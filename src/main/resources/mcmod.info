@@ -1,0 +1,19 @@
+[
+    {
+        "modid": "naturesaura",
+        "name": "Nature's Aura",
+        "description": "A mod about nature and aura and stuff",
+        "version": "${version}",
+        "mcversion": "${mcversion}",
+        "url": "https://ellpeck.de",
+        "updateUrl": "",
+        "authorList": ["Ellpeck"],
+        "credits": "Author: Ellpeck",
+        "logoFile": "",
+        "screenshots": [
+        ],
+        "parent": "",
+        "dependencies": [
+        ]
+    }
+]
