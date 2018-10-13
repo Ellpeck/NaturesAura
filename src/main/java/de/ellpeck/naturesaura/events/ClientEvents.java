@@ -20,7 +20,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onDebugRender(RenderGameOverlayEvent.Text event) {
-        if (Minecraft.getInstance().gameSettings.showDebugInfo) {
+        if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
             String prefix = TextFormatting.GREEN + "[" + NaturesAura.MOD_NAME + "]" + TextFormatting.RESET + " ";
             List<String> left = event.getLeft();
             left.add("");
@@ -35,12 +35,12 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent event) {
-        event.getMap().func_174942_a(ParticleMagic.TEXTURE);
+        event.getMap().registerSprite(ParticleMagic.TEXTURE);
     }
 
     @SubscribeEvent
     public void onClientTick(ClientTickEvent event) {
-        Minecraft mc = Minecraft.getInstance();
+        Minecraft mc = Minecraft.getMinecraft();
         if (!mc.isGamePaused()) {
             ParticleHandler.updateParticles();
         }

@@ -22,27 +22,17 @@ public final class ParticleHandler {
     private static final List<Particle> PARTICLES = new ArrayList<>();
 
     public static void spawnParticle(Particle particle, double x, double y, double z, int range) {
-        if (Minecraft.getInstance().player.getDistanceSq(x, y, z) <= range * range) {
+        if (particle != null && Minecraft.getMinecraft().player.getDistanceSq(x, y, z) <= range * range) {
             PARTICLES.add(particle);
         }
     }
 
     public static void updateParticles() {
         for (int i = 0; i < PARTICLES.size(); i++) {
-            boolean remove = false;
-
             Particle particle = PARTICLES.get(i);
-            if (particle != null) {
-                particle.tick();
+            particle.onUpdate();
 
-                if (!particle.isAlive()) {
-                    remove = true;
-                }
-            } else {
-                remove = true;
-            }
-
-            if (remove) {
+            if (!particle.isAlive()) {
                 PARTICLES.remove(i);
                 i--;
             }
@@ -50,7 +40,7 @@ public final class ParticleHandler {
     }
 
     public static void renderParticles(float partialTicks) {
-        Minecraft mc = Minecraft.getInstance();
+        Minecraft mc = Minecraft.getMinecraft();
         EntityPlayer player = mc.player;
 
         if (player != null) {
@@ -67,23 +57,21 @@ public final class ParticleHandler {
 
             GlStateManager.pushMatrix();
 
-            GlStateManager.enableAlphaTest();
+            GlStateManager.enableAlpha();
             GlStateManager.enableBlend();
             GlStateManager.alphaFunc(516, 0.003921569F);
             GlStateManager.disableCull();
 
             GlStateManager.depthMask(false);
 
-            mc.textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             Tessellator tessy = Tessellator.getInstance();
             BufferBuilder buffer = tessy.getBuffer();
 
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
             for (Particle particle : PARTICLES) {
-                if (particle != null) {
-                    particle.renderParticle(buffer, player, partialTicks, x, xz, z, yz, xy);
-                }
+                particle.renderParticle(buffer, player, partialTicks, x, xz, z, yz, xy);
             }
 
             tessy.draw();

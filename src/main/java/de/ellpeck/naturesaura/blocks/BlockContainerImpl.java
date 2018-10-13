@@ -40,7 +40,7 @@ public class BlockContainerImpl extends BlockContainer implements IModItem, IMod
 
     @Nullable
     @Override
-    public TileEntity func_149915_a(World world, int meta) {
+    public TileEntity createNewTileEntity(World world, int meta) {
         try {
             return this.tileClass.newInstance();
         } catch (Exception e) {

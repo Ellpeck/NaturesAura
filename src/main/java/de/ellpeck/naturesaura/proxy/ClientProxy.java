@@ -39,25 +39,25 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void registerRenderer(ItemStack stack, ResourceLocation location, String variant) {
-        ModelLoader.setCustomModelResourceLocation(stack.getItem(), stack.getDamage(), new ModelResourceLocation(location, variant));
+        ModelLoader.setCustomModelResourceLocation(stack.getItem(), stack.getItemDamage(), new ModelResourceLocation(location, variant));
     }
 
     @Override
     public void addColorProvidingItem(IColorProvidingItem item) {
-        ItemColors colors = Minecraft.getInstance().getItemColors();
+        ItemColors colors = Minecraft.getMinecraft().getItemColors();
         IItemColor color = item.getItemColor();
 
         if (item instanceof Item) {
-            colors.func_186730_a(color, (Item) item);
+            colors.registerItemColorHandler(color, (Item) item);
         } else if (item instanceof Block) {
-            colors.func_186731_a(color, (Block) item);
+            colors.registerItemColorHandler(color, (Block) item);
         }
     }
 
     @Override
     public void addColorProvidingBlock(IColorProvidingBlock block) {
         if (block instanceof Block) {
-            Minecraft.getInstance().getBlockColors().register(block.getBlockColor(), (Block) block);
+            Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(block.getBlockColor(), (Block) block);
         }
     }
 
@@ -69,6 +69,6 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void scheduleTask(Runnable runnable) {
-        Minecraft.getInstance().addScheduledTask(runnable);
+        Minecraft.getMinecraft().addScheduledTask(runnable);
     }
 }

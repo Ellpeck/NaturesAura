@@ -24,20 +24,20 @@ public final class ModRegistry {
     }
 
     private static void registerItem(Item item, String name, boolean addCreative) {
-        item.func_77655_b(NaturesAura.MOD_ID + "." + name);
+        item.setTranslationKey(NaturesAura.MOD_ID + "." + name);
 
         item.setRegistryName(NaturesAura.MOD_ID, name);
         ForgeRegistries.ITEMS.register(item);
 
         if (addCreative) {
-            item.func_77637_a(NaturesAura.CREATIVE_TAB);
+            item.setCreativeTab(NaturesAura.CREATIVE_TAB);
         } else {
-            item.func_77637_a(null);
+            item.setCreativeTab(null);
         }
     }
 
     private static void registerBlock(Block block, String name, ItemBlock item, boolean addCreative) {
-        block.func_149663_c(NaturesAura.MOD_ID + "." + name);
+        block.setTranslationKey(NaturesAura.MOD_ID + "." + name);
 
         block.setRegistryName(NaturesAura.MOD_ID, name);
         ForgeRegistries.BLOCKS.register(block);
@@ -46,9 +46,9 @@ public final class ModRegistry {
         ForgeRegistries.ITEMS.register(item);
 
         if (addCreative) {
-            block.func_149647_a(NaturesAura.CREATIVE_TAB);
+            block.setCreativeTab(NaturesAura.CREATIVE_TAB);
         } else {
-            block.func_149647_a(null);
+            block.setCreativeTab(null);
         }
     }
 

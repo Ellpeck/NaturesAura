@@ -19,7 +19,7 @@ public class ParticleMagic extends Particle {
     public ParticleMagic(World world, double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision) {
         super(world, posX, posY, posZ);
         this.desiredScale = scale;
-        this.maxAge = maxAge;
+        this.particleMaxAge = maxAge;
         this.canCollide = collision;
         this.particleGravity = gravity;
 
@@ -27,9 +27,9 @@ public class ParticleMagic extends Particle {
         this.motionY = motionY;
         this.motionZ = motionZ;
 
-        this.setColor(((color >> 16) & 255) / 255F, ((color >> 8) & 255) / 255F, (color & 255) / 255F);
+        this.setRBGColorF(((color >> 16) & 255) / 255F, ((color >> 8) & 255) / 255F, (color & 255) / 255F);
 
-        TextureMap map = Minecraft.getInstance().getTextureMap();
+        TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
         this.setParticleTexture(map.getAtlasSprite(TEXTURE.toString()));
 
         this.particleAlpha = 0F;
@@ -37,10 +37,10 @@ public class ParticleMagic extends Particle {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void onUpdate() {
+        super.onUpdate();
 
-        float lifeRatio = (float) this.age / (float) this.maxAge;
+        float lifeRatio = (float) this.particleAge / (float) this.particleMaxAge;
         this.particleAlpha = 0.75F - (lifeRatio * 0.75F);
         this.particleScale = this.desiredScale - (this.desiredScale * lifeRatio);
     }
