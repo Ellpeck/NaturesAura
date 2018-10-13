@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura;
 
-import de.ellpeck.naturesaura.blocks.OurBlocks;
+import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.proxy.IProxy;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.creativetab.CreativeTabs;
@@ -37,7 +37,7 @@ public final class NaturesAura {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        new OurBlocks();
+        new ModBlocks();
         ModRegistry.preInit(event);
         proxy.preInit(event);
     }

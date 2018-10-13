@@ -4,9 +4,9 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -16,19 +16,15 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import java.util.Collections;
 import java.util.Map;
 
-public class BlockImpl extends Block implements IModItem, IModelProvider {
+public class BlockAncientLog extends BlockLog implements IModItem, IModelProvider {
 
-    private final String baseName;
-
-    public BlockImpl(String baseName, Material material) {
-        super(material);
-        this.baseName = baseName;
+    public BlockAncientLog() {
         ModRegistry.addItemOrBlock(this);
     }
 
     @Override
     public String getBaseName() {
-        return this.baseName;
+        return "ancient_log";
     }
 
     @Override
@@ -57,7 +53,17 @@ public class BlockImpl extends Block implements IModItem, IModelProvider {
     }
 
     @Override
-    public Block setSoundType(SoundType sound) {
-        return super.setSoundType(sound);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, LOG_AXIS);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(LOG_AXIS).ordinal();
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(LOG_AXIS, EnumAxis.values()[meta]);
     }
 }

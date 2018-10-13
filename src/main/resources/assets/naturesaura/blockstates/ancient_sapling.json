@@ -1,0 +1,26 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:cross",
+        "textures": {
+            "cross": "naturesaura:blocks/ancient_sapling"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [
+            {
+                "model": "builtin/generated",
+                "transform": "forge:default-item",
+                "textures": {
+                    "layer0": "naturesaura:blocks/ancient_sapling"
+                }
+            }
+        ],
+        "stage": {
+            "0": {},
+            "1": {}
+        }
+    }
+}

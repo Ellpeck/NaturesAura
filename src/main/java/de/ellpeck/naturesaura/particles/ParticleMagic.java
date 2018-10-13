@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleMagic extends Particle {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(NaturesAura.MOD_ID, "particle/magic_round");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(NaturesAura.MOD_ID, "particles/magic_round");
 
     private final float desiredScale;
 
