@@ -16,7 +16,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -89,7 +88,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
             new BlockPos(1, -1, 3),
     };
 
-    private final List<WeakReference<IAuraContainerProvider>> cachedProviders = new ArrayList<>();
+    private final List<IAuraContainerProvider> cachedProviders = new ArrayList<>();
     private final BasicAuraContainer container = new BasicAuraContainer(5000);
     public boolean structureFine;
 
@@ -116,25 +115,28 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
                     this.cachedProviders.clear();
                     for (TileEntity tile : Helper.getTileEntitiesInArea(this.world, this.pos, 15)) {
                         if (tile instanceof IAuraContainerProvider && tile != this) {
-                            this.cachedProviders.add(new WeakReference<>((IAuraContainerProvider) tile));
+                            this.cachedProviders.add((IAuraContainerProvider) tile);
                         }
                     }
                 }
 
                 if (!this.cachedProviders.isEmpty()) {
-                    IAuraContainerProvider provider = this.cachedProviders.get(rand.nextInt(this.cachedProviders.size())).get();
-                    if (provider != null) {
+                    int index = rand.nextInt(this.cachedProviders.size());
+                    IAuraContainerProvider provider = this.cachedProviders.get(index);
+                    BlockPos pos = ((TileEntity) provider).getPos();
+                    if (this.world.getTileEntity(pos) == provider) {
                         int stored = this.container.storeAura(provider.container().drainAura(5, true), false);
                         if (stored > 0) {
                             provider.container().drainAura(stored, false);
 
-                            BlockPos pos = ((TileEntity) provider).getPos();
                             PacketHandler.sendToAllLoaded(this.world, this.pos, new PacketParticles(
                                     pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
                                     this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F,
                                     rand.nextFloat() * 0.05F + 0.05F, provider.container().getAuraColor(), rand.nextFloat() * 1F + 1F
                             ));
                         }
+                    } else {
+                        this.cachedProviders.remove(index);
                     }
                 }
             }
