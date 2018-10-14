@@ -11,4 +11,5 @@ public final class ModBlocks {
     public static final Block ANCIENT_LEAVES = new BlockAncientLeaves();
     public static final Block ANCIENT_SAPLING = new BlockAncientSapling();
     public static final Block NATURE_ALTAR = new BlockNatureAltar();
+    public static final Block DECAYED_LEAVES = new BlockDecayedLeaves();
 }

@@ -135,18 +135,36 @@ public class BlockAncientLeaves extends BlockLeaves implements
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         super.randomDisplayTick(stateIn, worldIn, pos, rand);
         if (rand.nextFloat() >= 0.9F && !worldIn.getBlockState(pos.down()).isFullBlock()) {
-            NaturesAura.proxy.spawnMagicParticle(worldIn,
-                    pos.getX() + rand.nextDouble(), pos.getY(), pos.getZ() + rand.nextDouble(),
-                    0F, 0F, 0F, 0xc46df9,
-                    rand.nextFloat() * 2F + 0.5F,
-                    rand.nextInt(100) + 150,
-                    rand.nextFloat() * 0.05F + 0.005F, true, true);
+            TileEntity tile = worldIn.getTileEntity(pos);
+            if (tile instanceof TileEntityAncientLeaves) {
+                if (((TileEntityAncientLeaves) tile).container().getStoredAura() > 0) {
+                    NaturesAura.proxy.spawnMagicParticle(worldIn,
+                            pos.getX() + rand.nextDouble(), pos.getY(), pos.getZ() + rand.nextDouble(),
+                            0F, 0F, 0F, 0xc46df9,
+                            rand.nextFloat() * 2F + 0.5F,
+                            rand.nextInt(100) + 150,
+                            rand.nextFloat() * 0.05F + 0.005F, true, true);
 
+                }
+            }
         }
     }
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(ModBlocks.ANCIENT_SAPLING);
+    }
+
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(worldIn, pos, state, rand);
+        if (!worldIn.isRemote) {
+            TileEntity tile = worldIn.getTileEntity(pos);
+            if (tile instanceof TileEntityAncientLeaves) {
+                if (((TileEntityAncientLeaves) tile).container().getStoredAura() <= 0) {
+                    worldIn.setBlockState(pos, ModBlocks.DECAYED_LEAVES.getDefaultState());
+                }
+            }
+        }
     }
 }

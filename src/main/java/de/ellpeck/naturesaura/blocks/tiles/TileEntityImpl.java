@@ -65,9 +65,7 @@ public class TileEntityImpl extends TileEntity {
         WorldServer world = (WorldServer) this.getWorld();
         PlayerChunkMapEntry entry = world.getPlayerChunkMap().getEntry(this.getPos().getX() >> 4, this.getPos().getZ() >> 4);
         if (entry != null) {
-            for (EntityPlayerMP player : entry.getWatchingPlayers()) {
-                player.connection.sendPacket(this.getUpdatePacket());
-            }
+            entry.sendPacket(this.getUpdatePacket());
         }
     }
 }

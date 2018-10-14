@@ -7,10 +7,19 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityAncientLeaves extends TileEntityImpl implements IAuraContainerProvider {
 
-    private final FiniteAuraContainer container = new FiniteAuraContainer(50) {
+    private final FiniteAuraContainer container = new FiniteAuraContainer(20) {
         @Override
         public int getAuraColor() {
             return 0xc46df9;
+        }
+
+        @Override
+        public int drainAura(int amountToDrain, boolean simulate) {
+            int amount = super.drainAura(amountToDrain, simulate);
+            if (amount > 0 && !simulate) {
+                TileEntityAncientLeaves.this.sendToClients();
+            }
+            return amount;
         }
     };
 

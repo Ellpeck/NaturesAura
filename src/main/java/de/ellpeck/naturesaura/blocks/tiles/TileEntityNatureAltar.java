@@ -167,6 +167,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
                                 this.pos.getX() + rand.nextFloat(), this.pos.getY() + 3F, this.pos.getZ() + 4F + rand.nextFloat(),
                                 0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(200) + 100, -0.025F, true, true);
                     }
+
                 }
             }
         }
