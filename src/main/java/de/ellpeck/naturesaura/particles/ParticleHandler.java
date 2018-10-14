@@ -15,26 +15,31 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 @SideOnly(Side.CLIENT)
 public final class ParticleHandler {
 
     private static final List<Particle> PARTICLES = new ArrayList<>();
 
-    public static void spawnParticle(Particle particle, double x, double y, double z, int range) {
-        if (particle != null && Minecraft.getMinecraft().player.getDistanceSq(x, y, z) <= range * range) {
-            PARTICLES.add(particle);
+    public static void spawnParticle(Supplier<Particle> particle, double x, double y, double z, int range) {
+        if (Minecraft.getMinecraft().player.getDistanceSq(x, y, z) <= range * range) {
+            Minecraft mc = Minecraft.getMinecraft();
+            int setting = mc.gameSettings.particleSetting;
+            if (setting == 0 ||
+                    setting == 1 && mc.world.rand.nextInt(3) == 0 ||
+                    setting == 2 && mc.world.rand.nextInt(10) == 0) {
+                PARTICLES.add(particle.get());
+            }
         }
     }
 
     public static void updateParticles() {
-        for (int i = 0; i < PARTICLES.size(); i++) {
+        for (int i = PARTICLES.size() - 1; i >= 0; i--) {
             Particle particle = PARTICLES.get(i);
             particle.onUpdate();
-
             if (!particle.isAlive()) {
                 PARTICLES.remove(i);
-                i--;
             }
         }
     }

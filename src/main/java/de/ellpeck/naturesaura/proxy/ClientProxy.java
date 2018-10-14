@@ -63,8 +63,7 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void spawnMagicParticle(World world, double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade) {
-        ParticleMagic particle = new ParticleMagic(world, posX, posY, posZ, motionX, motionY, motionZ, color, scale, maxAge, gravity, collision, fade);
-        ParticleHandler.spawnParticle(particle, posX, posY, posZ, 32);
+        ParticleHandler.spawnParticle(() -> new ParticleMagic(world, posX, posY, posZ, motionX, motionY, motionZ, color, scale, maxAge, gravity, collision, fade), posX, posY, posZ, 32);
     }
 
     @Override

@@ -62,7 +62,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
             new BlockPos(-1, -1, -1),
             new BlockPos(1, -1, -1)
     };
-    private static final BlockPos[] GRASS_POSITIONS = new BlockPos[]{
+    private static final BlockPos[] WOOD_POSITIONS = new BlockPos[]{
             new BlockPos(-1, -1, 0),
             new BlockPos(1, -1, 0),
             new BlockPos(0, -1, -1),
@@ -101,10 +101,10 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
 
         if (!this.world.isRemote) {
             if (this.world.getTotalWorldTime() % 40 == 0) {
-                boolean fine = this.check(BRICK_POSITIONS, Blocks.STONEBRICK.getDefaultState())
-                        && this.check(MOSSY_POSITIONS, Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, EnumType.MOSSY))
-                        && this.check(CHISELED_POSITIONS, Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, EnumType.CHISELED))
-                        && this.check(GRASS_POSITIONS, Blocks.GRASS.getDefaultState());
+                boolean fine = this.check(BRICK_POSITIONS, Blocks.STONEBRICK.getDefaultState(), false)
+                        && this.check(MOSSY_POSITIONS, Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, EnumType.MOSSY), false)
+                        && this.check(CHISELED_POSITIONS, Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, EnumType.CHISELED), false)
+                        && this.check(WOOD_POSITIONS, Blocks.PLANKS.getDefaultState(), true);
                 if (fine != this.structureFine) {
                     this.structureFine = fine;
                     this.sendToClients();
@@ -173,9 +173,10 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
         }
     }
 
-    private boolean check(BlockPos[] positions, IBlockState state) {
+    private boolean check(BlockPos[] positions, IBlockState state, boolean blockOnly) {
         for (BlockPos offset : positions) {
-            if (this.world.getBlockState(this.pos.add(offset)) != state) {
+            IBlockState world = this.world.getBlockState(this.pos.add(offset));
+            if (blockOnly ? world.getBlock() != state.getBlock() : world != state) {
                 return false;
             }
         }
@@ -199,5 +200,10 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
     @Override
     public IAuraContainer container() {
         return this.container;
+    }
+
+    @Override
+    public boolean isArtificial() {
+        return true;
     }
 }

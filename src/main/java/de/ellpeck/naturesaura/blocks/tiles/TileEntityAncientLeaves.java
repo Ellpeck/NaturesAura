@@ -29,6 +29,11 @@ public class TileEntityAncientLeaves extends TileEntityImpl implements IAuraCont
     }
 
     @Override
+    public boolean isArtificial() {
+        return false;
+    }
+
+    @Override
     public void writeNBT(NBTTagCompound compound, boolean syncing) {
         super.writeNBT(compound, syncing);
         this.container.writeNBT(compound);

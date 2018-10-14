@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura;
 
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.proxy.IProxy;
 import de.ellpeck.naturesaura.reg.ModRegistry;
@@ -32,13 +33,14 @@ public final class NaturesAura {
     public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(MOD_ID) {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(Items.BEETROOT);
+            return new ItemStack(ModItems.EYE);
         }
     };
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         new ModBlocks();
+        new ModItems();
         PacketHandler.init();
         ModRegistry.preInit(event);
         proxy.preInit(event);
