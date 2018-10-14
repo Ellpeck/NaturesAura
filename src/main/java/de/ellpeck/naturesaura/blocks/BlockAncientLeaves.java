@@ -115,7 +115,7 @@ public class BlockAncientLeaves extends BlockLeaves implements
     @Nullable
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityAncientLeaves();
+        return (meta & 2) != 0 ? new TileEntityAncientLeaves() : null;
     }
 
     @Override
@@ -140,7 +140,7 @@ public class BlockAncientLeaves extends BlockLeaves implements
                     0F, 0F, 0F, 0xc46df9,
                     rand.nextFloat() * 2F + 0.5F,
                     rand.nextInt(100) + 150,
-                    rand.nextFloat() * 0.05F + 0.005F, true);
+                    rand.nextFloat() * 0.05F + 0.005F, true, true);
 
         }
     }

@@ -15,13 +15,15 @@ public class ParticleMagic extends Particle {
     public static final ResourceLocation TEXTURE = new ResourceLocation(NaturesAura.MOD_ID, "particles/magic_round");
 
     private final float desiredScale;
+    private final boolean fade;
 
-    public ParticleMagic(World world, double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision) {
+    public ParticleMagic(World world, double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade) {
         super(world, posX, posY, posZ);
         this.desiredScale = scale;
         this.particleMaxAge = maxAge;
         this.canCollide = collision;
         this.particleGravity = gravity;
+        this.fade = fade;
 
         this.motionX = motionX;
         this.motionY = motionY;
@@ -32,17 +34,29 @@ public class ParticleMagic extends Particle {
         TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
         this.setParticleTexture(map.getAtlasSprite(TEXTURE.toString()));
 
-        this.particleAlpha = 0F;
-        this.particleScale = 0F;
+        this.particleAlpha = 0.75F;
+        this.particleScale = this.desiredScale;
     }
 
     @Override
     public void onUpdate() {
-        super.onUpdate();
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
 
-        float lifeRatio = (float) this.particleAge / (float) this.particleMaxAge;
-        this.particleAlpha = 0.75F - (lifeRatio * 0.75F);
-        this.particleScale = this.desiredScale - (this.desiredScale * lifeRatio);
+        this.particleAge++;
+        if (this.particleAge >= this.particleMaxAge) {
+            this.setExpired();
+        } else {
+            this.motionY -= 0.04D * (double) this.particleGravity;
+            this.move(this.motionX, this.motionY, this.motionZ);
+
+            if (this.fade) {
+                float lifeRatio = (float) this.particleAge / (float) this.particleMaxAge;
+                this.particleAlpha = 0.75F - (lifeRatio * 0.75F);
+                this.particleScale = this.desiredScale - (this.desiredScale * lifeRatio);
+            }
+        }
     }
 
     @Override

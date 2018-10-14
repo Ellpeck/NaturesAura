@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "naturesaura:nature_altar",
+        "textures": {
+            "texture": "naturesaura:blocks/nature_altar",
+            "top": "naturesaura:blocks/nature_altar_top",
+            "particle": "#top"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

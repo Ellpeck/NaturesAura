@@ -20,21 +20,20 @@ public class TileEntityImpl extends TileEntity {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         this.writeNBT(compound, false);
-        return super.writeToNBT(compound);
+        return compound;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         this.readNBT(compound, false);
-        super.readFromNBT(compound);
     }
 
     public void writeNBT(NBTTagCompound compound, boolean syncing) {
-
+        super.writeToNBT(compound);
     }
 
     public void readNBT(NBTTagCompound compound, boolean syncing) {
-
+        super.readFromNBT(compound);
     }
 
     @Override
