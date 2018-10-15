@@ -13,6 +13,8 @@ public class BlockNatureAltar extends BlockContainerImpl {
 
     public BlockNatureAltar() {
         super(Material.ROCK, "nature_altar", TileEntityNatureAltar.class, "nature_altar");
+        this.setHardness(4F);
+        this.setHarvestLevel("pickaxe", 1);
     }
 
     @Override

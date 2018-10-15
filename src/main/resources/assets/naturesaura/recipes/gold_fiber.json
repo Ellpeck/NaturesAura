@@ -1,0 +1,26 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "LNL",
+        "NGN",
+        "LNL"
+    ],
+    "key": {
+        "N": {
+            "type": "forge:ore_dict",
+            "ore": "nuggetGold"
+        },
+        "G": {
+            "item": "minecraft:tallgrass",
+            "data": 1
+        },
+        "L": {
+            "type": "forge:ore_dict",
+            "ore": "treeLeaves"
+        }
+    },
+    "result": {
+        "item": "naturesaura:gold_fiber",
+        "count": 4
+    }
+}

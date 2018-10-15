@@ -6,5 +6,8 @@ tile.naturesaura.ancient_leaves.name=Ancient Leaves
 tile.naturesaura.ancient_sapling.name=Ancient Sapling
 tile.naturesaura.nature_altar.name=Natural Altar
 tile.naturesaura.decayed_leaves.name=Decayed Leaves
+tile.naturesaura.golden_leaves.name=Golden Leaves
 
 item.naturesaura.eye.name=Environmental Eye
+item.naturesaura.gold_fiber.name=Brilliant Fiber
+item.naturesaura.gold_leaf.name=Gold Leaf

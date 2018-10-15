@@ -1,0 +1,28 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:leaves",
+        "textures": {
+            "all": "minecraft:blocks/leaves_oak"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}],
+        "decayable": {
+            "true": {},
+            "false": {}
+        },
+        "check_decay": {
+            "true": {},
+            "false": {}
+        },
+        "stage": {
+            "0": {},
+            "1": {},
+            "2": {},
+            "3": {}
+        }
+    }
+}
