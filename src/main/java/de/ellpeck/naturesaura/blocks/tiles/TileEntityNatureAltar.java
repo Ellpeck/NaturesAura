@@ -6,7 +6,7 @@ import de.ellpeck.naturesaura.aura.BasicAuraContainer;
 import de.ellpeck.naturesaura.aura.IAuraContainer;
 import de.ellpeck.naturesaura.aura.IAuraContainerProvider;
 import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticles;
+import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.BlockStoneBrick.EnumType;
 import net.minecraft.block.state.IBlockState;
@@ -129,7 +129,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
                         if (stored > 0) {
                             provider.container().drainAura(stored, false);
 
-                            PacketHandler.sendToAllLoaded(this.world, this.pos, new PacketParticles(
+                            PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
                                     pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
                                     this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F,
                                     rand.nextFloat() * 0.05F + 0.05F, provider.container().getAuraColor(), rand.nextFloat() * 1F + 1F
@@ -176,13 +176,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
     }
 
     private boolean check(BlockPos[] positions, IBlockState state, boolean blockOnly) {
-        for (BlockPos offset : positions) {
-            IBlockState world = this.world.getBlockState(this.pos.add(offset));
-            if (blockOnly ? world.getBlock() != state.getBlock() : world != state) {
-                return false;
-            }
-        }
-        return true;
+        return Helper.checkMultiblock(this.world, this.pos, positions, state, blockOnly);
     }
 
     @Override

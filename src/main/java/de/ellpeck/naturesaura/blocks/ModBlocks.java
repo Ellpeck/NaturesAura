@@ -13,4 +13,5 @@ public final class ModBlocks {
     public static final Block NATURE_ALTAR = new BlockNatureAltar();
     public static final Block DECAYED_LEAVES = new BlockDecayedLeaves();
     public static final Block GOLDEN_LEAVES = new BlockGoldenLeaves();
+    public static final Block GOLD_POWDER = new BlockGoldPowder();
 }

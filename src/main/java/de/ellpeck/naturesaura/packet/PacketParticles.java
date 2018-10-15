@@ -8,32 +8,35 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.util.vector.Vector3f;
 
 public class PacketParticles implements IMessage {
 
-    private float startX;
-    private float startY;
-    private float startZ;
-
-    private float endX;
-    private float endY;
-    private float endZ;
-
-    private float speed;
+    private float posX;
+    private float posY;
+    private float posZ;
+    private float motionX;
+    private float motionY;
+    private float motionZ;
     private int color;
     private float scale;
+    private int maxAge;
+    private float gravity;
+    private boolean collision;
+    private boolean fade;
 
-    public PacketParticles(float startX, float startY, float startZ, float endX, float endY, float endZ, float speed, int color, float scale) {
-        this.startX = startX;
-        this.startY = startY;
-        this.startZ = startZ;
-        this.endX = endX;
-        this.endY = endY;
-        this.endZ = endZ;
-        this.speed = speed;
+    public PacketParticles(float posX, float posY, float posZ, float motionX, float motionY, float motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade) {
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
+        this.motionX = motionX;
+        this.motionY = motionY;
+        this.motionZ = motionZ;
         this.color = color;
         this.scale = scale;
+        this.maxAge = maxAge;
+        this.gravity = gravity;
+        this.collision = collision;
+        this.fade = fade;
     }
 
     public PacketParticles() {
@@ -42,28 +45,34 @@ public class PacketParticles implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.startX = buf.readFloat();
-        this.startY = buf.readFloat();
-        this.startZ = buf.readFloat();
-        this.endX = buf.readFloat();
-        this.endY = buf.readFloat();
-        this.endZ = buf.readFloat();
-        this.speed = buf.readFloat();
+        this.posX = buf.readFloat();
+        this.posY = buf.readFloat();
+        this.posZ = buf.readFloat();
+        this.motionX = buf.readFloat();
+        this.motionY = buf.readFloat();
+        this.motionZ = buf.readFloat();
         this.color = buf.readInt();
         this.scale = buf.readFloat();
+        this.maxAge = buf.readInt();
+        this.gravity = buf.readFloat();
+        this.collision = buf.readBoolean();
+        this.fade = buf.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        buf.writeFloat(this.startX);
-        buf.writeFloat(this.startY);
-        buf.writeFloat(this.startZ);
-        buf.writeFloat(this.endX);
-        buf.writeFloat(this.endY);
-        buf.writeFloat(this.endZ);
-        buf.writeFloat(this.speed);
+        buf.writeFloat(this.posX);
+        buf.writeFloat(this.posY);
+        buf.writeFloat(this.posZ);
+        buf.writeFloat(this.motionX);
+        buf.writeFloat(this.motionY);
+        buf.writeFloat(this.motionZ);
         buf.writeInt(this.color);
         buf.writeFloat(this.scale);
+        buf.writeInt(this.maxAge);
+        buf.writeFloat(this.gravity);
+        buf.writeBoolean(this.collision);
+        buf.writeBoolean(this.fade);
     }
 
     public static class Handler implements IMessageHandler<PacketParticles, IMessage> {
@@ -71,19 +80,11 @@ public class PacketParticles implements IMessage {
         @Override
         @SideOnly(Side.CLIENT)
         public IMessage onMessage(PacketParticles message, MessageContext ctx) {
-            NaturesAura.proxy.scheduleTask(() -> {
-                Vector3f dir = new Vector3f(
-                        message.endX - message.startX,
-                        message.endY - message.startY,
-                        message.endZ - message.startZ);
-                int maxAge = (int) (dir.length() / message.speed);
-                dir.normalise();
-
-                NaturesAura.proxy.spawnMagicParticle(Minecraft.getMinecraft().world,
-                        message.startX, message.startY, message.startZ,
-                        dir.x * message.speed, dir.y * message.speed, dir.z * message.speed,
-                        message.color, message.scale, maxAge, 0F, false, false);
-            });
+            NaturesAura.proxy.scheduleTask(() ->
+                    NaturesAura.proxy.spawnMagicParticle(Minecraft.getMinecraft().world,
+                            message.posX, message.posY, message.posZ,
+                            message.motionX, message.motionY, message.motionZ,
+                            message.color, message.scale, message.maxAge, message.gravity, message.collision, message.fade));
 
             return null;
         }
