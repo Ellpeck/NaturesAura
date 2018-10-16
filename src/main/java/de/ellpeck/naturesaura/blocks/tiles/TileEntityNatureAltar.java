@@ -123,7 +123,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
                 if (!this.cachedProviders.isEmpty()) {
                     int index = rand.nextInt(this.cachedProviders.size());
                     IAuraContainerProvider provider = this.cachedProviders.get(index);
-                    if (((TileEntity) provider).isInvalid()) {
+                    if (!((TileEntity) provider).isInvalid()) {
                         int stored = this.container.storeAura(provider.container().drainAura(5, true), false);
                         if (stored > 0) {
                             provider.container().drainAura(stored, false);
