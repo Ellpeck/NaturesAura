@@ -149,20 +149,22 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
         super.writeNBT(compound, syncing);
         compound.setTag("item", this.stack.writeToNBT(new NBTTagCompound()));
 
-        if (this.ritualPos != null && this.involvedStands != null && this.output != null && this.totalTime > 0) {
-            compound.setLong("ritual_pos", this.ritualPos.toLong());
-            compound.setInteger("timer", this.timer);
-            compound.setInteger("total_time", this.totalTime);
-            compound.setTag("output", this.output.writeToNBT(new NBTTagCompound()));
+        if (!syncing) {
+            if (this.ritualPos != null && this.involvedStands != null && this.output != null && this.totalTime > 0) {
+                compound.setLong("ritual_pos", this.ritualPos.toLong());
+                compound.setInteger("timer", this.timer);
+                compound.setInteger("total_time", this.totalTime);
+                compound.setTag("output", this.output.writeToNBT(new NBTTagCompound()));
 
-            NBTTagList list = new NBTTagList();
-            for (Map.Entry<BlockPos, ItemStack> entry : this.involvedStands.entrySet()) {
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setLong("pos", entry.getKey().toLong());
-                tag.setTag("item", entry.getValue().writeToNBT(new NBTTagCompound()));
-                list.appendTag(tag);
+                NBTTagList list = new NBTTagList();
+                for (Map.Entry<BlockPos, ItemStack> entry : this.involvedStands.entrySet()) {
+                    NBTTagCompound tag = new NBTTagCompound();
+                    tag.setLong("pos", entry.getKey().toLong());
+                    tag.setTag("item", entry.getValue().writeToNBT(new NBTTagCompound()));
+                    list.appendTag(tag);
+                }
+                compound.setTag("stands", list);
             }
-            compound.setTag("stands", list);
         }
     }
 
@@ -171,20 +173,22 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
         super.readNBT(compound, syncing);
         this.stack = new ItemStack(compound.getCompoundTag("item"));
 
-        if (compound.hasKey("ritual_pos") && compound.hasKey("stands") && compound.hasKey("output") && compound.hasKey("total_time")) {
-            this.ritualPos = BlockPos.fromLong(compound.getLong("ritual_pos"));
-            this.timer = compound.getInteger("timer");
-            this.totalTime = compound.getInteger("total_time");
-            this.output = new ItemStack(compound.getCompoundTag("output"));
+        if (!syncing) {
+            if (compound.hasKey("ritual_pos") && compound.hasKey("stands") && compound.hasKey("output") && compound.hasKey("total_time")) {
+                this.ritualPos = BlockPos.fromLong(compound.getLong("ritual_pos"));
+                this.timer = compound.getInteger("timer");
+                this.totalTime = compound.getInteger("total_time");
+                this.output = new ItemStack(compound.getCompoundTag("output"));
 
-            this.involvedStands = new HashMap<>();
-            NBTTagList list = compound.getTagList("stands", 10);
-            for (NBTBase base : list) {
-                NBTTagCompound tag = (NBTTagCompound) base;
-                this.involvedStands.put(
-                        BlockPos.fromLong(tag.getLong("pos")),
-                        new ItemStack(tag.getCompoundTag("item"))
-                );
+                this.involvedStands = new HashMap<>();
+                NBTTagList list = compound.getTagList("stands", 10);
+                for (NBTBase base : list) {
+                    NBTTagCompound tag = (NBTTagCompound) base;
+                    this.involvedStands.put(
+                            BlockPos.fromLong(tag.getLong("pos")),
+                            new ItemStack(tag.getCompoundTag("item"))
+                    );
+                }
             }
         }
     }
