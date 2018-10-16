@@ -1,0 +1,15 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "L"
+    ],
+    "key": {
+        "L": {
+            "item": "naturesaura:gold_leaf"
+        }
+    },
+    "result": {
+        "item": "naturesaura:gold_powder",
+        "count": 2
+    }
+}

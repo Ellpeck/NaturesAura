@@ -9,6 +9,7 @@ import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -68,38 +69,31 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                         }
                     }
                     if (this.timer % 5 == 0) {
-                        for (BlockPos offset : TileEntityWoodStand.GOLD_POWDER_POSITIONS) {
-                            BlockPos dustPos = this.ritualPos.add(offset);
-                            PacketHandler.sendToAllAround(this.world, this.ritualPos, 32,
-                                    new PacketParticles(
-                                            (float) dustPos.getX() + 0.375F + this.world.rand.nextFloat() * 0.25F,
-                                            (float) dustPos.getY() + 0.1F,
-                                            (float) dustPos.getZ() + 0.375F + this.world.rand.nextFloat() * 0.25F,
-                                            (float) this.world.rand.nextGaussian() * 0.01F,
-                                            this.world.rand.nextFloat() * 0.005F + 0.01F,
-                                            (float) this.world.rand.nextGaussian() * 0.01F,
-                                            0xf4cb42, 2F, 100, 0F, false, true
-                                    ));
-                        }
+                        PacketHandler.sendToAllAround(this.world, this.ritualPos, 32,
+                                new PacketParticles(this.ritualPos.getX(), this.ritualPos.getY(), this.ritualPos.getZ(), 0));
                     }
 
                     if (this.timer >= this.recipe.time) {
                         this.recurseTreeDestruction(this.ritualPos, this.ritualPos);
-                        //TODO Spawn item and stuff here, make some more nice particles probably
+                        for (BlockPos offset : GOLD_POWDER_POSITIONS) {
+                            this.world.setBlockToAir(this.ritualPos.add(offset));
+                        }
+
+                        EntityItem item = new EntityItem(this.world,
+                                this.ritualPos.getX() + 0.5, this.ritualPos.getY() + 4.5, this.ritualPos.getZ() + 0.5,
+                                this.recipe.result.copy());
+                        this.world.spawnEntity(item);
+
+                        PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                                new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 3));
 
                         this.ritualPos = null;
                         this.involvedStands = null;
                         this.recipe = null;
                         this.timer = 0;
-                    } else if (this.timer >= this.recipe.time / 2) {
+                    } else if (this.timer >= this.recipe.time / 2 && !this.involvedStands.isEmpty()) {
                         for (TileEntityWoodStand stand : this.involvedStands.keySet()) {
-                            //TODO Turn this into a single packet that just randomly spawns a certain amount of particles
-                            for (int j = this.world.rand.nextInt(20) + 10; j >= 0; j--) {
-                                PacketHandler.sendToAllAround(this.world, this.ritualPos, 32, new PacketParticles(
-                                        (float) stand.pos.getX() + 0.5F, (float) stand.pos.getY() + 1.25F, (float) stand.pos.getZ() + 0.5F,
-                                        (float) this.world.rand.nextGaussian() * 0.05F, this.world.rand.nextFloat() * 0.05F, (float) this.world.rand.nextGaussian() * 0.05F,
-                                        0xFF00FF, 1.5F, 50, 0F, false, true));
-                            }
+                            PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(stand.pos.getX(), stand.pos.getY(), stand.pos.getZ(), 1));
                             stand.stack = ItemStack.EMPTY;
                             stand.sendToClients();
                         }
@@ -126,7 +120,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
             IBlockState state = this.world.getBlockState(offset);
             if (state.getBlock() instanceof BlockLog || state.getBlock() instanceof BlockLeaves) {
                 this.world.setBlockToAir(offset);
-                //TODO Spawn particles around the block outline here, probably with the same packet as above
+                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), 2));
 
                 this.recurseTreeDestruction(offset, start);
             }

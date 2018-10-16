@@ -59,7 +59,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
 
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        if (rand.nextFloat() >= 0.8F) {
+        if (rand.nextFloat() >= 0.9F) {
             for (BlockPos offsetToOrigin : TileEntityWoodStand.GOLD_POWDER_POSITIONS) {
                 BlockPos origin = pos.subtract(offsetToOrigin);
                 if (Helper.checkMultiblock(worldIn, origin, TileEntityWoodStand.GOLD_POWDER_POSITIONS, ModBlocks.GOLD_POWDER.getDefaultState(), true)) {

@@ -57,8 +57,10 @@ public class TerrainGenEvents {
                                 }
                             }
 
-                            toPick.setRitual(pos, recipe, actuallyInvolved);
-                            break;
+                            if (stillRequired.isEmpty()) {
+                                toPick.setRitual(pos, recipe, actuallyInvolved);
+                                break;
+                            }
                         }
                     }
                 }

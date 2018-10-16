@@ -134,7 +134,7 @@ public class BlockAncientLeaves extends BlockLeaves implements
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         super.randomDisplayTick(stateIn, worldIn, pos, rand);
-        if (rand.nextFloat() >= 0.9F && !worldIn.getBlockState(pos.down()).isFullBlock()) {
+        if (rand.nextFloat() >= 0.95F && !worldIn.getBlockState(pos.down()).isFullBlock()) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityAncientLeaves) {
                 if (((TileEntityAncientLeaves) tile).container().getStoredAura() > 0) {
@@ -143,7 +143,7 @@ public class BlockAncientLeaves extends BlockLeaves implements
                             0F, 0F, 0F, 0xc46df9,
                             rand.nextFloat() * 2F + 0.5F,
                             rand.nextInt(100) + 150,
-                            rand.nextFloat() * 0.05F + 0.005F, true, true);
+                            rand.nextFloat() * 0.01F + 0.001F, true, true);
 
                 }
             }
