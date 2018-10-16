@@ -13,3 +13,5 @@ tile.naturesaura.wood_stand.name=Wooden Stand
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.gold_fiber.name=Brilliant Fiber
 item.naturesaura.gold_leaf.name=Gold Leaf
+
+container.naturesaura.tree_ritual.name=Tree Infusion

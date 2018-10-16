@@ -118,7 +118,9 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
     }
 
     private void recurseTreeDestruction(BlockPos pos, BlockPos start) {
-        if (pos.distanceSq(start) >= 15 * 15) {
+        if (Math.abs(pos.getX() - start.getX()) >= 6
+                || Math.abs(pos.getZ() - start.getZ()) >= 6
+                || Math.abs(pos.getY() - start.getY()) >= 16) {
             return;
         }
 
