@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.events.TreeRitualHandler;
+import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -60,9 +60,9 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (rand.nextFloat() >= 0.8F) {
-            for (BlockPos offsetToOrigin : TreeRitualHandler.GOLD_POWDER_POSITIONS) {
+            for (BlockPos offsetToOrigin : TileEntityWoodStand.GOLD_POWDER_POSITIONS) {
                 BlockPos origin = pos.subtract(offsetToOrigin);
-                if (Helper.checkMultiblock(worldIn, origin, TreeRitualHandler.GOLD_POWDER_POSITIONS, ModBlocks.GOLD_POWDER.getDefaultState(), true)) {
+                if (Helper.checkMultiblock(worldIn, origin, TileEntityWoodStand.GOLD_POWDER_POSITIONS, ModBlocks.GOLD_POWDER.getDefaultState(), true)) {
                     NaturesAura.proxy.spawnMagicParticle(worldIn,
                             pos.getX() + 0.375 + rand.nextFloat() * 0.25, pos.getY() + 0.1, pos.getZ() + 0.375 + rand.nextFloat() * 0.25,
                             rand.nextGaussian() * 0.001, rand.nextFloat() * 0.001 + 0.005, rand.nextGaussian() * 0.001,

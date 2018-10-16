@@ -8,7 +8,7 @@ tile.naturesaura.nature_altar.name=Natural Altar
 tile.naturesaura.decayed_leaves.name=Decayed Leaves
 tile.naturesaura.golden_leaves.name=Golden Leaves
 tile.naturesaura.gold_powder.name=Gold Powder
-tile.naturesaura.tree_ritual.name=Drained Dirt
+tile.naturesaura.wood_stand.name=Wooden Stand
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.gold_fiber.name=Brilliant Fiber

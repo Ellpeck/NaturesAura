@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura;
 
 import de.ellpeck.naturesaura.blocks.ModBlocks;
-import de.ellpeck.naturesaura.events.TreeRitualHandler;
+import de.ellpeck.naturesaura.events.TerrainGenEvents;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.proxy.IProxy;
@@ -9,6 +9,7 @@ import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -44,7 +45,7 @@ public final class NaturesAura {
         PacketHandler.init();
         ModRegistry.preInit(event);
 
-        new TreeRitualHandler();
+        MinecraftForge.TERRAIN_GEN_BUS.register(new TerrainGenEvents());
 
         proxy.preInit(event);
     }
@@ -61,10 +62,5 @@ public final class NaturesAura {
     public void postInit(FMLPostInitializationEvent event) {
         ModRegistry.postInit(event);
         proxy.postInit(event);
-    }
-
-    @EventHandler
-    public void serverStopped(FMLServerStoppedEvent event){
-        TreeRitualHandler.clear();
     }
 }

@@ -123,12 +123,12 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
                 if (!this.cachedProviders.isEmpty()) {
                     int index = rand.nextInt(this.cachedProviders.size());
                     IAuraContainerProvider provider = this.cachedProviders.get(index);
-                    BlockPos pos = ((TileEntity) provider).getPos();
-                    if (this.world.getTileEntity(pos) == provider) {
+                    if (((TileEntity) provider).isInvalid()) {
                         int stored = this.container.storeAura(provider.container().drainAura(5, true), false);
                         if (stored > 0) {
                             provider.container().drainAura(stored, false);
 
+                            BlockPos pos = ((TileEntity) provider).getPos();
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
                                     pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
                                     this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F,

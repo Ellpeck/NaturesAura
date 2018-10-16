@@ -25,7 +25,7 @@ public class TreeRitualRecipe {
     public boolean matchesItems(ItemStack sapling, List<ItemStack> items) {
         if (this.saplingType.isItemEqual(sapling)) {
             for (ItemStack ingredient : this.items) {
-                if (!Helper.containsItem(items, ingredient)) {
+                if (Helper.getItemIndex(items, ingredient) < 0) {
                     return false;
                 }
             }

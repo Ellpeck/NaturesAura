@@ -1,6 +1,10 @@
 package de.ellpeck.naturesaura;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -46,21 +50,27 @@ public final class Helper {
         return ((a & 255) << 24) | ((r & 255) << 16) | ((g & 255) << 8) | (b & 255);
     }
 
-    public static boolean containsItem(List<ItemStack> list, ItemStack item) {
-        for (ItemStack stack : list) {
-            if (stack.isItemEqual(item)) {
-                return true;
+    public static int getItemIndex(List<ItemStack> list, ItemStack item) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).isItemEqual(item)) {
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
-    public static boolean containsItem(ItemStack[] array, ItemStack item) {
-        for (ItemStack stack : array) {
-            if (stack.isItemEqual(item)) {
-                return true;
-            }
+    @SideOnly(Side.CLIENT)
+    public static void renderItemInWorld(ItemStack stack) {
+        if (!stack.isEmpty()) {
+            GlStateManager.pushMatrix();
+            GlStateManager.disableLighting();
+            GlStateManager.pushAttrib();
+            RenderHelper.enableStandardItemLighting();
+            Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
+            RenderHelper.disableStandardItemLighting();
+            GlStateManager.popAttrib();
+            GlStateManager.enableLighting();
+            GlStateManager.popMatrix();
         }
-        return false;
     }
 }
