@@ -41,14 +41,14 @@ public class TerrainGenEvents {
                 if (!saplingStack.isEmpty()) {
                     for (TreeRitualRecipe recipe : TreeRitualRecipe.RECIPES) {
                         if (recipe.matchesItems(saplingStack, usableItems)) {
-                            Map<TileEntityWoodStand, ItemStack> actuallyInvolved = new HashMap<>();
+                            Map<BlockPos, ItemStack> actuallyInvolved = new HashMap<>();
                             List<ItemStack> stillRequired = new ArrayList<>(Arrays.asList(recipe.items));
                             TileEntityWoodStand toPick = null;
 
                             for (TileEntityWoodStand stand : stands) {
                                 int index = Helper.getItemIndex(stillRequired, stand.stack);
                                 if (index >= 0) {
-                                    actuallyInvolved.put(stand, stand.stack);
+                                    actuallyInvolved.put(stand.getPos(), stand.stack);
                                     stillRequired.remove(index);
 
                                     if (toPick == null) {
@@ -58,7 +58,7 @@ public class TerrainGenEvents {
                             }
 
                             if (stillRequired.isEmpty()) {
-                                toPick.setRitual(pos, recipe, actuallyInvolved);
+                                toPick.setRitual(pos, recipe.result, recipe.time, actuallyInvolved);
                                 break;
                             }
                         }
