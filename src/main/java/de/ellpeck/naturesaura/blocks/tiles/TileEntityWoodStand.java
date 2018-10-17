@@ -66,10 +66,10 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                     if (this.timer % 5 == 0 && this.timer < this.totalTime / 2) {
                         for (BlockPos pos : this.involvedStands.keySet()) {
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
-                                    (float) pos.getX() + 0.4F + this.world.rand.nextFloat() * 0.2F,
-                                    (float) pos.getY() + 1.05F + this.world.rand.nextFloat() * 0.35F,
-                                    (float) pos.getZ() + 0.4F + this.world.rand.nextFloat() * 0.2F,
-                                    this.ritualPos.getX() + 0.5F, this.ritualPos.getY() + this.world.rand.nextFloat() * 2F + 1F, this.ritualPos.getZ() + 0.5F,
+                                    (float) pos.getX() + 0.2F + this.world.rand.nextFloat() * 0.6F,
+                                    (float) pos.getY() + 0.85F,
+                                    (float) pos.getZ() + 0.2F + this.world.rand.nextFloat() * 0.6F,
+                                    this.ritualPos.getX() + 0.5F, this.ritualPos.getY() + this.world.rand.nextFloat() * 3F + 2F, this.ritualPos.getZ() + 0.5F,
                                     this.world.rand.nextFloat() * 0.02F + 0.02F, 0x89cc37, this.world.rand.nextFloat() * 1F + 1F
                             ));
                         }
