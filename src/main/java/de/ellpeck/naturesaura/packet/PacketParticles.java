@@ -3,7 +3,9 @@ package de.ellpeck.naturesaura.packet;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -59,10 +61,12 @@ public class PacketParticles implements IMessage {
                             BlockPos pos = new BlockPos(message.posX, message.posY, message.posZ);
                             for (BlockPos offset : TileEntityWoodStand.GOLD_POWDER_POSITIONS) {
                                 BlockPos dustPos = pos.add(offset);
+                                IBlockState state = world.getBlockState(dustPos);
+                                AxisAlignedBB box = state.getBlock().getBoundingBox(state, world, dustPos);
                                 NaturesAura.proxy.spawnMagicParticle(world,
-                                        dustPos.getX() + 0.375F + world.rand.nextFloat() * 0.25F,
+                                        dustPos.getX() + box.minX + (box.maxX - box.minX) * world.rand.nextFloat(),
                                         dustPos.getY() + 0.1F,
-                                        dustPos.getZ() + 0.375F + world.rand.nextFloat() * 0.25F,
+                                        dustPos.getZ() + box.minZ + (box.maxZ - box.minZ) * world.rand.nextFloat(),
                                         (float) world.rand.nextGaussian() * 0.01F,
                                         world.rand.nextFloat() * 0.005F + 0.01F,
                                         (float) world.rand.nextGaussian() * 0.01F,
@@ -74,7 +78,7 @@ public class PacketParticles implements IMessage {
                                 NaturesAura.proxy.spawnMagicParticle(world,
                                         message.posX + 0.5F, message.posY + 1.25F, message.posZ + 0.5F,
                                         (float) world.rand.nextGaussian() * 0.05F, world.rand.nextFloat() * 0.05F, (float) world.rand.nextGaussian() * 0.05F,
-                                        0xFF00FF, 1.5F, 50, 0F, false, true);
+                                        0x89cc37, 1.5F, 50, 0F, false, true);
                             }
                             break;
                         case 2:
@@ -90,7 +94,7 @@ public class PacketParticles implements IMessage {
                                 NaturesAura.proxy.spawnMagicParticle(world,
                                         message.posX, message.posY, message.posZ,
                                         world.rand.nextGaussian() * 0.05F, world.rand.nextGaussian() * 0.05F, world.rand.nextGaussian() * 0.05F,
-                                        0xFF00FF, 2F, 200, 0F, true, true);
+                                        0x89cc37, 2F, 200, 0F, true, true);
                             }
                             break;
                     }

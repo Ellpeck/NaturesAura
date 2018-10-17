@@ -17,7 +17,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,15 +60,17 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
     public void update() {
         if (!this.world.isRemote) {
             if (this.ritualPos != null && this.involvedStands != null && this.output != null && this.totalTime > 0) {
-                if (this.isRitualOkay(this.world)) {
+                if (this.isRitualOkay()) {
                     this.timer++;
 
-                    if (this.timer % 3 == 0 && this.timer < this.totalTime / 2) {
+                    if (this.timer % 5 == 0 && this.timer < this.totalTime / 2) {
                         for (BlockPos pos : this.involvedStands.keySet()) {
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
-                                    (float) pos.getX() + 0.5F, (float) pos.getY() + 1.25F, (float) pos.getZ() + 0.5F,
-                                    this.ritualPos.getX() + 0.5F, this.ritualPos.getY() + 2.5F, this.ritualPos.getZ() + 0.5F,
-                                    this.world.rand.nextFloat() * 0.02F + 0.02F, 0xFF00FF, this.world.rand.nextFloat() * 1F + 1F
+                                    (float) pos.getX() + 0.4F + this.world.rand.nextFloat() * 0.2F,
+                                    (float) pos.getY() + 1.05F + this.world.rand.nextFloat() * 0.35F,
+                                    (float) pos.getZ() + 0.4F + this.world.rand.nextFloat() * 0.2F,
+                                    this.ritualPos.getX() + 0.5F, this.ritualPos.getY() + this.world.rand.nextFloat() * 2F + 1F, this.ritualPos.getZ() + 0.5F,
+                                    this.world.rand.nextFloat() * 0.02F + 0.02F, 0x89cc37, this.world.rand.nextFloat() * 1F + 1F
                             ));
                         }
                     }
@@ -136,14 +137,20 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
         }
     }
 
-    private boolean isRitualOkay(World world) {
+    private boolean isRitualOkay() {
+        for (int i = 0; i < 3; i++) {
+            IBlockState state = this.world.getBlockState(this.ritualPos.up(i));
+            if (!(state.getBlock() instanceof BlockLog)) {
+                return false;
+            }
+        }
         for (Map.Entry<BlockPos, ItemStack> entry : this.involvedStands.entrySet()) {
-            TileEntity tile = world.getTileEntity(entry.getKey());
+            TileEntity tile = this.world.getTileEntity(entry.getKey());
             if (!(tile instanceof TileEntityWoodStand) || (this.timer < this.totalTime / 2 && !((TileEntityWoodStand) tile).stack.isItemEqual(entry.getValue()))) {
                 return false;
             }
         }
-        return Helper.checkMultiblock(world, this.ritualPos, TileEntityWoodStand.GOLD_POWDER_POSITIONS, ModBlocks.GOLD_POWDER.getDefaultState(), true);
+        return Helper.checkMultiblock(this.world, this.ritualPos, TileEntityWoodStand.GOLD_POWDER_POSITIONS, ModBlocks.GOLD_POWDER.getDefaultState(), true);
     }
 
     @Override

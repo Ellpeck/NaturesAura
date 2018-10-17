@@ -63,8 +63,11 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
             for (BlockPos offsetToOrigin : TileEntityWoodStand.GOLD_POWDER_POSITIONS) {
                 BlockPos origin = pos.subtract(offsetToOrigin);
                 if (Helper.checkMultiblock(worldIn, origin, TileEntityWoodStand.GOLD_POWDER_POSITIONS, ModBlocks.GOLD_POWDER.getDefaultState(), true)) {
+                    AxisAlignedBB box = this.getBoundingBox(stateIn, worldIn, pos);
                     NaturesAura.proxy.spawnMagicParticle(worldIn,
-                            pos.getX() + 0.375 + rand.nextFloat() * 0.25, pos.getY() + 0.1, pos.getZ() + 0.375 + rand.nextFloat() * 0.25,
+                            pos.getX() + box.minX + (box.maxX - box.minX) * rand.nextFloat(),
+                            pos.getY() + 0.05F,
+                            pos.getZ() + box.minZ + (box.maxZ - box.minZ) * rand.nextFloat(),
                             rand.nextGaussian() * 0.001, rand.nextFloat() * 0.001 + 0.005, rand.nextGaussian() * 0.001,
                             0xf4cb42, 1F, 50, 0F, false, true);
                     break;
