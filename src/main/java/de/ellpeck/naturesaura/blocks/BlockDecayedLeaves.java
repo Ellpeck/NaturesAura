@@ -3,6 +3,8 @@ package de.ellpeck.naturesaura.blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,10 +23,12 @@ public class BlockDecayedLeaves extends BlockImpl {
         this.setSoundType(SoundType.PLANT);
     }
 
+    @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT_MIPPED;
@@ -35,5 +39,10 @@ public class BlockDecayedLeaves extends BlockImpl {
         if (!worldIn.isRemote) {
             worldIn.setBlockToAir(pos);
         }
+    }
+
+    @Override
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        return Items.AIR;
     }
 }

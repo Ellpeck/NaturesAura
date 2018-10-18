@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.aura.IAuraContainer;
 import de.ellpeck.naturesaura.aura.IAuraContainerProvider;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.BlockStoneBrick.EnumType;
@@ -113,6 +114,9 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
     private final BasicAuraContainer container = new BasicAuraContainer(5000);
     public boolean structureFine;
 
+    private AltarRecipe currentRecipe;
+    private int timer;
+
     private int lastAura;
 
     @Override
@@ -158,6 +162,33 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
                         }
                     } else {
                         this.cachedProviders.remove(index);
+                    }
+                }
+
+                ItemStack stack = this.items.getStackInSlot(0);
+                if (this.currentRecipe == null) {
+                    if (!stack.isEmpty()) {
+                        this.currentRecipe = AltarRecipe.forInput(stack);
+                    }
+                } else {
+                    if (stack.isEmpty() || !stack.isItemEqual(this.currentRecipe.input)) {
+                        this.currentRecipe = null;
+                    } else {
+                        int req = this.currentRecipe.aura / this.currentRecipe.time;
+                        if (this.container.getStoredAura() >= req) {
+                            this.container.drainAura(req, false);
+
+                            if (this.timer % 4 == 0) {
+                                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 4));
+                            }
+
+                            this.timer++;
+                            if (this.timer >= this.currentRecipe.time) {
+                                this.items.setStackInSlot(0, this.currentRecipe.output.copy());
+                                this.currentRecipe = null;
+                                this.timer = 0;
+                            }
+                        }
                     }
                 }
             }
@@ -206,6 +237,13 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
         compound.setTag("items", this.items.serializeNBT());
         compound.setBoolean("fine", this.structureFine);
         this.container.writeNBT(compound);
+
+        if (!syncing) {
+            if (this.currentRecipe != null) {
+                compound.setTag("recipe_input", this.currentRecipe.input.serializeNBT());
+                compound.setInteger("timer", this.timer);
+            }
+        }
     }
 
     @Override
@@ -214,6 +252,13 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
         this.items.deserializeNBT(compound.getCompoundTag("items"));
         this.structureFine = compound.getBoolean("fine");
         this.container.readNBT(compound);
+
+        if (!syncing) {
+            if (compound.hasKey("recipe_input")) {
+                this.currentRecipe = AltarRecipe.forInput(new ItemStack(compound.getCompoundTag("recipe_input")));
+                this.timer = compound.getInteger("timer");
+            }
+        }
     }
 
     @Override

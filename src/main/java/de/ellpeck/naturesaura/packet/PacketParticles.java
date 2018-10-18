@@ -57,12 +57,12 @@ public class PacketParticles implements IMessage {
                 World world = Minecraft.getMinecraft().world;
                 if (world != null) {
                     switch (message.type) {
-                        case 0:
+                        case 0: // Tree ritual: Gold powder
                             BlockPos pos = new BlockPos(message.posX, message.posY, message.posZ);
                             for (BlockPos offset : TileEntityWoodStand.GOLD_POWDER_POSITIONS) {
                                 BlockPos dustPos = pos.add(offset);
                                 IBlockState state = world.getBlockState(dustPos);
-                                AxisAlignedBB box = state.getBlock().getBoundingBox(state, world, dustPos);
+                                AxisAlignedBB box = state.getBoundingBox(world, dustPos);
                                 NaturesAura.proxy.spawnMagicParticle(world,
                                         dustPos.getX() + box.minX + (box.maxX - box.minX) * world.rand.nextFloat(),
                                         dustPos.getY() + 0.1F,
@@ -73,7 +73,7 @@ public class PacketParticles implements IMessage {
                                         0xf4cb42, 2F, 100, 0F, false, true);
                             }
                             break;
-                        case 1:
+                        case 1: // Tree ritual: Consuming item
                             for (int i = world.rand.nextInt(20) + 10; i >= 0; i--) {
                                 NaturesAura.proxy.spawnMagicParticle(world,
                                         message.posX + 0.5F, message.posY + 1.25F, message.posZ + 0.5F,
@@ -81,7 +81,7 @@ public class PacketParticles implements IMessage {
                                         0x89cc37, 1.5F, 50, 0F, false, true);
                             }
                             break;
-                        case 2:
+                        case 2: // Tree ritual: Tree disappearing
                             for (int i = world.rand.nextInt(5) + 3; i >= 0; i--) {
                                 NaturesAura.proxy.spawnMagicParticle(world,
                                         message.posX + world.rand.nextFloat(), message.posY + world.rand.nextFloat(), message.posZ + world.rand.nextFloat(),
@@ -89,7 +89,7 @@ public class PacketParticles implements IMessage {
                                         0x33FF33, 1F, 100, 0F, false, true);
                             }
                             break;
-                        case 3:
+                        case 3: // Tree ritual: Spawn result item
                             for (int i = world.rand.nextInt(10) + 10; i >= 0; i--) {
                                 NaturesAura.proxy.spawnMagicParticle(world,
                                         message.posX, message.posY, message.posZ,
@@ -97,6 +97,15 @@ public class PacketParticles implements IMessage {
                                         0x89cc37, 2F, 200, 0F, true, true);
                             }
                             break;
+                        case 4: // Nature altar: Conversion
+                            for (int i = world.rand.nextInt(5) + 2; i >= 0; i--) {
+                                NaturesAura.proxy.spawnMagicParticle(world,
+                                        message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        message.posY + 0.9F + 0.25F * world.rand.nextFloat(),
+                                        message.posZ + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        world.rand.nextGaussian() * 0.01F, world.rand.nextFloat() * 0.01F, world.rand.nextGaussian() * 0.01F,
+                                        0x00FF00, world.rand.nextFloat() * 1.5F + 0.75F, 40, 0F, false, true);
+                            }
                     }
                 }
             });
