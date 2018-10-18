@@ -1,16 +1,20 @@
 package de.ellpeck.naturesaura;
 
+import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,5 +76,33 @@ public final class Helper {
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         }
+    }
+
+    public static boolean putStackOnTile(EntityPlayer player, EnumHand hand, BlockPos pos, int slot) {
+        TileEntity tile = player.world.getTileEntity(pos);
+        if (tile instanceof TileEntityImpl) {
+            IItemHandlerModifiable handler = ((TileEntityImpl) tile).getItemHandler(null);
+            if (handler != null) {
+                ItemStack handStack = player.getHeldItem(hand);
+                if (!handStack.isEmpty()) {
+                    ItemStack remain = handler.insertItem(slot, handStack, player.world.isRemote);
+                    if (!ItemStack.areItemStacksEqual(remain, handStack)) {
+                        if (!player.world.isRemote) {
+                            player.setHeldItem(hand, remain);
+                        }
+                        return true;
+                    }
+                }
+
+                if (!handler.getStackInSlot(slot).isEmpty()) {
+                    if (!player.world.isRemote) {
+                        player.addItemStackToInventory(handler.getStackInSlot(slot));
+                        handler.setStackInSlot(slot, ItemStack.EMPTY);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 public class RenderWoodStand extends TileEntitySpecialRenderer<TileEntityWoodStand> {
     @Override
     public void render(TileEntityWoodStand tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        ItemStack stack = tile.stack;
+        ItemStack stack = tile.items.getStackInSlot(0);
         if (!stack.isEmpty()) {
             GlStateManager.pushMatrix();
             if (stack.getItem() instanceof ItemBlock) {

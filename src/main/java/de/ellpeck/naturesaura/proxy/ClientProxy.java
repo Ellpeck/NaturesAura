@@ -1,6 +1,8 @@
 package de.ellpeck.naturesaura.proxy;
 
+import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
+import de.ellpeck.naturesaura.blocks.tiles.render.RenderNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderWoodStand;
 import de.ellpeck.naturesaura.events.ClientEvents;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
@@ -33,6 +35,7 @@ public class ClientProxy implements IProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodStand.class, new RenderWoodStand());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNatureAltar.class, new RenderNatureAltar());
     }
 
     @Override

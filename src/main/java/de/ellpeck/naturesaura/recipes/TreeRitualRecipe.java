@@ -35,7 +35,8 @@ public class TreeRitualRecipe {
         }
     }
 
-    public void add() {
+    public TreeRitualRecipe add() {
         RECIPES.add(this);
+        return this;
     }
 }

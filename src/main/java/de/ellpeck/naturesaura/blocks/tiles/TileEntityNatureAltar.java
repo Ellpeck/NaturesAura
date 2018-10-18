@@ -7,14 +7,19 @@ import de.ellpeck.naturesaura.aura.IAuraContainer;
 import de.ellpeck.naturesaura.aura.IAuraContainerProvider;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
+import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.BlockStoneBrick.EnumType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +60,6 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
             new BlockPos(-2, 0, 2)
     };
     private static final BlockPos[] CHISELED_POSITIONS = new BlockPos[]{
-            new BlockPos(0, -1, 0),
             new BlockPos(1, -1, 1),
             new BlockPos(-1, -1, 1),
             new BlockPos(-1, -1, -1),
@@ -86,6 +90,23 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
             new BlockPos(-1, -1, 3),
             new BlockPos(1, -1, 2),
             new BlockPos(1, -1, 3),
+    };
+
+    public final ItemStackHandler items = new ItemStackHandlerNA(1, this, true) {
+        @Override
+        public int getSlotLimit(int slot) {
+            return 1;
+        }
+
+        @Override
+        protected boolean canInsert(ItemStack stack, int slot) {
+            return AltarRecipe.forInput(stack) != null;
+        }
+
+        @Override
+        protected boolean canExtract(ItemStack stack, int slot, int amount) {
+            return AltarRecipe.forInput(stack) == null;
+        }
     };
 
     private final List<IAuraContainerProvider> cachedProviders = new ArrayList<>();
@@ -182,6 +203,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
     @Override
     public void writeNBT(NBTTagCompound compound, boolean syncing) {
         super.writeNBT(compound, syncing);
+        compound.setTag("items", this.items.serializeNBT());
         compound.setBoolean("fine", this.structureFine);
         this.container.writeNBT(compound);
     }
@@ -189,6 +211,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
     @Override
     public void readNBT(NBTTagCompound compound, boolean syncing) {
         super.readNBT(compound, syncing);
+        this.items.deserializeNBT(compound.getCompoundTag("items"));
         this.structureFine = compound.getBoolean("fine");
         this.container.readNBT(compound);
     }
@@ -201,5 +224,10 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
     @Override
     public boolean isArtificial() {
         return true;
+    }
+
+    @Override
+    public IItemHandlerModifiable getItemHandler(EnumFacing facing) {
+        return this.items;
     }
 }

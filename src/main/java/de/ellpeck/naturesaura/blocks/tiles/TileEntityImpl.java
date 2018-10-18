@@ -1,15 +1,21 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+import javax.annotation.Nullable;
 
 public class TileEntityImpl extends TileEntity {
     @Override
@@ -66,6 +72,29 @@ public class TileEntityImpl extends TileEntity {
         PlayerChunkMapEntry entry = world.getPlayerChunkMap().getEntry(this.getPos().getX() >> 4, this.getPos().getZ() >> 4);
         if (entry != null) {
             entry.sendPacket(this.getUpdatePacket());
+        }
+    }
+
+    public IItemHandlerModifiable getItemHandler(EnumFacing facing) {
+        return null;
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return this.getItemHandler(facing) != null;
+        } else {
+            return super.hasCapability(capability, facing);
+        }
+    }
+
+    @Nullable
+    @Override
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (T) this.getItemHandler(facing);
+        } else {
+            return super.getCapability(capability, facing);
         }
     }
 }

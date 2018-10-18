@@ -29,8 +29,9 @@ public class TerrainGenEvents {
                 for (TileEntity tile : tileEntities) {
                     if (tile instanceof TileEntityWoodStand) {
                         TileEntityWoodStand stand = (TileEntityWoodStand) tile;
-                        if (!stand.stack.isEmpty()) {
-                            usableItems.add(stand.stack);
+                        ItemStack stack = stand.items.getStackInSlot(0);
+                        if (!stack.isEmpty()) {
+                            usableItems.add(stack);
                             stands.add(stand);
                         }
                     }
@@ -46,9 +47,10 @@ public class TerrainGenEvents {
                             TileEntityWoodStand toPick = null;
 
                             for (TileEntityWoodStand stand : stands) {
-                                int index = Helper.getItemIndex(stillRequired, stand.stack);
+                                ItemStack stack = stand.items.getStackInSlot(0);
+                                int index = Helper.getItemIndex(stillRequired, stack);
                                 if (index >= 0) {
-                                    actuallyInvolved.put(stand.getPos(), stand.stack);
+                                    actuallyInvolved.put(stand.getPos(), stack);
                                     stillRequired.remove(index);
 
                                     if (toPick == null) {

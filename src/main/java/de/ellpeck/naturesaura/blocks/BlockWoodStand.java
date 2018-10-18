@@ -1,12 +1,12 @@
 package de.ellpeck.naturesaura.blocks;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -28,46 +28,7 @@ public class BlockWoodStand extends BlockContainerImpl {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileEntityWoodStand) {
-            TileEntityWoodStand stand = (TileEntityWoodStand) tile;
-            if (stand.stack.isEmpty()) {
-                ItemStack handStack = playerIn.getHeldItem(hand);
-                if (!handStack.isEmpty()) {
-                    if (!worldIn.isRemote) {
-                        ItemStack copy = handStack.copy();
-                        copy.setCount(1);
-                        stand.stack = copy;
-                        handStack.shrink(1);
-                        stand.sendToClients();
-                    }
-                    return true;
-                }
-            } else {
-                if (!worldIn.isRemote) {
-                    playerIn.addItemStackToInventory(stand.stack);
-                    stand.stack = ItemStack.EMPTY;
-                    stand.sendToClients();
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        if (!worldIn.isRemote) {
-            TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TileEntityWoodStand) {
-                TileEntityWoodStand stand = (TileEntityWoodStand) tile;
-                if (!stand.stack.isEmpty()) {
-                    EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stand.stack);
-                    worldIn.spawnEntity(item);
-                }
-            }
-        }
-        super.breakBlock(worldIn, pos, state);
+        return Helper.putStackOnTile(playerIn, hand, pos, 0);
     }
 
     @Override

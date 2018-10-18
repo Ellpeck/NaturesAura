@@ -17,6 +17,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +43,13 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
             new BlockPos(1, 0, -2),
             new BlockPos(-1, 0, -2)
     };
-    public ItemStack stack = ItemStack.EMPTY;
+
+    public final ItemStackHandler items = new ItemStackHandlerNA(1, this, true) {
+        @Override
+        public int getSlotLimit(int slot) {
+            return 1;
+        }
+    };
 
     private BlockPos ritualPos;
     private Map<BlockPos, ItemStack> involvedStands;
@@ -102,7 +110,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                         for (BlockPos pos : this.involvedStands.keySet()) {
                             TileEntityWoodStand stand = (TileEntityWoodStand) this.world.getTileEntity(pos);
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(stand.pos.getX(), stand.pos.getY(), stand.pos.getZ(), 1));
-                            stand.stack = ItemStack.EMPTY;
+                            stand.items.setStackInSlot(0, ItemStack.EMPTY);
                             stand.sendToClients();
                         }
                     }
@@ -146,7 +154,8 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
         }
         for (Map.Entry<BlockPos, ItemStack> entry : this.involvedStands.entrySet()) {
             TileEntity tile = this.world.getTileEntity(entry.getKey());
-            if (!(tile instanceof TileEntityWoodStand) || (this.timer < this.totalTime / 2 && !((TileEntityWoodStand) tile).stack.isItemEqual(entry.getValue()))) {
+            if (!(tile instanceof TileEntityWoodStand)
+                    || (this.timer < this.totalTime / 2 && !((TileEntityWoodStand) tile).items.getStackInSlot(0).isItemEqual(entry.getValue()))) {
                 return false;
             }
         }
@@ -156,7 +165,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
     @Override
     public void writeNBT(NBTTagCompound compound, boolean syncing) {
         super.writeNBT(compound, syncing);
-        compound.setTag("item", this.stack.writeToNBT(new NBTTagCompound()));
+        compound.setTag("items", this.items.serializeNBT());
 
         if (!syncing) {
             if (this.ritualPos != null && this.involvedStands != null && this.output != null && this.totalTime > 0) {
@@ -180,7 +189,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
     @Override
     public void readNBT(NBTTagCompound compound, boolean syncing) {
         super.readNBT(compound, syncing);
-        this.stack = new ItemStack(compound.getCompoundTag("item"));
+        this.items.deserializeNBT(compound.getCompoundTag("items"));
 
         if (!syncing) {
             if (compound.hasKey("ritual_pos") && compound.hasKey("stands") && compound.hasKey("output") && compound.hasKey("total_time")) {
@@ -200,5 +209,10 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                 }
             }
         }
+    }
+
+    @Override
+    public IItemHandlerModifiable getItemHandler(EnumFacing facing) {
+        return this.items;
     }
 }
