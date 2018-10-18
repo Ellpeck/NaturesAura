@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +77,22 @@ public final class Helper {
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderItemInGui(ItemStack stack, int x, int y, float scale) {
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        RenderHelper.enableGUIStandardItemLighting();
+        GlStateManager.enableDepth();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.translate(x, y, 0);
+        GlStateManager.scale(scale, scale, scale);
+        Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
+        Minecraft.getMinecraft().getRenderItem().renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, stack, 0, 0, null);
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.popMatrix();
     }
 
     public static boolean putStackOnTile(EntityPlayer player, EnumHand hand, BlockPos pos, int slot) {
