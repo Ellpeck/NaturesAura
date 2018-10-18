@@ -17,3 +17,6 @@ item.naturesaura.infused_iron.name=Infused Iron
 
 container.naturesaura.tree_ritual.name=Tree Infusion
 container.naturesaura.altar.name=Natural Altar
+
+info.naturesaura.aura_in_area=Provider Amount
+info.naturesaura.aura_percentage=Saturation

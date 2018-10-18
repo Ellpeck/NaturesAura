@@ -41,7 +41,7 @@ public class BasicAuraContainer implements IAuraContainer {
 
     @Override
     public int getAuraColor() {
-        return 0x00FF00;
+        return 0x1E891E;
     }
 
     public void writeNBT(NBTTagCompound compound) {
