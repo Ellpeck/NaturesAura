@@ -20,6 +20,13 @@ public final class ModRecipes {
                 new ItemStack(Blocks.STONE),
                 new ItemStack(ModItems.GOLD_LEAF),
                 new ItemStack(Items.DIAMOND)).add();
+        new TreeRitualRecipe(new ItemStack(Blocks.SAPLING), new ItemStack(ModBlocks.ANCIENT_SAPLING), 200,
+                new ItemStack(Blocks.SAPLING),
+                new ItemStack(Blocks.YELLOW_FLOWER),
+                new ItemStack(Blocks.RED_FLOWER),
+                new ItemStack(Items.WHEAT_SEEDS),
+                new ItemStack(Items.REEDS),
+                new ItemStack(ModItems.GOLD_LEAF)).add();
 
         new AltarRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON), 200, 30).add();
     }

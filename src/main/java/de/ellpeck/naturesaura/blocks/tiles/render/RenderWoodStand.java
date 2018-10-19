@@ -4,8 +4,10 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 
 public class RenderWoodStand extends TileEntitySpecialRenderer<TileEntityWoodStand> {
     @Override
@@ -13,7 +15,8 @@ public class RenderWoodStand extends TileEntitySpecialRenderer<TileEntityWoodSta
         ItemStack stack = tile.items.getStackInSlot(0);
         if (!stack.isEmpty()) {
             GlStateManager.pushMatrix();
-            if (stack.getItem() instanceof ItemBlock) {
+            Item item = stack.getItem();
+            if (item instanceof ItemBlock && ((ItemBlock) item).getBlock().getRenderLayer() == BlockRenderLayer.SOLID) {
                 GlStateManager.translate(x + 0.5F, y + 0.9735F, z + 0.5F);
                 float scale = 0.65F;
                 GlStateManager.scale(scale, scale, scale);
