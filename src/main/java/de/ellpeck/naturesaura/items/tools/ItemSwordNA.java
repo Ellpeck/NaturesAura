@@ -1,24 +1,18 @@
-package de.ellpeck.naturesaura.items;
+package de.ellpeck.naturesaura.items.tools;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.item.ItemSword;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import java.util.Collections;
-import java.util.Map;
-
-public class ItemImpl extends Item implements IModItem, IModelProvider {
-
+public class ItemSwordNA extends ItemSword implements IModItem, IModelProvider {
     private final String baseName;
 
-    public ItemImpl(String baseName) {
+    public ItemSwordNA(String baseName, ToolMaterial material) {
+        super(material);
         this.baseName = baseName;
         ModRegistry.addItemOrBlock(this);
     }

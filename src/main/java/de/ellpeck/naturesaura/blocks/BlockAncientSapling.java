@@ -56,11 +56,6 @@ public class BlockAncientSapling extends BlockBush implements IGrowable, IModIte
     }
 
     @Override
-    public Map<ItemStack, ModelVariant> getModelLocations() {
-        return Collections.singletonMap(new ItemStack(this), new ModelVariant(new ResourceLocation(NaturesAura.MOD_ID, this.getBaseName()), "inventory"));
-    }
-
-    @Override
     public String getBaseName() {
         return "ancient_sapling";
     }

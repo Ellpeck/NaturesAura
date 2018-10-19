@@ -64,11 +64,6 @@ public class BlockAncientLeaves extends BlockLeaves implements
     }
 
     @Override
-    public Map<ItemStack, ModelVariant> getModelLocations() {
-        return Collections.singletonMap(new ItemStack(this), new ModelVariant(new ResourceLocation(NaturesAura.MOD_ID, this.getBaseName()), "inventory"));
-    }
-
-    @Override
     public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
         return Collections.singletonList(new ItemStack(this, 1, 0));
     }

@@ -77,11 +77,6 @@ public class BlockContainerImpl extends BlockContainer implements IModItem, IMod
     }
 
     @Override
-    public Map<ItemStack, ModelVariant> getModelLocations() {
-        return Collections.singletonMap(new ItemStack(this), new ModelVariant(new ResourceLocation(NaturesAura.MOD_ID, this.getBaseName()), "inventory"));
-    }
-
-    @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }

@@ -52,11 +52,6 @@ public class BlockImpl extends Block implements IModItem, IModelProvider {
     }
 
     @Override
-    public Map<ItemStack, ModelVariant> getModelLocations() {
-        return Collections.singletonMap(new ItemStack(this), new ModelVariant(new ResourceLocation(NaturesAura.MOD_ID, this.getBaseName()), "inventory"));
-    }
-
-    @Override
     public Block setSoundType(SoundType sound) {
         return super.setSoundType(sound);
     }

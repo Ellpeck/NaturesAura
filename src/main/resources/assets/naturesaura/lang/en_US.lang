@@ -14,6 +14,11 @@ item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.gold_fiber.name=Brilliant Fiber
 item.naturesaura.gold_leaf.name=Gold Leaf
 item.naturesaura.infused_iron.name=Infused Iron
+item.naturesaura.infused_iron_pickaxe.name=Botanist's Pickaxe
+item.naturesaura.infused_iron_axe.name=Botanist's Handaxe
+item.naturesaura.infused_iron_shovel.name=Botanist's Shovel
+item.naturesaura.infused_iron_sword.name=Botanist's Blade
+item.naturesaura.infused_iron_hoe.name=Botanist's Hoe
 
 container.naturesaura.tree_ritual.name=Tree Infusion
 container.naturesaura.altar.name=Natural Altar
