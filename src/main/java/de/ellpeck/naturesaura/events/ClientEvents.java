@@ -1,9 +1,11 @@
 package de.ellpeck.naturesaura.events;
 
+import baubles.api.BaublesApi;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.aura.IAuraContainer;
 import de.ellpeck.naturesaura.aura.IAuraContainerProvider;
+import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import de.ellpeck.naturesaura.particles.ParticleMagic;
@@ -69,11 +71,11 @@ public class ClientEvents {
     @SubscribeEvent
     public void onOverlayRender(RenderGameOverlayEvent.Post event) {
         Minecraft mc = Minecraft.getMinecraft();
-        if (event.getType() == ElementType.ALL /*&& mc.currentScreen == null*/) {
+        if (event.getType() == ElementType.ALL && mc.currentScreen == null) {
             ScaledResolution res = event.getResolution();
             if (mc.player != null) {
                 ItemStack stack = mc.player.getHeldItemMainhand();
-                if (!stack.isEmpty() && stack.getItem() == ModItems.EYE) {
+                if (!stack.isEmpty() && stack.getItem() == ModItems.EYE || Compat.baubles && BaublesApi.isBaubleEquipped(mc.player, ModItems.EYE) >= 0) {
                     int maxAura = 0;
                     int aura = 0;
                     int total = 0;

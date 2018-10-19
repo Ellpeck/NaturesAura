@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura;
 
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.TerrainGenEvents;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -42,6 +43,7 @@ public final class NaturesAura {
         new ModBlocks();
         new ModItems();
 
+        Compat.init();
         PacketHandler.init();
         ModRegistry.preInit(event);
 
