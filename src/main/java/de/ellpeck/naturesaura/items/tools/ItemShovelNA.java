@@ -45,8 +45,13 @@ public class ItemShovelNA extends ItemSpade implements IModItem, IModelProvider 
 
             if (state.getBlock() instanceof BlockDirt) {
                 if (worldIn.getBlockState(pos.up()).getMaterial() == Material.AIR) {
-                    worldIn.setBlockState(pos, Blocks.GRASS.getDefaultState());
-                    damage = 5;
+                    for (EnumFacing dir : EnumFacing.HORIZONTALS) {
+                        if (worldIn.getBlockState(pos.offset(dir)).getBlock() == Blocks.GRASS) {
+                            worldIn.setBlockState(pos, Blocks.GRASS.getDefaultState());
+                            damage = 5;
+                            break;
+                        }
+                    }
                 }
             } else {
                 int range = player.isSneaking() ? 0 : 1;
