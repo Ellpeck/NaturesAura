@@ -34,8 +34,9 @@ public class ItemShovelNA extends ItemSpade implements IModItem, IModelProvider 
         EnumActionResult result = EnumActionResult.PASS;
         if (this == ModItems.INFUSED_SHOVEL) {
             ItemStack stack = player.getHeldItem(hand);
-            for (int x = -1; x <= 1; x++) {
-                for (int y = -1; y <= 1; y++) {
+            int range = player.isSneaking() ? 0 : 1;
+            for (int x = -range; x <= range; x++) {
+                for (int y = -range; y <= range; y++) {
                     BlockPos actualPos = pos.add(x, 0, y);
                     if (player.canPlayerEdit(actualPos.offset(facing), facing, stack)) {
                         if (facing != EnumFacing.DOWN

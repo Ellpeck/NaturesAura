@@ -1,0 +1,19 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "AAA",
+        " S ",
+        " S "
+    ],
+    "key": {
+        "A": {
+            "item": "naturesaura:infused_iron"
+        },
+        "S": {
+            "item": "naturesaura:ancient_stick"
+        }
+    },
+    "result": {
+        "item": "naturesaura:infused_iron_pickaxe"
+    }
+}

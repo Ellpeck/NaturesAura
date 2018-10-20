@@ -1,0 +1,15 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "W"
+    ],
+    "key": {
+        "W": {
+            "item": "naturesaura:ancient_bark"
+        }
+    },
+    "result": {
+        "item": "naturesaura:ancient_planks",
+        "count": 2
+    }
+}
