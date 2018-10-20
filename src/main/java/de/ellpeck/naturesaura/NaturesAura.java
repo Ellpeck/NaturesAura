@@ -1,5 +1,9 @@
 package de.ellpeck.naturesaura;
 
+import de.ellpeck.naturesaura.aura.Capabilities.CapabilityAuraContainer;
+import de.ellpeck.naturesaura.aura.Capabilities.CapabilityAuraRecharge;
+import de.ellpeck.naturesaura.aura.IAuraContainer;
+import de.ellpeck.naturesaura.aura.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.TerrainGenEvents;
@@ -11,10 +15,13 @@ import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,6 +47,9 @@ public final class NaturesAura {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        CapabilityManager.INSTANCE.register(IAuraContainer.class, new CapabilityAuraContainer(), () -> null);
+        CapabilityManager.INSTANCE.register(IAuraRecharge.class, new CapabilityAuraRecharge(), () -> null);
+
         new ModBlocks();
         new ModItems();
 

@@ -28,6 +28,7 @@ public final class ModRecipes {
                 new ItemStack(Items.REEDS),
                 new ItemStack(ModItems.GOLD_LEAF)).add();
 
-        new AltarRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON), 200, 30).add();
+        new AltarRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON), 300, 80).add();
+        new AltarRecipe(new ItemStack(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE), 150, 40).add();
     }
 }

@@ -20,23 +20,30 @@ import javax.annotation.Nullable;
 public class BaublesCompat {
 
     private final IBauble eye = stack -> BaubleType.CHARM;
+    private final IBauble cache = stack -> BaubleType.BELT;
 
     @SubscribeEvent
     public void onCapabilitiesAttach(AttachCapabilitiesEvent<ItemStack> event) {
         Item item = event.getObject().getItem();
         if (item == ModItems.EYE) {
-            event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "bauble"), new ICapabilityProvider() {
-                @Override
-                public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-                    return capability == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE;
-                }
-
-                @Nullable
-                @Override
-                public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-                    return capability == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE ? (T) BaublesCompat.this.eye : null;
-                }
-            });
+            this.addCap(event, this.eye);
+        } else if (item == ModItems.AURA_CACHE) {
+            this.addCap(event, this.cache);
         }
+    }
+
+    private void addCap(AttachCapabilitiesEvent<ItemStack> event, IBauble type) {
+        event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "bauble"), new ICapabilityProvider() {
+            @Override
+            public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+                return capability == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE;
+            }
+
+            @Nullable
+            @Override
+            public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+                return capability == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE ? (T) type : null;
+            }
+        });
     }
 }

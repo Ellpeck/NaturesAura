@@ -10,4 +10,6 @@ public interface IAuraContainer {
     int getMaxAura();
 
     int getAuraColor();
+
+    boolean isArtificial();
 }

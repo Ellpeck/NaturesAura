@@ -22,4 +22,5 @@ public final class ModItems {
     public static final Item INFUSED_SHOVEL = new ItemShovelNA("infused_iron_shovel", TOOL_MATERIAL_INFUSED_IRON);
     public static final Item INFUSED_HOE = new ItemHoeNA("infused_iron_hoe", TOOL_MATERIAL_INFUSED_IRON);
     public static final Item INFUSED_SWORD = new ItemSwordNA("infused_iron_sword", TOOL_MATERIAL_INFUSED_IRON);
+    public static final Item AURA_CACHE = new ItemAuraCache();
 }

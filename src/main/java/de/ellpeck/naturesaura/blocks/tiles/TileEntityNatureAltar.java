@@ -3,8 +3,8 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.aura.BasicAuraContainer;
+import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.IAuraContainer;
-import de.ellpeck.naturesaura.aura.IAuraContainerProvider;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, IAuraContainerProvider {
+public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
     private static final BlockPos[] BRICK_POSITIONS = new BlockPos[]{
             new BlockPos(-2, -1, 0),
@@ -101,7 +101,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
 
         @Override
         protected boolean canInsert(ItemStack stack, int slot) {
-            return AltarRecipe.forInput(stack) != null;
+            return AltarRecipe.forInput(stack) != null || stack.hasCapability(Capabilities.auraContainer, null);
         }
 
         @Override
@@ -110,8 +110,8 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
         }
     };
 
-    private final List<IAuraContainerProvider> cachedProviders = new ArrayList<>();
-    private final BasicAuraContainer container = new BasicAuraContainer(5000);
+    private final List<TileEntity> cachedProviders = new ArrayList<>();
+    private final BasicAuraContainer container = new BasicAuraContainer(5000, true);
     public boolean structureFine;
 
     private AltarRecipe currentRecipe;
@@ -139,25 +139,26 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
                 if (this.world.getTotalWorldTime() % 100 == 0) {
                     this.cachedProviders.clear();
                     for (TileEntity tile : Helper.getTileEntitiesInArea(this.world, this.pos, 15)) {
-                        if (tile instanceof IAuraContainerProvider && tile != this) {
-                            this.cachedProviders.add((IAuraContainerProvider) tile);
+                        if (tile.hasCapability(Capabilities.auraContainer, null) && tile != this) {
+                            this.cachedProviders.add(tile);
                         }
                     }
                 }
 
                 if (!this.cachedProviders.isEmpty()) {
                     int index = rand.nextInt(this.cachedProviders.size());
-                    IAuraContainerProvider provider = this.cachedProviders.get(index);
-                    if (!((TileEntity) provider).isInvalid()) {
-                        int stored = this.container.storeAura(provider.container().drainAura(5, true), false);
+                    TileEntity provider = this.cachedProviders.get(index);
+                    if (!provider.isInvalid() && provider.hasCapability(Capabilities.auraContainer, null)) {
+                        IAuraContainer container = provider.getCapability(Capabilities.auraContainer, null);
+                        int stored = this.container.storeAura(container.drainAura(5, true), false);
                         if (stored > 0) {
-                            provider.container().drainAura(stored, false);
+                            container.drainAura(stored, false);
 
-                            BlockPos pos = ((TileEntity) provider).getPos();
+                            BlockPos pos = provider.getPos();
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
                                     pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
                                     this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F,
-                                    rand.nextFloat() * 0.05F + 0.05F, provider.container().getAuraColor(), rand.nextFloat() * 1F + 1F
+                                    rand.nextFloat() * 0.05F + 0.05F, container.getAuraColor(), rand.nextFloat() * 1F + 1F
                             ));
                         }
                     } else {
@@ -166,27 +167,42 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
                 }
 
                 ItemStack stack = this.items.getStackInSlot(0);
-                if (this.currentRecipe == null) {
-                    if (!stack.isEmpty()) {
-                        this.currentRecipe = AltarRecipe.forInput(stack);
-                    }
-                } else {
-                    if (stack.isEmpty() || !stack.isItemEqual(this.currentRecipe.input)) {
-                        this.currentRecipe = null;
-                    } else {
-                        int req = this.currentRecipe.aura / this.currentRecipe.time;
-                        if (this.container.getStoredAura() >= req) {
-                            this.container.drainAura(req, false);
+                if (!stack.isEmpty() && stack.hasCapability(Capabilities.auraContainer, null)) {
+                    IAuraContainer container = stack.getCapability(Capabilities.auraContainer, null);
+                    int theoreticalDrain = this.container.drainAura(10, true);
+                    if (theoreticalDrain > 0) {
+                        int stored = container.storeAura(theoreticalDrain, false);
+                        if (stored > 0) {
+                            this.container.drainAura(stored, false);
 
-                            if (this.timer % 4 == 0) {
+                            if (this.world.getTotalWorldTime() % 4 == 0) {
                                 PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 4));
                             }
+                        }
+                    }
+                } else {
+                    if (this.currentRecipe == null) {
+                        if (!stack.isEmpty()) {
+                            this.currentRecipe = AltarRecipe.forInput(stack);
+                        }
+                    } else {
+                        if (stack.isEmpty() || !stack.isItemEqual(this.currentRecipe.input)) {
+                            this.currentRecipe = null;
+                        } else {
+                            int req = this.currentRecipe.aura / this.currentRecipe.time;
+                            if (this.container.getStoredAura() >= req) {
+                                this.container.drainAura(req, false);
 
-                            this.timer++;
-                            if (this.timer >= this.currentRecipe.time) {
-                                this.items.setStackInSlot(0, this.currentRecipe.output.copy());
-                                this.currentRecipe = null;
-                                this.timer = 0;
+                                if (this.timer % 4 == 0) {
+                                    PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 4));
+                                }
+
+                                this.timer++;
+                                if (this.timer >= this.currentRecipe.time) {
+                                    this.items.setStackInSlot(0, this.currentRecipe.output.copy());
+                                    this.currentRecipe = null;
+                                    this.timer = 0;
+                                }
                             }
                         }
                     }
@@ -262,13 +278,8 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable, 
     }
 
     @Override
-    public IAuraContainer container() {
+    public IAuraContainer getAuraContainer(EnumFacing facing) {
         return this.container;
-    }
-
-    @Override
-    public boolean isArtificial() {
-        return true;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.items.tools;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
@@ -9,15 +10,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+
+import javax.annotation.Nullable;
 
 public class ItemHoeNA extends ItemHoe implements IModItem, IModelProvider {
 
@@ -79,5 +84,13 @@ public class ItemHoeNA extends ItemHoe implements IModItem, IModelProvider {
     @Override
     public void onPostInit(FMLPostInitializationEvent event) {
 
+    }
+
+    @Nullable
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+        if (this == ModItems.INFUSED_HOE)
+            return Helper.makeRechargeProvider(stack);
+        else return null;
     }
 }

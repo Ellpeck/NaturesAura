@@ -27,7 +27,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class BlockAncientLeaves extends BlockLeaves implements
@@ -132,7 +131,7 @@ public class BlockAncientLeaves extends BlockLeaves implements
         if (rand.nextFloat() >= 0.95F && !worldIn.getBlockState(pos.down()).isFullBlock()) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityAncientLeaves) {
-                if (((TileEntityAncientLeaves) tile).container().getStoredAura() > 0) {
+                if (((TileEntityAncientLeaves) tile).getAuraContainer(null).getStoredAura() > 0) {
                     NaturesAura.proxy.spawnMagicParticle(worldIn,
                             pos.getX() + rand.nextDouble(), pos.getY(), pos.getZ() + rand.nextDouble(),
                             0F, 0F, 0F, 0xc46df9,
@@ -156,7 +155,7 @@ public class BlockAncientLeaves extends BlockLeaves implements
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityAncientLeaves) {
-                if (((TileEntityAncientLeaves) tile).container().getStoredAura() <= 0) {
+                if (((TileEntityAncientLeaves) tile).getAuraContainer(null).getStoredAura() <= 0) {
                     worldIn.setBlockState(pos, ModBlocks.DECAYED_LEAVES.getDefaultState());
                 }
             }

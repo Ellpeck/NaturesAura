@@ -2,12 +2,12 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.aura.FiniteAuraContainer;
 import de.ellpeck.naturesaura.aura.IAuraContainer;
-import de.ellpeck.naturesaura.aura.IAuraContainerProvider;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 
-public class TileEntityAncientLeaves extends TileEntityImpl implements IAuraContainerProvider {
+public class TileEntityAncientLeaves extends TileEntityImpl {
 
-    private final FiniteAuraContainer container = new FiniteAuraContainer(20) {
+    private final FiniteAuraContainer container = new FiniteAuraContainer(20, false) {
         @Override
         public int getAuraColor() {
             return 0xc46df9;
@@ -24,13 +24,8 @@ public class TileEntityAncientLeaves extends TileEntityImpl implements IAuraCont
     };
 
     @Override
-    public IAuraContainer container() {
+    public IAuraContainer getAuraContainer(EnumFacing facing) {
         return this.container;
-    }
-
-    @Override
-    public boolean isArtificial() {
-        return false;
     }
 
     @Override

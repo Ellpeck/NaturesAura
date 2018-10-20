@@ -1,5 +1,7 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.aura.Capabilities;
+import de.ellpeck.naturesaura.aura.IAuraContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -12,7 +14,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nullable;
@@ -79,10 +80,16 @@ public class TileEntityImpl extends TileEntity {
         return null;
     }
 
+    public IAuraContainer getAuraContainer(EnumFacing facing) {
+        return null;
+    }
+
     @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return this.getItemHandler(facing) != null;
+        } else if (capability == Capabilities.auraContainer) {
+            return this.getAuraContainer(facing) != null;
         } else {
             return super.hasCapability(capability, facing);
         }
@@ -93,6 +100,8 @@ public class TileEntityImpl extends TileEntity {
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return (T) this.getItemHandler(facing);
+        } else if (capability == Capabilities.auraContainer) {
+            return (T) this.getAuraContainer(facing);
         } else {
             return super.getCapability(capability, facing);
         }

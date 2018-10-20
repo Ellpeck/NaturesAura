@@ -2,8 +2,8 @@ package de.ellpeck.naturesaura.aura;
 
 public class FiniteAuraContainer extends BasicAuraContainer {
 
-    public FiniteAuraContainer(int aura) {
-        super(aura);
+    public FiniteAuraContainer(int aura, boolean artificial) {
+        super(aura, artificial);
         this.aura = aura;
     }
 
