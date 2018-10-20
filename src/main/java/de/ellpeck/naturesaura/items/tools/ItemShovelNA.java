@@ -5,7 +5,9 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
+import net.minecraft.block.BlockDirt;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -36,32 +38,42 @@ public class ItemShovelNA extends ItemSpade implements IModItem, IModelProvider 
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        EnumActionResult result = EnumActionResult.PASS;
         if (this == ModItems.INFUSED_SHOVEL) {
             ItemStack stack = player.getHeldItem(hand);
-            int range = player.isSneaking() ? 0 : 1;
-            for (int x = -range; x <= range; x++) {
-                for (int y = -range; y <= range; y++) {
-                    BlockPos actualPos = pos.add(x, 0, y);
-                    if (player.canPlayerEdit(actualPos.offset(facing), facing, stack)) {
-                        if (facing != EnumFacing.DOWN
-                                && worldIn.getBlockState(actualPos.up()).getMaterial() == Material.AIR
-                                && worldIn.getBlockState(actualPos).getBlock() == Blocks.GRASS) {
-                            if (!worldIn.isRemote) {
-                                worldIn.setBlockState(actualPos, Blocks.GRASS_PATH.getDefaultState(), 11);
+            IBlockState state = worldIn.getBlockState(pos);
+            int damage = 0;
+
+            if (state.getBlock() instanceof BlockDirt) {
+                if (worldIn.getBlockState(pos.up()).getMaterial() == Material.AIR) {
+                    worldIn.setBlockState(pos, Blocks.GRASS.getDefaultState());
+                    damage = 5;
+                }
+            } else {
+                int range = player.isSneaking() ? 0 : 1;
+                for (int x = -range; x <= range; x++) {
+                    for (int y = -range; y <= range; y++) {
+                        BlockPos actualPos = pos.add(x, 0, y);
+                        if (player.canPlayerEdit(actualPos.offset(facing), facing, stack)) {
+                            if (facing != EnumFacing.DOWN
+                                    && worldIn.getBlockState(actualPos.up()).getMaterial() == Material.AIR
+                                    && worldIn.getBlockState(actualPos).getBlock() == Blocks.GRASS) {
+                                if (!worldIn.isRemote) {
+                                    worldIn.setBlockState(actualPos, Blocks.GRASS_PATH.getDefaultState(), 11);
+                                }
+                                damage = 1;
                             }
-                            result = EnumActionResult.SUCCESS;
                         }
                     }
                 }
             }
 
-            if (result == EnumActionResult.SUCCESS) {
+            if (damage > 0) {
                 worldIn.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                stack.damageItem(1, player);
+                stack.damageItem(damage, player);
+                return EnumActionResult.SUCCESS;
             }
         }
-        return result;
+        return EnumActionResult.PASS;
     }
 
     @Override
