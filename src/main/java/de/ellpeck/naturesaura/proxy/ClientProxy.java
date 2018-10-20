@@ -4,6 +4,8 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderWoodStand;
+import de.ellpeck.naturesaura.compat.Compat;
+import de.ellpeck.naturesaura.compat.baubles.BaublesLayer;
 import de.ellpeck.naturesaura.events.ClientEvents;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import de.ellpeck.naturesaura.particles.ParticleMagic;
@@ -14,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -24,6 +27,8 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+
+import java.util.Map;
 
 public class ClientProxy implements IProxy {
 
@@ -36,6 +41,13 @@ public class ClientProxy implements IProxy {
     public void init(FMLInitializationEvent event) {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodStand.class, new RenderWoodStand());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNatureAltar.class, new RenderNatureAltar());
+
+        if (Compat.baubles) {
+            Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
+            for (RenderPlayer render : new RenderPlayer[]{skinMap.get("default"), skinMap.get("slim")}) {
+                render.addLayer(new BaublesLayer());
+            }
+        }
     }
 
     @Override
