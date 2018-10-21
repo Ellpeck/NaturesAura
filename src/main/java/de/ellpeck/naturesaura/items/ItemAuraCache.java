@@ -1,11 +1,17 @@
 package de.ellpeck.naturesaura.items;
 
+import baubles.api.render.IRenderBauble;
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.aura.container.ItemAuraContainer;
+import de.ellpeck.naturesaura.renderers.ITrinketItem;
+import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets.RenderType;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -13,11 +19,13 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ItemAuraCache extends ItemImpl {
+public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
     public ItemAuraCache() {
         super("aura_cache");
@@ -88,5 +96,16 @@ public class ItemAuraCache extends ItemImpl {
                 }
             }
         };
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void render(ItemStack stack, EntityPlayer player, RenderType type) {
+        boolean armor = !player.inventory.armorInventory.get(EntityEquipmentSlot.CHEST.getIndex()).isEmpty();
+        IRenderBauble.Helper.rotateIfSneaking(player);
+        GlStateManager.translate(-0.15F, 0.65F, armor ? -0.195F : -0.13F);
+        GlStateManager.scale(0.25F, 0.25F, 0.25F);
+        GlStateManager.rotate(180F, 1F, 0F, 0F);
+        Helper.renderItemInWorld(stack);
     }
 }

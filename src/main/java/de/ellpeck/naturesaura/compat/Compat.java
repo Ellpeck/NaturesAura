@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.compat;
 
-import de.ellpeck.naturesaura.compat.baubles.BaublesCompat;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 

@@ -1,4 +1,4 @@
-package de.ellpeck.naturesaura.compat.baubles;
+package de.ellpeck.naturesaura.compat;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
