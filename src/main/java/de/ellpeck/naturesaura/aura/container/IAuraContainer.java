@@ -1,4 +1,4 @@
-package de.ellpeck.naturesaura.aura;
+package de.ellpeck.naturesaura.aura.container;
 
 public interface IAuraContainer {
     int storeAura(int amountToStore, boolean simulate);

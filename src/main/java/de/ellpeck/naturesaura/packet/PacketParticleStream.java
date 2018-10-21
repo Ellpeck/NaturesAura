@@ -76,13 +76,15 @@ public class PacketParticleStream implements IMessage {
                         message.endX - message.startX,
                         message.endY - message.startY,
                         message.endZ - message.startZ);
-                int maxAge = (int) (dir.length() / message.speed);
-                dir.normalise();
+                if (dir.length() > 0) {
+                    int maxAge = (int) (dir.length() / message.speed);
+                    dir.normalise();
 
-                NaturesAura.proxy.spawnMagicParticle(Minecraft.getMinecraft().world,
-                        message.startX, message.startY, message.startZ,
-                        dir.x * message.speed, dir.y * message.speed, dir.z * message.speed,
-                        message.color, message.scale, maxAge, 0F, false, false);
+                    NaturesAura.proxy.spawnMagicParticle(Minecraft.getMinecraft().world,
+                            message.startX, message.startY, message.startZ,
+                            dir.x * message.speed, dir.y * message.speed, dir.z * message.speed,
+                            message.color, message.scale, maxAge, 0F, false, false);
+                }
             });
 
             return null;

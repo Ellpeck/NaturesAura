@@ -2,9 +2,10 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.aura.BasicAuraContainer;
 import de.ellpeck.naturesaura.aura.Capabilities;
-import de.ellpeck.naturesaura.aura.IAuraContainer;
+import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.aura.container.BasicAuraContainer;
+import de.ellpeck.naturesaura.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
@@ -15,15 +16,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
@@ -110,7 +108,6 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
         }
     };
 
-    private final List<TileEntity> cachedProviders = new ArrayList<>();
     private final BasicAuraContainer container = new BasicAuraContainer(5000, true);
     public boolean structureFine;
 
@@ -136,33 +133,24 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
             }
 
             if (this.structureFine) {
-                if (this.world.getTotalWorldTime() % 100 == 0) {
-                    this.cachedProviders.clear();
-                    for (TileEntity tile : Helper.getTileEntitiesInArea(this.world, this.pos, 15)) {
-                        if (tile.hasCapability(Capabilities.auraContainer, null) && tile != this) {
-                            this.cachedProviders.add(tile);
-                        }
-                    }
-                }
+                int space = this.container.storeAura(3, true);
+                if (space > 0) {
+                    int toStore = Math.min(AuraChunk.getAuraInArea(this.world, this.pos, 10), space);
+                    if (toStore > 0) {
+                        BlockPos spot = AuraChunk.getClosestSpot(this.world, this.pos, 10, this.pos);
+                        AuraChunk chunk = AuraChunk.getAuraChunk(this.world, spot);
 
-                if (!this.cachedProviders.isEmpty()) {
-                    int index = rand.nextInt(this.cachedProviders.size());
-                    TileEntity provider = this.cachedProviders.get(index);
-                    if (!provider.isInvalid() && provider.hasCapability(Capabilities.auraContainer, null)) {
-                        IAuraContainer container = provider.getCapability(Capabilities.auraContainer, null);
-                        int stored = this.container.storeAura(container.drainAura(5, true), false);
-                        if (stored > 0) {
-                            container.drainAura(stored, false);
+                        chunk.drainAura(spot, toStore);
+                        this.container.storeAura(toStore, false);
 
-                            BlockPos pos = provider.getPos();
+                        if (this.world.getTotalWorldTime() % 3 == 0)
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
-                                    pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
+                                    this.pos.getX() + (float) rand.nextGaussian() * 10F,
+                                    this.pos.getY() + rand.nextFloat() * 10F,
+                                    this.pos.getZ() + (float) rand.nextGaussian() * 10F,
                                     this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F,
-                                    rand.nextFloat() * 0.05F + 0.05F, container.getAuraColor(), rand.nextFloat() * 1F + 1F
+                                    rand.nextFloat() * 0.05F + 0.05F, 0x89cc37, rand.nextFloat() * 1F + 1F
                             ));
-                        }
-                    } else {
-                        this.cachedProviders.remove(index);
                     }
                 }
 

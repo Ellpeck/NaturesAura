@@ -1,5 +1,6 @@
-package de.ellpeck.naturesaura.aura;
+package de.ellpeck.naturesaura.aura.container;
 
+import de.ellpeck.naturesaura.aura.container.IAuraContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 

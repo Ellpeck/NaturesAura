@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura;
 
 import de.ellpeck.naturesaura.aura.Capabilities;
-import de.ellpeck.naturesaura.aura.IAuraRecharge;
+import de.ellpeck.naturesaura.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -24,23 +24,21 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public final class Helper {
 
-    public static List<TileEntity> getTileEntitiesInArea(World world, BlockPos pos, int radius) {
-        List<TileEntity> tiles = new ArrayList<>();
+    public static void getTileEntitiesInArea(World world, BlockPos pos, int radius, Consumer<TileEntity> consumer) {
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
                 for (TileEntity tile : world.getChunk(x, z).getTileEntityMap().values()) {
                     if (tile.getPos().distanceSq(pos) <= radius * radius) {
-                        tiles.add(tile);
+                        consumer.accept(tile);
                     }
                 }
             }
         }
-        return tiles;
     }
 
     public static boolean checkMultiblock(World world, BlockPos pos, BlockPos[] positions, IBlockState state, boolean blockOnly) {

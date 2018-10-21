@@ -1,5 +1,6 @@
-package de.ellpeck.naturesaura.aura;
+package de.ellpeck.naturesaura.aura.container;
 
+import de.ellpeck.naturesaura.aura.container.IAuraContainer;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class BasicAuraContainer implements IAuraContainer {

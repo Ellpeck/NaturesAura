@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.aura.Capabilities;
-import de.ellpeck.naturesaura.aura.IAuraContainer;
+import de.ellpeck.naturesaura.aura.container.IAuraContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;

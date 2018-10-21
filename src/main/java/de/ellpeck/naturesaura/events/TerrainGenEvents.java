@@ -6,7 +6,6 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
@@ -22,11 +21,9 @@ public class TerrainGenEvents {
         BlockPos pos = event.getPos();
         if (!world.isRemote) {
             if (Helper.checkMultiblock(world, pos, TileEntityWoodStand.GOLD_POWDER_POSITIONS, ModBlocks.GOLD_POWDER.getDefaultState(), true)) {
-                List<TileEntity> tileEntities = Helper.getTileEntitiesInArea(world, pos, 5);
                 List<TileEntityWoodStand> stands = new ArrayList<>();
                 List<ItemStack> usableItems = new ArrayList<>();
-
-                for (TileEntity tile : tileEntities) {
+                Helper.getTileEntitiesInArea(world, pos, 5, tile -> {
                     if (tile instanceof TileEntityWoodStand) {
                         TileEntityWoodStand stand = (TileEntityWoodStand) tile;
                         ItemStack stack = stand.items.getStackInSlot(0);
@@ -35,7 +32,7 @@ public class TerrainGenEvents {
                             stands.add(stand);
                         }
                     }
-                }
+                });
 
                 IBlockState sapling = world.getBlockState(pos);
                 ItemStack saplingStack = sapling.getBlock().getItem(world, pos, sapling);

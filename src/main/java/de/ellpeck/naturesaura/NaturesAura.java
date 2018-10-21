@@ -1,11 +1,14 @@
 package de.ellpeck.naturesaura;
 
+import de.ellpeck.naturesaura.aura.Capabilities.CapabilityAuraChunk;
 import de.ellpeck.naturesaura.aura.Capabilities.CapabilityAuraContainer;
 import de.ellpeck.naturesaura.aura.Capabilities.CapabilityAuraRecharge;
-import de.ellpeck.naturesaura.aura.IAuraContainer;
-import de.ellpeck.naturesaura.aura.IAuraRecharge;
+import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.compat.Compat;
+import de.ellpeck.naturesaura.events.CommonEvents;
 import de.ellpeck.naturesaura.events.TerrainGenEvents;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -49,6 +52,7 @@ public final class NaturesAura {
     public void preInit(FMLPreInitializationEvent event) {
         CapabilityManager.INSTANCE.register(IAuraContainer.class, new CapabilityAuraContainer(), () -> null);
         CapabilityManager.INSTANCE.register(IAuraRecharge.class, new CapabilityAuraRecharge(), () -> null);
+        CapabilityManager.INSTANCE.register(AuraChunk.class, new CapabilityAuraChunk(), () -> null);
 
         new ModBlocks();
         new ModItems();
@@ -58,6 +62,7 @@ public final class NaturesAura {
         ModRegistry.preInit(event);
 
         MinecraftForge.TERRAIN_GEN_BUS.register(new TerrainGenEvents());
+        MinecraftForge.EVENT_BUS.register(new CommonEvents());
 
         proxy.preInit(event);
     }

@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.aura.Capabilities;
-import de.ellpeck.naturesaura.aura.IAuraContainer;
-import de.ellpeck.naturesaura.aura.ItemAuraContainer;
+import de.ellpeck.naturesaura.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.aura.container.ItemAuraContainer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

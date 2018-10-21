@@ -2,10 +2,10 @@ package de.ellpeck.naturesaura.events;
 
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.aura.Capabilities;
-import de.ellpeck.naturesaura.aura.IAuraContainer;
+import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.items.ModItems;
@@ -31,6 +31,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.List;
 
@@ -41,11 +42,21 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onDebugRender(RenderGameOverlayEvent.Text event) {
-        if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
+        Minecraft mc = Minecraft.getMinecraft();
+        if (mc.gameSettings.showDebugInfo) {
             String prefix = TextFormatting.GREEN + "[" + NaturesAura.MOD_NAME + "]" + TextFormatting.RESET + " ";
             List<String> left = event.getLeft();
             left.add("");
             left.add(prefix + "PartScrn: " + ParticleHandler.getParticleAmount());
+
+            MutableInt amount = new MutableInt(AuraChunk.DEFAULT_AURA);
+            MutableInt spots = new MutableInt();
+            AuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 15, ((blockPos, drainSpot) -> {
+                spots.increment();
+                amount.add(drainSpot.getAmount());
+            }));
+            left.add(prefix + "Aura: " + amount.intValue());
+            left.add(prefix + "DrainSpots: " + spots.intValue());
         }
     }
 
@@ -79,38 +90,16 @@ public class ClientEvents {
                 ItemStack stack = mc.player.getHeldItemMainhand();
                 if (mc.currentScreen == null) {
                     if (!stack.isEmpty() && stack.getItem() == ModItems.EYE || Compat.baubles && BaublesApi.isBaubleEquipped(mc.player, ModItems.EYE) >= 0) {
-                        int maxAura = 0;
-                        int aura = 0;
-                        int total = 0;
-
-                        for (TileEntity tile : Helper.getTileEntitiesInArea(mc.world, mc.player.getPosition(), 15)) {
-                            if (tile.hasCapability(Capabilities.auraContainer, null)) {
-                                IAuraContainer container = tile.getCapability(Capabilities.auraContainer, null);
-                                if (!container.isArtificial()) {
-                                    maxAura += container.getMaxAura();
-                                    aura += container.getStoredAura();
-                                    total++;
-                                }
-                            }
-                        }
-
                         GlStateManager.pushMatrix();
                         mc.getTextureManager().bindTexture(OVERLAYS);
 
                         GlStateManager.color(0.8F, 0.25F, 0.25F);
-                        float totalPercentage = total / 1500F;
-                        int tHeight = MathHelper.ceil(Math.min(1F, totalPercentage) * 50);
+                        float totalPercentage = AuraChunk.getAuraInArea(mc.world, mc.player.getPosition(), 15) / (AuraChunk.DEFAULT_AURA * 2F);
+                        int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
                         if (tHeight < 50)
-                            Gui.drawModalRectWithCustomSizedTexture(3, 17, 6, 12, 6, 50 - tHeight, 256, 256);
+                            Gui.drawModalRectWithCustomSizedTexture(3, 10, 6, 12, 6, 50 - tHeight, 256, 256);
                         if (tHeight > 0)
-                            Gui.drawModalRectWithCustomSizedTexture(3, 17 + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
-
-                        GlStateManager.color(0.25F, 0.8F, 0.25F);
-                        int aHeight = MathHelper.ceil(aura / (float) maxAura * 50);
-                        if (aHeight < 50)
-                            Gui.drawModalRectWithCustomSizedTexture(12, 17, 6, 12, 6, 50 - aHeight, 256, 256);
-                        if (aHeight > 0)
-                            Gui.drawModalRectWithCustomSizedTexture(12, 17 + 50 - aHeight, 0, 12 + 50 - aHeight, 6, aHeight, 256, 256);
+                            Gui.drawModalRectWithCustomSizedTexture(3, 10 + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
 
                         if (mc.objectMouseOver != null) {
                             BlockPos pos = mc.objectMouseOver.getBlockPos();
@@ -135,13 +124,15 @@ public class ClientEvents {
                         }
 
                         if (totalPercentage > 1F) {
-                            mc.fontRenderer.drawString("+", 3F, 9.5F, 0xBB3333, true);
+                        mc.fontRenderer.drawString("+", 10F, 9.5F, 0xBB3333, true);
+                        }
+                        if (totalPercentage < 0F) {
+                        mc.fontRenderer.drawString("-", 10F, 53.5F, 0xBB3333, true);
                         }
 
                         float scale = 0.75F;
                         GlStateManager.scale(scale, scale, scale);
                         mc.fontRenderer.drawString(I18n.format("info." + NaturesAura.MOD_ID + ".aura_in_area"), 3 / scale, 3 / scale, 0xBB3333, true);
-                        mc.fontRenderer.drawString(I18n.format("info." + NaturesAura.MOD_ID + ".aura_percentage"), 12 / scale, 10 / scale, 0x33BB33, true);
 
                         GlStateManager.popMatrix();
                     }
