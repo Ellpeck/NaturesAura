@@ -1,0 +1,18 @@
+{
+    "name": "Natural Altar Infusion",
+    "icon": "naturesaura:nature_altar",
+    "category": "naturesaura:using",
+    "priority": true,
+    "pages": [
+        {
+            "type": "text",
+            "text": "When the $(l:naturesaura:collecting/altar)Natural Altar$() has collected a sufficient amount of $(thing)Aura$(), it will be able to infuse items of certain materials, converting them into different, more powerful materials. To do this, simply place any material onto the altar and wait for the infusion to be completed.$(br2)The following pages list some useful materials that a botanist might frequently need."
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Creating $(item)Infused Iron$() and $(item)Infused Rock$(), important ingredients in the creation of several $(l:naturesaura:items)Natural Items$().",
+            "recipe": "naturesaura:infused_iron",
+            "recipe2": "naturesaura:infused_stone"
+        }
+    ]
+}

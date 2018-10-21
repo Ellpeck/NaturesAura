@@ -1,4 +1,4 @@
-package de.ellpeck.naturesaura.jei.altar;
+package de.ellpeck.naturesaura.compat.jei.altar;
 
 import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import mezz.jei.api.ingredients.IIngredients;

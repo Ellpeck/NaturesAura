@@ -1,9 +1,9 @@
-package de.ellpeck.naturesaura.jei.altar;
+package de.ellpeck.naturesaura.compat.jei.altar;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
-import de.ellpeck.naturesaura.jei.JEINaturesAuraPlugin;
+import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
 import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -22,7 +22,7 @@ public class AltarCategory implements IRecipeCategory<AltarWrapper> {
     private final ItemStack altar = new ItemStack(ModBlocks.NATURE_ALTAR);
 
     public AltarCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/altar.png"), 0, 0, 78, 57);
+        this.background = helper.createDrawable(new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/jei/altar.png"), 0, 0, 78, 57);
     }
 
     @Override

@@ -1,20 +1,23 @@
 package de.ellpeck.naturesaura.recipes;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AltarRecipe {
 
-    public static final List<AltarRecipe> RECIPES = new ArrayList<>();
+    public static final Map<ResourceLocation, AltarRecipe> RECIPES = new HashMap<>();
 
+    public final ResourceLocation name;
     public final ItemStack input;
     public final ItemStack output;
     public final int aura;
     public final int time;
 
-    public AltarRecipe(ItemStack input, ItemStack output, int aura, int time) {
+    public AltarRecipe(ResourceLocation name, ItemStack input, ItemStack output, int aura, int time) {
+        this.name = name;
         this.input = input;
         this.output = output;
         this.aura = aura;
@@ -22,7 +25,7 @@ public class AltarRecipe {
     }
 
     public static AltarRecipe forInput(ItemStack input) {
-        for (AltarRecipe recipe : RECIPES) {
+        for (AltarRecipe recipe : RECIPES.values()) {
             if (recipe.input.isItemEqual(input)) {
                 return recipe;
             }
@@ -31,7 +34,7 @@ public class AltarRecipe {
     }
 
     public AltarRecipe add() {
-        RECIPES.add(this);
+        RECIPES.put(this.name, this);
         return this;
     }
 }

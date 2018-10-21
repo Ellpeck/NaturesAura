@@ -1,4 +1,4 @@
-package de.ellpeck.naturesaura.jei.treeritual;
+package de.ellpeck.naturesaura.compat.jei.treeritual;
 
 import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import mezz.jei.api.ingredients.IIngredients;

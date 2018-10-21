@@ -24,7 +24,7 @@ item.naturesaura.infused_iron_hoe.name=Botanist's Hoe
 item.naturesaura.ancient_stick.name=Ancient Wood Rod
 item.naturesaura.aura_cache.name=Aura Cache
 
-container.naturesaura.tree_ritual.name=Tree Infusion
-container.naturesaura.altar.name=Natural Altar
+container.naturesaura.tree_ritual.name=Ritual of the Forest
+container.naturesaura.altar.name=Natural Altar Infusion
 
 info.naturesaura.aura_in_area=Aura Around

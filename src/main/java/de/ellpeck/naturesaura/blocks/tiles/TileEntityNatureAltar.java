@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
@@ -244,7 +245,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
         if (!syncing) {
             if (this.currentRecipe != null) {
-                compound.setTag("recipe_input", this.currentRecipe.input.serializeNBT());
+                compound.setString("recipe", this.currentRecipe.name.toString());
                 compound.setInteger("timer", this.timer);
             }
         }
@@ -259,7 +260,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
         if (!syncing) {
             if (compound.hasKey("recipe_input")) {
-                this.currentRecipe = AltarRecipe.forInput(new ItemStack(compound.getCompoundTag("recipe_input")));
+                this.currentRecipe = AltarRecipe.RECIPES.get(new ResourceLocation(compound.getString("recipe")));
                 this.timer = compound.getInteger("timer");
             }
         }

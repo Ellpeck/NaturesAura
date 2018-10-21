@@ -1,7 +1,7 @@
-package de.ellpeck.naturesaura.jei.treeritual;
+package de.ellpeck.naturesaura.compat.jei.treeritual;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.jei.JEINaturesAuraPlugin;
+import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
 import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -17,7 +17,7 @@ public class TreeRitualCategory implements IRecipeCategory<TreeRitualWrapper> {
     private final IDrawable background;
 
     public TreeRitualCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/tree_ritual.png"), 0, 0, 146, 86);
+        this.background = helper.createDrawable(new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/jei/tree_ritual.png"), 0, 0, 146, 86);
     }
 
     @Override

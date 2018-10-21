@@ -37,7 +37,7 @@ public class TerrainGenEvents {
                 IBlockState sapling = world.getBlockState(pos);
                 ItemStack saplingStack = sapling.getBlock().getItem(world, pos, sapling);
                 if (!saplingStack.isEmpty()) {
-                    for (TreeRitualRecipe recipe : TreeRitualRecipe.RECIPES) {
+                    for (TreeRitualRecipe recipe : TreeRitualRecipe.RECIPES.values()) {
                         if (recipe.matchesItems(saplingStack, usableItems)) {
                             Map<BlockPos, ItemStack> actuallyInvolved = new HashMap<>();
                             List<ItemStack> stillRequired = new ArrayList<>(Arrays.asList(recipe.items));
