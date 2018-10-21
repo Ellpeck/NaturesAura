@@ -123,12 +123,10 @@ public class ClientEvents {
                             }
                         }
 
-                        if (totalPercentage > 1F) {
-                        mc.fontRenderer.drawString("+", 10F, 9.5F, 0xBB3333, true);
-                        }
-                        if (totalPercentage < 0F) {
-                        mc.fontRenderer.drawString("-", 10F, 53.5F, 0xBB3333, true);
-                        }
+                        if (totalPercentage > 1F)
+                            mc.fontRenderer.drawString("+", 10F, 9.5F, 0xBB3333, true);
+                        if (totalPercentage < 0F)
+                            mc.fontRenderer.drawString("-", 10F, 53.5F, 0xBB3333, true);
 
                         float scale = 0.75F;
                         GlStateManager.scale(scale, scale, scale);
