@@ -3,10 +3,12 @@ package de.ellpeck.naturesaura.events;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -32,6 +34,15 @@ public class CommonEvents {
                     }
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onChunkWatch(ChunkWatchEvent.Watch event) {
+        Chunk chunk = event.getChunkInstance();
+        if (!chunk.getWorld().isRemote && chunk.hasCapability(Capabilities.auraChunk, null)) {
+            AuraChunk auraChunk = chunk.getCapability(Capabilities.auraChunk, null);
+            PacketHandler.sendTo(event.getPlayer(), auraChunk.makePacket());
         }
     }
 }

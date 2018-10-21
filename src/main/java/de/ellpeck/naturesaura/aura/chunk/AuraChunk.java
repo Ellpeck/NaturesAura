@@ -16,6 +16,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
@@ -132,7 +133,7 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
         if (this.needsSync) {
             PacketHandler.sendToAllLoaded(world,
                     new BlockPos(this.chunk.x * 16, 0, this.chunk.z * 16),
-                    new PacketAuraChunk(this.chunk.x, this.chunk.z, this.drainSpots));
+                    this.makePacket());
             this.needsSync = false;
         }
 
@@ -164,6 +165,10 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
                 }
             }
         }
+    }
+
+    public IMessage makePacket() {
+        return new PacketAuraChunk(this.chunk.x, this.chunk.z, this.drainSpots);
     }
 
     @Override
