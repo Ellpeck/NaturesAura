@@ -259,7 +259,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
         this.container.readNBT(compound);
 
         if (!syncing) {
-            if (compound.hasKey("recipe_input")) {
+            if (compound.hasKey("recipe")) {
                 this.currentRecipe = AltarRecipe.RECIPES.get(new ResourceLocation(compound.getString("recipe")));
                 this.timer = compound.getInteger("timer");
             }
