@@ -1,9 +1,7 @@
 package de.ellpeck.naturesaura.items;
 
-import baubles.api.render.IRenderBauble;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.renderers.ITrinketItem;
-import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets.RenderType;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +22,6 @@ public class ItemEye extends ItemImpl implements ITrinketItem {
     public void render(ItemStack stack, EntityPlayer player, RenderType type) {
         if (type == RenderType.BODY) {
             boolean armor = !player.inventory.armorInventory.get(EntityEquipmentSlot.CHEST.getIndex()).isEmpty();
-            IRenderBauble.Helper.rotateIfSneaking(player);
             GlStateManager.translate(0.1F, 0.19F, armor ? -0.195F : -0.13F);
             GlStateManager.scale(0.15F, 0.15F, 0.15F);
             GlStateManager.rotate(180F, 1F, 0F, 0F);

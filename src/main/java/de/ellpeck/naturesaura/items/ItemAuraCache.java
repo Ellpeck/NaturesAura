@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.items;
 
-import baubles.api.render.IRenderBauble;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.container.IAuraContainer;
@@ -103,7 +102,6 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     public void render(ItemStack stack, EntityPlayer player, RenderType type) {
         if (type == RenderType.BODY) {
             boolean armor = !player.inventory.armorInventory.get(EntityEquipmentSlot.CHEST.getIndex()).isEmpty();
-            IRenderBauble.Helper.rotateIfSneaking(player);
             GlStateManager.translate(-0.15F, 0.65F, armor ? -0.195F : -0.13F);
             GlStateManager.scale(0.25F, 0.25F, 0.25F);
             GlStateManager.rotate(180F, 1F, 0F, 0F);

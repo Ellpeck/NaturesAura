@@ -59,6 +59,10 @@ public class PlayerLayerTrinkets implements LayerRenderer<EntityPlayer> {
             Item item = stack.getItem();
             if (item instanceof ITrinketItem && !this.alreadyRendered.contains(item)) {
                 GlStateManager.pushMatrix();
+                if (type == RenderType.BODY && player.isSneaking()) {
+                    GlStateManager.translate(0F, 0.2F, 0F);
+                    GlStateManager.rotate(90F / (float) Math.PI, 1.0F, 0.0F, 0.0F);
+                }
                 ((ITrinketItem) item).render(stack, player, type);
                 GlStateManager.popMatrix();
                 this.alreadyRendered.add(item);
