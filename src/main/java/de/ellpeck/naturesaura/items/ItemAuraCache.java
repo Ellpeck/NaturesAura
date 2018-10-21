@@ -101,11 +101,13 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     @Override
     @SideOnly(Side.CLIENT)
     public void render(ItemStack stack, EntityPlayer player, RenderType type) {
-        boolean armor = !player.inventory.armorInventory.get(EntityEquipmentSlot.CHEST.getIndex()).isEmpty();
-        IRenderBauble.Helper.rotateIfSneaking(player);
-        GlStateManager.translate(-0.15F, 0.65F, armor ? -0.195F : -0.13F);
-        GlStateManager.scale(0.25F, 0.25F, 0.25F);
-        GlStateManager.rotate(180F, 1F, 0F, 0F);
-        Helper.renderItemInWorld(stack);
+        if (type == RenderType.BODY) {
+            boolean armor = !player.inventory.armorInventory.get(EntityEquipmentSlot.CHEST.getIndex()).isEmpty();
+            IRenderBauble.Helper.rotateIfSneaking(player);
+            GlStateManager.translate(-0.15F, 0.65F, armor ? -0.195F : -0.13F);
+            GlStateManager.scale(0.25F, 0.25F, 0.25F);
+            GlStateManager.rotate(180F, 1F, 0F, 0F);
+            Helper.renderItemInWorld(stack);
+        }
     }
 }
