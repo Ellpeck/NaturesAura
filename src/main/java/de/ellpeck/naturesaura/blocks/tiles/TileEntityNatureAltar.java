@@ -177,6 +177,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                     } else {
                         if (stack.isEmpty() || !stack.isItemEqual(this.currentRecipe.input)) {
                             this.currentRecipe = null;
+                            this.timer = 0;
                         } else {
                             int req = this.currentRecipe.aura / this.currentRecipe.time;
                             if (this.container.getStoredAura() >= req) {

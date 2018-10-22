@@ -1,0 +1,20 @@
+{
+    "name": "Environmental Eye",
+    "icon": "naturesaura:eye",
+    "category": "naturesaura:items",
+    "pages": [
+        {
+            "type": "text",
+            "text": "When working with $(thing)Aura$(), by nature, it will be hard to grasp just how much there is in any given area or storage device. The $(item)Environmental Eye$() has the powers to display this information to botanists though: Once created, merely holding it in your hand will display several pieces of information:"
+        },
+        {
+            "type": "text",
+            "text": "A bar will display the amount stored in $(thing)Aura$()-bearing blocks, with a full bar meaning that the block has reached its storage capacity.$(br)An additional bar will display the saturation of $(thing)Aura$() around one's current location, with the bar being half full meaning that the $(thing)Aura$() is at its expected default level. The eye's limited power, however, means that, when $(thing)Aura$() exceeds any end of the visible bar, it will not be able to tell you just how much there is."
+        },
+        {
+            "type": "naturesaura:tree_ritual",
+            "text": "Creating the $(item)Environmental Eye$() using the $(l:naturesaura:using/tree_ritual)Ritual of the Forest$()",
+            "recipe": "naturesaura:eye"
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "name": "Ancient Trees",
+    "icon": "naturesaura:ancient_leaves",
+    "category": "naturesaura:creating",
+    "priority": true,
+    "pages": [
+        {
+            "type": "text",
+            "text": "A basic way of replenishing the $(thing)Aura$() in an area are $(item)Ancient Trees$(). Once an $(item)Ancient Sapling$() is created, it will grow like a normal tree, but its leaves will start increasing the $(thing)Aura$() levels back to normal slowly.$(br)The tree, however, does not fare well during this process: As its leaves' $(thing)Aura$() is drained into the world, the leaves start dying, leaving the tree bare if enough is drained."
+        },
+        {
+            "type": "naturesaura:tree_ritual",
+            "text": "Creating the $(item)Ancient Sapling$() using the $(l:naturesaura:using/tree_ritual)Ritual of the Forest$()",
+            "recipe": "naturesaura:ancient_sapling"
+        },
+        {
+            "type": "crafting",
+            "recipe": "naturesaura:ancient_planks",
+            "recipe2": "naturesaura:ancient_stick"
+        }
+    ]
+}

@@ -132,6 +132,7 @@ public class ClientEvents {
                         GlStateManager.scale(scale, scale, scale);
                         mc.fontRenderer.drawString(I18n.format("info." + NaturesAura.MOD_ID + ".aura_in_area"), 3 / scale, 3 / scale, 0xBB3333, true);
 
+                        GlStateManager.color(1F, 1F, 1F);
                         GlStateManager.popMatrix();
                     }
                 }
@@ -168,6 +169,7 @@ public class ClientEvents {
             int y = res.getScaledHeight() - 8;
 
             GlStateManager.pushMatrix();
+
             int color = container.getAuraColor();
             GlStateManager.color((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F);
             mc.getTextureManager().bindTexture(OVERLAYS);
@@ -180,6 +182,8 @@ public class ClientEvents {
             GlStateManager.scale(scale, scale, scale);
             String s = stack.getDisplayName();
             mc.fontRenderer.drawString(s, (x + 80) / scale - mc.fontRenderer.getStringWidth(s), (y - 7) / scale, color, true);
+
+            GlStateManager.color(1F, 1F, 1F);
             GlStateManager.popMatrix();
         }
     }

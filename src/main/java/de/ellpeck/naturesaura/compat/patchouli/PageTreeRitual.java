@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.compat.patchouli;
 
 import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import vazkii.patchouli.client.book.BookEntry;
@@ -12,6 +13,7 @@ public class PageTreeRitual extends PageDoubleRecipe<TreeRitualRecipe> {
 
     @Override
     protected void drawRecipe(TreeRitualRecipe recipe, int recipeX, int recipeY, int mouseX, int mouseY, boolean second) {
+        GlStateManager.enableBlend();
         this.mc.getTextureManager().bindTexture(PatchouliCompat.GUI_ELEMENTS);
         Gui.drawModalRectWithCustomSizedTexture(recipeX - 13, recipeY, 0, 44, 122, 88, 256, 256);
 

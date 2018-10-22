@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.compat.patchouli;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import vazkii.patchouli.client.book.BookEntry;
@@ -15,6 +16,7 @@ public class PageAltar extends PageDoubleRecipe<AltarRecipe> {
 
     @Override
     protected void drawRecipe(AltarRecipe recipe, int recipeX, int recipeY, int mouseX, int mouseY, boolean second) {
+        GlStateManager.enableBlend();
         this.mc.getTextureManager().bindTexture(PatchouliCompat.GUI_ELEMENTS);
         Gui.drawModalRectWithCustomSizedTexture(recipeX + 12, recipeY, 0, 0, 75, 44, 256, 256);
 
