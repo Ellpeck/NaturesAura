@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.particles;
 
+import de.ellpeck.naturesaura.ModConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -25,12 +26,19 @@ public final class ParticleHandler {
     public static void spawnParticle(Supplier<Particle> particle, double x, double y, double z, int range) {
         if (Minecraft.getMinecraft().player.getDistanceSq(x, y, z) <= range * range) {
             Minecraft mc = Minecraft.getMinecraft();
-            int setting = mc.gameSettings.particleSetting;
-            if (setting == 0 ||
-                    setting == 1 && mc.world.rand.nextInt(3) == 0 ||
-                    setting == 2 && mc.world.rand.nextInt(10) == 0) {
-                PARTICLES.add(particle.get());
+            if (ModConfig.client.respectVanillaParticleSettings) {
+                int setting = mc.gameSettings.particleSetting;
+                if (setting != 0 &&
+                        (setting != 1 || mc.world.rand.nextInt(3) != 0) &&
+                        (setting != 2 || mc.world.rand.nextInt(10) != 0)) {
+                    return;
+                }
             }
+            double setting = ModConfig.client.particleAmount;
+            if (setting < 1 && mc.world.rand.nextDouble() > setting) {
+                return;
+            }
+            PARTICLES.add(particle.get());
         }
     }
 

@@ -7,8 +7,11 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -43,6 +46,13 @@ public class CommonEvents {
         if (!chunk.getWorld().isRemote && chunk.hasCapability(Capabilities.auraChunk, null)) {
             AuraChunk auraChunk = chunk.getCapability(Capabilities.auraChunk, null);
             PacketHandler.sendTo(event.getPlayer(), auraChunk.makePacket());
+        }
+    }
+
+    @SubscribeEvent
+    public void onConfigChanged(OnConfigChangedEvent event) {
+        if (NaturesAura.MOD_ID.equals(event.getModID())) {
+            ConfigManager.sync(NaturesAura.MOD_ID, Config.Type.INSTANCE);
         }
     }
 }
