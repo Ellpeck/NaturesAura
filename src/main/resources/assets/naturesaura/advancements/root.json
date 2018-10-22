@@ -1,0 +1,28 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:eye"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.root"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.root.desc"
+        },
+        "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+        "show_toast": false,
+        "announce_to_chat": false
+    },
+    "criteria": {
+        "book": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "patchouli:guide_book"
+                    }
+                ]
+            }
+        }
+    }
+}

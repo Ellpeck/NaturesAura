@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:gold_leaf"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.gold_leaf"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.gold_leaf.desc"
+        }
+    },
+    "parent": "naturesaura:get_book",
+    "criteria": {
+        "book": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "naturesaura:gold_leaf"
+                    }
+                ]
+            }
+        }
+    }
+}

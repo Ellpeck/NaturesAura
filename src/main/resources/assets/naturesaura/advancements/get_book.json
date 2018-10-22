@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "patchouli:guide_book"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.get_book"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.get_book.desc"
+        }
+    },
+    "parent": "naturesaura:root",
+    "criteria": {
+        "book": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "patchouli:guide_book"
+                    }
+                ]
+            }
+        }
+    }
+}

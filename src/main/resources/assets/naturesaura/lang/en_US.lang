@@ -28,3 +28,10 @@ container.naturesaura.tree_ritual.name=Ritual of the Forest
 container.naturesaura.altar.name=Natural Altar Infusion
 
 info.naturesaura.aura_in_area=Aura Around
+
+advancement.naturesaura.root=Nature's Aura
+advancement.naturesaura.root.desc=Becoming a magical botanist
+advancement.naturesaura.get_book=Pages of discovery
+advancement.naturesaura.get_book.desc=Create the Book of Natural Aura
+advancement.naturesaura.gold_leaf=Time = Brilliance
+advancement.naturesaura.gold_leaf.desc=Create and harvest a Brilliant Tree
