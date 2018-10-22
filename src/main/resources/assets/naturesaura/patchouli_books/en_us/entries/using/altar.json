@@ -2,6 +2,7 @@
     "name": "Natural Altar Infusion",
     "icon": "naturesaura:nature_altar",
     "category": "naturesaura:using",
+    "advancement": "naturesaura:altar",
     "priority": true,
     "pages": [
         {
@@ -10,7 +11,7 @@
         },
         {
             "type": "naturesaura:altar",
-            "text": "Creating $(item)Infused Iron$() and $(item)Infused Rock$(), important ingredients in the creation of several $(l:naturesaura:items)Natural Items$().",
+            "text": "Creating $(item)Infused Iron$() and $(item)Infused Rock$(), important ingredients in the creation of several $(thing)natural items$().",
             "recipe": "naturesaura:infused_iron",
             "recipe2": "naturesaura:infused_stone"
         }

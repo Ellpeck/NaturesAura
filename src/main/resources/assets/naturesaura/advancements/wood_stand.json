@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:wood_stand"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.wood_stand"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.wood_stand.desc"
+        }
+    },
+    "parent": "naturesaura:gold_leaf",
+    "criteria": {
+        "book": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "naturesaura:wood_stand"
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,7 +1,8 @@
 {
     "name": "Aura Cache",
     "icon": "naturesaura:aura_cache",
-    "category": "naturesaura:collecting",
+    "category": "naturesaura:items",
+    "advancement": "naturesaura:altar",
     "pages": [
         {
             "type": "text",

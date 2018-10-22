@@ -2,6 +2,7 @@
     "name": "Environmental Eye",
     "icon": "naturesaura:eye",
     "category": "naturesaura:items",
+    "advancement": "naturesaura:wood_stand",
     "pages": [
         {
             "type": "text",
@@ -13,7 +14,7 @@
         },
         {
             "type": "naturesaura:tree_ritual",
-            "text": "Creating the $(item)Environmental Eye$() using the $(l:naturesaura:using/tree_ritual)Ritual of the Forest$()",
+            "text": "Creating the $(item)Environmental Eye$() using the $(l:naturesaura:practices/tree_ritual)Ritual of the Forest$()",
             "recipe": "naturesaura:eye"
         }
     ]

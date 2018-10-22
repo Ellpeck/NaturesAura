@@ -2,6 +2,7 @@
     "name": "Botanist's Tools",
     "icon": "naturesaura:infused_iron_pickaxe",
     "category": "naturesaura:items",
+    "advancement": "naturesaura:altar",
     "pages": [
         {
             "type": "text",
@@ -9,7 +10,7 @@
         },
         {
             "type": "text",
-            "text": "On top of that, when taking an $(l:naturesaura:collecting/aura_cache)Aura Cache$() with you, the tools will be able to use the $(thing)Aura$() that it has stored to regenerate their durability, significantly increasing their lifespan. For this, one simply needs to hold still and sneak, and the tool in one's hand will slowly recharge."
+            "text": "On top of that, when taking an $(l:naturesaura:items/aura_cache)Aura Cache$() with you, the tools will be able to use the $(thing)Aura$() that it has stored to regenerate their durability, significantly increasing their lifespan. For this, one simply needs to hold still and sneak, and the tool in one's hand will slowly recharge."
         },
         {
             "type": "crafting",

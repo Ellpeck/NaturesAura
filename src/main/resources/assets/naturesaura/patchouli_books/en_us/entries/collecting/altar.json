@@ -2,6 +2,7 @@
     "name": "The Natural Altar",
     "icon": "naturesaura:nature_altar",
     "category": "naturesaura:collecting",
+    "advancement": "naturesaura:wood_stand",
     "priority": true,
     "pages": [
         {
@@ -10,7 +11,7 @@
         },
         {
             "type": "naturesaura:tree_ritual",
-            "text": "Creating the $(item)Natural Altar$() using the $(l:naturesaura:using/tree_ritual)Ritual of the Forest$()",
+            "text": "Creating the $(item)Natural Altar$() using the $(l:naturesaura:practices/tree_ritual)Ritual of the Forest$()",
             "recipe": "naturesaura:nature_altar"
         }
     ]

@@ -1,0 +1,22 @@
+{
+    "name": "Ritual of the Forest",
+    "icon": "naturesaura:wood_stand",
+    "category": "naturesaura:practices",
+    "advancement": "naturesaura:gold_leaf",
+    "priority": true,
+    "pages": [
+        {
+            "type": "text",
+            "text": "When starting out as a magical botanist, it proves beneficial to use the powers of nature on a more direct level before delving directly into $(thing)Aura$() itself. The $(item)Ritual of the Forest$() uses properties of $(l:naturesaura:practices/gold_trees)Gold Powder$() to encorporate the power of natural ingredients directly into a fresh, growing tree, devouring it in the process, but at the same time, transforming it into useful tools and items."
+        },
+        {
+            "type": "text",
+            "text": "To construct this $(thing)ritual$(), one has to place $(item)Gold Powder$() in the configuration shown on the next page, with some $(item)Wooden Stands$() around that which will hold the ingredients in whichever configuration seems visually pleasing.$(br)Then, the correct $(item)Sapling$() must be placed in the middle, and, either through some kind of fertilizer, or through the inevitability of time, its growth will cause the ritual to start."
+        },
+        {
+            "type": "crafting",
+            "text": "Creating $(item)Wooden Stands$()",
+            "recipe": "naturesaura:wood_stand"
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:nature_altar"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.altar"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.altar.desc"
+        }
+    },
+    "parent": "naturesaura:wood_stand",
+    "criteria": {
+        "book": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "naturesaura:nature_altar"
+                    }
+                ]
+            }
+        }
+    }
+}

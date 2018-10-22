@@ -35,3 +35,7 @@ advancement.naturesaura.get_book=Pages of discovery
 advancement.naturesaura.get_book.desc=Create the Book of Natural Aura
 advancement.naturesaura.gold_leaf=Time = Brilliance
 advancement.naturesaura.gold_leaf.desc=Create and harvest a Brilliant Tree
+advancement.naturesaura.wood_stand=Powers of the Forest
+advancement.naturesaura.wood_stand.desc=Create a Wooden Stand for the Ritual of the Forest
+advancement.naturesaura.altar=Empowered
+advancement.naturesaura.altar.desc=Create a Natural Altar using the Ritual of the Forest
