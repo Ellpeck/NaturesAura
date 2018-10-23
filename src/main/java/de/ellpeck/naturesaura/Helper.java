@@ -1,8 +1,10 @@
 package de.ellpeck.naturesaura;
 
+import baubles.api.BaublesApi;
 import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
+import de.ellpeck.naturesaura.compat.Compat;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,6 +21,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.lwjgl.opengl.GL11;
 
@@ -149,5 +152,32 @@ public final class Helper {
                 return capability == Capabilities.auraRecharge ? (T) this.recharge : null;
             }
         };
+    }
+
+    public static boolean extractAuraFromPlayer(EntityPlayer player, int amount, boolean simulate) {
+        if (Compat.baubles) {
+            IItemHandler baubles = BaublesApi.getBaublesHandler(player);
+            for (int i = 0; i < baubles.getSlots(); i++) {
+                ItemStack stack = baubles.getStackInSlot(i);
+                if (!stack.isEmpty() && stack.hasCapability(Capabilities.auraContainer, null)) {
+                    amount -= stack.getCapability(Capabilities.auraContainer, null).drainAura(amount, simulate);
+                    if (amount <= 0) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+            ItemStack stack = player.inventory.getStackInSlot(i);
+            if (!stack.isEmpty() && stack.hasCapability(Capabilities.auraContainer, null)) {
+                amount -= stack.getCapability(Capabilities.auraContainer, null).drainAura(amount, simulate);
+                if (amount <= 0) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

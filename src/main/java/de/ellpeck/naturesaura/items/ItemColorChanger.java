@@ -1,11 +1,13 @@
 package de.ellpeck.naturesaura.items;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +21,8 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
 
     public ItemColorChanger() {
         super("color_changer");
+        this.setMaxStackSize(1);
+
         this.addPropertyOverride(new ResourceLocation(NaturesAura.MOD_ID, "fill_mode"),
                 (stack, worldIn, entityIn) -> isFillMode(stack) ? 1F : 0F);
         this.addPropertyOverride(new ResourceLocation(NaturesAura.MOD_ID, "has_color"),
@@ -44,22 +48,30 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
                     EnumDyeColor stored = getStoredColor(stack);
                     if (player.isSneaking()) {
                         if (stored != color) {
+                            world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                                    SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 0.65F, 1F);
                             if (!world.isRemote)
                                 storeColor(stack, color);
                             return true;
                         }
                     } else {
                         if (stored != null && stored != color) {
-                            if (!world.isRemote) {
-                                world.setBlockState(pos, state.withProperty(prop, stored));
+                            if (Helper.extractAuraFromPlayer(player, 10, world.isRemote)) {
+                                if (firstColor == null) {
+                                    world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                                            SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 0.65F, 1F);
+                                }
+                                if (!world.isRemote) {
+                                    world.setBlockState(pos, state.withProperty(prop, stored));
 
-                                if (isFillMode(stack)) {
-                                    for (EnumFacing off : EnumFacing.VALUES) {
-                                        changeOrCopyColor(player, stack, world, pos.offset(off), color);
+                                    if (isFillMode(stack)) {
+                                        for (EnumFacing off : EnumFacing.VALUES) {
+                                            changeOrCopyColor(player, stack, world, pos.offset(off), color);
+                                        }
                                     }
                                 }
+                                return true;
                             }
-                            return true;
                         }
                     }
                 }
@@ -72,6 +84,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
         if (playerIn.isSneaking() && getStoredColor(stack) != null) {
+            worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundCategory.PLAYERS, 0.65F, 1F);
             if (!worldIn.isRemote) {
                 setFillMode(stack, !isFillMode(stack));
             }

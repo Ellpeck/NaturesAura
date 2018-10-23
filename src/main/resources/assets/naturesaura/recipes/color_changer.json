@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "RYB",
+        "I I",
+        " I "
+    ],
+    "key": {
+        "I": {
+            "item": "naturesaura:infused_iron"
+        },
+        "R": {
+            "type": "forge:ore_dict",
+            "ore": "dyeRed"
+        },
+        "Y": {
+            "type": "forge:ore_dict",
+            "ore": "dyeYellow"
+        },
+        "B": {
+            "type": "forge:ore_dict",
+            "ore": "dyeBlue"
+        }
+    },
+    "result": {
+        "item": "naturesaura:color_changer"
+    }
+}
