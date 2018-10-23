@@ -1,0 +1,20 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "naturesaura:items/color_changer"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "naturesaura:has_color": 1
+            },
+            "model": "naturesaura:item/color_changer_filled"
+        },
+        {
+            "predicate": {
+                "naturesaura:fill_mode": 1
+            },
+            "model": "naturesaura:item/color_changer_fill_mode"
+        }
+    ]
+}

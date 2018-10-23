@@ -1,0 +1,7 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "naturesaura:items/color_changer",
+        "layer1": "naturesaura:items/color_changer_overlay"
+    }
+}

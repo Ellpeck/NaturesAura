@@ -23,6 +23,7 @@ item.naturesaura.infused_iron_sword.name=Botanist's Blade
 item.naturesaura.infused_iron_hoe.name=Botanist's Hoe
 item.naturesaura.ancient_stick.name=Ancient Wood Rod
 item.naturesaura.aura_cache.name=Aura Cache
+item.naturesaura.color_changer.name=Bucket of Infinite Colors
 
 container.naturesaura.tree_ritual.name=Ritual of the Forest
 container.naturesaura.altar.name=Natural Altar Infusion
