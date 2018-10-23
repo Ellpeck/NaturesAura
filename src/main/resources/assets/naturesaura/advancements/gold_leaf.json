@@ -12,7 +12,7 @@
     },
     "parent": "naturesaura:get_book",
     "criteria": {
-        "book": {
+        "leaf": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [

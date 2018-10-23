@@ -12,7 +12,7 @@
     },
     "parent": "naturesaura:gold_leaf",
     "criteria": {
-        "book": {
+        "stand": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [

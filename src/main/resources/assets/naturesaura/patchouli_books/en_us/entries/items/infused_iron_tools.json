@@ -2,7 +2,7 @@
     "name": "Botanist's Tools",
     "icon": "naturesaura:infused_iron_pickaxe",
     "category": "naturesaura:items",
-    "advancement": "naturesaura:altar",
+    "advancement": "naturesaura:infused_materials",
     "pages": [
         {
             "type": "text",

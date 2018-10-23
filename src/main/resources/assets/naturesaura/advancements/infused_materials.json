@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:infused_iron"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.infused_materials"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.infused_materials.desc"
+        }
+    },
+    "parent": "naturesaura:altar",
+    "criteria": {
+        "materials": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "naturesaura:infused_iron"
+                    },
+                    {
+                        "item": "naturesaura:infused_stone"
+                    }
+                ]
+            }
+        }
+    }
+}
