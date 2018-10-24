@@ -8,7 +8,6 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -142,20 +141,19 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
                 BlockPos pos = entry.getKey();
                 int amount = entry.getValue().intValue();
                 if (amount < 0) {
-                    List<TileEntity> tiles = new ArrayList<>();
+                    List<ISpotDrainable> tiles = new ArrayList<>();
                     Helper.getTileEntitiesInArea(world, pos, 25, tile -> {
                         if (tile.hasCapability(Capabilities.auraContainer, null)) {
                             IAuraContainer container = tile.getCapability(Capabilities.auraContainer, null);
                             if (container instanceof ISpotDrainable) {
-                                tiles.add(tile);
+                                tiles.add((ISpotDrainable) container);
                             }
                         }
                     });
                     if (!tiles.isEmpty()) {
                         for (int i = world.rand.nextInt(10) + 5; i >= 0; i--) {
-                            TileEntity tile = tiles.get(world.rand.nextInt(tiles.size()));
-                            IAuraContainer container = tile.getCapability(Capabilities.auraContainer, null);
-                            int drained = ((ISpotDrainable) container).drainAuraPassively(-amount, false);
+                            ISpotDrainable tile = tiles.get(world.rand.nextInt(tiles.size()));
+                            int drained = tile.drainAuraPassively(-amount, false);
                             this.storeAura(pos, drained);
                             amount += drained;
                             if (amount >= drained) {
