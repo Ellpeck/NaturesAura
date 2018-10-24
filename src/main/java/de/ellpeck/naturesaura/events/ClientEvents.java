@@ -165,7 +165,7 @@ public class ClientEvents {
         if (!stack.isEmpty()) {
             IAuraContainer container = stack.getCapability(Capabilities.auraContainer, null);
             int width = MathHelper.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
-            int x = res.getScaledWidth() / 2 - 173;
+            int x = res.getScaledWidth() / 2 - 173 - (mc.player.getHeldItemOffhand().isEmpty() ? 0 : 29);
             int y = res.getScaledHeight() - 8;
 
             GlStateManager.pushMatrix();
