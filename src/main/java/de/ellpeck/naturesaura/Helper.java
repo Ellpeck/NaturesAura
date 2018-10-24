@@ -11,10 +11,12 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -103,7 +105,7 @@ public final class Helper {
         GlStateManager.popMatrix();
     }
 
-    public static boolean putStackOnTile(EntityPlayer player, EnumHand hand, BlockPos pos, int slot) {
+    public static boolean putStackOnTile(EntityPlayer player, EnumHand hand, BlockPos pos, int slot, boolean sound) {
         TileEntity tile = player.world.getTileEntity(pos);
         if (tile instanceof TileEntityImpl) {
             IItemHandlerModifiable handler = ((TileEntityImpl) tile).getItemHandler(null);
@@ -112,14 +114,19 @@ public final class Helper {
                 if (!handStack.isEmpty()) {
                     ItemStack remain = handler.insertItem(slot, handStack, player.world.isRemote);
                     if (!ItemStack.areItemStacksEqual(remain, handStack)) {
-                        if (!player.world.isRemote) {
+                        if (sound)
+                            player.world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                                    SoundEvents.ENTITY_ITEMFRAME_ADD_ITEM, SoundCategory.PLAYERS, 0.75F, 1F);
+                        if (!player.world.isRemote)
                             player.setHeldItem(hand, remain);
-                        }
                         return true;
                     }
                 }
 
                 if (!handler.getStackInSlot(slot).isEmpty()) {
+                    if (sound)
+                        player.world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                                SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM, SoundCategory.PLAYERS, 0.75F, 1F);
                     if (!player.world.isRemote) {
                         player.addItemStackToInventory(handler.getStackInSlot(slot));
                         handler.setStackInSlot(slot, ItemStack.EMPTY);

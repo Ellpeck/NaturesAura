@@ -14,11 +14,13 @@ import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.BlockStoneBrick.EnumType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
@@ -192,6 +194,9 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                                     this.items.setStackInSlot(0, this.currentRecipe.output.copy());
                                     this.currentRecipe = null;
                                     this.timer = 0;
+
+                                    this.world.playSound(null, this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5,
+                                            SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.BLOCKS, 0.65F, 1F);
                                 }
                             }
                         }

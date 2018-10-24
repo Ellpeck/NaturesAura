@@ -9,6 +9,7 @@ import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +17,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
@@ -100,6 +102,8 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
 
                         PacketHandler.sendToAllAround(this.world, this.pos, 32,
                                 new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 3));
+                        this.world.playSound(null, this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5,
+                                SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.BLOCKS, 0.65F, 1F);
 
                         this.ritualPos = null;
                         this.involvedStands = null;
@@ -109,10 +113,15 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                     } else if (this.timer == this.totalTime / 2) {
                         for (BlockPos pos : this.involvedStands.keySet()) {
                             TileEntityWoodStand stand = (TileEntityWoodStand) this.world.getTileEntity(pos);
+
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(stand.pos.getX(), stand.pos.getY(), stand.pos.getZ(), 1));
+                            this.world.playSound(null, stand.pos.getX() + 0.5, stand.pos.getY() + 0.5, stand.pos.getZ() + 0.5,
+                                    SoundEvents.BLOCK_WOOD_STEP, SoundCategory.BLOCKS, 0.5F, 1F);
+
                             stand.items.setStackInSlot(0, ItemStack.EMPTY);
                             stand.sendToClients();
                         }
+
                     }
 
                 } else {

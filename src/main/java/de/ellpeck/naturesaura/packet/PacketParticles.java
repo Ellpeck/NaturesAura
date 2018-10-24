@@ -76,8 +76,8 @@ public class PacketParticles implements IMessage {
                         case 1: // Tree ritual: Consuming item
                             for (int i = world.rand.nextInt(20) + 10; i >= 0; i--) {
                                 NaturesAura.proxy.spawnMagicParticle(world,
-                                        message.posX + 0.5F, message.posY + 1.25F, message.posZ + 0.5F,
-                                        (float) world.rand.nextGaussian() * 0.05F, world.rand.nextFloat() * 0.05F, (float) world.rand.nextGaussian() * 0.05F,
+                                        message.posX + 0.5F, message.posY + 0.9F, message.posZ + 0.5F,
+                                        (float) world.rand.nextGaussian() * 0.02F, world.rand.nextFloat() * 0.02F, (float) world.rand.nextGaussian() * 0.02F,
                                         0x89cc37, 1.5F, 50, 0F, false, true);
                             }
                             break;

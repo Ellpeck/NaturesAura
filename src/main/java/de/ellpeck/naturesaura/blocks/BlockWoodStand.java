@@ -5,9 +5,7 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -28,7 +26,7 @@ public class BlockWoodStand extends BlockContainerImpl {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        return Helper.putStackOnTile(playerIn, hand, pos, 0);
+        return Helper.putStackOnTile(playerIn, hand, pos, 0, true);
     }
 
     @Override

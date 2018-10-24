@@ -24,7 +24,7 @@ public class BlockNatureAltar extends BlockContainerImpl {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        return Helper.putStackOnTile(playerIn, hand, pos, 0);
+        return Helper.putStackOnTile(playerIn, hand, pos, 0, true);
     }
 
     @Override
