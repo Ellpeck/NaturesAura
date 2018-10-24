@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.aura.container;
 
-import de.ellpeck.naturesaura.aura.container.IAuraContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -8,12 +7,10 @@ public class ItemAuraContainer implements IAuraContainer {
 
     protected final ItemStack stack;
     protected final int maxAura;
-    protected final boolean artificial;
 
-    public ItemAuraContainer(ItemStack stack, int maxAura, boolean artificial) {
+    public ItemAuraContainer(ItemStack stack, int maxAura) {
         this.stack = stack;
         this.maxAura = maxAura;
-        this.artificial = artificial;
     }
 
     @Override
@@ -60,10 +57,5 @@ public class ItemAuraContainer implements IAuraContainer {
     @Override
     public int getAuraColor() {
         return 0x42a6bc;
-    }
-
-    @Override
-    public boolean isArtificial() {
-        return this.artificial;
     }
 }

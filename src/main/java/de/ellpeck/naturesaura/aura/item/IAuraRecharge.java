@@ -1,7 +1,9 @@
 package de.ellpeck.naturesaura.aura.item;
 
+import de.ellpeck.naturesaura.aura.container.IAuraContainer;
+
 public interface IAuraRecharge {
 
-    boolean recharge();
+    void rechargeFromContainer(IAuraContainer container);
 
 }

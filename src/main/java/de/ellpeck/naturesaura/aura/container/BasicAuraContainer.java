@@ -1,17 +1,14 @@
 package de.ellpeck.naturesaura.aura.container;
 
-import de.ellpeck.naturesaura.aura.container.IAuraContainer;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class BasicAuraContainer implements IAuraContainer {
 
     protected final int maxAura;
-    protected final boolean artificial;
     protected int aura;
 
-    public BasicAuraContainer(int maxAura, boolean artificial) {
+    public BasicAuraContainer(int maxAura) {
         this.maxAura = maxAura;
-        this.artificial = artificial;
     }
 
     @Override
@@ -45,11 +42,6 @@ public class BasicAuraContainer implements IAuraContainer {
     @Override
     public int getAuraColor() {
         return 0x1E891E;
-    }
-
-    @Override
-    public boolean isArtificial() {
-        return this.artificial;
     }
 
     public void writeNBT(NBTTagCompound compound) {

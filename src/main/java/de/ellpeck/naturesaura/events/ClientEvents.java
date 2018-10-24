@@ -53,7 +53,7 @@ public class ClientEvents {
             MutableInt spots = new MutableInt();
             AuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 15, ((blockPos, drainSpot) -> {
                 spots.increment();
-                amount.add(drainSpot.getAmount());
+                amount.add(drainSpot.intValue());
             }));
             left.add(prefix + "Aura: " + amount.intValue());
             left.add(prefix + "DrainSpots: " + spots.intValue());

@@ -1,13 +1,13 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.aura.container.FiniteAuraContainer;
 import de.ellpeck.naturesaura.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.aura.container.NaturalAuraContainer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 public class TileEntityAncientLeaves extends TileEntityImpl {
 
-    private final FiniteAuraContainer container = new FiniteAuraContainer(20, false) {
+    private final NaturalAuraContainer container = new NaturalAuraContainer(20, 5) {
         @Override
         public int getAuraColor() {
             return 0xc46df9;

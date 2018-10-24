@@ -140,12 +140,12 @@ public final class Helper {
 
     public static ICapabilityProvider makeRechargeProvider(ItemStack stack) {
         return new ICapabilityProvider() {
-            private final IAuraRecharge recharge = () -> {
-                if (stack.getItemDamage() > 0) {
+            private final IAuraRecharge recharge = container -> {
+                int toDrain = 3;
+                if (stack.getItemDamage() > 0 && container.drainAura(toDrain, true) >= toDrain) {
                     stack.setItemDamage(stack.getItemDamage() - 1);
-                    return true;
+                    container.drainAura(toDrain, false);
                 }
-                return false;
             };
 
             @Override

@@ -34,14 +34,14 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
     public static final int DEFAULT_AURA = 10000;
 
     private final Chunk chunk;
-    private final Map<BlockPos, DrainSpot> drainSpots = new HashMap<>();
+    private final Map<BlockPos, MutableInt> drainSpots = new HashMap<>();
     private boolean needsSync;
 
     public AuraChunk(Chunk chunk) {
         this.chunk = chunk;
     }
 
-    public static void getSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, DrainSpot> consumer) {
+    public static void getSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer) {
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
                 Chunk chunk = world.getChunk(x, z);
@@ -55,7 +55,7 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
 
     public static int getAuraInArea(World world, BlockPos pos, int radius) {
         MutableInt result = new MutableInt(DEFAULT_AURA);
-        getSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> result.add(drainSpot.getAmount()));
+        getSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> result.add(drainSpot.intValue()));
         return result.intValue();
     }
 
@@ -85,8 +85,8 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
         return closest;
     }
 
-    public void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, DrainSpot> consumer) {
-        for (Map.Entry<BlockPos, DrainSpot> entry : this.drainSpots.entrySet()) {
+    public void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer) {
+        for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
             BlockPos drainPos = entry.getKey();
             if (drainPos.distanceSq(pos) <= radius * radius) {
                 consumer.accept(drainPos, entry.getValue());
@@ -95,31 +95,31 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
     }
 
     public void drainAura(BlockPos pos, int amount) {
-        DrainSpot spot = this.getDrainSpot(pos);
-        spot.drain(amount);
-        if (spot.isEmpty())
+        MutableInt spot = this.getDrainSpot(pos);
+        spot.subtract(amount);
+        if (spot.intValue() == 0)
             this.drainSpots.remove(pos);
         this.markDirty();
     }
 
     public void storeAura(BlockPos pos, int amount) {
-        DrainSpot spot = this.getDrainSpot(pos);
-        spot.store(amount);
-        if (spot.isEmpty())
+        MutableInt spot = this.getDrainSpot(pos);
+        spot.add(amount);
+        if (spot.intValue() == 0)
             this.drainSpots.remove(pos);
         this.markDirty();
     }
 
-    private DrainSpot getDrainSpot(BlockPos pos) {
-        DrainSpot spot = this.drainSpots.get(pos);
+    private MutableInt getDrainSpot(BlockPos pos) {
+        MutableInt spot = this.drainSpots.get(pos);
         if (spot == null) {
-            spot = new DrainSpot(0);
+            spot = new MutableInt();
             this.drainSpots.put(pos, spot);
         }
         return spot;
     }
 
-    public void setSpots(Map<BlockPos, DrainSpot> spots) {
+    public void setSpots(Map<BlockPos, MutableInt> spots) {
         this.drainSpots.clear();
         this.drainSpots.putAll(spots);
     }
@@ -138,27 +138,28 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
         }
 
         if (world.getTotalWorldTime() % 40 == 0) {
-            for (Map.Entry<BlockPos, DrainSpot> entry : this.drainSpots.entrySet()) {
+            for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
                 BlockPos pos = entry.getKey();
-                int amount = entry.getValue().getAmount();
+                int amount = entry.getValue().intValue();
                 if (amount < 0) {
                     List<TileEntity> tiles = new ArrayList<>();
                     Helper.getTileEntitiesInArea(world, pos, 25, tile -> {
                         if (tile.hasCapability(Capabilities.auraContainer, null)) {
-                            tiles.add(tile);
+                            IAuraContainer container = tile.getCapability(Capabilities.auraContainer, null);
+                            if (container instanceof ISpotDrainable) {
+                                tiles.add(tile);
+                            }
                         }
                     });
                     if (!tiles.isEmpty()) {
                         for (int i = world.rand.nextInt(10) + 5; i >= 0; i--) {
                             TileEntity tile = tiles.get(world.rand.nextInt(tiles.size()));
                             IAuraContainer container = tile.getCapability(Capabilities.auraContainer, null);
-                            if (!container.isArtificial()) {
-                                int drained = container.drainAura(Math.min(-amount, 5), false);
-                                this.storeAura(pos, drained);
-                                amount += drained;
-                                if (amount >= drained) {
-                                    break;
-                                }
+                            int drained = ((ISpotDrainable) container).drainAuraPassively(-amount, false);
+                            this.storeAura(pos, drained);
+                            amount += drained;
+                            if (amount >= drained) {
+                                break;
                             }
                         }
                     }
@@ -185,10 +186,10 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
     @Override
     public NBTTagCompound serializeNBT() {
         NBTTagList list = new NBTTagList();
-        for (Map.Entry<BlockPos, DrainSpot> entry : this.drainSpots.entrySet()) {
+        for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setLong("pos", entry.getKey().toLong());
-            tag.setInteger("amount", entry.getValue().getAmount());
+            tag.setInteger("amount", entry.getValue().intValue());
             list.appendTag(tag);
         }
 
@@ -205,7 +206,7 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
             NBTTagCompound tag = (NBTTagCompound) base;
             this.drainSpots.put(
                     BlockPos.fromLong(tag.getLong("pos")),
-                    new DrainSpot(tag.getInteger("amount")));
+                    new MutableInt(tag.getInteger("amount")));
         }
     }
 }

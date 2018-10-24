@@ -3,7 +3,6 @@ package de.ellpeck.naturesaura.packet;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
-import de.ellpeck.naturesaura.aura.chunk.DrainSpot;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
@@ -14,6 +13,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +22,9 @@ public class PacketAuraChunk implements IMessage {
 
     private int chunkX;
     private int chunkZ;
-    private Map<BlockPos, DrainSpot> drainSpots;
+    private Map<BlockPos, MutableInt> drainSpots;
 
-    public PacketAuraChunk(int chunkX, int chunkZ, Map<BlockPos, DrainSpot> drainSpots) {
+    public PacketAuraChunk(int chunkX, int chunkZ, Map<BlockPos, MutableInt> drainSpots) {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.drainSpots = drainSpots;
@@ -44,7 +44,7 @@ public class PacketAuraChunk implements IMessage {
         for (int i = 0; i < amount; i++) {
             this.drainSpots.put(
                     BlockPos.fromLong(buf.readLong()),
-                    new DrainSpot(buf.readInt())
+                    new MutableInt(buf.readInt())
             );
         }
     }
@@ -55,9 +55,9 @@ public class PacketAuraChunk implements IMessage {
         buf.writeInt(this.chunkZ);
 
         buf.writeInt(this.drainSpots.size());
-        for (Map.Entry<BlockPos, DrainSpot> entry : this.drainSpots.entrySet()) {
+        for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
             buf.writeLong(entry.getKey().toLong());
-            buf.writeInt(entry.getValue().getAmount());
+            buf.writeInt(entry.getValue().intValue());
         }
     }
 

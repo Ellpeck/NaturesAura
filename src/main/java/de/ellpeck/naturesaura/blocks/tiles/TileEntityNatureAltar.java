@@ -111,7 +111,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
         }
     };
 
-    private final BasicAuraContainer container = new BasicAuraContainer(5000, true);
+    private final BasicAuraContainer container = new BasicAuraContainer(5000);
     public boolean structureFine;
 
     private AltarRecipe currentRecipe;

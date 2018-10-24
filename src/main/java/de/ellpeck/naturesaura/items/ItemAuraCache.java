@@ -39,9 +39,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
                 ItemStack stack = player.getHeldItemMainhand();
                 if (stack.hasCapability(Capabilities.auraRecharge, null)) {
                     IAuraContainer container = stackIn.getCapability(Capabilities.auraContainer, null);
-                    if (container.getStoredAura() >= 3 && stack.getCapability(Capabilities.auraRecharge, null).recharge()) {
-                        container.drainAura(4, false);
-                    }
+                    stack.getCapability(Capabilities.auraRecharge, null).rechargeFromContainer(container);
                 }
             }
         }
@@ -78,7 +76,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
         return new ICapabilityProvider() {
-            private final ItemAuraContainer container = new ItemAuraContainer(stack, 4000, true);
+            private final ItemAuraContainer container = new ItemAuraContainer(stack, 4000);
 
             @Override
             public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
