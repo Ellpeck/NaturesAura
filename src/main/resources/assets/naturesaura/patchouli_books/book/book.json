@@ -1,0 +1,7 @@
+{
+    "name": "item.naturesaura.book.name",
+    "landing_text": "info.naturesaura.book.landing",
+    "advancement_namespaces": [
+        "naturesaura"
+    ]
+}

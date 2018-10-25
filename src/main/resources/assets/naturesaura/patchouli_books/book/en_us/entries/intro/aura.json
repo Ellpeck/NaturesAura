@@ -1,7 +1,7 @@
 {
     "name": "Aura, conceptually",
     "icon": "naturesaura:gold_leaf",
-    "category": "naturesaura:intro",
+    "category": "intro",
     "priority": true,
     "pages": [
         {

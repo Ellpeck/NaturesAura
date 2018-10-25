@@ -1,7 +1,7 @@
 {
     "name": "Brilliant Trees",
     "icon": "naturesaura:gold_leaf",
-    "category": "naturesaura:practices",
+    "category": "practices",
     "priority": true,
     "pages": [
         {
@@ -21,7 +21,7 @@
         },
         {
             "type": "crafting",
-            "text": "$(item)Gold Leaf$(), once harvested, can easily be crushed into $(item)Gold Powder$() which can be placed on the ground as an integral part of the $(l:naturesaura:practices/tree_ritual)Ritual of the Forest$().",
+            "text": "$(item)Gold Leaf$(), once harvested, can easily be crushed into $(item)Gold Powder$() which can be placed on the ground as an integral part of the $(l:practices/tree_ritual)Ritual of the Forest$().",
             "recipe": "naturesaura:gold_powder"
         }
     ]

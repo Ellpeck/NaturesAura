@@ -1,7 +1,7 @@
 {
     "name": "Baubles",
     "icon": "minecraft:totem_of_undying",
-    "category": "naturesaura:intro",
+    "category": "intro",
     "read_by_default": true,
     "flag": "mod:baubles",
     "pages": [

@@ -1,0 +1,18 @@
+{
+    "name": "The Natural Altar",
+    "icon": "naturesaura:nature_altar",
+    "category": "collecting",
+    "advancement": "naturesaura:wood_stand",
+    "priority": true,
+    "pages": [
+        {
+            "type": "text",
+            "text": "A rudimentary, yet effective way of collecting $(thing)Aura$() early on is the $(item)Natural Altar$(). After creating the setup shown on the following page, the altar will start slowly draining $(thing)Aura$() in the vicinity. However, it is not strong enough to cause major damage, making it only drain until there is none left in the area.$(br)The collected $(thing)Aura$() can then be used in several ways, $(l:using/altar)infusing items$() for instance."
+        },
+        {
+            "type": "naturesaura:tree_ritual",
+            "text": "Creating the $(item)Natural Altar$() using the $(l:practices/tree_ritual)Ritual of the Forest$()",
+            "recipe": "naturesaura:nature_altar"
+        }
+    ]
+}

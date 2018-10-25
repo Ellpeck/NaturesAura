@@ -1,7 +1,7 @@
 {
     "name": "Ancient Trees",
     "icon": "naturesaura:ancient_leaves",
-    "category": "naturesaura:creating",
+    "category": "creating",
     "advancement": "naturesaura:wood_stand",
     "priority": true,
     "pages": [
@@ -11,7 +11,7 @@
         },
         {
             "type": "naturesaura:tree_ritual",
-            "text": "Creating the $(item)Ancient Sapling$() using the $(l:naturesaura:practices/tree_ritual)Ritual of the Forest$()",
+            "text": "Creating the $(item)Ancient Sapling$() using the $(l:practices/tree_ritual)Ritual of the Forest$()",
             "recipe": "naturesaura:ancient_sapling"
         },
         {

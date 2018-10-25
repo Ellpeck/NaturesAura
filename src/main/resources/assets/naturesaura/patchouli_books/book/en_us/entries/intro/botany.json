@@ -1,7 +1,7 @@
 {
     "name": "Magical Botany",
     "icon": "minecraft:sapling",
-    "category": "naturesaura:intro",
+    "category": "intro",
     "priority": true,
     "pages": [
         {

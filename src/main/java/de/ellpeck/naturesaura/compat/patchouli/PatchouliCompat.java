@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.compat.patchouli;
 import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.util.ResourceLocation;
 import vazkii.patchouli.client.book.BookPage;
-import vazkii.patchouli.client.book.BookRegistry;
+import vazkii.patchouli.client.book.ClientBookRegistry;
 
 public final class PatchouliCompat {
 
@@ -15,6 +15,6 @@ public final class PatchouliCompat {
     }
 
     private static void addPatchouliPage(String name, Class<? extends BookPage> page) {
-        BookRegistry.INSTANCE.pageTypes.put(NaturesAura.MOD_ID + ":" + name, page);
+        ClientBookRegistry.INSTANCE.pageTypes.put(NaturesAura.MOD_ID + ":" + name, page);
     }
 }

@@ -1,12 +1,12 @@
 {
     "name": "Botanist's Tools",
     "icon": "naturesaura:infused_iron_pickaxe",
-    "category": "naturesaura:items",
+    "category": "items",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {
             "type": "text",
-            "text": "Using the inherent powers of $(l:naturesaura:using/altar)Infused Iron$(), one can produce tools that not only have similar properties to its base material $(item)Iron$(), but also have additional features that one wouldn't quite expect.$(br)The following pages will display how to create the tools and how to use their special features."
+            "text": "Using the inherent powers of $(l:using/altar)Infused Iron$(), one can produce tools that not only have similar properties to its base material $(item)Iron$(), but also have additional features that one wouldn't quite expect.$(br)The following pages will display how to create the tools and how to use their special features."
         },
         {
             "type": "text",

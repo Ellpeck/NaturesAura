@@ -1,13 +1,13 @@
 {
     "name": "Ritual of the Forest",
     "icon": "naturesaura:wood_stand",
-    "category": "naturesaura:practices",
+    "category": "practices",
     "advancement": "naturesaura:gold_leaf",
     "priority": true,
     "pages": [
         {
             "type": "text",
-            "text": "When starting out as a magical botanist, it proves beneficial to use the powers of nature on a more direct level before delving directly into $(thing)Aura$() itself. The $(item)Ritual of the Forest$() uses properties of $(l:naturesaura:practices/gold_trees)Gold Powder$() to encorporate the power of natural ingredients directly into a fresh, growing tree, devouring it in the process, but at the same time, transforming it into useful tools and items."
+            "text": "When starting out as a magical botanist, it proves beneficial to use the powers of nature on a more direct level before delving directly into $(thing)Aura$() itself. The $(item)Ritual of the Forest$() uses properties of $(l:practices/gold_trees)Gold Powder$() to encorporate the power of natural ingredients directly into a fresh, growing tree, devouring it in the process, but at the same time, transforming it into useful tools and items."
         },
         {
             "type": "text",
