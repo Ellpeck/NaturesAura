@@ -49,14 +49,18 @@ public class ClientEvents {
             left.add("");
             left.add(prefix + "PartScrn: " + ParticleHandler.getParticleAmount());
 
+            boolean adv = mc.gameSettings.showDebugProfilerChart;
+            if (adv)
+                left.add(prefix + "DrainSpots:");
             MutableInt amount = new MutableInt(AuraChunk.DEFAULT_AURA);
             MutableInt spots = new MutableInt();
             AuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 15, ((blockPos, drainSpot) -> {
                 spots.increment();
                 amount.add(drainSpot.intValue());
+                if (adv)
+                    left.add(prefix + drainSpot.intValue() + " @ " + blockPos.getX()+" "+blockPos.getY()+" "+blockPos.getZ());
             }));
-            left.add(prefix + "Aura: " + amount.intValue());
-            left.add(prefix + "DrainSpots: " + spots.intValue());
+            left.add(prefix + "Aura: " + amount.intValue() + " in " + spots.intValue() + " spots");
         }
     }
 

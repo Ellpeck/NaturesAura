@@ -1,8 +1,9 @@
 package de.ellpeck.naturesaura.aura.chunk;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.aura.Capabilities;
-import de.ellpeck.naturesaura.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.aura.chunk.effect.GrassDieEffect;
+import de.ellpeck.naturesaura.aura.chunk.effect.IDrainSpotEffect;
+import de.ellpeck.naturesaura.aura.chunk.effect.ReplenishingEffect;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.nbt.NBTBase;
@@ -34,10 +35,13 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
 
     private final Chunk chunk;
     private final Map<BlockPos, MutableInt> drainSpots = new HashMap<>();
+    private final List<IDrainSpotEffect> effects = new ArrayList<>();
     private boolean needsSync;
 
     public AuraChunk(Chunk chunk) {
         this.chunk = chunk;
+        this.effects.add(new ReplenishingEffect());
+        this.effects.add(new GrassDieEffect());
     }
 
     public static void getSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer) {
@@ -72,7 +76,7 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
         MutableObject<BlockPos> closestSpot = new MutableObject<>();
         getSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> {
             double dist = pos.distanceSq(blockPos);
-            if (dist < radius * radius && dist < closestDist.doubleValue()) {
+            if (dist < closestDist.doubleValue()) {
                 closestDist.setValue(dist);
                 closestSpot.setValue(blockPos);
             }
@@ -136,32 +140,9 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
             this.needsSync = false;
         }
 
-        if (world.getTotalWorldTime() % 40 == 0) {
-            for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
-                BlockPos pos = entry.getKey();
-                int amount = entry.getValue().intValue();
-                if (amount < 0) {
-                    List<ISpotDrainable> tiles = new ArrayList<>();
-                    Helper.getTileEntitiesInArea(world, pos, 25, tile -> {
-                        if (tile.hasCapability(Capabilities.auraContainer, null)) {
-                            IAuraContainer container = tile.getCapability(Capabilities.auraContainer, null);
-                            if (container instanceof ISpotDrainable) {
-                                tiles.add((ISpotDrainable) container);
-                            }
-                        }
-                    });
-                    if (!tiles.isEmpty()) {
-                        for (int i = world.rand.nextInt(10) + 5; i >= 0; i--) {
-                            ISpotDrainable tile = tiles.get(world.rand.nextInt(tiles.size()));
-                            int drained = tile.drainAuraPassively(-amount, false);
-                            this.storeAura(pos, drained);
-                            amount += drained;
-                            if (amount >= drained) {
-                                break;
-                            }
-                        }
-                    }
-                }
+        for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
+            for (IDrainSpotEffect effect : this.effects) {
+                effect.update(world, this.chunk, this, entry.getKey(), entry.getValue());
             }
         }
     }

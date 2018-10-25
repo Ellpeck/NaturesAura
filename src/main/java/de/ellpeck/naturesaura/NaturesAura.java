@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import de.ellpeck.naturesaura.commands.CommandAura;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.CommonEvents;
 import de.ellpeck.naturesaura.events.TerrainGenEvents;
@@ -25,6 +26,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -80,5 +82,10 @@ public final class NaturesAura {
     public void postInit(FMLPostInitializationEvent event) {
         ModRegistry.postInit(event);
         proxy.postInit(event);
+    }
+
+    @EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new CommandAura());
     }
 }
