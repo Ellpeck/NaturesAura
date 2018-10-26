@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.aura.chunk;
 
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.chunk.effect.GrassDieEffect;
 import de.ellpeck.naturesaura.aura.chunk.effect.IDrainSpotEffect;
@@ -45,6 +46,7 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
     }
 
     public static void getSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer) {
+        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getSpotsInArea");
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
                 Chunk chunk = world.getChunk(x, z);
@@ -54,6 +56,7 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
                 }
             }
         }
+        world.profiler.endSection();
     }
 
     public static int getAuraInArea(World world, BlockPos pos, int radius) {

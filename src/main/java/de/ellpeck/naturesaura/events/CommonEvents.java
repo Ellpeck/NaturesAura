@@ -28,6 +28,7 @@ public class CommonEvents {
     public void onWorldTick(TickEvent.WorldTickEvent event) {
         if (!event.world.isRemote && event.phase == TickEvent.Phase.END) {
             if (event.world.getTotalWorldTime() % 20 == 0) {
+                event.world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":onWorldTick");
                 Iterator<Chunk> chunks = event.world.getPersistentChunkIterable(((WorldServer) event.world).getPlayerChunkMap().getChunkIterator());
                 while (chunks.hasNext()) {
                     Chunk chunk = chunks.next();
@@ -36,6 +37,7 @@ public class CommonEvents {
                         auraChunk.update();
                     }
                 }
+                event.world.profiler.endSection();
             }
         }
     }

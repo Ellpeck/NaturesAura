@@ -47,20 +47,19 @@ public class ClientEvents {
             String prefix = TextFormatting.GREEN + "[" + NaturesAura.MOD_NAME + "]" + TextFormatting.RESET + " ";
             List<String> left = event.getLeft();
             left.add("");
-            left.add(prefix + "PartScrn: " + ParticleHandler.getParticleAmount());
+            left.add(prefix + "Particles: " + ParticleHandler.getParticleAmount());
 
-            boolean adv = mc.gameSettings.showDebugProfilerChart;
-            if (adv)
-                left.add(prefix + "DrainSpots:");
-            MutableInt amount = new MutableInt(AuraChunk.DEFAULT_AURA);
-            MutableInt spots = new MutableInt();
-            AuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 15, ((blockPos, drainSpot) -> {
-                spots.increment();
-                amount.add(drainSpot.intValue());
-                if (adv)
-                    left.add(prefix + drainSpot.intValue() + " @ " + blockPos.getX()+" "+blockPos.getY()+" "+blockPos.getZ());
-            }));
-            left.add(prefix + "Aura: " + amount.intValue() + " in " + spots.intValue() + " spots");
+            if (mc.player.capabilities.isCreativeMode) {
+                left.add(prefix + "Aura:");
+                MutableInt amount = new MutableInt(AuraChunk.DEFAULT_AURA);
+                MutableInt spots = new MutableInt();
+                AuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 15, ((blockPos, drainSpot) -> {
+                    spots.increment();
+                    amount.add(drainSpot.intValue());
+                    left.add(prefix + drainSpot.intValue() + " @ " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
+                }));
+                left.add(prefix + "Total: " + amount.intValue() + " in " + spots.intValue() + " spots");
+            }
         }
     }
 
