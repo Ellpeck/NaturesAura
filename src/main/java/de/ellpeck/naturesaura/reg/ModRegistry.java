@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.reg;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.reg.IModelProvider.ModelVariant;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -70,11 +70,10 @@ public final class ModRegistry {
             }
 
             if (item instanceof IModelProvider) {
-                Map<ItemStack, ModelVariant> models = ((IModelProvider) item).getModelLocations();
+                Map<ItemStack, ModelResourceLocation> models = ((IModelProvider) item).getModelLocations();
 
                 for (ItemStack stack : models.keySet()) {
-                    ModelVariant variant = models.get(stack);
-                    NaturesAura.proxy.registerRenderer(stack, variant.location, variant.variant);
+                    NaturesAura.proxy.registerRenderer(stack, models.get(stack));
                 }
             }
 

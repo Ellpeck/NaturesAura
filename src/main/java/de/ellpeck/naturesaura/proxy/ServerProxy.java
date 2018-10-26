@@ -2,8 +2,8 @@ package de.ellpeck.naturesaura.proxy;
 
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -28,7 +28,7 @@ public class ServerProxy implements IProxy {
     }
 
     @Override
-    public void registerRenderer(ItemStack stack, ResourceLocation location, String variant) {
+    public void registerRenderer(ItemStack stack, ModelResourceLocation location) {
 
     }
 

@@ -37,7 +37,7 @@ public final class NaturesAura {
     public static final String PROXY_LOCATION = "de.ellpeck." + MOD_ID + ".proxy.";
     public static final String MOD_NAME = "Nature's Aura";
     public static final String VERSION = "@VERSION@";
-    public static final String DEPS = "required:patchouli;";
+    public static final String DEPS = "required-after:patchouli;";
 
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 

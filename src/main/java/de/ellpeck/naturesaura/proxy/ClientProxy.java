@@ -4,12 +4,13 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderWoodStand;
-import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
+import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.ClientEvents;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import de.ellpeck.naturesaura.particles.ParticleMagic;
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
+import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -18,7 +19,6 @@ import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -34,6 +34,7 @@ public class ClientProxy implements IProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
+        Compat.initClient();
     }
 
     @Override
@@ -53,8 +54,8 @@ public class ClientProxy implements IProxy {
     }
 
     @Override
-    public void registerRenderer(ItemStack stack, ResourceLocation location, String variant) {
-        ModelLoader.setCustomModelResourceLocation(stack.getItem(), stack.getItemDamage(), new ModelResourceLocation(location, variant));
+    public void registerRenderer(ItemStack stack, ModelResourceLocation location) {
+        ModelLoader.setCustomModelResourceLocation(stack.getItem(), stack.getItemDamage(), location);
     }
 
     @Override

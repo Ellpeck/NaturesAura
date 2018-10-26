@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.proxy;
 
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -16,7 +17,7 @@ public interface IProxy {
 
     void postInit(FMLPostInitializationEvent event);
 
-    void registerRenderer(ItemStack stack, ResourceLocation location, String variant);
+    void registerRenderer(ItemStack stack, ModelResourceLocation location);
 
     void addColorProvidingItem(IColorProvidingItem item);
 

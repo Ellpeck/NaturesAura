@@ -6,7 +6,6 @@ import net.minecraftforge.fml.common.Loader;
 
 public final class Compat {
 
-    public static boolean patchouli;
     public static boolean baubles;
 
     public static void init() {
@@ -14,10 +13,9 @@ public final class Compat {
         if (baubles) {
             MinecraftForge.EVENT_BUS.register(new BaublesCompat());
         }
+    }
 
-        patchouli = Loader.isModLoaded("patchouli");
-        if (patchouli) {
-            PatchouliCompat.init();
-        }
+    public static void initClient(){
+        PatchouliCompat.initClient();
     }
 }

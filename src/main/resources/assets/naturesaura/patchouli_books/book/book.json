@@ -6,7 +6,7 @@
     ],
     "creative_tab": "naturesaura",
     "advancements_tab": "naturesaura",
-    "book_texture": "patchouli:textures/gui/book_green",
-    "model": "patchouli:book_green",
+    "book_texture": "naturesaura:textures/gui/book",
+    "model": "naturesaura:book",
     "subtitle": "Haha yes"
 }
