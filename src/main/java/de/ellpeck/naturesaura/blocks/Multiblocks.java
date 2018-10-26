@@ -58,7 +58,7 @@ public final class Multiblocks {
         return true;
     }
 
-    private interface LooseValidator {
+    public interface LooseValidator {
         boolean works(BlockPos start, int x, int y, int z, StateMatcher matcher);
     }
 }
