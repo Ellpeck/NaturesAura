@@ -32,6 +32,15 @@ public final class ModRecipes {
                 new ItemStack(Items.WHEAT_SEEDS),
                 new ItemStack(Items.REEDS),
                 new ItemStack(ModItems.GOLD_LEAF)).add();
+        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "furnace_heater"),
+                new ItemStack(Blocks.SAPLING), new ItemStack(ModBlocks.FURNACE_HEATER), 600,
+                new ItemStack(ModBlocks.INFUSED_STONE),
+                new ItemStack(ModBlocks.INFUSED_STONE),
+                new ItemStack(ModItems.INFUSED_IRON),
+                new ItemStack(ModItems.INFUSED_IRON),
+                new ItemStack(Items.FIRE_CHARGE),
+                new ItemStack(Items.FLINT),
+                new ItemStack(Blocks.MAGMA)).add();
 
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_iron"),
                 new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON), 300, 80).add();

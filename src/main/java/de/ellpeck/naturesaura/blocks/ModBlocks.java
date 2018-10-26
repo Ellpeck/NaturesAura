@@ -17,4 +17,5 @@ public final class ModBlocks {
     public static final Block GOLD_POWDER = new BlockGoldPowder();
     public static final Block WOOD_STAND = new BlockWoodStand();
     public static final Block INFUSED_STONE = new BlockImpl("infused_stone", Material.ROCK).setSoundType(SoundType.STONE).setHardness(1.75F);
+    public static final Block FURNACE_HEATER = new BlockFurnaceHeater();
 }

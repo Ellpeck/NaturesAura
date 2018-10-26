@@ -6,6 +6,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -17,8 +18,8 @@ public class GrassDieEffect implements IDrainSpotEffect {
             int aura = AuraChunk.getAuraInArea(world, pos, 25);
             if (aura < 0) {
                 int amount = Math.min(300, Math.abs(aura) / 1000);
-                if (amount > 0) {
-                    int dist = Math.min(45, Math.abs(aura) / 750);
+                if (amount > 1) {
+                    int dist = MathHelper.clamp(Math.abs(aura) / 750, 5, 45);
                     if (dist > 0) {
                         for (int i = amount / 2 + world.rand.nextInt(amount / 2); i >= 0; i--) {
                             BlockPos grassPos = new BlockPos(

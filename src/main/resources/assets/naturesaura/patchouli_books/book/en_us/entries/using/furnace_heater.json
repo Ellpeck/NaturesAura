@@ -1,0 +1,17 @@
+{
+    "name": "Extraneous Firestarter",
+    "icon": "naturesaura:furnace_heater",
+    "category": "using",
+    "advancement": "naturesaura:infused_materials",
+    "pages": [
+        {
+            "type": "text",
+            "text": "At some point, one realizes that a $(item)Furnace$() is just too slow and consuming of resources to use efficiently.$(br)The $(item)Extraneous Firestarter$() will speed up any $(item)Furnace$() it is placed on top of, along with giving it the necessary heat to smelt any sort of material. Note that, while consuming the required $(thing)Aura$() for this, the natural levels might drop into the negatives, causing $(l:intro/aura)diminishing returns$()."
+        },
+        {
+            "type": "naturesaura:tree_ritual",
+            "text": "Creating the $(item)Extraneous Firestarter$() using the $(l:practices/tree_ritual)Ritual of the Forest$()",
+            "recipe": "naturesaura:furnace_heater"
+        }
+    ]
+}
