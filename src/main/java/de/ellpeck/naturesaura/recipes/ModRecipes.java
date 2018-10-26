@@ -23,7 +23,7 @@ public final class ModRecipes {
                 new ItemStack(Blocks.STONE),
                 new ItemStack(Blocks.STONE),
                 new ItemStack(ModItems.GOLD_LEAF),
-                new ItemStack(Items.DIAMOND)).add();
+                new ItemStack(Items.GOLD_INGOT)).add();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "ancient_sapling"),
                 new ItemStack(Blocks.SAPLING), new ItemStack(ModBlocks.ANCIENT_SAPLING), 200,
                 new ItemStack(Blocks.SAPLING),

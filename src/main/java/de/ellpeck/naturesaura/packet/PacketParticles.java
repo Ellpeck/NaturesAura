@@ -1,10 +1,11 @@
 package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
+import de.ellpeck.naturesaura.blocks.Multiblocks;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -59,8 +60,7 @@ public class PacketParticles implements IMessage {
                     switch (message.type) {
                         case 0: // Tree ritual: Gold powder
                             BlockPos pos = new BlockPos(message.posX, message.posY, message.posZ);
-                            for (BlockPos offset : TileEntityWoodStand.GOLD_POWDER_POSITIONS) {
-                                BlockPos dustPos = pos.add(offset);
+                            Multiblocks.TREE_RITUAL.forEach(world, pos, Rotation.NONE, 'G', dustPos -> {
                                 IBlockState state = world.getBlockState(dustPos);
                                 AxisAlignedBB box = state.getBoundingBox(world, dustPos);
                                 NaturesAura.proxy.spawnMagicParticle(world,
@@ -71,7 +71,7 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextFloat() * 0.005F + 0.01F,
                                         (float) world.rand.nextGaussian() * 0.01F,
                                         0xf4cb42, 2F, 100, 0F, false, true);
-                            }
+                            });
                             break;
                         case 1: // Tree ritual: Consuming item
                             for (int i = world.rand.nextInt(20) + 10; i >= 0; i--) {

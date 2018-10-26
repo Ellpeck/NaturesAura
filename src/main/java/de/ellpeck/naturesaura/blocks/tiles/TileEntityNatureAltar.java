@@ -6,14 +6,12 @@ import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.aura.container.BasicAuraContainer;
 import de.ellpeck.naturesaura.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.blocks.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.recipes.AltarRecipe;
-import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.BlockStoneBrick.EnumType;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,71 +26,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import java.util.Random;
 
 public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
-
-    private static final BlockPos[] BRICK_POSITIONS = new BlockPos[]{
-            new BlockPos(-2, -1, 0),
-            new BlockPos(-3, -1, 0),
-            new BlockPos(-4, 0, 0),
-            new BlockPos(-4, 1, 0),
-
-            new BlockPos(2, -1, 0),
-            new BlockPos(3, -1, 0),
-            new BlockPos(4, 0, 0),
-            new BlockPos(4, 1, 0),
-
-            new BlockPos(0, -1, -2),
-            new BlockPos(0, -1, -3),
-            new BlockPos(0, 0, -4),
-            new BlockPos(0, 1, -4),
-
-            new BlockPos(0, -1, 2),
-            new BlockPos(0, -1, 3),
-            new BlockPos(0, 0, 4),
-            new BlockPos(0, 1, 4)
-    };
-    private static final BlockPos[] MOSSY_POSITIONS = new BlockPos[]{
-            new BlockPos(-4, 2, 0),
-            new BlockPos(4, 2, 0),
-            new BlockPos(0, 2, -4),
-            new BlockPos(0, 2, 4),
-
-            new BlockPos(-2, 0, -2),
-            new BlockPos(2, 0, -2),
-            new BlockPos(2, 0, 2),
-            new BlockPos(-2, 0, 2)
-    };
-    private static final BlockPos[] CHISELED_POSITIONS = new BlockPos[]{
-            new BlockPos(1, -1, 1),
-            new BlockPos(-1, -1, 1),
-            new BlockPos(-1, -1, -1),
-            new BlockPos(1, -1, -1)
-    };
-    private static final BlockPos[] WOOD_POSITIONS = new BlockPos[]{
-            new BlockPos(-1, -1, 0),
-            new BlockPos(1, -1, 0),
-            new BlockPos(0, -1, -1),
-            new BlockPos(0, -1, 1),
-
-            new BlockPos(-2, -1, -1),
-            new BlockPos(-3, -1, -1),
-            new BlockPos(-2, -1, 1),
-            new BlockPos(-3, -1, 1),
-
-            new BlockPos(2, -1, -1),
-            new BlockPos(3, -1, -1),
-            new BlockPos(2, -1, 1),
-            new BlockPos(3, -1, 1),
-
-            new BlockPos(-1, -1, -2),
-            new BlockPos(-1, -1, -3),
-            new BlockPos(1, -1, -2),
-            new BlockPos(1, -1, -3),
-
-            new BlockPos(-1, -1, 2),
-            new BlockPos(-1, -1, 3),
-            new BlockPos(1, -1, 2),
-            new BlockPos(1, -1, 3),
-    };
 
     public final ItemStackHandler items = new ItemStackHandlerNA(1, this, true) {
         @Override
@@ -125,10 +58,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
         if (!this.world.isRemote) {
             if (this.world.getTotalWorldTime() % 40 == 0) {
-                boolean fine = this.check(BRICK_POSITIONS, Blocks.STONEBRICK.getDefaultState(), false)
-                        && this.check(MOSSY_POSITIONS, Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, EnumType.MOSSY), false)
-                        && this.check(CHISELED_POSITIONS, Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, EnumType.CHISELED), false)
-                        && this.check(WOOD_POSITIONS, Blocks.PLANKS.getDefaultState(), true);
+                boolean fine = Multiblocks.ALTAR.validate(this.world, this.pos);
                 if (fine != this.structureFine) {
                     this.structureFine = fine;
                     this.sendToClients();
@@ -236,10 +166,6 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                 }
             }
         }
-    }
-
-    private boolean check(BlockPos[] positions, IBlockState state, boolean blockOnly) {
-        return Helper.checkMultiblock(this.world, this.pos, positions, state, blockOnly);
     }
 
     @Override

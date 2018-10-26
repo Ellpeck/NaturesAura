@@ -46,16 +46,6 @@ public final class Helper {
         }
     }
 
-    public static boolean checkMultiblock(World world, BlockPos pos, BlockPos[] positions, IBlockState state, boolean blockOnly) {
-        for (BlockPos offset : positions) {
-            IBlockState current = world.getBlockState(pos.add(offset));
-            if (blockOnly ? current.getBlock() != state.getBlock() : current != state) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     @SideOnly(Side.CLIENT)
     public static int blendColors(int c1, int c2, float ratio) {
         int a = (int) ((c1 >> 24 & 0xFF) * ratio + (c2 >> 24 & 0xFF) * (1 - ratio));

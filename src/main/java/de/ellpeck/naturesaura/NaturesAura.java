@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import de.ellpeck.naturesaura.blocks.Multiblocks;
 import de.ellpeck.naturesaura.commands.CommandAura;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.CommonEvents;
@@ -63,6 +64,7 @@ public final class NaturesAura {
         Compat.init();
         PacketHandler.init();
         ModRegistry.preInit(event);
+        new Multiblocks();
 
         MinecraftForge.TERRAIN_GEN_BUS.register(new TerrainGenEvents());
         MinecraftForge.EVENT_BUS.register(new CommonEvents());

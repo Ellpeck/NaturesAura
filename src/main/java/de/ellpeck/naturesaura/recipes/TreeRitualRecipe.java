@@ -1,11 +1,9 @@
 package de.ellpeck.naturesaura.recipes;
 
-import de.ellpeck.naturesaura.Helper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class TreeRitualRecipe {
@@ -24,19 +22,6 @@ public class TreeRitualRecipe {
         this.items = items;
         this.result = result;
         this.time = time;
-    }
-
-    public boolean matchesItems(ItemStack sapling, List<ItemStack> items) {
-        if (this.saplingType.isItemEqual(sapling)) {
-            for (ItemStack ingredient : this.items) {
-                if (Helper.getItemIndex(items, ingredient) < 0) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public TreeRitualRecipe add() {

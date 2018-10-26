@@ -11,7 +11,12 @@
         },
         {
             "type": "text",
-            "text": "To construct this $(thing)ritual$(), one has to place $(item)Gold Powder$() in the configuration shown on the next page, with some $(item)Wooden Stands$() around that which will hold the ingredients in whichever configuration seems visually pleasing.$(br)Then, the correct $(item)Sapling$() must be placed in the middle, and, either through some kind of fertilizer, or through the inevitability of time, its growth will cause the ritual to start."
+            "text": "To construct this $(thing)ritual$(), one has to place $(item)Gold Powder$() in the configuration shown on the next page, with some $(item)Wooden Stands$() around that which will hold the ingredients.$(br)Then, the correct $(item)Sapling$() must be placed in the middle, and, either through some kind of fertilizer, or through the inevitability of time, its growth will cause the ritual to start."
+        },
+        {
+            "type": "multiblock",
+            "multiblock": "naturesaura:tree_ritual",
+            "text": "Preparing the $(item)Ritual of the Forest$(). It is not required to have all $(item)Wood Stands$() present."
         },
         {
             "type": "crafting",

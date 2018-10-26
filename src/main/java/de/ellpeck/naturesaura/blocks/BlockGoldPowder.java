@@ -1,8 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -16,6 +14,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -55,25 +54,6 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
         super("gold_powder", Material.CIRCUITS);
         this.setSoundType(SoundType.STONE);
         this.setHardness(0F);
-    }
-
-    @Override
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        if (rand.nextFloat() >= 0.9F) {
-            for (BlockPos offsetToOrigin : TileEntityWoodStand.GOLD_POWDER_POSITIONS) {
-                BlockPos origin = pos.subtract(offsetToOrigin);
-                if (Helper.checkMultiblock(worldIn, origin, TileEntityWoodStand.GOLD_POWDER_POSITIONS, ModBlocks.GOLD_POWDER.getDefaultState(), true)) {
-                    AxisAlignedBB box = this.getBoundingBox(stateIn, worldIn, pos);
-                    NaturesAura.proxy.spawnMagicParticle(worldIn,
-                            pos.getX() + box.minX + (box.maxX - box.minX) * rand.nextFloat(),
-                            pos.getY() + 0.05F,
-                            pos.getZ() + box.minZ + (box.maxZ - box.minZ) * rand.nextFloat(),
-                            rand.nextGaussian() * 0.001, rand.nextFloat() * 0.001 + 0.005, rand.nextGaussian() * 0.001,
-                            0xf4cb42, 1F, 50, 0F, false, true);
-                    break;
-                }
-            }
-        }
     }
 
     @Override
