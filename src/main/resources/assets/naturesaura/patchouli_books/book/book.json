@@ -11,7 +11,8 @@
     "model": "naturesaura:book",
     "subtitle": "Haha yes",
     "macros": {
-        "$(thing)": "$(#0d3bc4)",
+        "$(thing)": "$(#ff6600)",
+        "$(item)": "$(#ad09e2)",
         "$(aura)": "$(#419600)Aura$()"
     }
 }
