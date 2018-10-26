@@ -6,7 +6,7 @@
     "pages": [
         {
             "type": "text",
-            "text": "Through the years that botanist's have been trying to figure out the magical properties of $(aura) bearing objects, they have discovered an unexpected, yet common, theme: $(item)Gold$() seems to always play a role in the interaction between humans and $(thing)Aura$()."
+            "text": "Through the years that botanist's have been trying to figure out the magical properties of $(aura) bearing objects, they have discovered an unexpected, yet common, theme: $(item)Gold$() seems to always play a role in the interaction between humans and $(aura)."
         },
         {
             "type": "spotlight",

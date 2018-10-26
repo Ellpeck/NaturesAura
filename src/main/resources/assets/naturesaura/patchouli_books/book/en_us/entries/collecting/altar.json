@@ -7,7 +7,7 @@
     "pages": [
         {
             "type": "text",
-            "text": "A rudimentary, yet effective way of collecting $(aura) early on is the $(item)Natural Altar$(). After creating the setup shown on the following page, the altar will start slowly draining $(aura) in the vicinity. However, it is not strong enough to cause major damage, making it only drain until there is none left in the area.$(br)The collected $(thing)Aura$() can then be used in several ways, $(l:using/altar)infusing items$() for instance."
+            "text": "A rudimentary, yet effective way of collecting $(aura) early on is the $(item)Natural Altar$(). After creating the setup shown on the following page, the altar will start slowly draining $(aura) in the vicinity. However, it is not strong enough to cause major damage, making it only drain until there is none left in the area.$(br)The collected $(aura) can then be used in several ways, $(l:using/altar)infusing items$() for instance."
         },
         {
             "type": "naturesaura:tree_ritual",
