@@ -6,7 +6,7 @@
     "pages": [
         {
             "type": "text",
-            "text": "At some point, one realizes that a $(item)Furnace$() is just too slow and consuming of resources to use efficiently.$(br)The $(item)Extraneous Firestarter$() will speed up any $(item)Furnace$() it is placed on top of, along with giving it the necessary heat to smelt any sort of material. Note that, while consuming the required $(thing)Aura$() for this, the natural levels might drop into the negatives, causing $(l:intro/aura)diminishing returns$()."
+            "text": "At some point, one realizes that a $(item)Furnace$() is just too slow and consuming of resources to use efficiently.$(br)The $(item)Extraneous Firestarter$() will speed up any $(item)Furnace$() it is placed on top of, along with giving it the necessary heat to smelt any sort of material. Note that, while consuming the required $(aura) for this, the natural levels might drop into the negatives, causing $(l:intro/aura)diminishing returns$()."
         },
         {
             "type": "naturesaura:tree_ritual",

@@ -7,6 +7,11 @@
     "creative_tab": "naturesaura",
     "advancements_tab": "naturesaura",
     "book_texture": "naturesaura:textures/gui/book",
+    "filler_texture": "naturesaura:textures/gui/book_filler",
     "model": "naturesaura:book",
-    "subtitle": "Haha yes"
+    "subtitle": "Haha yes",
+    "macros": {
+        "$(thing)": "$(#0d3bc4)",
+        "$(aura)": "$(#419600)Aura$()"
+    }
 }

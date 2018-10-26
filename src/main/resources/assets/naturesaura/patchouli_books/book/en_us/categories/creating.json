@@ -1,6 +1,6 @@
 {
     "name": "Creating Aura",
-    "description": "The finity of $(thing)Aura$() in the world can be troubling to think about, because once it is drained, it seems like it is not restorable. That, however, is not the case: This category houses explanations for how to create $(thing)Aura$() using different techniques.",
+    "description": "The finity of $(aura) in the world can be troubling to think about, because once it is drained, it seems like it is not restorable. That, however, is not the case: This category houses explanations for how to create $(aura) using different techniques.",
     "icon": "naturesaura:ancient_sapling",
     "sortnum": 18
 }

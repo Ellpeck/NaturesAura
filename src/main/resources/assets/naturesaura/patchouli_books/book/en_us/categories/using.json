@@ -1,6 +1,6 @@
 {
     "name": "Harnessing Aura",
-    "description": "When collecting $(thing)Aura$() from the world, an instinctive question for any human to ask would be $(italic)\"How can one make use of this?\"$() This category houses entries that will explain just that.",
+    "description": "When collecting $(aura) from the world, an instinctive question for any human to ask would be $(italic)\"How can one make use of this?\"$() This category houses entries that will explain just that.",
     "icon": "naturesaura:aura_cache",
     "sortnum": 15
 }
