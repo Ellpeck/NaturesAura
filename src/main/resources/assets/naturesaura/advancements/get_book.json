@@ -1,7 +1,8 @@
 {
     "display": {
         "icon": {
-            "item": "patchouli:guide_book"
+            "item": "patchouli:guide_book",
+            "nbt": "{\"patchouli:book\":\"naturesaura:book\"}"
         },
         "title": {
             "translate": "advancement.naturesaura.get_book"
@@ -17,7 +18,8 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "patchouli:guide_book"
+                        "item": "patchouli:guide_book",
+                        "nbt": "{\"patchouli:book\":\"naturesaura:book\"}"
                     }
                 ]
             }

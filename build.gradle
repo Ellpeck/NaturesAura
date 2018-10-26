@@ -11,7 +11,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
-version = "1.0"
+version = "a1"
 group = "de.ellpeck.naturesaura"
 archivesBaseName = "naturesaura"
 
@@ -32,6 +32,8 @@ repositories {
 dependencies {
     deobfCompile "mezz.jei:jei_1.12.2:4.13.1.220"
     deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
+
+    compile files("/lib/Patchouli.jar")
 }
 
 

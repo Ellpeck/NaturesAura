@@ -1,0 +1,24 @@
+{
+    "type": "forge:ore_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:paper"
+        },
+        {
+            "item": "minecraft:paper"
+        },
+        {
+            "item": "minecraft:leather"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "treeSapling"
+        }
+    ],
+    "result": {
+        "item": "patchouli:guide_book",
+        "nbt": {
+            "patchouli:book": "naturesaura:book"
+        }
+    }
+}
