@@ -11,7 +11,7 @@
         },
         {
             "type": "multiblock",
-            "multiblock": "naturesaura:altar",
+            "multiblock_id": "naturesaura:altar",
             "text": "How to assemble the $(item)Natural Altar$()"
         },
         {

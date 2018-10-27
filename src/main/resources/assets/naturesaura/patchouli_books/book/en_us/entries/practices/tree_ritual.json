@@ -15,7 +15,7 @@
         },
         {
             "type": "multiblock",
-            "multiblock": "naturesaura:tree_ritual",
+            "multiblock_id": "naturesaura:tree_ritual",
             "text": "Preparing the $(item)Ritual of the Forest$(). It is not required to have all $(item)Wood Stands$() present."
         },
         {
