@@ -19,4 +19,5 @@ public final class ModBlocks {
     public static final Block INFUSED_STONE = new BlockImpl("infused_stone", Material.ROCK).setSoundType(SoundType.STONE).setHardness(1.75F);
     public static final Block FURNACE_HEATER = new BlockFurnaceHeater();
     public static final Block POTION_GENERATOR = new BlockPotionGenerator();
+    public static final Block AURA_DETECTOR = new BlockAuraDetector();
 }
