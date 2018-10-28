@@ -12,11 +12,14 @@ public final class ModConfig {
 
     public static class General {
 
+        @Comment("If using Dragon's Breath in a Brewing Stand should not cause a glass bottle to appear")
+        public boolean removeDragonBreathContainerItem = true;
+
     }
 
     public static class Client {
 
-        @Comment("The percentage of particles that should be displayed, where 1 is 100% and 0 is 0%.")
+        @Comment("The percentage of particles that should be displayed, where 1 is 100% and 0 is 0%")
         @RangeDouble(min = 0, max = 1)
         public double particleAmount = 1;
 

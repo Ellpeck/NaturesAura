@@ -18,6 +18,7 @@ import de.ellpeck.naturesaura.proxy.IProxy;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -84,6 +85,10 @@ public final class NaturesAura {
     public void postInit(FMLPostInitializationEvent event) {
         ModRegistry.postInit(event);
         proxy.postInit(event);
+
+        if (ModConfig.general.removeDragonBreathContainerItem) {
+            Items.DRAGON_BREATH.setContainerItem(null);
+        }
     }
 
     @EventHandler

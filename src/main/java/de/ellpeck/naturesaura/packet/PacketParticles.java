@@ -21,12 +21,14 @@ public class PacketParticles implements IMessage {
     private float posY;
     private float posZ;
     private int type;
+    private int[] data;
 
-    public PacketParticles(float posX, float posY, float posZ, int type) {
+    public PacketParticles(float posX, float posY, float posZ, int type, int... data) {
         this.posX = posX;
         this.posY = posY;
         this.posZ = posZ;
         this.type = type;
+        this.data = data;
     }
 
     public PacketParticles() {
@@ -38,7 +40,12 @@ public class PacketParticles implements IMessage {
         this.posX = buf.readFloat();
         this.posY = buf.readFloat();
         this.posZ = buf.readFloat();
-        this.type = buf.readInt();
+        this.type = buf.readByte();
+
+        this.data = new int[buf.readByte()];
+        for (int i = 0; i < this.data.length; i++) {
+            this.data[i] = buf.readInt();
+        }
     }
 
     @Override
@@ -46,7 +53,12 @@ public class PacketParticles implements IMessage {
         buf.writeFloat(this.posX);
         buf.writeFloat(this.posY);
         buf.writeFloat(this.posZ);
-        buf.writeInt(this.type);
+        buf.writeByte(this.type);
+
+        buf.writeByte(this.data.length);
+        for (int i : this.data) {
+            buf.writeInt(i);
+        }
     }
 
     public static class Handler implements IMessageHandler<PacketParticles, IMessage> {
@@ -106,6 +118,32 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextGaussian() * 0.01F, world.rand.nextFloat() * 0.01F, world.rand.nextGaussian() * 0.01F,
                                         0x00FF00, world.rand.nextFloat() * 1.5F + 0.75F, 40, 0F, false, true);
                             }
+                            break;
+                        case 5: // Potion generator
+                            int color = message.data[0];
+                            boolean disperse = message.data[1] > 0;
+                            for (int i = world.rand.nextInt(5) + 5; i >= 0; i--) {
+                                NaturesAura.proxy.spawnMagicParticle(world,
+                                        message.posX + world.rand.nextFloat(),
+                                        message.posY + 1.1F,
+                                        message.posZ + world.rand.nextFloat(),
+                                        world.rand.nextGaussian() * 0.005F, world.rand.nextFloat() * 0.05F, world.rand.nextGaussian() * 0.005F,
+                                        color, 2F + world.rand.nextFloat(), 80, 0F, true, true);
+
+                                if (disperse)
+                                    for (int x = -1; x <= 1; x += 2)
+                                        for (int z = -1; z <= 1; z += 2) {
+                                            NaturesAura.proxy.spawnMagicParticle(world,
+                                                    message.posX + x * 3 + 0.5F,
+                                                    message.posY + 2.5,
+                                                    message.posZ + z * 3 + 0.5F,
+                                                    world.rand.nextGaussian() * 0.01F,
+                                                    world.rand.nextFloat() * 0.02F,
+                                                    world.rand.nextGaussian() * 0.01F,
+                                                    0xd6340c, 1F + world.rand.nextFloat() * 2F, 150, 0F, true, true);
+                                        }
+                            }
+                            break;
                     }
                 }
             });

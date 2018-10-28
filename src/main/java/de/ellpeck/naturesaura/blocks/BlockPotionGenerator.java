@@ -6,5 +6,7 @@ import net.minecraft.block.material.Material;
 public class BlockPotionGenerator extends BlockContainerImpl {
     public BlockPotionGenerator() {
         super(Material.ROCK, "potion_generator", TileEntityPotionGenerator.class, "potion_generator");
+        this.setHardness(5F);
+        this.setHarvestLevel("pickaxe", 1);
     }
 }
