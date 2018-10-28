@@ -1,0 +1,17 @@
+{
+    "name": "Ritual of the Brewer",
+    "icon": "naturesaura:potion_generator",
+    "category": "creating",
+    "advancement": "naturesaura:infused_materials",
+    "priority": true,
+    "pages": [
+        {
+            "type": "text",
+            "text": "bla bla bla"
+        },
+        {
+            "type": "multiblock",
+            "multiblock_id": "naturesaura:potion_generator"
+        }
+    ]
+}

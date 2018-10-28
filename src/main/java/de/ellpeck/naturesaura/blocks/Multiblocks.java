@@ -36,4 +36,16 @@ public final class Multiblocks {
                     '0', StateMatcher.fromPredicate(Blocks.SAPLING, state -> state.getBlock() instanceof BlockSapling || state.getBlock() instanceof BlockLog),
                     ' ', StateMatcher.ANY)
     ).setSymmetrical(true);
+    public static final Multiblock POTION_GENERATOR = MultiblockRegistry.registerMultiblock(
+            new ResourceLocation(NaturesAura.MOD_ID, "potion_generator"),
+            new Multiblock(new String[][]{
+                    {"R     R", "       ", "       ", "       ", "       ", "       ", "R     R"},
+                    {"N     N", "       ", "       ", "       ", "       ", "       ", "N     N"},
+                    {"N     N", "       ", "       ", "   0   ", "       ", "       ", "N     N"},
+                    {" N   N ", "NNN NNN", " NRRRN ", "  R R  ", " NRRRN ", "NNN NNN", " N   N "}},
+                    'N', Blocks.NETHER_BRICK,
+                    'R', Blocks.RED_NETHER_BRICK,
+                    '0', ModBlocks.POTION_GENERATOR,
+                    ' ', StateMatcher.ANY)
+    ).setSymmetrical(true);
 }

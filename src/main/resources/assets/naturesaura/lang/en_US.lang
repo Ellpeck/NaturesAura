@@ -12,6 +12,7 @@ tile.naturesaura.wood_stand.name=Wooden Stand
 tile.naturesaura.ancient_planks.name=Ancient Planks
 tile.naturesaura.infused_stone.name=Infused Rock
 tile.naturesaura.furnace_heater.name=Extraneous Firestarter
+tile.naturesaura.potion_generator.name=Absorber of Lingering
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.gold_fiber.name=Brilliant Fiber
