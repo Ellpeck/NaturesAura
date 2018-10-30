@@ -1,9 +1,11 @@
 package de.ellpeck.naturesaura.aura.chunk;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.chunk.effect.GrassDieEffect;
 import de.ellpeck.naturesaura.aura.chunk.effect.IDrainSpotEffect;
+import de.ellpeck.naturesaura.aura.chunk.effect.PlantBoostEffect;
 import de.ellpeck.naturesaura.aura.chunk.effect.ReplenishingEffect;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -43,16 +45,19 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
         this.chunk = chunk;
         this.effects.add(new ReplenishingEffect());
         this.effects.add(new GrassDieEffect());
+        this.effects.add(new PlantBoostEffect());
     }
 
     public static void getSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer) {
         world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getSpotsInArea");
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
-                Chunk chunk = world.getChunk(x, z);
-                if (chunk.hasCapability(Capabilities.auraChunk, null)) {
-                    AuraChunk auraChunk = chunk.getCapability(Capabilities.auraChunk, null);
-                    auraChunk.getSpotsInArea(pos, radius, consumer);
+                if (Helper.isChunkLoaded(world, x, z)) {
+                    Chunk chunk = world.getChunk(x, z);
+                    if (chunk.hasCapability(Capabilities.auraChunk, null)) {
+                        AuraChunk auraChunk = chunk.getCapability(Capabilities.auraChunk, null);
+                        auraChunk.getSpotsInArea(pos, radius, consumer);
+                    }
                 }
             }
         }

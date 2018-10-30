@@ -5,7 +5,6 @@ import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import de.ellpeck.naturesaura.compat.Compat;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -19,6 +18,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,13 +38,24 @@ public final class Helper {
     public static void getTileEntitiesInArea(World world, BlockPos pos, int radius, Consumer<TileEntity> consumer) {
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
-                for (TileEntity tile : world.getChunk(x, z).getTileEntityMap().values()) {
-                    if (tile.getPos().distanceSq(pos) <= radius * radius) {
-                        consumer.accept(tile);
+                if (isChunkLoaded(world, x, z)) {
+                    for (TileEntity tile : world.getChunk(x, z).getTileEntityMap().values()) {
+                        if (tile.getPos().distanceSq(pos) <= radius * radius)
+                            consumer.accept(tile);
                     }
                 }
             }
         }
+    }
+
+    // For some reason this method isn't public in World, but I also don't want to have to make a new BlockPos
+    // or use the messy MutableBlockPos system just to see if a chunk is loaded, so this will have to do I guess
+    public static boolean isChunkLoaded(World world, int x, int z) {
+        IChunkProvider provider = world.getChunkProvider();
+        if (provider instanceof ChunkProviderServer)
+            return ((ChunkProviderServer) provider).chunkExists(x, z);
+        else
+            return !provider.provideChunk(x, z).isEmpty();
     }
 
     @SideOnly(Side.CLIENT)

@@ -144,6 +144,16 @@ public class PacketParticles implements IMessage {
                                         }
                             }
                             break;
+                        case 6: // Plant boost effect
+                            for (int i = world.rand.nextInt(20) + 15; i >= 0; i--)
+                                NaturesAura.proxy.spawnMagicParticle(world,
+                                        message.posX + world.rand.nextFloat(),
+                                        message.posY + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        message.posZ + world.rand.nextFloat(),
+                                        0F, world.rand.nextFloat() * 0.01F, 0F,
+                                        0x5ccc30, 1F + world.rand.nextFloat() * 2F, 100, 0F, false, true);
+
+                            break;
                     }
                 }
             });
