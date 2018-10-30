@@ -34,7 +34,6 @@ public class ClientProxy implements IProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
-        Compat.initClient();
     }
 
     @Override

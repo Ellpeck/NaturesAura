@@ -11,9 +11,13 @@
         },
         {
             "type": "naturesaura:altar",
-            "text": "Creating $(item)Infused Iron$() and $(item)Infused Rock$(), important ingredients in the creation of several $(thing)natural items$().",
-            "recipe": "naturesaura:infused_iron",
-            "recipe2": "naturesaura:infused_stone"
+            "text": "Creating $(item)Infused Iron$(), a material blessed with the powers of $(aura), allowing it to be used in several magical $(thing)natural items$().",
+            "recipe": "naturesaura:infused_iron"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Creating $(item)Infused Rock$(), a material, similar looking to the fabric of $(italic)balance$() itself, infused with $(aura).",
+            "recipe": "naturesaura:infused_stone"
         }
     ]
 }

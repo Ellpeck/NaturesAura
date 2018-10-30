@@ -137,7 +137,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
 
     private boolean isRitualOkay() {
         if (!Multiblocks.TREE_RITUAL.forEachMatcher(this.world, this.ritualPos, Rotation.NONE, (char) 0, (start, actionPos, x, y, z, ch, matcher) ->
-                matcher.displayState.getBlock() == ModBlocks.WOOD_STAND || Multiblocks.TREE_RITUAL.test(this.world, start, x, y, z, Rotation.NONE))) {
+                matcher.getDisplayedState().getBlock() == ModBlocks.WOOD_STAND || Multiblocks.TREE_RITUAL.test(this.world, start, x, y, z, Rotation.NONE))) {
             return false;
         }
         if (this.timer < this.recipe.time / 2) {
