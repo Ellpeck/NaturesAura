@@ -12,7 +12,7 @@ tile.naturesaura.wood_stand.name=Wooden Stand
 tile.naturesaura.ancient_planks.name=Ancient Planks
 tile.naturesaura.infused_stone.name=Infused Rock
 tile.naturesaura.furnace_heater.name=Extraneous Firestarter
-tile.naturesaura.potion_generator.name=Absorber of Lingering
+tile.naturesaura.potion_generator.name=Lingering Absorber
 tile.naturesaura.aura_detector.name=Aura Detector
 
 item.naturesaura.eye.name=Environmental Eye
@@ -47,5 +47,9 @@ advancement.naturesaura.altar=Empowered
 advancement.naturesaura.altar.desc=Create a Natural Altar using the Ritual of the Forest
 advancement.naturesaura.infused_materials=Iron Factory
 advancement.naturesaura.infused_materials.desc=Use the Natural Altar to create Infused Iron and Infused Rock
+advancement.naturesaura.furnace_heater=Cozy Warmth
+advancement.naturesaura.furnace_heater.desc=Create an Extraneous Firestarter to heat your furnace
+advancement.naturesaura.potion_generator=Lurking Powers
+advancement.naturesaura.potion_generator.desc=Make a Lingering Absorber for the Ritual of the Brewer to create Aura
 
 command.naturesaura.aura.usage=/naaura <action> <amount> <range>

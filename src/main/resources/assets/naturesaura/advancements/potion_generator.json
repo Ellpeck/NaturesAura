@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:potion_generator"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.potion_generator"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.potion_generator.desc"
+        }
+    },
+    "parent": "naturesaura:infused_materials",
+    "criteria": {
+        "generator": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "naturesaura:potion_generator"
+                    }
+                ]
+            }
+        }
+    }
+}

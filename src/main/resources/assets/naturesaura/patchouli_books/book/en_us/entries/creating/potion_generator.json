@@ -15,12 +15,12 @@
         {
             "type": "multiblock",
             "multiblock_id": "naturesaura:potion_generator",
-            "text": "Creating the $(item)Ritual of the Brewer$() with the $(item)Absorber of Lingering$() in the center"
+            "text": "Creating the $(item)Ritual of the Brewer$() with the $(item)Lingering Absorber$() in the center"
         },
         {
             "type": "crafting",
             "recipe": "naturesaura:potion_generator",
-            "text": "Creating the $(item)Absorber of Lingering$()"
+            "text": "Creating the $(item)Lingering Absorber$()"
         }
     ]
 }

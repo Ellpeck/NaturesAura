@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:furnace_heater"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.furnace_heater"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.furnace_heater.desc"
+        }
+    },
+    "parent": "naturesaura:infused_materials",
+    "criteria": {
+        "heater": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "naturesaura:furnace_heater"
+                    }
+                ]
+            }
+        }
+    }
+}
