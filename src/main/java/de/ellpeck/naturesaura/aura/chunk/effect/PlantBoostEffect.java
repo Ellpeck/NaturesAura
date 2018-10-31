@@ -42,7 +42,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
                         growable.grow(world, world.rand, plantPos, state);
 
                         BlockPos closestSpot = AuraChunk.getHighestSpot(world, plantPos, 25, pos);
-                        AuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 25);
+                        AuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 100);
 
                         PacketHandler.sendToAllAround(world, plantPos, 32,
                                 new PacketParticles(plantPos.getX(), plantPos.getY(), plantPos.getZ(), 6));
