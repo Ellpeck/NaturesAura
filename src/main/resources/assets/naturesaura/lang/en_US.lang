@@ -35,6 +35,7 @@ container.naturesaura.altar.name=Natural Altar Infusion
 
 info.naturesaura.aura_in_area=Aura Around
 info.naturesaura.book.landing=$(aura) is a complicated matter, and creating, collecting and making use of it can be difficult.$(br)The $(item)Book of Natural Aura$() contains all the information one requires to do so.
+info.naturesaura.book.subtitle=The guide to Nature's Aura
 
 advancement.naturesaura.root=Nature's Aura
 advancement.naturesaura.root.desc=Becoming a magical botanist
