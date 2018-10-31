@@ -41,5 +41,6 @@ public class JEINaturesAuraPlugin implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(ModBlocks.GOLD_POWDER), TREE_RITUAL);
         registry.addRecipeCatalyst(new ItemStack(ModBlocks.WOOD_STAND), TREE_RITUAL);
         registry.addRecipeCatalyst(new ItemStack(ModBlocks.NATURE_ALTAR), ALTAR);
+        registry.addRecipeCatalyst(new ItemStack(ModBlocks.CONVERSION_CATALYST), ALTAR);
     }
 }

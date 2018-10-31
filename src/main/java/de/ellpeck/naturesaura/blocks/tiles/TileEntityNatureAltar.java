@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
@@ -11,6 +10,7 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.recipes.AltarRecipe;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -110,7 +110,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                         if (stack.isEmpty() || !stack.isItemEqual(this.currentRecipe.input)) {
                             this.currentRecipe = null;
                             this.timer = 0;
-                        } else {
+                        } else if (this.hasCatalyst(this.currentRecipe.catalyst)) {
                             int req = this.currentRecipe.aura / this.currentRecipe.time;
                             if (this.container.getStoredAura() >= req) {
                                 this.container.drainAura(req, false);
@@ -166,6 +166,20 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                 }
             }
         }
+    }
+
+    private boolean hasCatalyst(Block block) {
+        if (block == null)
+            return true;
+
+        for (int x = -2; x <= 2; x += 4) {
+            for (int z = -2; z <= 2; z += 4) {
+                IBlockState state = this.world.getBlockState(this.pos.add(x, 1, z));
+                if (state.getBlock() == block)
+                    return true;
+            }
+        }
+        return false;
     }
 
     @Override

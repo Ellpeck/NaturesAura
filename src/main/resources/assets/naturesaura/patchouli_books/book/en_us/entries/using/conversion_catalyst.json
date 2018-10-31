@@ -1,0 +1,27 @@
+{
+    "name": "Transmutation Catalyst",
+    "icon": "naturesaura:conversion_catalyst",
+    "category": "using",
+    "advancement": "naturesaura:infused_materials",
+    "pages": [
+        {
+            "type": "text",
+            "text": "The $(l:collecting/altar)Natural Altar$() can be useful for infusing certain items with the power of $(aura), however, it can also assist in transmuting items from one type into another.$(br)This can be achieved by creating the $(item)Transmutation Catalyst$() and placing it on top of any of the four lower $(item)Mossy Stone Brick$() blocks around the altar, and then placing the ingredient on the altar as usual."
+        },
+        {
+            "type": "naturesaura:tree_ritual",
+            "text": "Creating the $(item)Transmutation Catalyst$() using the $(l:practices/tree_ritual)Ritual of the Forest$().",
+            "recipe": "naturesaura:conversion_catalyst"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Creating $(item)Dragon's Breath$() out of the end's fruit",
+            "recipe": "naturesaura:chorus"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Conjuring $(item)Leather$() from a zombie's remains",
+            "recipe": "naturesaura:leather"
+        }
+    ]
+}

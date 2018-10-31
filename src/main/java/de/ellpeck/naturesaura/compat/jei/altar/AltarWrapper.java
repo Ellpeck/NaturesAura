@@ -4,6 +4,9 @@ import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
 
 public class AltarWrapper implements IRecipeWrapper {
 
@@ -15,7 +18,7 @@ public class AltarWrapper implements IRecipeWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(VanillaTypes.ITEM, this.recipe.input);
+        ingredients.setInputs(VanillaTypes.ITEM, Arrays.asList(this.recipe.input, new ItemStack(this.recipe.catalyst)));
         ingredients.setOutput(VanillaTypes.ITEM, this.recipe.output);
     }
 }

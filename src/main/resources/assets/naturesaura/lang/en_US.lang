@@ -14,6 +14,7 @@ tile.naturesaura.infused_stone.name=Infused Rock
 tile.naturesaura.furnace_heater.name=Extraneous Firestarter
 tile.naturesaura.potion_generator.name=Lingering Absorber
 tile.naturesaura.aura_detector.name=Aura Detector
+tile.naturesaura.conversion_catalyst.name=Transmutation Catalyst
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.gold_fiber.name=Brilliant Fiber

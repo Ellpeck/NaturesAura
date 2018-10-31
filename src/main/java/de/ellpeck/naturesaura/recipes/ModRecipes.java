@@ -41,10 +41,27 @@ public final class ModRecipes {
                 new ItemStack(Items.FIRE_CHARGE),
                 new ItemStack(Items.FLINT),
                 new ItemStack(Blocks.MAGMA)).add();
+        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "conversion_catalyst"),
+                new ItemStack(Blocks.SAPLING, 1, 3), new ItemStack(ModBlocks.CONVERSION_CATALYST), 600,
+                new ItemStack(Blocks.STONEBRICK, 1, 1),
+                new ItemStack(ModBlocks.INFUSED_STONE),
+                new ItemStack(Items.BREWING_STAND),
+                new ItemStack(Items.GOLD_INGOT),
+                new ItemStack(ModItems.GOLD_LEAF),
+                new ItemStack(Blocks.GLOWSTONE)).add();
 
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_iron"),
-                new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON), 300, 80).add();
+                new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON),
+                null, 300, 80).add();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_stone"),
-                new ItemStack(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE), 150, 40).add();
+                new ItemStack(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE),
+                null, 150, 40).add();
+
+        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "chorus"),
+                new ItemStack(Blocks.CHORUS_FLOWER), new ItemStack(Items.DRAGON_BREATH),
+                ModBlocks.CONVERSION_CATALYST, 1000, 120).add();
+        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "leather"),
+                new ItemStack(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER),
+                ModBlocks.CONVERSION_CATALYST, 400, 50).add();
     }
 }

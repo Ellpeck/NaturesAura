@@ -15,6 +15,14 @@
             "link_recipe": true
         },
         {
+            "group": "catalyst",
+            "type": "item",
+            "item": "#catalyst",
+            "x": 50,
+            "y": 28
+        },
+        {
+            "group": "altar",
             "type": "item",
             "item": "naturesaura:nature_altar",
             "x": 50,

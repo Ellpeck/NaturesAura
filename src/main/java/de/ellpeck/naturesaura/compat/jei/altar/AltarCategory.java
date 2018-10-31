@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.compat.jei.altar;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
@@ -11,7 +10,6 @@ import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -46,11 +44,6 @@ public class AltarCategory implements IRecipeCategory<AltarWrapper> {
     }
 
     @Override
-    public void drawExtras(Minecraft minecraft) {
-        Helper.renderItemInGui(this.altar, 26, 19, 1F);
-    }
-
-    @Override
     public void setRecipe(IRecipeLayout recipeLayout, AltarWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup group = recipeLayout.getItemStacks();
         AltarRecipe recipe = recipeWrapper.recipe;
@@ -58,5 +51,7 @@ public class AltarCategory implements IRecipeCategory<AltarWrapper> {
         group.set(0, recipe.input);
         group.init(1, false, 56, 18);
         group.set(1, recipe.output);
+        group.init(2, true, 26, 18);
+        group.set(2, recipe.catalyst == null ? this.altar : new ItemStack(recipe.catalyst));
     }
 }
