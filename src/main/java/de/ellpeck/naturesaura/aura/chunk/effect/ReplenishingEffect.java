@@ -17,7 +17,6 @@ import java.util.List;
 public class ReplenishingEffect implements IDrainSpotEffect {
     @Override
     public void update(World world, Chunk chunk, AuraChunk auraChunk, BlockPos pos, MutableInt spot) {
-        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":ReplenishingEffect");
         int amount = spot.intValue();
         if (amount < 0) {
             List<ISpotDrainable> tiles = new ArrayList<>();
@@ -41,6 +40,5 @@ public class ReplenishingEffect implements IDrainSpotEffect {
                 }
             }
         }
-        world.profiler.endSection();
     }
 }

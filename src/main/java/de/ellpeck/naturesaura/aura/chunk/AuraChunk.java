@@ -20,7 +20,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
 
@@ -165,7 +164,9 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
 
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
             for (IDrainSpotEffect effect : this.effects) {
+                world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":" + effect.getClass().getSimpleName());
                 effect.update(world, this.chunk, this, entry.getKey(), entry.getValue());
+                world.profiler.endSection();
             }
         }
     }

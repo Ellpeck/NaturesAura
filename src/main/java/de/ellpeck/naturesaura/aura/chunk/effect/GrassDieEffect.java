@@ -15,7 +15,6 @@ import org.apache.commons.lang3.mutable.MutableInt;
 public class GrassDieEffect implements IDrainSpotEffect {
     @Override
     public void update(World world, Chunk chunk, AuraChunk auraChunk, BlockPos pos, MutableInt spot) {
-        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":GrassDieEffect");
         if (spot.intValue() < 0) {
             int aura = AuraChunk.getAuraInArea(world, pos, 25);
             if (aura < 0) {
@@ -49,6 +48,5 @@ public class GrassDieEffect implements IDrainSpotEffect {
                 }
             }
         }
-        world.profiler.endSection();
     }
 }
