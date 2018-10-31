@@ -68,9 +68,9 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
             if (this.structureFine) {
                 int space = this.container.storeAura(3, true);
                 if (space > 0) {
-                    int toStore = Math.min(AuraChunk.getAuraInArea(this.world, this.pos, 10), space);
+                    int toStore = Math.min(AuraChunk.getAuraInArea(this.world, this.pos, 20), space);
                     if (toStore > 0) {
-                        BlockPos spot = AuraChunk.getClosestSpot(this.world, this.pos, 10, this.pos);
+                        BlockPos spot = AuraChunk.getHighestSpot(this.world, this.pos, 20, this.pos);
                         AuraChunk chunk = AuraChunk.getAuraChunk(this.world, spot);
 
                         chunk.drainAura(spot, toStore);

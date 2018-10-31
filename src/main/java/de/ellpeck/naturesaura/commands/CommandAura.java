@@ -41,14 +41,14 @@ public class CommandAura extends CommandBase {
 
         World world = sender.getEntityWorld();
         BlockPos pos = sender.getPosition();
-        BlockPos spot = AuraChunk.getClosestSpot(world, pos, range, pos);
-        AuraChunk chunk = AuraChunk.getAuraChunk(world, spot);
 
         if ("add".equals(action)) {
-            chunk.storeAura(spot, amount);
+            BlockPos spot = AuraChunk.getLowestSpot(world, pos, range, pos);
+            AuraChunk.getAuraChunk(world, spot).storeAura(spot, amount);
             sender.sendMessage(new TextComponentString("Added " + amount + " aura"));
         } else if ("remove".equals(action)) {
-            chunk.drainAura(spot, amount);
+            BlockPos spot = AuraChunk.getHighestSpot(world, pos, range, pos);
+            AuraChunk.getAuraChunk(world, spot).drainAura(spot, amount);
             sender.sendMessage(new TextComponentString("Removed " + amount + " aura"));
         } else {
             throw new SyntaxErrorException("Invalid action " + action);

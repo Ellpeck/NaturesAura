@@ -79,21 +79,36 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
         }
     }
 
-    public static BlockPos getClosestSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot) {
-        MutableDouble closestDist = new MutableDouble(Double.MAX_VALUE);
-        MutableObject<BlockPos> closestSpot = new MutableObject<>();
+    public static BlockPos getLowestSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot) {
+        MutableInt lowestAmount = new MutableInt(Integer.MAX_VALUE);
+        MutableObject<BlockPos> lowestSpot = new MutableObject<>();
         getSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> {
-            double dist = pos.distanceSq(blockPos);
-            if (dist < closestDist.doubleValue()) {
-                closestDist.setValue(dist);
-                closestSpot.setValue(blockPos);
+            int amount = drainSpot.intValue();
+            if (amount < lowestAmount.intValue()) {
+                lowestAmount.setValue(amount);
+                lowestSpot.setValue(blockPos);
             }
         });
-        BlockPos closest = closestSpot.getValue();
-        if (closest == null) {
-            closest = defaultSpot;
-        }
-        return closest;
+        BlockPos lowest = lowestSpot.getValue();
+        if (lowest == null)
+            lowest = defaultSpot;
+        return lowest;
+    }
+
+    public static BlockPos getHighestSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot) {
+        MutableInt highestAmount = new MutableInt(Integer.MIN_VALUE);
+        MutableObject<BlockPos> highestSpot = new MutableObject<>();
+        getSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> {
+            int amount = drainSpot.intValue();
+            if (amount > highestAmount.intValue()) {
+                highestAmount.setValue(amount);
+                highestSpot.setValue(blockPos);
+            }
+        });
+        BlockPos highest = highestSpot.getValue();
+        if (highest == null)
+            highest = defaultSpot;
+        return highest;
     }
 
     public void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer) {

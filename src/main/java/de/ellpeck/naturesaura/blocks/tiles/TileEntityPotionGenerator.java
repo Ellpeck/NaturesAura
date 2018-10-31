@@ -41,21 +41,30 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
                                 continue;
                             }
 
-                            boolean dispersed = false;
-                            int toAdd = (effect.getAmplifier() * 5 + 1) * (effect.getDuration() / 40);
-                            for (EnumFacing dir : EnumFacing.HORIZONTALS) {
-                                BlockPos offset = this.pos.offset(dir, 8);
-                                BlockPos spot = AuraChunk.getClosestSpot(this.world, offset, 10, offset);
-                                if (AuraChunk.getAuraInArea(this.world, spot, 10) < 15000) {
-                                    AuraChunk chunk = AuraChunk.getAuraChunk(this.world, spot);
-                                    chunk.storeAura(spot, toAdd / 4);
-                                    dispersed = true;
+                            int toAdd = ((effect.getAmplifier() * 5 + 1) * (effect.getDuration() / 40)) / 4;
+                            int toAddTimes = 4;
+                            while (toAddTimes > 0) {
+                                boolean foundEmpty = false;
+                                for (EnumFacing dir : EnumFacing.HORIZONTALS) {
+                                    BlockPos offset = this.pos.offset(dir, 12);
+                                    BlockPos spot = AuraChunk.getLowestSpot(this.world, offset, 15, offset);
+                                    if (AuraChunk.getAuraInArea(this.world, spot, 15) < 20000) {
+                                        AuraChunk chunk = AuraChunk.getAuraChunk(this.world, spot);
+                                        chunk.storeAura(spot, toAdd);
+
+                                        foundEmpty = true;
+                                        toAddTimes--;
+                                        if (toAddTimes <= 0)
+                                            break;
+                                    }
                                 }
+                                if (!foundEmpty)
+                                    break;
                             }
 
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
                                     this.pos.getX(), this.pos.getY(), this.pos.getZ(), 5,
-                                    PotionUtils.getPotionColor(type), dispersed ? 1 : 0));
+                                    PotionUtils.getPotionColor(type), toAddTimes < 4 ? 1 : 0));
 
                             addedOne = true;
                             break;
