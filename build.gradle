@@ -13,7 +13,7 @@ apply plugin: 'maven'
 
 version = "a1"
 group = "de.ellpeck.naturesaura"
-archivesBaseName = "naturesaura"
+archivesBaseName = "NaturesAura"
 
 sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
