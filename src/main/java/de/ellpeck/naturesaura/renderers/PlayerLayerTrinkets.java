@@ -25,36 +25,38 @@ public class PlayerLayerTrinkets implements LayerRenderer<EntityPlayer> {
     public void doRenderLayer(@Nonnull EntityPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if (player.getActivePotionEffect(MobEffects.INVISIBILITY) != null)
             return;
+        ItemStack main = player.getHeldItemMainhand();
+        ItemStack second = player.getHeldItemOffhand();
 
         this.alreadyRendered.clear();
         GlStateManager.pushMatrix();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        this.render(player, RenderType.BODY);
+        this.render(player, RenderType.BODY, main, second);
         float yaw = player.prevRotationYawHead + (player.rotationYawHead - player.prevRotationYawHead) * partialTicks;
         float yawOffset = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks;
         float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partialTicks;
         GlStateManager.rotate(yawOffset, 0, -1, 0);
         GlStateManager.rotate(yaw - 270, 0, 1, 0);
         GlStateManager.rotate(pitch, 0, 0, 1);
-        this.render(player, RenderType.HEAD);
+        this.render(player, RenderType.HEAD, main, second);
         GlStateManager.popMatrix();
 
     }
 
-    private void render(EntityPlayer player, RenderType type) {
+    private void render(EntityPlayer player, RenderType type, ItemStack main, ItemStack second) {
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-            this.renderStack(player.inventory.getStackInSlot(i), player, type);
+            this.renderStack(player.inventory.getStackInSlot(i), player, type, main, second);
         }
 
         if (Compat.baubles) {
             IItemHandler baubles = BaublesApi.getBaublesHandler(player);
             for (int i = 0; i < baubles.getSlots(); i++) {
-                this.renderStack(baubles.getStackInSlot(i), player, type);
+                this.renderStack(baubles.getStackInSlot(i), player, type, main, second);
             }
         }
     }
 
-    private void renderStack(ItemStack stack, EntityPlayer player, RenderType type) {
+    private void renderStack(ItemStack stack, EntityPlayer player, RenderType type, ItemStack main, ItemStack second) {
         if (!stack.isEmpty()) {
             Item item = stack.getItem();
             if (item instanceof ITrinketItem && !this.alreadyRendered.contains(item)) {
@@ -63,7 +65,7 @@ public class PlayerLayerTrinkets implements LayerRenderer<EntityPlayer> {
                     GlStateManager.translate(0F, 0.2F, 0F);
                     GlStateManager.rotate(90F / (float) Math.PI, 1.0F, 0.0F, 0.0F);
                 }
-                ((ITrinketItem) item).render(stack, player, type);
+                ((ITrinketItem) item).render(stack, player, type, stack == main || stack == second);
                 GlStateManager.popMatrix();
                 this.alreadyRendered.add(item);
             }

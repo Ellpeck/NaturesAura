@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.events;
 
-import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.aura.Capabilities;
@@ -31,6 +30,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.List;
@@ -90,104 +90,112 @@ public class ClientEvents {
         if (event.getType() == ElementType.ALL) {
             ScaledResolution res = event.getResolution();
             if (mc.player != null) {
-                ItemStack stack = mc.player.getHeldItemMainhand();
-                if (mc.currentScreen == null) {
-                    if (!stack.isEmpty() && stack.getItem() == ModItems.EYE || Compat.baubles && BaublesApi.isBaubleEquipped(mc.player, ModItems.EYE) >= 0) {
-                        GlStateManager.pushMatrix();
-                        mc.getTextureManager().bindTexture(OVERLAYS);
+                ItemStack cache = ItemStack.EMPTY;
+                ItemStack eye = ItemStack.EMPTY;
 
-                        GlStateManager.color(0.8F, 0.25F, 0.25F);
-                        float totalPercentage = AuraChunk.getAuraInArea(mc.world, mc.player.getPosition(), 15) / (AuraChunk.DEFAULT_AURA * 2F);
-                        int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
-                        if (tHeight < 50)
-                            Gui.drawModalRectWithCustomSizedTexture(3, 10, 6, 12, 6, 50 - tHeight, 256, 256);
-                        if (tHeight > 0)
-                            Gui.drawModalRectWithCustomSizedTexture(3, 10 + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
+                if (Compat.baubles) {
+                    IItemHandler baubles = BaublesApi.getBaublesHandler(mc.player);
+                    for (int i = 0; i < baubles.getSlots(); i++) {
+                        ItemStack slot = baubles.getStackInSlot(i);
+                        if (!slot.isEmpty()) {
+                            if (slot.getItem() == ModItems.AURA_CACHE) {
+                                cache = slot;
+                                break;
+                            } else if (slot.getItem() == ModItems.EYE) {
+                                eye = slot;
+                                break;
+                            }
+                        }
+                    }
+                }
 
-                        if (mc.objectMouseOver != null) {
-                            BlockPos pos = mc.objectMouseOver.getBlockPos();
-                            if (pos != null) {
-                                TileEntity tile = mc.world.getTileEntity(pos);
-                                if (tile != null && tile.hasCapability(Capabilities.auraContainer, null)) {
-                                    IAuraContainer container = tile.getCapability(Capabilities.auraContainer, null);
+                if (cache.isEmpty() || eye.isEmpty()) {
+                    for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
+                        ItemStack slot = mc.player.inventory.getStackInSlot(i);
+                        if (!slot.isEmpty()) {
+                            if (slot.getItem() == ModItems.AURA_CACHE) {
+                                cache = slot;
+                                break;
+                            } else if (slot.getItem() == ModItems.EYE && i <= 8) {
+                                eye = slot;
+                                break;
+                            }
+                        }
+                    }
+                }
 
-                                    IBlockState state = mc.world.getBlockState(pos);
-                                    ItemStack blockStack = state.getBlock().getPickBlock(state, mc.objectMouseOver, mc.world, pos, mc.player);
-                                    this.drawContainerInfo(container, mc, res, 25, blockStack.getDisplayName());
+                if (!cache.isEmpty()) {
+                    IAuraContainer container = cache.getCapability(Capabilities.auraContainer, null);
+                    int width = MathHelper.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
+                    int x = res.getScaledWidth() / 2 - 173 - (mc.player.getHeldItemOffhand().isEmpty() ? 0 : 29);
+                    int y = res.getScaledHeight() - 8;
 
-                                    if (tile instanceof TileEntityNatureAltar) {
-                                        ItemStack tileStack = ((TileEntityNatureAltar) tile).getItemHandler(null).getStackInSlot(0);
-                                        if (!tileStack.isEmpty() && tileStack.hasCapability(Capabilities.auraContainer, null)) {
-                                            IAuraContainer stackContainer = tileStack.getCapability(Capabilities.auraContainer, null);
-                                            this.drawContainerInfo(stackContainer, mc, res, 45, tileStack.getDisplayName());
-                                        }
+                    GlStateManager.pushMatrix();
+
+                    int color = container.getAuraColor();
+                    GlStateManager.color((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F);
+                    mc.getTextureManager().bindTexture(OVERLAYS);
+                    if (width < 80)
+                        Gui.drawModalRectWithCustomSizedTexture(x + width, y, width, 0, 80 - width, 6, 256, 256);
+                    if (width > 0)
+                        Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 6, width, 6, 256, 256);
+
+                    float scale = 0.75F;
+                    GlStateManager.scale(scale, scale, scale);
+                    String s = cache.getDisplayName();
+                    mc.fontRenderer.drawString(s, (x + 80) / scale - mc.fontRenderer.getStringWidth(s), (y - 7) / scale, color, true);
+
+                    GlStateManager.color(1F, 1F, 1F);
+                    GlStateManager.popMatrix();
+                }
+
+                if (!eye.isEmpty()) {
+                    GlStateManager.pushMatrix();
+                    mc.getTextureManager().bindTexture(OVERLAYS);
+
+                    GlStateManager.color(0.8F, 0.25F, 0.25F);
+                    float totalPercentage = AuraChunk.getAuraInArea(mc.world, mc.player.getPosition(), 15) / (AuraChunk.DEFAULT_AURA * 2F);
+                    int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
+                    if (tHeight < 50)
+                        Gui.drawModalRectWithCustomSizedTexture(3, 10, 6, 12, 6, 50 - tHeight, 256, 256);
+                    if (tHeight > 0)
+                        Gui.drawModalRectWithCustomSizedTexture(3, 10 + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
+
+                    if (mc.objectMouseOver != null) {
+                        BlockPos pos = mc.objectMouseOver.getBlockPos();
+                        if (pos != null) {
+                            TileEntity tile = mc.world.getTileEntity(pos);
+                            if (tile != null && tile.hasCapability(Capabilities.auraContainer, null)) {
+                                IAuraContainer container = tile.getCapability(Capabilities.auraContainer, null);
+
+                                IBlockState state = mc.world.getBlockState(pos);
+                                ItemStack blockStack = state.getBlock().getPickBlock(state, mc.objectMouseOver, mc.world, pos, mc.player);
+                                this.drawContainerInfo(container, mc, res, 25, blockStack.getDisplayName());
+
+                                if (tile instanceof TileEntityNatureAltar) {
+                                    ItemStack tileStack = ((TileEntityNatureAltar) tile).getItemHandler(null).getStackInSlot(0);
+                                    if (!tileStack.isEmpty() && tileStack.hasCapability(Capabilities.auraContainer, null)) {
+                                        IAuraContainer stackContainer = tileStack.getCapability(Capabilities.auraContainer, null);
+                                        this.drawContainerInfo(stackContainer, mc, res, 45, tileStack.getDisplayName());
                                     }
                                 }
                             }
                         }
-
-                        if (totalPercentage > 1F)
-                            mc.fontRenderer.drawString("+", 10F, 9.5F, 0xBB3333, true);
-                        if (totalPercentage < 0F)
-                            mc.fontRenderer.drawString("-", 10F, 53.5F, 0xBB3333, true);
-
-                        float scale = 0.75F;
-                        GlStateManager.scale(scale, scale, scale);
-                        mc.fontRenderer.drawString(I18n.format("info." + NaturesAura.MOD_ID + ".aura_in_area"), 3 / scale, 3 / scale, 0xBB3333, true);
-
-                        GlStateManager.color(1F, 1F, 1F);
-                        GlStateManager.popMatrix();
                     }
-                }
 
-                this.displayAuraCache(mc, res);
-            }
-        }
-    }
+                    if (totalPercentage > 1F)
+                        mc.fontRenderer.drawString("+", 10F, 9.5F, 0xBB3333, true);
+                    if (totalPercentage < 0F)
+                        mc.fontRenderer.drawString("-", 10F, 53.5F, 0xBB3333, true);
 
-    private void displayAuraCache(Minecraft mc, ScaledResolution res) {
-        ItemStack stack = ItemStack.EMPTY;
+                    float scale = 0.75F;
+                    GlStateManager.scale(scale, scale, scale);
+                    mc.fontRenderer.drawString(I18n.format("info." + NaturesAura.MOD_ID + ".aura_in_area"), 3 / scale, 3 / scale, 0xBB3333, true);
 
-        if (Compat.baubles) {
-            ItemStack slot = BaublesApi.getBaublesHandler(mc.player).getStackInSlot(BaubleType.BELT.getValidSlots()[0]);
-            if (!slot.isEmpty() && slot.getItem() == ModItems.AURA_CACHE) {
-                stack = slot;
-            }
-        }
-
-        if (stack.isEmpty()) {
-            for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
-                ItemStack slot = mc.player.inventory.getStackInSlot(i);
-                if (!slot.isEmpty() && slot.getItem() == ModItems.AURA_CACHE) {
-                    stack = slot;
-                    break;
+                    GlStateManager.color(1F, 1F, 1F);
+                    GlStateManager.popMatrix();
                 }
             }
-        }
-
-        if (!stack.isEmpty()) {
-            IAuraContainer container = stack.getCapability(Capabilities.auraContainer, null);
-            int width = MathHelper.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
-            int x = res.getScaledWidth() / 2 - 173 - (mc.player.getHeldItemOffhand().isEmpty() ? 0 : 29);
-            int y = res.getScaledHeight() - 8;
-
-            GlStateManager.pushMatrix();
-
-            int color = container.getAuraColor();
-            GlStateManager.color((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F);
-            mc.getTextureManager().bindTexture(OVERLAYS);
-            if (width < 80)
-                Gui.drawModalRectWithCustomSizedTexture(x + width, y, width, 0, 80 - width, 6, 256, 256);
-            if (width > 0)
-                Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 6, width, 6, 256, 256);
-
-            float scale = 0.75F;
-            GlStateManager.scale(scale, scale, scale);
-            String s = stack.getDisplayName();
-            mc.fontRenderer.drawString(s, (x + 80) / scale - mc.fontRenderer.getStringWidth(s), (y - 7) / scale, color, true);
-
-            GlStateManager.color(1F, 1F, 1F);
-            GlStateManager.popMatrix();
         }
     }
 

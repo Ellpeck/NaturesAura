@@ -6,7 +6,7 @@
     "pages": [
         {
             "type": "text",
-            "text": "When working with $(aura), by nature, it will be hard to grasp just how much there is in any given area or storage device. The $(item)Environmental Eye$() has the powers to display this information to botanists though: Once created, merely holding it in your hand will display several pieces of information:"
+            "text": "When working with $(aura), by nature, it will be hard to grasp just how much there is in any given area or storage device. The $(item)Environmental Eye$() has the powers to display this information to botanists though: Once created, merely holding it anywhere in one's hotbar will display several pieces of information:"
         },
         {
             "type": "text",

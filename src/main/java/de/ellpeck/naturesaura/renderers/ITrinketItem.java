@@ -9,5 +9,5 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface ITrinketItem {
 
     @SideOnly(Side.CLIENT)
-    void render(ItemStack stack, EntityPlayer player, RenderType type);
+    void render(ItemStack stack, EntityPlayer player, RenderType type, boolean isHolding);
 }
