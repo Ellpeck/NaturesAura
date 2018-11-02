@@ -40,7 +40,10 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
         @Override
         protected boolean canExtract(ItemStack stack, int slot, int amount) {
-            return AltarRecipe.forInput(stack) == null;
+            if(stack.hasCapability(Capabilities.auraContainer, null))
+                return stack.getCapability(Capabilities.auraContainer, null).storeAura(1, true) <= 0;
+            else
+                return AltarRecipe.forInput(stack) == null;
         }
     };
 
