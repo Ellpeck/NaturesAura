@@ -1,8 +1,6 @@
 package de.ellpeck.naturesaura;
 
-import de.ellpeck.naturesaura.aura.Capabilities.CapabilityAuraChunk;
-import de.ellpeck.naturesaura.aura.Capabilities.CapabilityAuraContainer;
-import de.ellpeck.naturesaura.aura.Capabilities.CapabilityAuraRecharge;
+import de.ellpeck.naturesaura.aura.Capabilities.StorageImpl;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.aura.item.IAuraRecharge;
@@ -55,9 +53,9 @@ public final class NaturesAura {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        CapabilityManager.INSTANCE.register(IAuraContainer.class, new CapabilityAuraContainer(), () -> null);
-        CapabilityManager.INSTANCE.register(IAuraRecharge.class, new CapabilityAuraRecharge(), () -> null);
-        CapabilityManager.INSTANCE.register(AuraChunk.class, new CapabilityAuraChunk(), () -> null);
+        CapabilityManager.INSTANCE.register(IAuraContainer.class, new StorageImpl<>(), () -> null);
+        CapabilityManager.INSTANCE.register(IAuraRecharge.class, new StorageImpl<>(), () -> null);
+        CapabilityManager.INSTANCE.register(AuraChunk.class, new StorageImpl<>(), () -> null);
 
         new ModBlocks();
         new ModItems();
