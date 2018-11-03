@@ -1,0 +1,22 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:half_slab",
+        "textures": {
+            "bottom": "naturesaura:blocks/ancient_planks",
+            "top": "naturesaura:blocks/ancient_planks",
+            "side": "naturesaura:blocks/ancient_planks"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "half=top": [
+            {
+                "x": 180,
+                "uvlock": true
+            }
+        ],
+        "half=bottom": [{}],
+        "inventory": [{}]
+    }
+}

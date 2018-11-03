@@ -1,0 +1,15 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "WWW"
+    ],
+    "key": {
+        "W": {
+            "item": "naturesaura:infused_brick"
+        }
+    },
+    "result": {
+        "item": "naturesaura:infused_brick_slab",
+        "count": 6
+    }
+}

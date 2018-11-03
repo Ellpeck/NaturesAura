@@ -15,6 +15,16 @@ tile.naturesaura.furnace_heater.name=Extraneous Firestarter
 tile.naturesaura.potion_generator.name=Lingering Absorber
 tile.naturesaura.aura_detector.name=Aura Detector
 tile.naturesaura.conversion_catalyst.name=Transmutation Catalyst
+tile.naturesaura.infused_stairs.name=Infused Rock Stairs
+tile.naturesaura.infused_slab.name=Infused Rock Slab
+tile.naturesaura.infused_slab_double.name=Infused Rock Double Slab
+tile.naturesaura.ancient_stairs.name=Ancient Wood Stairs
+tile.naturesaura.ancient_slab.name=Ancient Wood Slab
+tile.naturesaura.ancient_slab_double.name=Ancient Wood Double Slab
+tile.naturesaura.infused_brick.name=Infused Brick
+tile.naturesaura.infused_brick_stairs.name=Infused Brick Stairs
+tile.naturesaura.infused_brick_slab.name=Infused Brick Slab
+tile.naturesaura.infused_brick_slab_double.name=Infused Brick Double Slab
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.gold_fiber.name=Brilliant Fiber

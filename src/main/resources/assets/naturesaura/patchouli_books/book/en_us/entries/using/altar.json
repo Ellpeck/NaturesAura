@@ -16,7 +16,7 @@
         },
         {
             "type": "naturesaura:altar",
-            "text": "Creating $(item)Infused Rock$(), a material, similar looking to the fabric of $(italic)balance$() itself, infused with $(aura).",
+            "text": "Creating $(item)Infused Rock$(), an earthly material infused with $(aura).",
             "recipe": "naturesaura:infused_stone"
         }
     ]
