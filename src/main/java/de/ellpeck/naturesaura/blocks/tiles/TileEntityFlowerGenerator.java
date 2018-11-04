@@ -58,11 +58,14 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
             IBlockState state = this.world.getBlockState(pos);
             MutableInt curr = this.consumedRecently.computeIfAbsent(state, s -> new MutableInt());
 
-            int toAdd = Math.max(0, 50 - curr.getValue());
+            int addAmount = 100;
+            int toAdd = Math.max(0, addAmount - curr.getValue());
             if (toAdd > 0) {
                 BlockPos auraPos = AuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);
-                AuraChunk auraChunk = AuraChunk.getAuraChunk(this.world, auraPos);
-                auraChunk.storeAura(auraPos, toAdd);
+                if (AuraChunk.getAuraInArea(this.world, auraPos, 30) < 20000)
+                    AuraChunk.getAuraChunk(this.world, auraPos).storeAura(auraPos, toAdd);
+                else
+                    toAdd = 0;
             }
 
             for (Map.Entry<IBlockState, MutableInt> entry : this.consumedRecently.entrySet()) {
@@ -76,7 +79,7 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
 
             this.world.setBlockToAir(pos);
 
-            int color = Helper.blendColors(0x5ccc30, 0xe53c16, toAdd / 50F);
+            int color = Helper.blendColors(0x5ccc30, 0xe53c16, toAdd / (float) addAmount);
             if (toAdd > 0) {
                 for (int i = this.world.rand.nextInt(5) + 5; i >= 0; i--)
                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
