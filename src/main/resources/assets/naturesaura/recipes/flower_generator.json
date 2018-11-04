@@ -1,0 +1,24 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "PIP",
+        "IFI",
+        "PIP"
+    ],
+    "key": {
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plankWood"
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        },
+        "F": {
+            "item": "minecraft:double_plant",
+            "data": 5
+        }
+    },
+    "result": {
+        "item": "naturesaura:flower_generator"
+    }
+}
