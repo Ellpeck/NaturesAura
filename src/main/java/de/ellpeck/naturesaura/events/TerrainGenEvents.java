@@ -28,7 +28,7 @@ public class TerrainGenEvents {
         BlockPos pos = event.getPos();
         if (!world.isRemote) {
             if (Multiblocks.TREE_RITUAL.forEachMatcher(world, pos, Rotation.NONE, (char) 0, (start, actionPos, x, y, z, ch, matcher) ->
-                    matcher.getDisplayedState().getBlock() == ModBlocks.WOOD_STAND || Multiblocks.TREE_RITUAL.test(world, start, x, y, z, Rotation.NONE))) {
+                    ch == 'W' || Multiblocks.TREE_RITUAL.test(world, start, x, y, z, Rotation.NONE))) {
                 IBlockState sapling = world.getBlockState(pos);
                 ItemStack saplingStack = sapling.getBlock().getItem(world, pos, sapling);
                 if (!saplingStack.isEmpty()) {
