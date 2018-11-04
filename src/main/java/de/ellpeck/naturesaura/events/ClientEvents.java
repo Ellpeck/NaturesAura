@@ -32,6 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.mutable.MutableInt;
+import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.List;
 
@@ -153,13 +154,26 @@ public class ClientEvents {
                     GlStateManager.pushMatrix();
                     mc.getTextureManager().bindTexture(OVERLAYS);
 
-                    GlStateManager.color(0.8F, 0.25F, 0.25F);
-                    float totalPercentage = AuraChunk.getAuraInArea(mc.world, mc.player.getPosition(), 15) / (AuraChunk.DEFAULT_AURA * 2F);
-                    int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
-                    if (tHeight < 50)
-                        Gui.drawModalRectWithCustomSizedTexture(3, 10, 6, 12, 6, 50 - tHeight, 256, 256);
-                    if (tHeight > 0)
-                        Gui.drawModalRectWithCustomSizedTexture(3, 10 + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
+                    if (!mc.gameSettings.showDebugInfo) {
+                        GlStateManager.color(0.8F, 0.25F, 0.25F);
+                        float totalPercentage = AuraChunk.getAuraInArea(mc.world, mc.player.getPosition(), 15) / (AuraChunk.DEFAULT_AURA * 2F);
+                        int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
+                        if (tHeight < 50)
+                            Gui.drawModalRectWithCustomSizedTexture(3, 10, 6, 12, 6, 50 - tHeight, 256, 256);
+                        if (tHeight > 0)
+                            Gui.drawModalRectWithCustomSizedTexture(3, 10 + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
+
+                        if (totalPercentage > 1F)
+                            mc.fontRenderer.drawString("+", 10F, 9.5F, 0xBB3333, true);
+                        if (totalPercentage < 0F)
+                            mc.fontRenderer.drawString("-", 10F, 53.5F, 0xBB3333, true);
+
+                        GlStateManager.pushMatrix();
+                        float scale = 0.75F;
+                        GlStateManager.scale(scale, scale, scale);
+                        mc.fontRenderer.drawString(I18n.format("info." + NaturesAura.MOD_ID + ".aura_in_area"), 3 / scale, 3 / scale, 0xBB3333, true);
+                        GlStateManager.popMatrix();
+                    }
 
                     if (mc.objectMouseOver != null) {
                         BlockPos pos = mc.objectMouseOver.getBlockPos();
@@ -170,27 +184,18 @@ public class ClientEvents {
 
                                 IBlockState state = mc.world.getBlockState(pos);
                                 ItemStack blockStack = state.getBlock().getPickBlock(state, mc.objectMouseOver, mc.world, pos, mc.player);
-                                this.drawContainerInfo(container, mc, res, 25, blockStack.getDisplayName());
+                                this.drawContainerInfo(container, mc, res, 35, blockStack.getDisplayName());
 
                                 if (tile instanceof TileEntityNatureAltar) {
                                     ItemStack tileStack = ((TileEntityNatureAltar) tile).getItemHandler(null).getStackInSlot(0);
                                     if (!tileStack.isEmpty() && tileStack.hasCapability(Capabilities.auraContainer, null)) {
                                         IAuraContainer stackContainer = tileStack.getCapability(Capabilities.auraContainer, null);
-                                        this.drawContainerInfo(stackContainer, mc, res, 45, tileStack.getDisplayName());
+                                        this.drawContainerInfo(stackContainer, mc, res, 55, tileStack.getDisplayName());
                                     }
                                 }
                             }
                         }
                     }
-
-                    if (totalPercentage > 1F)
-                        mc.fontRenderer.drawString("+", 10F, 9.5F, 0xBB3333, true);
-                    if (totalPercentage < 0F)
-                        mc.fontRenderer.drawString("-", 10F, 53.5F, 0xBB3333, true);
-
-                    float scale = 0.75F;
-                    GlStateManager.scale(scale, scale, scale);
-                    mc.fontRenderer.drawString(I18n.format("info." + NaturesAura.MOD_ID + ".aura_in_area"), 3 / scale, 3 / scale, 0xBB3333, true);
 
                     GlStateManager.color(1F, 1F, 1F);
                     GlStateManager.popMatrix();
