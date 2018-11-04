@@ -40,7 +40,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
         @Override
         protected boolean canExtract(ItemStack stack, int slot, int amount) {
-            if(stack.hasCapability(Capabilities.auraContainer, null))
+            if (stack.hasCapability(Capabilities.auraContainer, null))
                 return stack.getCapability(Capabilities.auraContainer, null).storeAura(1, true) <= 0;
             else
                 return AltarRecipe.forInput(stack) == null;
@@ -186,13 +186,13 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, boolean syncing) {
-        super.writeNBT(compound, syncing);
+    public void writeNBT(NBTTagCompound compound, SaveType type) {
+        super.writeNBT(compound, type);
         compound.setTag("items", this.items.serializeNBT());
         compound.setBoolean("fine", this.structureFine);
         this.container.writeNBT(compound);
 
-        if (!syncing) {
+        if (type == SaveType.TILE) {
             if (this.currentRecipe != null) {
                 compound.setString("recipe", this.currentRecipe.name.toString());
                 compound.setInteger("timer", this.timer);
@@ -201,13 +201,13 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, boolean syncing) {
-        super.readNBT(compound, syncing);
+    public void readNBT(NBTTagCompound compound, SaveType type) {
+        super.readNBT(compound, type);
         this.items.deserializeNBT(compound.getCompoundTag("items"));
         this.structureFine = compound.getBoolean("fine");
         this.container.readNBT(compound);
 
-        if (!syncing) {
+        if (type == SaveType.TILE) {
             if (compound.hasKey("recipe")) {
                 this.currentRecipe = AltarRecipe.RECIPES.get(new ResourceLocation(compound.getString("recipe")));
                 this.timer = compound.getInteger("timer");

@@ -51,7 +51,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
                 }
             }
 
-            if(did != this.isActive){
+            if (did != this.isActive) {
                 this.isActive = did;
                 this.sendToClients();
             }
@@ -75,18 +75,18 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, boolean syncing) {
-        super.writeNBT(compound, syncing);
+    public void writeNBT(NBTTagCompound compound, SaveType type) {
+        super.writeNBT(compound, type);
 
-        if (syncing)
+        if (type == SaveType.SYNC)
             compound.setBoolean("active", this.isActive);
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, boolean syncing) {
-        super.readNBT(compound, syncing);
+    public void readNBT(NBTTagCompound compound, SaveType type) {
+        super.readNBT(compound, type);
 
-        if (syncing)
+        if (type == SaveType.SYNC)
             this.isActive = compound.getBoolean("active");
     }
 }

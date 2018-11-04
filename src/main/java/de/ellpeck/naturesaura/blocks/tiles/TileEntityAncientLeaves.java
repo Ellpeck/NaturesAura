@@ -29,14 +29,16 @@ public class TileEntityAncientLeaves extends TileEntityImpl {
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, boolean syncing) {
-        super.writeNBT(compound, syncing);
-        this.container.writeNBT(compound);
+    public void writeNBT(NBTTagCompound compound, SaveType type) {
+        super.writeNBT(compound, type);
+        if (type != SaveType.BLOCK)
+            this.container.writeNBT(compound);
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, boolean syncing) {
-        super.readNBT(compound, syncing);
-        this.container.readNBT(compound);
+    public void readNBT(NBTTagCompound compound, SaveType type) {
+        super.readNBT(compound, type);
+        if (type != SaveType.BLOCK)
+            this.container.readNBT(compound);
     }
 }

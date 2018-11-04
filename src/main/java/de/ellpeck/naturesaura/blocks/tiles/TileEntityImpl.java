@@ -2,7 +2,10 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.container.IAuraContainer;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -14,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nullable;
@@ -26,46 +30,48 @@ public class TileEntityImpl extends TileEntity {
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        this.writeNBT(compound, false);
+        this.writeNBT(compound, SaveType.TILE);
         return compound;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        this.readNBT(compound, false);
+        this.readNBT(compound, SaveType.TILE);
     }
 
-    public void writeNBT(NBTTagCompound compound, boolean syncing) {
-        super.writeToNBT(compound);
+    public void writeNBT(NBTTagCompound compound, SaveType type) {
+        if (type != SaveType.BLOCK)
+            super.writeToNBT(compound);
     }
 
-    public void readNBT(NBTTagCompound compound, boolean syncing) {
-        super.readFromNBT(compound);
+    public void readNBT(NBTTagCompound compound, SaveType type) {
+        if (type != SaveType.BLOCK)
+            super.readFromNBT(compound);
     }
 
     @Override
     public final SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound compound = new NBTTagCompound();
-        this.writeNBT(compound, true);
+        this.writeNBT(compound, SaveType.SYNC);
         return new SPacketUpdateTileEntity(this.pos, 0, compound);
     }
 
     @Override
     public final NBTTagCompound getUpdateTag() {
         NBTTagCompound compound = new NBTTagCompound();
-        this.writeNBT(compound, true);
+        this.writeNBT(compound, SaveType.SYNC);
         return compound;
     }
 
     @Override
     public void handleUpdateTag(NBTTagCompound tag) {
-        this.readNBT(tag, true);
+        this.readNBT(tag, SaveType.SYNC);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
         super.onDataPacket(net, packet);
-        this.readNBT(packet.getNbtCompound(), true);
+        this.readNBT(packet.getNbtCompound(), SaveType.SYNC);
     }
 
     public void sendToClients() {
@@ -105,5 +111,52 @@ public class TileEntityImpl extends TileEntity {
         } else {
             return super.getCapability(capability, facing);
         }
+    }
+
+    public void dropInventory() {
+        IItemHandler handler = this.getItemHandler(null);
+        if (handler != null) {
+            for (int i = 0; i < handler.getSlots(); i++) {
+                ItemStack stack = handler.getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    EntityItem item = new EntityItem(this.world,
+                            this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5,
+                            stack);
+                    this.world.spawnEntity(item);
+                }
+            }
+        }
+    }
+
+    public ItemStack getDrop(IBlockState state, int fortune) {
+        Block block = state.getBlock();
+        ItemStack stack = new ItemStack(
+                block.getItemDropped(state, this.world.rand, fortune),
+                block.quantityDropped(state, fortune, this.world.rand),
+                block.damageDropped(state));
+
+        NBTTagCompound compound = new NBTTagCompound();
+        this.writeNBT(compound, SaveType.BLOCK);
+
+        if (!compound.isEmpty()) {
+            stack.setTagCompound(new NBTTagCompound());
+            stack.getTagCompound().setTag("data", compound);
+        }
+
+        return stack;
+    }
+
+    public void loadDataOnPlace(ItemStack stack) {
+        if (stack.hasTagCompound()) {
+            NBTTagCompound compound = stack.getTagCompound().getCompoundTag("data");
+            if (compound != null)
+                this.readNBT(compound, SaveType.BLOCK);
+        }
+    }
+
+    public enum SaveType {
+        TILE,
+        SYNC,
+        BLOCK
     }
 }

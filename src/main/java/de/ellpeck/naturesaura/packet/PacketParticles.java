@@ -154,6 +154,29 @@ public class PacketParticles implements IMessage {
                                         0x5ccc30, 1F + world.rand.nextFloat() * 2F, 100, 0F, false, true);
 
                             break;
+                        case 7: // Flower generator consumation
+                            color = message.data[0];
+                            for (int i = world.rand.nextInt(10) + 10; i >= 0; i--)
+                                NaturesAura.proxy.spawnMagicParticle(world,
+                                        message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        message.posY + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        message.posZ + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        color, world.rand.nextFloat() * 2F + 1F, 50, 0F, false, true);
+                            break;
+                        case 8: // Flower generator aura creation
+                            for (int i = world.rand.nextInt(10) + 5; i >= 0; i--)
+                                NaturesAura.proxy.spawnMagicParticle(world,
+                                        message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        message.posY + 1.01F,
+                                        message.posZ + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        world.rand.nextGaussian() * 0.005F,
+                                        world.rand.nextFloat() * 0.02F + 0.01F,
+                                        world.rand.nextGaussian() * 0.005F,
+                                        0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 80, 0F, false, true);
+                            break;
                     }
                 }
             });

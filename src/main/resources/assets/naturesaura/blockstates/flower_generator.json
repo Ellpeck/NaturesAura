@@ -1,0 +1,20 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:cube",
+        "textures": {
+            "particle": "naturesaura:blocks/flower_generator",
+            "up": "naturesaura:blocks/flower_generator_top",
+            "down": "naturesaura:blocks/flower_generator_top",
+            "north": "#particle",
+            "east": "#particle",
+            "south": "#particle",
+            "west": "#particle"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

@@ -8,22 +8,22 @@ import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Map;
 
 public class BlockContainerImpl extends BlockContainer implements IModItem, IModelProvider {
 
@@ -85,19 +85,36 @@ public class BlockContainerImpl extends BlockContainer implements IModItem, IMod
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TileEntityImpl) {
-                IItemHandler handler = ((TileEntityImpl) tile).getItemHandler(null);
-                if (handler != null) {
-                    for (int i = 0; i < handler.getSlots(); i++) {
-                        ItemStack stack = handler.getStackInSlot(i);
-                        if (!stack.isEmpty()) {
-                            EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
-                            worldIn.spawnEntity(item);
-                        }
-                    }
-                }
-            }
+            if (tile instanceof TileEntityImpl)
+                ((TileEntityImpl) tile).dropInventory();
         }
         super.breakBlock(worldIn, pos, state);
+    }
+
+    @Override
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile instanceof TileEntityImpl)
+            drops.add(((TileEntityImpl) tile).getDrop(state, fortune));
+        else
+            super.getDrops(drops, world, pos, state, fortune);
+    }
+
+    @Override
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+        return willHarvest || super.removedByPlayer(state, world, pos, player, false);
+    }
+
+    @Override
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
+        super.harvestBlock(worldIn, player, pos, state, te, stack);
+        worldIn.setBlockToAir(pos);
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof TileEntityImpl)
+            ((TileEntityImpl) tile).loadDataOnPlace(stack);
     }
 }

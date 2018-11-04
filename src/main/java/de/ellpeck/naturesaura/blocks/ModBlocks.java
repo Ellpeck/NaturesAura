@@ -28,4 +28,5 @@ public final class ModBlocks {
     public static final Block POTION_GENERATOR = new BlockPotionGenerator();
     public static final Block AURA_DETECTOR = new BlockAuraDetector();
     public static final Block CONVERSION_CATALYST = new BlockImpl("conversion_catalyst", Material.ROCK).setSoundType(SoundType.STONE).setHardness(2.5F);
+    public static final Block FLOWER_GENERATOR = new BlockFlowerGenerator();
 }

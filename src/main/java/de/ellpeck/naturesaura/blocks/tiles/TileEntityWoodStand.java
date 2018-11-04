@@ -163,11 +163,11 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, boolean syncing) {
-        super.writeNBT(compound, syncing);
+    public void writeNBT(NBTTagCompound compound, SaveType type) {
+        super.writeNBT(compound, type);
         compound.setTag("items", this.items.serializeNBT());
 
-        if (!syncing) {
+        if (type == SaveType.TILE) {
             if (this.ritualPos != null && this.recipe != null) {
                 compound.setLong("ritual_pos", this.ritualPos.toLong());
                 compound.setInteger("timer", this.timer);
@@ -177,11 +177,11 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, boolean syncing) {
-        super.readNBT(compound, syncing);
+    public void readNBT(NBTTagCompound compound, SaveType type) {
+        super.readNBT(compound, type);
         this.items.deserializeNBT(compound.getCompoundTag("items"));
 
-        if (!syncing) {
+        if (type == SaveType.TILE) {
             if (compound.hasKey("recipe")) {
                 this.ritualPos = BlockPos.fromLong(compound.getLong("ritual_pos"));
                 this.timer = compound.getInteger("timer");
