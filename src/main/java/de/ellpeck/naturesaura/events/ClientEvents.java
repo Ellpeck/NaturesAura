@@ -32,7 +32,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.mutable.MutableInt;
-import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.List;
 
@@ -99,13 +98,10 @@ public class ClientEvents {
                     for (int i = 0; i < baubles.getSlots(); i++) {
                         ItemStack slot = baubles.getStackInSlot(i);
                         if (!slot.isEmpty()) {
-                            if (slot.getItem() == ModItems.AURA_CACHE) {
+                            if (slot.getItem() == ModItems.AURA_CACHE)
                                 cache = slot;
-                                break;
-                            } else if (slot.getItem() == ModItems.EYE) {
+                            else if (slot.getItem() == ModItems.EYE)
                                 eye = slot;
-                                break;
-                            }
                         }
                     }
                 }
@@ -114,13 +110,10 @@ public class ClientEvents {
                     for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
                         ItemStack slot = mc.player.inventory.getStackInSlot(i);
                         if (!slot.isEmpty()) {
-                            if (slot.getItem() == ModItems.AURA_CACHE) {
+                            if (slot.getItem() == ModItems.AURA_CACHE)
                                 cache = slot;
-                                break;
-                            } else if (slot.getItem() == ModItems.EYE && i <= 8) {
+                            else if (slot.getItem() == ModItems.EYE && i <= 8)
                                 eye = slot;
-                                break;
-                            }
                         }
                     }
                 }
