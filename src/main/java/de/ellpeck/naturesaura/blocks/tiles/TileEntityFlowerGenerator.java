@@ -89,7 +89,7 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
                             this.pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F,
                             this.pos.getY() + 0.25F + this.world.rand.nextFloat() * 0.5F,
                             this.pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F,
-                            this.world.rand.nextFloat() * 0.01F + 0.05F, color, 1F
+                            this.world.rand.nextFloat() * 0.02F + 0.1F, color, 1F
                     ));
                 PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 8));
             }

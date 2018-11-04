@@ -33,8 +33,8 @@ public class BlockFurnaceHeater extends BlockContainerImpl {
                     pos.getX() + 0.35F + rand.nextFloat() * 0.3F,
                     pos.getY() + 0.2F,
                     pos.getZ() + 0.35F + rand.nextFloat() * 0.3F,
-                    0F, rand.nextFloat() * 0.008F + 0.005F, 0F,
-                    rand.nextBoolean() ? 0xf46e42 : 0xf49541, rand.nextFloat() + 0.5F, 100, 0F, true, true);
+                    0F, rand.nextFloat() * 0.016F + 0.01F, 0F,
+                    rand.nextBoolean() ? 0xf46e42 : 0xf49541, rand.nextFloat() + 0.5F, 50, 0F, true, true);
         }
     }
 

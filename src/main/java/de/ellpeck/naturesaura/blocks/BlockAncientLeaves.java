@@ -136,8 +136,8 @@ public class BlockAncientLeaves extends BlockLeaves implements
                             pos.getX() + rand.nextDouble(), pos.getY(), pos.getZ() + rand.nextDouble(),
                             0F, 0F, 0F, 0xc46df9,
                             rand.nextFloat() * 2F + 0.5F,
-                            rand.nextInt(100) + 150,
-                            rand.nextFloat() * 0.01F + 0.001F, true, true);
+                            rand.nextInt(50) + 75,
+                            rand.nextFloat() * 0.02F + 0.002F, true, true);
 
                 }
             }

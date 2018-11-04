@@ -85,7 +85,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                                     this.pos.getY() + rand.nextFloat() * 10F,
                                     this.pos.getZ() + (float) rand.nextGaussian() * 10F,
                                     this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F,
-                                    rand.nextFloat() * 0.05F + 0.05F, 0x89cc37, rand.nextFloat() * 1F + 1F
+                                    rand.nextFloat() * 0.1F + 0.1F, 0x89cc37, rand.nextFloat() * 1F + 1F
                             ));
                     }
                 }
@@ -148,22 +148,22 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                     if (this.container.getStoredAura() > 0) {
                         NaturesAura.proxy.spawnMagicParticle(this.world,
                                 this.pos.getX() - 4F + rand.nextFloat(), this.pos.getY() + 3F, this.pos.getZ() + rand.nextFloat(),
-                                0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(200) + 100, -0.025F, true, true);
+                                0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
                     if (this.container.getStoredAura() >= fourths) {
                         NaturesAura.proxy.spawnMagicParticle(this.world,
                                 this.pos.getX() + 4F + rand.nextFloat(), this.pos.getY() + 3F, this.pos.getZ() + rand.nextFloat(),
-                                0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(200) + 100, -0.025F, true, true);
+                                0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
                     if (this.container.getStoredAura() >= fourths * 2) {
                         NaturesAura.proxy.spawnMagicParticle(this.world,
                                 this.pos.getX() + rand.nextFloat(), this.pos.getY() + 3F, this.pos.getZ() - 4F + rand.nextFloat(),
-                                0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(200) + 100, -0.025F, true, true);
+                                0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
                     if (this.container.getStoredAura() >= fourths * 3) {
                         NaturesAura.proxy.spawnMagicParticle(this.world,
                                 this.pos.getX() + rand.nextFloat(), this.pos.getY() + 3F, this.pos.getZ() + 4F + rand.nextFloat(),
-                                0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(200) + 100, -0.025F, true, true);
+                                0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
 
                 }

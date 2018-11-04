@@ -46,7 +46,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
                                 this.pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F,
                                 this.pos.getY() + 0.15F,
                                 this.pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F,
-                                this.world.rand.nextFloat() * 0.035F + 0.035F, 0x89cc37, this.world.rand.nextFloat() + 0.5F
+                                this.world.rand.nextFloat() * 0.07F + 0.07F, 0x89cc37, this.world.rand.nextFloat() + 0.5F
                         ));
                 }
             }

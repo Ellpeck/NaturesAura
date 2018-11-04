@@ -28,6 +28,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
@@ -75,12 +76,14 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onClientTick(ClientTickEvent event) {
-        Minecraft mc = Minecraft.getMinecraft();
-        if (!mc.isGamePaused()) {
-            ParticleHandler.updateParticles();
-        }
-        if (mc.world == null) {
-            ParticleHandler.clearParticles();
+        if (event.phase == Phase.END) {
+            Minecraft mc = Minecraft.getMinecraft();
+            if (!mc.isGamePaused()) {
+                ParticleHandler.updateParticles();
+            }
+            if (mc.world == null) {
+                ParticleHandler.clearParticles();
+            }
         }
     }
 

@@ -61,7 +61,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                                             (float) pos.getY() + 0.85F,
                                             (float) pos.getZ() + 0.2F + this.world.rand.nextFloat() * 0.6F,
                                             this.ritualPos.getX() + 0.5F, this.ritualPos.getY() + this.world.rand.nextFloat() * 3F + 2F, this.ritualPos.getZ() + 0.5F,
-                                            this.world.rand.nextFloat() * 0.02F + 0.02F, 0x89cc37, this.world.rand.nextFloat() * 1F + 1F
+                                            this.world.rand.nextFloat() * 0.04F + 0.04F, 0x89cc37, this.world.rand.nextFloat() * 1F + 1F
                                     ));
                                 }
                             });
