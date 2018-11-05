@@ -1,23 +1,23 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:potion_generator"
+            "item": "naturesaura:placer"
         },
         "title": {
-            "translate": "advancement.naturesaura.potion_generator"
+            "translate": "advancement.naturesaura.placer"
         },
         "description": {
-            "translate": "advancement.naturesaura.potion_generator.desc"
+            "translate": "advancement.naturesaura.placer.desc"
         }
     },
-    "parent": "naturesaura:flower_generator",
+    "parent": "naturesaura:infused_materials",
     "criteria": {
-        "generator": {
+        "placer": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:potion_generator"
+                        "item": "naturesaura:placer"
                     }
                 ]
             }

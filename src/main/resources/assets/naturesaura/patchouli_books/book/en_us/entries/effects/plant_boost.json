@@ -2,7 +2,7 @@
     "name": "Vegetational Increase",
     "icon": "minecraft:wheat_seeds",
     "category": "effects",
-    "advancement": "naturesaura:potion_generator",
+    "advancement": "naturesaura:flower_generator",
     "pages": [
         {
             "type": "text",

@@ -2,7 +2,7 @@
     "name": "Ritual of the Brewer",
     "icon": "naturesaura:potion_generator",
     "category": "creating",
-    "advancement": "naturesaura:infused_materials",
+    "advancement": "naturesaura:flower_generator",
     "pages": [
         {
             "type": "text",

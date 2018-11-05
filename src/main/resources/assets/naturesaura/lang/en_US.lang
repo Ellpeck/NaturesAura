@@ -65,5 +65,11 @@ advancement.naturesaura.furnace_heater=Cozy Warmth
 advancement.naturesaura.furnace_heater.desc=Create an Extraneous Firestarter to heat your furnace
 advancement.naturesaura.potion_generator=Lurking Powers
 advancement.naturesaura.potion_generator.desc=Make a Lingering Absorber for the Ritual of the Brewer to create Aura
+advancement.naturesaura.flower_generator=Botanistic Homicide
+advancement.naturesaura.flower_generator.desc=Create a Herbivorous Absorber to create Aura
+advancement.naturesaura.placer=Plop Plop Placement
+advancement.naturesaura.placer.desc=Create an Imperceptible Builder to place blocks for you
+advancement.naturesaura.conversion_catalyst=Not so Equivalent Exchange
+advancement.naturesaura.conversion_catalyst.desc=Create a Conversion Catalyst for easy material conversion
 
 command.naturesaura.aura.usage=/naaura <action> <amount> <range>

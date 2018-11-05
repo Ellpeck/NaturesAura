@@ -177,6 +177,17 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextGaussian() * 0.01F,
                                         0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 40, 0F, false, true);
                             break;
+                        case 9: // Placer placing
+                            for (int i = world.rand.nextInt(20) + 20; i >= 0; i--) {
+                                boolean side = world.rand.nextBoolean();
+                                float x = side ? world.rand.nextFloat() : (world.rand.nextBoolean() ? 1.1F : -0.1F);
+                                float z = !side ? world.rand.nextFloat() : (world.rand.nextBoolean() ? 1.1F : -0.1F);
+                                NaturesAura.proxy.spawnMagicParticle(world,
+                                        message.posX + x, message.posY + 0.1F + world.rand.nextFloat() * 0.98F, message.posZ + z,
+                                        0F, 0F, 0F,
+                                        0xad7a37, world.rand.nextFloat() + 1F, 50, 0F, true, true);
+                            }
+                            break;
                     }
                 }
             });
