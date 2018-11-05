@@ -26,6 +26,7 @@ tile.naturesaura.infused_brick_stairs.name=Infused Brick Stairs
 tile.naturesaura.infused_brick_slab.name=Infused Brick Slab
 tile.naturesaura.infused_brick_slab_double.name=Infused Brick Double Slab
 tile.naturesaura.flower_generator.name=Herbivorous Absorber
+tile.naturesaura.placer.name=Imperceptible Builder
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.gold_fiber.name=Brilliant Fiber

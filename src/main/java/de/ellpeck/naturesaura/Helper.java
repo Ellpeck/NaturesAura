@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -16,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -46,6 +48,17 @@ public final class Helper {
                 }
             }
         }
+    }
+
+    public static List<EntityItemFrame> getAttachedItemFrames(World world, BlockPos pos) {
+        List<EntityItemFrame> frames = world.getEntitiesWithinAABB(EntityItemFrame.class, new AxisAlignedBB(pos).grow(0.25));
+        for (int i = frames.size() - 1; i >= 0; i--) {
+            EntityItemFrame frame = frames.get(i);
+            BlockPos framePos = frame.getHangingPosition().offset(frame.facingDirection.getOpposite());
+            if (!pos.equals(framePos))
+                frames.remove(i);
+        }
+        return frames;
     }
 
     // For some reason this method isn't public in World, but I also don't want to have to make a new BlockPos

@@ -188,10 +188,11 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     @Override
     public void writeNBT(NBTTagCompound compound, SaveType type) {
         super.writeNBT(compound, type);
-        compound.setTag("items", this.items.serializeNBT());
-        compound.setBoolean("fine", this.structureFine);
-        this.container.writeNBT(compound);
-
+        if (type != SaveType.BLOCK) {
+            compound.setTag("items", this.items.serializeNBT());
+            compound.setBoolean("fine", this.structureFine);
+            this.container.writeNBT(compound);
+        }
         if (type == SaveType.TILE) {
             if (this.currentRecipe != null) {
                 compound.setString("recipe", this.currentRecipe.name.toString());
@@ -203,10 +204,11 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     @Override
     public void readNBT(NBTTagCompound compound, SaveType type) {
         super.readNBT(compound, type);
-        this.items.deserializeNBT(compound.getCompoundTag("items"));
-        this.structureFine = compound.getBoolean("fine");
-        this.container.readNBT(compound);
-
+        if (type != SaveType.BLOCK) {
+            this.items.deserializeNBT(compound.getCompoundTag("items"));
+            this.structureFine = compound.getBoolean("fine");
+            this.container.readNBT(compound);
+        }
         if (type == SaveType.TILE) {
             if (compound.hasKey("recipe")) {
                 this.currentRecipe = AltarRecipe.RECIPES.get(new ResourceLocation(compound.getString("recipe")));
