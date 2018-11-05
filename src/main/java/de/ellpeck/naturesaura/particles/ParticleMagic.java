@@ -29,9 +29,9 @@ public class ParticleMagic extends Particle {
         this.motionY = motionY;
         this.motionZ = motionZ;
 
-        float r = (((color >> 16) & 255) / 255F) * (1F - this.rand.nextFloat() * 0.35F);
-        float g = (((color >> 8) & 255) / 255F) * (1F - this.rand.nextFloat() * 0.35F);
-        float b = ((color & 255) / 255F) * (1F - this.rand.nextFloat() * 0.35F);
+        float r = (((color >> 16) & 255) / 255F) * (1F - this.rand.nextFloat() * 0.25F);
+        float g = (((color >> 8) & 255) / 255F) * (1F - this.rand.nextFloat() * 0.25F);
+        float b = ((color & 255) / 255F) * (1F - this.rand.nextFloat() * 0.25F);
         this.setRBGColorF(r, g, b);
 
         TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();

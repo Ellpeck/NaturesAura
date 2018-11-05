@@ -188,6 +188,14 @@ public class PacketParticles implements IMessage {
                                         0xad7a37, world.rand.nextFloat() + 1F, 50, 0F, true, true);
                             }
                             break;
+                        case 10: // Hopper upgrade picking up
+                            for (int i = world.rand.nextInt(20) + 10; i >= 0; i--)
+                                NaturesAura.proxy.spawnMagicParticle(world,
+                                        message.posX, message.posY + 0.45F, message.posZ,
+                                        world.rand.nextGaussian() * 0.015F,
+                                        world.rand.nextGaussian() * 0.015F,
+                                        world.rand.nextGaussian() * 0.015F,
+                                        0xdde7ff, world.rand.nextFloat() + 1F, 30, -0.06F, true, true);
                     }
                 }
             });

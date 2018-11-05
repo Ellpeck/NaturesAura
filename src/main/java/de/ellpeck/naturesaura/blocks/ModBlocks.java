@@ -30,4 +30,5 @@ public final class ModBlocks {
     public static final Block CONVERSION_CATALYST = new BlockImpl("conversion_catalyst", Material.ROCK).setSoundType(SoundType.STONE).setHardness(2.5F);
     public static final Block FLOWER_GENERATOR = new BlockFlowerGenerator();
     public static final Block PLACER = new BlockPlacer();
+    public static final Block HOPPER_UPGRADE = new BlockHopperUpgrade();
 }
