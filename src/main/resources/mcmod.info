@@ -2,7 +2,7 @@
     {
         "modid": "naturesaura",
         "name": "Nature's Aura",
-        "description": "A mod about nature and aura and stuff",
+        "description": "Nature's Aura is a mod about collecting, using and replenishing the Aura naturally present in the world to create useful devices and unique mechanics.",
         "version": "${version}",
         "mcversion": "${mcversion}",
         "url": "https://ellpeck.de",
