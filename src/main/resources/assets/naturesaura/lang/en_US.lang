@@ -73,5 +73,7 @@ advancement.naturesaura.placer=Plop Plop Placement
 advancement.naturesaura.placer.desc=Create an Imperceptible Builder to place blocks for you
 advancement.naturesaura.conversion_catalyst=Not so Equivalent Exchange
 advancement.naturesaura.conversion_catalyst.desc=Create a Conversion Catalyst for easy material conversion
+advancement.naturesaura.infused_tools=Gear Up Intensifies
+advancement.naturesaura.infused_tools.desc=Create an Infused Iron Pickaxe and Blade
 
 command.naturesaura.aura.usage=/naaura <action> <amount> <range>

@@ -76,6 +76,12 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
             if (living instanceof EntityPlayer && !Helper.extractAuraFromPlayer((EntityPlayer) living, 10, false))
                 return;
 
+            DamageSource source;
+            if (living instanceof EntityPlayer)
+                source = DamageSource.causePlayerDamage((EntityPlayer) living);
+            else
+                source = DamageSource.MAGIC;
+
             int range = 5;
             List<EntityLiving> mobs = worldIn.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(
                     living.posX - range, living.posY - 0.5, living.posZ - range,
@@ -87,7 +93,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                     continue;
                 if (living instanceof EntityPlayer && !Helper.extractAuraFromPlayer((EntityPlayer) living, 5, false))
                     break;
-                mob.attackEntityFrom(DamageSource.MAGIC, 4F);
+                mob.attackEntityFrom(source, 4F);
             }
 
             BlockPos pos = living.getPosition();

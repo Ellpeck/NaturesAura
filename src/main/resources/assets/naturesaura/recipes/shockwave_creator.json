@@ -1,0 +1,29 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        " I ",
+        "RTR",
+        "SBS"
+    ],
+    "key": {
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        },
+        "B": {
+            "item": "minecraft:diamond_boots"
+        },
+        "T": {
+            "item": "minecraft:tnt"
+        },
+        "R": {
+            "item": "naturesaura:infused_stone"
+        },
+        "S": {
+            "item": "minecraft:redstone"
+        }
+    },
+    "result": {
+        "item": "naturesaura:shockwave_creator"
+    }
+}

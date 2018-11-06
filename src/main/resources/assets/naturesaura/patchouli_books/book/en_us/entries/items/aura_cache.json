@@ -3,6 +3,7 @@
     "icon": "naturesaura:aura_cache",
     "category": "items",
     "advancement": "naturesaura:infused_materials",
+    "priority": true,
     "pages": [
         {
             "type": "text",
