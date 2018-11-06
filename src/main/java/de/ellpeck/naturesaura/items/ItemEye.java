@@ -22,7 +22,7 @@ public class ItemEye extends ItemImpl implements ITrinketItem {
     public void render(ItemStack stack, EntityPlayer player, RenderType type, boolean isHolding) {
         if (type == RenderType.BODY && !isHolding) {
             boolean armor = !player.inventory.armorInventory.get(EntityEquipmentSlot.CHEST.getIndex()).isEmpty();
-            GlStateManager.translate(0.1F, 0.19F, armor ? -0.195F : -0.13F);
+            GlStateManager.translate(0.1F, 0.225F, armor ? -0.195F : -0.13F);
             GlStateManager.scale(0.15F, 0.15F, 0.15F);
             GlStateManager.rotate(180F, 1F, 0F, 0F);
             Helper.renderItemInWorld(stack);

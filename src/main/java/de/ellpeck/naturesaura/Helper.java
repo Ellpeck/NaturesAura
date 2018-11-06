@@ -177,15 +177,17 @@ public final class Helper {
     }
 
     public static boolean extractAuraFromPlayer(EntityPlayer player, int amount, boolean simulate) {
+        if (player.capabilities.isCreativeMode)
+            return true;
+
         if (Compat.baubles) {
             IItemHandler baubles = BaublesApi.getBaublesHandler(player);
             for (int i = 0; i < baubles.getSlots(); i++) {
                 ItemStack stack = baubles.getStackInSlot(i);
                 if (!stack.isEmpty() && stack.hasCapability(Capabilities.auraContainer, null)) {
                     amount -= stack.getCapability(Capabilities.auraContainer, null).drainAura(amount, simulate);
-                    if (amount <= 0) {
+                    if (amount <= 0)
                         return true;
-                    }
                 }
             }
         }
@@ -194,9 +196,8 @@ public final class Helper {
             ItemStack stack = player.inventory.getStackInSlot(i);
             if (!stack.isEmpty() && stack.hasCapability(Capabilities.auraContainer, null)) {
                 amount -= stack.getCapability(Capabilities.auraContainer, null).drainAura(amount, simulate);
-                if (amount <= 0) {
+                if (amount <= 0)
                     return true;
-                }
             }
         }
 

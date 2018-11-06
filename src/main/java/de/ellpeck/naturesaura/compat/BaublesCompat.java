@@ -37,6 +37,17 @@ public class BaublesCompat {
             return true;
         }
     };
+    private final IBauble shockwaveCreator = new IBauble() {
+        @Override
+        public BaubleType getBaubleType(ItemStack itemstack) {
+            return BaubleType.AMULET;
+        }
+
+        @Override
+        public void onWornTick(ItemStack stack, EntityLivingBase player) {
+            stack.getItem().onUpdate(stack, player.world, player, -1, false);
+        }
+    };
 
     @SubscribeEvent
     public void onCapabilitiesAttach(AttachCapabilitiesEvent<ItemStack> event) {
@@ -45,6 +56,8 @@ public class BaublesCompat {
             this.addCap(event, this.eye);
         } else if (item == ModItems.AURA_CACHE) {
             this.addCap(event, this.cache);
+        } else if (item == ModItems.SHOCKWAVE_CREATOR) {
+            this.addCap(event, this.shockwaveCreator);
         }
     }
 

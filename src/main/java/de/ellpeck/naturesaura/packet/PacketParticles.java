@@ -196,6 +196,18 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextGaussian() * 0.015F,
                                         world.rand.nextGaussian() * 0.015F,
                                         0xdde7ff, world.rand.nextFloat() + 1F, 30, -0.06F, true, true);
+                            break;
+                        case 11: // Shockwave creator particles
+                            for (int i = 0; i < 360; i += 2) {
+                                double rad = Math.toRadians(i);
+                                NaturesAura.proxy.spawnMagicParticle(world,
+                                        message.posX, message.posY + 0.01F, message.posZ,
+                                        (float) Math.sin(rad) * 0.65F,
+                                        0F,
+                                        (float) Math.cos(rad) * 0.65F,
+                                        0x911b07, 3F, 10, 0F, false, true);
+                            }
+                            break;
                     }
                 }
             });
