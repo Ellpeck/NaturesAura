@@ -118,7 +118,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
     public void render(ItemStack stack, EntityPlayer player, PlayerLayerTrinkets.RenderType type, boolean isHolding) {
         if (type == PlayerLayerTrinkets.RenderType.BODY && !isHolding) {
             boolean armor = !player.inventory.armorInventory.get(EntityEquipmentSlot.CHEST.getIndex()).isEmpty();
-            GlStateManager.translate(-0.1675F, -0.05F, armor ? -0.195F : -0.13F);
+            GlStateManager.translate(-0.1675F, -0.05F, armor ? -0.195F : -0.1475F);
             GlStateManager.scale(0.021F, 0.021F, 0.021F);
 
             GlStateManager.pushMatrix();

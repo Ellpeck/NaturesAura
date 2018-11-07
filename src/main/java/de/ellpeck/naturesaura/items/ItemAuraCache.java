@@ -101,7 +101,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
         if (type == RenderType.BODY && !isHolding) {
             boolean chest = !player.inventory.armorInventory.get(EntityEquipmentSlot.CHEST.getIndex()).isEmpty();
             boolean legs = !player.inventory.armorInventory.get(EntityEquipmentSlot.LEGS.getIndex()).isEmpty();
-            GlStateManager.translate(-0.15F, 0.65F, chest ? -0.195F : (legs ? -0.165F : -0.13F));
+            GlStateManager.translate(-0.15F, 0.65F, chest ? -0.195F : (legs ? -0.165F : -0.1475F));
             GlStateManager.scale(0.25F, 0.25F, 0.25F);
             GlStateManager.rotate(180F, 1F, 0F, 0F);
             Helper.renderItemInWorld(stack);
