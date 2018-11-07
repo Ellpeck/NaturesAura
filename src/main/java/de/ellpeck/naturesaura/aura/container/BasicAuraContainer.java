@@ -1,13 +1,16 @@
 package de.ellpeck.naturesaura.aura.container;
 
+import de.ellpeck.naturesaura.aura.AuraType;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class BasicAuraContainer implements IAuraContainer {
 
+    protected final AuraType type;
     protected final int maxAura;
     protected int aura;
 
-    public BasicAuraContainer(int maxAura) {
+    public BasicAuraContainer(AuraType type, int maxAura) {
+        this.type = type;
         this.maxAura = maxAura;
     }
 
@@ -42,6 +45,11 @@ public class BasicAuraContainer implements IAuraContainer {
     @Override
     public int getAuraColor() {
         return 0x1E891E;
+    }
+
+    @Override
+    public boolean isAcceptableType(AuraType type) {
+        return this.type == null || this.type == type;
     }
 
     public void writeNBT(NBTTagCompound compound) {

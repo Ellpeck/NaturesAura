@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.aura.chunk;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.aura.AuraType;
 import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.chunk.effect.GrassDieEffect;
 import de.ellpeck.naturesaura.aura.chunk.effect.IDrainSpotEffect;
@@ -36,15 +37,23 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
     public static final int DEFAULT_AURA = 10000;
 
     private final Chunk chunk;
+    private final AuraType type;
     private final Map<BlockPos, MutableInt> drainSpots = new HashMap<>();
     private final List<IDrainSpotEffect> effects = new ArrayList<>();
     private boolean needsSync;
 
-    public AuraChunk(Chunk chunk) {
+    public AuraChunk(Chunk chunk, AuraType type) {
         this.chunk = chunk;
-        this.effects.add(new ReplenishingEffect());
-        this.effects.add(new GrassDieEffect());
-        this.effects.add(new PlantBoostEffect());
+        this.type = type;
+
+        this.addEffect(new ReplenishingEffect());
+        this.addEffect(new GrassDieEffect());
+        this.addEffect(new PlantBoostEffect());
+    }
+
+    public void addEffect(IDrainSpotEffect effect) {
+        if (effect.appliesToType(this.type))
+            this.effects.add(effect);
     }
 
     public static void getSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer) {
@@ -147,6 +156,10 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
     public void setSpots(Map<BlockPos, MutableInt> spots) {
         this.drainSpots.clear();
         this.drainSpots.putAll(spots);
+    }
+
+    public AuraType getType() {
+        return this.type;
     }
 
     public void markDirty() {

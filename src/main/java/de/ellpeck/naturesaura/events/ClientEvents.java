@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.events;
 
 import baubles.api.BaublesApi;
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.aura.AuraType;
 import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.aura.container.IAuraContainer;
@@ -60,6 +61,7 @@ public class ClientEvents {
                     left.add(prefix + drainSpot.intValue() + " @ " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
                 }));
                 left.add(prefix + "Total: " + amount.intValue() + " in " + spots.intValue() + " spots");
+                left.add(prefix + "Type: " + AuraType.forWorld(mc.world));
             }
         }
     }

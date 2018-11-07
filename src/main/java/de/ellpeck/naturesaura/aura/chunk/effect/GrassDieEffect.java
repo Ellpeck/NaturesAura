@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.aura.chunk.effect;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.aura.AuraType;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.block.*;
@@ -48,5 +49,10 @@ public class GrassDieEffect implements IDrainSpotEffect {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean appliesToType(AuraType type) {
+        return type == AuraType.OVERWORLD;
     }
 }

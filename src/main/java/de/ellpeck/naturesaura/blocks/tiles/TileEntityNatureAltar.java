@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.aura.AuraType;
 import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.aura.container.BasicAuraContainer;
@@ -47,7 +48,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
         }
     };
 
-    private final BasicAuraContainer container = new BasicAuraContainer(5000);
+    private final BasicAuraContainer container = new BasicAuraContainer(AuraType.OVERWORLD, 5000);
     public boolean structureFine;
 
     private AltarRecipe currentRecipe;
@@ -70,7 +71,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
             if (this.structureFine) {
                 int space = this.container.storeAura(3, true);
-                if (space > 0) {
+                if (space > 0 && this.container.isAcceptableType(AuraType.forWorld(this.world))) {
                     int toStore = Math.min(AuraChunk.getAuraInArea(this.world, this.pos, 20), space);
                     if (toStore > 0) {
                         BlockPos spot = AuraChunk.getHighestSpot(this.world, this.pos, 20, this.pos);

@@ -1,5 +1,7 @@
 package de.ellpeck.naturesaura.aura.container;
 
+import de.ellpeck.naturesaura.aura.AuraType;
+
 public interface IAuraContainer {
     int storeAura(int amountToStore, boolean simulate);
 
@@ -10,4 +12,6 @@ public interface IAuraContainer {
     int getMaxAura();
 
     int getAuraColor();
+
+    boolean isAcceptableType(AuraType type);
 }

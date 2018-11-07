@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.events;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.aura.AuraType;
 import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -21,7 +22,9 @@ public class CommonEvents {
 
     @SubscribeEvent
     public void onChunkCapsAttach(AttachCapabilitiesEvent<Chunk> event) {
-        event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "aura"), new AuraChunk(event.getObject()));
+        Chunk chunk = event.getObject();
+        AuraType type = AuraType.forWorld(chunk.getWorld());
+        event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "aura"), new AuraChunk(chunk, type));
     }
 
     @SubscribeEvent

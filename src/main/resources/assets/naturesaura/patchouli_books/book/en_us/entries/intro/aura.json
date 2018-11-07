@@ -6,11 +6,11 @@
     "pages": [
         {
             "type": "text",
-            "text": "Contrary to popular belief, $(aura) isn't stored in single, floating $(italic)nodes$(), but rather, it is present everywhere in the world.$(br)While touching it is impossible, making use of its powers certainly is not. When $(aura) is used right, it can assist in the production of materials, the creation of new ideas and the harnessing of the world and its components."
+            "text": "Contrary to popular belief, $(aura) isn't stored in single, floating $(italic)nodes$(), but rather, it is present everywhere in the world.$(br)While touching it is impossible, making use of its powers certainly is not. When $(aura) is used right, it can assist in the $(thing)production$() of materials, the $(thing)creation$() of new ideas and the $(thing)harnessing$() of the world and its components."
         },
         {
             "type": "text",
-            "text": "However, it isn't always as easy as that. Making use of it wrongly, specifically draining it completely from an area, will face the culprit with diminishing returns.$(br)So while $(aura) is plentiful and useful, abusing it would certainly be ill-advised."
+            "text": "However, it isn't always as easy as that. Making use of it wrongly, specifically $(thing)draining$() it completely from an area, will face the culprit with diminishing returns.$(br)So while $(aura) is plentiful and useful, abusing it would certainly be ill-advised.$(p)An additional thing to note is that, based on the world you are in - specifically, the $(item)dimension$(), different types of $(aura) will be present, making some mechanics work unlike expected."
         }
     ]
 }

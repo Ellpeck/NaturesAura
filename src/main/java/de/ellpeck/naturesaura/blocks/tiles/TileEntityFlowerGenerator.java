@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
+import de.ellpeck.naturesaura.aura.AuraType;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
@@ -62,7 +63,7 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
             int toAdd = Math.max(0, addAmount - curr.getValue());
             if (toAdd > 0) {
                 BlockPos auraPos = AuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);
-                if (AuraChunk.getAuraInArea(this.world, auraPos, 30) < 20000)
+                if (AuraType.OVERWORLD.isPresent(this.world) && AuraChunk.getAuraInArea(this.world, auraPos, 30) < 20000)
                     AuraChunk.getAuraChunk(this.world, auraPos).storeAura(auraPos, toAdd);
                 else
                     toAdd = 0;

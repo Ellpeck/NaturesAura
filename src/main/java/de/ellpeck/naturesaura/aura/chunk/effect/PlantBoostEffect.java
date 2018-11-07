@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.aura.chunk.effect;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.aura.AuraType;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
@@ -50,5 +51,10 @@ public class PlantBoostEffect implements IDrainSpotEffect {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean appliesToType(AuraType type) {
+        return type == AuraType.OVERWORLD;
     }
 }

@@ -1,13 +1,14 @@
 package de.ellpeck.naturesaura.aura.container;
 
+import de.ellpeck.naturesaura.aura.AuraType;
 import de.ellpeck.naturesaura.aura.chunk.ISpotDrainable;
 
 public class NaturalAuraContainer extends BasicAuraContainer implements ISpotDrainable {
 
     private final int drainAmount;
 
-    public NaturalAuraContainer(int aura, int drainAmount) {
-        super(aura);
+    public NaturalAuraContainer(AuraType type, int aura, int drainAmount) {
+        super(type, aura);
         this.aura = aura;
         this.drainAmount = drainAmount;
     }
