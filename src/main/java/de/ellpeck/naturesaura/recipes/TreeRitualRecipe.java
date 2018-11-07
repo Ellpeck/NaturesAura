@@ -22,10 +22,7 @@ public class TreeRitualRecipe {
         this.items = items;
         this.result = result;
         this.time = time;
-    }
 
-    public TreeRitualRecipe add() {
         RECIPES.put(this.name, this);
-        return this;
     }
 }

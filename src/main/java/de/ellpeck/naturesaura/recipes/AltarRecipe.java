@@ -25,6 +25,8 @@ public class AltarRecipe {
         this.catalyst = catalyst;
         this.aura = aura;
         this.time = time;
+
+        RECIPES.put(this.name, this);
     }
 
     public static AltarRecipe forInput(ItemStack input) {
@@ -34,10 +36,5 @@ public class AltarRecipe {
             }
         }
         return null;
-    }
-
-    public AltarRecipe add() {
-        RECIPES.put(this.name, this);
-        return this;
     }
 }

@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.blocks.Multiblocks;
+import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
@@ -14,11 +14,13 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
-import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +55,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                         boolean isOverHalf = this.timer >= this.recipe.time / 2;
 
                         if (!isOverHalf)
-                            Multiblocks.TREE_RITUAL.forEach(this.world, this.ritualPos, Rotation.NONE, 'W', pos -> {
+                            Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'W', (pos, matcher) -> {
                                 TileEntity tile = this.world.getTileEntity(pos);
                                 if (tile instanceof TileEntityWoodStand && !((TileEntityWoodStand) tile).items.getStackInSlot(0).isEmpty()) {
                                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
@@ -64,6 +66,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                                             this.world.rand.nextFloat() * 0.04F + 0.04F, 0x89cc37, this.world.rand.nextFloat() * 1F + 1F
                                     ));
                                 }
+                                return true;
                             });
 
                         PacketHandler.sendToAllAround(this.world, this.ritualPos, 32,
@@ -71,8 +74,10 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
 
                         if (this.timer >= this.recipe.time) {
                             this.recurseTreeDestruction(this.ritualPos, this.ritualPos);
-                            Multiblocks.TREE_RITUAL.forEach(this.world, this.ritualPos, Rotation.NONE, 'G',
-                                    pos -> this.world.setBlockToAir(pos));
+                            Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'G', (pos, matcher) -> {
+                                this.world.setBlockToAir(pos);
+                                return true;
+                            });
 
                             EntityItem item = new EntityItem(this.world,
                                     this.ritualPos.getX() + 0.5, this.ritualPos.getY() + 4.5, this.ritualPos.getZ() + 0.5,
@@ -88,7 +93,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                             this.recipe = null;
                             this.timer = 0;
                         } else if (isOverHalf && !wasOverHalf) {
-                            Multiblocks.TREE_RITUAL.forEach(this.world, this.ritualPos, Rotation.NONE, 'W', pos -> {
+                            Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'W', (pos, matcher) -> {
                                 TileEntity tile = this.world.getTileEntity(pos);
                                 if (tile instanceof TileEntityWoodStand) {
                                     TileEntityWoodStand stand = (TileEntityWoodStand) tile;
@@ -102,6 +107,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                                         stand.sendToClients();
                                     }
                                 }
+                                return true;
                             });
                         }
                     } else {
@@ -135,14 +141,12 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
     }
 
     private boolean isRitualOkay() {
-        if (!Multiblocks.TREE_RITUAL.forEachMatcher(this.world, this.ritualPos, Rotation.NONE, (char) 0, (start, actionPos, x, y, z, ch, matcher) ->
-                ch == 'W' || Multiblocks.TREE_RITUAL.test(this.world, start, x, y, z, Rotation.NONE))) {
+        if (!Multiblocks.TREE_RITUAL.isComplete(this.world, this.ritualPos)) {
             return false;
         }
         if (this.timer < this.recipe.time / 2) {
             List<ItemStack> required = new ArrayList<>(Arrays.asList(this.recipe.items));
-            MutableBoolean tooMuch = new MutableBoolean();
-            Multiblocks.TREE_RITUAL.forEach(this.world, this.ritualPos, Rotation.NONE, 'W', pos -> {
+            boolean fine = Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'W', (pos, matcher) -> {
                 TileEntity tile = this.world.getTileEntity(pos);
                 if (tile instanceof TileEntityWoodStand) {
                     ItemStack stack = ((TileEntityWoodStand) tile).items.getStackInSlot(0);
@@ -151,12 +155,13 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                         if (index >= 0) {
                             required.remove(index);
                         } else {
-                            tooMuch.setTrue();
+                            return false;
                         }
                     }
                 }
+                return true;
             });
-            return tooMuch.isFalse() && required.isEmpty();
+            return fine && required.isEmpty();
         } else
             return true;
     }

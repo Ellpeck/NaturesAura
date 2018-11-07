@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
-import de.ellpeck.naturesaura.blocks.Multiblocks;
+import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.EntityAreaEffectCloud;
@@ -22,7 +22,7 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
     @Override
     public void update() {
         if (!this.world.isRemote && this.world.getTotalWorldTime() % 10 == 0) {
-            if (Multiblocks.POTION_GENERATOR.validate(this.world, this.pos)) {
+            if (Multiblocks.POTION_GENERATOR.isComplete(this.world, this.pos)) {
                 boolean addedOne = false;
 
                 List<EntityAreaEffectCloud> clouds = this.world.getEntitiesWithinAABB(EntityAreaEffectCloud.class, new AxisAlignedBB(this.pos).grow(2));

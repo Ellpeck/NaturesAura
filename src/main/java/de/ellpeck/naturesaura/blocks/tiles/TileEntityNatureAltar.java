@@ -5,7 +5,7 @@ import de.ellpeck.naturesaura.aura.Capabilities;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.aura.container.BasicAuraContainer;
 import de.ellpeck.naturesaura.aura.container.IAuraContainer;
-import de.ellpeck.naturesaura.blocks.Multiblocks;
+import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
@@ -61,7 +61,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
         if (!this.world.isRemote) {
             if (this.world.getTotalWorldTime() % 40 == 0) {
-                boolean fine = Multiblocks.ALTAR.validate(this.world, this.pos);
+                boolean fine = Multiblocks.ALTAR.isComplete(this.world, this.pos);
                 if (fine != this.structureFine) {
                     this.structureFine = fine;
                     this.sendToClients();

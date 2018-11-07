@@ -43,6 +43,7 @@ item.naturesaura.aura_cache.name=Aura Cache
 item.naturesaura.color_changer.name=Bucket of Infinite Color
 item.naturesaura.book.name=Book of Natural Aura
 item.naturesaura.shockwave_creator.name=Amulet of Wrath
+item.naturesaura.multiblock_maker.name=Multiblock Maker
 
 container.naturesaura.tree_ritual.name=Ritual of the Forest
 container.naturesaura.altar.name=Natural Altar Infusion
