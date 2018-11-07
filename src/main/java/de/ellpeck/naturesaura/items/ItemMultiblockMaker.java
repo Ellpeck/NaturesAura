@@ -44,7 +44,10 @@ public class ItemMultiblockMaker extends ItemImpl {
                 return EnumActionResult.PASS;
 
             if (!worldIn.isRemote)
-                multi.forEach(pos.up(), (char) 0, (blockPos, matcher) -> worldIn.setBlockState(blockPos, matcher.defaultState));
+                multi.forEach(pos.up(), (char) 0, (blockPos, matcher) -> {
+                    worldIn.setBlockState(blockPos, matcher.defaultState);
+                    return true;
+                });
 
             return EnumActionResult.SUCCESS;
         }
