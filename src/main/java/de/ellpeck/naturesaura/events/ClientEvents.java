@@ -151,7 +151,7 @@ public class ClientEvents {
                     mc.getTextureManager().bindTexture(OVERLAYS);
 
                     if (!mc.gameSettings.showDebugInfo) {
-                        GlStateManager.color(0.8F, 0.25F, 0.25F);
+                        GlStateManager.color(83 / 255F, 160 / 255F, 8 / 255F);
                         float totalPercentage = AuraChunk.getAuraInArea(mc.world, mc.player.getPosition(), 15) / (AuraChunk.DEFAULT_AURA * 2F);
                         int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
                         if (tHeight < 50)
@@ -160,14 +160,14 @@ public class ClientEvents {
                             Gui.drawModalRectWithCustomSizedTexture(3, 10 + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
 
                         if (totalPercentage > 1F)
-                            mc.fontRenderer.drawString("+", 10F, 9.5F, 0xBB3333, true);
+                            mc.fontRenderer.drawString("+", 10F, 9.5F, 0x53a008, true);
                         if (totalPercentage < 0F)
-                            mc.fontRenderer.drawString("-", 10F, 53.5F, 0xBB3333, true);
+                            mc.fontRenderer.drawString("-", 10F, 53.5F, 0x53a008, true);
 
                         GlStateManager.pushMatrix();
                         float scale = 0.75F;
                         GlStateManager.scale(scale, scale, scale);
-                        mc.fontRenderer.drawString(I18n.format("info." + NaturesAura.MOD_ID + ".aura_in_area"), 3 / scale, 3 / scale, 0xBB3333, true);
+                        mc.fontRenderer.drawString(I18n.format("info." + NaturesAura.MOD_ID + ".aura_in_area"), 3 / scale, 3 / scale, 0x53a008, true);
                         GlStateManager.popMatrix();
                     }
 
