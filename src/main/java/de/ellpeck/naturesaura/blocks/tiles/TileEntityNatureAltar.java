@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.aura.AuraType;
 import de.ellpeck.naturesaura.aura.Capabilities;
@@ -111,7 +112,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                             this.currentRecipe = AltarRecipe.forInput(stack);
                         }
                     } else {
-                        if (stack.isEmpty() || !stack.isItemEqual(this.currentRecipe.input)) {
+                        if (stack.isEmpty() || !Helper.areItemsEqual(stack, this.currentRecipe.input, true)) {
                             this.currentRecipe = null;
                             this.timer = 0;
                         } else if (this.hasCatalyst(this.currentRecipe.catalyst)) {

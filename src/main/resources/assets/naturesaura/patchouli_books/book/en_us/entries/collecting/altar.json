@@ -2,7 +2,7 @@
     "name": "The Natural Altar",
     "icon": "naturesaura:nature_altar",
     "category": "collecting",
-    "advancement": "naturesaura:wood_stand",
+    "advancement": "naturesaura:aura_bottle_overworld",
     "priority": true,
     "pages": [
         {

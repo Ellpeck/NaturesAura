@@ -19,7 +19,8 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "patchouli:guide_book"
+                        "item": "patchouli:guide_book",
+                        "nbt": "{\"patchouli:book\":\"naturesaura:book\"}"
                     }
                 ]
             }

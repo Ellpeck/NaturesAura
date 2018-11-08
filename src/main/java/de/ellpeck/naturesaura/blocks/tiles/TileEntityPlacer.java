@@ -90,7 +90,7 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickable {
 
         for (EntityItemFrame frame : frames) {
             ItemStack frameStack = frame.getDisplayedItem();
-            if (!frameStack.isEmpty() && stack.isItemEqual(frameStack))
+            if (!frameStack.isEmpty() && Helper.areItemsEqual(stack, frameStack, false))
                 return true;
         }
         return false;

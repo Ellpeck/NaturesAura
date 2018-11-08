@@ -1,7 +1,7 @@
 {
     "type": "forge:ore_shaped",
     "pattern": [
-        "PIP",
+        "PBP",
         "IFI",
         "PIP"
     ],
@@ -16,6 +16,13 @@
         "F": {
             "item": "minecraft:double_plant",
             "data": 5
+        },
+        "B": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "type": "OVERWORLD"
+            }
         }
     },
     "result": {

@@ -1,0 +1,28 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:aura_bottle",
+            "nbt": "{\"type\":\"END\"}"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.aura_bottle_end"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.aura_bottle_end.desc"
+        }
+    },
+    "parent": "naturesaura:wood_stand",
+    "criteria": {
+        "bottle": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "naturesaura:aura_bottle",
+                        "nbt": "{\"type\":\"END\"}"
+                    }
+                ]
+            }
+        }
+    }
+}

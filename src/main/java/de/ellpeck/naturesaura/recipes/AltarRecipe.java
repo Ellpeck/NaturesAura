@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.recipes;
 
+import de.ellpeck.naturesaura.Helper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -31,7 +32,7 @@ public class AltarRecipe {
 
     public static AltarRecipe forInput(ItemStack input) {
         for (AltarRecipe recipe : RECIPES.values()) {
-            if (recipe.input.isItemEqual(input)) {
+            if (Helper.areItemsEqual(recipe.input, input, true)) {
                 return recipe;
             }
         }

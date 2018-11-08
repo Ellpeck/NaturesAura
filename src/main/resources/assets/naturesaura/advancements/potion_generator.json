@@ -10,7 +10,7 @@
             "translate": "advancement.naturesaura.potion_generator.desc"
         }
     },
-    "parent": "naturesaura:flower_generator",
+    "parent": "naturesaura:aura_bottle_nether",
     "criteria": {
         "generator": {
             "trigger": "minecraft:inventory_changed",

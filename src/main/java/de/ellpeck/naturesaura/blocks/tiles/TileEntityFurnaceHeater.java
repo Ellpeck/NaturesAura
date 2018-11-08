@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
@@ -69,7 +70,8 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
                 return false;
 
             ItemStack currOutput = furnace.getStackInSlot(2);
-            return currOutput.isEmpty() || output.isItemEqual(currOutput) && currOutput.getCount() + output.getCount() <= output.getMaxStackSize();
+            return currOutput.isEmpty() ||
+                    Helper.areItemsEqual(currOutput, output, true) && currOutput.getCount() + output.getCount() <= output.getMaxStackSize();
         } else
             return false;
     }

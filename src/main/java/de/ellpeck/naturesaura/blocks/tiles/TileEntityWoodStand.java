@@ -151,7 +151,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                 if (tile instanceof TileEntityWoodStand) {
                     ItemStack stack = ((TileEntityWoodStand) tile).items.getStackInSlot(0);
                     if (!stack.isEmpty()) {
-                        int index = Helper.getItemIndex(required, stack);
+                        int index = Helper.getItemIndex(required, stack, true);
                         if (index >= 0) {
                             required.remove(index);
                         } else {

@@ -10,7 +10,7 @@
             "translate": "advancement.naturesaura.altar.desc"
         }
     },
-    "parent": "naturesaura:wood_stand",
+    "parent": "naturesaura:aura_bottle_overworld",
     "criteria": {
         "book": {
             "trigger": "minecraft:inventory_changed",

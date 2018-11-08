@@ -1,7 +1,9 @@
 package de.ellpeck.naturesaura.recipes;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.aura.AuraType;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -23,7 +25,8 @@ public final class ModRecipes {
                 new ItemStack(Blocks.STONE),
                 new ItemStack(Blocks.STONE),
                 new ItemStack(ModItems.GOLD_LEAF),
-                new ItemStack(Items.GOLD_INGOT));
+                new ItemStack(Items.GOLD_INGOT),
+                ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), AuraType.OVERWORLD));
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "ancient_sapling"),
                 new ItemStack(Blocks.SAPLING), new ItemStack(ModBlocks.ANCIENT_SAPLING), 200,
                 new ItemStack(Blocks.SAPLING),
@@ -40,7 +43,8 @@ public final class ModRecipes {
                 new ItemStack(ModItems.INFUSED_IRON),
                 new ItemStack(Items.FIRE_CHARGE),
                 new ItemStack(Items.FLINT),
-                new ItemStack(Blocks.MAGMA));
+                new ItemStack(Blocks.MAGMA),
+                ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), AuraType.NETHER));
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "conversion_catalyst"),
                 new ItemStack(Blocks.SAPLING, 1, 3), new ItemStack(ModBlocks.CONVERSION_CATALYST), 600,
                 new ItemStack(Blocks.STONEBRICK, 1, 1),
@@ -58,8 +62,8 @@ public final class ModRecipes {
                 null, 150, 40);
 
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "chorus"),
-                new ItemStack(Blocks.CHORUS_FLOWER), new ItemStack(Items.DRAGON_BREATH),
-                ModBlocks.CONVERSION_CATALYST, 1000, 120);
+                ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), AuraType.END), new ItemStack(Items.DRAGON_BREATH),
+                ModBlocks.CONVERSION_CATALYST, 350, 80);
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "leather"),
                 new ItemStack(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER),
                 ModBlocks.CONVERSION_CATALYST, 400, 50);

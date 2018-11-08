@@ -16,7 +16,11 @@
             "item": "naturesaura:infused_iron"
         },
         "W": {
-            "item": "minecraft:nether_wart"
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "type": "NETHER"
+            }
         }
     },
     "result": {

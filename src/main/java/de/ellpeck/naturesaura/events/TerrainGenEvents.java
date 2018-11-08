@@ -29,7 +29,7 @@ public class TerrainGenEvents {
                 ItemStack saplingStack = sapling.getBlock().getItem(world, pos, sapling);
                 if (!saplingStack.isEmpty()) {
                     for (TreeRitualRecipe recipe : TreeRitualRecipe.RECIPES.values()) {
-                        if (recipe.saplingType.isItemEqual(saplingStack)) {
+                        if (Helper.areItemsEqual(saplingStack, recipe.saplingType, true)) {
                             List<ItemStack> required = new ArrayList<>(Arrays.asList(recipe.items));
                             MutableObject<TileEntityWoodStand> toPick = new MutableObject<>();
 
@@ -39,7 +39,7 @@ public class TerrainGenEvents {
                                     TileEntityWoodStand stand = (TileEntityWoodStand) tile;
                                     ItemStack stack = stand.items.getStackInSlot(0);
                                     if (!stack.isEmpty()) {
-                                        int index = Helper.getItemIndex(required, stack);
+                                        int index = Helper.getItemIndex(required, stack, true);
                                         if (index >= 0) {
                                             required.remove(index);
 

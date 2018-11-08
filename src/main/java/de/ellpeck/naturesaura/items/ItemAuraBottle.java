@@ -48,7 +48,7 @@ public class ItemAuraBottle extends ItemImpl {
                     setType(new ItemStack(this), AuraType.forWorld(player.world)));
 
             BlockPos spot = AuraChunk.getHighestSpot(player.world, pos, 30, pos);
-            AuraChunk.getAuraChunk(player.world, spot).drainAura(spot, 500);
+            AuraChunk.getAuraChunk(player.world, spot).drainAura(spot, 200);
 
             player.world.playSound(null, player.posX, player.posY, player.posZ,
                     SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.PLAYERS, 1F, 1F);
@@ -76,6 +76,8 @@ public class ItemAuraBottle extends ItemImpl {
         if (!stack.hasTagCompound())
             return AuraType.OTHER;
         String type = stack.getTagCompound().getString("type");
+        if (type.isEmpty())
+            return AuraType.OTHER;
         return AuraType.valueOf(type);
     }
 
