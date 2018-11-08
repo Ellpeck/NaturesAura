@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.BlockLeaves;
@@ -11,11 +10,9 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -26,9 +23,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class BlockGoldenLeaves extends BlockLeaves implements
@@ -158,11 +153,12 @@ public class BlockGoldenLeaves extends BlockLeaves implements
 
     public static boolean convert(World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
-        if (state.getBlock() == Blocks.LEAVES || state.getBlock() == Blocks.LEAVES2) {
+        if (state.getBlock().isLeaves(state, world, pos) &&
+                !(state.getBlock() instanceof BlockAncientLeaves || state.getBlock() instanceof BlockGoldenLeaves)) {
             if (!world.isRemote) {
                 world.setBlockState(pos, ModBlocks.GOLDEN_LEAVES.getDefaultState()
-                        .withProperty(CHECK_DECAY, state.getValue(CHECK_DECAY))
-                        .withProperty(DECAYABLE, state.getValue(DECAYABLE)));
+                        .withProperty(CHECK_DECAY, state.getPropertyKeys().contains(CHECK_DECAY) ? state.getValue(CHECK_DECAY) : false)
+                        .withProperty(DECAYABLE, state.getPropertyKeys().contains(DECAYABLE) ? state.getValue(DECAYABLE) : false));
             }
             return true;
         }
