@@ -71,7 +71,6 @@ public final class Helper {
             return !provider.provideChunk(x, z).isEmpty();
     }
 
-    @SideOnly(Side.CLIENT)
     public static int blendColors(int c1, int c2, float ratio) {
         int a = (int) ((c1 >> 24 & 0xFF) * ratio + (c2 >> 24 & 0xFF) * (1 - ratio));
         int r = (int) ((c1 >> 16 & 0xFF) * ratio + (c2 >> 16 & 0xFF) * (1 - ratio));
