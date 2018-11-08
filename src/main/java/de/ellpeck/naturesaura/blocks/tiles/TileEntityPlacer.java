@@ -112,9 +112,15 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickable {
 
     private boolean handleSpecialCases(ItemStack stack, BlockPos pos) {
         if (stack.getItem() == Items.REDSTONE)
-            this.world.setBlockState(pos, Blocks.REDSTONE_WIRE.getDefaultState());
+            if (Blocks.REDSTONE_WIRE.canPlaceBlockAt(this.world, pos))
+                this.world.setBlockState(pos, Blocks.REDSTONE_WIRE.getDefaultState());
+            else
+                return false;
         else if (stack.getItem() == Item.getItemFromBlock(ModBlocks.GOLD_POWDER))
-            this.world.setBlockState(pos, ModBlocks.GOLD_POWDER.getDefaultState());
+            if (ModBlocks.GOLD_POWDER.canPlaceBlockAt(this.world, pos))
+                this.world.setBlockState(pos, ModBlocks.GOLD_POWDER.getDefaultState());
+            else
+                return false;
         else if (stack.getItem() instanceof IPlantable) {
             IPlantable plantable = (IPlantable) stack.getItem();
             IBlockState plant = plantable.getPlant(this.world, pos);
