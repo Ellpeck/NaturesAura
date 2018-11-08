@@ -13,7 +13,7 @@ public class RenderNatureAltar extends TileEntitySpecialRenderer<TileEntityNatur
         ItemStack stack = tile.items.getStackInSlot(0);
         if (!stack.isEmpty()) {
             GlStateManager.pushMatrix();
-            float time = tile.getWorld().getTotalWorldTime() + partialTicks;
+            float time = tile.bobTimer + partialTicks;
             float bob = (float) Math.sin(time / 10F) * 0.1F;
             GlStateManager.translate(x + 0.5F, y + 1.2F + bob, z + 0.5F);
             GlStateManager.rotate((time * 3) % 360, 0F, 1F, 0F);

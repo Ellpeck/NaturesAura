@@ -22,6 +22,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -48,6 +50,9 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                 return AltarRecipe.forInput(stack) == null;
         }
     };
+
+    @SideOnly(Side.CLIENT)
+    public int bobTimer;
 
     private final BasicAuraContainer container = new BasicAuraContainer(AuraType.OVERWORLD, 5000);
     public boolean structureFine;
@@ -170,6 +175,8 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
                 }
             }
+
+            this.bobTimer++;
         }
     }
 
