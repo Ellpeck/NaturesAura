@@ -1,0 +1,26 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "naturesaura:items/aura_bottle_overworld"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "naturesaura:type": 1
+            },
+            "model": "naturesaura:item/aura_bottle_nether"
+        },
+        {
+            "predicate": {
+                "naturesaura:type": 2
+            },
+            "model": "naturesaura:item/aura_bottle_end"
+        },
+        {
+            "predicate": {
+                "naturesaura:type": 3
+            },
+            "model": "naturesaura:item/aura_bottle_other"
+        }
+    ]
+}

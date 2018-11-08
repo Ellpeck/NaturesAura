@@ -1,0 +1,17 @@
+{
+    "name": "Aura Bottling",
+    "icon": "naturesaura:aura_bottle{type:'OVERWORLD'}",
+    "category": "collecting",
+    "advancement": "naturesaura:gold_leaf",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(aura) and its presence in the world has been a conundrum to researchers for decades. As such, they needed a way to better be able to analyze it, which is why $(item)Bottles$() were invented.$(br)While this might not be the full story of their conception, they can still be used to collect $(aura) in its purest form by simply interacting with the air directly while holding one in your hand."
+        },
+        {
+            "type": "spotlight",
+            "item": "naturesaura:aura_bottle{type:'OVERWORLD'}",
+            "text": "Of course, based on the world that you are currently in, the type of $(aura) collected will slightly vary. For instance, in the normal world, $(aura) can be gathered in the form of sunlight, while in the Nether realm, $(aura) can be gathered in the form of ghosts."
+        }
+    ]
+}
