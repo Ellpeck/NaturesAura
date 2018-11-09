@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -14,7 +13,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -23,7 +21,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
 
@@ -54,6 +51,11 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
         super("gold_powder", Material.CIRCUITS);
         this.setSoundType(SoundType.STONE);
         this.setHardness(0F);
+        this.setDefaultState(this.getDefaultState()
+                .withProperty(NORTH, AttachPos.NONE)
+                .withProperty(EAST, AttachPos.NONE)
+                .withProperty(SOUTH, AttachPos.NONE)
+                .withProperty(WEST, AttachPos.NONE));
     }
 
     @Override
