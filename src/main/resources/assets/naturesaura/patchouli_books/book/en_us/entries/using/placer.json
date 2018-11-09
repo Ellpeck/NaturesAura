@@ -16,6 +16,11 @@
             "type": "crafting",
             "text": "Creating the $(item)Imperceptible Builder$()",
             "recipe": "naturesaura:placer"
+        },
+        {
+            "type": "crafting",
+            "text": "The $(item)Farming Stencil$() can be used with the builder to allow it to place things on $(item)Farmland$(). Just place it in one of the item frames like you would with a normal block.",
+            "recipe": "naturesaura:farming_stencil"
         }
     ]
 }

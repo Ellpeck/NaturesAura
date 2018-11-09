@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.state.IBlockState;
@@ -90,7 +91,12 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickable {
 
         for (EntityItemFrame frame : frames) {
             ItemStack frameStack = frame.getDisplayedItem();
-            if (!frameStack.isEmpty() && Helper.areItemsEqual(stack, frameStack, false))
+            if (frameStack.isEmpty())
+                continue;
+            if(Helper.areItemsEqual(stack, frameStack, false))
+                return true;
+
+            if(state.getBlock() == Blocks.FARMLAND && frameStack.getItem() == ModItems.FARMING_STENCIL)
                 return true;
         }
         return false;

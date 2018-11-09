@@ -27,4 +27,5 @@ public final class ModItems {
     public static final Item SHOCKWAVE_CREATOR = new ItemShockwaveCreator();
     public static final Item MULTIBLOCK_MAKER = new ItemMultiblockMaker();
     public static final Item AURA_BOTTLE = new ItemAuraBottle();
+    public static final Item FARMING_STENCIL = new ItemImpl("farming_stencil");
 }

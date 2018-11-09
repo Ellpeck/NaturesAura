@@ -48,6 +48,7 @@ item.naturesaura.aura_bottle.overworld.name=Bottled Sunlight
 item.naturesaura.aura_bottle.nether.name=Bottled Ghosts
 item.naturesaura.aura_bottle.end.name=Bottled Darkness
 item.naturesaura.aura_bottle.other.name=Bottled Substance
+item.naturesaura.farming_stencil.name=Farming Stencil
 
 container.naturesaura.tree_ritual.name=Ritual of the Forest
 container.naturesaura.altar.name=Natural Altar Infusion

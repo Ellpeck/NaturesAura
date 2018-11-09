@@ -1,0 +1,24 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "WHW",
+        "WDW",
+        "WWW"
+    ],
+    "key": {
+        "W": {
+            "type": "forge:ore_dict",
+            "ore": "plankWood"
+        },
+        "D": {
+            "item": "minecraft:dirt",
+            "data": 0
+        },
+        "H": {
+            "item": "naturesaura:infused_iron_hoe"
+        }
+    },
+    "result": {
+        "item": "naturesaura:farming_stencil"
+    }
+}
