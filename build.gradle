@@ -22,18 +22,20 @@ compileJava {
 
 repositories {
     maven {
-        url "http://dvs1.progwml6.com/files/maven"
+        url = "http://dvs1.progwml6.com/files/maven"
     }
     maven {
         url = "http://maven.thiakil.com"
+    }
+    maven {
+        url = "https://maven.blamejared.com"
     }
 }
 
 dependencies {
     deobfCompile "mezz.jei:jei_1.12.2:4.13.1.220"
     deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
-
-    compile files("/lib/Patchouli.jar")
+    compile "vazkii.patchouli:Patchouli:1.0-6.8"
 }
 
 

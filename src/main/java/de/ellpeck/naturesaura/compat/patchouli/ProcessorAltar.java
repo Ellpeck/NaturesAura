@@ -12,7 +12,7 @@ public class ProcessorAltar implements IComponentProcessor {
     private AltarRecipe recipe;
 
     @Override
-    public void setup(IVariableProvider provider) {
+    public void setup(IVariableProvider<String> provider) {
         ResourceLocation res = new ResourceLocation(provider.get("recipe"));
         this.recipe = AltarRecipe.RECIPES.get(res);
     }

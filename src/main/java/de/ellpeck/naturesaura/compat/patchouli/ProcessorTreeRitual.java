@@ -11,7 +11,7 @@ public class ProcessorTreeRitual implements IComponentProcessor {
     private TreeRitualRecipe recipe;
 
     @Override
-    public void setup(IVariableProvider provider) {
+    public void setup(IVariableProvider<String> provider) {
         ResourceLocation res = new ResourceLocation(provider.get("recipe"));
         this.recipe = TreeRitualRecipe.RECIPES.get(res);
     }
