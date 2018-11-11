@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura;
 
 import baubles.api.BaublesApi;
-import de.ellpeck.naturesaura.aura.Capabilities;
-import de.ellpeck.naturesaura.aura.item.IAuraRecharge;
+import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import de.ellpeck.naturesaura.compat.Compat;
 import net.minecraft.client.Minecraft;
@@ -170,13 +170,13 @@ public final class Helper {
 
             @Override
             public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-                return capability == Capabilities.auraRecharge;
+                return capability == NACapabilities.auraRecharge;
             }
 
             @Nullable
             @Override
             public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-                return capability == Capabilities.auraRecharge ? (T) this.recharge : null;
+                return capability == NACapabilities.auraRecharge ? (T) this.recharge : null;
             }
         };
     }
@@ -189,8 +189,8 @@ public final class Helper {
             IItemHandler baubles = BaublesApi.getBaublesHandler(player);
             for (int i = 0; i < baubles.getSlots(); i++) {
                 ItemStack stack = baubles.getStackInSlot(i);
-                if (!stack.isEmpty() && stack.hasCapability(Capabilities.auraContainer, null)) {
-                    amount -= stack.getCapability(Capabilities.auraContainer, null).drainAura(amount, simulate);
+                if (!stack.isEmpty() && stack.hasCapability(NACapabilities.auraContainer, null)) {
+                    amount -= stack.getCapability(NACapabilities.auraContainer, null).drainAura(amount, simulate);
                     if (amount <= 0)
                         return true;
                 }
@@ -199,8 +199,8 @@ public final class Helper {
 
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
             ItemStack stack = player.inventory.getStackInSlot(i);
-            if (!stack.isEmpty() && stack.hasCapability(Capabilities.auraContainer, null)) {
-                amount -= stack.getCapability(Capabilities.auraContainer, null).drainAura(amount, simulate);
+            if (!stack.isEmpty() && stack.hasCapability(NACapabilities.auraContainer, null)) {
+                amount -= stack.getCapability(NACapabilities.auraContainer, null).drainAura(amount, simulate);
                 if (amount <= 0)
                     return true;
             }

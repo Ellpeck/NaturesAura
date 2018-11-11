@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.compat.patchouli;
 
-import de.ellpeck.naturesaura.recipes.AltarRecipe;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import vazkii.patchouli.api.IComponentProcessor;
@@ -14,7 +15,7 @@ public class ProcessorAltar implements IComponentProcessor {
     @Override
     public void setup(IVariableProvider<String> provider) {
         ResourceLocation res = new ResourceLocation(provider.get("recipe"));
-        this.recipe = AltarRecipe.RECIPES.get(res);
+        this.recipe = NaturesAuraAPI.ALTAR_RECIPES.get(res);
     }
 
     @Override

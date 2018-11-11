@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.compat.jei.altar;
 
-import de.ellpeck.naturesaura.recipes.AltarRecipe;
+import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;

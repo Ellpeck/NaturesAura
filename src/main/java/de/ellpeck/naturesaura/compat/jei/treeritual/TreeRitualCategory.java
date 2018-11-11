@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.compat.jei.treeritual;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
-import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;

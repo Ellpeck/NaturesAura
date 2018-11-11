@@ -1,4 +1,4 @@
-package de.ellpeck.naturesaura.aura;
+package de.ellpeck.naturesaura.api.aura;
 
 import net.minecraft.world.World;
 

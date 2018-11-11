@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.aura.chunk.effect;
 
-import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.aura.AuraType;
-import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
@@ -15,9 +15,9 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 public class GrassDieEffect implements IDrainSpotEffect {
     @Override
-    public void update(World world, Chunk chunk, AuraChunk auraChunk, BlockPos pos, MutableInt spot) {
+    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot) {
         if (spot.intValue() < 0) {
-            int aura = AuraChunk.getAuraInArea(world, pos, 25);
+            int aura = IAuraChunk.getAuraInArea(world, pos, 25);
             if (aura < 0) {
                 int amount = Math.min(300, Math.abs(aura) / 1000);
                 if (amount > 1) {

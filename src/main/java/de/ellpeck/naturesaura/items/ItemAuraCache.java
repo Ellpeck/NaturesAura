@@ -1,9 +1,9 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.aura.Capabilities;
-import de.ellpeck.naturesaura.aura.container.IAuraContainer;
-import de.ellpeck.naturesaura.aura.container.ItemAuraContainer;
+import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.api.aura.container.ItemAuraContainer;
 import de.ellpeck.naturesaura.renderers.ITrinketItem;
 import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets.RenderType;
 import net.minecraft.client.renderer.GlStateManager;
@@ -37,9 +37,9 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
             EntityPlayer player = (EntityPlayer) entityIn;
             if (player.isSneaking()) {
                 ItemStack stack = player.getHeldItemMainhand();
-                if (stack.hasCapability(Capabilities.auraRecharge, null)) {
-                    IAuraContainer container = stackIn.getCapability(Capabilities.auraContainer, null);
-                    stack.getCapability(Capabilities.auraRecharge, null).rechargeFromContainer(container);
+                if (stack.hasCapability(NACapabilities.auraRecharge, null)) {
+                    IAuraContainer container = stackIn.getCapability(NACapabilities.auraContainer, null);
+                    stack.getCapability(NACapabilities.auraRecharge, null).rechargeFromContainer(container);
                 }
             }
         }
@@ -51,7 +51,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
             items.add(new ItemStack(this));
 
             ItemStack stack = new ItemStack(this);
-            IAuraContainer container = stack.getCapability(Capabilities.auraContainer, null);
+            IAuraContainer container = stack.getCapability(NACapabilities.auraContainer, null);
             container.storeAura(container.getMaxAura(), false);
             items.add(stack);
         }
@@ -64,8 +64,8 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
-        if (stack.hasCapability(Capabilities.auraContainer, null)) {
-            IAuraContainer container = stack.getCapability(Capabilities.auraContainer, null);
+        if (stack.hasCapability(NACapabilities.auraContainer, null)) {
+            IAuraContainer container = stack.getCapability(NACapabilities.auraContainer, null);
             return 1 - container.getStoredAura() / (double) container.getMaxAura();
         } else {
             return 0;
@@ -80,13 +80,13 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
             @Override
             public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-                return capability == Capabilities.auraContainer;
+                return capability == NACapabilities.auraContainer;
             }
 
             @Nullable
             @Override
             public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-                if (capability == Capabilities.auraContainer) {
+                if (capability == NACapabilities.auraContainer) {
                     return (T) this.container;
                 } else {
                     return null;

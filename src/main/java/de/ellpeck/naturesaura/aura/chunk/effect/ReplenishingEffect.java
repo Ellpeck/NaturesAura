@@ -1,11 +1,12 @@
 package de.ellpeck.naturesaura.aura.chunk.effect;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.aura.AuraType;
-import de.ellpeck.naturesaura.aura.Capabilities;
-import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
-import de.ellpeck.naturesaura.aura.chunk.ISpotDrainable;
-import de.ellpeck.naturesaura.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
+import de.ellpeck.naturesaura.api.aura.chunk.ISpotDrainable;
+import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -16,14 +17,14 @@ import java.util.List;
 
 public class ReplenishingEffect implements IDrainSpotEffect {
     @Override
-    public void update(World world, Chunk chunk, AuraChunk auraChunk, BlockPos pos, MutableInt spot) {
+    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot) {
         int amount = spot.intValue();
         if (amount < 0) {
             AuraType type = AuraType.forWorld(world);
             List<ISpotDrainable> tiles = new ArrayList<>();
             Helper.getTileEntitiesInArea(world, pos, 25, tile -> {
-                if (tile.hasCapability(Capabilities.auraContainer, null)) {
-                    IAuraContainer container = tile.getCapability(Capabilities.auraContainer, null);
+                if (tile.hasCapability(NACapabilities.auraContainer, null)) {
+                    IAuraContainer container = tile.getCapability(NACapabilities.auraContainer, null);
                     if (container instanceof ISpotDrainable) {
                         tiles.add((ISpotDrainable) container);
                     }

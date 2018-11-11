@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.items.ModItems;
@@ -74,8 +75,8 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickable {
                     continue;
 
                 handler.extractItem(i, 1, false);
-                BlockPos spot = AuraChunk.getHighestSpot(this.world, this.pos, 10, this.pos);
-                AuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 10);
+                BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 10, this.pos);
+                IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 10);
 
                 PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), 9));
 

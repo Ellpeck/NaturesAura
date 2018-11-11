@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
@@ -34,8 +35,8 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
                     //if set higher than 199, it'll never finish because the furnace does ++ and then ==
                     furnace.setField(2, Math.min(199, furnace.getField(2) + 5));
 
-                    BlockPos spot = AuraChunk.getHighestSpot(this.world, this.pos, 15, this.pos);
-                    AuraChunk chunk = AuraChunk.getAuraChunk(this.world, spot);
+                    BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 15, this.pos);
+                    IAuraChunk chunk = IAuraChunk.getAuraChunk(this.world, spot);
                     chunk.drainAura(spot, MathHelper.ceil((200 - time) / 4F));
                     did = true;
 

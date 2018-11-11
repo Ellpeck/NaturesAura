@@ -1,16 +1,11 @@
-package de.ellpeck.naturesaura.recipes;
+package de.ellpeck.naturesaura.api.recipes;
 
-import de.ellpeck.naturesaura.Helper;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class AltarRecipe {
-
-    public static final Map<ResourceLocation, AltarRecipe> RECIPES = new HashMap<>();
 
     public final ResourceLocation name;
     public final ItemStack input;
@@ -27,15 +22,6 @@ public class AltarRecipe {
         this.aura = aura;
         this.time = time;
 
-        RECIPES.put(this.name, this);
-    }
-
-    public static AltarRecipe forInput(ItemStack input) {
-        for (AltarRecipe recipe : RECIPES.values()) {
-            if (Helper.areItemsEqual(recipe.input, input, true)) {
-                return recipe;
-            }
-        }
-        return null;
+        NaturesAuraAPI.ALTAR_RECIPES.put(this.name, this);
     }
 }

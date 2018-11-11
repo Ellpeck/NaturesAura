@@ -1,7 +1,7 @@
-package de.ellpeck.naturesaura.aura.container;
+package de.ellpeck.naturesaura.api.aura.container;
 
-import de.ellpeck.naturesaura.aura.AuraType;
-import de.ellpeck.naturesaura.aura.chunk.ISpotDrainable;
+import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.aura.chunk.ISpotDrainable;
 
 public class NaturalAuraContainer extends BasicAuraContainer implements ISpotDrainable {
 

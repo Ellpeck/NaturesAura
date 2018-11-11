@@ -1,7 +1,9 @@
 package de.ellpeck.naturesaura.recipes;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.aura.AuraType;
+import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
+import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ModItems;

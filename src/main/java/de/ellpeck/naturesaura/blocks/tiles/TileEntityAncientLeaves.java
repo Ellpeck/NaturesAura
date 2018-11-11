@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.aura.AuraType;
-import de.ellpeck.naturesaura.aura.container.IAuraContainer;
-import de.ellpeck.naturesaura.aura.container.NaturalAuraContainer;
+import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.api.aura.container.NaturalAuraContainer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 

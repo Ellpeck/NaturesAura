@@ -1,13 +1,14 @@
 package de.ellpeck.naturesaura.compat.jei;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.compat.jei.altar.AltarCategory;
 import de.ellpeck.naturesaura.compat.jei.altar.AltarWrapper;
 import de.ellpeck.naturesaura.compat.jei.treeritual.TreeRitualCategory;
 import de.ellpeck.naturesaura.compat.jei.treeritual.TreeRitualWrapper;
-import de.ellpeck.naturesaura.recipes.AltarRecipe;
-import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
+import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
@@ -35,8 +36,8 @@ public class JEINaturesAuraPlugin implements IModPlugin {
         registry.handleRecipes(TreeRitualRecipe.class, TreeRitualWrapper::new, TREE_RITUAL);
         registry.handleRecipes(AltarRecipe.class, AltarWrapper::new, ALTAR);
 
-        registry.addRecipes(TreeRitualRecipe.RECIPES.values(), TREE_RITUAL);
-        registry.addRecipes(AltarRecipe.RECIPES.values(), ALTAR);
+        registry.addRecipes(NaturesAuraAPI.TREE_RITUAL_RECIPES.values(), TREE_RITUAL);
+        registry.addRecipes(NaturesAuraAPI.ALTAR_RECIPES.values(), ALTAR);
 
         registry.addRecipeCatalyst(new ItemStack(ModBlocks.GOLD_POWDER), TREE_RITUAL);
         registry.addRecipeCatalyst(new ItemStack(ModBlocks.WOOD_STAND), TREE_RITUAL);

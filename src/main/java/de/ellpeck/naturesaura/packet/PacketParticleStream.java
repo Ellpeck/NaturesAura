@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -80,7 +81,7 @@ public class PacketParticleStream implements IMessage {
                     int maxAge = (int) (dir.length() / message.speed);
                     dir.normalise();
 
-                    NaturesAura.proxy.spawnMagicParticle(Minecraft.getMinecraft().world,
+                    NaturesAuraAPI.instance().spawnMagicParticle(Minecraft.getMinecraft().world,
                             message.startX, message.startY, message.startZ,
                             dir.x * message.speed, dir.y * message.speed, dir.z * message.speed,
                             message.color, message.scale, maxAge, 0F, false, false);

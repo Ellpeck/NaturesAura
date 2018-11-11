@@ -1,11 +1,11 @@
 package de.ellpeck.naturesaura.aura.chunk;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.aura.AuraType;
-import de.ellpeck.naturesaura.aura.Capabilities;
+import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.aura.chunk.effect.GrassDieEffect;
-import de.ellpeck.naturesaura.aura.chunk.effect.IDrainSpotEffect;
 import de.ellpeck.naturesaura.aura.chunk.effect.PlantBoostEffect;
 import de.ellpeck.naturesaura.aura.chunk.effect.ReplenishingEffect;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
@@ -18,11 +18,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import org.apache.commons.lang3.mutable.MutableInt;
-import org.apache.commons.lang3.mutable.MutableObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,9 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCompound> {
-
-    public static final int DEFAULT_AURA = 10000;
+public class AuraChunk implements IAuraChunk {
 
     private final Chunk chunk;
     private final AuraType type;
@@ -51,74 +46,13 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
         this.addEffect(new PlantBoostEffect());
     }
 
+    @Override
     public void addEffect(IDrainSpotEffect effect) {
         if (effect.appliesToType(this.type))
             this.effects.add(effect);
     }
 
-    public static void getSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer) {
-        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getSpotsInArea");
-        for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
-            for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
-                if (Helper.isChunkLoaded(world, x, z)) {
-                    Chunk chunk = world.getChunk(x, z);
-                    if (chunk.hasCapability(Capabilities.auraChunk, null)) {
-                        AuraChunk auraChunk = chunk.getCapability(Capabilities.auraChunk, null);
-                        auraChunk.getSpotsInArea(pos, radius, consumer);
-                    }
-                }
-            }
-        }
-        world.profiler.endSection();
-    }
-
-    public static int getAuraInArea(World world, BlockPos pos, int radius) {
-        MutableInt result = new MutableInt(DEFAULT_AURA);
-        getSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> result.add(drainSpot.intValue()));
-        return result.intValue();
-    }
-
-    public static AuraChunk getAuraChunk(World world, BlockPos pos) {
-        Chunk chunk = world.getChunk(pos);
-        if (chunk.hasCapability(Capabilities.auraChunk, null)) {
-            return chunk.getCapability(Capabilities.auraChunk, null);
-        } else {
-            return null;
-        }
-    }
-
-    public static BlockPos getLowestSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot) {
-        MutableInt lowestAmount = new MutableInt(Integer.MAX_VALUE);
-        MutableObject<BlockPos> lowestSpot = new MutableObject<>();
-        getSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> {
-            int amount = drainSpot.intValue();
-            if (amount < lowestAmount.intValue()) {
-                lowestAmount.setValue(amount);
-                lowestSpot.setValue(blockPos);
-            }
-        });
-        BlockPos lowest = lowestSpot.getValue();
-        if (lowest == null)
-            lowest = defaultSpot;
-        return lowest;
-    }
-
-    public static BlockPos getHighestSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot) {
-        MutableInt highestAmount = new MutableInt(Integer.MIN_VALUE);
-        MutableObject<BlockPos> highestSpot = new MutableObject<>();
-        getSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> {
-            int amount = drainSpot.intValue();
-            if (amount > highestAmount.intValue()) {
-                highestAmount.setValue(amount);
-                highestSpot.setValue(blockPos);
-            }
-        });
-        BlockPos highest = highestSpot.getValue();
-        if (highest == null)
-            highest = defaultSpot;
-        return highest;
-    }
-
+    @Override
     public void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer) {
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
             BlockPos drainPos = entry.getKey();
@@ -128,6 +62,7 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
         }
     }
 
+    @Override
     public void drainAura(BlockPos pos, int amount) {
         MutableInt spot = this.getDrainSpot(pos);
         spot.subtract(amount);
@@ -136,6 +71,7 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
         this.markDirty();
     }
 
+    @Override
     public void storeAura(BlockPos pos, int amount) {
         MutableInt spot = this.getDrainSpot(pos);
         spot.add(amount);
@@ -144,7 +80,8 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
         this.markDirty();
     }
 
-    private MutableInt getDrainSpot(BlockPos pos) {
+    @Override
+    public MutableInt getDrainSpot(BlockPos pos) {
         MutableInt spot = this.drainSpots.get(pos);
         if (spot == null) {
             spot = new MutableInt();
@@ -158,10 +95,12 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
         this.drainSpots.putAll(spots);
     }
 
+    @Override
     public AuraType getType() {
         return this.type;
     }
 
+    @Override
     public void markDirty() {
         this.needsSync = true;
     }
@@ -190,13 +129,13 @@ public class AuraChunk implements ICapabilityProvider, INBTSerializable<NBTTagCo
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-        return capability == Capabilities.auraChunk;
+        return capability == NACapabilities.auraChunk;
     }
 
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        return capability == Capabilities.auraChunk ? (T) this : null;
+        return capability == NACapabilities.auraChunk ? (T) this : null;
     }
 
     @Override

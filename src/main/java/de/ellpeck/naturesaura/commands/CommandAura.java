@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.commands;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import net.minecraft.command.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -43,12 +43,12 @@ public class CommandAura extends CommandBase {
         BlockPos pos = sender.getPosition();
 
         if ("add".equals(action)) {
-            BlockPos spot = AuraChunk.getLowestSpot(world, pos, range, pos);
-            AuraChunk.getAuraChunk(world, spot).storeAura(spot, amount);
+            BlockPos spot = IAuraChunk.getLowestSpot(world, pos, range, pos);
+            IAuraChunk.getAuraChunk(world, spot).storeAura(spot, amount);
             sender.sendMessage(new TextComponentString("Added " + amount + " aura"));
         } else if ("remove".equals(action)) {
-            BlockPos spot = AuraChunk.getHighestSpot(world, pos, range, pos);
-            AuraChunk.getAuraChunk(world, spot).drainAura(spot, amount);
+            BlockPos spot = IAuraChunk.getHighestSpot(world, pos, range, pos);
+            IAuraChunk.getAuraChunk(world, spot).drainAura(spot, amount);
             sender.sendMessage(new TextComponentString("Removed " + amount + " aura"));
         } else {
             throw new SyntaxErrorException("Invalid action " + action);

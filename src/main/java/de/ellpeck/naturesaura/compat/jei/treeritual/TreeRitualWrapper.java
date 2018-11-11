@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.compat.jei.treeritual;
 
-import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;

@@ -1,9 +1,10 @@
 package de.ellpeck.naturesaura.events;
 
 import de.ellpeck.naturesaura.Helper;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
-import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -28,7 +29,7 @@ public class TerrainGenEvents {
                 IBlockState sapling = world.getBlockState(pos);
                 ItemStack saplingStack = sapling.getBlock().getItem(world, pos, sapling);
                 if (!saplingStack.isEmpty()) {
-                    for (TreeRitualRecipe recipe : TreeRitualRecipe.RECIPES.values()) {
+                    for (TreeRitualRecipe recipe : NaturesAuraAPI.TREE_RITUAL_RECIPES.values()) {
                         if (Helper.areItemsEqual(saplingStack, recipe.saplingType, true)) {
                             List<ItemStack> required = new ArrayList<>(Arrays.asList(recipe.items));
                             MutableObject<TileEntityWoodStand> toPick = new MutableObject<>();

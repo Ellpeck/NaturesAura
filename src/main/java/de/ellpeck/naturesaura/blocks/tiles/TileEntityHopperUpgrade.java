@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
@@ -21,7 +22,7 @@ public class TileEntityHopperUpgrade extends TileEntityImpl implements ITickable
     @Override
     public void update() {
         if (!this.world.isRemote && this.world.getTotalWorldTime() % 10 == 0) {
-            if (AuraChunk.getAuraInArea(this.world, this.pos, 25) < 1000)
+            if (IAuraChunk.getAuraInArea(this.world, this.pos, 25) < 1000)
                 return;
             TileEntity tile = this.world.getTileEntity(this.pos.down());
             if (!(tile instanceof TileEntityHopper) || !BlockHopper.isEnabled(tile.getBlockMetadata()))
@@ -58,8 +59,8 @@ public class TileEntityHopperUpgrade extends TileEntityImpl implements ITickable
                     if (copy.isEmpty())
                         item.setDead();
 
-                    BlockPos spot = AuraChunk.getHighestSpot(this.world, this.pos, 25, this.pos);
-                    AuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 10);
+                    BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 25, this.pos);
+                    IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 10);
 
                     PacketHandler.sendToAllAround(this.world, this.pos, 32,
                             new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 10));

@@ -1,8 +1,8 @@
-package de.ellpeck.naturesaura.aura;
+package de.ellpeck.naturesaura.api;
 
-import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
-import de.ellpeck.naturesaura.aura.container.IAuraContainer;
-import de.ellpeck.naturesaura.aura.item.IAuraRecharge;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -11,7 +11,7 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 
 import javax.annotation.Nullable;
 
-public final class Capabilities {
+public final class NACapabilities {
 
     @CapabilityInject(IAuraContainer.class)
     public static Capability<IAuraContainer> auraContainer;
@@ -19,8 +19,8 @@ public final class Capabilities {
     @CapabilityInject(IAuraRecharge.class)
     public static Capability<IAuraRecharge> auraRecharge;
 
-    @CapabilityInject(AuraChunk.class)
-    public static Capability<AuraChunk> auraChunk;
+    @CapabilityInject(IAuraChunk.class)
+    public static Capability<IAuraChunk> auraChunk;
 
     public static class StorageImpl<T> implements IStorage<T> {
 

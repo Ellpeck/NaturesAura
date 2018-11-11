@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.aura.AuraType;
-import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -38,7 +38,7 @@ public class ItemAuraBottle extends ItemImpl {
         if (ray != null && ray.typeOfHit == RayTraceResult.Type.BLOCK)
             return;
         BlockPos pos = player.getPosition();
-        if (AuraChunk.getAuraInArea(player.world, pos, 30) < 1000)
+        if (IAuraChunk.getAuraInArea(player.world, pos, 30) < 1000)
             return;
 
         if (!player.world.isRemote) {
@@ -47,8 +47,8 @@ public class ItemAuraBottle extends ItemImpl {
             player.inventory.addItemStackToInventory(
                     setType(new ItemStack(this), AuraType.forWorld(player.world)));
 
-            BlockPos spot = AuraChunk.getHighestSpot(player.world, pos, 30, pos);
-            AuraChunk.getAuraChunk(player.world, spot).drainAura(spot, 200);
+            BlockPos spot = IAuraChunk.getHighestSpot(player.world, pos, 30, pos);
+            IAuraChunk.getAuraChunk(player.world, spot).drainAura(spot, 200);
 
             player.world.playSound(null, player.posX, player.posY, player.posZ,
                     SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.PLAYERS, 1F, 1F);

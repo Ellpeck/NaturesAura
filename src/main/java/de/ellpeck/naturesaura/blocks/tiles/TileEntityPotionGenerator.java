@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -47,9 +48,9 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
                                 boolean foundEmpty = false;
                                 for (EnumFacing dir : EnumFacing.HORIZONTALS) {
                                     BlockPos offset = this.pos.offset(dir, 12);
-                                    BlockPos spot = AuraChunk.getLowestSpot(this.world, offset, 15, offset);
-                                    if (AuraChunk.getAuraInArea(this.world, spot, 15) < 20000) {
-                                        AuraChunk chunk = AuraChunk.getAuraChunk(this.world, spot);
+                                    BlockPos spot = IAuraChunk.getLowestSpot(this.world, offset, 15, offset);
+                                    if (IAuraChunk.getAuraInArea(this.world, spot, 15) < 20000) {
+                                        IAuraChunk chunk = IAuraChunk.getAuraChunk(this.world, spot);
                                         chunk.storeAura(spot, toAdd);
 
                                         foundEmpty = true;

@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.compat.patchouli;
 
-import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import net.minecraft.util.ResourceLocation;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariableProvider;
@@ -13,7 +14,7 @@ public class ProcessorTreeRitual implements IComponentProcessor {
     @Override
     public void setup(IVariableProvider<String> provider) {
         ResourceLocation res = new ResourceLocation(provider.get("recipe"));
-        this.recipe = TreeRitualRecipe.RECIPES.get(res);
+        this.recipe = NaturesAuraAPI.TREE_RITUAL_RECIPES.get(res);
     }
 
     @Override

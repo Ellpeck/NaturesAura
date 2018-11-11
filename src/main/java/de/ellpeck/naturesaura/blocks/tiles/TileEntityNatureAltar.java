@@ -2,16 +2,17 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.aura.AuraType;
-import de.ellpeck.naturesaura.aura.Capabilities;
-import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
-import de.ellpeck.naturesaura.aura.container.BasicAuraContainer;
-import de.ellpeck.naturesaura.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.container.BasicAuraContainer;
+import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.SoundEvents;
@@ -39,15 +40,15 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
         @Override
         protected boolean canInsert(ItemStack stack, int slot) {
-            return AltarRecipe.forInput(stack) != null || stack.hasCapability(Capabilities.auraContainer, null);
+            return getRecipeForInput(stack) != null || stack.hasCapability(NACapabilities.auraContainer, null);
         }
 
         @Override
         protected boolean canExtract(ItemStack stack, int slot, int amount) {
-            if (stack.hasCapability(Capabilities.auraContainer, null))
-                return stack.getCapability(Capabilities.auraContainer, null).storeAura(1, true) <= 0;
+            if (stack.hasCapability(NACapabilities.auraContainer, null))
+                return stack.getCapability(NACapabilities.auraContainer, null).storeAura(1, true) <= 0;
             else
-                return AltarRecipe.forInput(stack) == null;
+                return getRecipeForInput(stack) == null;
         }
     };
 
@@ -78,10 +79,10 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
             if (this.structureFine) {
                 int space = this.container.storeAura(3, true);
                 if (space > 0 && this.container.isAcceptableType(AuraType.forWorld(this.world))) {
-                    int toStore = Math.min(AuraChunk.getAuraInArea(this.world, this.pos, 20), space);
+                    int toStore = Math.min(IAuraChunk.getAuraInArea(this.world, this.pos, 20), space);
                     if (toStore > 0) {
-                        BlockPos spot = AuraChunk.getHighestSpot(this.world, this.pos, 20, this.pos);
-                        AuraChunk chunk = AuraChunk.getAuraChunk(this.world, spot);
+                        BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 20, this.pos);
+                        IAuraChunk chunk = IAuraChunk.getAuraChunk(this.world, spot);
 
                         chunk.drainAura(spot, toStore);
                         this.container.storeAura(toStore, false);
@@ -98,8 +99,8 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                 }
 
                 ItemStack stack = this.items.getStackInSlot(0);
-                if (!stack.isEmpty() && stack.hasCapability(Capabilities.auraContainer, null)) {
-                    IAuraContainer container = stack.getCapability(Capabilities.auraContainer, null);
+                if (!stack.isEmpty() && stack.hasCapability(NACapabilities.auraContainer, null)) {
+                    IAuraContainer container = stack.getCapability(NACapabilities.auraContainer, null);
                     int theoreticalDrain = this.container.drainAura(10, true);
                     if (theoreticalDrain > 0) {
                         int stored = container.storeAura(theoreticalDrain, false);
@@ -114,7 +115,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                 } else {
                     if (this.currentRecipe == null) {
                         if (!stack.isEmpty()) {
-                            this.currentRecipe = AltarRecipe.forInput(stack);
+                            this.currentRecipe = getRecipeForInput(stack);
                         }
                     } else {
                         if (stack.isEmpty() || !Helper.areItemsEqual(stack, this.currentRecipe.input, true)) {
@@ -153,22 +154,22 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                 if (rand.nextFloat() >= 0.7F) {
                     int fourths = this.container.getMaxAura() / 4;
                     if (this.container.getStoredAura() > 0) {
-                        NaturesAura.proxy.spawnMagicParticle(this.world,
+                        NaturesAuraAPI.instance().spawnMagicParticle(this.world,
                                 this.pos.getX() - 4F + rand.nextFloat(), this.pos.getY() + 3F, this.pos.getZ() + rand.nextFloat(),
                                 0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
                     if (this.container.getStoredAura() >= fourths) {
-                        NaturesAura.proxy.spawnMagicParticle(this.world,
+                        NaturesAuraAPI.instance().spawnMagicParticle(this.world,
                                 this.pos.getX() + 4F + rand.nextFloat(), this.pos.getY() + 3F, this.pos.getZ() + rand.nextFloat(),
                                 0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
                     if (this.container.getStoredAura() >= fourths * 2) {
-                        NaturesAura.proxy.spawnMagicParticle(this.world,
+                        NaturesAuraAPI.instance().spawnMagicParticle(this.world,
                                 this.pos.getX() + rand.nextFloat(), this.pos.getY() + 3F, this.pos.getZ() - 4F + rand.nextFloat(),
                                 0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
                     if (this.container.getStoredAura() >= fourths * 3) {
-                        NaturesAura.proxy.spawnMagicParticle(this.world,
+                        NaturesAuraAPI.instance().spawnMagicParticle(this.world,
                                 this.pos.getX() + rand.nextFloat(), this.pos.getY() + 3F, this.pos.getZ() + 4F + rand.nextFloat(),
                                 0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
@@ -178,6 +179,15 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
             this.bobTimer++;
         }
+    }
+
+    private static AltarRecipe getRecipeForInput(ItemStack input) {
+        for (AltarRecipe recipe : NaturesAuraAPI.ALTAR_RECIPES.values()) {
+            if (Helper.areItemsEqual(recipe.input, input, true)) {
+                return recipe;
+            }
+        }
+        return null;
     }
 
     private boolean hasCatalyst(Block block) {
@@ -220,7 +230,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
         }
         if (type == SaveType.TILE) {
             if (compound.hasKey("recipe")) {
-                this.currentRecipe = AltarRecipe.RECIPES.get(new ResourceLocation(compound.getString("recipe")));
+                this.currentRecipe = NaturesAuraAPI.ALTAR_RECIPES.get(new ResourceLocation(compound.getString("recipe")));
                 this.timer = compound.getInteger("timer");
             }
         }

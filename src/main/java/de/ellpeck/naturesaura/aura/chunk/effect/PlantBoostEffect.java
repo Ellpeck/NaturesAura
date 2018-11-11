@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.aura.chunk.effect;
 
-import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.aura.AuraType;
-import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
@@ -17,10 +17,10 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 public class PlantBoostEffect implements IDrainSpotEffect {
     @Override
-    public void update(World world, Chunk chunk, AuraChunk auraChunk, BlockPos pos, MutableInt spot) {
+    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot) {
         if (spot.intValue() <= 0)
             return;
-        int aura = AuraChunk.getAuraInArea(world, pos, 25);
+        int aura = IAuraChunk.getAuraInArea(world, pos, 25);
         if (aura <= 0)
             return;
         int amount = Math.min(45, Math.abs(aura) / 1000);
@@ -42,8 +42,8 @@ public class PlantBoostEffect implements IDrainSpotEffect {
                     if (growable.canGrow(world, plantPos, state, false)) {
                         growable.grow(world, world.rand, plantPos, state);
 
-                        BlockPos closestSpot = AuraChunk.getHighestSpot(world, plantPos, 25, pos);
-                        AuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 100);
+                        BlockPos closestSpot = IAuraChunk.getHighestSpot(world, plantPos, 25, pos);
+                        IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 100);
 
                         PacketHandler.sendToAllAround(world, plantPos, 32,
                                 new PacketParticles(plantPos.getX(), plantPos.getY(), plantPos.getZ(), 6));

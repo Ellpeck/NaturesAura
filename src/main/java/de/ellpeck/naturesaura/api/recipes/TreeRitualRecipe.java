@@ -1,14 +1,10 @@
-package de.ellpeck.naturesaura.recipes;
+package de.ellpeck.naturesaura.api.recipes;
 
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class TreeRitualRecipe {
-
-    public static final Map<ResourceLocation, TreeRitualRecipe> RECIPES = new HashMap<>();
 
     public final ResourceLocation name;
     public final ItemStack saplingType;
@@ -23,6 +19,6 @@ public class TreeRitualRecipe {
         this.result = result;
         this.time = time;
 
-        RECIPES.put(this.name, this);
+        NaturesAuraAPI.TREE_RITUAL_RECIPES.put(this.name, this);
     }
 }

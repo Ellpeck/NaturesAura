@@ -2,10 +2,10 @@ package de.ellpeck.naturesaura.events;
 
 import baubles.api.BaublesApi;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.aura.AuraType;
-import de.ellpeck.naturesaura.aura.Capabilities;
-import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
-import de.ellpeck.naturesaura.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.items.ModItems;
@@ -53,9 +53,9 @@ public class ClientEvents {
 
             if (mc.player.capabilities.isCreativeMode) {
                 left.add(prefix + "Aura:");
-                MutableInt amount = new MutableInt(AuraChunk.DEFAULT_AURA);
+                MutableInt amount = new MutableInt(IAuraChunk.DEFAULT_AURA);
                 MutableInt spots = new MutableInt();
-                AuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 15, ((blockPos, drainSpot) -> {
+                IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 15, ((blockPos, drainSpot) -> {
                     spots.increment();
                     amount.add(drainSpot.intValue());
                     left.add(prefix + drainSpot.intValue() + " @ " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
@@ -124,7 +124,7 @@ public class ClientEvents {
                 }
 
                 if (!cache.isEmpty()) {
-                    IAuraContainer container = cache.getCapability(Capabilities.auraContainer, null);
+                    IAuraContainer container = cache.getCapability(NACapabilities.auraContainer, null);
                     int width = MathHelper.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
                     int x = res.getScaledWidth() / 2 - 173 - (mc.player.getHeldItemOffhand().isEmpty() ? 0 : 29);
                     int y = res.getScaledHeight() - 8;
@@ -154,7 +154,7 @@ public class ClientEvents {
 
                     if (!mc.gameSettings.showDebugInfo) {
                         GlStateManager.color(83 / 255F, 160 / 255F, 8 / 255F);
-                        float totalPercentage = AuraChunk.getAuraInArea(mc.world, mc.player.getPosition(), 15) / (AuraChunk.DEFAULT_AURA * 2F);
+                        float totalPercentage = IAuraChunk.getAuraInArea(mc.world, mc.player.getPosition(), 15) / (IAuraChunk.DEFAULT_AURA * 2F);
                         int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
                         if (tHeight < 50)
                             Gui.drawModalRectWithCustomSizedTexture(3, 10, 6, 12, 6, 50 - tHeight, 256, 256);
@@ -177,8 +177,8 @@ public class ClientEvents {
                         BlockPos pos = mc.objectMouseOver.getBlockPos();
                         if (pos != null) {
                             TileEntity tile = mc.world.getTileEntity(pos);
-                            if (tile != null && tile.hasCapability(Capabilities.auraContainer, null)) {
-                                IAuraContainer container = tile.getCapability(Capabilities.auraContainer, null);
+                            if (tile != null && tile.hasCapability(NACapabilities.auraContainer, null)) {
+                                IAuraContainer container = tile.getCapability(NACapabilities.auraContainer, null);
 
                                 IBlockState state = mc.world.getBlockState(pos);
                                 ItemStack blockStack = state.getBlock().getPickBlock(state, mc.objectMouseOver, mc.world, pos, mc.player);
@@ -186,8 +186,8 @@ public class ClientEvents {
 
                                 if (tile instanceof TileEntityNatureAltar) {
                                     ItemStack tileStack = ((TileEntityNatureAltar) tile).getItemHandler(null).getStackInSlot(0);
-                                    if (!tileStack.isEmpty() && tileStack.hasCapability(Capabilities.auraContainer, null)) {
-                                        IAuraContainer stackContainer = tileStack.getCapability(Capabilities.auraContainer, null);
+                                    if (!tileStack.isEmpty() && tileStack.hasCapability(NACapabilities.auraContainer, null)) {
+                                        IAuraContainer stackContainer = tileStack.getCapability(NACapabilities.auraContainer, null);
                                         this.drawContainerInfo(stackContainer, mc, res, 55, tileStack.getDisplayName());
                                     }
                                 }

@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityFurnaceHeater;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -31,7 +31,7 @@ public class BlockFurnaceHeater extends BlockContainerImpl {
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityFurnaceHeater && ((TileEntityFurnaceHeater) tile).isActive) {
-            NaturesAura.proxy.spawnMagicParticle(worldIn,
+            NaturesAuraAPI.instance().spawnMagicParticle(worldIn,
                     pos.getX() + 0.35F + rand.nextFloat() * 0.3F,
                     pos.getY() + 0.2F,
                     pos.getZ() + 0.35F + rand.nextFloat() * 0.3F,

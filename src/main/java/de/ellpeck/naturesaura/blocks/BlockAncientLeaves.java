@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAncientLeaves;
 import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.BlockLeaves;
@@ -132,7 +133,7 @@ public class BlockAncientLeaves extends BlockLeaves implements
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityAncientLeaves) {
                 if (((TileEntityAncientLeaves) tile).getAuraContainer(null).getStoredAura() > 0) {
-                    NaturesAura.proxy.spawnMagicParticle(worldIn,
+                    NaturesAuraAPI.instance().spawnMagicParticle(worldIn,
                             pos.getX() + rand.nextDouble(), pos.getY(), pos.getZ() + rand.nextDouble(),
                             0F, 0F, 0F, 0xc46df9,
                             rand.nextFloat() * 2F + 0.5F,
