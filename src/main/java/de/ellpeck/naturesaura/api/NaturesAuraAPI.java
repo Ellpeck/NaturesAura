@@ -5,13 +5,17 @@ import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.internal.StubHooks;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
+import net.minecraft.block.BlockFlower;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableInt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -35,6 +39,18 @@ public final class NaturesAuraAPI {
      * added to this list.
      */
     public static final Map<ResourceLocation, TreeRitualRecipe> TREE_RITUAL_RECIPES = new HashMap<>();
+    /**
+     * The list of all types of flowers that the flower generator can use for
+     * consumption. By default, all {@link BlockFlower} instances and all blocks
+     * specified in the config file are added
+     */
+    public static final List<IBlockState> FLOWER_GENERATOR_BLOCKS = new ArrayList<>();
+    /**
+     * A map of all of the block states that the Botanist's Pickaxe can convert
+     * into their mossy variations. Contains mossy brick and mossy cobblestone
+     * by default, along with all blocks specified in the config file
+     */
+    public static final Map<IBlockState, IBlockState> BOTANIST_PICKAXE_CONVERSIONS = new HashMap<>();
 
     /**
      * This method returns the active {@link IInternalHooks} instance which can

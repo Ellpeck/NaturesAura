@@ -5,6 +5,9 @@ import de.ellpeck.naturesaura.api.NACapabilities;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import de.ellpeck.naturesaura.compat.Compat;
+import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -16,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -179,5 +183,35 @@ public final class Helper {
                 return capability == NACapabilities.auraRecharge ? (T) this.recharge : null;
             }
         };
+    }
+
+    public static IBlockState getStateFromString(String raw) {
+        String[] split = raw.split("\\[");
+        Block block = Block.REGISTRY.getObject(new ResourceLocation(split[0]));
+        if (block != null) {
+            IBlockState state = block.getDefaultState();
+            if (split.length > 1) {
+                for (String part : split[1].replace("]", "").split(",")) {
+                    String[] keyValue = part.split("=");
+                    for (IProperty<?> prop : state.getProperties().keySet()) {
+                        IBlockState changed = findProperty(state, prop, keyValue[0], keyValue[1]);
+                        if (changed != null) {
+                            state = changed;
+                            break;
+                        }
+                    }
+                }
+            }
+            return state;
+        } else
+            return null;
+    }
+
+    private static <T extends Comparable<T>> IBlockState findProperty(IBlockState state, IProperty<T> prop, String key, String newValue) {
+        if (key.equals(prop.getName()))
+            for (T value : prop.getAllowedValues())
+                if (prop.getName(value).equals(newValue))
+                    return state.withProperty(prop, value);
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.events;
 
+import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NACapabilities;
 import de.ellpeck.naturesaura.api.aura.AuraType;
@@ -58,6 +59,7 @@ public class CommonEvents {
     public void onConfigChanged(OnConfigChangedEvent event) {
         if (NaturesAura.MOD_ID.equals(event.getModID())) {
             ConfigManager.sync(NaturesAura.MOD_ID, Config.Type.INSTANCE);
+            ModConfig.initOrReload();
         }
     }
 }

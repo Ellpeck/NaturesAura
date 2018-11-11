@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.AuraType;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -25,12 +26,10 @@ import java.util.Map;
 
 public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickable {
 
-    private static final List<IBlockState> FLOWERS = new ArrayList<>();
-
     static {
         for (Block block : ForgeRegistries.BLOCKS) {
             if (block instanceof BlockFlower) {
-                FLOWERS.addAll(block.getBlockState().getValidStates());
+                NaturesAuraAPI.FLOWER_GENERATOR_BLOCKS.addAll(block.getBlockState().getValidStates());
             }
         }
     }
@@ -46,7 +45,7 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
                 for (int z = -range; z <= range; z++) {
                     BlockPos offset = this.pos.add(x, 0, z);
                     IBlockState state = this.world.getBlockState(offset);
-                    if (FLOWERS.contains(state)) {
+                    if (NaturesAuraAPI.FLOWER_GENERATOR_BLOCKS.contains(state)) {
                         possible.add(offset);
                     }
                 }

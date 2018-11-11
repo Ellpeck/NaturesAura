@@ -76,6 +76,7 @@ public final class NaturesAura {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
+        ModConfig.initOrReload();
         ModRecipes.init();
         ModRegistry.init(event);
         OreDict.init();

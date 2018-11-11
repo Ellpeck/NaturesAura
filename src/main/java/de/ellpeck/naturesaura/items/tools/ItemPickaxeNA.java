@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.items.tools;
 
-import com.google.common.collect.ImmutableMap;
 import de.ellpeck.naturesaura.Helper;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
@@ -26,14 +26,17 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import javax.annotation.Nullable;
-import java.util.Map;
 
 public class ItemPickaxeNA extends ItemPickaxe implements IModItem, IModelProvider {
 
-    private static final Map<IBlockState, IBlockState> BOTANIST_CONVERSION = ImmutableMap.<IBlockState, IBlockState>builder()
-            .put(Blocks.COBBLESTONE.getDefaultState(), Blocks.MOSSY_COBBLESTONE.getDefaultState())
-            .put(Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT),
-                    Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY)).build();
+    static {
+        NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
+                Blocks.COBBLESTONE.getDefaultState(),
+                Blocks.MOSSY_COBBLESTONE.getDefaultState());
+        NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
+                Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT),
+                Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY));
+    }
 
     private final String baseName;
 
@@ -72,7 +75,7 @@ public class ItemPickaxeNA extends ItemPickaxe implements IModItem, IModelProvid
         if (this == ModItems.INFUSED_PICKAXE) {
             ItemStack stack = player.getHeldItem(hand);
             IBlockState state = worldIn.getBlockState(pos);
-            IBlockState result = BOTANIST_CONVERSION.get(state);
+            IBlockState result = NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.get(state);
             if (result != null) {
                 if (!worldIn.isRemote)
                     worldIn.setBlockState(pos, result);
