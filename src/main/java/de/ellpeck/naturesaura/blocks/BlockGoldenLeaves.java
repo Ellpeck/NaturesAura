@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.BlockLeaves;
@@ -60,6 +61,18 @@ public class BlockGoldenLeaves extends BlockLeaves implements
     @Override
     public void onPostInit(FMLPostInitializationEvent event) {
 
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if (stateIn.getValue(STAGE) == HIGHEST_STAGE && rand.nextFloat() >= 0.75F)
+            NaturesAuraAPI.instance().spawnMagicParticle(worldIn,
+                    pos.getX() + rand.nextFloat(),
+                    pos.getY() + rand.nextFloat(),
+                    pos.getZ() + rand.nextFloat(),
+                    0F, 0F, 0F,
+                    0xF2FF00, 0.5F + rand.nextFloat(), 50, 0F, false, true);
     }
 
     @Override
