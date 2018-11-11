@@ -1,9 +1,11 @@
 package de.ellpeck.naturesaura.api;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.internal.StubHooks;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -62,6 +64,20 @@ public final class NaturesAuraAPI {
      * @see #instance()
      */
     public interface IInternalHooks {
+
+        /**
+         * Helper method to extract aura from an {@link IAuraContainer} in the
+         * supplied player's inventory or baubles slots. The method returns true
+         * if the aura could be extracted. Note that, if the player is in
+         * creative mode, this method will always return true and no extraction
+         * will take place.
+         *
+         * @param player   The player
+         * @param amount   The amount to extract
+         * @param simulate If the extraction should be simulated
+         * @return If the extraction was successful
+         */
+        boolean extractAuraFromPlayer(EntityPlayer player, int amount, boolean simulate);
 
         /**
          * This method can be used to spawn the magic particle effect used by

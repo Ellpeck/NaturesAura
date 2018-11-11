@@ -1,17 +1,51 @@
 package de.ellpeck.naturesaura;
 
+import baubles.api.BaublesApi;
 import de.ellpeck.naturesaura.api.NACapabilities;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.compat.Compat;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import java.util.function.BiConsumer;
 
 public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
+    @Override
+    public boolean extractAuraFromPlayer(EntityPlayer player, int amount, boolean simulate) {
+        if (player.capabilities.isCreativeMode)
+            return true;
+
+        if (Compat.baubles) {
+            IItemHandler baubles = BaublesApi.getBaublesHandler(player);
+            for (int i = 0; i < baubles.getSlots(); i++) {
+                ItemStack stack = baubles.getStackInSlot(i);
+                if (!stack.isEmpty() && stack.hasCapability(NACapabilities.auraContainer, null)) {
+                    amount -= stack.getCapability(NACapabilities.auraContainer, null).drainAura(amount, simulate);
+                    if (amount <= 0)
+                        return true;
+                }
+            }
+        }
+
+        for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+            ItemStack stack = player.inventory.getStackInSlot(i);
+            if (!stack.isEmpty() && stack.hasCapability(NACapabilities.auraContainer, null)) {
+                amount -= stack.getCapability(NACapabilities.auraContainer, null).drainAura(amount, simulate);
+                if (amount <= 0)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public void spawnMagicParticle(World world, double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade) {
         NaturesAura.proxy.spawnMagicParticle(world, posX, posY, posZ, motionX, motionY, motionZ, color, scale, maxAge, gravity, collision, fade);

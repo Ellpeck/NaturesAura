@@ -180,32 +180,4 @@ public final class Helper {
             }
         };
     }
-
-    public static boolean extractAuraFromPlayer(EntityPlayer player, int amount, boolean simulate) {
-        if (player.capabilities.isCreativeMode)
-            return true;
-
-        if (Compat.baubles) {
-            IItemHandler baubles = BaublesApi.getBaublesHandler(player);
-            for (int i = 0; i < baubles.getSlots(); i++) {
-                ItemStack stack = baubles.getStackInSlot(i);
-                if (!stack.isEmpty() && stack.hasCapability(NACapabilities.auraContainer, null)) {
-                    amount -= stack.getCapability(NACapabilities.auraContainer, null).drainAura(amount, simulate);
-                    if (amount <= 0)
-                        return true;
-                }
-            }
-        }
-
-        for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-            ItemStack stack = player.inventory.getStackInSlot(i);
-            if (!stack.isEmpty() && stack.hasCapability(NACapabilities.auraContainer, null)) {
-                amount -= stack.getCapability(NACapabilities.auraContainer, null).drainAura(amount, simulate);
-                if (amount <= 0)
-                    return true;
-            }
-        }
-
-        return false;
-    }
 }

@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -56,7 +57,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
                         }
                     } else {
                         if (stored != null && stored != color) {
-                            if (Helper.extractAuraFromPlayer(player, 10, world.isRemote)) {
+                            if (NaturesAuraAPI.instance().extractAuraFromPlayer(player, 10, world.isRemote)) {
                                 if (firstColor == null) {
                                     world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                                             SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 0.65F, 1F);

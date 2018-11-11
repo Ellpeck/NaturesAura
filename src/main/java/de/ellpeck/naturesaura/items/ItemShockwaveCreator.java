@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.renderers.ITrinketItem;
@@ -72,7 +73,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                 return;
             if (living.getDistanceSq(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z")) > 0.75F)
                 return;
-            if (living instanceof EntityPlayer && !Helper.extractAuraFromPlayer((EntityPlayer) living, 10, false))
+            if (living instanceof EntityPlayer && !NaturesAuraAPI.instance().extractAuraFromPlayer((EntityPlayer) living, 10, false))
                 return;
 
             DamageSource source;
@@ -90,7 +91,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                     continue;
                 if (living.getDistanceSq(mob) > range * range)
                     continue;
-                if (living instanceof EntityPlayer && !Helper.extractAuraFromPlayer((EntityPlayer) living, 5, false))
+                if (living instanceof EntityPlayer && !NaturesAuraAPI.instance().extractAuraFromPlayer((EntityPlayer) living, 5, false))
                     break;
                 mob.attackEntityFrom(source, 4F);
             }
