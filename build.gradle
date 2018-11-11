@@ -21,6 +21,7 @@ compileJava {
 }
 
 repositories {
+    mavenCentral()
     maven {
         url = "http://dvs1.progwml6.com/files/maven"
     }
@@ -33,9 +34,13 @@ repositories {
 }
 
 dependencies {
+    compile "vazkii.patchouli:Patchouli:1.0-6.8"
+    
     deobfCompile "mezz.jei:jei_1.12.2:4.13.1.220"
     deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
-    compile "vazkii.patchouli:Patchouli:1.0-6.8"
+
+    compile "com.blamejared:MTLib:3.0.4.8"
+    compile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.11.494"
 }
 
 

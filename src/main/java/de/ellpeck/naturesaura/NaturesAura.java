@@ -63,7 +63,7 @@ public final class NaturesAura {
         new ModBlocks();
         new ModItems();
 
-        Compat.init();
+        Compat.preInit();
         PacketHandler.init();
         ModRegistry.preInit(event);
         new Multiblocks();
@@ -86,6 +86,7 @@ public final class NaturesAura {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         ModRegistry.postInit(event);
+        Compat.postInit();
         proxy.postInit(event);
 
         if (ModConfig.general.removeDragonBreathContainerItem) {

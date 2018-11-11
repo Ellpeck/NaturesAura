@@ -18,7 +18,10 @@ public class TreeRitualRecipe {
         this.items = items;
         this.result = result;
         this.time = time;
+    }
 
+    public TreeRitualRecipe register() {
         NaturesAuraAPI.TREE_RITUAL_RECIPES.put(this.name, this);
+        return this;
     }
 }

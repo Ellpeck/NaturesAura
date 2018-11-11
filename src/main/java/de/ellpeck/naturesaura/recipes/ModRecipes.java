@@ -20,7 +20,7 @@ public final class ModRecipes {
                 new ItemStack(Items.SPIDER_EYE),
                 new ItemStack(Items.GOLD_INGOT),
                 new ItemStack(ModItems.GOLD_LEAF),
-                new ItemStack(ModItems.GOLD_LEAF));
+                new ItemStack(ModItems.GOLD_LEAF)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "nature_altar"),
                 new ItemStack(Blocks.SAPLING), new ItemStack(ModBlocks.NATURE_ALTAR), 500,
                 new ItemStack(Blocks.STONE),
@@ -28,7 +28,7 @@ public final class ModRecipes {
                 new ItemStack(Blocks.STONE),
                 new ItemStack(ModItems.GOLD_LEAF),
                 new ItemStack(Items.GOLD_INGOT),
-                ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), AuraType.OVERWORLD));
+                ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), AuraType.OVERWORLD)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "ancient_sapling"),
                 new ItemStack(Blocks.SAPLING), new ItemStack(ModBlocks.ANCIENT_SAPLING), 200,
                 new ItemStack(Blocks.SAPLING),
@@ -36,7 +36,7 @@ public final class ModRecipes {
                 new ItemStack(Blocks.RED_FLOWER),
                 new ItemStack(Items.WHEAT_SEEDS),
                 new ItemStack(Items.REEDS),
-                new ItemStack(ModItems.GOLD_LEAF));
+                new ItemStack(ModItems.GOLD_LEAF)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "furnace_heater"),
                 new ItemStack(Blocks.SAPLING), new ItemStack(ModBlocks.FURNACE_HEATER), 600,
                 new ItemStack(ModBlocks.INFUSED_STONE),
@@ -46,7 +46,7 @@ public final class ModRecipes {
                 new ItemStack(Items.FIRE_CHARGE),
                 new ItemStack(Items.FLINT),
                 new ItemStack(Blocks.MAGMA),
-                ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), AuraType.NETHER));
+                ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), AuraType.NETHER)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "conversion_catalyst"),
                 new ItemStack(Blocks.SAPLING, 1, 3), new ItemStack(ModBlocks.CONVERSION_CATALYST), 600,
                 new ItemStack(Blocks.STONEBRICK, 1, 1),
@@ -54,20 +54,20 @@ public final class ModRecipes {
                 new ItemStack(Items.BREWING_STAND),
                 new ItemStack(Items.GOLD_INGOT),
                 new ItemStack(ModItems.GOLD_LEAF),
-                new ItemStack(Blocks.GLOWSTONE));
+                new ItemStack(Blocks.GLOWSTONE)).register();
 
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_iron"),
                 new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON),
-                null, 300, 80);
+                null, 300, 80).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_stone"),
                 new ItemStack(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE),
-                null, 150, 40);
+                null, 150, 40).register();
 
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "chorus"),
                 ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), AuraType.END), new ItemStack(Items.DRAGON_BREATH),
-                ModBlocks.CONVERSION_CATALYST, 350, 80);
+                ModBlocks.CONVERSION_CATALYST, 350, 80).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "leather"),
                 new ItemStack(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER),
-                ModBlocks.CONVERSION_CATALYST, 400, 50);
+                ModBlocks.CONVERSION_CATALYST, 400, 50).register();
     }
 }

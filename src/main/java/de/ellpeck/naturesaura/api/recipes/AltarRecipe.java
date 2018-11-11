@@ -21,7 +21,10 @@ public class AltarRecipe {
         this.catalyst = catalyst;
         this.aura = aura;
         this.time = time;
+    }
 
+    public AltarRecipe register(){
         NaturesAuraAPI.ALTAR_RECIPES.put(this.name, this);
+        return this;
     }
 }
