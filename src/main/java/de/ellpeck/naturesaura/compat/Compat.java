@@ -8,17 +8,19 @@ public final class Compat {
 
     public static boolean baubles;
     public static boolean craftTweaker;
+    public static boolean mtLib;
 
     public static void preInit() {
         baubles = Loader.isModLoaded("baubles");
         craftTweaker = Loader.isModLoaded("crafttweaker");
+        mtLib = Loader.isModLoaded("mtlib");
 
         if (baubles)
             MinecraftForge.EVENT_BUS.register(new BaublesCompat());
     }
 
     public static void postInit() {
-        if (craftTweaker)
+        if (craftTweaker && mtLib)
             CraftTweakerCompat.postInit();
     }
 }
