@@ -17,5 +17,5 @@ public interface IAuraType {
 
     boolean isPresentInWorld(World world);
 
-    int getBottledColor();
+    int getColor();
 }

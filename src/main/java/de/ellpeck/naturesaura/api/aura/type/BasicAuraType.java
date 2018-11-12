@@ -33,7 +33,7 @@ public class BasicAuraType implements IAuraType {
     }
 
     @Override
-    public int getBottledColor() {
+    public int getColor() {
         return this.color;
     }
 }

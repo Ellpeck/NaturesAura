@@ -93,6 +93,6 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
     @Override
     @SideOnly(Side.CLIENT)
     public IItemColor getItemColor() {
-        return (stack, tintIndex) -> tintIndex > 0 ? getType(stack).getBottledColor() : 0xFFFFFF;
+        return (stack, tintIndex) -> tintIndex > 0 ? getType(stack).getColor() : 0xFFFFFF;
     }
 }
