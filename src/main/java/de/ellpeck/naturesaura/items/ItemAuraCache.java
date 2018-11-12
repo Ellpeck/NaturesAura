@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.ItemAuraContainer;
 import de.ellpeck.naturesaura.renderers.ITrinketItem;
@@ -37,9 +37,9 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
             EntityPlayer player = (EntityPlayer) entityIn;
             if (player.isSneaking()) {
                 ItemStack stack = player.getHeldItemMainhand();
-                if (stack.hasCapability(NACapabilities.auraRecharge, null)) {
-                    IAuraContainer container = stackIn.getCapability(NACapabilities.auraContainer, null);
-                    stack.getCapability(NACapabilities.auraRecharge, null).rechargeFromContainer(container);
+                if (stack.hasCapability(NaturesAuraAPI.capAuraRecharge, null)) {
+                    IAuraContainer container = stackIn.getCapability(NaturesAuraAPI.capAuraContainer, null);
+                    stack.getCapability(NaturesAuraAPI.capAuraRecharge, null).rechargeFromContainer(container);
                 }
             }
         }
@@ -51,7 +51,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
             items.add(new ItemStack(this));
 
             ItemStack stack = new ItemStack(this);
-            IAuraContainer container = stack.getCapability(NACapabilities.auraContainer, null);
+            IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer, null);
             container.storeAura(container.getMaxAura(), false);
             items.add(stack);
         }
@@ -64,8 +64,8 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
-        if (stack.hasCapability(NACapabilities.auraContainer, null)) {
-            IAuraContainer container = stack.getCapability(NACapabilities.auraContainer, null);
+        if (stack.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
+            IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer, null);
             return 1 - container.getStoredAura() / (double) container.getMaxAura();
         } else {
             return 0;
@@ -80,13 +80,13 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
             @Override
             public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-                return capability == NACapabilities.auraContainer;
+                return capability == NaturesAuraAPI.capAuraContainer;
             }
 
             @Nullable
             @Override
             public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-                if (capability == NACapabilities.auraContainer) {
+                if (capability == NaturesAuraAPI.capAuraContainer) {
                     return (T) this.container;
                 } else {
                     return null;

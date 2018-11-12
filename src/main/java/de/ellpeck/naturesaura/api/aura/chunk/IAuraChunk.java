@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.api.aura.chunk;
 
-import de.ellpeck.naturesaura.api.NACapabilities;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,8 +36,8 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
      */
     static IAuraChunk getAuraChunk(World world, BlockPos pos) {
         Chunk chunk = world.getChunk(pos);
-        if (chunk.hasCapability(NACapabilities.auraChunk, null)) {
-            return chunk.getCapability(NACapabilities.auraChunk, null);
+        if (chunk.hasCapability(NaturesAuraAPI.capAuraChunk, null)) {
+            return chunk.getCapability(NaturesAuraAPI.capAuraChunk, null);
         } else {
             return null;
         }

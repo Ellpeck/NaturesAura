@@ -1,10 +1,8 @@
 package de.ellpeck.naturesaura;
 
-import baubles.api.BaublesApi;
-import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
-import de.ellpeck.naturesaura.compat.Compat;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +14,7 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -27,10 +26,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.lwjgl.opengl.GL11;
 
@@ -174,13 +173,13 @@ public final class Helper {
 
             @Override
             public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-                return capability == NACapabilities.auraRecharge;
+                return capability == NaturesAuraAPI.capAuraRecharge;
             }
 
             @Nullable
             @Override
             public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-                return capability == NACapabilities.auraRecharge ? (T) this.recharge : null;
+                return capability == NaturesAuraAPI.capAuraRecharge ? (T) this.recharge : null;
             }
         };
     }
@@ -213,5 +212,20 @@ public final class Helper {
                 if (prop.getName(value).equals(newValue))
                     return state.withProperty(prop, value);
         return null;
+    }
+
+    public static <T> void registerCap(Class<T> type) {
+        CapabilityManager.INSTANCE.register(type, new Capability.IStorage<T>() {
+            @Nullable
+            @Override
+            public NBTBase writeNBT(Capability capability, Object instance, EnumFacing side) {
+                return null;
+            }
+
+            @Override
+            public void readNBT(Capability capability, Object instance, EnumFacing side, NBTBase nbt) {
+
+            }
+        }, () -> null);
     }
 }

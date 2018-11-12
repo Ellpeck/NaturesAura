@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.aura.chunk.effect;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.chunk.ISpotDrainable;
@@ -22,8 +22,8 @@ public class ReplenishingEffect implements IDrainSpotEffect {
         if (amount < 0) {
             List<ISpotDrainable> tiles = new ArrayList<>();
             Helper.getTileEntitiesInArea(world, pos, 25, tile -> {
-                if (tile.hasCapability(NACapabilities.auraContainer, null)) {
-                    IAuraContainer container = tile.getCapability(NACapabilities.auraContainer, null);
+                if (tile.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
+                    IAuraContainer container = tile.getCapability(NaturesAuraAPI.capAuraContainer, null);
                     if (container instanceof ISpotDrainable) {
                         tiles.add((ISpotDrainable) container);
                     }

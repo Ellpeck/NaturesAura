@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.events;
 
 import baubles.api.BaublesApi;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
@@ -124,7 +124,7 @@ public class ClientEvents {
                 }
 
                 if (!cache.isEmpty()) {
-                    IAuraContainer container = cache.getCapability(NACapabilities.auraContainer, null);
+                    IAuraContainer container = cache.getCapability(NaturesAuraAPI.capAuraContainer, null);
                     int width = MathHelper.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
                     int x = res.getScaledWidth() / 2 - 173 - (mc.player.getHeldItemOffhand().isEmpty() ? 0 : 29);
                     int y = res.getScaledHeight() - 8;
@@ -177,8 +177,8 @@ public class ClientEvents {
                         BlockPos pos = mc.objectMouseOver.getBlockPos();
                         if (pos != null) {
                             TileEntity tile = mc.world.getTileEntity(pos);
-                            if (tile != null && tile.hasCapability(NACapabilities.auraContainer, null)) {
-                                IAuraContainer container = tile.getCapability(NACapabilities.auraContainer, null);
+                            if (tile != null && tile.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
+                                IAuraContainer container = tile.getCapability(NaturesAuraAPI.capAuraContainer, null);
 
                                 IBlockState state = mc.world.getBlockState(pos);
                                 ItemStack blockStack = state.getBlock().getPickBlock(state, mc.objectMouseOver, mc.world, pos, mc.player);
@@ -186,8 +186,8 @@ public class ClientEvents {
 
                                 if (tile instanceof TileEntityNatureAltar) {
                                     ItemStack tileStack = ((TileEntityNatureAltar) tile).getItemHandler(null).getStackInSlot(0);
-                                    if (!tileStack.isEmpty() && tileStack.hasCapability(NACapabilities.auraContainer, null)) {
-                                        IAuraContainer stackContainer = tileStack.getCapability(NACapabilities.auraContainer, null);
+                                    if (!tileStack.isEmpty() && tileStack.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
+                                        IAuraContainer stackContainer = tileStack.getCapability(NaturesAuraAPI.capAuraContainer, null);
                                         this.drawContainerInfo(stackContainer, mc, res, 55, tileStack.getDisplayName());
                                     }
                                 }

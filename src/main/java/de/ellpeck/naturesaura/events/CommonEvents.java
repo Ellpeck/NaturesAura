@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.events;
 
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -36,8 +36,8 @@ public class CommonEvents {
                 Iterator<Chunk> chunks = event.world.getPersistentChunkIterable(((WorldServer) event.world).getPlayerChunkMap().getChunkIterator());
                 while (chunks.hasNext()) {
                     Chunk chunk = chunks.next();
-                    if (chunk.hasCapability(NACapabilities.auraChunk, null)) {
-                        AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NACapabilities.auraChunk, null);
+                    if (chunk.hasCapability(NaturesAuraAPI.capAuraChunk, null)) {
+                        AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null);
                         auraChunk.update();
                     }
                 }
@@ -49,8 +49,8 @@ public class CommonEvents {
     @SubscribeEvent
     public void onChunkWatch(ChunkWatchEvent.Watch event) {
         Chunk chunk = event.getChunkInstance();
-        if (!chunk.getWorld().isRemote && chunk.hasCapability(NACapabilities.auraChunk, null)) {
-            AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NACapabilities.auraChunk, null);
+        if (!chunk.getWorld().isRemote && chunk.hasCapability(NaturesAuraAPI.capAuraChunk, null)) {
+            AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null);
             PacketHandler.sendTo(event.getPlayer(), auraChunk.makePacket());
         }
     }

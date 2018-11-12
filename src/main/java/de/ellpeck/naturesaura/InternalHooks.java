@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura;
 
 import baubles.api.BaublesApi;
-import de.ellpeck.naturesaura.api.NACapabilities;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.compat.Compat;
@@ -26,8 +25,8 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
             IItemHandler baubles = BaublesApi.getBaublesHandler(player);
             for (int i = 0; i < baubles.getSlots(); i++) {
                 ItemStack stack = baubles.getStackInSlot(i);
-                if (!stack.isEmpty() && stack.hasCapability(NACapabilities.auraContainer, null)) {
-                    amount -= stack.getCapability(NACapabilities.auraContainer, null).drainAura(amount, simulate);
+                if (!stack.isEmpty() && stack.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
+                    amount -= stack.getCapability(NaturesAuraAPI.capAuraContainer, null).drainAura(amount, simulate);
                     if (amount <= 0)
                         return true;
                 }
@@ -36,8 +35,8 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
             ItemStack stack = player.inventory.getStackInSlot(i);
-            if (!stack.isEmpty() && stack.hasCapability(NACapabilities.auraContainer, null)) {
-                amount -= stack.getCapability(NACapabilities.auraContainer, null).drainAura(amount, simulate);
+            if (!stack.isEmpty() && stack.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
+                amount -= stack.getCapability(NaturesAuraAPI.capAuraContainer, null).drainAura(amount, simulate);
                 if (amount <= 0)
                     return true;
             }
@@ -58,8 +57,8 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
                 if (Helper.isChunkLoaded(world, x, z)) {
                     Chunk chunk = world.getChunk(x, z);
-                    if (chunk.hasCapability(NACapabilities.auraChunk, null)) {
-                        IAuraChunk auraChunk = chunk.getCapability(NACapabilities.auraChunk, null);
+                    if (chunk.hasCapability(NaturesAuraAPI.capAuraChunk, null)) {
+                        IAuraChunk auraChunk = chunk.getCapability(NaturesAuraAPI.capAuraChunk, null);
                         auraChunk.getSpotsInArea(pos, radius, consumer);
                     }
                 }

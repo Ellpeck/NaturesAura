@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -94,7 +94,7 @@ public class TileEntityImpl extends TileEntity {
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return this.getItemHandler(facing) != null;
-        } else if (capability == NACapabilities.auraContainer) {
+        } else if (capability == NaturesAuraAPI.capAuraContainer) {
             return this.getAuraContainer(facing) != null;
         } else {
             return super.hasCapability(capability, facing);
@@ -106,7 +106,7 @@ public class TileEntityImpl extends TileEntity {
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return (T) this.getItemHandler(facing);
-        } else if (capability == NACapabilities.auraContainer) {
+        } else if (capability == NaturesAuraAPI.capAuraContainer) {
             return (T) this.getAuraContainer(facing);
         } else {
             return super.getCapability(capability, facing);

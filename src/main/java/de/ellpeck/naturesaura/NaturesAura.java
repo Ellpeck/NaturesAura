@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura;
 
-import de.ellpeck.naturesaura.api.NACapabilities.StorageImpl;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
@@ -21,7 +20,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -56,9 +54,9 @@ public final class NaturesAura {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         NaturesAuraAPI.setInstance(new InternalHooks());
-        CapabilityManager.INSTANCE.register(IAuraContainer.class, new StorageImpl<>(), () -> null);
-        CapabilityManager.INSTANCE.register(IAuraRecharge.class, new StorageImpl<>(), () -> null);
-        CapabilityManager.INSTANCE.register(IAuraChunk.class, new StorageImpl<>(), () -> null);
+        Helper.registerCap(IAuraContainer.class);
+        Helper.registerCap(IAuraRecharge.class);
+        Helper.registerCap(IAuraChunk.class);
 
         new ModBlocks();
         new ModItems();

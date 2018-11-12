@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.api.NACapabilities;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.BasicAuraContainer;
@@ -39,13 +38,13 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
         @Override
         protected boolean canInsert(ItemStack stack, int slot) {
-            return getRecipeForInput(stack) != null || stack.hasCapability(NACapabilities.auraContainer, null);
+            return getRecipeForInput(stack) != null || stack.hasCapability(NaturesAuraAPI.capAuraContainer, null);
         }
 
         @Override
         protected boolean canExtract(ItemStack stack, int slot, int amount) {
-            if (stack.hasCapability(NACapabilities.auraContainer, null))
-                return stack.getCapability(NACapabilities.auraContainer, null).storeAura(1, true) <= 0;
+            if (stack.hasCapability(NaturesAuraAPI.capAuraContainer, null))
+                return stack.getCapability(NaturesAuraAPI.capAuraContainer, null).storeAura(1, true) <= 0;
             else
                 return getRecipeForInput(stack) == null;
         }
@@ -98,8 +97,8 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                 }
 
                 ItemStack stack = this.items.getStackInSlot(0);
-                if (!stack.isEmpty() && stack.hasCapability(NACapabilities.auraContainer, null)) {
-                    IAuraContainer container = stack.getCapability(NACapabilities.auraContainer, null);
+                if (!stack.isEmpty() && stack.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
+                    IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer, null);
                     int theoreticalDrain = this.container.drainAura(10, true);
                     if (theoreticalDrain > 0) {
                         int stored = container.storeAura(theoreticalDrain, false);

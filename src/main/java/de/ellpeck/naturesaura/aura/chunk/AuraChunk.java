@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.aura.chunk;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
@@ -129,13 +129,13 @@ public class AuraChunk implements IAuraChunk {
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-        return capability == NACapabilities.auraChunk;
+        return capability == NaturesAuraAPI.capAuraChunk;
     }
 
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        return capability == NACapabilities.auraChunk ? (T) this : null;
+        return capability == NaturesAuraAPI.capAuraChunk ? (T) this : null;
     }
 
     @Override

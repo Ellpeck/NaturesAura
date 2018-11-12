@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.api;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.internal.StubHooks;
@@ -14,6 +15,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.ArrayList;
@@ -65,6 +68,29 @@ public final class NaturesAuraAPI {
     public static final IAuraType TYPE_NETHER = new BasicAuraType(new ResourceLocation(MOD_ID, "nether"), DimensionType.NETHER, 0x871c0c).register();
     public static final IAuraType TYPE_END = new BasicAuraType(new ResourceLocation(MOD_ID, "end"), DimensionType.THE_END, 0x302624).register();
     public static final IAuraType TYPE_OTHER = new BasicAuraType(new ResourceLocation(MOD_ID, "other"), null, 0x2fa8a0).register();
+
+    /**
+     * The capability for any item or block that stores Aura in the form of an
+     * {@link IAuraContainer}
+     */
+    @CapabilityInject(IAuraContainer.class)
+    public static Capability<IAuraContainer> capAuraContainer;
+    /**
+     * The capability for any item that can be recharged from an Aura storage
+     * container like the Aura Cache in the form of {@link IAuraRecharge} by a
+     * player holding it in their hand
+     */
+    @CapabilityInject(IAuraRecharge.class)
+    public static Capability<IAuraRecharge> capAuraRecharge;
+    /**
+     * The capability that any chunk in a world has to store Aura in it. As this
+     * is only applicable to chunks and all chunks in the world automatically
+     * get assigned this capability, using it directly is not necessary for
+     * addon developers. To retrieve this capability from any chunk, use the
+     * helper method {@link IAuraChunk#getAuraChunk(World, BlockPos)}.
+     */
+    @CapabilityInject(IAuraChunk.class)
+    public static Capability<IAuraChunk> capAuraChunk;
 
     /**
      * This method returns the active {@link IInternalHooks} instance which can

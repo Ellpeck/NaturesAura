@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.api.NACapabilities;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -70,8 +70,8 @@ public class PacketAuraChunk implements IMessage {
                 World world = Minecraft.getMinecraft().world;
                 if (world != null) {
                     Chunk chunk = world.getChunk(message.chunkX, message.chunkZ);
-                    if (chunk.hasCapability(NACapabilities.auraChunk, null)) {
-                        AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NACapabilities.auraChunk, null);
+                    if (chunk.hasCapability(NaturesAuraAPI.capAuraChunk, null)) {
+                        AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null);
                         auraChunk.setSpots(message.drainSpots);
                     }
                 }
