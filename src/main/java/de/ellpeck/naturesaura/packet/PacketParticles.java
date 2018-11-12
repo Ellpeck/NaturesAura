@@ -75,7 +75,7 @@ public class PacketParticles implements IMessage {
                             Multiblocks.TREE_RITUAL.forEach(pos, 'G', (dustPos, matcher) -> {
                                 IBlockState state = world.getBlockState(dustPos);
                                 AxisAlignedBB box = state.getBoundingBox(world, dustPos);
-                                NaturesAuraAPI.instance().spawnMagicParticle(world,
+                                NaturesAuraAPI.instance().spawnMagicParticle(
                                         dustPos.getX() + box.minX + (box.maxX - box.minX) * world.rand.nextFloat(),
                                         dustPos.getY() + 0.1F,
                                         dustPos.getZ() + box.minZ + (box.maxZ - box.minZ) * world.rand.nextFloat(),
@@ -88,7 +88,7 @@ public class PacketParticles implements IMessage {
                             break;
                         case 1: // Tree ritual: Consuming item
                             for (int i = world.rand.nextInt(20) + 10; i >= 0; i--) {
-                                NaturesAuraAPI.instance().spawnMagicParticle(world,
+                                NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX + 0.5F, message.posY + 0.9F, message.posZ + 0.5F,
                                         (float) world.rand.nextGaussian() * 0.04F, world.rand.nextFloat() * 0.04F, (float) world.rand.nextGaussian() * 0.04F,
                                         0x89cc37, 1.5F, 25, 0F, false, true);
@@ -96,7 +96,7 @@ public class PacketParticles implements IMessage {
                             break;
                         case 2: // Tree ritual: Tree disappearing
                             for (int i = world.rand.nextInt(5) + 3; i >= 0; i--) {
-                                NaturesAuraAPI.instance().spawnMagicParticle(world,
+                                NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX + world.rand.nextFloat(), message.posY + world.rand.nextFloat(), message.posZ + world.rand.nextFloat(),
                                         0F, 0F, 0F,
                                         0x33FF33, 1F, 50, 0F, false, true);
@@ -104,7 +104,7 @@ public class PacketParticles implements IMessage {
                             break;
                         case 3: // Tree ritual: Spawn result item
                             for (int i = world.rand.nextInt(10) + 10; i >= 0; i--) {
-                                NaturesAuraAPI.instance().spawnMagicParticle(world,
+                                NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX, message.posY, message.posZ,
                                         world.rand.nextGaussian() * 0.1F, world.rand.nextGaussian() * 0.1F, world.rand.nextGaussian() * 0.1F,
                                         0x89cc37, 2F, 100, 0F, true, true);
@@ -112,7 +112,7 @@ public class PacketParticles implements IMessage {
                             break;
                         case 4: // Nature altar: Conversion
                             for (int i = world.rand.nextInt(5) + 2; i >= 0; i--) {
-                                NaturesAuraAPI.instance().spawnMagicParticle(world,
+                                NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
                                         message.posY + 0.9F + 0.25F * world.rand.nextFloat(),
                                         message.posZ + 0.25F + world.rand.nextFloat() * 0.5F,
@@ -124,7 +124,7 @@ public class PacketParticles implements IMessage {
                             int color = message.data[0];
                             boolean disperse = message.data[1] > 0;
                             for (int i = world.rand.nextInt(5) + 5; i >= 0; i--) {
-                                NaturesAuraAPI.instance().spawnMagicParticle(world,
+                                NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX + world.rand.nextFloat(),
                                         message.posY + 1.1F,
                                         message.posZ + world.rand.nextFloat(),
@@ -134,7 +134,7 @@ public class PacketParticles implements IMessage {
                                 if (disperse)
                                     for (int x = -1; x <= 1; x += 2)
                                         for (int z = -1; z <= 1; z += 2) {
-                                            NaturesAuraAPI.instance().spawnMagicParticle(world,
+                                            NaturesAuraAPI.instance().spawnMagicParticle(
                                                     message.posX + x * 3 + 0.5F,
                                                     message.posY + 2.5,
                                                     message.posZ + z * 3 + 0.5F,
@@ -147,7 +147,7 @@ public class PacketParticles implements IMessage {
                             break;
                         case 6: // Plant boost effect
                             for (int i = world.rand.nextInt(20) + 15; i >= 0; i--)
-                                NaturesAuraAPI.instance().spawnMagicParticle(world,
+                                NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX + world.rand.nextFloat(),
                                         message.posY + 0.25F + world.rand.nextFloat() * 0.5F,
                                         message.posZ + world.rand.nextFloat(),
@@ -158,7 +158,7 @@ public class PacketParticles implements IMessage {
                         case 7: // Flower generator consumation
                             color = message.data[0];
                             for (int i = world.rand.nextInt(10) + 10; i >= 0; i--)
-                                NaturesAuraAPI.instance().spawnMagicParticle(world,
+                                NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
                                         message.posY + 0.25F + world.rand.nextFloat() * 0.5F,
                                         message.posZ + 0.25F + world.rand.nextFloat() * 0.5F,
@@ -169,7 +169,7 @@ public class PacketParticles implements IMessage {
                             break;
                         case 8: // Flower generator aura creation
                             for (int i = world.rand.nextInt(10) + 5; i >= 0; i--)
-                                NaturesAuraAPI.instance().spawnMagicParticle(world,
+                                NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
                                         message.posY + 1.01F,
                                         message.posZ + 0.25F + world.rand.nextFloat() * 0.5F,
@@ -183,7 +183,7 @@ public class PacketParticles implements IMessage {
                                 boolean side = world.rand.nextBoolean();
                                 float x = side ? world.rand.nextFloat() : (world.rand.nextBoolean() ? 1.1F : -0.1F);
                                 float z = !side ? world.rand.nextFloat() : (world.rand.nextBoolean() ? 1.1F : -0.1F);
-                                NaturesAuraAPI.instance().spawnMagicParticle(world,
+                                NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX + x, message.posY + 0.1F + world.rand.nextFloat() * 0.98F, message.posZ + z,
                                         0F, 0F, 0F,
                                         0xad7a37, world.rand.nextFloat() + 1F, 50, 0F, true, true);
@@ -191,7 +191,7 @@ public class PacketParticles implements IMessage {
                             break;
                         case 10: // Hopper upgrade picking up
                             for (int i = world.rand.nextInt(20) + 10; i >= 0; i--)
-                                NaturesAuraAPI.instance().spawnMagicParticle(world,
+                                NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX, message.posY + 0.45F, message.posZ,
                                         world.rand.nextGaussian() * 0.015F,
                                         world.rand.nextGaussian() * 0.015F,
@@ -201,7 +201,7 @@ public class PacketParticles implements IMessage {
                         case 11: // Shockwave creator particles
                             for (int i = 0; i < 360; i += 2) {
                                 double rad = Math.toRadians(i);
-                                NaturesAuraAPI.instance().spawnMagicParticle(world,
+                                NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX, message.posY + 0.01F, message.posZ,
                                         (float) Math.sin(rad) * 0.65F,
                                         0F,

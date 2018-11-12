@@ -152,22 +152,22 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                 if (rand.nextFloat() >= 0.7F) {
                     int fourths = this.container.getMaxAura() / 4;
                     if (this.container.getStoredAura() > 0) {
-                        NaturesAuraAPI.instance().spawnMagicParticle(this.world,
+                        NaturesAuraAPI.instance().spawnMagicParticle(
                                 this.pos.getX() - 4F + rand.nextFloat(), this.pos.getY() + 3F, this.pos.getZ() + rand.nextFloat(),
                                 0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
                     if (this.container.getStoredAura() >= fourths) {
-                        NaturesAuraAPI.instance().spawnMagicParticle(this.world,
+                        NaturesAuraAPI.instance().spawnMagicParticle(
                                 this.pos.getX() + 4F + rand.nextFloat(), this.pos.getY() + 3F, this.pos.getZ() + rand.nextFloat(),
                                 0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
                     if (this.container.getStoredAura() >= fourths * 2) {
-                        NaturesAuraAPI.instance().spawnMagicParticle(this.world,
+                        NaturesAuraAPI.instance().spawnMagicParticle(
                                 this.pos.getX() + rand.nextFloat(), this.pos.getY() + 3F, this.pos.getZ() - 4F + rand.nextFloat(),
                                 0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
                     if (this.container.getStoredAura() >= fourths * 3) {
-                        NaturesAuraAPI.instance().spawnMagicParticle(this.world,
+                        NaturesAuraAPI.instance().spawnMagicParticle(
                                 this.pos.getX() + rand.nextFloat(), this.pos.getY() + 3F, this.pos.getZ() + 4F + rand.nextFloat(),
                                 0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }

@@ -141,7 +141,6 @@ public final class NaturesAuraAPI {
          * you want to send it from the server side, you need to create your own
          * packet.
          *
-         * @param world     The world to spawn the particle in
          * @param posX      The x position
          * @param posY      The y position
          * @param posZ      The z position
@@ -157,7 +156,26 @@ public final class NaturesAuraAPI {
          * @param fade      If the particle should slowly fade out or suddenly
          *                  disappear
          */
-        void spawnMagicParticle(World world, double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade);
+        void spawnMagicParticle(double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade);
+
+        /**
+         * This method can be used to spawn the magic particle effect used by
+         * Nature's Aura. The particle will be created to spawn at the start
+         * position and move towards the end position, dying when it reaches it.
+         * It will not have an effect on the client side, so if you want to send
+         * it from the server side, you need to create your own packet.
+         *
+         * @param startX The start x
+         * @param startY The start y
+         * @param startZ The start z
+         * @param endX   The end x
+         * @param endY   The end y
+         * @param endZ   The end z
+         * @param speed  The speed at which the particle should go
+         * @param color  The color of the particle
+         * @param scale  The scale of the particle
+         */
+        void spawnParticleStream(float startX, float startY, float startZ, float endX, float endY, float endZ, float speed, int color, float scale);
 
         /**
          * @see IAuraChunk#getSpotsInArea(World, BlockPos, int, BiConsumer)

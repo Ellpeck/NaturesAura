@@ -67,7 +67,7 @@ public class BlockGoldenLeaves extends BlockLeaves implements
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (stateIn.getValue(STAGE) == HIGHEST_STAGE && rand.nextFloat() >= 0.75F)
-            NaturesAuraAPI.instance().spawnMagicParticle(worldIn,
+            NaturesAuraAPI.instance().spawnMagicParticle(
                     pos.getX() + rand.nextFloat(),
                     pos.getY() + rand.nextFloat(),
                     pos.getZ() + rand.nextFloat(),

@@ -12,6 +12,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
+import org.lwjgl.util.vector.Vector3f;
 
 import java.util.function.BiConsumer;
 
@@ -46,8 +47,21 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
-    public void spawnMagicParticle(World world, double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade) {
-        NaturesAura.proxy.spawnMagicParticle(world, posX, posY, posZ, motionX, motionY, motionZ, color, scale, maxAge, gravity, collision, fade);
+    public void spawnMagicParticle(double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade) {
+        NaturesAura.proxy.spawnMagicParticle(posX, posY, posZ, motionX, motionY, motionZ, color, scale, maxAge, gravity, collision, fade);
+    }
+
+    @Override
+    public void spawnParticleStream(float startX, float startY, float startZ, float endX, float endY, float endZ, float speed, int color, float scale) {
+        Vector3f dir = new Vector3f(endX - startX, endY - startY, endZ - startZ);
+        if (dir.length() > 0) {
+            int maxAge = (int) (dir.length() / speed);
+            dir.normalise();
+
+            this.spawnMagicParticle(startX, startY, startZ,
+                    dir.x * speed, dir.y * speed, dir.z * speed,
+                    color, scale, maxAge, 0F, false, false);
+        }
     }
 
     @Override

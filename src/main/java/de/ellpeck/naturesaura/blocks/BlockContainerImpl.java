@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -116,5 +117,31 @@ public class BlockContainerImpl extends BlockContainer implements IModItem, IMod
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityImpl)
             ((TileEntityImpl) tile).loadDataOnPlace(stack);
+    }
+
+    @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        this.updateRedstoneState(worldIn, pos);
+    }
+
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        this.updateRedstoneState(worldIn, pos);
+    }
+
+    private void updateRedstoneState(World world, BlockPos pos) {
+        if (!world.isRemote) {
+            TileEntity tile = world.getTileEntity(pos);
+            if (tile instanceof TileEntityImpl) {
+                TileEntityImpl impl = (TileEntityImpl) tile;
+                boolean powered = world.getRedstonePowerFromNeighbors(pos) > 0;
+                boolean wasPowered = impl.isRedstonePowered;
+                if (powered && !wasPowered) {
+                    impl.isRedstonePowered = true;
+                } else if (!powered && wasPowered) {
+                    impl.isRedstonePowered = false;
+                }
+            }
+        }
     }
 }

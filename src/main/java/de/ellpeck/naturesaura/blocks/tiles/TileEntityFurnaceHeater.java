@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.BlockFurnaceHeater;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
@@ -51,7 +52,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
                                 tilePos.getX() + this.world.rand.nextFloat(),
                                 tilePos.getY() + this.world.rand.nextFloat(),
                                 tilePos.getZ() + this.world.rand.nextFloat(),
-                                this.world.rand.nextFloat() * 0.07F + 0.07F, 0x89cc37, this.world.rand.nextFloat() + 0.5F
+                                this.world.rand.nextFloat() * 0.07F + 0.07F, IAuraType.forWorld(this.world).getColor(), this.world.rand.nextFloat() + 0.5F
                         ));
                     }
                 }

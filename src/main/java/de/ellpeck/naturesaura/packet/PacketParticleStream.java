@@ -3,13 +3,11 @@ package de.ellpeck.naturesaura.packet;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.util.vector.Vector3f;
 
 public class PacketParticleStream implements IMessage {
 
@@ -72,21 +70,10 @@ public class PacketParticleStream implements IMessage {
         @Override
         @SideOnly(Side.CLIENT)
         public IMessage onMessage(PacketParticleStream message, MessageContext ctx) {
-            NaturesAura.proxy.scheduleTask(() -> {
-                Vector3f dir = new Vector3f(
-                        message.endX - message.startX,
-                        message.endY - message.startY,
-                        message.endZ - message.startZ);
-                if (dir.length() > 0) {
-                    int maxAge = (int) (dir.length() / message.speed);
-                    dir.normalise();
-
-                    NaturesAuraAPI.instance().spawnMagicParticle(Minecraft.getMinecraft().world,
-                            message.startX, message.startY, message.startZ,
-                            dir.x * message.speed, dir.y * message.speed, dir.z * message.speed,
-                            message.color, message.scale, maxAge, 0F, false, false);
-                }
-            });
+            NaturesAura.proxy.scheduleTask(() -> NaturesAuraAPI.instance().spawnParticleStream(
+                    message.startX, message.startY, message.startZ,
+                    message.endX, message.endY, message.endZ,
+                    message.speed, message.color, message.scale));
 
             return null;
         }

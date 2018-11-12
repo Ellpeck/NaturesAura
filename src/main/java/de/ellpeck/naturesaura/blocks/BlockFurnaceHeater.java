@@ -60,7 +60,7 @@ public class BlockFurnaceHeater extends BlockContainerImpl {
                 z = facing.getXOffset() != 0 ? (0.35F + rand.nextFloat() * 0.3F) : facing.getZOffset() < 0 ? 1 : 0;
             }
 
-            NaturesAuraAPI.instance().spawnMagicParticle(worldIn,
+            NaturesAuraAPI.instance().spawnMagicParticle(
                     pos.getX() + x, pos.getY() + y, pos.getZ() + z,
                     (rand.nextFloat() * 0.016F + 0.01F) * facing.getXOffset(),
                     (rand.nextFloat() * 0.016F + 0.01F) * facing.getYOffset(),

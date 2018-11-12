@@ -21,6 +21,9 @@ public final class ModConfig {
 
         @Comment("Additional blocks that the Herbivorous Absorber can consume to generate Aura. Each entry needs to be formatted as modid:block[prop1=value1,...] where block state properties are optional")
         public String[] additionalHerbivorousAbsorberFlowers = new String[0];
+
+        @Comment("The amount of blocks that can be between two Aura Field Creators for them to be connectable and work together")
+        public int fieldCreatorRange = 8;
     }
 
     public static class Client {

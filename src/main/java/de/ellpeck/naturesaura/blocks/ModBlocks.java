@@ -31,4 +31,5 @@ public final class ModBlocks {
     public static final Block FLOWER_GENERATOR = new BlockFlowerGenerator();
     public static final Block PLACER = new BlockPlacer();
     public static final Block HOPPER_UPGRADE = new BlockHopperUpgrade();
+    public static final Block FIELD_CREATOR = new BlockFieldCreator();
 }

@@ -23,6 +23,9 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import javax.annotation.Nullable;
 
 public class TileEntityImpl extends TileEntity {
+
+    public boolean isRedstonePowered;
+
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
         return oldState.getBlock() != newState.getBlock();
@@ -40,13 +43,17 @@ public class TileEntityImpl extends TileEntity {
     }
 
     public void writeNBT(NBTTagCompound compound, SaveType type) {
-        if (type != SaveType.BLOCK)
+        if (type != SaveType.BLOCK) {
             super.writeToNBT(compound);
+            compound.setBoolean("redstone", this.isRedstonePowered);
+        }
     }
 
     public void readNBT(NBTTagCompound compound, SaveType type) {
-        if (type != SaveType.BLOCK)
+        if (type != SaveType.BLOCK) {
             super.readFromNBT(compound);
+            this.isRedstonePowered = compound.getBoolean("redstone");
+        }
     }
 
     @Override
