@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.blocks.BlockFurnaceHeater;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import net.minecraft.block.BlockFurnace;
@@ -11,6 +11,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -24,7 +25,9 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
         if (!this.world.isRemote && this.world.getTotalWorldTime() % 5 == 0) {
             boolean did = false;
 
-            TileEntity tile = this.world.getTileEntity(this.pos.down());
+            EnumFacing facing = this.world.getBlockState(this.pos).getValue(BlockFurnaceHeater.FACING);
+            BlockPos tilePos = this.pos.offset(facing.getOpposite());
+            TileEntity tile = this.world.getTileEntity(tilePos);
             if (tile instanceof TileEntityFurnace) {
                 TileEntityFurnace furnace = (TileEntityFurnace) tile;
                 if (isReady(furnace)) {
@@ -40,16 +43,17 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
                     chunk.drainAura(spot, MathHelper.ceil((200 - time) / 4F));
                     did = true;
 
-                    if (this.world.getTotalWorldTime() % 15 == 0)
+                    if (this.world.getTotalWorldTime() % 15 == 0) {
                         PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
                                 this.pos.getX() + (float) this.world.rand.nextGaussian() * 5F,
                                 this.pos.getY() + 1 + this.world.rand.nextFloat() * 5F,
                                 this.pos.getZ() + (float) this.world.rand.nextGaussian() * 5F,
-                                this.pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F,
-                                this.pos.getY() + 0.15F,
-                                this.pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F,
+                                tilePos.getX() + this.world.rand.nextFloat(),
+                                tilePos.getY() + this.world.rand.nextFloat(),
+                                tilePos.getZ() + this.world.rand.nextFloat(),
                                 this.world.rand.nextFloat() * 0.07F + 0.07F, 0x89cc37, this.world.rand.nextFloat() + 0.5F
                         ));
+                    }
                 }
             }
 
