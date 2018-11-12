@@ -35,7 +35,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = NaturesAura.MOD_ID, name = NaturesAura.MOD_NAME, version = NaturesAura.VERSION, dependencies = NaturesAura.DEPS)
 public final class NaturesAura {
 
-    public static final String MOD_ID = "naturesaura";
+    public static final String MOD_ID = NaturesAuraAPI.MOD_ID;
     public static final String PROXY_LOCATION = "de.ellpeck." + MOD_ID + ".proxy.";
     public static final String MOD_NAME = "Nature's Aura";
     public static final String VERSION = "@VERSION@";

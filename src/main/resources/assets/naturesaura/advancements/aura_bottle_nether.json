@@ -2,7 +2,7 @@
     "display": {
         "icon": {
             "item": "naturesaura:aura_bottle",
-            "nbt": "{\"type\":\"NETHER\"}"
+            "nbt": "{\"stored_type\":\"naturesaura:nether\"}"
         },
         "title": {
             "translate": "advancement.naturesaura.aura_bottle_nether"
@@ -19,7 +19,7 @@
                 "items": [
                     {
                         "item": "naturesaura:aura_bottle",
-                        "nbt": "{\"type\":\"NETHER\"}"
+                        "nbt": "{\"stored_type\":\"naturesaura:nether\"}"
                     }
                 ]
             }

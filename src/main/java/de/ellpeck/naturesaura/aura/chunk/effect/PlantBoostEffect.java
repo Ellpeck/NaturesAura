@@ -1,8 +1,9 @@
 package de.ellpeck.naturesaura.aura.chunk.effect;
 
-import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
@@ -54,7 +55,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public boolean appliesToType(AuraType type) {
-        return type == AuraType.OVERWORLD;
+    public boolean appliesToType(IAuraType type) {
+        return type == NaturesAuraAPI.TYPE_OVERWORLD;
     }
 }

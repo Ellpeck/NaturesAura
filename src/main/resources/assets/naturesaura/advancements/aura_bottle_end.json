@@ -2,7 +2,7 @@
     "display": {
         "icon": {
             "item": "naturesaura:aura_bottle",
-            "nbt": "{\"type\":\"END\"}"
+            "nbt": "{\"stored_type\":\"naturesaura:end\"}"
         },
         "title": {
             "translate": "advancement.naturesaura.aura_bottle_end"
@@ -19,7 +19,7 @@
                 "items": [
                     {
                         "item": "naturesaura:aura_bottle",
-                        "nbt": "{\"type\":\"END\"}"
+                        "nbt": "{\"stored_type\":\"naturesaura:end\"}"
                     }
                 ]
             }

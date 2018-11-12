@@ -1,13 +1,12 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NACapabilities;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.aura.AuraType;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.BasicAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -55,7 +54,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     @SideOnly(Side.CLIENT)
     public int bobTimer;
 
-    private final BasicAuraContainer container = new BasicAuraContainer(AuraType.OVERWORLD, 5000);
+    private final BasicAuraContainer container = new BasicAuraContainer(NaturesAuraAPI.TYPE_OVERWORLD, 5000);
     public boolean structureFine;
 
     private AltarRecipe currentRecipe;
@@ -78,7 +77,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
             if (this.structureFine) {
                 int space = this.container.storeAura(3, true);
-                if (space > 0 && this.container.isAcceptableType(AuraType.forWorld(this.world))) {
+                if (space > 0 && this.container.isAcceptableType(IAuraType.forWorld(this.world))) {
                     int toStore = Math.min(IAuraChunk.getAuraInArea(this.world, this.pos, 20), space);
                     if (toStore > 0) {
                         BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 20, this.pos);

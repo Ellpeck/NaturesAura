@@ -1,8 +1,9 @@
 package de.ellpeck.naturesaura.aura.chunk.effect;
 
-import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
@@ -52,7 +53,7 @@ public class GrassDieEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public boolean appliesToType(AuraType type) {
-        return type == AuraType.OVERWORLD;
+    public boolean appliesToType(IAuraType type) {
+        return type == NaturesAuraAPI.TYPE_OVERWORLD;
     }
 }

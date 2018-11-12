@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.api.aura.chunk;
 
 import de.ellpeck.naturesaura.api.NACapabilities;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -126,7 +126,7 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
 
     MutableInt getDrainSpot(BlockPos pos);
 
-    AuraType getType();
+    IAuraType getType();
 
     void markDirty();
 }

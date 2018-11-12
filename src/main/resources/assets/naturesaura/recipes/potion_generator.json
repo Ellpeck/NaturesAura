@@ -19,7 +19,7 @@
             "type": "minecraft:item_nbt",
             "item": "naturesaura:aura_bottle",
             "nbt": {
-                "type": "NETHER"
+                "stored_type": "naturesaura:nether"
             }
         }
     },

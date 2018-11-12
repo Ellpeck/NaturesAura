@@ -2,7 +2,7 @@
     "display": {
         "icon": {
             "item": "naturesaura:aura_bottle",
-            "nbt": "{\"type\":\"OVERWORLD\"}"
+            "nbt": "{\"stored_type\":\"naturesaura:overworld\"}"
         },
         "title": {
             "translate": "advancement.naturesaura.aura_bottle_overworld"
@@ -19,7 +19,7 @@
                 "items": [
                     {
                         "item": "naturesaura:aura_bottle",
-                        "nbt": "{\"type\":\"OVERWORLD\"}"
+                        "nbt": "{\"stored_type\":\"naturesaura:overworld\"}"
                     }
                 ]
             }

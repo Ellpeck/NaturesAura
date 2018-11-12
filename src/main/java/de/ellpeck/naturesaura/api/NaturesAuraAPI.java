@@ -2,6 +2,8 @@ package de.ellpeck.naturesaura.api;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.internal.StubHooks;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
@@ -10,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -25,18 +28,19 @@ import java.util.function.BiConsumer;
  * internal mod functions not exposed to the API.
  */
 public final class NaturesAuraAPI {
+    public static final String MOD_ID = "naturesaura";
     private static IInternalHooks instance = new StubHooks();
 
     /**
      * The list of all {@link AltarRecipe} instances which are the recipes used
-     * by the Natural Altar. Newly created recipes are automatically added to
-     * this list.
+     * by the Natural Altar. Newly created recipes can be easily added using
+     * {@link AltarRecipe#register()}.
      */
     public static final Map<ResourceLocation, AltarRecipe> ALTAR_RECIPES = new HashMap<>();
     /**
      * The list of all {@link TreeRitualRecipe} instances which are the recipes
-     * used in the Ritual of the Forest. Newly created recipes are automatically
-     * added to this list.
+     * used in the Ritual of the Forest. Newly created recipes can be easily
+     * added using {@link TreeRitualRecipe#register()}.
      */
     public static final Map<ResourceLocation, TreeRitualRecipe> TREE_RITUAL_RECIPES = new HashMap<>();
     /**
@@ -51,6 +55,16 @@ public final class NaturesAuraAPI {
      * by default, along with all blocks specified in the config file
      */
     public static final Map<IBlockState, IBlockState> BOTANIST_PICKAXE_CONVERSIONS = new HashMap<>();
+    /**
+     * A map of all {@link IAuraType} instances which are types of Aura present
+     * in different types of worlds. {@link BasicAuraType} instances can be
+     * easily registered using {@link BasicAuraType#register()}.
+     */
+    public static final Map<ResourceLocation, IAuraType> AURA_TYPES = new HashMap<>();
+    public static final IAuraType TYPE_OVERWORLD = new BasicAuraType(new ResourceLocation(MOD_ID, "overworld"), DimensionType.OVERWORLD, 0xbef224).register();
+    public static final IAuraType TYPE_NETHER = new BasicAuraType(new ResourceLocation(MOD_ID, "nether"), DimensionType.NETHER, 0x871c0c).register();
+    public static final IAuraType TYPE_END = new BasicAuraType(new ResourceLocation(MOD_ID, "end"), DimensionType.THE_END, 0x302624).register();
+    public static final IAuraType TYPE_OTHER = new BasicAuraType(new ResourceLocation(MOD_ID, "other"), null, 0x2fa8a0).register();
 
     /**
      * This method returns the active {@link IInternalHooks} instance which can

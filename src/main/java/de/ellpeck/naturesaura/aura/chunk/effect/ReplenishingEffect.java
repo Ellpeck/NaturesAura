@@ -2,11 +2,11 @@ package de.ellpeck.naturesaura.aura.chunk.effect;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NACapabilities;
-import de.ellpeck.naturesaura.api.aura.AuraType;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.chunk.ISpotDrainable;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -20,7 +20,6 @@ public class ReplenishingEffect implements IDrainSpotEffect {
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot) {
         int amount = spot.intValue();
         if (amount < 0) {
-            AuraType type = AuraType.forWorld(world);
             List<ISpotDrainable> tiles = new ArrayList<>();
             Helper.getTileEntitiesInArea(world, pos, 25, tile -> {
                 if (tile.hasCapability(NACapabilities.auraContainer, null)) {
@@ -31,6 +30,7 @@ public class ReplenishingEffect implements IDrainSpotEffect {
                 }
             });
             if (!tiles.isEmpty()) {
+                IAuraType type = IAuraType.forWorld(world);
                 for (int i = world.rand.nextInt(6); i >= 0; i--) {
                     ISpotDrainable tile = tiles.get(world.rand.nextInt(tiles.size()));
                     if (!tile.isAcceptableType(type))
@@ -49,7 +49,7 @@ public class ReplenishingEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public boolean appliesToType(AuraType type) {
+    public boolean appliesToType(IAuraType type) {
         return true;
     }
 }

@@ -1,16 +1,16 @@
 package de.ellpeck.naturesaura.api.aura.container;
 
-import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class ItemAuraContainer implements IAuraContainer {
 
     protected final ItemStack stack;
-    protected final AuraType type;
+    protected final IAuraType type;
     protected final int maxAura;
 
-    public ItemAuraContainer(ItemStack stack, AuraType type, int maxAura) {
+    public ItemAuraContainer(ItemStack stack, IAuraType type, int maxAura) {
         this.stack = stack;
         this.type = type;
         this.maxAura = maxAura;
@@ -63,7 +63,7 @@ public class ItemAuraContainer implements IAuraContainer {
     }
 
     @Override
-    public boolean isAcceptableType(AuraType type) {
+    public boolean isAcceptableType(IAuraType type) {
         return this.type == null || this.type == type;
     }
 }

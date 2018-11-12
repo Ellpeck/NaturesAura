@@ -1,8 +1,10 @@
 package de.ellpeck.naturesaura.items;
 
-import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.reg.IColorProvidingItem;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -18,13 +20,13 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemAuraBottle extends ItemImpl {
+public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
 
     public ItemAuraBottle() {
         super("aura_bottle");
-        this.addPropertyOverride(new ResourceLocation(NaturesAura.MOD_ID, "type"),
-                (stack, worldIn, entityIn) -> getType(stack).ordinal());
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -45,7 +47,7 @@ public class ItemAuraBottle extends ItemImpl {
             held.shrink(1);
 
             player.inventory.addItemStackToInventory(
-                    setType(new ItemStack(this), AuraType.forWorld(player.world)));
+                    setType(new ItemStack(this), IAuraType.forWorld(player.world)));
 
             BlockPos spot = IAuraChunk.getHighestSpot(player.world, pos, 30, pos);
             IAuraChunk.getAuraChunk(player.world, spot).drainAura(spot, 200);
@@ -59,7 +61,7 @@ public class ItemAuraBottle extends ItemImpl {
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
-            for (AuraType type : AuraType.values()) {
+            for (IAuraType type : NaturesAuraAPI.AURA_TYPES.values()) {
                 ItemStack stack = new ItemStack(this);
                 setType(stack, type);
                 items.add(stack);
@@ -69,22 +71,28 @@ public class ItemAuraBottle extends ItemImpl {
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        return I18n.translateToLocal(this.getUnlocalizedNameInefficiently(stack) + "." + getType(stack).name().toLowerCase() + ".name").trim();
+        return I18n.translateToLocal(this.getUnlocalizedNameInefficiently(stack) + "." + getType(stack).getName() + ".name").trim();
     }
 
-    public static AuraType getType(ItemStack stack) {
+    public static IAuraType getType(ItemStack stack) {
         if (!stack.hasTagCompound())
-            return AuraType.OTHER;
-        String type = stack.getTagCompound().getString("type");
+            return NaturesAuraAPI.TYPE_OTHER;
+        String type = stack.getTagCompound().getString("stored_type");
         if (type.isEmpty())
-            return AuraType.OTHER;
-        return AuraType.valueOf(type);
+            return NaturesAuraAPI.TYPE_OTHER;
+        return NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(type));
     }
 
-    public static ItemStack setType(ItemStack stack, AuraType type) {
+    public static ItemStack setType(ItemStack stack, IAuraType type) {
         if (!stack.hasTagCompound())
             stack.setTagCompound(new NBTTagCompound());
-        stack.getTagCompound().setString("type", type.name());
+        stack.getTagCompound().setString("stored_type", type.getName().toString());
         return stack;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IItemColor getItemColor() {
+        return (stack, tintIndex) -> tintIndex > 0 ? getType(stack).getBottledColor() : 0xFFFFFF;
     }
 }

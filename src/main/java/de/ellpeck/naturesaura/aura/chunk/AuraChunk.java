@@ -2,9 +2,9 @@ package de.ellpeck.naturesaura.aura.chunk;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NACapabilities;
-import de.ellpeck.naturesaura.api.aura.AuraType;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.aura.chunk.effect.GrassDieEffect;
 import de.ellpeck.naturesaura.aura.chunk.effect.PlantBoostEffect;
 import de.ellpeck.naturesaura.aura.chunk.effect.ReplenishingEffect;
@@ -32,12 +32,12 @@ import java.util.function.BiConsumer;
 public class AuraChunk implements IAuraChunk {
 
     private final Chunk chunk;
-    private final AuraType type;
+    private final IAuraType type;
     private final Map<BlockPos, MutableInt> drainSpots = new HashMap<>();
     private final List<IDrainSpotEffect> effects = new ArrayList<>();
     private boolean needsSync;
 
-    public AuraChunk(Chunk chunk, AuraType type) {
+    public AuraChunk(Chunk chunk, IAuraType type) {
         this.chunk = chunk;
         this.type = type;
 
@@ -96,7 +96,7 @@ public class AuraChunk implements IAuraChunk {
     }
 
     @Override
-    public AuraType getType() {
+    public IAuraType getType() {
         return this.type;
     }
 

@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.events;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NACapabilities;
-import de.ellpeck.naturesaura.api.aura.AuraType;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.aura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.util.ResourceLocation;
@@ -24,7 +24,7 @@ public class CommonEvents {
     @SubscribeEvent
     public void onChunkCapsAttach(AttachCapabilitiesEvent<Chunk> event) {
         Chunk chunk = event.getObject();
-        AuraType type = AuraType.forWorld(chunk.getWorld());
+        IAuraType type = IAuraType.forWorld(chunk.getWorld());
         event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "aura"), new AuraChunk(chunk, type));
     }
 
