@@ -14,9 +14,6 @@ public final class ModConfig {
 
     public static class General {
 
-        @Comment("If using Dragon's Breath in a Brewing Stand should not cause a glass bottle to appear")
-        public boolean removeDragonBreathContainerItem = true;
-
         @Comment("Additional conversion recipes for the Botanist's Pickaxe right click function. Each entry needs to be formatted as modid:input_block[prop1=value1,...]->modid:output_block[prop1=value1,...] where block state properties are optional")
         public String[] additionalBotanistPickaxeConversions = new String[0];
 
@@ -28,6 +25,9 @@ public final class ModConfig {
     }
 
     public static class Features {
+
+        @Comment("If using Dragon's Breath in a Brewing Stand should not cause a glass bottle to appear")
+        public boolean removeDragonBreathContainerItem = true;
 
         @Comment("If the Aura Imbalance effect of grass and trees dying in the area if the Aura levels are too low should occur")
         public boolean grassDieEffect = true;
