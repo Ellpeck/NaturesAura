@@ -90,7 +90,7 @@ public final class NaturesAura {
         Compat.postInit();
         proxy.postInit(event);
 
-        if (ModConfig.general.removeDragonBreathContainerItem) {
+        if (ModConfig.enabledFeatures.removeDragonBreathContainerItem) {
             Items.DRAGON_BREATH.setContainerItem(null);
         }
     }

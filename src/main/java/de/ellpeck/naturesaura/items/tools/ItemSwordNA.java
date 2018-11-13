@@ -5,9 +5,12 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -47,6 +50,13 @@ public class ItemSwordNA extends ItemSword implements IModItem, IModelProvider {
     @Override
     public void onPostInit(FMLPostInitializationEvent event) {
 
+    }
+
+    @Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+        if (this == ModItems.INFUSED_SWORD)
+            target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 60, 2));
+        return super.hitEntity(stack, target, attacker);
     }
 
     @Nullable

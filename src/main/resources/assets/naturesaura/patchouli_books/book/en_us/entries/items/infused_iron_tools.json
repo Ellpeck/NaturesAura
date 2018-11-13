@@ -33,7 +33,7 @@
             "recipe": "naturesaura:infused_hoe"
         }, {
             "type": "crafting",
-            "text": "The $(item)Botanist's Blade$(), while not having an inherent special feature, will still prove useful in slaying enemies of any sort.",
+            "text": "The $(item)Botanist's Blade$() is a good way of dealing with monsters: It will cause any mob you hit to be $(thing)slowed down$() for a couple of seconds, making them an easier target.",
             "recipe": "naturesaura:infused_sword"
         }
     ]
