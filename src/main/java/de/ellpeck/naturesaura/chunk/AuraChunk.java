@@ -1,13 +1,9 @@
-package de.ellpeck.naturesaura.aura.chunk;
+package de.ellpeck.naturesaura.chunk;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.aura.chunk.effect.GrassDieEffect;
-import de.ellpeck.naturesaura.aura.chunk.effect.PlantBoostEffect;
-import de.ellpeck.naturesaura.aura.chunk.effect.ReplenishingEffect;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.nbt.NBTBase;
@@ -28,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 public class AuraChunk implements IAuraChunk {
 
@@ -41,15 +38,11 @@ public class AuraChunk implements IAuraChunk {
         this.chunk = chunk;
         this.type = type;
 
-        this.addEffect(new ReplenishingEffect());
-        this.addEffect(new GrassDieEffect());
-        this.addEffect(new PlantBoostEffect());
-    }
-
-    @Override
-    public void addEffect(IDrainSpotEffect effect) {
-        if (effect.appliesToType(this.type))
-            this.effects.add(effect);
+        for (Supplier<IDrainSpotEffect> supplier : NaturesAuraAPI.DRAIN_SPOT_EFFECTS.values()) {
+            IDrainSpotEffect effect = supplier.get();
+            if (effect.appliesToType(this.type))
+                this.effects.add(effect);
+        }
     }
 
     @Override
@@ -116,7 +109,7 @@ public class AuraChunk implements IAuraChunk {
 
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
             for (IDrainSpotEffect effect : this.effects) {
-                world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":" + effect.getClass().getSimpleName());
+                world.profiler.func_194340_a(() -> effect.getName().toString());
                 effect.update(world, this.chunk, this, entry.getKey(), entry.getValue());
                 world.profiler.endSection();
             }

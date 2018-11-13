@@ -1,5 +1,6 @@
-package de.ellpeck.naturesaura.aura.chunk.effect;
+package de.ellpeck.naturesaura.chunk.effect;
 
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
@@ -8,6 +9,7 @@ import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -15,6 +17,9 @@ import net.minecraft.world.chunk.Chunk;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 public class GrassDieEffect implements IDrainSpotEffect {
+
+    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "grass_die");
+
     @Override
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot) {
         if (spot.intValue() < 0) {
@@ -55,5 +60,10 @@ public class GrassDieEffect implements IDrainSpotEffect {
     @Override
     public boolean appliesToType(IAuraType type) {
         return type == NaturesAuraAPI.TYPE_OVERWORLD;
+    }
+
+    @Override
+    public ResourceLocation getName() {
+        return NAME;
     }
 }

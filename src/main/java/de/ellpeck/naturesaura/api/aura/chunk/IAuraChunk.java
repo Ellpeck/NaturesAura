@@ -112,8 +112,6 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
         return NaturesAuraAPI.instance().getHighestAuraDrainSpot(world, pos, radius, defaultSpot);
     }
 
-    void addEffect(IDrainSpotEffect effect);
-
     /**
      * @see #getSpotsInArea(World, BlockPos, int, BiConsumer)
      */

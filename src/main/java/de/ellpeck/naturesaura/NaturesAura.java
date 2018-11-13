@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
+import de.ellpeck.naturesaura.chunk.effect.DrainSpotEffects;
 import de.ellpeck.naturesaura.commands.CommandAura;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.CommonEvents;
@@ -78,6 +79,7 @@ public final class NaturesAura {
         ModRecipes.init();
         ModRegistry.init(event);
         OreDict.init();
+        DrainSpotEffects.init();
 
         proxy.init(event);
     }

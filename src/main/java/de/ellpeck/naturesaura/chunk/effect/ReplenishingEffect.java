@@ -1,12 +1,14 @@
-package de.ellpeck.naturesaura.aura.chunk.effect;
+package de.ellpeck.naturesaura.chunk.effect;
 
 import de.ellpeck.naturesaura.Helper;
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.chunk.ISpotDrainable;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -16,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReplenishingEffect implements IDrainSpotEffect {
+
+    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "replenishing");
+
     @Override
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot) {
         int amount = spot.intValue();
@@ -51,5 +56,10 @@ public class ReplenishingEffect implements IDrainSpotEffect {
     @Override
     public boolean appliesToType(IAuraType type) {
         return true;
+    }
+
+    @Override
+    public ResourceLocation getName() {
+        return NAME;
     }
 }

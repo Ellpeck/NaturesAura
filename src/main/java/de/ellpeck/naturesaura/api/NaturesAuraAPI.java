@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.api;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 /**
  * The main class of the Nature's Aura API. This is where you can find recipe
@@ -68,6 +70,15 @@ public final class NaturesAuraAPI {
     public static final IAuraType TYPE_NETHER = new BasicAuraType(new ResourceLocation(MOD_ID, "nether"), DimensionType.NETHER, 0x871c0c).register();
     public static final IAuraType TYPE_END = new BasicAuraType(new ResourceLocation(MOD_ID, "end"), DimensionType.THE_END, 0x302624).register();
     public static final IAuraType TYPE_OTHER = new BasicAuraType(new ResourceLocation(MOD_ID, "other"), null, 0x2fa8a0).register();
+    /**
+     * A map of all {@link IDrainSpotEffect} suppliers which are effects that
+     * happen passively at every spot that Aura has been drained from in the
+     * world. These effects include things like vegetational increase and
+     * natural decay. To register your own drain spot effects, just add a
+     * supplier for them to this map and they will automatically be executed
+     * once a second for every drain spot currently loaded.
+     */
+    public static final Map<ResourceLocation, Supplier<IDrainSpotEffect>> DRAIN_SPOT_EFFECTS = new HashMap<>();
 
     /**
      * The capability for any item or block that stores Aura in the form of an
