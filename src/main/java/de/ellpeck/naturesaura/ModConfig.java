@@ -9,6 +9,7 @@ import net.minecraftforge.common.config.Config.RangeDouble;
 public final class ModConfig {
 
     public static General general = new General();
+    public static Features enabledFeatures = new Features();
     public static Client client = new Client();
 
     public static class General {
@@ -24,6 +25,14 @@ public final class ModConfig {
 
         @Comment("The amount of blocks that can be between two Aura Field Creators for them to be connectable and work together")
         public int fieldCreatorRange = 8;
+    }
+
+    public static class Features {
+
+        @Comment("If the Aura Imbalance effect of grass and trees dying in the area if the Aura levels are too low should occur")
+        public boolean grassDieEffect = true;
+        @Comment("If the Aura Imbalance effect of plant growth being boosted if the Aura levels are high enough should occur")
+        public boolean plantBoostEffect = true;
     }
 
     public static class Client {

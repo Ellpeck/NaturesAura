@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.chunk.effect;
 
+import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
@@ -43,7 +44,8 @@ public class PlantBoostEffect implements IDrainSpotEffect {
             if (plantPos.distanceSq(pos) <= dist * dist && world.isBlockLoaded(plantPos)) {
                 IBlockState state = world.getBlockState(plantPos);
                 Block block = state.getBlock();
-                if (block instanceof IGrowable && block != Blocks.TALLGRASS && block != Blocks.GRASS) {
+                if (block instanceof IGrowable &&
+                        block != Blocks.TALLGRASS && block != Blocks.GRASS && block != Blocks.DOUBLE_PLANT) {
                     IGrowable growable = (IGrowable) block;
                     if (growable.canGrow(world, plantPos, state, false)) {
                         growable.grow(world, world.rand, plantPos, state);
@@ -60,8 +62,8 @@ public class PlantBoostEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public boolean appliesToType(IAuraType type) {
-        return type == NaturesAuraAPI.TYPE_OVERWORLD;
+    public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
+        return ModConfig.enabledFeatures.plantBoostEffect && type == NaturesAuraAPI.TYPE_OVERWORLD;
     }
 
     @Override

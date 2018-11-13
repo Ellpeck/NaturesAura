@@ -11,7 +11,7 @@ public interface IDrainSpotEffect {
 
     void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot);
 
-    boolean appliesToType(IAuraType type);
+    boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type);
 
     ResourceLocation getName();
 }

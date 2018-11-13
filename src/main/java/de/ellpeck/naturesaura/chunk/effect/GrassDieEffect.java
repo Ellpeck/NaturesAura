@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.chunk.effect;
 
+import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
@@ -58,8 +59,8 @@ public class GrassDieEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public boolean appliesToType(IAuraType type) {
-        return type == NaturesAuraAPI.TYPE_OVERWORLD;
+    public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
+        return ModConfig.enabledFeatures.grassDieEffect && type == NaturesAuraAPI.TYPE_OVERWORLD;
     }
 
     @Override

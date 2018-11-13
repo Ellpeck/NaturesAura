@@ -40,7 +40,7 @@ public class AuraChunk implements IAuraChunk {
 
         for (Supplier<IDrainSpotEffect> supplier : NaturesAuraAPI.DRAIN_SPOT_EFFECTS.values()) {
             IDrainSpotEffect effect = supplier.get();
-            if (effect.appliesToType(this.type))
+            if (effect.appliesHere(this.chunk, this, this.type))
                 this.effects.add(effect);
         }
     }

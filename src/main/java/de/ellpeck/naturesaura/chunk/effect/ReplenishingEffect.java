@@ -54,7 +54,7 @@ public class ReplenishingEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public boolean appliesToType(IAuraType type) {
+    public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
         return true;
     }
 
