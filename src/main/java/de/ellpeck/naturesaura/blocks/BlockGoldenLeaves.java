@@ -158,8 +158,9 @@ public class BlockGoldenLeaves extends BlockLeaves implements
             }
 
             if (stage > 1) {
-                EnumFacing facing = EnumFacing.random(rand);
-                convert(worldIn, pos.offset(facing));
+                BlockPos offset = pos.offset(EnumFacing.random(rand));
+                if (worldIn.isBlockLoaded(offset))
+                    convert(worldIn, offset);
             }
         }
     }
