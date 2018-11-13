@@ -28,6 +28,7 @@ tile.naturesaura.infused_brick_slab_double.name=Infused Brick Double Slab
 tile.naturesaura.flower_generator.name=Herbivorous Absorber
 tile.naturesaura.placer.name=Imperceptible Builder
 tile.naturesaura.hopper_upgrade.name=Hopper Enhancement
+tile.naturesaura.field_creator.name=Aura Field Creator
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.gold_fiber.name=Brilliant Fiber

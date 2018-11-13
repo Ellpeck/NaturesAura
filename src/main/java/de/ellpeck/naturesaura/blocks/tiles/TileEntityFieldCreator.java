@@ -37,7 +37,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
             return;
 
         BlockPos connectedPos = this.getConnectedPos();
-        if (connectedPos == null)
+        if (connectedPos == null || !this.world.isBlockLoaded(connectedPos))
             return;
 
         TileEntity other = this.world.getTileEntity(connectedPos);
@@ -136,9 +136,9 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
                     p.getX() + (float) this.world.rand.nextGaussian() * 3F,
                     p.getY() + 1 + this.world.rand.nextFloat() * 3F,
                     p.getZ() + (float) this.world.rand.nextGaussian() * 3F,
-                    p.getX() + this.world.rand.nextFloat(),
-                    p.getY() + this.world.rand.nextFloat(),
-                    p.getZ() + this.world.rand.nextFloat(),
+                    p.getX() + 0.5F,
+                    p.getY() + 0.5F,
+                    p.getZ() + 0.5F,
                     this.world.rand.nextFloat() * 0.07F + 0.07F, IAuraType.forWorld(this.world).getColor(), this.world.rand.nextFloat() + 0.5F
             ));
         }

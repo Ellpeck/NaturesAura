@@ -1,0 +1,30 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "GIG",
+        "GPG",
+        "GEG"
+    ],
+    "key": {
+        "G": {
+            "item": "minecraft:glass"
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        },
+        "P": {
+            "item": "minecraft:piston"
+        },
+        "E": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:end"
+            }
+        }
+    },
+    "result": {
+        "item": "naturesaura:field_creator",
+        "count": 2
+    }
+}

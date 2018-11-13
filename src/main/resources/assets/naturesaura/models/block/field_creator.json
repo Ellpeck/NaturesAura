@@ -1,0 +1,69 @@
+{
+    "elements": [
+        {
+            "from": [0, 0, 0],
+            "to": [16, 16, 16],
+            "faces": {
+                "down": {
+                    "uv": [0, 0, 16, 16],
+                    "texture": "#texture",
+                    "cullface": "down"
+                },
+                "up": {
+                    "uv": [0, 0, 16, 16],
+                    "texture": "#texture",
+                    "cullface": "up"
+                },
+                "north": {
+                    "uv": [0, 0, 16, 16],
+                    "texture": "#texture",
+                    "cullface": "north"
+                },
+                "south": {
+                    "uv": [0, 0, 16, 16],
+                    "texture": "#texture",
+                    "cullface": "south"
+                },
+                "west": {
+                    "uv": [0, 0, 16, 16],
+                    "texture": "#texture",
+                    "cullface": "west"
+                },
+                "east": {
+                    "uv": [0, 0, 16, 16],
+                    "texture": "#texture",
+                    "cullface": "east"
+                }
+            }
+        }, {
+            "from": [5, 5, 5],
+            "to": [11, 11, 11],
+            "faces": {
+                "down": {
+                    "uv": [0, 0, 6, 6],
+                    "texture": "#center"
+                },
+                "up": {
+                    "uv": [0, 0, 6, 6],
+                    "texture": "#center"
+                },
+                "north": {
+                    "uv": [0, 0, 6, 6],
+                    "texture": "#center"
+                },
+                "south": {
+                    "uv": [0, 0, 6, 6],
+                    "texture": "#center"
+                },
+                "west": {
+                    "uv": [0, 0, 6, 6],
+                    "texture": "#center"
+                },
+                "east": {
+                    "uv": [0, 0, 6, 6],
+                    "texture": "#center"
+                }
+            }
+        }
+    ]
+}

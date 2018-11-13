@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "naturesaura:field_creator",
+        "textures": {
+            "texture": "naturesaura:blocks/field_creator",
+            "center": "naturesaura:blocks/field_creator_center",
+            "particle": "#texture"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

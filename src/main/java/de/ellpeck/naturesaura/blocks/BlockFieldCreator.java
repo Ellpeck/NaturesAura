@@ -5,14 +5,17 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityFieldCreator;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -76,15 +79,46 @@ public class BlockFieldCreator extends BlockContainerImpl {
                 BlockPos connected = creator.getConnectedPos();
                 if (connected != null)
                     NaturesAuraAPI.instance().spawnParticleStream(
-                            pos.getX() + rand.nextFloat(),
-                            pos.getY() + rand.nextFloat(),
-                            pos.getZ() + rand.nextFloat(),
-                            connected.getX() + rand.nextFloat(),
-                            connected.getY() + rand.nextFloat(),
-                            connected.getZ() + rand.nextFloat(),
+                            pos.getX() + 0.25F + rand.nextFloat() * 0.5F,
+                            pos.getY() + 0.25F + rand.nextFloat() * 0.5F,
+                            pos.getZ() + 0.25F + rand.nextFloat() * 0.5F,
+                            connected.getX() + 0.25F + rand.nextFloat() * 0.5F,
+                            connected.getY() + 0.25F + rand.nextFloat() * 0.5F,
+                            connected.getZ() + 0.25F + rand.nextFloat() * 0.5F,
                             0.65F, 0x4245f4, 1F
                     );
             }
         }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return false;
+    }
+
+    @Override
+    public boolean isSideSolid(IBlockState baseState, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return false;
+    }
+
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        return BlockFaceShape.UNDEFINED;
     }
 }
