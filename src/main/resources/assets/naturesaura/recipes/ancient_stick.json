@@ -2,7 +2,6 @@
     "type": "forge:ore_shaped",
     "pattern": [
         "W",
-        "W",
         "W"
     ],
     "key": {
@@ -12,6 +11,6 @@
     },
     "result": {
         "item": "naturesaura:ancient_stick",
-        "count": 3
+        "count": 2
     }
 }

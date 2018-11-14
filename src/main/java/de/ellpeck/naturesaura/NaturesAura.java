@@ -12,7 +12,6 @@ import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.CommonEvents;
 import de.ellpeck.naturesaura.events.TerrainGenEvents;
 import de.ellpeck.naturesaura.items.ModItems;
-import de.ellpeck.naturesaura.items.OreDict;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.proxy.IProxy;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
@@ -78,7 +77,6 @@ public final class NaturesAura {
         ModConfig.initOrReload();
         ModRecipes.init();
         ModRegistry.init(event);
-        OreDict.init();
         DrainSpotEffects.init();
 
         proxy.init(event);
