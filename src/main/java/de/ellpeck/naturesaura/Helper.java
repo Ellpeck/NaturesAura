@@ -36,21 +36,23 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 public final class Helper {
 
-    public static void getTileEntitiesInArea(World world, BlockPos pos, int radius, Consumer<TileEntity> consumer) {
+    public static boolean getTileEntitiesInArea(World world, BlockPos pos, int radius, Function<TileEntity, Boolean> consumer) {
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
                 if (isChunkLoaded(world, x, z)) {
                     for (TileEntity tile : world.getChunk(x, z).getTileEntityMap().values()) {
                         if (tile.getPos().distanceSq(pos) <= radius * radius)
-                            consumer.accept(tile);
+                            if (consumer.apply(tile))
+                                return true;
                     }
                 }
             }
         }
+        return false;
     }
 
     public static List<EntityItemFrame> getAttachedItemFrames(World world, BlockPos pos) {

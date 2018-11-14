@@ -10,7 +10,6 @@ import de.ellpeck.naturesaura.chunk.effect.DrainSpotEffects;
 import de.ellpeck.naturesaura.commands.CommandAura;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.CommonEvents;
-import de.ellpeck.naturesaura.events.TerrainGenEvents;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.proxy.IProxy;
@@ -66,7 +65,6 @@ public final class NaturesAura {
         ModRegistry.preInit(event);
         new Multiblocks();
 
-        MinecraftForge.TERRAIN_GEN_BUS.register(new TerrainGenEvents());
         MinecraftForge.EVENT_BUS.register(new CommonEvents());
 
         proxy.preInit(event);

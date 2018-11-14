@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -209,6 +210,28 @@ public class PacketParticles implements IMessage {
                                         0x911b07, 3F, 10, 0F, false, true);
                             }
                             break;
+                        case 12: // Oak generator
+                            int sapX = message.data[0];
+                            int sapY = message.data[1];
+                            int sapZ = message.data[2];
+                            for (int i = world.rand.nextInt(20) + 10; i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnParticleStream(
+                                        sapX + 0.5F + (float) world.rand.nextGaussian() * 3F,
+                                        sapY + 0.5F + world.rand.nextFloat() * 4F,
+                                        sapZ + 0.5F + (float) world.rand.nextGaussian() * 3F,
+                                        message.posX + 0.5F,
+                                        message.posY + 0.5F,
+                                        message.posZ + 0.5F,
+                                        0.6F, BiomeColorHelper.getFoliageColorAtPos(world, new BlockPos(sapX, sapY, sapZ)), 1.5F);
+                            for (int i = world.rand.nextInt(10) + 10; i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        message.posY + 1.01F,
+                                        message.posZ + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        world.rand.nextGaussian() * 0.03F,
+                                        world.rand.nextFloat() * 0.04F + 0.04F,
+                                        world.rand.nextGaussian() * 0.03F,
+                                        0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 60, 0F, false, true);
                     }
                 }
             });

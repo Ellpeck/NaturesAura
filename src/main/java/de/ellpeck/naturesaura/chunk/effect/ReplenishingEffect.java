@@ -33,6 +33,7 @@ public class ReplenishingEffect implements IDrainSpotEffect {
                         tiles.add((ISpotDrainable) container);
                     }
                 }
+                return false;
             });
             if (!tiles.isEmpty()) {
                 IAuraType type = IAuraType.forWorld(world);
