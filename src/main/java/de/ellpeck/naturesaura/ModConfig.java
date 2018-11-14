@@ -21,7 +21,7 @@ public final class ModConfig {
         public String[] additionalHerbivorousAbsorberFlowers = new String[0];
 
         @Comment("The amount of blocks that can be between two Aura Field Creators for them to be connectable and work together")
-        public int fieldCreatorRange = 8;
+        public int fieldCreatorRange = 10;
     }
 
     public static class Features {
