@@ -41,7 +41,7 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
                                 continue;
                             }
 
-                            int toAdd = ((effect.getAmplifier() * 5 + 1) * (effect.getDuration() / 40)) / 4;
+                            int toAdd = ((effect.getAmplifier() * 6 + 1) * (effect.getDuration() / 30)) / 4;
                             int toAddTimes = 4;
                             while (toAddTimes > 0) {
                                 boolean foundEmpty = false;

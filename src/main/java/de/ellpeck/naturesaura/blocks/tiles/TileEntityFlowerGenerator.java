@@ -57,7 +57,7 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
             IBlockState state = this.world.getBlockState(pos);
             MutableInt curr = this.consumedRecently.computeIfAbsent(state, s -> new MutableInt());
 
-            int addAmount = 100;
+            int addAmount = 200;
             int toAdd = Math.max(0, addAmount - curr.getValue());
             if (toAdd > 0) {
                 BlockPos auraPos = IAuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);

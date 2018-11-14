@@ -81,7 +81,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
                 creator.sendToClients();
             }
 
-            chunk.drainAura(spot, 15);
+            chunk.drainAura(spot, 10);
             this.sendParticles();
         } else {
             if (this.world.getTotalWorldTime() % 20 == 0)
