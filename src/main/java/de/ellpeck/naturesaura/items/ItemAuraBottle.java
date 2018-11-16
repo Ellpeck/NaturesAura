@@ -46,7 +46,12 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
 
                 ItemStack dispense = stack.splitStack(1);
                 if (offsetState.getBlock().isAir(offsetState, world, offset)) {
-                    dispense = setType(new ItemStack(ItemAuraBottle.this), IAuraType.forWorld(world));
+                    if (IAuraChunk.getAuraInArea(world, offset, 30) >= 1000) {
+                        dispense = setType(new ItemStack(ItemAuraBottle.this), IAuraType.forWorld(world));
+
+                        BlockPos spot = IAuraChunk.getHighestSpot(world, offset, 30, offset);
+                        IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 200);
+                    }
                 }
 
                 doDispense(world, dispense, 6, facing, BlockDispenser.getDispensePosition(source));
