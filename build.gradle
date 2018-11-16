@@ -15,6 +15,10 @@ version = "b2"
 group = "de.ellpeck.naturesaura"
 archivesBaseName = "NaturesAura"
 
+if(hasProperty('buildnumber')){
+    version = "${version}-${this.properties['buildnumber']}"
+}
+
 sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
@@ -64,5 +68,25 @@ processResources {
     }
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+apply plugin: 'maven-publish'
+
+jar {
+
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+//            url "file:///srv/nginx/maven"
+            url "file:///tmp/maven"
+        }
     }
 }
