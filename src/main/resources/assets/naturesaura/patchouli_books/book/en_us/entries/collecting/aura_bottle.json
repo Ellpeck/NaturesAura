@@ -13,6 +13,10 @@
             "item": "naturesaura:aura_bottle{stored_type:'naturesaura:overworld'}",
             "link_recipe": true,
             "text": "Of course, based on the world that you are currently in, the type of $(aura) collected will slightly vary. For instance, in the normal world, $(aura) can be gathered in the form of sunlight, while in the Nether realm, $(aura) can be gathered in the form of ghosts."
+        },
+        {
+            "type": "text",
+            "text": "Additionally, the collection of $(aura) in this manner can be automated easily using $(item)Dispensers$(): Putting empty bottles into them will cause them to be shot out with the cork slightly unscrewed, making them fill up with $(aura) in the process. As they are not sucked up by the Dispenser again afterwards, an additional tool like a $(item)Hopper$() is required."
         }
     ]
 }

@@ -4,19 +4,25 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
+import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -28,6 +34,25 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
     public ItemAuraBottle() {
         super("aura_bottle");
         MinecraftForge.EVENT_BUS.register(this);
+
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(Items.GLASS_BOTTLE, new BehaviorDefaultDispenseItem() {
+            @Override
+            protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+                World world = source.getWorld();
+                IBlockState state = source.getBlockState();
+                EnumFacing facing = state.getValue(BlockDispenser.FACING);
+                BlockPos offset = source.getBlockPos().offset(facing);
+                IBlockState offsetState = world.getBlockState(offset);
+
+                ItemStack dispense = stack.splitStack(1);
+                if (offsetState.getBlock().isAir(offsetState, world, offset)) {
+                    dispense = setType(new ItemStack(ItemAuraBottle.this), IAuraType.forWorld(world));
+                }
+
+                doDispense(world, dispense, 6, facing, BlockDispenser.getDispensePosition(source));
+                return stack;
+            }
+        });
     }
 
     @SubscribeEvent
