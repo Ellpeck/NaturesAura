@@ -33,8 +33,11 @@ import java.util.function.Supplier;
  * internal mod functions not exposed to the API.
  */
 public final class NaturesAuraAPI {
-    public static final String MOD_ID = "naturesaura";
     private static IInternalHooks instance = new StubHooks();
+
+    public static final String MOD_ID = "naturesaura";
+    public static final String API_ID = MOD_ID + "api";
+    public static final String VERSION = "1";
 
     /**
      * The list of all {@link AltarRecipe} instances which are the recipes used
