@@ -85,8 +85,8 @@ publishing {
     }
     repositories {
         maven {
-//            url "file:///srv/nginx/maven"
-            url "file:///tmp/maven"
+            url "file:///srv/nginx/maven"
+            //url "file:///tmp/maven"
         }
     }
 }
