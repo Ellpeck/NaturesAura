@@ -21,7 +21,7 @@ public final class Multiblocks {
                     {"         ", "   WBW   ", "   WBW   ", " WWCWCWW ", " BBW WBB ", " WWCWCWW ", "   WBW   ", "   WBW   ", "         "}},
             'C', Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, EnumType.CHISELED),
             'B', Blocks.STONEBRICK.getDefaultState(),
-            'W', Blocks.PLANKS,
+            'W', Matcher.oreDict(Blocks.PLANKS, "plankWood"),
             'M', Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, EnumType.MOSSY),
             '0', ModBlocks.NATURE_ALTAR,
             ' ', Matcher.wildcard());

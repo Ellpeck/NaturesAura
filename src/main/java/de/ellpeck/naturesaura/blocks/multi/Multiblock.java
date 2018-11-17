@@ -3,12 +3,16 @@ package de.ellpeck.naturesaura.blocks.multi;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 import vazkii.patchouli.api.PatchouliAPI;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
@@ -94,14 +98,14 @@ public class Multiblock {
                     Matcher matcher = matchers.get(this.rawPattern[x][y][z]);
                     if (matcher == null)
                         throw new IllegalStateException();
-                    if (!matcher.isWildcard)
+                    if (matcher.check != null)
                         this.matchers.put(new BlockPos(x, y, z), matcher);
                 }
 
         for (int i = 1; i < rawMatchers.length; i += 2) {
             if (rawMatchers[i] instanceof Matcher) {
                 Matcher matcher = (Matcher) rawMatchers[i];
-                if (matcher.isWildcard)
+                if (matcher.check == null)
                     rawMatchers[i] = PatchouliAPI.instance.anyMatcher();
                 else
                     rawMatchers[i] = PatchouliAPI.instance.predicateMatcher(matcher.defaultState,
@@ -144,18 +148,10 @@ public class Multiblock {
 
         public final IBlockState defaultState;
         public final IMatcher check;
-        public final boolean isWildcard;
 
         public Matcher(IBlockState defaultState, IMatcher check) {
             this.defaultState = defaultState;
             this.check = check;
-            this.isWildcard = false;
-        }
-
-        public Matcher(IBlockState defaultState) {
-            this.defaultState = defaultState;
-            this.check = null;
-            this.isWildcard = true;
         }
 
         public static Matcher state(IBlockState state) {
@@ -169,7 +165,32 @@ public class Multiblock {
         }
 
         public static Matcher wildcard() {
-            return new Matcher(Blocks.AIR.getDefaultState());
+            return new Matcher(Blocks.AIR.getDefaultState(), null);
+        }
+
+        public static Matcher oreDict(Block defaultBlock, String name) {
+            return new Matcher(defaultBlock.getDefaultState(), new IMatcher() {
+                private List<IBlockState> states;
+
+                @Override
+                public boolean matches(World world, BlockPos start, BlockPos offset, BlockPos pos, IBlockState state, char c) {
+                    if (this.states == null) {
+                        this.states = new ArrayList<>();
+                        for (ItemStack stack : OreDictionary.getOres(name)) {
+                            Block block = Block.getBlockFromItem(stack.getItem());
+                            if (block != null && block != Blocks.AIR) {
+                                int damage = stack.getItemDamage();
+                                if (damage == OreDictionary.WILDCARD_VALUE)
+                                    this.states.addAll(block.getBlockState().getValidStates());
+                                else
+                                    this.states.add(block.getStateFromMeta(damage));
+                            }
+                        }
+                    }
+
+                    return this.states.isEmpty() || this.states.contains(state);
+                }
+            });
         }
     }
 
