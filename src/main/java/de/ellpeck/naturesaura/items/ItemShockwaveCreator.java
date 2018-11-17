@@ -83,10 +83,10 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                 source = DamageSource.MAGIC;
 
             int range = 5;
-            List<EntityLiving> mobs = worldIn.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(
+            List<EntityLivingBase> mobs = worldIn.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(
                     living.posX - range, living.posY - 0.5, living.posZ - range,
                     living.posX + range, living.posY + 0.5, living.posZ + range));
-            for (EntityLiving mob : mobs) {
+            for (EntityLivingBase mob : mobs) {
                 if (mob.isDead || mob == living)
                     continue;
                 if (living.getDistanceSq(mob) > range * range)
