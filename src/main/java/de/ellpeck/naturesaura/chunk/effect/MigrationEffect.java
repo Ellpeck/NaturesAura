@@ -28,11 +28,7 @@ public class MigrationEffect implements IDrainSpotEffect {
         if (highestPos == null)
             return;
         IAuraChunk highestChunk = IAuraChunk.getAuraChunk(world, highestPos);
-        MutableInt highestSpot = highestChunk.getDrainSpot(highestPos);
-        if (highestSpot.intValue() <= 0)
-            return;
-
-        int toTransfer = Math.min(25, highestSpot.intValue());
+        int toTransfer = Math.min(25, highestChunk.getDrainSpot(highestPos).intValue());
         highestChunk.drainAura(highestPos, toTransfer);
         auraChunk.storeAura(pos, toTransfer);
     }

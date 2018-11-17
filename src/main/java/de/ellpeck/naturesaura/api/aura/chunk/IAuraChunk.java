@@ -82,7 +82,8 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
      * This method returns the position of the lowest drain spot (meaning the
      * one that has the least Aura stored) in the given area. This should be
      * used with any machines that fill up Aura in an area, so that the most
-     * drained spots get selected first.
+     * drained spots get selected first. Note that, when there is no drain spot
+     * with an amount lower than 0, the default will always be returned.
      *
      * @param world       The world
      * @param pos         The center position
@@ -99,7 +100,8 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
      * This method returns the position of the highest drain spot (meaning the
      * one that has the most Aura stored) in the given area. This should be used
      * with any machines that use up Aura so that the spots with the highest
-     * amount are drained first.
+     * amount are drained first. Note that, when there is no drain spot with an
+     * amount greater than 0, the defautl will always be returned.
      *
      * @param world       The world
      * @param pos         The center position

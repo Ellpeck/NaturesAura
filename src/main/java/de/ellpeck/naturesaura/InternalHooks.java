@@ -100,7 +100,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
             }
         });
         BlockPos lowest = lowestSpot.getValue();
-        if (lowest == null)
+        if (lowest == null || lowestAmount.intValue() >= 0)
             lowest = defaultSpot;
         return lowest;
     }
@@ -117,7 +117,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
             }
         });
         BlockPos highest = highestSpot.getValue();
-        if (highest == null)
+        if (highest == null || highestAmount.intValue() <= 0)
             highest = defaultSpot;
         return highest;
     }
