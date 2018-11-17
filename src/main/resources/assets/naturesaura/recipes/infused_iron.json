@@ -1,0 +1,15 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "I"
+    ],
+    "key": {
+        "I": {
+            "item": "naturesaura:infused_iron_block"
+        }
+    },
+    "result": {
+        "item": "naturesaura:infused_iron",
+        "count": 9
+    }
+}

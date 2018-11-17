@@ -11,7 +11,7 @@
         },
         {
             "type": "naturesaura:altar",
-            "text": "Creating $(item)Infused Iron$(), a material blessed with the powers of $(aura), allowing it to be used in several magical $(thing)natural items$().",
+            "text": "Creating $(item)Infused Iron$(), a material blessed with the powers of $(aura), allowing it to be used in several magical $(thing)natural items$().$(br)Note that the same infusion is possible using the materials' block form.",
             "recipe": "naturesaura:infused_iron"
         },
         {

@@ -59,6 +59,9 @@ public final class ModRecipes {
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_iron"),
                 new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON),
                 null, 300, 80).register();
+        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_iron_block"),
+                new ItemStack(Blocks.IRON_BLOCK), new ItemStack(ModBlocks.INFUSED_IRON),
+                null, 2700, 700).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_stone"),
                 new ItemStack(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE),
                 null, 150, 40).register();
