@@ -11,7 +11,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
-version = "b2"
+version = "b3"
 group = "de.ellpeck.naturesaura"
 archivesBaseName = "NaturesAura"
 

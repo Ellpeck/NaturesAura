@@ -69,7 +69,7 @@ public class AuraChunk implements IAuraChunk {
 
     @Override
     public int drainAura(BlockPos pos, int amount) {
-        return this.drainAura(pos, amount, true);
+        return this.drainAura(pos, amount, false);
     }
 
     @Override
