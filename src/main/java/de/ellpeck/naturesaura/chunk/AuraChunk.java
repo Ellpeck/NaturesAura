@@ -19,10 +19,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
@@ -57,19 +54,17 @@ public class AuraChunk implements IAuraChunk {
 
     @Override
     public void drainAura(BlockPos pos, int amount) {
-        MutableInt spot = this.getDrainSpot(pos);
-        spot.subtract(amount);
-        if (spot.intValue() == 0)
-            this.drainSpots.remove(pos);
+        if (amount <= 0)
+            return;
+        this.getDrainSpot(pos).subtract(amount);
         this.markDirty();
     }
 
     @Override
     public void storeAura(BlockPos pos, int amount) {
-        MutableInt spot = this.getDrainSpot(pos);
-        spot.add(amount);
-        if (spot.intValue() == 0)
-            this.drainSpots.remove(pos);
+        if (amount <= 0)
+            return;
+        this.getDrainSpot(pos).add(amount);
         this.markDirty();
     }
 
@@ -100,19 +95,33 @@ public class AuraChunk implements IAuraChunk {
 
     public void update() {
         World world = this.chunk.getWorld();
+
+        Set<BlockPos> toClear = null;
+        for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
+            BlockPos pos = entry.getKey();
+            MutableInt amount = entry.getValue();
+            for (IDrainSpotEffect effect : this.effects) {
+                world.profiler.func_194340_a(() -> effect.getName().toString());
+                effect.update(world, this.chunk, this, pos, amount);
+                world.profiler.endSection();
+            }
+            if (amount.intValue() == 0) {
+                if (toClear == null)
+                    toClear = new HashSet<>();
+                toClear.add(pos);
+            }
+        }
+        if (toClear != null) {
+            for (BlockPos spot : toClear)
+                this.drainSpots.remove(spot);
+            this.markDirty();
+        }
+
         if (this.needsSync) {
             PacketHandler.sendToAllLoaded(world,
                     new BlockPos(this.chunk.x * 16, 0, this.chunk.z * 16),
                     this.makePacket());
             this.needsSync = false;
-        }
-
-        for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
-            for (IDrainSpotEffect effect : this.effects) {
-                world.profiler.func_194340_a(() -> effect.getName().toString());
-                effect.update(world, this.chunk, this, entry.getKey(), entry.getValue());
-                world.profiler.endSection();
-            }
         }
     }
 

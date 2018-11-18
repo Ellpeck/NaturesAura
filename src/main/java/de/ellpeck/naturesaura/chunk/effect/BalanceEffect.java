@@ -10,9 +10,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.commons.lang3.mutable.MutableInt;
 
-public class MigrationEffect implements IDrainSpotEffect {
+public class BalanceEffect implements IDrainSpotEffect {
 
-    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "migration");
+    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "balance");
 
     @Override
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot) {
