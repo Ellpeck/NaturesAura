@@ -58,7 +58,8 @@ public class ClientEvents {
                 IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 15, ((blockPos, drainSpot) -> {
                     spots.increment();
                     amount.add(drainSpot.intValue());
-                    left.add(prefix + drainSpot.intValue() + " @ " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
+                    if (mc.player.isSneaking())
+                        left.add(prefix + drainSpot.intValue() + " @ " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
                 }));
                 left.add(prefix + "Total: " + amount.intValue() + " in " + spots.intValue() + " spots");
                 left.add(prefix + "Type: " + IAuraType.forWorld(mc.world).getName());

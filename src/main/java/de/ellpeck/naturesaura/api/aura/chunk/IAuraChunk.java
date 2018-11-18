@@ -119,9 +119,51 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
      */
     void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer);
 
-    void drainAura(BlockPos pos, int amount);
+    /**
+     * Drains the given amount of Aura from the given position. Returns the
+     * amount of Aura that was drained.
+     *
+     * @param pos        The position
+     * @param amount     The amount to drain
+     * @param aimForZero If true, and draining the given amount would make the
+     *                   level go from positive to negative, an amount will be
+     *                   drained instead that will cause the spot's amount to be
+     *                   0.
+     * @return The amount of Aura drained. Will only be different from the
+     * supplied amount if stopAtZero is true
+     */
+    int drainAura(BlockPos pos, int amount, boolean aimForZero);
 
-    void storeAura(BlockPos pos, int amount);
+    /**
+     * Convenience version of {@link #drainAura(BlockPos, int, boolean)} with
+     * aimForZero set to false, as this is the most likely behavior you will
+     * want. Notice that {@link #storeAura(BlockPos, int)} has aimForZero set to
+     * true.
+     */
+    int drainAura(BlockPos pos, int amount);
+
+    /**
+     * Stores the given amount of Aura at the given position. Returns the amount
+     * of Aura that was stored.
+     *
+     * @param pos        The position
+     * @param amount     The amount to store
+     * @param aimForZero If true, and storing the given amount would make the
+     *                   level go from negative to positive, an amount will be
+     *                   stored instead that will cause the spot's amount to be
+     *                   0.
+     * @return The amount of Aura stored. Will only be different from the
+     * supplied amount if stopAtZero is true
+     */
+    int storeAura(BlockPos pos, int amount, boolean aimForZero);
+
+    /**
+     * Convenience version of {@link #storeAura(BlockPos, int, boolean)} with
+     * aimForZero set to true, as this is the most likely behavior you will
+     * want. Notice that {@link #drainAura(BlockPos, int)} has aimForZero set to
+     * false.
+     */
+    int storeAura(BlockPos pos, int amount);
 
     MutableInt getDrainSpot(BlockPos pos);
 
