@@ -34,4 +34,5 @@ public final class ModBlocks {
     public static final Block FIELD_CREATOR = new BlockFieldCreator();
     public static final Block OAK_GENERATOR = new BlockOakGenerator();
     public static final Block INFUSED_IRON = new BlockImpl("infused_iron_block", Material.IRON).setSoundType(SoundType.METAL).setHardness(3F);
+    public static final Block OFFERING_TABLE = new BlockOfferingTable();
 }

@@ -1,0 +1,17 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "naturesaura:offering_table",
+        "textures": {
+            "0": "naturesaura:blocks/stripped_oak_log",
+            "1": "naturesaura:blocks/stripped_oak_log_top",
+            "2": "naturesaura:blocks/infused_stone",
+            "particle": "#0"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

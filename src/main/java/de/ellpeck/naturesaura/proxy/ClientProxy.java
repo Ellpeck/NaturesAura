@@ -1,8 +1,10 @@
 package de.ellpeck.naturesaura.proxy;
 
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
+import de.ellpeck.naturesaura.blocks.tiles.TileEntityOfferingTable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderNatureAltar;
+import de.ellpeck.naturesaura.blocks.tiles.render.RenderOfferingTable;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderWoodStand;
 import de.ellpeck.naturesaura.events.ClientEvents;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
@@ -38,6 +40,7 @@ public class ClientProxy implements IProxy {
     public void init(FMLInitializationEvent event) {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodStand.class, new RenderWoodStand());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNatureAltar.class, new RenderNatureAltar());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOfferingTable.class, new RenderOfferingTable());
 
         Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
         for (RenderPlayer render : new RenderPlayer[]{skinMap.get("default"), skinMap.get("slim")}) {
