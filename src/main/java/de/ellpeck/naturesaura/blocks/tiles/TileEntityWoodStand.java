@@ -1,12 +1,11 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
@@ -152,12 +151,14 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                 if (tile instanceof TileEntityWoodStand) {
                     ItemStack stack = ((TileEntityWoodStand) tile).items.getStackInSlot(0);
                     if (!stack.isEmpty()) {
-                        int index = Helper.getItemIndex(required, stack, true);
-                        if (index >= 0) {
-                            required.remove(index);
-                        } else {
-                            return false;
+                        for (int i = required.size() - 1; i >= 0; i--) {
+                            ItemStack req = required.get(i);
+                            if (this.recipe.matches(req, stack)) {
+                                required.remove(i);
+                                return true;
+                            }
                         }
+                        return false;
                     }
                 }
                 return true;

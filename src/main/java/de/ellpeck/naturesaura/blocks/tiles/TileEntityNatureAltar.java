@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.BasicAuraContainer;
@@ -116,7 +115,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                             this.currentRecipe = getRecipeForInput(stack);
                         }
                     } else {
-                        if (stack.isEmpty() || !Helper.areItemsEqual(stack, this.currentRecipe.input, true)) {
+                        if (stack.isEmpty() || !this.currentRecipe.matches(stack)) {
                             this.currentRecipe = null;
                             this.timer = 0;
                         } else if (this.hasCatalyst(this.currentRecipe.catalyst)) {
@@ -181,7 +180,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
     private static AltarRecipe getRecipeForInput(ItemStack input) {
         for (AltarRecipe recipe : NaturesAuraAPI.ALTAR_RECIPES.values()) {
-            if (Helper.areItemsEqual(recipe.input, input, true)) {
+            if (recipe.matches(input)) {
                 return recipe;
             }
         }

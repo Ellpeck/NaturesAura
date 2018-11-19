@@ -20,6 +20,10 @@ public class TreeRitualRecipe {
         this.time = time;
     }
 
+    public boolean matches(ItemStack expected, ItemStack found) {
+        return ItemStack.areItemsEqual(expected, found) && ItemStack.areItemStackShareTagsEqual(expected, found);
+    }
+
     public TreeRitualRecipe register() {
         NaturesAuraAPI.TREE_RITUAL_RECIPES.put(this.name, this);
         return this;

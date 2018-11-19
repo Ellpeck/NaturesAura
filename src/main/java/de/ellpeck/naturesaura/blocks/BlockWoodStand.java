@@ -60,16 +60,18 @@ public class BlockWoodStand extends BlockContainerImpl {
                                     TileEntityWoodStand stand = (TileEntityWoodStand) tile;
                                     ItemStack stack = stand.items.getStackInSlot(0);
                                     if (!stack.isEmpty()) {
-                                        int index = Helper.getItemIndex(required, stack, true);
-                                        if (index >= 0) {
-                                            required.remove(index);
+                                        for (int i = required.size() - 1; i >= 0; i--) {
+                                            ItemStack req = required.get(i);
+                                            if (recipe.matches(req, stack)) {
+                                                required.remove(i);
 
-                                            if (toPick.getValue() == null) {
-                                                toPick.setValue(stand);
+                                                if (toPick.getValue() == null) {
+                                                    toPick.setValue(stand);
+                                                }
+                                                return true;
                                             }
-                                        } else {
-                                            return false;
                                         }
+                                        return false;
                                     }
                                 }
                                 return true;

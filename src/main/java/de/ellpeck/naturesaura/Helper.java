@@ -84,15 +84,6 @@ public final class Helper {
         return ((a & 255) << 24) | ((r & 255) << 16) | ((g & 255) << 8) | (b & 255);
     }
 
-    public static int getItemIndex(List<ItemStack> list, ItemStack item, boolean nbt) {
-        for (int i = 0; i < list.size(); i++) {
-            if (areItemsEqual(list.get(i), item, nbt)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     public static boolean areItemsEqual(ItemStack first, ItemStack second, boolean nbt) {
         if (!ItemStack.areItemsEqual(first, second))
             return false;

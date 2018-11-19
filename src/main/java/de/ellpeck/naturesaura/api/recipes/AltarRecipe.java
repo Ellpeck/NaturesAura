@@ -23,7 +23,11 @@ public class AltarRecipe {
         this.time = time;
     }
 
-    public AltarRecipe register(){
+    public boolean matches(ItemStack found) {
+        return ItemStack.areItemsEqual(this.input, found) && ItemStack.areItemStackShareTagsEqual(this.input, found);
+    }
+
+    public AltarRecipe register() {
         NaturesAuraAPI.ALTAR_RECIPES.put(this.name, this);
         return this;
     }
