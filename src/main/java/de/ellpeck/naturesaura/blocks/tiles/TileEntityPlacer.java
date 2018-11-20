@@ -12,7 +12,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -24,14 +23,11 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TileEntityPlacer extends TileEntityImpl implements ITickable {
-
-    private final ItemStackHandlerNA handler = new ItemStackHandlerNA(1, this, true);
 
     @Override
     public void update() {
@@ -93,10 +89,10 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickable {
             ItemStack frameStack = frame.getDisplayedItem();
             if (frameStack.isEmpty())
                 continue;
-            if(Helper.areItemsEqual(stack, frameStack, false))
+            if (Helper.areItemsEqual(stack, frameStack, false))
                 return true;
 
-            if(state.getBlock() == Blocks.FARMLAND && frameStack.getItem() == ModItems.FARMING_STENCIL)
+            if (state.getBlock() == Blocks.FARMLAND && frameStack.getItem() == ModItems.FARMING_STENCIL)
                 return true;
         }
         return false;
@@ -138,24 +134,5 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickable {
 
         stack.shrink(1);
         return true;
-    }
-
-    @Override
-    public IItemHandlerModifiable getItemHandler(EnumFacing facing) {
-        return this.handler;
-    }
-
-    @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
-        super.readNBT(compound, type);
-        if (type != SaveType.BLOCK)
-            this.handler.deserializeNBT(compound.getCompoundTag("ingredients"));
-    }
-
-    @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
-        super.writeNBT(compound, type);
-        if (type != SaveType.BLOCK)
-            compound.setTag("ingredients", this.handler.serializeNBT());
     }
 }

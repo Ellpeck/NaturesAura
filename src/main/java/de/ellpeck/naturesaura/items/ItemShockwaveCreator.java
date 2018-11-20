@@ -37,7 +37,7 @@ import java.util.List;
 
 public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
 
-    private static final ResourceLocation RES_WORN = new ResourceLocation(NaturesAura.MOD_ID, "textures/ingredients/shockwave_creator_player.png");
+    private static final ResourceLocation RES_WORN = new ResourceLocation(NaturesAura.MOD_ID, "textures/items/shockwave_creator_player.png");
 
     public ItemShockwaveCreator() {
         super("shockwave_creator");

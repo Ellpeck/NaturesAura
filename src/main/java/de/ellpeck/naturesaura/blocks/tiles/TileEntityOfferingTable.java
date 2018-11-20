@@ -12,7 +12,7 @@ public class TileEntityOfferingTable extends TileEntityImpl {
     public void writeNBT(NBTTagCompound compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
-            compound.setTag("ingredients", this.items.serializeNBT());
+            compound.setTag("items", this.items.serializeNBT());
         }
     }
 
@@ -20,7 +20,7 @@ public class TileEntityOfferingTable extends TileEntityImpl {
     public void readNBT(NBTTagCompound compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
-            this.items.deserializeNBT(compound.getCompoundTag("ingredients"));
+            this.items.deserializeNBT(compound.getCompoundTag("items"));
         }
     }
 

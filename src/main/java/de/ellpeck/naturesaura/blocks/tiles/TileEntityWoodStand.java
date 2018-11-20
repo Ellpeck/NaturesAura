@@ -173,7 +173,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
     public void writeNBT(NBTTagCompound compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK)
-            compound.setTag("ingredients", this.items.serializeNBT());
+            compound.setTag("items", this.items.serializeNBT());
 
         if (type == SaveType.TILE) {
             if (this.ritualPos != null && this.recipe != null) {
@@ -188,7 +188,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
     public void readNBT(NBTTagCompound compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK)
-            this.items.deserializeNBT(compound.getCompoundTag("ingredients"));
+            this.items.deserializeNBT(compound.getCompoundTag("items"));
 
         if (type == SaveType.TILE) {
             if (compound.hasKey("recipe")) {
