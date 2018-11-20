@@ -14,6 +14,7 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -28,6 +29,7 @@ import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.crafting.IngredientNBT;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -220,5 +222,21 @@ public final class Helper {
 
             }
         }, () -> null);
+    }
+
+    public static Ingredient nbtIng(ItemStack stack) {
+        return new IngredientNBTPublic(stack);
+    }
+
+    public static Ingredient blockIng(Block block) {
+        return Ingredient.fromStacks(new ItemStack(block));
+    }
+
+    private static class IngredientNBTPublic extends IngredientNBT {
+
+        //Why is this protected in the original class, we will never know
+        public IngredientNBTPublic(ItemStack stack) {
+            super(stack);
+        }
     }
 }

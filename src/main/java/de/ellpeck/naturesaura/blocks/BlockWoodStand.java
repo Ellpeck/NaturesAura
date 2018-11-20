@@ -11,6 +11,7 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -50,8 +51,8 @@ public class BlockWoodStand extends BlockContainerImpl {
                 ItemStack saplingStack = sapling.getBlock().getItem(world, pos, sapling);
                 if (!saplingStack.isEmpty()) {
                     for (TreeRitualRecipe recipe : NaturesAuraAPI.TREE_RITUAL_RECIPES.values()) {
-                        if (Helper.areItemsEqual(saplingStack, recipe.saplingType, true)) {
-                            List<ItemStack> required = new ArrayList<>(Arrays.asList(recipe.items));
+                        if (recipe.saplingType.apply(saplingStack)) {
+                            List<Ingredient> required = new ArrayList<>(Arrays.asList(recipe.ingredients));
                             MutableObject<TileEntityWoodStand> toPick = new MutableObject<>();
 
                             boolean fine = Multiblocks.TREE_RITUAL.forEach(pos, 'W', (tilePos, matcher) -> {
@@ -61,8 +62,8 @@ public class BlockWoodStand extends BlockContainerImpl {
                                     ItemStack stack = stand.items.getStackInSlot(0);
                                     if (!stack.isEmpty()) {
                                         for (int i = required.size() - 1; i >= 0; i--) {
-                                            ItemStack req = required.get(i);
-                                            if (recipe.matches(req, stack)) {
+                                            Ingredient req = required.get(i);
+                                            if (req.apply(stack)) {
                                                 required.remove(i);
 
                                                 if (toPick.getValue() == null) {

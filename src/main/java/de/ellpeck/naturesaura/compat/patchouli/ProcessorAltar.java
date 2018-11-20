@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.compat.patchouli;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariableProvider;
@@ -22,12 +22,12 @@ public class ProcessorAltar implements IComponentProcessor {
     public String process(String key) {
         switch (key) {
             case "input":
-                return PatchouliAPI.instance.serializeItemStack(this.recipe.input);
+                return PatchouliAPI.instance.serializeIngredient(this.recipe.input);
             case "output":
                 return PatchouliAPI.instance.serializeItemStack(this.recipe.output);
             case "catalyst":
-                if (this.recipe.catalyst != null)
-                    return PatchouliAPI.instance.serializeItemStack(new ItemStack(this.recipe.catalyst));
+                if (this.recipe.catalyst != Ingredient.EMPTY)
+                    return PatchouliAPI.instance.serializeIngredient(this.recipe.catalyst);
                 else
                     return null;
             case "name":
@@ -39,6 +39,6 @@ public class ProcessorAltar implements IComponentProcessor {
 
     @Override
     public boolean allowRender(String group) {
-        return group.isEmpty() || group.equals(this.recipe.catalyst == null ? "altar" : "catalyst");
+        return group.isEmpty() || group.equals(this.recipe.catalyst == Ingredient.EMPTY ? "altar" : "catalyst");
     }
 }

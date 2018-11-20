@@ -10,8 +10,7 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -27,12 +26,11 @@ public final class AltarTweaker {
     @ZenMethod
     public static void addRecipe(String name, IItemStack input, IItemStack output, IItemStack catalyst, int aura, int time) {
         CraftTweakerCompat.SCHEDULED_ACTIONS.add(() -> {
-            Block block = Block.getBlockFromItem(InputHelper.toStack(catalyst).getItem());
             ResourceLocation res = new ResourceLocation(name);
             return new Add(Collections.singletonMap(res, new AltarRecipe(res,
-                    InputHelper.toStack(input),
+                    Helper.nbtIng(InputHelper.toStack(input)),
                     InputHelper.toStack(output),
-                    block == Blocks.AIR ? null : block,
+                    Ingredient.fromStacks(InputHelper.toStack(catalyst)),
                     aura, time)));
         });
     }

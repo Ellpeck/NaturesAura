@@ -10,10 +10,12 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,10 +29,10 @@ public final class TreeRitualTweaker {
         CraftTweakerCompat.SCHEDULED_ACTIONS.add(() -> {
             ResourceLocation res = new ResourceLocation(name);
             return new Add(Collections.singletonMap(res, new TreeRitualRecipe(res,
-                    InputHelper.toStack(saplingType),
+                    Ingredient.fromStacks(InputHelper.toStack(saplingType)),
                     InputHelper.toStack(result),
                     time,
-                    InputHelper.toStacks(items)
+                    Arrays.stream(items).map(item -> Helper.nbtIng(InputHelper.toStack(item))).toArray(Ingredient[]::new)
             )));
         });
     }

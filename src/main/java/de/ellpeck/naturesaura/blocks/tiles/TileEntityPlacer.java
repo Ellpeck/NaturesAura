@@ -149,13 +149,13 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickable {
     public void readNBT(NBTTagCompound compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK)
-            this.handler.deserializeNBT(compound.getCompoundTag("items"));
+            this.handler.deserializeNBT(compound.getCompoundTag("ingredients"));
     }
 
     @Override
     public void writeNBT(NBTTagCompound compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK)
-            compound.setTag("items", this.handler.serializeNBT());
+            compound.setTag("ingredients", this.handler.serializeNBT());
     }
 }

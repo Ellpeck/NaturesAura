@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.recipes;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
@@ -10,67 +11,69 @@ import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
 public final class ModRecipes {
 
     public static void init() {
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "eye"),
-                new ItemStack(Blocks.SAPLING), new ItemStack(ModItems.EYE), 250,
-                new ItemStack(Items.SPIDER_EYE),
-                new ItemStack(Items.GOLD_INGOT),
-                new ItemStack(ModItems.GOLD_LEAF),
-                new ItemStack(ModItems.GOLD_LEAF)).register();
+                Ingredient.fromStacks(new ItemStack(Blocks.SAPLING)), new ItemStack(ModItems.EYE), 250,
+                Ingredient.fromItem(Items.SPIDER_EYE),
+                Ingredient.fromItem(Items.GOLD_INGOT),
+                Ingredient.fromItem(ModItems.GOLD_LEAF),
+                Ingredient.fromItem(ModItems.GOLD_LEAF)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "nature_altar"),
-                new ItemStack(Blocks.SAPLING), new ItemStack(ModBlocks.NATURE_ALTAR), 500,
-                new ItemStack(Blocks.STONE),
-                new ItemStack(Blocks.STONE),
-                new ItemStack(Blocks.STONE),
-                new ItemStack(ModItems.GOLD_LEAF),
-                new ItemStack(Items.GOLD_INGOT),
-                ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)).register();
+                Helper.blockIng(Blocks.SAPLING), new ItemStack(ModBlocks.NATURE_ALTAR), 500,
+                Helper.blockIng(Blocks.STONE),
+                Helper.blockIng(Blocks.STONE),
+                Helper.blockIng(Blocks.STONE),
+                Ingredient.fromItem(ModItems.GOLD_LEAF),
+                Ingredient.fromItem(Items.GOLD_INGOT),
+                Helper.nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD))).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "ancient_sapling"),
-                new ItemStack(Blocks.SAPLING), new ItemStack(ModBlocks.ANCIENT_SAPLING), 200,
-                new ItemStack(Blocks.SAPLING),
-                new ItemStack(Blocks.YELLOW_FLOWER),
-                new ItemStack(Blocks.RED_FLOWER),
-                new ItemStack(Items.WHEAT_SEEDS),
-                new ItemStack(Items.REEDS),
-                new ItemStack(ModItems.GOLD_LEAF)).register();
+                Helper.blockIng(Blocks.SAPLING), new ItemStack(ModBlocks.ANCIENT_SAPLING), 200,
+                Helper.blockIng(Blocks.SAPLING),
+                Helper.blockIng(Blocks.YELLOW_FLOWER),
+                Helper.blockIng(Blocks.RED_FLOWER),
+                Ingredient.fromItem(Items.WHEAT_SEEDS),
+                Ingredient.fromItem(Items.REEDS),
+                Ingredient.fromItem(ModItems.GOLD_LEAF)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "furnace_heater"),
-                new ItemStack(Blocks.SAPLING), new ItemStack(ModBlocks.FURNACE_HEATER), 600,
-                new ItemStack(ModBlocks.INFUSED_STONE),
-                new ItemStack(ModBlocks.INFUSED_STONE),
-                new ItemStack(ModItems.INFUSED_IRON),
-                new ItemStack(ModItems.INFUSED_IRON),
-                new ItemStack(Items.FIRE_CHARGE),
-                new ItemStack(Items.FLINT),
-                new ItemStack(Blocks.MAGMA),
-                ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER)).register();
+                Helper.blockIng(Blocks.SAPLING), new ItemStack(ModBlocks.FURNACE_HEATER), 600,
+                Helper.blockIng(ModBlocks.INFUSED_STONE),
+                Helper.blockIng(ModBlocks.INFUSED_STONE),
+                Ingredient.fromItem(ModItems.INFUSED_IRON),
+                Ingredient.fromItem(ModItems.INFUSED_IRON),
+                Ingredient.fromItem(Items.FIRE_CHARGE),
+                Ingredient.fromItem(Items.FLINT),
+                Helper.blockIng(Blocks.MAGMA),
+                Helper.nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER))).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "conversion_catalyst"),
-                new ItemStack(Blocks.SAPLING, 1, 3), new ItemStack(ModBlocks.CONVERSION_CATALYST), 600,
-                new ItemStack(Blocks.STONEBRICK, 1, 1),
-                new ItemStack(ModBlocks.INFUSED_STONE),
-                new ItemStack(Items.BREWING_STAND),
-                new ItemStack(Items.GOLD_INGOT),
-                new ItemStack(ModItems.GOLD_LEAF),
-                new ItemStack(Blocks.GLOWSTONE)).register();
+                Ingredient.fromStacks(new ItemStack(Blocks.SAPLING, 1, 3)), new ItemStack(ModBlocks.CONVERSION_CATALYST), 600,
+                Ingredient.fromStacks(new ItemStack(Blocks.STONEBRICK, 1, 1)),
+                Helper.blockIng(ModBlocks.INFUSED_STONE),
+                Ingredient.fromItem(Items.BREWING_STAND),
+                Ingredient.fromItem(Items.GOLD_INGOT),
+                Ingredient.fromItem(ModItems.GOLD_LEAF),
+                Helper.blockIng(Blocks.GLOWSTONE)).register();
 
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_iron"),
-                new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON),
-                null, 300, 80).register();
+                Ingredient.fromItem(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON),
+                Ingredient.EMPTY, 300, 80).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_iron_block"),
-                new ItemStack(Blocks.IRON_BLOCK), new ItemStack(ModBlocks.INFUSED_IRON),
-                null, 2700, 700).register();
+                Helper.blockIng(Blocks.IRON_BLOCK), new ItemStack(ModBlocks.INFUSED_IRON),
+                Ingredient.EMPTY, 2700, 700).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_stone"),
-                new ItemStack(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE),
-                null, 150, 40).register();
+                Helper.blockIng(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE),
+                Ingredient.EMPTY, 150, 40).register();
 
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "chorus"),
-                ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_END), new ItemStack(Items.DRAGON_BREATH),
-                ModBlocks.CONVERSION_CATALYST, 350, 80).register();
+                Helper.nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_END)),
+                new ItemStack(Items.DRAGON_BREATH),
+                Helper.blockIng(ModBlocks.CONVERSION_CATALYST), 350, 80).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "leather"),
-                new ItemStack(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER),
-                ModBlocks.CONVERSION_CATALYST, 400, 50).register();
+                Ingredient.fromItem(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER),
+                Helper.blockIng(ModBlocks.CONVERSION_CATALYST), 400, 50).register();
     }
 }

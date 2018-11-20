@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.compat.jei.treeritual;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
@@ -11,6 +11,8 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.Arrays;
 
 public class TreeRitualCategory implements IRecipeCategory<TreeRitualWrapper> {
 
@@ -46,15 +48,15 @@ public class TreeRitualCategory implements IRecipeCategory<TreeRitualWrapper> {
         TreeRitualRecipe recipe = recipeWrapper.recipe;
 
         group.init(0, true, 34, 34);
-        group.set(0, recipe.saplingType);
+        group.set(0, Arrays.asList(recipe.saplingType.getMatchingStacks()));
 
         group.init(1, true, 124, 34);
         group.set(1, recipe.result);
 
         int[][] positions = new int[][]{{35, 1}, {35, 69}, {1, 35}, {69, 35}, {12, 12}, {58, 58}, {58, 12}, {12, 58}};
-        for (int i = 0; i < recipe.items.length; i++) {
+        for (int i = 0; i < recipe.ingredients.length; i++) {
             group.init(i + 2, true, positions[i][0] - 1, positions[i][1] - 1);
-            group.set(i + 2, recipe.items[i]);
+            group.set(i + 2, Arrays.asList(recipe.ingredients[i].getMatchingStacks()));
         }
     }
 }

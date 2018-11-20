@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -115,7 +116,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                             this.currentRecipe = getRecipeForInput(stack);
                         }
                     } else {
-                        if (stack.isEmpty() || !this.currentRecipe.matches(stack)) {
+                        if (stack.isEmpty() || !this.currentRecipe.input.apply(stack)) {
                             this.currentRecipe = null;
                             this.timer = 0;
                         } else if (this.hasCatalyst(this.currentRecipe.catalyst)) {
@@ -180,21 +181,23 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
     private static AltarRecipe getRecipeForInput(ItemStack input) {
         for (AltarRecipe recipe : NaturesAuraAPI.ALTAR_RECIPES.values()) {
-            if (recipe.matches(input)) {
+            if (recipe.input.apply(input)) {
                 return recipe;
             }
         }
         return null;
     }
 
-    private boolean hasCatalyst(Block block) {
-        if (block == null)
+    private boolean hasCatalyst(Ingredient catalyst) {
+        if (catalyst == Ingredient.EMPTY)
             return true;
 
         for (int x = -2; x <= 2; x += 4) {
             for (int z = -2; z <= 2; z += 4) {
-                IBlockState state = this.world.getBlockState(this.pos.add(x, 1, z));
-                if (state.getBlock() == block)
+                BlockPos offset = this.pos.add(x, 1, z);
+                IBlockState state = this.world.getBlockState(offset);
+                ItemStack stack = state.getBlock().getItem(this.world, offset, state);
+                if (catalyst.apply(stack))
                     return true;
             }
         }
@@ -205,7 +208,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     public void writeNBT(NBTTagCompound compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
-            compound.setTag("items", this.items.serializeNBT());
+            compound.setTag("ingredients", this.items.serializeNBT());
             compound.setBoolean("fine", this.structureFine);
             this.container.writeNBT(compound);
         }
@@ -221,7 +224,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     public void readNBT(NBTTagCompound compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
-            this.items.deserializeNBT(compound.getCompoundTag("items"));
+            this.items.deserializeNBT(compound.getCompoundTag("ingredients"));
             this.structureFine = compound.getBoolean("fine");
             this.container.readNBT(compound);
         }
