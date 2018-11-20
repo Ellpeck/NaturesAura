@@ -25,14 +25,6 @@ import java.util.Map;
 
 public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickable {
 
-    static {
-        for (Block block : ForgeRegistries.BLOCKS) {
-            if (block instanceof BlockFlower) {
-                NaturesAuraAPI.FLOWER_GENERATOR_BLOCKS.addAll(block.getBlockState().getValidStates());
-            }
-        }
-    }
-
     private final Map<IBlockState, MutableInt> consumedRecently = new HashMap<>();
 
     @Override
@@ -44,7 +36,7 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
                 for (int z = -range; z <= range; z++) {
                     BlockPos offset = this.pos.add(x, 0, z);
                     IBlockState state = this.world.getBlockState(offset);
-                    if (NaturesAuraAPI.FLOWER_GENERATOR_BLOCKS.contains(state)) {
+                    if (NaturesAuraAPI.FLOWERS.contains(state)) {
                         possible.add(offset);
                     }
                 }

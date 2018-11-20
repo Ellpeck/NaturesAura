@@ -10,6 +10,7 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.api.recipes.ing.NBTIngredient;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -32,7 +33,7 @@ public final class TreeRitualTweaker {
                     Ingredient.fromStacks(InputHelper.toStack(saplingType)),
                     InputHelper.toStack(result),
                     time,
-                    Arrays.stream(items).map(item -> Helper.nbtIng(InputHelper.toStack(item))).toArray(Ingredient[]::new)
+                    Arrays.stream(items).map(item -> new NBTIngredient(InputHelper.toStack(item))).toArray(Ingredient[]::new)
             )));
         });
     }

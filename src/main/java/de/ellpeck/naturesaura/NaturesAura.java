@@ -72,7 +72,7 @@ public final class NaturesAura {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        ModConfig.initOrReload();
+        ModConfig.initOrReload(false);
         ModRecipes.init();
         ModRegistry.init(event);
         DrainSpotEffects.init();

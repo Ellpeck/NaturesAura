@@ -29,15 +29,6 @@ import javax.annotation.Nullable;
 
 public class ItemPickaxeNA extends ItemPickaxe implements IModItem, IModelProvider {
 
-    static {
-        NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
-                Blocks.COBBLESTONE.getDefaultState(),
-                Blocks.MOSSY_COBBLESTONE.getDefaultState());
-        NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
-                Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT),
-                Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY));
-    }
-
     private final String baseName;
 
     public ItemPickaxeNA(String baseName, ToolMaterial material) {

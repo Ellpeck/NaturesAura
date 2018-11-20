@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks.multi;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.blocks.multi.Multiblock.Matcher;
 import net.minecraft.block.BlockLog;
@@ -45,5 +46,13 @@ public final class Multiblocks {
             'N', Blocks.NETHER_BRICK,
             'R', Blocks.RED_NETHER_BRICK,
             '0', ModBlocks.POTION_GENERATOR,
+            ' ', Matcher.wildcard());
+    public static final Multiblock OFFERING_TABLE = new Multiblock(
+            new ResourceLocation(NaturesAura.MOD_ID, "offering_table"),
+            new String[][]{
+                    {"  RRRRR  ", " R     R ", "R  RRR  R", "R R   R R", "R R 0 R R", "R R   R R", "R  RRR  R", " R     R ", "  RRRRR  "}},
+            'R', new Matcher(Blocks.RED_FLOWER.getDefaultState(),
+            (world, start, offset, pos, state, c) -> NaturesAuraAPI.FLOWERS.contains(state)),
+            '0', ModBlocks.OFFERING_TABLE,
             ' ', Matcher.wildcard());
 }

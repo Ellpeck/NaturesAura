@@ -4,15 +4,22 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
+import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.api.recipes.ing.AmountIngredient;
+import de.ellpeck.naturesaura.api.recipes.ing.NBTIngredient;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ModItems;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public final class ModRecipes {
 
@@ -30,7 +37,7 @@ public final class ModRecipes {
                 Helper.blockIng(Blocks.STONE),
                 Ingredient.fromItem(ModItems.GOLD_LEAF),
                 Ingredient.fromItem(Items.GOLD_INGOT),
-                Helper.nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD))).register();
+                new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD))).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "ancient_sapling"),
                 Helper.blockIng(Blocks.SAPLING), new ItemStack(ModBlocks.ANCIENT_SAPLING), 200,
                 Helper.blockIng(Blocks.SAPLING),
@@ -48,7 +55,7 @@ public final class ModRecipes {
                 Ingredient.fromItem(Items.FIRE_CHARGE),
                 Ingredient.fromItem(Items.FLINT),
                 Helper.blockIng(Blocks.MAGMA),
-                Helper.nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER))).register();
+                new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER))).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "conversion_catalyst"),
                 Ingredient.fromStacks(new ItemStack(Blocks.SAPLING, 1, 3)), new ItemStack(ModBlocks.CONVERSION_CATALYST), 600,
                 Ingredient.fromStacks(new ItemStack(Blocks.STONEBRICK, 1, 1)),
@@ -69,11 +76,27 @@ public final class ModRecipes {
                 Ingredient.EMPTY, 150, 40).register();
 
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "chorus"),
-                Helper.nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_END)),
+                new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_END)),
                 new ItemStack(Items.DRAGON_BREATH),
                 Helper.blockIng(ModBlocks.CONVERSION_CATALYST), 350, 80).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "leather"),
                 Ingredient.fromItem(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER),
                 Helper.blockIng(ModBlocks.CONVERSION_CATALYST), 400, 50).register();
+
+        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "test"),
+                new AmountIngredient(new ItemStack(ModItems.INFUSED_IRON, 3)),
+                Ingredient.fromItem(Items.DIAMOND),
+                new ItemStack(Blocks.DIRT)).register();
+
+        NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
+                Blocks.COBBLESTONE.getDefaultState(),
+                Blocks.MOSSY_COBBLESTONE.getDefaultState());
+        NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
+                Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT),
+                Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY));
+
+        for (Block block : ForgeRegistries.BLOCKS)
+            if (block instanceof BlockFlower)
+                NaturesAuraAPI.FLOWERS.addAll(block.getBlockState().getValidStates());
     }
 }

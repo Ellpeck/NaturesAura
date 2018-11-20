@@ -1,9 +1,14 @@
 package de.ellpeck.naturesaura;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.RangeDouble;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 @Config(modid = NaturesAura.MOD_ID, category = "")
 public final class ModConfig {
@@ -17,8 +22,8 @@ public final class ModConfig {
         @Comment("Additional conversion recipes for the Botanist's Pickaxe right click function. Each entry needs to be formatted as modid:input_block[prop1=value1,...]->modid:output_block[prop1=value1,...] where block state properties are optional")
         public String[] additionalBotanistPickaxeConversions = new String[0];
 
-        @Comment("Additional blocks that the Herbivorous Absorber can consume to generate Aura. Each entry needs to be formatted as modid:block[prop1=value1,...] where block state properties are optional")
-        public String[] additionalHerbivorousAbsorberFlowers = new String[0];
+        @Comment("Additional blocks that several mechanics identify as flowers. Each entry needs to be formatted as modid:block[prop1=value1,...] where block state properties are optional")
+        public String[] additionalFlowers = new String[0];
 
         @Comment("The amount of blocks that can be between two Aura Field Creators for them to be connectable and work together")
         public int fieldCreatorRange = 10;
@@ -45,23 +50,25 @@ public final class ModConfig {
         public boolean respectVanillaParticleSettings = true;
     }
 
-    public static void initOrReload() {
-        try {
-            for (String s : general.additionalBotanistPickaxeConversions) {
-                String[] split = s.split("->");
-                NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
-                        Helper.getStateFromString(split[0]),
-                        Helper.getStateFromString(split[1]));
+    public static void initOrReload(boolean reload) {
+        if (!reload) {
+            try {
+                for (String s : general.additionalBotanistPickaxeConversions) {
+                    String[] split = s.split("->");
+                    NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
+                            Helper.getStateFromString(split[0]),
+                            Helper.getStateFromString(split[1]));
+                }
+            } catch (Exception e) {
+                NaturesAura.LOGGER.warn("Error parsing additionalBotanistPickaxeConversions", e);
             }
-        } catch (Exception e) {
-            NaturesAura.LOGGER.warn("Error parsing additionalBotanistPickaxeConversions", e);
-        }
 
-        try {
-            for (String s : general.additionalHerbivorousAbsorberFlowers)
-                NaturesAuraAPI.FLOWER_GENERATOR_BLOCKS.add(Helper.getStateFromString(s));
-        } catch (Exception e) {
-            NaturesAura.LOGGER.warn("Error parsing additionalHerbivorousAbsorberFlowers", e);
+            try {
+                for (String s : general.additionalFlowers)
+                    NaturesAuraAPI.FLOWERS.add(Helper.getStateFromString(s));
+            } catch (Exception e) {
+                NaturesAura.LOGGER.warn("Error parsing additionalFlowers", e);
+            }
         }
     }
 }

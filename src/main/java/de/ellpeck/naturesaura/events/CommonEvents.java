@@ -59,7 +59,7 @@ public class CommonEvents {
     public void onConfigChanged(OnConfigChangedEvent event) {
         if (NaturesAura.MOD_ID.equals(event.getModID())) {
             ConfigManager.sync(NaturesAura.MOD_ID, Config.Type.INSTANCE);
-            ModConfig.initOrReload();
+            ModConfig.initOrReload(true);
         }
     }
 }

@@ -8,6 +8,7 @@ import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.internal.StubHooks;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
+import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.state.IBlockState;
@@ -52,11 +53,18 @@ public final class NaturesAuraAPI {
      */
     public static final Map<ResourceLocation, TreeRitualRecipe> TREE_RITUAL_RECIPES = new HashMap<>();
     /**
-     * The list of all types of flowers that the flower generator can use for
-     * consumption. By default, all {@link BlockFlower} instances and all blocks
-     * specified in the config file are added
+     * The list of all {@link OfferingRecipe} instances which are the recipes
+     * used by the Offering Table. Newly created recipes can by easily added
+     * using {@link OfferingRecipe#register()}.
      */
-    public static final List<IBlockState> FLOWER_GENERATOR_BLOCKS = new ArrayList<>();
+    public static final Map<ResourceLocation, OfferingRecipe> OFFERING_RECIPES = new HashMap<>();
+    /**
+     * The list of all types of blocks that several mechanics in the mod use as
+     * flowers. Right now, this includes the Herbivorous Absorber and the
+     * Offering Table. By default, all {@link BlockFlower} instances and all
+     * blocks specified in the config file are added
+     */
+    public static final List<IBlockState> FLOWERS = new ArrayList<>();
     /**
      * A map of all of the block states that the Botanist's Pickaxe can convert
      * into their mossy variations. Contains mossy brick and mossy cobblestone
