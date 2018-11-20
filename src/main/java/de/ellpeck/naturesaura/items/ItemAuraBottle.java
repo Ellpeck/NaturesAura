@@ -11,7 +11,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,7 +34,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
         super("aura_bottle");
         MinecraftForge.EVENT_BUS.register(this);
 
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(Items.GLASS_BOTTLE, new BehaviorDefaultDispenseItem() {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.BOTTLE_TWO, new BehaviorDefaultDispenseItem() {
             @Override
             protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
                 World world = source.getWorld();
@@ -63,7 +62,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent.RightClickItem event) {
         ItemStack held = event.getItemStack();
-        if (held.isEmpty() || held.getItem() != Items.GLASS_BOTTLE)
+        if (held.isEmpty() || held.getItem() != ModItems.BOTTLE_TWO)
             return;
         EntityPlayer player = event.getEntityPlayer();
         RayTraceResult ray = this.rayTrace(player.world, player, true);
