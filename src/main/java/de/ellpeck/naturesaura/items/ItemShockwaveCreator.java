@@ -1,12 +1,10 @@
 package de.ellpeck.naturesaura.items;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import de.ellpeck.naturesaura.renderers.ITrinketItem;
-import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -16,7 +14,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -115,8 +112,8 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void render(ItemStack stack, EntityPlayer player, PlayerLayerTrinkets.RenderType type, boolean isHolding) {
-        if (type == PlayerLayerTrinkets.RenderType.BODY && !isHolding) {
+    public void render(ItemStack stack, EntityPlayer player, RenderType type, boolean isHolding) {
+        if (type == RenderType.BODY && !isHolding) {
             boolean armor = !player.inventory.armorInventory.get(EntityEquipmentSlot.CHEST.getIndex()).isEmpty();
             GlStateManager.translate(-0.1675F, -0.05F, armor ? -0.195F : -0.1475F);
             GlStateManager.scale(0.021F, 0.021F, 0.021F);

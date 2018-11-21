@@ -1,8 +1,7 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.renderers.ITrinketItem;
-import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets.RenderType;
+import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;

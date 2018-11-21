@@ -2,18 +2,24 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
+import de.ellpeck.naturesaura.blocks.tiles.render.RenderNatureAltar;
+import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockNatureAltar extends BlockContainerImpl {
+public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvider {
 
     private static final AxisAlignedBB BOUND_BOX = new AxisAlignedBB(0F, 0F, 0F, 1F, 12 / 16F, 1F);
 
@@ -56,5 +62,11 @@ public class BlockNatureAltar extends BlockContainerImpl {
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
         return BlockFaceShape.UNDEFINED;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public Tuple<Class, TileEntitySpecialRenderer> getTESR() {
+        return new Tuple<>(TileEntityNatureAltar.class, new RenderNatureAltar());
     }
 }

@@ -29,11 +29,10 @@ public final class ModRegistry {
         item.setRegistryName(NaturesAura.MOD_ID, name);
         ForgeRegistries.ITEMS.register(item);
 
-        if (addCreative) {
+        if (addCreative)
             item.setCreativeTab(NaturesAura.CREATIVE_TAB);
-        } else {
+        else
             item.setCreativeTab(null);
-        }
     }
 
     private static void registerBlock(Block block, String name, ItemBlock item, boolean addCreative) {
@@ -45,36 +44,32 @@ public final class ModRegistry {
         item.setRegistryName(block.getRegistryName());
         ForgeRegistries.ITEMS.register(item);
 
-        if (addCreative) {
+        if (addCreative)
             block.setCreativeTab(NaturesAura.CREATIVE_TAB);
-        } else {
+        else
             block.setCreativeTab(null);
-        }
     }
 
     public static void preInit(FMLPreInitializationEvent event) {
         for (IModItem item : ALL_ITEMS) {
-            if (item instanceof Item) {
+            if (item instanceof Item)
                 registerItem((Item) item, item.getBaseName(), item.shouldAddCreative());
-            } else if (item instanceof Block) {
+            else if (item instanceof Block) {
                 Block block = (Block) item;
 
                 ItemBlock itemBlock;
-                if (item instanceof ICustomItemBlockProvider) {
+                if (item instanceof ICustomItemBlockProvider)
                     itemBlock = ((ICustomItemBlockProvider) item).getItemBlock();
-                } else {
+                else
                     itemBlock = new ItemBlock(block);
-                }
 
                 registerBlock(block, item.getBaseName(), itemBlock, item.shouldAddCreative());
             }
 
             if (item instanceof IModelProvider) {
                 Map<ItemStack, ModelResourceLocation> models = ((IModelProvider) item).getModelLocations();
-
-                for (ItemStack stack : models.keySet()) {
+                for (ItemStack stack : models.keySet())
                     NaturesAura.proxy.registerRenderer(stack, models.get(stack));
-                }
             }
 
             item.onPreInit(event);
@@ -83,13 +78,12 @@ public final class ModRegistry {
 
     public static void init(FMLInitializationEvent event) {
         for (IModItem item : ALL_ITEMS) {
-            if (item instanceof IColorProvidingBlock) {
+            if (item instanceof IColorProvidingBlock)
                 NaturesAura.proxy.addColorProvidingBlock((IColorProvidingBlock) item);
-            }
-
-            if (item instanceof IColorProvidingItem) {
+            if (item instanceof IColorProvidingItem)
                 NaturesAura.proxy.addColorProvidingItem((IColorProvidingItem) item);
-            }
+            if (item instanceof ITESRProvider)
+                NaturesAura.proxy.registerTESR((ITESRProvider) item);
 
             item.onInit(event);
         }

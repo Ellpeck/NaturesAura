@@ -11,6 +11,7 @@ import de.ellpeck.naturesaura.particles.ParticleHandler;
 import de.ellpeck.naturesaura.particles.ParticleMagic;
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
+import de.ellpeck.naturesaura.reg.ITESRProvider;
 import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -18,8 +19,10 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -38,10 +41,6 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void init(FMLInitializationEvent event) {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodStand.class, new RenderWoodStand());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNatureAltar.class, new RenderNatureAltar());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOfferingTable.class, new RenderOfferingTable());
-
         Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
         for (RenderPlayer render : new RenderPlayer[]{skinMap.get("default"), skinMap.get("slim")}) {
             render.addLayer(new PlayerLayerTrinkets());
@@ -75,6 +74,12 @@ public class ClientProxy implements IProxy {
         if (block instanceof Block) {
             Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(block.getBlockColor(), (Block) block);
         }
+    }
+
+    @Override
+    public void registerTESR(ITESRProvider provider) {
+        Tuple<Class, TileEntitySpecialRenderer> tesr = provider.getTESR();
+        ClientRegistry.bindTileEntitySpecialRenderer(tesr.getFirst(), tesr.getSecond());
     }
 
     @Override

@@ -2,9 +2,9 @@ package de.ellpeck.naturesaura.proxy;
 
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
+import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -39,6 +39,11 @@ public class ServerProxy implements IProxy {
 
     @Override
     public void addColorProvidingBlock(IColorProvidingBlock block) {
+
+    }
+
+    @Override
+    public void registerTESR(ITESRProvider provider) {
 
     }
 

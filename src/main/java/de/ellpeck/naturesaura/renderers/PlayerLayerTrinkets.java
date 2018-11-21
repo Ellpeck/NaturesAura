@@ -1,6 +1,8 @@
 package de.ellpeck.naturesaura.renderers;
 
 import baubles.api.BaublesApi;
+import de.ellpeck.naturesaura.api.render.ITrinketItem;
+import de.ellpeck.naturesaura.api.render.ITrinketItem.RenderType;
 import de.ellpeck.naturesaura.compat.Compat;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -75,9 +77,5 @@ public class PlayerLayerTrinkets implements LayerRenderer<EntityPlayer> {
     @Override
     public boolean shouldCombineTextures() {
         return false;
-    }
-
-    public enum RenderType {
-        HEAD, BODY
     }
 }
