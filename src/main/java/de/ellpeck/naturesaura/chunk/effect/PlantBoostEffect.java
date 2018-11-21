@@ -34,8 +34,6 @@ public class PlantBoostEffect implements IDrainSpotEffect {
         if (amount <= 1)
             return;
         int dist = MathHelper.clamp(Math.abs(aura) / 1500, 5, 35);
-        if (dist <= 0)
-            return;
 
         for (int i = amount / 2 + world.rand.nextInt(amount / 2); i >= 0; i--) {
             int x = MathHelper.floor(pos.getX() + world.rand.nextGaussian() * dist);
