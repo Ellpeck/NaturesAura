@@ -29,4 +29,6 @@ public final class ModItems {
     public static final Item BOTTLE_TWO = new ItemImpl("bottle_two_the_rebottling");
     public static final Item AURA_BOTTLE = new ItemAuraBottle();
     public static final Item FARMING_STENCIL = new ItemImpl("farming_stencil");
+    public static final Item SKY_INGOT = new ItemImpl("sky_ingot");
+    public static final Item CALLING_SPIRIT = new ItemImpl("calling_spirit");
 }

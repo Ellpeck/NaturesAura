@@ -22,7 +22,7 @@ public class RenderOfferingTable extends TileEntitySpecialRenderer<TileEntityOff
         if (!stack.isEmpty()) {
             this.rand.setSeed(Item.getIdFromItem(stack.getItem()) + stack.getMetadata());
 
-            int amount = MathHelper.ceil(stack.getCount() / 8F);
+            int amount = MathHelper.ceil(stack.getCount() / 2F);
             for (int i = 0; i < amount; i++) {
                 GlStateManager.pushMatrix();
                 Item item = stack.getItem();

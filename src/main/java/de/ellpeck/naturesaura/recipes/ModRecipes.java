@@ -83,10 +83,10 @@ public final class ModRecipes {
                 Ingredient.fromItem(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER),
                 Helper.blockIng(ModBlocks.CONVERSION_CATALYST), 400, 50).register();
 
-        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "test"),
+        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sky_ingot"),
                 new AmountIngredient(new ItemStack(ModItems.INFUSED_IRON, 3)),
-                Ingredient.fromItem(Items.DIAMOND),
-                new ItemStack(Blocks.DIRT)).register();
+                Ingredient.fromItem(ModItems.CALLING_SPIRIT),
+                new ItemStack(ModItems.SKY_INGOT)).register();
 
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
                 Blocks.COBBLESTONE.getDefaultState(),

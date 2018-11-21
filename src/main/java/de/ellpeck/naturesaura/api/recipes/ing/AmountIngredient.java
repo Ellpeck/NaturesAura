@@ -8,6 +8,7 @@ public class AmountIngredient extends Ingredient {
 
     public final Ingredient delegate;
     public final int amount;
+    private ItemStack[] matchingStacks;
 
     public AmountIngredient(Ingredient delegate, int amount) {
         super(0);
@@ -21,7 +22,16 @@ public class AmountIngredient extends Ingredient {
 
     @Override
     public ItemStack[] getMatchingStacks() {
-        return this.delegate.getMatchingStacks();
+        if (this.matchingStacks == null) {
+            ItemStack[] delegate = this.delegate.getMatchingStacks();
+            this.matchingStacks = new ItemStack[delegate.length];
+            for (int i = 0; i < delegate.length; i++) {
+                ItemStack copy = delegate[i].copy();
+                copy.setCount(this.amount);
+                this.matchingStacks[i] = copy;
+            }
+        }
+        return this.matchingStacks;
     }
 
     @Override

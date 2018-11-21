@@ -232,6 +232,28 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextFloat() * 0.04F + 0.04F,
                                         world.rand.nextGaussian() * 0.03F,
                                         0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 60, 0F, false, true);
+                            break;
+                        case 13: // Offering table
+                            int genX = message.data[0];
+                            int genY = message.data[1];
+                            int genZ = message.data[2];
+                            for (int i = world.rand.nextInt(20) + 10; i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        message.posX, message.posY + 0.5F, message.posZ,
+                                        world.rand.nextGaussian() * 0.02F,
+                                        world.rand.nextFloat() * 0.25F,
+                                        world.rand.nextGaussian() * 0.02F,
+                                        0xffadfd, 1.5F, 40, 0F, false, true);
+                            for (int i = world.rand.nextInt(50) + 30; i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        genX + 0.5F + world.rand.nextGaussian() * 2.5F,
+                                        genY + 0.1F,
+                                        genZ + 0.5F + world.rand.nextGaussian() * 2.5F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        world.rand.nextFloat() * 0.01F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        0xd3e4ff, 1.5F, 150, 0F, false, true);
+                            break;
                     }
                 }
             });

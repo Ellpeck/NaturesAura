@@ -3,6 +3,8 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -20,7 +22,12 @@ import java.util.List;
 import java.util.Queue;
 
 public class TileEntityOfferingTable extends TileEntityImpl implements ITickable {
-    public final ItemStackHandler items = new ItemStackHandlerNA(1, this, true);
+    public final ItemStackHandler items = new ItemStackHandlerNA(1, this, true) {
+        @Override
+        public int getSlotLimit(int slot) {
+            return 16;
+        }
+    };
     private final Queue<ItemStack> itemsToSpawn = new ArrayDeque<>();
 
     @Override
@@ -62,15 +69,17 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
                         this.itemsToSpawn.add(recipe.output.copy());
 
                     this.world.addWeatherEffect(new EntityLightningBolt(this.world, this.pos.getX(), this.pos.getY(), this.pos.getZ(), true));
+                    PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
+                            (float) item.posX, (float) item.posY, (float) item.posZ, 13,
+                            this.pos.getX(), this.pos.getY(), this.pos.getZ()));
+
                     break;
                 }
             } else if (this.world.getTotalWorldTime() % 3 == 0) {
                 if (!this.itemsToSpawn.isEmpty())
                     this.world.spawnEntity(new EntityItem(
                             this.world,
-                            this.pos.getX() + 0.5F + this.world.rand.nextGaussian() * 3F,
-                            256,
-                            this.pos.getZ() + 0.5F + this.world.rand.nextGaussian() * 3F,
+                            this.pos.getX() + 0.5F, 256, this.pos.getZ() + 0.5F,
                             this.itemsToSpawn.remove()));
             }
         }
