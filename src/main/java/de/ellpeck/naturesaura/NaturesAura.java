@@ -46,7 +46,7 @@ public final class NaturesAura {
     public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(MOD_ID) {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(ModItems.EYE);
+            return new ItemStack(ModItems.GOLD_LEAF);
         }
     };
 
