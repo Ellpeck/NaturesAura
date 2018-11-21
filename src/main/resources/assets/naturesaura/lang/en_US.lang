@@ -100,5 +100,9 @@ advancement.naturesaura.aura_bottle_nether=Spooky Scary Skeletons
 advancement.naturesaura.aura_bottle_nether.desc=Collect Aura using a Bottle in the Nether
 advancement.naturesaura.aura_bottle_end=Breathy Surroundings
 advancement.naturesaura.aura_bottle_end.desc=Collect Aura using a Bottle in the End
+advancement.naturesaura.offering=Yo God, ya want this?
+advancement.naturesaura.offering.desc=Create an Offering Table for the Offering to the Gods
+advancement.naturesaura.sky_ingot=Sturdy and light
+advancement.naturesaura.sky_ingot.desc=Create an Ingot of the Skies using the Offering to the Gods
 
 command.naturesaura.aura.usage=/naaura <action> <amount> <range>

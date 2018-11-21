@@ -2,7 +2,7 @@
     "name": "Ritual of the Brewer",
     "icon": "naturesaura:potion_generator",
     "category": "creating",
-    "advancement": "naturesaura:aura_bottle_nether",
+    "advancement": "naturesaura:sky_ingot",
     "pages": [
         {
             "type": "text",

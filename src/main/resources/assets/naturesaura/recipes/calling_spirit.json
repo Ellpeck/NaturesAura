@@ -1,0 +1,38 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        " O ",
+        "GNG",
+        " E "
+    ],
+    "key": {
+        "G": {
+            "item": "naturesaura:infused_iron"
+        },
+        "O": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:overworld"
+            }
+        },
+        "N": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:nether"
+            }
+        },
+        "E": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:end"
+            }
+        }
+    },
+    "result": {
+        "item": "naturesaura:calling_spirit",
+        "count": 3
+    }
+}

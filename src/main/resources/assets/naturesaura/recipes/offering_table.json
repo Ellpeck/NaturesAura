@@ -1,0 +1,24 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "SIS",
+        " S ",
+        "WWW"
+    ],
+    "key": {
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "stone"
+        },
+        "W": {
+            "type": "forge:ore_dict",
+            "ore": "logWood"
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        }
+    },
+    "result": {
+        "item": "naturesaura:offering_table"
+    }
+}

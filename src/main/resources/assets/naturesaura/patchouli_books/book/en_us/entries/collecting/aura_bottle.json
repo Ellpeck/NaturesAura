@@ -3,6 +3,7 @@
     "icon": "naturesaura:aura_bottle{stored_type:'naturesaura:overworld'}",
     "category": "collecting",
     "advancement": "naturesaura:wood_stand",
+    "priority": true,
     "pages": [
         {
             "type": "text",

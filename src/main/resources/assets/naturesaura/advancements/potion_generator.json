@@ -10,7 +10,7 @@
             "translate": "advancement.naturesaura.potion_generator.desc"
         }
     },
-    "parent": "naturesaura:aura_bottle_nether",
+    "parent": "naturesaura:sky_ingot",
     "criteria": {
         "generator": {
             "trigger": "minecraft:inventory_changed",

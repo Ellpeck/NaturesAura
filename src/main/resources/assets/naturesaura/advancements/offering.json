@@ -1,23 +1,23 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:conversion_catalyst"
+            "item": "naturesaura:offering_table"
         },
         "title": {
-            "translate": "advancement.naturesaura.conversion_catalyst"
+            "translate": "advancement.naturesaura.offering"
         },
         "description": {
-            "translate": "advancement.naturesaura.conversion_catalyst.desc"
+            "translate": "advancement.naturesaura.offering.desc"
         }
     },
-    "parent": "naturesaura:sky_ingot",
+    "parent": "naturesaura:aura_bottle_end",
     "criteria": {
-        "catalyst": {
+        "table": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:conversion_catalyst"
+                        "item": "naturesaura:offering_table"
                     }
                 ]
             }

@@ -61,7 +61,7 @@ public final class ModRecipes {
                 Ingredient.fromStacks(new ItemStack(Blocks.STONEBRICK, 1, 1)),
                 Helper.blockIng(ModBlocks.INFUSED_STONE),
                 Ingredient.fromItem(Items.BREWING_STAND),
-                Ingredient.fromItem(Items.GOLD_INGOT),
+                Ingredient.fromItem(ModItems.SKY_INGOT),
                 Ingredient.fromItem(ModItems.GOLD_LEAF),
                 Helper.blockIng(Blocks.GLOWSTONE)).register();
 
