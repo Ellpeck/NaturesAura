@@ -75,13 +75,23 @@ public final class ModRecipes {
                 Helper.blockIng(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE),
                 Ingredient.EMPTY, 150, 40).register();
 
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "chorus"),
+        Ingredient conversion = Helper.blockIng(ModBlocks.CONVERSION_CATALYST);
+        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "breath"),
                 new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_END)),
                 new ItemStack(Items.DRAGON_BREATH),
-                Helper.blockIng(ModBlocks.CONVERSION_CATALYST), 350, 80).register();
+                conversion, 500, 80).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "leather"),
                 Ingredient.fromItem(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER),
-                Helper.blockIng(ModBlocks.CONVERSION_CATALYST), 400, 50).register();
+                conversion, 400, 50).register();
+        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "soul_sand"),
+                Helper.blockIng(Blocks.SAND), new ItemStack(Blocks.SOUL_SAND),
+                conversion, 200, 100).register();
+        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "nether_wart"),
+                Helper.blockIng(Blocks.RED_MUSHROOM), new ItemStack(Items.NETHER_WART),
+                conversion, 600, 250).register();
+        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "prismarine"),
+                Ingredient.fromItem(Items.QUARTZ), new ItemStack(Items.PRISMARINE_SHARD),
+                conversion, 850, 200).register();
 
         new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sky_ingot"),
                 new AmountIngredient(new ItemStack(ModItems.INFUSED_IRON, 3)),

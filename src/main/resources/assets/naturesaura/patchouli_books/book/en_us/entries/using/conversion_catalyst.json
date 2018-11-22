@@ -15,13 +15,28 @@
         },
         {
             "type": "naturesaura:altar",
-            "text": "Creating $(item)Dragon's Breath$() out of the end's fruit",
-            "recipe": "naturesaura:chorus"
+            "text": "Creating $(item)Dragon's Breath$() out of the end's $(aura)",
+            "recipe": "naturesaura:breath"
         },
         {
             "type": "naturesaura:altar",
             "text": "Conjuring $(item)Leather$() from a zombie's remains",
             "recipe": "naturesaura:leather"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Making $(item)Soul Sand$() out of worldly grains",
+            "recipe": "naturesaura:soul_sand"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Creating $(item)Nether Wart$() from poisonous mushrooms",
+            "recipe": "naturesaura:nether_wart"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Conjuring $(item)Prismarine Shards$() from the nether's ore",
+            "recipe": "naturesaura:prismarine"
         }
     ]
 }

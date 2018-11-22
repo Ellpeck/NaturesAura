@@ -10,7 +10,6 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -21,6 +20,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -120,7 +120,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                             this.currentRecipe = null;
                             this.timer = 0;
                         } else if (this.hasCatalyst(this.currentRecipe.catalyst)) {
-                            int req = this.currentRecipe.aura / this.currentRecipe.time;
+                            int req = MathHelper.ceil(this.currentRecipe.aura / (double) this.currentRecipe.time);
                             if (this.container.getStoredAura() >= req) {
                                 this.container.drainAura(req, false);
 
