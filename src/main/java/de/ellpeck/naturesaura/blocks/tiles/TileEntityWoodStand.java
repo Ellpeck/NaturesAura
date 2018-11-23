@@ -129,14 +129,18 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
             return;
         }
 
-        for (EnumFacing facing : EnumFacing.VALUES) {
-            BlockPos offset = pos.offset(facing);
-            IBlockState state = this.world.getBlockState(offset);
-            if (state.getBlock() instanceof BlockLog || state.getBlock() instanceof BlockLeaves) {
-                this.world.setBlockToAir(offset);
-                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), 2));
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                for (int z = -1; z <= 1; z++) {
+                    BlockPos offset = pos.add(x, y, z);
+                    IBlockState state = this.world.getBlockState(offset);
+                    if (state.getBlock() instanceof BlockLog || state.getBlock() instanceof BlockLeaves) {
+                        this.world.setBlockToAir(offset);
+                        PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), 2));
 
-                this.recurseTreeDestruction(offset, start);
+                        this.recurseTreeDestruction(offset, start);
+                    }
+                }
             }
         }
     }
