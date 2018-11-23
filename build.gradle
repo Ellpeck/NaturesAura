@@ -77,10 +77,17 @@ jar {
 
 }
 
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    from sourceSets.main.java
+    classifier = 'dev'
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact jar
+            artifact deobfJar
         }
     }
     repositories {
