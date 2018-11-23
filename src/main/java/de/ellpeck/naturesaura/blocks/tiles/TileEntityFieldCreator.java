@@ -56,7 +56,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
             return;
 
         TileEntityFieldCreator creator = (TileEntityFieldCreator) other;
-        if (!this.isRedstonePowered && !creator.isRedstonePowered) {
+        if (this.redstonePower <= 0 && creator.redstonePower <= 0) {
             this.chargeTimer = 0;
             if (this.isCharged) {
                 this.isCharged = false;

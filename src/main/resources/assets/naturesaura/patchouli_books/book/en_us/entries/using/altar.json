@@ -1,13 +1,27 @@
 {
-    "name": "Natural Altar Infusion",
+    "name": "The Natural Altar",
     "icon": "naturesaura:nature_altar",
     "category": "using",
-    "advancement": "naturesaura:altar",
+    "advancement": "naturesaura:aura_bottle_overworld",
     "priority": true,
     "pages": [
         {
             "type": "text",
-            "text": "When the $(l:collecting/altar)Natural Altar$() has collected a sufficient amount of $(aura), it will be able to infuse items of certain materials, converting them into different, more powerful materials. To do this, simply place any material onto the altar and wait for the infusion to be completed.$(br2)The following pages list some useful materials that a botanist might frequently need."
+            "text": "A rudimentary, yet effective way of collecting $(aura) early on is the $(item)Natural Altar$(). After creating the setup shown on the following page, the altar will start slowly draining $(aura) in the vicinity. However, it is not strong enough to cause major damage, making it only drain until there is none left in the area.$(br)The collected $(aura) can then be used as shown on the following pages."
+        },
+        {
+            "type": "multiblock",
+            "multiblock_id": "naturesaura:altar",
+            "text": "How to assemble the $(item)Natural Altar$()"
+        },
+        {
+            "type": "naturesaura:tree_ritual",
+            "text": "Creating the $(item)Natural Altar$() using the $(l:practices/tree_ritual)Ritual of the Forest$()",
+            "recipe": "naturesaura:nature_altar"
+        },
+        {
+            "type": "text",
+            "text": "When the $(item)Natural Altar$() has collected a sufficient amount of $(aura), it will be able to infuse items of certain materials, converting them into different, more powerful materials. To do this, simply place any material onto the altar and wait for the infusion to be completed.$(br2)The following pages list some useful materials that a botanist might frequently need."
         },
         {
             "type": "naturesaura:altar",

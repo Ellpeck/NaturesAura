@@ -254,6 +254,14 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextGaussian() * 0.01F,
                                         0xd3e4ff, 1.5F, 150, 0F, false, true);
                             break;
+                        case 14: // Pickup stopper
+                            NaturesAuraAPI.instance().spawnMagicParticle(
+                                    message.posX, message.posY + 0.4F, message.posZ,
+                                    world.rand.nextGaussian() * 0.005F,
+                                    world.rand.nextFloat() * 0.005F,
+                                    world.rand.nextGaussian() * 0.005F,
+                                    0xcc3116, 1.5F, 40, 0F, false, true);
+                            break;
                     }
                 }
             });

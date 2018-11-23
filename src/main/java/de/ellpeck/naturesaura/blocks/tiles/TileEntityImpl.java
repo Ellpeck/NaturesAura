@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 public class TileEntityImpl extends TileEntity {
 
-    public boolean isRedstonePowered;
+    public int redstonePower;
 
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
@@ -45,14 +45,14 @@ public class TileEntityImpl extends TileEntity {
     public void writeNBT(NBTTagCompound compound, SaveType type) {
         if (type != SaveType.BLOCK) {
             super.writeToNBT(compound);
-            compound.setBoolean("redstone", this.isRedstonePowered);
+            compound.setInteger("redstone", this.redstonePower);
         }
     }
 
     public void readNBT(NBTTagCompound compound, SaveType type) {
         if (type != SaveType.BLOCK) {
             super.readFromNBT(compound);
-            this.isRedstonePowered = compound.getBoolean("redstone");
+            this.redstonePower = compound.getInteger("redstone");
         }
     }
 

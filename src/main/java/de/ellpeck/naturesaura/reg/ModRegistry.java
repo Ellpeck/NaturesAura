@@ -41,8 +41,10 @@ public final class ModRegistry {
         block.setRegistryName(NaturesAura.MOD_ID, name);
         ForgeRegistries.BLOCKS.register(block);
 
-        item.setRegistryName(block.getRegistryName());
-        ForgeRegistries.ITEMS.register(item);
+        if (item != null) {
+            item.setRegistryName(block.getRegistryName());
+            ForgeRegistries.ITEMS.register(item);
+        }
 
         if (addCreative)
             block.setCreativeTab(NaturesAura.CREATIVE_TAB);

@@ -1,7 +1,7 @@
 {
     "name": "Aura Detector",
     "icon": "naturesaura:aura_detector",
-    "category": "using",
+    "category": "devices",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

@@ -1,6 +1,0 @@
-{
-    "name": "Collecting Aura",
-    "description": "To be able to make use of the $(aura) in the world, one must first find a way to handle it reasonably. Converting it into a storable form $(italics)(no, not liquids)$() might prove somewhat difficult, but this category will provide guidance.",
-    "icon": "naturesaura:textures/gui/patchouli/categories/collecting.png",
-    "sortnum": 10
-}
