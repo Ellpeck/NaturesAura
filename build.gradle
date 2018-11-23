@@ -15,7 +15,7 @@ version = "b3"
 group = "de.ellpeck.naturesaura"
 archivesBaseName = "NaturesAura"
 
-if(hasProperty('buildnumber')){
+if (hasProperty('buildnumber')) {
     version = "${version}-${this.properties['buildnumber']}"
 }
 
@@ -39,7 +39,7 @@ repositories {
 
 dependencies {
     compile "vazkii.patchouli:Patchouli:1.0-10.45"
-    
+
     deobfCompile "mezz.jei:jei_1.12.2:4.13.1.220"
     deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
 
@@ -72,6 +72,10 @@ processResources {
 }
 
 apply plugin: 'maven-publish'
+
+jar {
+    
+}
 
 task deobfJar(type: Jar) {
     from sourceSets.main.output
