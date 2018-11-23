@@ -7,6 +7,8 @@ import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.internal.StubHooks;
+import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
+import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
@@ -38,7 +40,7 @@ public final class NaturesAuraAPI {
 
     public static final String MOD_ID = "naturesaura";
     public static final String API_ID = MOD_ID + "api";
-    public static final String VERSION = "3";
+    public static final String VERSION = "4";
 
     /**
      * The list of all {@link AltarRecipe} instances which are the recipes used
@@ -90,6 +92,12 @@ public final class NaturesAuraAPI {
      * once a second for every drain spot currently loaded.
      */
     public static final Map<ResourceLocation, Supplier<IDrainSpotEffect>> DRAIN_SPOT_EFFECTS = new HashMap<>();
+    /**
+     * A map of all {@link IMultiblock} objects which are multiblock structures
+     * that can easily be looped through and checked, and also easily created
+     * using the multiblock maker debug tool.
+     */
+    public static final Map<ResourceLocation, IMultiblock> MULTIBLOCKS = new HashMap<>();
 
     /**
      * The capability for any item or block that stores Aura in the form of an
@@ -198,6 +206,22 @@ public final class NaturesAuraAPI {
          * @param scale  The scale of the particle
          */
         void spawnParticleStream(float startX, float startY, float startZ, float endX, float endY, float endZ, float speed, int color, float scale);
+
+        /**
+         * This method is used to create a custom multiblock from within the
+         * API. The multiblock will automatically be registered both to Nature's
+         * Aura's multiblock registry and Patchouli's multiblock registry.
+         *
+         * @param name        The name the multiblock should have
+         * @param pattern     The pattern that the multiblock should have, where
+         *                    each character is mapped to a raw matcher
+         * @param rawMatchers Each char matcher in the form of the char followed
+         *                    by a matcher, either in the form of a Block, an
+         *                    IBlockState or a {@link Matcher}, similar to the
+         *                    old way that crafting recipes work.
+         * @return the multiblock instance
+         */
+        IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers);
 
         /**
          * @see IAuraChunk#getSpotsInArea(World, BlockPos, int, BiConsumer)

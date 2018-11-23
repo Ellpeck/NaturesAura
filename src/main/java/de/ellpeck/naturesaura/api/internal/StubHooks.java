@@ -1,7 +1,9 @@
 package de.ellpeck.naturesaura.api.internal;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -22,6 +24,11 @@ public class StubHooks implements NaturesAuraAPI.IInternalHooks {
     @Override
     public void spawnParticleStream(float startX, float startY, float startZ, float endX, float endY, float endZ, float speed, int color, float scale) {
 
+    }
+
+    @Override
+    public IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
+        return new StubMultiblock();
     }
 
     @Override

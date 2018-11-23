@@ -1,34 +1,31 @@
 package de.ellpeck.naturesaura.blocks.multi;
 
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
+import de.ellpeck.naturesaura.api.multiblock.Matcher;
+import de.ellpeck.naturesaura.api.multiblock.Matcher.ICheck;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 import vazkii.patchouli.api.PatchouliAPI;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-public class Multiblock {
+public class Multiblock implements IMultiblock {
 
-    public static final Map<ResourceLocation, Multiblock> MULTIBLOCKS = new HashMap<>();
-
-    public final ResourceLocation name;
-    public final Map<BlockPos, Matcher> matchers = new HashMap<>();
-    public final int width;
-    public final int height;
-    public final int depth;
-    public final int xOffset;
-    public final int yOffset;
-    public final int zOffset;
-    public final char[][][] rawPattern;
+    private final ResourceLocation name;
+    private final Map<BlockPos, de.ellpeck.naturesaura.api.multiblock.Matcher> matchers = new HashMap<>();
+    private final int width;
+    private final int height;
+    private final int depth;
+    private final int xOffset;
+    private final int yOffset;
+    private final int zOffset;
+    private final char[][][] rawPattern;
 
     public Multiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
         this.name = name;
@@ -84,11 +81,15 @@ public class Multiblock {
                 continue;
 
             Object value = rawMatchers[i + 1];
-            if (value instanceof IBlockState)
-                matchers.put(c, Matcher.state((IBlockState) value));
-            else if (value instanceof Block)
-                matchers.put(c, Matcher.block((Block) value));
-            else
+            if (value instanceof IBlockState) {
+                IBlockState state = (IBlockState) value;
+                matchers.put(c, new Matcher(state,
+                        (world, start, offset, pos, other, otherC) -> other == state));
+            } else if (value instanceof Block) {
+                Block block = (Block) value;
+                matchers.put(c, new Matcher(block.getDefaultState(),
+                        (world, start, offset, pos, state, otherC) -> state.getBlock() == block));
+            } else
                 matchers.put(c, (Matcher) value);
         }
 
@@ -98,36 +99,39 @@ public class Multiblock {
                     Matcher matcher = matchers.get(this.rawPattern[x][y][z]);
                     if (matcher == null)
                         throw new IllegalStateException();
-                    if (matcher.check != null)
+                    if (matcher.getCheck() != null)
                         this.matchers.put(new BlockPos(x, y, z), matcher);
                 }
 
         for (int i = 1; i < rawMatchers.length; i += 2) {
             if (rawMatchers[i] instanceof Matcher) {
                 Matcher matcher = (Matcher) rawMatchers[i];
-                if (matcher.check == null)
+                ICheck check = matcher.getCheck();
+                if (check == null)
                     rawMatchers[i] = PatchouliAPI.instance.anyMatcher();
                 else
-                    rawMatchers[i] = PatchouliAPI.instance.predicateMatcher(matcher.defaultState,
-                            state -> matcher.check.matches(null, null, null, null, state, (char) 0));
+                    rawMatchers[i] = PatchouliAPI.instance.predicateMatcher(matcher.getDefaultState(),
+                            state -> check.matches(null, null, null, null, state, (char) 0));
             }
         }
         PatchouliAPI.instance.registerMultiblock(name, PatchouliAPI.instance.makeMultiblock(pattern, rawMatchers));
 
-        MULTIBLOCKS.put(this.name, this);
+        NaturesAuraAPI.MULTIBLOCKS.put(this.name, this);
     }
 
+    @Override
     public boolean isComplete(World world, BlockPos center) {
         BlockPos start = this.getStart(center);
         return this.forEach(center, (char) 0, (pos, matcher) -> {
             BlockPos offset = pos.subtract(start);
-            return matcher.check.matches(world, start, offset, pos, world.getBlockState(pos), this.getChar(offset));
+            return matcher.getCheck().matches(world, start, offset, pos, world.getBlockState(pos), this.getChar(offset));
         });
     }
 
-    public boolean forEach(BlockPos center, char c, BiFunction<BlockPos, Matcher, Boolean> function) {
+    @Override
+    public boolean forEach(BlockPos center, char c, BiFunction<BlockPos, de.ellpeck.naturesaura.api.multiblock.Matcher, Boolean> function) {
         BlockPos start = this.getStart(center);
-        for (Map.Entry<BlockPos, Matcher> entry : this.matchers.entrySet()) {
+        for (Map.Entry<BlockPos, de.ellpeck.naturesaura.api.multiblock.Matcher> entry : this.matchers.entrySet()) {
             BlockPos offset = entry.getKey();
             if (c == 0 || this.getChar(offset) == c)
                 if (!function.apply(start.add(offset), entry.getValue()))
@@ -136,65 +140,58 @@ public class Multiblock {
         return true;
     }
 
+    @Override
     public BlockPos getStart(BlockPos center) {
         return center.add(-this.xOffset, -this.yOffset, -this.zOffset);
     }
 
+    @Override
     public char getChar(BlockPos offset) {
         return this.rawPattern[offset.getX()][offset.getY()][offset.getZ()];
     }
 
-    public static class Matcher {
-
-        public final IBlockState defaultState;
-        public final IMatcher check;
-
-        public Matcher(IBlockState defaultState, IMatcher check) {
-            this.defaultState = defaultState;
-            this.check = check;
-        }
-
-        public static Matcher state(IBlockState state) {
-            return new Matcher(state,
-                    (world, start, offset, pos, other, c) -> other == state);
-        }
-
-        public static Matcher block(Block block) {
-            return new Matcher(block.getDefaultState(),
-                    (world, start, offset, pos, state, c) -> state.getBlock() == block);
-        }
-
-        public static Matcher wildcard() {
-            return new Matcher(Blocks.AIR.getDefaultState(), null);
-        }
-
-        public static Matcher oreDict(Block defaultBlock, String name) {
-            return new Matcher(defaultBlock.getDefaultState(), new IMatcher() {
-                private List<IBlockState> states;
-
-                @Override
-                public boolean matches(World world, BlockPos start, BlockPos offset, BlockPos pos, IBlockState state, char c) {
-                    if (this.states == null) {
-                        this.states = new ArrayList<>();
-                        for (ItemStack stack : OreDictionary.getOres(name)) {
-                            Block block = Block.getBlockFromItem(stack.getItem());
-                            if (block != null && block != Blocks.AIR) {
-                                int damage = stack.getItemDamage();
-                                if (damage == OreDictionary.WILDCARD_VALUE)
-                                    this.states.addAll(block.getBlockState().getValidStates());
-                                else
-                                    this.states.add(block.getStateFromMeta(damage));
-                            }
-                        }
-                    }
-
-                    return this.states.isEmpty() || this.states.contains(state);
-                }
-            });
-        }
+    @Override
+    public ResourceLocation getName() {
+        return this.name;
     }
 
-    public interface IMatcher {
-        boolean matches(World world, BlockPos start, BlockPos offset, BlockPos pos, IBlockState state, char c);
+    @Override
+    public Map<BlockPos, de.ellpeck.naturesaura.api.multiblock.Matcher> getMatchers() {
+        return this.matchers;
+    }
+
+    @Override
+    public int getWidth() {
+        return this.width;
+    }
+
+    @Override
+    public int getHeight() {
+        return this.height;
+    }
+
+    @Override
+    public int getDepth() {
+        return this.depth;
+    }
+
+    @Override
+    public int getXOffset() {
+        return this.xOffset;
+    }
+
+    @Override
+    public int getYOffset() {
+        return this.yOffset;
+    }
+
+    @Override
+    public int getZOffset() {
+        return this.zOffset;
+    }
+
+    @Override
+    public char[][][] getRawPattern() {
+        return this.rawPattern;
     }
 }

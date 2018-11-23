@@ -3,9 +3,12 @@ package de.ellpeck.naturesaura;
 import baubles.api.BaublesApi;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
+import de.ellpeck.naturesaura.blocks.multi.Multiblock;
 import de.ellpeck.naturesaura.compat.Compat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -62,6 +65,11 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
                     dir.x * speed, dir.y * speed, dir.z * speed,
                     color, scale, maxAge, 0F, false, false);
         }
+    }
+
+    @Override
+    public IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
+        return new Multiblock(name, pattern, rawMatchers);
     }
 
     @Override

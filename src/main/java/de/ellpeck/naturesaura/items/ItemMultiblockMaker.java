@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.items;
 
-import de.ellpeck.naturesaura.blocks.multi.Multiblock;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class ItemMultiblockMaker extends ItemImpl {
 
-    private static List<Multiblock> multiblocks;
+    private static List<IMultiblock> multiblocks;
 
     public ItemMultiblockMaker() {
         super("multiblock_maker");
@@ -39,13 +40,13 @@ public class ItemMultiblockMaker extends ItemImpl {
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (player.capabilities.isCreativeMode) {
-            Multiblock multi = multiblocks().get(getMultiblock(player.getHeldItem(hand)));
+            IMultiblock multi = multiblocks().get(getMultiblock(player.getHeldItem(hand)));
             if (multi == null)
                 return EnumActionResult.PASS;
 
             if (!worldIn.isRemote)
                 multi.forEach(pos.up(), (char) 0, (blockPos, matcher) -> {
-                    worldIn.setBlockState(blockPos, matcher.defaultState);
+                    worldIn.setBlockState(blockPos, matcher.getDefaultState());
                     return true;
                 });
 
@@ -57,8 +58,8 @@ public class ItemMultiblockMaker extends ItemImpl {
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
         String name = super.getItemStackDisplayName(stack);
-        Multiblock multi = multiblocks().get(getMultiblock(stack));
-        return multi == null ? name : name + " (" + multi.name + ")";
+        IMultiblock multi = multiblocks().get(getMultiblock(stack));
+        return multi == null ? name : name + " (" + multi.getName() + ")";
     }
 
     private static int getMultiblock(ItemStack stack) {
@@ -67,10 +68,10 @@ public class ItemMultiblockMaker extends ItemImpl {
         return stack.getTagCompound().getInteger("multiblock");
     }
 
-    private static List<Multiblock> multiblocks() {
+    private static List<IMultiblock> multiblocks() {
         if (multiblocks == null) {
             multiblocks = new ArrayList<>();
-            multiblocks.addAll(Multiblock.MULTIBLOCKS.values());
+            multiblocks.addAll(NaturesAuraAPI.MULTIBLOCKS.values());
         }
         return multiblocks;
     }
