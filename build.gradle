@@ -73,20 +73,42 @@ processResources {
 
 apply plugin: 'maven-publish'
 
-jar {
-
-}
-
 task deobfJar(type: Jar) {
     from sourceSets.main.output
     from sourceSets.main.java
     classifier = 'dev'
 }
 
+task apiJar(type: Jar) {
+    from sourceSets.main.output
+    from sourceSets.main.java
+    classifier = 'api'
+    include 'de/ellpeck/naturesaura/api/**'
+}
+
+javadoc {
+    include 'de/ellpeck/naturesaura/api/**'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from 'build/docs/javadoc'
+    classifier 'javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java
+    classifier = 'sources'
+}
+
+apply plugin: 'maven-publish'
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact jar
+            artifact apiJar
+            artifact javadocJar
+            artifact sourcesJar
             artifact deobfJar
         }
     }
