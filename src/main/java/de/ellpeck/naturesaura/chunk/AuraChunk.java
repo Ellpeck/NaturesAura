@@ -98,14 +98,24 @@ public class AuraChunk implements IAuraChunk {
         MutableInt spot = this.drainSpots.get(pos);
         if (spot == null) {
             spot = new MutableInt();
-            this.drainSpots.put(pos, spot);
+            this.addDrainSpot(pos, spot);
         }
         return spot;
     }
 
+    private void addDrainSpot(BlockPos pos, MutableInt spot) {
+        int expX = pos.getX() >> 4;
+        int expZ = pos.getZ() >> 4;
+        if (expX != this.chunk.x || expZ != this.chunk.z)
+            throw new IllegalArgumentException("Tried to add drain spot " + pos + " to chunk at " + this.chunk.x + ", " + this.chunk.z + " when it should've been added to chunk at " + expX + ", " + expZ);
+
+        this.drainSpots.put(pos, spot);
+    }
+
     public void setSpots(Map<BlockPos, MutableInt> spots) {
         this.drainSpots.clear();
-        this.drainSpots.putAll(spots);
+        for (Map.Entry<BlockPos, MutableInt> entry : spots.entrySet())
+            this.addDrainSpot(entry.getKey(), entry.getValue());
     }
 
     @Override
@@ -186,7 +196,7 @@ public class AuraChunk implements IAuraChunk {
         NBTTagList list = compound.getTagList("drain_spots", 10);
         for (NBTBase base : list) {
             NBTTagCompound tag = (NBTTagCompound) base;
-            this.drainSpots.put(
+            this.addDrainSpot(
                     BlockPos.fromLong(tag.getLong("pos")),
                     new MutableInt(tag.getInteger("amount")));
         }
