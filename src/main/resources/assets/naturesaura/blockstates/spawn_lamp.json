@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "naturesaura:spawn_lamp",
+        "textures": {
+            "0": "naturesaura:blocks/spawn_lamp",
+            "particle": "#0"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

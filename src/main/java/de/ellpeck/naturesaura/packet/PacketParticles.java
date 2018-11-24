@@ -262,6 +262,15 @@ public class PacketParticles implements IMessage {
                                     world.rand.nextGaussian() * 0.005F,
                                     0xcc3116, 1.5F, 40, 0F, false, true);
                             break;
+                        case 15: // Spawn lamp
+                            for (int i = world.rand.nextInt(5) + 5; i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        message.posX + 0.3F + world.rand.nextFloat() * 0.4F,
+                                        message.posY + 0.15F + world.rand.nextFloat() * 0.5F,
+                                        message.posZ + 0.3F + world.rand.nextFloat() * 0.4F,
+                                        0F, 0F, 0F,
+                                        0xf4a142, 1F, 30, 0F, false, true);
+                            break;
                     }
                 }
             });

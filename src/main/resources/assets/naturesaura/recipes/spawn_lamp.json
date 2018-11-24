@@ -1,0 +1,26 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "ILI",
+        "SGS",
+        "ILI"
+    ],
+    "key": {
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        },
+        "L": {
+            "item": "minecraft:glass"
+        },
+        "S": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "G": {
+            "item": "minecraft:glowstone"
+        }
+    },
+    "result": {
+        "item": "naturesaura:spawn_lamp"
+    }
+}
