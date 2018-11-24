@@ -132,13 +132,13 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
      * @return The amount of Aura drained. Will only be different from the
      * supplied amount if stopAtZero is true
      */
-    int drainAura(BlockPos pos, int amount, boolean aimForZero);
+    int drainAura(BlockPos pos, int amount, boolean aimForZero, boolean simulate);
 
     /**
-     * Convenience version of {@link #drainAura(BlockPos, int, boolean)} with
-     * aimForZero set to false, as this is the most likely behavior you will
-     * want. Notice that {@link #storeAura(BlockPos, int)} has aimForZero set to
-     * true.
+     * Convenience version of {@link #drainAura(BlockPos, int, boolean,
+     * boolean)} with aimForZero and simulate set to false, as this is the most
+     * likely behavior you will want. Notice that {@link #storeAura(BlockPos,
+     * int)} has aimForZero set to true.
      */
     int drainAura(BlockPos pos, int amount);
 
@@ -155,13 +155,13 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
      * @return The amount of Aura stored. Will only be different from the
      * supplied amount if stopAtZero is true
      */
-    int storeAura(BlockPos pos, int amount, boolean aimForZero);
+    int storeAura(BlockPos pos, int amount, boolean aimForZero, boolean simulate);
 
     /**
-     * Convenience version of {@link #storeAura(BlockPos, int, boolean)} with
-     * aimForZero set to true, as this is the most likely behavior you will
-     * want. Notice that {@link #drainAura(BlockPos, int)} has aimForZero set to
-     * false.
+     * Convenience version of {@link #storeAura(BlockPos, int, boolean,
+     * boolean)} with aimForZero set to true and simulate set to false, as this
+     * is the most likely behavior you will want. Notice that {@link
+     * #drainAura(BlockPos, int)} has aimForZero set to false.
      */
     int storeAura(BlockPos pos, int amount);
 

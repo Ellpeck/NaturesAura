@@ -53,7 +53,7 @@ public class AuraChunk implements IAuraChunk {
     }
 
     @Override
-    public int drainAura(BlockPos pos, int amount, boolean aimForZero) {
+    public int drainAura(BlockPos pos, int amount, boolean aimForZero, boolean simulate) {
         if (amount <= 0)
             return 0;
         MutableInt spot = this.getDrainSpot(pos);
@@ -62,18 +62,20 @@ public class AuraChunk implements IAuraChunk {
             if (curr > 0 && curr - amount < 0)
                 amount = curr;
         }
-        spot.subtract(amount);
-        this.markDirty();
+        if (!simulate) {
+            spot.subtract(amount);
+            this.markDirty();
+        }
         return amount;
     }
 
     @Override
     public int drainAura(BlockPos pos, int amount) {
-        return this.drainAura(pos, amount, false);
+        return this.drainAura(pos, amount, false, false);
     }
 
     @Override
-    public int storeAura(BlockPos pos, int amount, boolean aimForZero) {
+    public int storeAura(BlockPos pos, int amount, boolean aimForZero, boolean simulate) {
         if (amount <= 0)
             return 0;
         MutableInt spot = this.getDrainSpot(pos);
@@ -83,14 +85,16 @@ public class AuraChunk implements IAuraChunk {
                 amount = -curr;
             }
         }
-        spot.add(amount);
-        this.markDirty();
+        if (!simulate) {
+            spot.add(amount);
+            this.markDirty();
+        }
         return amount;
     }
 
     @Override
     public int storeAura(BlockPos pos, int amount) {
-        return this.storeAura(pos, amount, true);
+        return this.storeAura(pos, amount, true, false);
     }
 
     @Override
