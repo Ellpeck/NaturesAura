@@ -29,8 +29,8 @@ public class BalanceEffect implements IDrainSpotEffect {
             return;
         IAuraChunk highestChunk = IAuraChunk.getAuraChunk(world, highestPos);
         int toTransfer = Math.min(25, highestChunk.getDrainSpot(highestPos).intValue());
-        highestChunk.drainAura(highestPos, toTransfer);
-        auraChunk.storeAura(pos, toTransfer);
+        int stored = auraChunk.storeAura(pos, toTransfer);
+        highestChunk.drainAura(highestPos, stored);
     }
 
     @Override

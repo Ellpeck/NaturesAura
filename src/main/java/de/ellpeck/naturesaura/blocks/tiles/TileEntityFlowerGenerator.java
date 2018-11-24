@@ -7,7 +7,6 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFlower;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -52,10 +51,13 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
             int addAmount = 200;
             int toAdd = Math.max(0, addAmount - curr.getValue());
             if (toAdd > 0) {
-                BlockPos auraPos = IAuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);
-                if (NaturesAuraAPI.TYPE_OVERWORLD.isPresentInWorld(this.world) && IAuraChunk.getAuraInArea(this.world, auraPos, 30) < 20000)
-                    IAuraChunk.getAuraChunk(this.world, auraPos).storeAura(auraPos, toAdd);
-                else
+                if (NaturesAuraAPI.TYPE_OVERWORLD.isPresentInWorld(this.world) && IAuraChunk.getAuraInArea(this.world, this.pos, 35) < 20000) {
+                    int remain = toAdd;
+                    while (remain > 0) {
+                        BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);
+                        remain -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, remain);
+                    }
+                } else
                     toAdd = 0;
             }
 

@@ -47,10 +47,12 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
                                 boolean foundEmpty = false;
                                 for (EnumFacing dir : EnumFacing.HORIZONTALS) {
                                     BlockPos offset = this.pos.offset(dir, 12);
-                                    BlockPos spot = IAuraChunk.getLowestSpot(this.world, offset, 15, offset);
-                                    if (IAuraChunk.getAuraInArea(this.world, spot, 15) < 20000) {
-                                        IAuraChunk chunk = IAuraChunk.getAuraChunk(this.world, spot);
-                                        chunk.storeAura(spot, toAdd);
+                                    if (IAuraChunk.getAuraInArea(this.world, offset, 15) < 20000) {
+                                        int remain = toAdd;
+                                        while (remain > 0) {
+                                            BlockPos spot = IAuraChunk.getLowestSpot(this.world, offset, 15, offset);
+                                            remain -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
+                                        }
 
                                         foundEmpty = true;
                                         toAddTimes--;
