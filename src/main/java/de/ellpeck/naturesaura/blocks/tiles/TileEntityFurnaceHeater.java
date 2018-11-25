@@ -39,7 +39,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
                     //if set higher than 199, it'll never finish because the furnace does ++ and then ==
                     furnace.setField(2, Math.min(199, furnace.getField(2) + 5));
 
-                    BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 15, this.pos);
+                    BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 20, this.pos);
                     IAuraChunk chunk = IAuraChunk.getAuraChunk(this.world, spot);
                     chunk.drainAura(spot, MathHelper.ceil((200 - time) / 4F));
                     did = true;
