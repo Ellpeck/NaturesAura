@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntitySpawnLamp;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
@@ -30,6 +31,8 @@ public class BlockSpawnLamp extends BlockContainerImpl {
         super(Material.IRON, "spawn_lamp", TileEntitySpawnLamp.class, "spawn_lamp");
         MinecraftForge.EVENT_BUS.register(this);
         this.setLightLevel(1F);
+        this.setSoundType(SoundType.METAL);
+        this.setHardness(3F);
     }
 
     @SubscribeEvent
