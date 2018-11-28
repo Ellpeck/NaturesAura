@@ -37,4 +37,5 @@ public final class ModBlocks {
     public static final Block OFFERING_TABLE = new BlockOfferingTable();
     public static final Block PICKUP_STOPPER = new BlockPickupStopper();
     public static final Block SPAWN_LAMP = new BlockSpawnLamp();
+    public static final Block ANIMAL_GENERATOR = new BlockAnimalGenerator();
 }

@@ -271,6 +271,37 @@ public class PacketParticles implements IMessage {
                                         0F, 0F, 0F,
                                         0xf4a142, 1F, 30, 0F, false, true);
                             break;
+                        case 16: // Animal generator aura creation
+                            for (int i = world.rand.nextInt(5) + 5; i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        message.posY + 1.01F,
+                                        message.posZ + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        world.rand.nextFloat() * 0.04F + 0.02F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 40, 0F, false, true);
+                            break;
+                        case 17: // Animal generator consuming
+                            boolean child = message.data[0] > 0;
+                            float height = message.data[1] / 10F;
+                            genX = message.data[2];
+                            genY = message.data[3];
+                            genZ = message.data[4];
+                            for (int i = (child ? world.rand.nextInt(10) + 10 : world.rand.nextInt(20) + 20); i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        message.posX + world.rand.nextGaussian() * 0.25F,
+                                        message.posY + height * 0.75F + world.rand.nextGaussian() * 0.25F,
+                                        message.posZ + world.rand.nextGaussian() * 0.25F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        world.rand.nextFloat() * 0.01F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        0x42f4c8, world.rand.nextFloat() * (child ? 0.5F : 2F) + 1F, world.rand.nextInt(30) + 40, 0F, true, true);
+                            NaturesAuraAPI.instance().spawnParticleStream(
+                                    message.posX, message.posY + height * 0.75F, message.posZ,
+                                    genX + 0.5F, genY + 0.5F, genZ + 0.5F,
+                                    0.15F, 0x41c4f4, child ? 1.5F : 3F);
+                            break;
                     }
                 }
             });
