@@ -10,7 +10,7 @@
         },
         {
             "type":"text",
-            "text":"Effects like these become apparent around the time that the meter of the $(l:items/eye)Environmental Eye$() fills up fully.$(br)This effect is known to only occur in the $(thing)overworld$()."
+            "text":"Effects like these become apparent around the time that the meter of the $(l:items/eye)Environmental Eye$() fills up by about three quarters.$(br)This effect is known to only occur in the $(thing)overworld$()."
         }
     ]
 }

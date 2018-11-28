@@ -27,8 +27,8 @@ public class PlantBoostEffect implements IDrainSpotEffect {
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot) {
         if (spot.intValue() <= 0)
             return;
-        int aura = IAuraChunk.getAuraInArea(world, pos, 25);
-        if (aura <= 0)
+        int aura = IAuraChunk.getAuraInArea(world, pos, 30);
+        if (aura < 15000)
             return;
         int amount = Math.min(45, Math.abs(aura) / 1000);
         if (amount <= 1)
