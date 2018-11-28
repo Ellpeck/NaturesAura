@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -36,6 +37,11 @@ public class BlockAncientLeaves extends BlockLeaves implements
     public BlockAncientLeaves() {
         this.leavesFancy = true;
         ModRegistry.addItemOrBlock(this);
+    }
+
+    @Override
+    public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        return MapColor.PINK;
     }
 
     @Override

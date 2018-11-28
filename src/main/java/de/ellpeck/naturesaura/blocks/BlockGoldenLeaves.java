@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -36,6 +37,11 @@ public class BlockGoldenLeaves extends BlockLeaves implements
     public BlockGoldenLeaves() {
         this.leavesFancy = true;
         ModRegistry.addItemOrBlock(this);
+    }
+
+    @Override
+    public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        return MapColor.GOLD;
     }
 
     @Override
