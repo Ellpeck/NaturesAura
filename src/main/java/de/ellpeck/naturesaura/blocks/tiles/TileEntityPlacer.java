@@ -32,6 +32,8 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickable {
     @Override
     public void update() {
         if (!this.world.isRemote && this.world.getTotalWorldTime() % 15 == 0) {
+            if (this.redstonePower > 0)
+                return;
             TileEntity tileUp = this.world.getTileEntity(this.pos.up());
             if (tileUp == null || !tileUp.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN))
                 return;
