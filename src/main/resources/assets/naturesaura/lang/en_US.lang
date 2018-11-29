@@ -34,6 +34,7 @@ tile.naturesaura.infused_iron_block.name=Infused Iron Block
 tile.naturesaura.offering_table.name=Offering Table
 tile.naturesaura.pickup_stopper.name=Item Grounder
 tile.naturesaura.spawn_lamp.name=Lamp of Sanctuary
+tile.naturesaura.animal_generator.name=Disentangler of Mortals
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.gold_fiber.name=Brilliant Fiber

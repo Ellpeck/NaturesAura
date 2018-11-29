@@ -15,13 +15,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class BlockAnimalGenerator extends BlockContainerImpl {
     public BlockAnimalGenerator() {
         super(Material.ROCK, "animal_generator", TileEntityAnimalGenerator.class, "animal_generator");
-        this.setSoundType(SoundType.WOOD);
-        this.setHardness(2F);
+        this.setSoundType(SoundType.STONE);
+        this.setHardness(3F);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -43,7 +44,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl {
 
             boolean child = entity.isChild();
             int time = child ? 60 : 120;
-            int amount = child ? 45 : 70;
+            int amount = child ? 40 : 60;
             gen.setGenerationValues(time, amount);
 
             BlockPos genPos = gen.getPos();
@@ -59,10 +60,14 @@ public class BlockAnimalGenerator extends BlockContainerImpl {
     @SubscribeEvent
     public void onEntityDrops(LivingDropsEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
-        if (entity.world.isRemote)
-            return;
-        if (entity.getEntityData().getBoolean(NaturesAura.MOD_ID + ":no_drops")) {
+        if (entity.getEntityData().getBoolean(NaturesAura.MOD_ID + ":no_drops"))
             event.setCanceled(true);
-        }
+    }
+
+    @SubscribeEvent
+    public void onEntityExp(LivingExperienceDropEvent event) {
+        EntityLivingBase entity = event.getEntityLiving();
+        if (entity.getEntityData().getBoolean(NaturesAura.MOD_ID + ":no_drops"))
+            event.setCanceled(true);
     }
 }

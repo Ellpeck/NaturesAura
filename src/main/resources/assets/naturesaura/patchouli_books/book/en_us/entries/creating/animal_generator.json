@@ -1,0 +1,21 @@
+{
+    "name": "Disentangler of Mortals",
+    "icon": "naturesaura:animal_generator",
+    "category": "creating",
+    "advancement": "naturesaura:sky_ingot",
+    "pages": [
+        {
+            "type": "text",
+            "text": "Creating $(aura) through natural substances can be a double-edged sword. Creating $(aura) using the $(item)Disentangler of Mortals$() is especially so: Killing any passive animal close to it will cause the animal's soul to be freed and spread into the environment in the form of a rather big amount of $(aura). For this, baby animals' souls are less fulfilled, causing less $(aura) to be dispersed."
+        },
+        {
+            "type": "text",
+            "text": "It should be noted, also, that the animals whose souls are absorbed will not be lootable for their usual drops. Additionally, supplying the $(item)Disentangler of Mortals$() with a death while it is already in the process of converting a soul will cause both the animal's soul not to be freed and its remains not to be dropped."
+        },
+        {
+            "type": "crafting",
+            "recipe": "naturesaura:animal_generator",
+            "text": "Creating the $(item)Disentangler of Mortals$()"
+        }
+    ]
+}

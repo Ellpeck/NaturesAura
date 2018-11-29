@@ -1,0 +1,32 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "BSB",
+        "IAI",
+        "BWB"
+    ],
+    "key": {
+        "B": {
+            "item": "minecraft:nether_brick"
+        },
+        "I": {
+            "item": "minecraft:iron_bars"
+        },
+        "S": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "A": {
+            "item": "minecraft:soul_sand"
+        },
+        "W": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:overworld"
+            }
+        }
+    },
+    "result": {
+        "item": "naturesaura:animal_generator"
+    }
+}
