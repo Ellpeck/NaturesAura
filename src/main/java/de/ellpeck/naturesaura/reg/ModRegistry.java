@@ -52,7 +52,7 @@ public final class ModRegistry {
             ForgeRegistries.ITEMS.register(item);
         }
 
-        item.setCreativeTab(tab);
+        block.setCreativeTab(tab);
     }
 
     private static CreativeTabs getTab(IModItem item) {
