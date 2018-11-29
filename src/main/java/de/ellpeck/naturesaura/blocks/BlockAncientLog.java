@@ -1,35 +1,25 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import java.util.Collections;
-import java.util.Map;
-
-public class BlockAncientLog extends BlockLog implements IModItem, IModelProvider {
+public class BlockAncientLog extends BlockLog implements IModItem, ICreativeItem, IModelProvider {
 
     public BlockAncientLog() {
-        ModRegistry.addItemOrBlock(this);
+        ModRegistry.add(this);
     }
 
     @Override
     public String getBaseName() {
         return "ancient_log";
-    }
-
-    @Override
-    public boolean shouldAddCreative() {
-        return true;
     }
 
     @Override

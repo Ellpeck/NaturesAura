@@ -37,7 +37,7 @@ public class BlockGoldenLeaves extends BlockLeaves implements
 
     public BlockGoldenLeaves() {
         this.leavesFancy = true;
-        ModRegistry.addItemOrBlock(this);
+        ModRegistry.add(this);
     }
 
     @Override
@@ -48,11 +48,6 @@ public class BlockGoldenLeaves extends BlockLeaves implements
     @Override
     public String getBaseName() {
         return "golden_leaves";
-    }
-
-    @Override
-    public boolean shouldAddCreative() {
-        return true;
     }
 
     @Override

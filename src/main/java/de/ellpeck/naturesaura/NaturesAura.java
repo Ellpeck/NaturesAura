@@ -12,6 +12,7 @@ import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.CommonEvents;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.proxy.IProxy;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.reg.ModRegistry;
@@ -59,6 +60,7 @@ public final class NaturesAura {
 
         new ModBlocks();
         new ModItems();
+        new ModPotions();
 
         Compat.preInit();
         PacketHandler.init();

@@ -1,36 +1,26 @@
 package de.ellpeck.naturesaura.items;
 
-import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import java.util.Collections;
-import java.util.Map;
-
-public class ItemImpl extends Item implements IModItem, IModelProvider {
+public class ItemImpl extends Item implements IModItem, ICreativeItem, IModelProvider {
 
     private final String baseName;
 
     public ItemImpl(String baseName) {
         this.baseName = baseName;
-        ModRegistry.addItemOrBlock(this);
+        ModRegistry.add(this);
     }
 
     @Override
     public String getBaseName() {
         return this.baseName;
-    }
-
-    @Override
-    public boolean shouldAddCreative() {
-        return true;
     }
 
     @Override

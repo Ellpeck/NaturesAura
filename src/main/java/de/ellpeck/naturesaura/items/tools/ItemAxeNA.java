@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.items.tools;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
@@ -17,23 +18,18 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import javax.annotation.Nullable;
 
-public class ItemAxeNA extends ItemAxe implements IModItem, IModelProvider {
+public class ItemAxeNA extends ItemAxe implements IModItem, ICreativeItem, IModelProvider {
     private final String baseName;
 
     public ItemAxeNA(String baseName, ToolMaterial material, float damage, float speed) {
         super(material, damage, speed);
         this.baseName = baseName;
-        ModRegistry.addItemOrBlock(this);
+        ModRegistry.add(this);
     }
 
     @Override
     public String getBaseName() {
         return this.baseName;
-    }
-
-    @Override
-    public boolean shouldAddCreative() {
-        return true;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
+import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
@@ -11,14 +12,14 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-public class BlockStairsNA extends BlockStairs implements IModItem, IModelProvider {
+public class BlockStairsNA extends BlockStairs implements IModItem, ICreativeItem, IModelProvider {
 
     private final String baseName;
 
     protected BlockStairsNA(String baseName, IBlockState modelState) {
         super(modelState);
         this.baseName = baseName;
-        ModRegistry.addItemOrBlock(this);
+        ModRegistry.add(this);
         this.fullBlock = false;
         this.lightOpacity = 0;
     }
@@ -26,11 +27,6 @@ public class BlockStairsNA extends BlockStairs implements IModItem, IModelProvid
     @Override
     public String getBaseName() {
         return this.baseName;
-    }
-
-    @Override
-    public boolean shouldAddCreative() {
-        return true;
     }
 
     @Override

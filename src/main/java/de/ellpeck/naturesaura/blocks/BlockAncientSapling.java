@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.gen.WorldGenAncientTree;
+import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
@@ -11,8 +11,6 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -22,11 +20,9 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import java.util.Collections;
-import java.util.Map;
 import java.util.Random;
 
-public class BlockAncientSapling extends BlockBush implements IGrowable, IModItem, IModelProvider {
+public class BlockAncientSapling extends BlockBush implements IGrowable, IModItem, ICreativeItem, IModelProvider {
 
     private static final AxisAlignedBB AABB = new AxisAlignedBB(
             0.09999999403953552D, 0.0D, 0.09999999403953552D,
@@ -36,7 +32,7 @@ public class BlockAncientSapling extends BlockBush implements IGrowable, IModIte
         this.setHardness(0.0F);
         this.setSoundType(SoundType.PLANT);
 
-        ModRegistry.addItemOrBlock(this);
+        ModRegistry.add(this);
     }
 
     @Override
@@ -58,11 +54,6 @@ public class BlockAncientSapling extends BlockBush implements IGrowable, IModIte
     @Override
     public String getBaseName() {
         return "ancient_sapling";
-    }
-
-    @Override
-    public boolean shouldAddCreative() {
-        return true;
     }
 
     @Override

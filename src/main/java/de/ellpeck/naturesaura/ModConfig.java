@@ -1,14 +1,9 @@
 package de.ellpeck.naturesaura;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.RangeDouble;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 @Config(modid = NaturesAura.MOD_ID, category = "")
 public final class ModConfig {
@@ -40,6 +35,8 @@ public final class ModConfig {
         public boolean plantBoostEffect = true;
         @Comment("If the Aura Imbalance effect of explosions happening randomly if Aura levels are too low should occur")
         public boolean explosionEffect = true;
+        @Comment("If the Aura Imbalance effect of breathlessness if Aura levels are too low should occur")
+        public boolean breathlessEffect = true;
     }
 
     public static class Client {

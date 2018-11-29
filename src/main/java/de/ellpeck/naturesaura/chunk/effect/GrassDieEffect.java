@@ -24,11 +24,11 @@ public class GrassDieEffect implements IDrainSpotEffect {
     @Override
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot) {
         if (spot.intValue() < 0) {
-            int aura = IAuraChunk.getAuraInArea(world, pos, 25);
+            int aura = IAuraChunk.getAuraInArea(world, pos, 50);
             if (aura < 0) {
                 int amount = Math.min(300, Math.abs(aura) / 1000);
                 if (amount > 1) {
-                    int dist = MathHelper.clamp(Math.abs(aura) / 750, 5, 45);
+                    int dist = MathHelper.clamp(Math.abs(aura) / 750, 5, 75);
                     for (int i = amount / 2 + world.rand.nextInt(amount / 2); i >= 0; i--) {
                         BlockPos grassPos = new BlockPos(
                                 pos.getX() + world.rand.nextGaussian() * dist,

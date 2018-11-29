@@ -8,8 +8,6 @@ public interface IModItem {
 
     String getBaseName();
 
-    boolean shouldAddCreative();
-
     void onPreInit(FMLPreInitializationEvent event);
 
     void onInit(FMLInitializationEvent event);

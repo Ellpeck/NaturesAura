@@ -1,7 +1,9 @@
 package de.ellpeck.naturesaura.items.tools;
 
+import crafttweaker.api.creativetabs.ICreativeTab;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
@@ -24,14 +26,14 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import javax.annotation.Nullable;
 
-public class ItemHoeNA extends ItemHoe implements IModItem, IModelProvider {
+public class ItemHoeNA extends ItemHoe implements IModItem, ICreativeItem, IModelProvider {
 
     private final String baseName;
 
     public ItemHoeNA(String baseName, ToolMaterial material) {
         super(material);
         this.baseName = baseName;
-        ModRegistry.addItemOrBlock(this);
+        ModRegistry.add(this);
     }
 
     @Override
@@ -64,11 +66,6 @@ public class ItemHoeNA extends ItemHoe implements IModItem, IModelProvider {
     @Override
     public String getBaseName() {
         return this.baseName;
-    }
-
-    @Override
-    public boolean shouldAddCreative() {
-        return true;
     }
 
     @Override

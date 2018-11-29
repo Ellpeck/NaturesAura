@@ -10,5 +10,6 @@ public final class DrainSpotEffects {
         NaturesAuraAPI.DRAIN_SPOT_EFFECTS.put(ReplenishingEffect.NAME, ReplenishingEffect::new);
         NaturesAuraAPI.DRAIN_SPOT_EFFECTS.put(BalanceEffect.NAME, BalanceEffect::new);
         NaturesAuraAPI.DRAIN_SPOT_EFFECTS.put(ExplosionEffect.NAME, ExplosionEffect::new);
+        NaturesAuraAPI.DRAIN_SPOT_EFFECTS.put(BreathlessEffect.NAME, BreathlessEffect::new);
     }
 }

@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.items.tools;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
@@ -18,23 +19,18 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import javax.annotation.Nullable;
 
-public class ItemSwordNA extends ItemSword implements IModItem, IModelProvider {
+public class ItemSwordNA extends ItemSword implements IModItem, ICreativeItem, IModelProvider {
     private final String baseName;
 
     public ItemSwordNA(String baseName, ToolMaterial material) {
         super(material);
         this.baseName = baseName;
-        ModRegistry.addItemOrBlock(this);
+        ModRegistry.add(this);
     }
 
     @Override
     public String getBaseName() {
         return this.baseName;
-    }
-
-    @Override
-    public boolean shouldAddCreative() {
-        return true;
     }
 
     @Override

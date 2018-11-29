@@ -32,11 +32,11 @@ import java.util.List;
 import java.util.Random;
 
 public class BlockAncientLeaves extends BlockLeaves implements
-        IModItem, IModelProvider, IColorProvidingBlock, IColorProvidingItem, ITileEntityProvider {
+        IModItem, ICreativeItem, IModelProvider, IColorProvidingBlock, IColorProvidingItem, ITileEntityProvider {
 
     public BlockAncientLeaves() {
         this.leavesFancy = true;
-        ModRegistry.addItemOrBlock(this);
+        ModRegistry.add(this);
     }
 
     @Override
@@ -47,11 +47,6 @@ public class BlockAncientLeaves extends BlockLeaves implements
     @Override
     public String getBaseName() {
         return "ancient_leaves";
-    }
-
-    @Override
-    public boolean shouldAddCreative() {
-        return true;
     }
 
     @Override

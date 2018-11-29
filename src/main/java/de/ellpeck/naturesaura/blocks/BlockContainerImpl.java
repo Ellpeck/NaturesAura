@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
+import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
@@ -26,7 +27,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nullable;
 
-public class BlockContainerImpl extends BlockContainer implements IModItem, IModelProvider {
+public class BlockContainerImpl extends BlockContainer implements IModItem, ICreativeItem, IModelProvider {
 
     private final String baseName;
 
@@ -40,7 +41,7 @@ public class BlockContainerImpl extends BlockContainer implements IModItem, IMod
         this.tileClass = tileClass;
         this.tileRegName = tileReg;
 
-        ModRegistry.addItemOrBlock(this);
+        ModRegistry.add(this);
     }
 
     @Nullable
@@ -56,11 +57,6 @@ public class BlockContainerImpl extends BlockContainer implements IModItem, IMod
     @Override
     public String getBaseName() {
         return this.baseName;
-    }
-
-    @Override
-    public boolean shouldAddCreative() {
-        return true;
     }
 
     @Override

@@ -9,6 +9,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -39,8 +40,8 @@ public abstract class BlockSlabsNA extends BlockImpl implements ICustomItemBlock
     }
 
     @Override
-    public boolean shouldAddCreative() {
-        return !this.isDouble();
+    public CreativeTabs getTabToAdd() {
+        return this.isDouble() ? null : super.getTabToAdd();
     }
 
     @Override

@@ -109,3 +109,5 @@ advancement.naturesaura.sky_ingot=Sturdy and light
 advancement.naturesaura.sky_ingot.desc=Create an Ingot of the Skies using the Offering to the Gods
 
 command.naturesaura.aura.usage=/naaura <action> <amount> <range>
+
+potion.naturesaura.breathless.name=Breathless
