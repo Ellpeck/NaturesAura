@@ -2,8 +2,8 @@
     "type": "forge:ore_shaped",
     "pattern": [
         " O ",
-        "GNG",
-        " E "
+        "GDG",
+        " N "
     ],
     "key": {
         "G": {
@@ -23,12 +23,8 @@
                 "stored_type": "naturesaura:nether"
             }
         },
-        "E": {
-            "type": "minecraft:item_nbt",
-            "item": "naturesaura:aura_bottle",
-            "nbt": {
-                "stored_type": "naturesaura:end"
-            }
+        "D": {
+            "item": "minecraft:diamond"
         }
     },
     "result": {

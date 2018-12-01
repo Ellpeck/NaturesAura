@@ -2,7 +2,7 @@
     "name": "Lamp of Sanctuary",
     "icon": "naturesaura:spawn_lamp",
     "category": "using",
-    "advancement": "naturesaura:sky_ingot",
+    "advancement": "naturesaura:aura_bottle_end",
     "pages": [
         {
             "type": "text",

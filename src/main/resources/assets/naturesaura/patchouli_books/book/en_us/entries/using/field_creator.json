@@ -2,7 +2,7 @@
     "name": "Aura Field Creator",
     "icon": "naturesaura:field_creator",
     "category": "using",
-    "advancement": "naturesaura:aura_bottle_end",
+    "advancement": "naturesaura:sky_ingot",
     "pages": [
         {
             "type": "text",

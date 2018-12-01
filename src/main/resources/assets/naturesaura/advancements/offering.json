@@ -10,7 +10,7 @@
             "translate": "advancement.naturesaura.offering.desc"
         }
     },
-    "parent": "naturesaura:aura_bottle_end",
+    "parent": "naturesaura:aura_bottle_nether",
     "criteria": {
         "table": {
             "trigger": "minecraft:inventory_changed",

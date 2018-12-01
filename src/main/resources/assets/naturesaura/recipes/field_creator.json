@@ -10,7 +10,7 @@
             "item": "minecraft:glass"
         },
         "I": {
-            "item": "naturesaura:infused_iron"
+            "item": "naturesaura:sky_ingot"
         },
         "P": {
             "item": "minecraft:piston"
@@ -19,7 +19,7 @@
             "type": "minecraft:item_nbt",
             "item": "naturesaura:aura_bottle",
             "nbt": {
-                "stored_type": "naturesaura:end"
+                "stored_type": "naturesaura:overworld"
             }
         }
     },

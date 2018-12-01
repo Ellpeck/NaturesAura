@@ -2,7 +2,7 @@
     "name": "Offering to the Gods",
     "icon": "naturesaura:offering_table",
     "category": "practices",
-    "advancement": "naturesaura:aura_bottle_end",
+    "advancement": "naturesaura:aura_bottle_nether",
     "pages": [
         {
             "type": "text",
