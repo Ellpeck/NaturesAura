@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
-import de.ellpeck.naturesaura.api.recipes.ing.NBTIngredient;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
@@ -156,14 +155,18 @@ public final class Helper {
         return false;
     }
 
-    public static ICapabilityProvider makeRechargeProvider(ItemStack stack) {
+    public static ICapabilityProvider makeRechargeProvider(ItemStack stack, boolean needsSelected) {
         return new ICapabilityProvider() {
-            private final IAuraRecharge recharge = container -> {
-                int toDrain = 3;
-                if (stack.getItemDamage() > 0 && container.drainAura(toDrain, true) >= toDrain) {
-                    stack.setItemDamage(stack.getItemDamage() - 1);
-                    container.drainAura(toDrain, false);
+            private final IAuraRecharge recharge = (container, containerSlot, itemSlot, isSelected) -> {
+                if (isSelected || !needsSelected) {
+                    int toDrain = 3;
+                    if (stack.getItemDamage() > 0 && container.drainAura(toDrain, true) >= toDrain) {
+                        stack.setItemDamage(stack.getItemDamage() - 1);
+                        container.drainAura(toDrain, false);
+                        return true;
+                    }
                 }
+                return false;
             };
 
             @Override

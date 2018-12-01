@@ -4,6 +4,6 @@ import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 
 public interface IAuraRecharge {
 
-    void rechargeFromContainer(IAuraContainer container);
+    boolean rechargeFromContainer(IAuraContainer container, int containerSlot, int itemSlot, boolean isSelected);
 
 }

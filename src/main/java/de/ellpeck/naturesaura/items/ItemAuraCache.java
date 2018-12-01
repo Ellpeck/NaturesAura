@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.ItemAuraContainer;
+import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.creativetab.CreativeTabs;
@@ -35,10 +36,16 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
         if (!worldIn.isRemote && entityIn instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entityIn;
             if (player.isSneaking()) {
-                ItemStack stack = player.getHeldItemMainhand();
-                if (stack.hasCapability(NaturesAuraAPI.capAuraRecharge, null)) {
-                    IAuraContainer container = stackIn.getCapability(NaturesAuraAPI.capAuraContainer, null);
-                    stack.getCapability(NaturesAuraAPI.capAuraRecharge, null).rechargeFromContainer(container);
+                IAuraContainer container = stackIn.getCapability(NaturesAuraAPI.capAuraContainer, null);
+                if (container.getStoredAura() <= 0)
+                    return;
+                for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+                    ItemStack stack = player.inventory.getStackInSlot(i);
+                    if (stack.hasCapability(NaturesAuraAPI.capAuraRecharge, null)) {
+                        IAuraRecharge recharge = stack.getCapability(NaturesAuraAPI.capAuraRecharge, null);
+                        if (recharge.rechargeFromContainer(container, itemSlot, i, player.inventory.currentItem == i))
+                            break;
+                    }
                 }
             }
         }

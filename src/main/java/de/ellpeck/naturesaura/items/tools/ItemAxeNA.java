@@ -59,7 +59,7 @@ public class ItemAxeNA extends ItemAxe implements IModItem, ICreativeItem, IMode
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
         if (this == ModItems.INFUSED_AXE)
-            return Helper.makeRechargeProvider(stack);
+            return Helper.makeRechargeProvider(stack, true);
         else return null;
     }
 }

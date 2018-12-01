@@ -100,7 +100,7 @@ public class ItemShovelNA extends ItemSpade implements IModItem, ICreativeItem, 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
         if (this == ModItems.INFUSED_SHOVEL)
-            return Helper.makeRechargeProvider(stack);
+            return Helper.makeRechargeProvider(stack, true);
         else return null;
     }
 }

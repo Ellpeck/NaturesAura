@@ -76,7 +76,7 @@ public class ItemPickaxeNA extends ItemPickaxe implements IModItem, ICreativeIte
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
         if (this == ModItems.INFUSED_PICKAXE)
-            return Helper.makeRechargeProvider(stack);
+            return Helper.makeRechargeProvider(stack, true);
         else return null;
     }
 }

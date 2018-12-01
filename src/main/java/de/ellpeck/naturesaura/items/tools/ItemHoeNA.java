@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.items.tools;
 
-import crafttweaker.api.creativetabs.ICreativeTab;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICreativeItem;
@@ -87,7 +86,7 @@ public class ItemHoeNA extends ItemHoe implements IModItem, ICreativeItem, IMode
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
         if (this == ModItems.INFUSED_HOE)
-            return Helper.makeRechargeProvider(stack);
+            return Helper.makeRechargeProvider(stack, true);
         else return null;
     }
 }

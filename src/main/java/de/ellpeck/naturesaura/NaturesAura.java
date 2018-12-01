@@ -30,10 +30,13 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Locale;
+
 @Mod(modid = NaturesAura.MOD_ID, name = NaturesAura.MOD_NAME, version = NaturesAura.VERSION, dependencies = NaturesAura.DEPS)
 public final class NaturesAura {
 
     public static final String MOD_ID = NaturesAuraAPI.MOD_ID;
+    public static final String MOD_ID_UPPER = MOD_ID.toUpperCase(Locale.ROOT);
     public static final String PROXY_LOCATION = "de.ellpeck." + MOD_ID + ".proxy.";
     public static final String MOD_NAME = "Nature's Aura";
     public static final String VERSION = "@VERSION@";

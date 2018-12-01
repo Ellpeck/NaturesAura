@@ -59,7 +59,7 @@ public class ItemSwordNA extends ItemSword implements IModItem, ICreativeItem, I
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
         if (this == ModItems.INFUSED_SWORD)
-            return Helper.makeRechargeProvider(stack);
+            return Helper.makeRechargeProvider(stack, true);
         else return null;
     }
 }

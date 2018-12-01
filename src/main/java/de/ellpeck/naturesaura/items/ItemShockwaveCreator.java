@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.items;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
+import de.ellpeck.naturesaura.items.tools.ItemArmorNA;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
@@ -16,9 +17,11 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -78,6 +81,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                 source = DamageSource.causePlayerDamage((EntityPlayer) living);
             else
                 source = DamageSource.MAGIC;
+            boolean infusedSet = ItemArmorNA.isFullSetEquipped(living, 0);
 
             int range = 5;
             List<EntityLivingBase> mobs = worldIn.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(
@@ -91,6 +95,9 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                 if (living instanceof EntityPlayer && !NaturesAuraAPI.instance().extractAuraFromPlayer((EntityPlayer) living, 5, false))
                     break;
                 mob.attackEntityFrom(source, 4F);
+
+                if (infusedSet)
+                    mob.addPotionEffect(new PotionEffect(MobEffects.WITHER, 120));
             }
 
             BlockPos pos = living.getPosition();

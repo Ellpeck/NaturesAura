@@ -1,0 +1,16 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "AAA",
+        "A A",
+        "A A"
+    ],
+    "key": {
+        "A": {
+            "item": "naturesaura:infused_iron"
+        }
+    },
+    "result": {
+        "item": "naturesaura:infused_iron_pants"
+    }
+}
