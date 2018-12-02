@@ -3,6 +3,7 @@
     "icon": "naturesaura:eye",
     "category": "items",
     "advancement": "naturesaura:wood_stand",
+    "priority": true,
     "pages": [
         {
             "type": "text",
@@ -10,7 +11,7 @@
         },
         {
             "type": "text",
-            "text": "A bar will display the amount stored in $(aura)-bearing blocks, with a full bar meaning that the block has reached its storage capacity.$(br)An additional bar will display the saturation of $(aura) around one's current location, with the bar being half full meaning that the $(aura) is at its expected default level. The eye's limited power, however, means that, when $(aura) exceeds any end of the visible bar, it will not be able to tell you just how much there is."
+            "text": "A bar will display the amount stored in $(aura)-bearing blocks, with a full bar meaning that the block has reached its storage capacity.$(br)An additional bar at the top left of one's field of view will display the saturation of $(aura) around one's current location, with the bar being half full meaning that the $(aura) is at its expected default level. The eye's limited power, however, means that, when $(aura) exceeds any end of the visible bar, it will not be able to tell you just how much there is."
         },
         {
             "type": "naturesaura:tree_ritual",

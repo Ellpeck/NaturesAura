@@ -33,6 +33,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
+import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.List;
@@ -45,6 +46,7 @@ public class ClientEvents {
     @SubscribeEvent
     public void onDebugRender(RenderGameOverlayEvent.Text event) {
         Minecraft mc = Minecraft.getMinecraft();
+        mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":onDebugRender");
         if (mc.gameSettings.showDebugInfo) {
             String prefix = TextFormatting.GREEN + "[" + NaturesAura.MOD_NAME + "]" + TextFormatting.RESET + " ";
             List<String> left = event.getLeft();
@@ -52,10 +54,10 @@ public class ClientEvents {
             left.add(prefix + "Particles: " + ParticleHandler.getParticleAmount());
 
             if (mc.player.capabilities.isCreativeMode) {
-                left.add(prefix + "Aura:");
+                left.add(prefix + "Aura (range 35)");
                 MutableInt amount = new MutableInt(IAuraChunk.DEFAULT_AURA);
                 MutableInt spots = new MutableInt();
-                IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 15, ((blockPos, drainSpot) -> {
+                IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 35, ((blockPos, drainSpot) -> {
                     spots.increment();
                     amount.add(drainSpot);
                     if (mc.player.isSneaking())
@@ -65,6 +67,7 @@ public class ClientEvents {
                 left.add(prefix + "Type: " + IAuraType.forWorld(mc.world).getName());
             }
         }
+        mc.profiler.endSection();
     }
 
     @SubscribeEvent
@@ -93,6 +96,7 @@ public class ClientEvents {
     @SubscribeEvent
     public void onOverlayRender(RenderGameOverlayEvent.Post event) {
         Minecraft mc = Minecraft.getMinecraft();
+        mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":onOverlayRender");
         if (event.getType() == ElementType.ALL) {
             ScaledResolution res = event.getResolution();
             if (mc.player != null) {
@@ -155,7 +159,14 @@ public class ClientEvents {
 
                     if (!mc.gameSettings.showDebugInfo) {
                         GlStateManager.color(83 / 255F, 160 / 255F, 8 / 255F);
-                        float totalPercentage = IAuraChunk.getAuraInArea(mc.world, mc.player.getPosition(), 15) / (IAuraChunk.DEFAULT_AURA * 2F);
+
+                        MutableFloat totalAmount = new MutableFloat(IAuraChunk.DEFAULT_AURA);
+                        IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 35, (pos, spot) -> {
+                            float percentage = 1F - (float) mc.player.getDistance(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F) / 35F;
+                            totalAmount.add(spot * percentage);
+                        });
+                        float totalPercentage = totalAmount.intValue() / (IAuraChunk.DEFAULT_AURA * 2F);
+
                         int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
                         if (tHeight < 50)
                             Gui.drawModalRectWithCustomSizedTexture(3, 10, 6, 12, 6, 50 - tHeight, 256, 256);
@@ -201,6 +212,7 @@ public class ClientEvents {
                 }
             }
         }
+        mc.profiler.endSection();
     }
 
     private void drawContainerInfo(IAuraContainer container, Minecraft mc, ScaledResolution res, int yOffset, String name) {
