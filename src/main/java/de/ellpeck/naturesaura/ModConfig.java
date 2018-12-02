@@ -1,6 +1,10 @@
 package de.ellpeck.naturesaura;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.RangeDouble;
@@ -19,6 +23,9 @@ public final class ModConfig {
 
         @Comment("Additional blocks that several mechanics identify as flowers. Each entry needs to be formatted as modid:block[prop1=value1,...] where block state properties are optional")
         public String[] additionalFlowers = new String[0];
+
+        @Comment("Additional dimensions that map to Aura types that should be present in them. This is useful if you have a modpack with custom dimensions that should have Aura act similarly to an existing dimension in them. Each entry needs to be formatted as dimension_name->aura_type, where aura_type can be any of naturesaura:overworld, naturesaura:nether and naturesaura:end.")
+        public String[] auraTypeOverrides = new String[0];
 
         @Comment("The amount of blocks that can be between two Aura Field Creators for them to be connectable and work together")
         public int fieldCreatorRange = 10;
@@ -67,6 +74,17 @@ public final class ModConfig {
                     NaturesAuraAPI.FLOWERS.add(Helper.getStateFromString(s));
             } catch (Exception e) {
                 NaturesAura.LOGGER.warn("Error parsing additionalFlowers", e);
+            }
+
+            try {
+                for (String s : general.auraTypeOverrides) {
+                    String[] split = s.split("->");
+                    IAuraType type = NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(split[1]));
+                    if (type instanceof BasicAuraType)
+                        ((BasicAuraType) type).addDimensionType(DimensionType.byName(split[0]));
+                }
+            } catch (Exception e) {
+                NaturesAura.LOGGER.warn("Error parsing auraTypeOverrides", e);
             }
         }
     }

@@ -7,10 +7,11 @@ import net.minecraft.world.World;
 public interface IAuraType {
 
     static IAuraType forWorld(World world) {
+        IAuraType highestType = NaturesAuraAPI.TYPE_OTHER;
         for (IAuraType type : NaturesAuraAPI.AURA_TYPES.values())
-            if (type.isPresentInWorld(world))
-                return type;
-        return NaturesAuraAPI.TYPE_OTHER;
+            if (type.isPresentInWorld(world) && type.getPriority() > highestType.getPriority())
+                highestType = type;
+        return highestType;
     }
 
     ResourceLocation getName();
@@ -18,4 +19,6 @@ public interface IAuraType {
     boolean isPresentInWorld(World world);
 
     int getColor();
+
+    int getPriority();
 }
