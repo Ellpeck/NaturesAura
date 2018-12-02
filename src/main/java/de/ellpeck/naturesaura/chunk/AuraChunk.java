@@ -19,7 +19,10 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
@@ -27,7 +30,7 @@ public class AuraChunk implements IAuraChunk {
 
     private final Chunk chunk;
     private final IAuraType type;
-    private final Map<BlockPos, MutableInt> drainSpots = new HashMap<>();
+    private final Map<BlockPos, MutableInt> drainSpots = new ConcurrentHashMap<>();
     private final List<IDrainSpotEffect> effects = new ArrayList<>();
     private boolean needsSync;
 
@@ -66,6 +69,8 @@ public class AuraChunk implements IAuraChunk {
         }
         if (!simulate) {
             spot.subtract(amount);
+            if (spot.intValue() == 0)
+                this.drainSpots.remove(pos);
             this.markDirty();
         }
         return amount;
@@ -91,6 +96,8 @@ public class AuraChunk implements IAuraChunk {
         }
         if (!simulate) {
             spot.add(amount);
+            if (spot.intValue() == 0)
+                this.drainSpots.remove(pos);
             this.markDirty();
         }
         return amount;
@@ -144,7 +151,6 @@ public class AuraChunk implements IAuraChunk {
     public void update() {
         World world = this.chunk.getWorld();
 
-        Set<BlockPos> toClear = null;
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
             BlockPos pos = entry.getKey();
             MutableInt amount = entry.getValue();
@@ -153,16 +159,6 @@ public class AuraChunk implements IAuraChunk {
                 effect.update(world, this.chunk, this, pos, amount.intValue());
                 world.profiler.endSection();
             }
-            if (amount.intValue() == 0) {
-                if (toClear == null)
-                    toClear = new HashSet<>();
-                toClear.add(pos);
-            }
-        }
-        if (toClear != null) {
-            for (BlockPos spot : toClear)
-                this.drainSpots.remove(spot);
-            this.markDirty();
         }
 
         if (this.needsSync) {
