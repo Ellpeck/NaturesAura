@@ -10,15 +10,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import org.apache.commons.lang3.mutable.MutableInt;
 
 public class ExplosionEffect implements IDrainSpotEffect {
 
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "explosions");
 
     @Override
-    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot) {
-        if (spot.intValue() >= 0 || world.getTotalWorldTime() % 40 != 0)
+    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (spot >= 0 || world.getTotalWorldTime() % 40 != 0)
             return;
         int aura = IAuraChunk.getAuraInArea(world, pos, 85);
         if (aura > -50000)

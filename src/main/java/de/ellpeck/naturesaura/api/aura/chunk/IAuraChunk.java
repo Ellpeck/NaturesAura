@@ -8,7 +8,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.function.BiConsumer;
 
@@ -59,7 +58,7 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
      * @param consumer A consumer that gets given the position and amount of
      *                 aura in each drain spot found
      */
-    static void getSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer) {
+    static void getSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
         NaturesAuraAPI.instance().getAuraSpotsInArea(world, pos, radius, consumer);
     }
 
@@ -117,7 +116,7 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
     /**
      * @see #getSpotsInArea(World, BlockPos, int, BiConsumer)
      */
-    void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer);
+    void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer);
 
     /**
      * Drains the given amount of Aura from the given position. Returns the
@@ -165,7 +164,7 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
      */
     int storeAura(BlockPos pos, int amount);
 
-    MutableInt getDrainSpot(BlockPos pos);
+    int getDrainSpot(BlockPos pos);
 
     IAuraType getType();
 

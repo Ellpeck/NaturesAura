@@ -15,15 +15,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import org.apache.commons.lang3.mutable.MutableInt;
 
 public class GrassDieEffect implements IDrainSpotEffect {
 
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "grass_die");
 
     @Override
-    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot) {
-        if (spot.intValue() < 0) {
+    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (spot < 0) {
             int aura = IAuraChunk.getAuraInArea(world, pos, 50);
             if (aura < 0) {
                 int amount = Math.min(300, Math.abs(aura) / 1000);

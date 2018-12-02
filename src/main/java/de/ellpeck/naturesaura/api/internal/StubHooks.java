@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.function.BiConsumer;
 
@@ -32,7 +31,7 @@ public class StubHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
-    public void getAuraSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer) {
+    public void getAuraSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
 
     }
 

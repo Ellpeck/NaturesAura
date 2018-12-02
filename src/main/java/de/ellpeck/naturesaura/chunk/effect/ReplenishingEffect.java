@@ -12,7 +12,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +21,8 @@ public class ReplenishingEffect implements IDrainSpotEffect {
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "replenishing");
 
     @Override
-    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot) {
-        int amount = spot.intValue();
-        if (amount < 0) {
+    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (spot < 0) {
             List<ISpotDrainable> tiles = new ArrayList<>();
             Helper.getTileEntitiesInArea(world, pos, 25, tile -> {
                 if (tile.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
@@ -41,12 +39,12 @@ public class ReplenishingEffect implements IDrainSpotEffect {
                     ISpotDrainable tile = tiles.get(world.rand.nextInt(tiles.size()));
                     if (!tile.isAcceptableType(type))
                         continue;
-                    int drained = tile.drainAuraPassively(-amount, false);
+                    int drained = tile.drainAuraPassively(-spot, false);
                     if (drained <= 0)
                         continue;
                     auraChunk.storeAura(pos, drained);
-                    amount += drained;
-                    if (amount >= drained) {
+                    spot += drained;
+                    if (spot >= drained) {
                         break;
                     }
                 }

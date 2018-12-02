@@ -8,15 +8,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import org.apache.commons.lang3.mutable.MutableInt;
 
 public class BalanceEffect implements IDrainSpotEffect {
 
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "balance");
 
     @Override
-    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, MutableInt spot) {
-        if (spot.intValue() >= 0)
+    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (spot >= 0)
             return;
         int aura = IAuraChunk.getAuraInArea(world, pos, 25);
         if (aura >= 0)
@@ -28,7 +27,7 @@ public class BalanceEffect implements IDrainSpotEffect {
         if (highestPos == null)
             return;
         IAuraChunk highestChunk = IAuraChunk.getAuraChunk(world, highestPos);
-        int toTransfer = Math.min(25, highestChunk.getDrainSpot(highestPos).intValue());
+        int toTransfer = Math.min(25, highestChunk.getDrainSpot(highestPos));
         int stored = auraChunk.storeAura(pos, toTransfer);
         highestChunk.drainAura(highestPos, stored);
     }

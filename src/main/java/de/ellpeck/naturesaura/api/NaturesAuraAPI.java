@@ -21,7 +21,6 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +39,7 @@ public final class NaturesAuraAPI {
 
     public static final String MOD_ID = "naturesaura";
     public static final String API_ID = MOD_ID + "api";
-    public static final String VERSION = "4";
+    public static final String VERSION = "5";
 
     /**
      * The list of all {@link AltarRecipe} instances which are the recipes used
@@ -226,7 +225,7 @@ public final class NaturesAuraAPI {
         /**
          * @see IAuraChunk#getSpotsInArea(World, BlockPos, int, BiConsumer)
          */
-        void getAuraSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer);
+        void getAuraSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer);
 
         /**
          * @see IAuraChunk#getAuraInArea(World, BlockPos, int)

@@ -43,11 +43,11 @@ public class AuraChunk implements IAuraChunk {
     }
 
     @Override
-    public void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer) {
+    public void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
             BlockPos drainPos = entry.getKey();
             if (drainPos.distanceSq(pos) <= radius * radius) {
-                consumer.accept(drainPos, entry.getValue());
+                consumer.accept(drainPos, entry.getValue().intValue());
             }
         }
     }
@@ -56,9 +56,11 @@ public class AuraChunk implements IAuraChunk {
     public int drainAura(BlockPos pos, int amount, boolean aimForZero, boolean simulate) {
         if (amount <= 0)
             return 0;
-        MutableInt spot = this.getDrainSpot(pos);
+        MutableInt spot = this.getActualDrainSpot(pos, true);
+        int curr = spot.intValue();
+        if (curr < 0 && curr - amount > 0) // Underflow protection
+            return 0;
         if (aimForZero) {
-            int curr = spot.intValue();
             if (curr > 0 && curr - amount < 0)
                 amount = curr;
         }
@@ -78,9 +80,11 @@ public class AuraChunk implements IAuraChunk {
     public int storeAura(BlockPos pos, int amount, boolean aimForZero, boolean simulate) {
         if (amount <= 0)
             return 0;
-        MutableInt spot = this.getDrainSpot(pos);
+        MutableInt spot = this.getActualDrainSpot(pos, true);
+        int curr = spot.intValue();
+        if (curr > 0 && curr + amount < 0) // Overflow protection
+            return 0;
         if (aimForZero) {
-            int curr = spot.intValue();
             if (curr < 0 && curr + amount > 0) {
                 amount = -curr;
             }
@@ -97,14 +101,19 @@ public class AuraChunk implements IAuraChunk {
         return this.storeAura(pos, amount, true, false);
     }
 
-    @Override
-    public MutableInt getDrainSpot(BlockPos pos) {
+    private MutableInt getActualDrainSpot(BlockPos pos, boolean make) {
         MutableInt spot = this.drainSpots.get(pos);
-        if (spot == null) {
+        if (spot == null && make) {
             spot = new MutableInt();
             this.addDrainSpot(pos, spot);
         }
         return spot;
+    }
+
+    @Override
+    public int getDrainSpot(BlockPos pos) {
+        MutableInt spot = this.getActualDrainSpot(pos, false);
+        return spot == null ? 0 : spot.intValue();
     }
 
     private void addDrainSpot(BlockPos pos, MutableInt spot) {
@@ -141,7 +150,7 @@ public class AuraChunk implements IAuraChunk {
             MutableInt amount = entry.getValue();
             for (IDrainSpotEffect effect : this.effects) {
                 world.profiler.func_194340_a(() -> effect.getName().toString());
-                effect.update(world, this.chunk, this, pos, amount);
+                effect.update(world, this.chunk, this, pos, amount.intValue());
                 world.profiler.endSection();
             }
             if (amount.intValue() == 0) {

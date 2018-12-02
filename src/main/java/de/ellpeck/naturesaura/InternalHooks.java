@@ -73,7 +73,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
-    public void getAuraSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, MutableInt> consumer) {
+    public void getAuraSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
         world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getSpotsInArea");
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
@@ -92,7 +92,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     @Override
     public int getAuraInArea(World world, BlockPos pos, int radius) {
         MutableInt result = new MutableInt(IAuraChunk.DEFAULT_AURA);
-        this.getAuraSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> result.add(drainSpot.intValue()));
+        this.getAuraSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> result.add(drainSpot));
         return result.intValue();
     }
 
@@ -101,9 +101,8 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
         MutableInt lowestAmount = new MutableInt(Integer.MAX_VALUE);
         MutableObject<BlockPos> lowestSpot = new MutableObject<>();
         this.getAuraSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> {
-            int amount = drainSpot.intValue();
-            if (amount < lowestAmount.intValue()) {
-                lowestAmount.setValue(amount);
+            if (drainSpot < lowestAmount.intValue()) {
+                lowestAmount.setValue(drainSpot);
                 lowestSpot.setValue(blockPos);
             }
         });
@@ -118,9 +117,8 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
         MutableInt highestAmount = new MutableInt(Integer.MIN_VALUE);
         MutableObject<BlockPos> highestSpot = new MutableObject<>();
         this.getAuraSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> {
-            int amount = drainSpot.intValue();
-            if (amount > highestAmount.intValue()) {
-                highestAmount.setValue(amount);
+            if (drainSpot > highestAmount.intValue()) {
+                highestAmount.setValue(drainSpot);
                 highestSpot.setValue(blockPos);
             }
         });
