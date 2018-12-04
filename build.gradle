@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    compile "vazkii.patchouli:Patchouli:1.0-10.45"
+    compile "vazkii.patchouli:Patchouli:1.0-12.61"
 
     deobfCompile "mezz.jei:jei_1.12.2:4.13.1.220"
     deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"

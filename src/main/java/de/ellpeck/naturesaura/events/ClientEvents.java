@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.events;
 
 import baubles.api.BaublesApi;
+import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
@@ -35,8 +36,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.lwjgl.opengl.GL11;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class ClientEvents {
@@ -47,7 +51,7 @@ public class ClientEvents {
     public void onDebugRender(RenderGameOverlayEvent.Text event) {
         Minecraft mc = Minecraft.getMinecraft();
         mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":onDebugRender");
-        if (mc.gameSettings.showDebugInfo) {
+        if (mc.gameSettings.showDebugInfo && ModConfig.client.debugText) {
             String prefix = TextFormatting.GREEN + "[" + NaturesAura.MOD_NAME + "]" + TextFormatting.RESET + " ";
             List<String> left = event.getLeft();
             left.add("");
@@ -57,12 +61,12 @@ public class ClientEvents {
                 left.add(prefix + "Aura (range 35)");
                 MutableInt amount = new MutableInt(IAuraChunk.DEFAULT_AURA);
                 MutableInt spots = new MutableInt();
-                IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 35, ((blockPos, drainSpot) -> {
+                IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 35, (blockPos, drainSpot) -> {
                     spots.increment();
                     amount.add(drainSpot);
                     if (mc.player.isSneaking())
                         left.add(prefix + drainSpot + " @ " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
-                }));
+                });
                 left.add(prefix + "Total: " + amount.intValue() + " in " + spots.intValue() + " spots");
                 left.add(prefix + "Type: " + IAuraType.forWorld(mc.world).getName());
             }
@@ -91,6 +95,84 @@ public class ClientEvents {
                 ParticleHandler.clearParticles();
             }
         }
+    }
+
+    @SubscribeEvent
+    public void onWorldRender(RenderWorldLastEvent event) {
+        Minecraft mc = Minecraft.getMinecraft();
+        mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":onWorldRender");
+        if (mc.gameSettings.showDebugInfo && mc.player.capabilities.isCreativeMode && ModConfig.client.debugWorld) {
+            GL11.glPushMatrix();
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            GL11.glDisable(GL11.GL_LIGHTING);
+            float partial = event.getPartialTicks();
+            GL11.glTranslated(
+                    -mc.player.prevPosX - (mc.player.posX - mc.player.prevPosX) * partial,
+                    -mc.player.prevPosY - (mc.player.posY - mc.player.prevPosY) * partial,
+                    -mc.player.prevPosZ - (mc.player.posZ - mc.player.prevPosZ) * partial);
+
+            Map<BlockPos, Integer> spots = new HashMap<>();
+
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+            GL11.glPushMatrix();
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBegin(GL11.GL_QUADS);
+            IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 64, (pos, spot) -> {
+                spots.put(pos, spot);
+
+                GlStateManager.color(spot > 0 ? 0F : 1F, spot > 0 ? 1F : 0F, 0F, 0.5F);
+                int x = pos.getX();
+                int y = pos.getY();
+                int z = pos.getZ();
+                GL11.glVertex3d(x, y + 1, z);
+                GL11.glVertex3d(x + 1, y + 1, z);
+                GL11.glVertex3d(x + 1, y, z);
+                GL11.glVertex3d(x, y, z);
+                GL11.glVertex3d(x + 1, y, z + 1);
+                GL11.glVertex3d(x + 1, y, z);
+                GL11.glVertex3d(x + 1, y + 1, z);
+                GL11.glVertex3d(x + 1, y + 1, z + 1);
+                GL11.glVertex3d(x + 1, y + 1, z + 1);
+                GL11.glVertex3d(x, y + 1, z + 1);
+                GL11.glVertex3d(x, y, z + 1);
+                GL11.glVertex3d(x + 1, y, z + 1);
+                GL11.glVertex3d(x, y + 1, z + 1);
+                GL11.glVertex3d(x, y + 1, z);
+                GL11.glVertex3d(x, y, z);
+                GL11.glVertex3d(x, y, z + 1);
+                GL11.glVertex3d(x, y + 1, z);
+                GL11.glVertex3d(x, y + 1, z + 1);
+                GL11.glVertex3d(x + 1, y + 1, z + 1);
+                GL11.glVertex3d(x + 1, y + 1, z);
+                GL11.glVertex3d(x + 1, y, z);
+                GL11.glVertex3d(x + 1, y, z + 1);
+                GL11.glVertex3d(x, y, z + 1);
+                GL11.glVertex3d(x, y, z);
+            });
+            GL11.glEnd();
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GL11.glPopMatrix();
+            GL11.glPopAttrib();
+
+            GL11.glPushMatrix();
+            float scale = 0.03F;
+            GlStateManager.scale(scale, scale, scale);
+            for (Map.Entry<BlockPos, Integer> spot : spots.entrySet()) {
+                BlockPos pos = spot.getKey();
+                GlStateManager.pushMatrix();
+                GlStateManager.translate((pos.getX() + 0.1) / scale, (pos.getY() + 1) / scale, (pos.getZ() + 0.1) / scale);
+                GlStateManager.rotate(90F, 1F, 0F, 0F);
+                mc.fontRenderer.drawString(spot.getValue().toString(), 0, 0, 0);
+                GlStateManager.popMatrix();
+            }
+            GL11.glPopMatrix();
+
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
+            GL11.glEnable(GL11.GL_LIGHTING);
+            GL11.glPopMatrix();
+        }
+        mc.profiler.endSection();
     }
 
     @SubscribeEvent
