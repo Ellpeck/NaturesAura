@@ -25,12 +25,16 @@ public class SpreadEffect implements IDrainSpotEffect {
             int bestAmount = drain ? Integer.MAX_VALUE : Integer.MIN_VALUE;
             for (EnumFacing facing : EnumFacing.VALUES) {
                 BlockPos offset = pos.offset(facing, 15);
-                int amount = IAuraChunk.getAuraInArea(world, offset, 14);
-                if (drain ? amount < bestAmount : amount > bestAmount) {
-                    bestAmount = amount;
-                    bestOffset = offset;
+                if (offset.getY() >= 0 && offset.getY() <= world.getHeight()) {
+                    int amount = IAuraChunk.getAuraInArea(world, offset, 14);
+                    if (drain ? amount < bestAmount : amount > bestAmount) {
+                        bestAmount = amount;
+                        bestOffset = offset;
+                    }
                 }
             }
+            if(bestOffset == null)
+                break;
 
             BlockPos bestPos = drain ? IAuraChunk.getLowestSpot(world, bestOffset, 14, bestOffset)
                     : IAuraChunk.getHighestSpot(world, bestOffset, 14, bestOffset);
