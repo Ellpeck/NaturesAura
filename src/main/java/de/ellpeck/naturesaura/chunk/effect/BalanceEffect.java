@@ -17,16 +17,14 @@ public class BalanceEffect implements IDrainSpotEffect {
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (spot < 1000)
             return;
-        int radius = Math.min(80, spot / 40);
+        int radius = Math.min(80, spot / 50);
         if (radius <= 0)
             return;
         BlockPos lowestPos = IAuraChunk.getLowestSpot(world, pos, radius, null);
         if (lowestPos == null)
             return;
-        IAuraChunk lowestChunk = IAuraChunk.getAuraChunk(world, lowestPos);
-        int toTransfer = Math.min(spot / 10, -lowestChunk.getDrainSpot(lowestPos));
-        int stored = auraChunk.drainAura(pos, toTransfer);
-        lowestChunk.storeAura(lowestPos, stored);
+        int stored = IAuraChunk.getAuraChunk(world, lowestPos).storeAura(lowestPos, spot / 10);
+        auraChunk.drainAura(pos, stored);
     }
 
     @Override
