@@ -9,7 +9,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -41,32 +40,20 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
                                 continue;
                             }
 
-                            int toAdd = ((effect.getAmplifier() * 6 + 1) * (effect.getDuration() / 30)) / 4;
-                            int toAddTimes = 4;
-                            while (toAddTimes > 0) {
-                                boolean foundEmpty = false;
-                                for (EnumFacing dir : EnumFacing.HORIZONTALS) {
-                                    BlockPos offset = this.pos.offset(dir, 12);
-                                    if (IAuraChunk.getAuraInArea(this.world, offset, 15) < 20000) {
-                                        int remain = toAdd;
-                                        while (remain > 0) {
-                                            BlockPos spot = IAuraChunk.getLowestSpot(this.world, offset, 15, offset);
-                                            remain -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
-                                        }
-
-                                        foundEmpty = true;
-                                        toAddTimes--;
-                                        if (toAddTimes <= 0)
-                                            break;
-                                    }
+                            boolean disperseParticles;
+                            if (IAuraChunk.getAuraInArea(this.world, this.pos, 35) < 20000) {
+                                int toAdd = ((effect.getAmplifier() * 6 + 1) * (effect.getDuration() / 30));
+                                while (toAdd > 0) {
+                                    BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);
+                                    toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
                                 }
-                                if (!foundEmpty)
-                                    break;
-                            }
+                                disperseParticles = true;
+                            } else
+                                disperseParticles = false;
 
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
                                     this.pos.getX(), this.pos.getY(), this.pos.getZ(), 5,
-                                    PotionUtils.getPotionColor(type), toAddTimes < 4 ? 1 : 0));
+                                    PotionUtils.getPotionColor(type), disperseParticles ? 1 : 0));
 
                             addedOne = true;
                             break;

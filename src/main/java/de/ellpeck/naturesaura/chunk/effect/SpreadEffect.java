@@ -25,7 +25,7 @@ public class SpreadEffect implements IDrainSpotEffect {
             int bestAmount = drain ? Integer.MAX_VALUE : Integer.MIN_VALUE;
             for (EnumFacing facing : EnumFacing.VALUES) {
                 BlockPos offset = pos.offset(facing, 15);
-                if (offset.getY() >= 0 && offset.getY() <= world.getHeight()) {
+                if (world.isBlockLoaded(offset) && offset.getY() >= 0 && offset.getY() <= world.getHeight()) {
                     int amount = IAuraChunk.getAuraInArea(world, offset, 14);
                     if (drain ? amount < bestAmount : amount > bestAmount) {
                         bestAmount = amount;
