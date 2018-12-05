@@ -10,7 +10,7 @@
         },
         {
             "type": "text",
-            "text": "Then, throwing any kind of positive, lasting $(item)Lingering Potion$() down in its vicinity will cause the effect to be consumed and turned into $(aura). Needless to say, the longer and higher the effect, the more $(aura) gets created.$(br)Notice that, however, only one effect can be converted at one time, and throwing multiple potions at the ritual will cause their powers to go to waste. Additionally, once there is enough $(aura) in the area, additional potion effects will similarly go to waste."
+            "text": "Then, throwing any kind of positive, lasting $(item)Lingering Potion$() down in its vicinity will cause the effect to be consumed and turned into $(aura). Needless to say, the longer and higher the effect, the more $(aura) gets created.$(br)Notice that, however, only one effect can be converted at one time, and throwing multiple potions at the ritual will cause their powers to go to waste."
         },
         {
             "type": "multiblock",

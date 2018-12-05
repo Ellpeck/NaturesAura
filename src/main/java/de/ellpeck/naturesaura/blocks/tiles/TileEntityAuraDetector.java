@@ -11,7 +11,7 @@ public class TileEntityAuraDetector extends TileEntityImpl implements ITickable 
 
     @Override
     public void update() {
-        if (!this.world.isRemote && this.world.getTotalWorldTime() % 80 == 0) {
+        if (!this.world.isRemote && this.world.getTotalWorldTime() % 20 == 0) {
             MutableFloat totalAmount = new MutableFloat(IAuraChunk.DEFAULT_AURA);
             IAuraChunk.getSpotsInArea(this.world, this.pos, 25, (pos, spot) -> {
                 float percentage = 1F - (float) this.pos.getDistance(pos.getX(), pos.getY(), pos.getZ()) / 25F;

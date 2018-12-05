@@ -104,7 +104,6 @@ public class ClientEvents {
         if (mc.gameSettings.showDebugInfo && mc.player.capabilities.isCreativeMode && ModConfig.client.debugWorld) {
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_DEPTH_TEST);
-            GL11.glDisable(GL11.GL_LIGHTING);
             float partial = event.getPartialTicks();
             GL11.glTranslated(
                     -mc.player.prevPosX - (mc.player.posX - mc.player.prevPosX) * partial,
@@ -121,7 +120,7 @@ public class ClientEvents {
             IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 64, (pos, spot) -> {
                 spots.put(pos, spot);
 
-                GlStateManager.color(spot > 0 ? 0F : 1F, spot > 0 ? 1F : 0F, 0F, 0.5F);
+                GlStateManager.color(spot > 0 ? 0F : 1F, spot > 0 ? 1F : 0F, 0F, 0.35F);
                 int x = pos.getX();
                 int y = pos.getY();
                 int z = pos.getZ();
@@ -169,7 +168,6 @@ public class ClientEvents {
             GL11.glPopMatrix();
 
             GL11.glEnable(GL11.GL_DEPTH_TEST);
-            GL11.glEnable(GL11.GL_LIGHTING);
             GL11.glPopMatrix();
         }
         mc.profiler.endSection();

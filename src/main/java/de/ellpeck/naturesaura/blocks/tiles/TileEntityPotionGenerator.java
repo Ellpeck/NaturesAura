@@ -40,20 +40,15 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
                                 continue;
                             }
 
-                            boolean disperseParticles;
-                            if (IAuraChunk.getAuraInArea(this.world, this.pos, 35) < 20000) {
-                                int toAdd = ((effect.getAmplifier() * 6 + 1) * (effect.getDuration() / 30));
-                                while (toAdd > 0) {
-                                    BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);
-                                    toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
-                                }
-                                disperseParticles = true;
-                            } else
-                                disperseParticles = false;
+                            int toAdd = ((effect.getAmplifier() * 6 + 1) * (effect.getDuration() / 30));
+                            while (toAdd > 0) {
+                                BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);
+                                toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
+                            }
 
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
                                     this.pos.getX(), this.pos.getY(), this.pos.getZ(), 5,
-                                    PotionUtils.getPotionColor(type), disperseParticles ? 1 : 0));
+                                    PotionUtils.getPotionColor(type)));
 
                             addedOne = true;
                             break;

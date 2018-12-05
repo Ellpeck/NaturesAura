@@ -123,7 +123,6 @@ public class PacketParticles implements IMessage {
                             break;
                         case 5: // Potion generator
                             int color = message.data[0];
-                            boolean disperse = message.data[1] > 0;
                             for (int i = world.rand.nextInt(5) + 5; i >= 0; i--) {
                                 NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX + world.rand.nextFloat(),
@@ -132,18 +131,17 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextGaussian() * 0.01F, world.rand.nextFloat() * 0.1F, world.rand.nextGaussian() * 0.01F,
                                         color, 2F + world.rand.nextFloat(), 40, 0F, true, true);
 
-                                if (disperse)
-                                    for (int x = -1; x <= 1; x += 2)
-                                        for (int z = -1; z <= 1; z += 2) {
-                                            NaturesAuraAPI.instance().spawnMagicParticle(
-                                                    message.posX + x * 3 + 0.5F,
-                                                    message.posY + 2.5,
-                                                    message.posZ + z * 3 + 0.5F,
-                                                    world.rand.nextGaussian() * 0.02F,
-                                                    world.rand.nextFloat() * 0.04F,
-                                                    world.rand.nextGaussian() * 0.02F,
-                                                    0xd6340c, 1F + world.rand.nextFloat() * 2F, 75, 0F, true, true);
-                                        }
+                                for (int x = -1; x <= 1; x += 2)
+                                    for (int z = -1; z <= 1; z += 2) {
+                                        NaturesAuraAPI.instance().spawnMagicParticle(
+                                                message.posX + x * 3 + 0.5F,
+                                                message.posY + 2.5,
+                                                message.posZ + z * 3 + 0.5F,
+                                                world.rand.nextGaussian() * 0.02F,
+                                                world.rand.nextFloat() * 0.04F,
+                                                world.rand.nextGaussian() * 0.02F,
+                                                0xd6340c, 1F + world.rand.nextFloat() * 2F, 75, 0F, true, true);
+                                    }
                             }
                             break;
                         case 6: // Plant boost effect

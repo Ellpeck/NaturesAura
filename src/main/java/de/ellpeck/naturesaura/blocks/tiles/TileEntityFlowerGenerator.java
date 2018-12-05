@@ -51,7 +51,7 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
             int addAmount = 200;
             int toAdd = Math.max(0, addAmount - curr.getValue());
             if (toAdd > 0) {
-                if (NaturesAuraAPI.TYPE_OVERWORLD.isPresentInWorld(this.world) && IAuraChunk.getAuraInArea(this.world, this.pos, 35) < 20000) {
+                if (NaturesAuraAPI.TYPE_OVERWORLD.isPresentInWorld(this.world)) {
                     int remain = toAdd;
                     while (remain > 0) {
                         BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);
