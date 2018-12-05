@@ -233,6 +233,11 @@ public final class NaturesAuraAPI {
         int getAuraInArea(World world, BlockPos pos, int radius);
 
         /**
+         * @see IAuraChunk#triangulateAuraInArea(World, BlockPos, int)
+         */
+        int triangulateAuraInArea(World world, BlockPos pos, int radius);
+
+        /**
          * @see IAuraChunk#getLowestSpot(World, BlockPos, int, BlockPos)
          */
         BlockPos getLowestAuraDrainSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot);

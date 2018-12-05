@@ -65,7 +65,8 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
     /**
      * Convenience method that adds up all of the aura from each drain spot from
      * {@link #getSpotsInArea(World, BlockPos, int, BiConsumer)} and
-     * conveniently returns it.
+     * conveniently returns it. For a better visual display with a more gradual
+     * increase, use {@link #triangulateAuraInArea(World, BlockPos, int)}.
      *
      * @param world  The world
      * @param pos    The center position
@@ -75,6 +76,25 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
      */
     static int getAuraInArea(World world, BlockPos pos, int radius) {
         return NaturesAuraAPI.instance().getAuraInArea(world, pos, radius);
+    }
+
+    /**
+     * Convenience method that adds up all of the aura from each drain spot from
+     * {@link #getSpotsInArea(World, BlockPos, int, BiConsumer)}, but multiplies
+     * their amount by the percentual distance to the supplied position. This
+     * will cause for a lot more gradual of an increase and decrease of Aura
+     * when moving closer to actual spots. This should be used for visual
+     * purposes as it is more performance intensive than {@link
+     * #getAuraInArea(World, BlockPos, int)}.
+     *
+     * @param world  The world
+     * @param pos    The center position
+     * @param radius The radius around the center to search for spots in
+     * @return The amount of Aura presetn in that area, based on the drain spots
+     * that are found and their distance to the center
+     */
+    static int triangulateAuraInArea(World world, BlockPos pos, int radius) {
+        return NaturesAuraAPI.instance().triangulateAuraInArea(world, pos, radius);
     }
 
     /**

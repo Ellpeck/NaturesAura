@@ -34,7 +34,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
-import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.opengl.GL11;
 
@@ -240,12 +239,8 @@ public class ClientEvents {
                     if (!mc.gameSettings.showDebugInfo) {
                         GlStateManager.color(83 / 255F, 160 / 255F, 8 / 255F);
 
-                        MutableFloat totalAmount = new MutableFloat(IAuraChunk.DEFAULT_AURA);
-                        IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 35, (pos, spot) -> {
-                            float percentage = 1F - (float) mc.player.getDistance(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F) / 35F;
-                            totalAmount.add(spot * percentage);
-                        });
-                        float totalPercentage = totalAmount.intValue() / (IAuraChunk.DEFAULT_AURA * 2F);
+                        int totalAmount = IAuraChunk.triangulateAuraInArea(mc.world, mc.player.getPosition(), 35);
+                        float totalPercentage = totalAmount / (IAuraChunk.DEFAULT_AURA * 2F);
 
                         int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
                         if (tHeight < 50)

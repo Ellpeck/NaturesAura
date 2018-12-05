@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.api.internal;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -37,7 +38,12 @@ public class StubHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public int getAuraInArea(World world, BlockPos pos, int radius) {
-        return 0;
+        return IAuraChunk.DEFAULT_AURA;
+    }
+
+    @Override
+    public int triangulateAuraInArea(World world, BlockPos pos, int radius) {
+        return IAuraChunk.DEFAULT_AURA;
     }
 
     @Override
