@@ -39,6 +39,9 @@ public class PlantBoostEffect implements IDrainSpotEffect {
             int z = MathHelper.floor(pos.getZ() + world.rand.nextGaussian() * dist);
             BlockPos plantPos = new BlockPos(x, world.getHeight(x, z), z);
             if (plantPos.distanceSq(pos) <= dist * dist && world.isBlockLoaded(plantPos)) {
+                if (NaturesAuraAPI.instance().isEffectInhibited(world, plantPos, NAME, 15))
+                    continue;
+
                 IBlockState state = world.getBlockState(plantPos);
                 Block block = state.getBlock();
                 if (block instanceof IGrowable &&

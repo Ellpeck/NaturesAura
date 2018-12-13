@@ -40,4 +40,5 @@ public final class ModItems {
     public static final Item FARMING_STENCIL = new ItemImpl("farming_stencil");
     public static final Item SKY_INGOT = new ItemImpl("sky_ingot");
     public static final Item CALLING_SPIRIT = new ItemGlowing("calling_spirit");
+    public static final Item INHIBITING_POWDER = new ItemInhibitingPowder();
 }

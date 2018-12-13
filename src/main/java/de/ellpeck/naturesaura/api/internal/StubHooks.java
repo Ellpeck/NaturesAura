@@ -32,6 +32,11 @@ public class StubHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
+    public boolean isEffectInhibited(World world, BlockPos pos, ResourceLocation name, int radius) {
+        return false;
+    }
+
+    @Override
     public void getAuraSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
 
     }

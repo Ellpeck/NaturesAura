@@ -92,6 +92,15 @@ public final class NaturesAuraAPI {
      */
     public static final Map<ResourceLocation, Supplier<IDrainSpotEffect>> DRAIN_SPOT_EFFECTS = new HashMap<>();
     /**
+     * A map of all {@link IDrainSpotEffect} names (registered in {@link
+     * #DRAIN_SPOT_EFFECTS}) that can be inhibited using the inhibiting powder.
+     * The integer the effect is registered to is the color that the powder and
+     * its effect should have. To check if an effect should be inhibited, use
+     * {@link IInternalHooks#isEffectInhibited(World, BlockPos,
+     * ResourceLocation, int)}
+     */
+    public static final Map<ResourceLocation, Integer> INHIBITED_EFFECTS = new HashMap<>();
+    /**
      * A map of all {@link IMultiblock} objects which are multiblock structures
      * that can easily be looped through and checked, and also easily created
      * using the multiblock maker debug tool.
@@ -221,6 +230,20 @@ public final class NaturesAuraAPI {
          * @return the multiblock instance
          */
         IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers);
+
+        /**
+         * Returns true if there is an effect inhibitor entity in the given
+         * radius from the given position that inhibits the {@link
+         * IDrainSpotEffect} with the given name.
+         *
+         * @param world  The world
+         * @param pos    The center position
+         * @param name   The registry name of the {@link IDrainSpotEffect} to
+         *               check for
+         * @param radius The radius around the center to check for
+         * @return If the effect is currently inhibited by any inhibitors
+         */
+        boolean isEffectInhibited(World world, BlockPos pos, ResourceLocation name, int radius);
 
         /**
          * @see IAuraChunk#getSpotsInArea(World, BlockPos, int, BiConsumer)

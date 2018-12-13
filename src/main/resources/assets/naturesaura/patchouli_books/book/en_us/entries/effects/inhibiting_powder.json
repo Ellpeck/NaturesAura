@@ -1,0 +1,17 @@
+{
+    "name": "Inhibition Powder",
+    "icon": "naturesaura:inhibiting_powder{effect:'naturesaura:plant_boost'}",
+    "category": "effects",
+    "advancement": "naturesaura:flower_generator",
+    "priority": true,
+    "pages": [
+        {
+            "type": "text",
+            "text": "Sometimes, the effects of an excess of $(aura) can become troublesome in certain situations. For this, $(item)Inhibition Powder$() can be of huge assistance: Some positive effects can be $(thing)inhibited$() in a certain radius by making a powder of their kind."
+        },
+        {
+            "type": "text",
+            "text": "Then, simply placing it down on the ground will cause it to stop the effect it is bound to from happening. Hitting it while it is on the ground will cause it to go back into its item form.$(p)Each effect that has an $(item)Inhibition Powder$() attached to it will show the recipe and radius in its chapter."
+        }
+    ]
+}

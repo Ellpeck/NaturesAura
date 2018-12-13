@@ -9,6 +9,7 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.chunk.effect.DrainSpotEffects;
 import de.ellpeck.naturesaura.commands.CommandAura;
 import de.ellpeck.naturesaura.compat.Compat;
+import de.ellpeck.naturesaura.entities.ModEntities;
 import de.ellpeck.naturesaura.events.CommonEvents;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -68,6 +69,7 @@ public final class NaturesAura {
         Compat.preInit();
         PacketHandler.init();
         ModRegistry.preInit(event);
+        ModEntities.init();
         new Multiblocks();
 
         MinecraftForge.EVENT_BUS.register(new CommonEvents());

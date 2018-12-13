@@ -61,7 +61,7 @@ public final class OfferingTweaker {
     private static class Remove extends BaseMapRemoval<ResourceLocation, OfferingRecipe> {
 
         protected Remove(Map<ResourceLocation, OfferingRecipe> map) {
-            super("Tree Ritual", NaturesAuraAPI.OFFERING_RECIPES, map);
+            super("Offering", NaturesAuraAPI.OFFERING_RECIPES, map);
         }
 
         @Override

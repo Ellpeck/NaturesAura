@@ -12,5 +12,7 @@ public final class DrainSpotEffects {
         NaturesAuraAPI.DRAIN_SPOT_EFFECTS.put(ExplosionEffect.NAME, ExplosionEffect::new);
         NaturesAuraAPI.DRAIN_SPOT_EFFECTS.put(BreathlessEffect.NAME, BreathlessEffect::new);
         NaturesAuraAPI.DRAIN_SPOT_EFFECTS.put(SpreadEffect.NAME, SpreadEffect::new);
+
+        NaturesAuraAPI.INHIBITED_EFFECTS.put(PlantBoostEffect.NAME, 0xc2f442);
     }
 }

@@ -1,11 +1,5 @@
 package de.ellpeck.naturesaura.proxy;
 
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityOfferingTable;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
-import de.ellpeck.naturesaura.blocks.tiles.render.RenderNatureAltar;
-import de.ellpeck.naturesaura.blocks.tiles.render.RenderOfferingTable;
-import de.ellpeck.naturesaura.blocks.tiles.render.RenderWoodStand;
 import de.ellpeck.naturesaura.events.ClientEvents;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import de.ellpeck.naturesaura.particles.ParticleMagic;
@@ -20,17 +14,21 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class ClientProxy implements IProxy {
 
@@ -80,6 +78,11 @@ public class ClientProxy implements IProxy {
     public void registerTESR(ITESRProvider provider) {
         Tuple<Class, TileEntitySpecialRenderer> tesr = provider.getTESR();
         ClientRegistry.bindTileEntitySpecialRenderer(tesr.getFirst(), tesr.getSecond());
+    }
+
+    @Override
+    public <T extends Entity> void registerEntityRenderer(Class<T> entityClass, Supplier<IRenderFactory<T>> renderFactory) {
+        RenderingRegistry.registerEntityRenderingHandler(entityClass, renderFactory.get());
     }
 
     @Override

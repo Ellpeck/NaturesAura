@@ -6,9 +6,11 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.blocks.multi.Multiblock;
 import de.ellpeck.naturesaura.compat.Compat;
+import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -18,6 +20,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.lwjgl.util.vector.Vector3f;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
@@ -71,6 +74,15 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     @Override
     public IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
         return new Multiblock(name, pattern, rawMatchers);
+    }
+
+    @Override
+    public boolean isEffectInhibited(World world, BlockPos pos, ResourceLocation name, int radius) {
+        List<EntityEffectInhibitor> inhibitors = world.getEntitiesWithinAABB(
+                EntityEffectInhibitor.class,
+                new AxisAlignedBB(pos).grow(radius),
+                entity -> entity.getDistanceSq(pos) <= radius * radius && name.equals(entity.getInhibitedEffect()));
+        return !inhibitors.isEmpty();
     }
 
     @Override
