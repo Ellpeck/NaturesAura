@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura;
 import baubles.api.BaublesApi;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.blocks.multi.Multiblock;
 import de.ellpeck.naturesaura.compat.Compat;
@@ -26,7 +27,16 @@ import java.util.function.BiConsumer;
 public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     @Override
     public boolean extractAuraFromPlayer(EntityPlayer player, int amount, boolean simulate) {
-        if (player.capabilities.isCreativeMode)
+        return this.auraPlayerInteraction(player, amount, true, simulate);
+    }
+
+    @Override
+    public boolean insertAuraIntoPlayer(EntityPlayer player, int amount, boolean simulate) {
+        return this.auraPlayerInteraction(player, amount, false, simulate);
+    }
+
+    private boolean auraPlayerInteraction(EntityPlayer player, int amount, boolean extract, boolean simulate) {
+        if (extract && player.capabilities.isCreativeMode)
             return true;
 
         if (Compat.baubles) {
@@ -34,7 +44,11 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
             for (int i = 0; i < baubles.getSlots(); i++) {
                 ItemStack stack = baubles.getStackInSlot(i);
                 if (!stack.isEmpty() && stack.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
-                    amount -= stack.getCapability(NaturesAuraAPI.capAuraContainer, null).drainAura(amount, simulate);
+                    IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer, null);
+                    if (extract)
+                        amount -= container.drainAura(amount, simulate);
+                    else
+                        amount -= container.storeAura(amount, simulate);
                     if (amount <= 0)
                         return true;
                 }
@@ -44,7 +58,11 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
             ItemStack stack = player.inventory.getStackInSlot(i);
             if (!stack.isEmpty() && stack.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
-                amount -= stack.getCapability(NaturesAuraAPI.capAuraContainer, null).drainAura(amount, simulate);
+                IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer, null);
+                if (extract)
+                    amount -= container.drainAura(amount, simulate);
+                else
+                    amount -= container.storeAura(amount, simulate);
                 if (amount <= 0)
                     return true;
             }

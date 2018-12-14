@@ -2,7 +2,7 @@
     "name": "Inhibition Powder",
     "icon": "naturesaura:inhibiting_powder{effect:'naturesaura:plant_boost'}",
     "category": "effects",
-    "advancement": "naturesaura:flower_generator",
+    "advancement": "naturesaura:aura_cache",
     "priority": true,
     "pages": [
         {

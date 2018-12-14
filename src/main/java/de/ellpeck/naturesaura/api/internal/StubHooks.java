@@ -17,6 +17,11 @@ public class StubHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
+    public boolean insertAuraIntoPlayer(EntityPlayer player, int amount, boolean simulate) {
+        return false;
+    }
+
+    @Override
     public void spawnMagicParticle(double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade) {
 
     }

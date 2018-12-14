@@ -174,6 +174,18 @@ public final class NaturesAuraAPI {
         boolean extractAuraFromPlayer(EntityPlayer player, int amount, boolean simulate);
 
         /**
+         * Helper method to insert aura into an {@link IAuraContainer} in the
+         * supplied player's inventory or baubles slots. The method returns true
+         * if the aura could be inserted.
+         *
+         * @param player   The player
+         * @param amount   The amount to insert
+         * @param simulate If the insertion should be simulated
+         * @return If the insertion was successful
+         */
+        boolean insertAuraIntoPlayer(EntityPlayer player, int amount, boolean simulate);
+
+        /**
          * This method can be used to spawn the magic particle effect used by
          * Nature's Aura. It will not have an effect on the client side, so if
          * you want to send it from the server side, you need to create your own

@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:aura_cache"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.aura_cache"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.aura_cache.desc"
+        }
+    },
+    "parent": "naturesaura:infused_materials",
+    "criteria": {
+        "cache": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "naturesaura:aura_cache"
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -40,6 +40,8 @@ public final class ModConfig {
         public boolean grassDieEffect = true;
         @Comment("If the Aura Imbalance effect of plant growth being boosted if the Aura levels are high enough should occur")
         public boolean plantBoostEffect = true;
+        @Comment("If the Aura Imbalance effect of aura containers in players' inventories being filled if the Aura levels are high enough should occur")
+        public boolean cacheRechargeEffect = true;
         @Comment("If the Aura Imbalance effect of explosions happening randomly if Aura levels are too low should occur")
         public boolean explosionEffect = true;
         @Comment("If the Aura Imbalance effect of breathlessness if Aura levels are too low should occur")
