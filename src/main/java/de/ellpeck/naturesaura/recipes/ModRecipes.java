@@ -12,7 +12,7 @@ import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.chunk.effect.CacheRechargeEffect;
 import de.ellpeck.naturesaura.chunk.effect.PlantBoostEffect;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
-import de.ellpeck.naturesaura.items.ItemInhibitingPowder;
+import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
@@ -69,14 +69,14 @@ public final class ModRecipes {
                 Helper.blockIng(Blocks.GLOWSTONE)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "plant_powder"),
                 Ingredient.fromStacks(new ItemStack(Blocks.SAPLING)),
-                ItemInhibitingPowder.setEffect(new ItemStack(ModItems.INHIBITING_POWDER), PlantBoostEffect.NAME), 400,
+                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER), PlantBoostEffect.NAME), 400,
                 Helper.blockIng(ModBlocks.GOLD_POWDER),
                 Helper.blockIng(ModBlocks.GOLD_POWDER),
                 Ingredient.fromItem(ModItems.SKY_INGOT),
                 Ingredient.fromItem(Items.WHEAT)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "cache_powder"),
                 Ingredient.fromStacks(new ItemStack(Blocks.SAPLING)),
-                ItemInhibitingPowder.setEffect(new ItemStack(ModItems.INHIBITING_POWDER), CacheRechargeEffect.NAME), 400,
+                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER), CacheRechargeEffect.NAME), 400,
                 Helper.blockIng(ModBlocks.GOLD_POWDER),
                 Helper.blockIng(ModBlocks.GOLD_POWDER),
                 Ingredient.fromItem(ModItems.SKY_INGOT),

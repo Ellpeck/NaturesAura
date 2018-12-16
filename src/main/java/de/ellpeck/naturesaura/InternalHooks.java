@@ -95,7 +95,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
-    public boolean isEffectInhibited(World world, BlockPos pos, ResourceLocation name, int radius) {
+    public boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name, int radius) {
         List<EntityEffectInhibitor> inhibitors = world.getEntitiesWithinAABB(
                 EntityEffectInhibitor.class,
                 new AxisAlignedBB(pos).grow(radius),

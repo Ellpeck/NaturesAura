@@ -39,7 +39,7 @@ public final class NaturesAuraAPI {
 
     public static final String MOD_ID = "naturesaura";
     public static final String API_ID = MOD_ID + "api";
-    public static final String VERSION = "5";
+    public static final String VERSION = "6";
 
     /**
      * The list of all {@link AltarRecipe} instances which are the recipes used
@@ -92,14 +92,12 @@ public final class NaturesAuraAPI {
      */
     public static final Map<ResourceLocation, Supplier<IDrainSpotEffect>> DRAIN_SPOT_EFFECTS = new HashMap<>();
     /**
-     * A map of all {@link IDrainSpotEffect} names (registered in {@link
-     * #DRAIN_SPOT_EFFECTS}) that can be inhibited using the inhibiting powder.
-     * The integer the effect is registered to is the color that the powder and
-     * its effect should have. To check if an effect should be inhibited, use
-     * {@link IInternalHooks#isEffectInhibited(World, BlockPos,
-     * ResourceLocation, int)}
+     * A map of all effect powder type. The integer the effect is registered to
+     * is the color that the powder and its effect should have. To check if a
+     * powder is active in any given area, use {@link IInternalHooks#isEffectPowderActive(World,
+     * BlockPos, ResourceLocation, int)}
      */
-    public static final Map<ResourceLocation, Integer> INHIBITED_EFFECTS = new HashMap<>();
+    public static final Map<ResourceLocation, Integer> EFFECT_POWDERS = new HashMap<>();
     /**
      * A map of all {@link IMultiblock} objects which are multiblock structures
      * that can easily be looped through and checked, and also easily created
@@ -244,18 +242,17 @@ public final class NaturesAuraAPI {
         IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers);
 
         /**
-         * Returns true if there is an effect inhibitor entity in the given
-         * radius from the given position that inhibits the {@link
-         * IDrainSpotEffect} with the given name.
+         * Returns true if there is an effect powder entity active anywhere
+         * around the given position in the given radius. To register a powder
+         * with the supplied name, use {@link #EFFECT_POWDERS}
          *
          * @param world  The world
          * @param pos    The center position
-         * @param name   The registry name of the {@link IDrainSpotEffect} to
-         *               check for
+         * @param name   The registry name of the powder
          * @param radius The radius around the center to check for
          * @return If the effect is currently inhibited by any inhibitors
          */
-        boolean isEffectInhibited(World world, BlockPos pos, ResourceLocation name, int radius);
+        boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name, int radius);
 
         /**
          * @see IAuraChunk#getSpotsInArea(World, BlockPos, int, BiConsumer)

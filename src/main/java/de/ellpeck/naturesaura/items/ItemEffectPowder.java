@@ -15,10 +15,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemInhibitingPowder extends ItemImpl implements IColorProvidingItem {
+public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
 
-    public ItemInhibitingPowder() {
-        super("inhibiting_powder");
+    public ItemEffectPowder() {
+        super("effect_powder");
     }
 
     @Override
@@ -28,7 +28,7 @@ public class ItemInhibitingPowder extends ItemImpl implements IColorProvidingIte
             ResourceLocation effect = getEffect(stack);
             EntityEffectInhibitor entity = new EntityEffectInhibitor(worldIn);
             entity.setInhibitedEffect(effect);
-            entity.setColor(NaturesAuraAPI.INHIBITED_EFFECTS.get(effect));
+            entity.setColor(NaturesAuraAPI.EFFECT_POWDERS.get(effect));
             entity.setPosition(pos.getX() + hitX, pos.getY() + hitY + 1, pos.getZ() + hitZ);
             worldIn.spawnEntity(entity);
             stack.shrink(1);
@@ -39,7 +39,7 @@ public class ItemInhibitingPowder extends ItemImpl implements IColorProvidingIte
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
-            for (ResourceLocation effect : NaturesAuraAPI.INHIBITED_EFFECTS.keySet()) {
+            for (ResourceLocation effect : NaturesAuraAPI.EFFECT_POWDERS.keySet()) {
                 ItemStack stack = new ItemStack(this);
                 setEffect(stack, effect);
                 items.add(stack);
@@ -71,6 +71,6 @@ public class ItemInhibitingPowder extends ItemImpl implements IColorProvidingIte
     @Override
     @SideOnly(Side.CLIENT)
     public IItemColor getItemColor() {
-        return (stack, tintIndex) -> NaturesAuraAPI.INHIBITED_EFFECTS.getOrDefault(getEffect(stack), 0xFFFFFF);
+        return (stack, tintIndex) -> NaturesAuraAPI.EFFECT_POWDERS.getOrDefault(getEffect(stack), 0xFFFFFF);
     }
 }

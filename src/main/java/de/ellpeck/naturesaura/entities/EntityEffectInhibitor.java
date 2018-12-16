@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.entities;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.items.ItemInhibitingPowder;
+import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -67,7 +67,7 @@ public class EntityEffectInhibitor extends Entity {
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (source instanceof EntityDamageSource && !this.world.isRemote) {
             this.setDead();
-            this.entityDropItem(ItemInhibitingPowder.setEffect(new ItemStack(ModItems.INHIBITING_POWDER), this.getInhibitedEffect()), 0F);
+            this.entityDropItem(ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER), this.getInhibitedEffect()), 0F);
             return true;
         } else
             return super.attackEntityFrom(source, amount);

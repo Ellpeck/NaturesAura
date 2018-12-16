@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.entities.render;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
-import de.ellpeck.naturesaura.items.ItemInhibitingPowder;
+import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -42,7 +42,7 @@ public class RenderEffectInhibitor extends Render<EntityEffectInhibitor> {
         GlStateManager.scale(0.5F, 0.5F, 0.5F);
         ResourceLocation effect = entity.getInhibitedEffect();
         Helper.renderItemInWorld(this.items.computeIfAbsent(effect,
-                res -> ItemInhibitingPowder.setEffect(new ItemStack(ModItems.INHIBITING_POWDER), effect)));
+                res -> ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER), effect)));
         GlStateManager.popMatrix();
     }
 }
