@@ -10,6 +10,7 @@ import net.minecraft.block.BlockSapling;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.BlockStoneBrick.EnumType;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public final class Multiblocks {
@@ -35,7 +36,13 @@ public final class Multiblocks {
                     (world, start, offset, pos, state, c) -> world != null || state.getBlock() == ModBlocks.WOOD_STAND),
             'G', ModBlocks.GOLD_POWDER,
             '0', new Matcher(Blocks.SAPLING.getDefaultState(),
-                    (world, start, offset, pos, state, c) -> state.getBlock() instanceof BlockSapling || state.getBlock() instanceof BlockLog),
+                    (world, start, offset, pos, state, c) -> {
+                        if (state.getBlock() instanceof BlockSapling || state.getBlock() instanceof BlockLog)
+                            return true;
+                        ItemStack stack = state.getBlock().getItem(world, pos, state);
+                        return !stack.isEmpty() && NaturesAuraAPI.TREE_RITUAL_RECIPES.values().stream().anyMatch(recipe -> recipe.saplingType.apply(stack));
+                    }
+            ),
             ' ', Matcher.wildcard());
     public static final IMultiblock POTION_GENERATOR = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "potion_generator"),
