@@ -32,11 +32,13 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
             List<BlockPos> possible = new ArrayList<>();
             int range = 3;
             for (int x = -range; x <= range; x++) {
-                for (int z = -range; z <= range; z++) {
-                    BlockPos offset = this.pos.add(x, 0, z);
-                    IBlockState state = this.world.getBlockState(offset);
-                    if (NaturesAuraAPI.FLOWERS.contains(state)) {
-                        possible.add(offset);
+                for (int y = -1; y <= 1; y++) {
+                    for (int z = -range; z <= range; z++) {
+                        BlockPos offset = this.pos.add(x, y, z);
+                        IBlockState state = this.world.getBlockState(offset);
+                        if (NaturesAuraAPI.FLOWERS.contains(state)) {
+                            possible.add(offset);
+                        }
                     }
                 }
             }
