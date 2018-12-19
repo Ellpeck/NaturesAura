@@ -65,6 +65,7 @@ item.naturesaura.infused_iron_pants.name=Botanist's Leggings
 item.naturesaura.infused_iron_shoes.name=Botanist's Shoes
 item.naturesaura.effect_powder.naturesaura:plant_boost.name=Powder of Steady Growth
 item.naturesaura.effect_powder.naturesaura:cache_recharge.name=Powder of no Storage
+item.naturesaura.effect_powder.naturesaura:animal.name=Powder of Chastity
 
 container.naturesaura.tree_ritual.name=Ritual of the Forest
 container.naturesaura.altar.name=Natural Altar Infusion

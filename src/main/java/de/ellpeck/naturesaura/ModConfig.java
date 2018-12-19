@@ -46,6 +46,8 @@ public final class ModConfig {
         public boolean explosionEffect = true;
         @Comment("If the Aura Imbalance effect of breathlessness if Aura levels are too low should occur")
         public boolean breathlessEffect = true;
+        @Comment("If the Aura Imbalance effect of farm animals being affected in positive ways if Aura levels are too high should occur")
+        public boolean animalEffect = true;
     }
 
     public static class Client {

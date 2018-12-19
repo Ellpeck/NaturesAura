@@ -13,8 +13,10 @@ public final class DrainSpotEffects {
         NaturesAuraAPI.DRAIN_SPOT_EFFECTS.put(BreathlessEffect.NAME, BreathlessEffect::new);
         NaturesAuraAPI.DRAIN_SPOT_EFFECTS.put(SpreadEffect.NAME, SpreadEffect::new);
         NaturesAuraAPI.DRAIN_SPOT_EFFECTS.put(CacheRechargeEffect.NAME, CacheRechargeEffect::new);
+        NaturesAuraAPI.DRAIN_SPOT_EFFECTS.put(AnimalEffect.NAME, AnimalEffect::new);
 
         NaturesAuraAPI.EFFECT_POWDERS.put(PlantBoostEffect.NAME, 0xc2f442);
         NaturesAuraAPI.EFFECT_POWDERS.put(CacheRechargeEffect.NAME, 0x1fb0d1);
+        NaturesAuraAPI.EFFECT_POWDERS.put(AnimalEffect.NAME, 0xba1010);
     }
 }
