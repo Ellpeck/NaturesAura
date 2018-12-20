@@ -1,8 +1,10 @@
 package de.ellpeck.naturesaura.events;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -43,6 +45,20 @@ public class CommonEvents {
                 }
                 event.world.profiler.endSection();
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (!event.player.world.isRemote && event.phase == TickEvent.Phase.END) {
+            if (event.player.world.getTotalWorldTime() % 200 != 0)
+                return;
+
+            int aura = IAuraChunk.triangulateAuraInArea(event.player.world, event.player.getPosition(), 25);
+            if (aura <= 0)
+                Helper.addAdvancement(event.player, new ResourceLocation(NaturesAura.MOD_ID, "negative_imbalance"), "triggered_in_code");
+            else if (aura >= 15000)
+                Helper.addAdvancement(event.player, new ResourceLocation(NaturesAura.MOD_ID, "positive_imbalance"), "triggered_in_code");
         }
     }
 

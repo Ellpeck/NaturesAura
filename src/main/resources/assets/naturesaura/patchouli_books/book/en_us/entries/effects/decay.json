@@ -2,7 +2,7 @@
     "name": "Natural Decay",
     "icon": "naturesaura:decayed_leaves",
     "category": "effects",
-    "advancement": "naturesaura:furnace_heater",
+    "advancement": "naturesaura:negative_imbalance",
     "pages": [
         {
             "type": "text",

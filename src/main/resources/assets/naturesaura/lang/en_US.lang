@@ -116,6 +116,10 @@ advancement.naturesaura.sky_ingot=Sturdy and light
 advancement.naturesaura.sky_ingot.desc=Create an Ingot of the Skies using the Offering to the Gods
 advancement.naturesaura.aura_cache=Ca-ching
 advancement.naturesaura.aura_cache.desc=Create an Aura Cache to store Aura in your inventory
+advancement.naturesaura.positive_imbalance=Luscious Surroundings
+advancement.naturesaura.positive_imbalance.desc=Create enough Aura to cause positive imbalance effects
+advancement.naturesaura.negative_imbalance=Deadly Day
+advancement.naturesaura.negative_imbalance.desc=Drain enough Aura to cause negative imbalance effects
 
 command.naturesaura.aura.usage=/naaura <action> <amount> <range>
 

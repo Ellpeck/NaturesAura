@@ -1,0 +1,19 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:decayed_leaves"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.negative_imbalance"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.negative_imbalance.desc"
+        }
+    },
+    "parent": "naturesaura:altar",
+    "criteria": {
+        "triggered_in_code": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

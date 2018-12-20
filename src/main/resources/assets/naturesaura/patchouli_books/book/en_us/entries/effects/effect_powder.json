@@ -2,7 +2,7 @@
     "name": "Effect Powder",
     "icon": "naturesaura:effect_powder{effect:'naturesaura:plant_boost'}",
     "category": "effects",
-    "advancement": "naturesaura:aura_cache",
+    "advancement": "naturesaura:positive_imbalance",
     "priority": true,
     "pages": [
         {

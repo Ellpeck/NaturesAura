@@ -2,7 +2,7 @@
     "name": "Natural Storage",
     "icon": "naturesaura:aura_cache",
     "category": "effects",
-    "advancement": "naturesaura:aura_cache",
+    "advancement": "naturesaura:positive_imbalance",
     "pages": [
         {
             "type": "text",

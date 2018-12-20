@@ -2,7 +2,7 @@
     "name": "Increase of Fertility",
     "icon": "minecraft:egg",
     "category": "effects",
-    "advancement": "naturesaura:flower_generator",
+    "advancement": "naturesaura:positive_imbalance",
     "pages": [
         {
             "type": "text",

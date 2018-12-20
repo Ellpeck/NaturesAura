@@ -1,0 +1,19 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:wheat_seeds"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.positive_imbalance"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.positive_imbalance.desc"
+        }
+    },
+    "parent": "naturesaura:altar",
+    "criteria": {
+        "triggered_in_code": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

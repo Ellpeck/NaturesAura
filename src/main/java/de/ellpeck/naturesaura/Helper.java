@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -229,5 +231,14 @@ public final class Helper {
 
     public static Ingredient blockIng(Block block) {
         return Ingredient.fromStacks(new ItemStack(block));
+    }
+
+    public static void addAdvancement(EntityPlayer player, ResourceLocation advancement, String criterion) {
+        if (!(player instanceof EntityPlayerMP))
+            return;
+        EntityPlayerMP playerMp = (EntityPlayerMP) player;
+        Advancement adv = playerMp.getServerWorld().getAdvancementManager().getAdvancement(advancement);
+        if (adv != null)
+            playerMp.getAdvancements().grantCriterion(adv, criterion);
     }
 }
