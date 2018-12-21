@@ -1,6 +1,6 @@
 {
     "name": "This Book",
-    "icon": "minecraft:book",
+    "icon": "patchouli:guide_book{'patchouli:book':'naturesaura:book'}",
     "category": "intro",
     "priority": true,
     "pages": [
