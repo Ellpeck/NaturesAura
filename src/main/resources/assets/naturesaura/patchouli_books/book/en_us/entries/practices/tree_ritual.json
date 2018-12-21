@@ -4,6 +4,7 @@
     "category": "practices",
     "advancement": "naturesaura:gold_leaf",
     "priority": true,
+    "turnin": "naturesaura:wood_stand",
     "pages": [
         {
             "type": "text",

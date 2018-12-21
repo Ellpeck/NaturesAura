@@ -4,6 +4,7 @@
     "category": "using",
     "advancement": "naturesaura:aura_bottle_overworld",
     "priority": true,
+    "turnin": "naturesaura:infused_materials",
     "pages": [
         {
             "type": "text",

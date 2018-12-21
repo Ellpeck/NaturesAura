@@ -3,6 +3,7 @@
     "icon": "naturesaura:gold_leaf",
     "category": "practices",
     "priority": true,
+    "turnin": "naturesaura:gold_leaf",
     "pages": [
         {
             "type": "text",
