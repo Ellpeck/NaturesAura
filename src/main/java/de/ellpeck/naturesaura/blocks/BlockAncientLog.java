@@ -13,13 +13,16 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class BlockAncientLog extends BlockLog implements IModItem, ICreativeItem, IModelProvider {
 
-    public BlockAncientLog() {
+    private final String baseName;
+
+    public BlockAncientLog(String baseName) {
+        this.baseName = baseName;
         ModRegistry.add(this);
     }
 
     @Override
     public String getBaseName() {
-        return "ancient_log";
+        return this.baseName;
     }
 
     @Override

@@ -6,8 +6,8 @@ import net.minecraft.block.material.Material;
 
 public final class ModBlocks {
 
-    public static final Block ANCIENT_LOG = new BlockAncientLog();
-    public static final Block ANCIENT_BARK = new BlockImpl("ancient_bark", Material.WOOD).setSoundType(SoundType.WOOD).setHardness(2F);
+    public static final Block ANCIENT_LOG = new BlockAncientLog("ancient_log");
+    public static final Block ANCIENT_BARK = new BlockAncientLog("ancient_bark");
     public static final Block ANCIENT_PLANKS = new BlockImpl("ancient_planks", Material.WOOD).setSoundType(SoundType.WOOD).setHardness(2F);
     public static final Block ANCIENT_STAIRS = new BlockStairsNA("ancient_stairs", ANCIENT_PLANKS.getDefaultState());
     public static final Block ANCIENT_SLAB = BlockSlabsNA.makeSlab("ancient_slab", Material.WOOD, SoundType.WOOD, 1.5F);
