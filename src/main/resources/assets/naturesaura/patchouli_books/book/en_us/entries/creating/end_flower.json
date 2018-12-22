@@ -1,0 +1,17 @@
+{
+    "name": "Rose of Oblivion",
+    "icon": "naturesaura:end_flower",
+    "category": "creating",
+    "advancement": "naturesaura:end_flower",
+    "pages": [
+        {
+            "type": "text",
+            "text": "The $(thing)Ender Dragon$() is known to be quite a beast to behold. It guards $(thing)The End$() better than anybody else, but it can be defeated. This not only bears a token of its offspring and a lot of pride, it also bears the $(item)Rose of Oblivion$(). Upon the dragon's death, they will start sprouting out of the ground on the end island, ready to be collected by any botanist and placed in any dimension."
+        },
+        {
+            "type": "spotlight",
+            "item": "naturesaura:end_flower",
+            "text": "These flowers bear very large amounts of $(aura) that they $(thing)disperse$() in an interesting way: Initially, they will do nothing; however, if there is even the slightest bit of $(aura) missing from the area, they will start slowly feeding their $(aura) into the environment, dying after all of it is drained. During this process, they can neither be stopped, nor harvested."
+        }
+    ]
+}

@@ -35,6 +35,7 @@ tile.naturesaura.offering_table.name=Offering Table
 tile.naturesaura.pickup_stopper.name=Item Grounder
 tile.naturesaura.spawn_lamp.name=Lamp of Sanctuary
 tile.naturesaura.animal_generator.name=Disentangler of Mortals
+tile.naturesaura.end_flower.name=Rose of Oblivion
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.gold_fiber.name=Brilliant Fiber
@@ -120,6 +121,8 @@ advancement.naturesaura.positive_imbalance=Luscious Surroundings
 advancement.naturesaura.positive_imbalance.desc=Create enough Aura to cause positive imbalance effects
 advancement.naturesaura.negative_imbalance=Deadly Day
 advancement.naturesaura.negative_imbalance.desc=Drain enough Aura to cause negative imbalance effects
+advancement.naturesaura.end_flower=Blue Lotus
+advancement.naturesaura.end_flower.desc=Kill the Ender Dragon to make a Rose of Oblivion grow
 
 command.naturesaura.aura.usage=/naaura <action> <amount> <range>
 

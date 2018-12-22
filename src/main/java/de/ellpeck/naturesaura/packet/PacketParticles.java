@@ -300,6 +300,18 @@ public class PacketParticles implements IMessage {
                                     genX + 0.5F, genY + 0.5F, genZ + 0.5F,
                                     0.15F, 0x41c4f4, child ? 1.5F : 3F);
                             break;
+                        case 18: // End flower decay
+                            color = message.data[0];
+                            for (int i = world.rand.nextInt(10) + 20; i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        message.posX + world.rand.nextFloat(),
+                                        message.posY + world.rand.nextFloat(),
+                                        message.posZ + world.rand.nextFloat(),
+                                        world.rand.nextGaussian() * 0.01F,
+                                        world.rand.nextFloat() * 0.01F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        color, 1.5F, 80, 0F, true, true);
+                            break;
                     }
                 }
             });
