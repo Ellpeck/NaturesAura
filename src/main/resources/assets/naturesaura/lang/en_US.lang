@@ -124,6 +124,6 @@ advancement.naturesaura.negative_imbalance.desc=Drain enough Aura to cause negat
 advancement.naturesaura.end_flower=Blue Lotus
 advancement.naturesaura.end_flower.desc=Kill the Ender Dragon to make a Rose of Oblivion grow
 
-command.naturesaura.aura.usage=/naaura <action> <amount> <range>
+command.naturesaura.aura.usage=/naaura store|drain <amount> [range] OR /naaura reset <range>
 
 potion.naturesaura.breathless.name=Breathless
