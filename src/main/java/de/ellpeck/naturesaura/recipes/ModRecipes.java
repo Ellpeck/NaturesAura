@@ -34,6 +34,14 @@ public final class ModRecipes {
                 Ingredient.fromItem(Items.GOLD_INGOT),
                 Ingredient.fromItem(ModItems.GOLD_LEAF),
                 Ingredient.fromItem(ModItems.GOLD_LEAF)).register();
+        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "eye_improved"),
+                Ingredient.fromStacks(new ItemStack(Blocks.SAPLING)), new ItemStack(ModItems.EYE_IMPROVED), 500,
+                Ingredient.fromItem(ModItems.EYE),
+                Ingredient.fromItem(ModItems.SKY_INGOT),
+                Ingredient.fromItem(ModItems.SKY_INGOT),
+                Helper.blockIng(ModBlocks.END_FLOWER),
+                Ingredient.fromItem(ModItems.GOLD_LEAF),
+                Ingredient.fromItem(ModItems.GOLD_LEAF)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "nature_altar"),
                 Helper.blockIng(Blocks.SAPLING), new ItemStack(ModBlocks.NATURE_ALTAR), 500,
                 Helper.blockIng(Blocks.STONE),

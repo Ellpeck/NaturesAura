@@ -181,6 +181,7 @@ public class ClientEvents {
             if (mc.player != null) {
                 ItemStack cache = ItemStack.EMPTY;
                 ItemStack eye = ItemStack.EMPTY;
+                ItemStack eyeImproved = ItemStack.EMPTY;
 
                 if (Compat.baubles) {
                     IItemHandler baubles = BaublesApi.getBaublesHandler(mc.player);
@@ -191,19 +192,21 @@ public class ClientEvents {
                                 cache = slot;
                             else if (slot.getItem() == ModItems.EYE)
                                 eye = slot;
+                            else if (slot.getItem() == ModItems.EYE_IMPROVED)
+                                eyeImproved = slot;
                         }
                     }
                 }
 
-                if (cache.isEmpty() || eye.isEmpty()) {
-                    for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
-                        ItemStack slot = mc.player.inventory.getStackInSlot(i);
-                        if (!slot.isEmpty()) {
-                            if (slot.getItem() == ModItems.AURA_CACHE)
-                                cache = slot;
-                            else if (slot.getItem() == ModItems.EYE && i <= 8)
-                                eye = slot;
-                        }
+                for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
+                    ItemStack slot = mc.player.inventory.getStackInSlot(i);
+                    if (!slot.isEmpty()) {
+                        if (slot.getItem() == ModItems.AURA_CACHE)
+                            cache = slot;
+                        else if (slot.getItem() == ModItems.EYE && i <= 8)
+                            eye = slot;
+                        else if (slot.getItem() == ModItems.EYE_IMPROVED)
+                            eyeImproved = slot;
                     }
                 }
 
@@ -232,7 +235,7 @@ public class ClientEvents {
                     GlStateManager.popMatrix();
                 }
 
-                if (!eye.isEmpty()) {
+                if (!eye.isEmpty() || !eyeImproved.isEmpty()) {
                     GlStateManager.pushMatrix();
                     mc.getTextureManager().bindTexture(OVERLAYS);
 
@@ -243,15 +246,33 @@ public class ClientEvents {
                         float totalPercentage = totalAmount / (IAuraChunk.DEFAULT_AURA * 2F);
 
                         int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
+                        int y = eyeImproved.isEmpty() ? 10 : 36;
                         if (tHeight < 50)
-                            Gui.drawModalRectWithCustomSizedTexture(3, 10, 6, 12, 6, 50 - tHeight, 256, 256);
+                            Gui.drawModalRectWithCustomSizedTexture(3, y, 6, 12, 6, 50 - tHeight, 256, 256);
                         if (tHeight > 0)
-                            Gui.drawModalRectWithCustomSizedTexture(3, 10 + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
+                            Gui.drawModalRectWithCustomSizedTexture(3, y + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
 
-                        if (totalPercentage > 1F)
-                            mc.fontRenderer.drawString("+", 10F, 9.5F, 0x53a008, true);
-                        if (totalPercentage < 0F)
-                            mc.fontRenderer.drawString("-", 10F, 53.5F, 0x53a008, true);
+                        if (!eyeImproved.isEmpty()) {
+                            GlStateManager.color(160 / 255F, 83 / 255F, 8 / 255F);
+
+                            int topHeight = MathHelper.ceil(MathHelper.clamp((totalPercentage - 1F) * 2F, 0F, 1F) * 25);
+                            if (topHeight < 25)
+                                Gui.drawModalRectWithCustomSizedTexture(3, 10, 18, 12, 6, 25 - topHeight, 256, 256);
+                            if (topHeight > 0)
+                                Gui.drawModalRectWithCustomSizedTexture(3, 10 + 25 - topHeight, 12, 12 + 25 - topHeight, 6, topHeight, 256, 256);
+
+                            int bottomHeight = MathHelper.ceil(MathHelper.clamp((totalPercentage + 1F) * 2F - 1F, 0F, 1F) * 25);
+                            if (bottomHeight < 25)
+                                Gui.drawModalRectWithCustomSizedTexture(3, 87, 18, 12, 6, 25 - bottomHeight, 256, 256);
+                            if (bottomHeight > 0)
+                                Gui.drawModalRectWithCustomSizedTexture(3, 87 + 25 - bottomHeight, 12, 12 + 25 - bottomHeight, 6, bottomHeight, 256, 256);
+                        }
+
+                        int color = eyeImproved.isEmpty() ? 0x53a008 : 0xa05308;
+                        if (totalPercentage > (eyeImproved.isEmpty() ? 1F : 1.5F))
+                            mc.fontRenderer.drawString("+", 10F, 9.5F, color, true);
+                        if (totalPercentage < (eyeImproved.isEmpty() ? 0F : -0.5F))
+                            mc.fontRenderer.drawString("-", 10F, eyeImproved.isEmpty() ? 53.5F : 105.5F, color, true);
 
                         GlStateManager.pushMatrix();
                         float scale = 0.75F;

@@ -11,8 +11,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemEye extends ItemImpl implements ITrinketItem {
 
-    public ItemEye() {
-        super("eye");
+    public ItemEye(String name) {
+        super(name);
         this.setMaxStackSize(1);
     }
 

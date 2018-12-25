@@ -26,7 +26,8 @@ public final class ModItems {
     public static final Item INFUSED_PANTS = new ItemArmorNA("infused_iron_pants", ARMOR_INFUSED, EntityEquipmentSlot.LEGS);
     public static final Item INFUSED_SHOES = new ItemArmorNA("infused_iron_shoes", ARMOR_INFUSED, EntityEquipmentSlot.FEET);
 
-    public static final Item EYE = new ItemEye();
+    public static final Item EYE = new ItemEye("eye");
+    public static final Item EYE_IMPROVED = new ItemEye("eye_improved");
     public static final Item GOLD_FIBER = new ItemGoldFiber();
     public static final Item GOLD_LEAF = new ItemImpl("gold_leaf");
     public static final Item INFUSED_IRON = new ItemImpl("infused_iron");

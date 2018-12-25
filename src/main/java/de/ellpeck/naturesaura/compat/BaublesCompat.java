@@ -52,13 +52,13 @@ public class BaublesCompat {
     @SubscribeEvent
     public void onCapabilitiesAttach(AttachCapabilitiesEvent<ItemStack> event) {
         Item item = event.getObject().getItem();
-        if (item == ModItems.EYE) {
+        if (item == ModItems.EYE || item == ModItems.EYE_IMPROVED)
             this.addCap(event, this.eye);
-        } else if (item == ModItems.AURA_CACHE) {
+        else if (item == ModItems.AURA_CACHE)
             this.addCap(event, this.cache);
-        } else if (item == ModItems.SHOCKWAVE_CREATOR) {
+        else if (item == ModItems.SHOCKWAVE_CREATOR)
             this.addCap(event, this.shockwaveCreator);
-        }
+
     }
 
     private void addCap(AttachCapabilitiesEvent<ItemStack> event, IBauble type) {
