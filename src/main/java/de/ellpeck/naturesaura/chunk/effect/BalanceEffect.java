@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 public class BalanceEffect implements IDrainSpotEffect {
 
@@ -17,9 +18,13 @@ public class BalanceEffect implements IDrainSpotEffect {
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (spot < 1000)
             return;
-        int radius = Math.min(80, spot / 50);
-        if (radius <= 0)
-            return;
+        int searchRadius = Math.min(45, spot / 100);
+        MutableInt positiveAura = new MutableInt();
+        IAuraChunk.getSpotsInArea(world, pos, searchRadius, (otherPos, otherSpot) -> {
+            if (otherSpot > 0)
+                positiveAura.add(otherSpot);
+        });
+        int radius = Math.min(80, positiveAura.intValue() / 50);
         BlockPos lowestPos = IAuraChunk.getLowestSpot(world, pos, radius, null);
         if (lowestPos == null)
             return;
