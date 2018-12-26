@@ -246,7 +246,7 @@ public class ClientEvents {
                         float totalPercentage = totalAmount / (IAuraChunk.DEFAULT_AURA * 2F);
 
                         int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
-                        int y = eyeImproved.isEmpty() ? 10 : 36;
+                        int y = !eyeImproved.isEmpty() && totalPercentage > 1F ? 36 : 10;
                         if (tHeight < 50)
                             Gui.drawModalRectWithCustomSizedTexture(3, y, 6, 12, 6, 50 - tHeight, 256, 256);
                         if (tHeight > 0)
@@ -256,23 +256,24 @@ public class ClientEvents {
                             GlStateManager.color(160 / 255F, 83 / 255F, 8 / 255F);
 
                             int topHeight = MathHelper.ceil(MathHelper.clamp((totalPercentage - 1F) * 2F, 0F, 1F) * 25);
-                            if (topHeight < 25)
-                                Gui.drawModalRectWithCustomSizedTexture(3, 10, 18, 12, 6, 25 - topHeight, 256, 256);
-                            if (topHeight > 0)
+                            if (topHeight > 0) {
+                                if (topHeight < 25)
+                                    Gui.drawModalRectWithCustomSizedTexture(3, 10, 18, 12, 6, 25 - topHeight, 256, 256);
                                 Gui.drawModalRectWithCustomSizedTexture(3, 10 + 25 - topHeight, 12, 12 + 25 - topHeight, 6, topHeight, 256, 256);
-
+                            }
                             int bottomHeight = MathHelper.ceil(MathHelper.clamp((totalPercentage + 1F) * 2F - 1F, 0F, 1F) * 25);
-                            if (bottomHeight < 25)
-                                Gui.drawModalRectWithCustomSizedTexture(3, 87, 18, 12, 6, 25 - bottomHeight, 256, 256);
-                            if (bottomHeight > 0)
-                                Gui.drawModalRectWithCustomSizedTexture(3, 87 + 25 - bottomHeight, 12, 12 + 25 - bottomHeight, 6, bottomHeight, 256, 256);
+                            if (bottomHeight < 25) {
+                                Gui.drawModalRectWithCustomSizedTexture(3, 61, 18, 12, 6, 25 - bottomHeight, 256, 256);
+                                if (bottomHeight > 0)
+                                    Gui.drawModalRectWithCustomSizedTexture(3, 61 + 25 - bottomHeight, 12, 12 + 25 - bottomHeight, 6, bottomHeight, 256, 256);
+                            }
                         }
 
                         int color = eyeImproved.isEmpty() ? 0x53a008 : 0xa05308;
                         if (totalPercentage > (eyeImproved.isEmpty() ? 1F : 1.5F))
                             mc.fontRenderer.drawString("+", 10F, 9.5F, color, true);
                         if (totalPercentage < (eyeImproved.isEmpty() ? 0F : -0.5F))
-                            mc.fontRenderer.drawString("-", 10F, eyeImproved.isEmpty() ? 53.5F : 105.5F, color, true);
+                            mc.fontRenderer.drawString("-", 10F, eyeImproved.isEmpty() ? 53.5F : 79.5F, color, true);
 
                         GlStateManager.pushMatrix();
                         float scale = 0.75F;
