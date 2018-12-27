@@ -24,12 +24,11 @@ public class TileEntityHopperUpgrade extends TileEntityImpl implements ITickable
             if (IAuraChunk.getAuraInArea(this.world, this.pos, 25) < 1000)
                 return;
             TileEntity tile = this.world.getTileEntity(this.pos.down());
-            if (!(tile instanceof TileEntityHopper) || !BlockHopper.isEnabled(tile.getBlockMetadata()))
+            if (!isValidHopper(tile))
                 return;
-            TileEntityHopper hopper = (TileEntityHopper) tile;
-            if (!hopper.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP))
+            if (!tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP))
                 return;
-            IItemHandler handler = hopper.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
+            IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
             if (handler == null)
                 return;
 
@@ -66,5 +65,13 @@ public class TileEntityHopperUpgrade extends TileEntityImpl implements ITickable
                 }
             }
         }
+    }
+
+    private static boolean isValidHopper(TileEntity tile) {
+        if (tile instanceof TileEntityHopper)
+            return BlockHopper.isEnabled(tile.getBlockMetadata());
+        if (tile instanceof TileEntityGratedChute)
+            return ((TileEntityGratedChute) tile).redstonePower <= 0;
+        return false;
     }
 }

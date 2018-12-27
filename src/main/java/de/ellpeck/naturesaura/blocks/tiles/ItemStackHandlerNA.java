@@ -22,8 +22,10 @@ public class ItemStackHandlerNA extends ItemStackHandler {
 
     @Override
     protected void onContentsChanged(int slot) {
-        if (this.sendToClients && !this.tile.getWorld().isRemote) {
-            this.tile.sendToClients();
+        if (this.tile != null) {
+            this.tile.markDirty();
+            if (this.sendToClients && !this.tile.getWorld().isRemote)
+                this.tile.sendToClients();
         }
     }
 

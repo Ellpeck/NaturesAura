@@ -1,0 +1,35 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "naturesaura:grated_chute_down",
+        "textures": {
+            "particle": "naturesaura:blocks/grated_chute_outside",
+            "top": "naturesaura:blocks/grated_chute_top",
+            "side": "naturesaura:blocks/grated_chute_outside",
+            "inside": "naturesaura:blocks/grated_chute_inside"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}],
+        "facing=down": {
+            "model": "naturesaura:grated_chute_down"
+        },
+        "facing=north": {
+            "model": "naturesaura:grated_chute_side"
+        },
+        "facing=south": {
+            "model": "naturesaura:grated_chute_side",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "naturesaura:grated_chute_side",
+            "y": 270
+        },
+        "facing=east": {
+            "model": "naturesaura:grated_chute_side",
+            "y": 90
+        }
+    }
+}

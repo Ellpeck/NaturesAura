@@ -1,0 +1,23 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "IHI",
+        "ICI",
+        " I "
+    ],
+    "key": {
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "chestWood"
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        },
+        "H": {
+            "item": "minecraft:hopper"
+        }
+    },
+    "result": {
+        "item": "naturesaura:grated_chute"
+    }
+}

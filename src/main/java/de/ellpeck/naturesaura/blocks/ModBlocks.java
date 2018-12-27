@@ -39,4 +39,5 @@ public final class ModBlocks {
     public static final Block SPAWN_LAMP = new BlockSpawnLamp();
     public static final Block ANIMAL_GENERATOR = new BlockAnimalGenerator();
     public static final Block END_FLOWER = new BlockEndFlower();
+    public static final Block GRATED_CHUTE = new BlockGratedChute();
 }
