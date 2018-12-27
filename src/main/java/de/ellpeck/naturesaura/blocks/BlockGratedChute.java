@@ -10,13 +10,17 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -92,7 +96,15 @@ public class BlockGratedChute extends BlockContainerImpl {
 
     @Override
     public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
-        return 0; //TODO Comparator
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof TileEntityGratedChute) {
+            IItemHandler handler = ((TileEntityGratedChute) tile).getItemHandler(null);
+            ItemStack stack = handler.getStackInSlot(0);
+            if (stack.isEmpty())
+                return 0;
+            return MathHelper.ceil((stack.getCount() / (float) stack.getMaxStackSize()) * 15);
+        } else
+            return 0;
     }
 
     @Override
