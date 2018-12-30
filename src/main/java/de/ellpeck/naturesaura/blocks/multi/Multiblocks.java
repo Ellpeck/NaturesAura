@@ -63,4 +63,14 @@ public final class Multiblocks {
                     (world, start, offset, pos, state, c) -> NaturesAuraAPI.FLOWERS.contains(state)),
             '0', ModBlocks.OFFERING_TABLE,
             ' ', Matcher.wildcard());
+    public static final IMultiblock ANIMAL_SPAWNER = NaturesAuraAPI.instance().createMultiblock(
+            new ResourceLocation(NaturesAura.MOD_ID, "animal_spawner"),
+            new String[][]{
+                    {"       ", "       ", "       ", "   0   ", "       ", "       ", "       "},
+                    {"  HHH  ", " HRRRH ", "HRWRWRH", "HRR RRH", "HRWRWRH", " HRRRH ", "  HHH  "}},
+            'H', Blocks.HAY_BLOCK,
+            'R', ModBlocks.INFUSED_BRICK,
+            'W', ModBlocks.ANCIENT_PLANKS,
+            '0', ModBlocks.ANIMAL_SPAWNER,
+            ' ', Matcher.wildcard());
 }

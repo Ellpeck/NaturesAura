@@ -40,4 +40,5 @@ public final class ModBlocks {
     public static final Block ANIMAL_GENERATOR = new BlockAnimalGenerator();
     public static final Block END_FLOWER = new BlockEndFlower();
     public static final Block GRATED_CHUTE = new BlockGratedChute();
+    public static final Block ANIMAL_SPAWNER = new BlockAnimalSpawner();
 }

@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
+import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
 import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import de.ellpeck.naturesaura.api.recipes.ing.AmountIngredient;
@@ -18,8 +19,11 @@ import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
@@ -130,6 +134,22 @@ public final class ModRecipes {
                 new AmountIngredient(new ItemStack(ModItems.INFUSED_IRON, 3)),
                 Ingredient.fromItem(ModItems.CALLING_SPIRIT),
                 new ItemStack(ModItems.SKY_INGOT)).register();
+
+        new AnimalSpawnerRecipe(new ResourceLocation(NaturesAura.MOD_ID, "cow"),
+                EntityCow::new, 500, 60,
+                Ingredient.fromItem(ModItems.BIRTH_SPIRIT),
+                Ingredient.fromItem(Items.BEEF),
+                Ingredient.fromItem(Items.LEATHER)).register();
+        for (EnumDyeColor color : EnumDyeColor.values())
+            new AnimalSpawnerRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sheep_" + color.getName()),
+                    world -> {
+                        EntitySheep sheep = new EntitySheep(world);
+                        sheep.setFleeceColor(color);
+                        return sheep;
+                    }, 500, 60,
+                    Ingredient.fromItem(ModItems.BIRTH_SPIRIT),
+                    Ingredient.fromItem(Items.MUTTON),
+                    Ingredient.fromStacks(new ItemStack(Blocks.WOOL, 1, color.getMetadata()))).register();
 
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
                 Blocks.COBBLESTONE.getDefaultState(),

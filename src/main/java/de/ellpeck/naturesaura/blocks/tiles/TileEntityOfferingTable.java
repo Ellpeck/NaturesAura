@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
@@ -60,8 +61,9 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
                     if (!recipe.startItem.apply(itemStack))
                         continue;
 
-                    int recipeCount = stack.getCount() / recipe.input.amount;
-                    stack.shrink(recipeCount * recipe.input.amount);
+                    int amount = Helper.getIngredientAmount(recipe.input);
+                    int recipeCount = stack.getCount() / amount;
+                    stack.shrink(recipeCount * amount);
                     item.setDead();
                     this.sendToClients();
 

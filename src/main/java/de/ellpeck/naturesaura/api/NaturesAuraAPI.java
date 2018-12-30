@@ -10,6 +10,7 @@ import de.ellpeck.naturesaura.api.internal.StubHooks;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
+import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
 import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import net.minecraft.block.BlockFlower;
@@ -104,6 +105,12 @@ public final class NaturesAuraAPI {
      * using the multiblock maker debug tool.
      */
     public static final Map<ResourceLocation, IMultiblock> MULTIBLOCKS = new HashMap<>();
+    /**
+     * A map of all {@link AnimalSpawnerRecipe} objects that are used with the
+     * animal spawner block. To register a recipe, use {@link
+     * AnimalSpawnerRecipe#register()}.
+     */
+    public static final Map<ResourceLocation, AnimalSpawnerRecipe> ANIMAL_SPAWNER_RECIPES = new HashMap<>();
 
     /**
      * The capability for any item or block that stores Aura in the form of an

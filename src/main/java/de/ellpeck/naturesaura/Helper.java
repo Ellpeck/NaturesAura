@@ -241,4 +241,12 @@ public final class Helper {
         if (adv != null)
             playerMp.getAdvancements().grantCriterion(adv, criterion);
     }
+
+    public static int getIngredientAmount(Ingredient ingredient) {
+        int highestAmount = 0;
+        for (ItemStack stack : ingredient.getMatchingStacks())
+            if (stack.getCount() > highestAmount)
+                highestAmount = stack.getCount();
+        return highestAmount;
+    }
 }
