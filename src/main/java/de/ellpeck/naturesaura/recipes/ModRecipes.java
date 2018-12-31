@@ -19,15 +19,20 @@ import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.function.Function;
 
 public final class ModRecipes {
 
@@ -135,22 +140,6 @@ public final class ModRecipes {
                 Ingredient.fromItem(ModItems.CALLING_SPIRIT),
                 new ItemStack(ModItems.SKY_INGOT)).register();
 
-        new AnimalSpawnerRecipe(new ResourceLocation(NaturesAura.MOD_ID, "cow"),
-                EntityCow::new, 500, 60,
-                Ingredient.fromItem(ModItems.BIRTH_SPIRIT),
-                Ingredient.fromItem(Items.BEEF),
-                Ingredient.fromItem(Items.LEATHER)).register();
-        for (EnumDyeColor color : EnumDyeColor.values())
-            new AnimalSpawnerRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sheep_" + color.getName()),
-                    world -> {
-                        EntitySheep sheep = new EntitySheep(world);
-                        sheep.setFleeceColor(color);
-                        return sheep;
-                    }, 500, 60,
-                    Ingredient.fromItem(ModItems.BIRTH_SPIRIT),
-                    Ingredient.fromItem(Items.MUTTON),
-                    Ingredient.fromStacks(new ItemStack(Blocks.WOOL, 1, color.getMetadata()))).register();
-
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
                 Blocks.COBBLESTONE.getDefaultState(),
                 Blocks.MOSSY_COBBLESTONE.getDefaultState());
@@ -161,5 +150,53 @@ public final class ModRecipes {
         for (Block block : ForgeRegistries.BLOCKS)
             if (block instanceof BlockFlower)
                 NaturesAuraAPI.FLOWERS.addAll(block.getBlockState().getValidStates());
+
+        spawner("cow", EntityCow::new, 500, 60, Ingredient.fromItem(Items.BEEF), Ingredient.fromItem(Items.LEATHER));
+        for (EnumDyeColor color : EnumDyeColor.values())
+            spawner("sheep_" + color.getName(), world -> {
+                EntitySheep sheep = new EntitySheep(world);
+                sheep.setFleeceColor(color);
+                return sheep;
+            }, 500, 60, Ingredient.fromItem(Items.MUTTON), Ingredient.fromStacks(new ItemStack(Blocks.WOOL, 1, color.getMetadata())));
+        spawner("chicken", EntityChicken::new, 300, 40, Ingredient.fromItem(Items.FEATHER), Ingredient.fromItem(Items.EGG));
+        spawner("pig", EntityPig::new, 500, 60, Ingredient.fromItem(Items.PORKCHOP));
+        spawner("blaze", EntityBlaze::new, 1500, 120, Ingredient.fromItem(Items.BLAZE_ROD), Ingredient.fromItem(Items.BLAZE_POWDER));
+        spawner("ghast", EntityGhast::new, 1200, 150, Ingredient.fromItem(Items.GUNPOWDER), Ingredient.fromItem(Items.GHAST_TEAR));
+        spawner("ocelot", EntityOcelot::new, 800, 60, Ingredient.fromItem(Items.FISH), Helper.blockIng(Blocks.WOOL));
+        spawner("mule", EntityMule::new, 1000, 100, Ingredient.fromItem(Items.LEATHER), Helper.blockIng(Blocks.CHEST), Ingredient.fromItem(Items.APPLE));
+        spawner("bat", EntityBat::new, 300, 40, Ingredient.fromItem(Items.FEATHER));
+        spawner("endermite", EntityEndermite::new, 300, 40, Ingredient.fromItem(Items.ENDER_PEARL), Helper.blockIng(Blocks.STONE));
+        spawner("parrot", EntityParrot::new, 500, 60, Ingredient.fromItem(Items.FEATHER), Ingredient.fromItem(Items.COOKIE));
+        spawner("slime", EntitySlime::new, 300, 40, Ingredient.fromItem(Items.SLIME_BALL));
+        spawner("spider", EntitySpider::new, 1000, 120, Ingredient.fromItem(Items.STRING), Ingredient.fromItem(Items.SPIDER_EYE));
+        spawner("skeleton", EntitySkeleton::new, 1000, 120, Ingredient.fromItem(Items.BONE), Ingredient.fromItem(Items.ARROW));
+        spawner("enderman", EntityEnderman::new, 1200, 120, Ingredient.fromItem(Items.ENDER_PEARL));
+        spawner("silverfish", EntitySilverfish::new, 300, 40, Helper.blockIng(Blocks.STONE));
+        spawner("squid", EntitySquid::new, 500, 40, Ingredient.fromStacks(new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage())));
+        spawner("stray", EntityStray::new, 1000, 120, Ingredient.fromItem(Items.BONE), Helper.blockIng(Blocks.ICE));
+        spawner("shulker", EntityShulker::new, 1500, 100, Ingredient.fromItem(Items.SHULKER_SHELL));
+        spawner("husk", EntityHusk::new, 1000, 120, Ingredient.fromItem(Items.ROTTEN_FLESH), Helper.blockIng(Blocks.SAND));
+        spawner("llama", EntityLlama::new, 600, 80, Ingredient.fromStacks(new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE)));
+        spawner("rabbit", EntityRabbit::new, 300, 40, Ingredient.fromItem(Items.RABBIT_HIDE));
+        spawner("magma_cube", EntityMagmaCube::new, 1000, 100, Ingredient.fromItem(Items.MAGMA_CREAM));
+        spawner("zombie_pigman", EntityPigZombie::new, 1200, 150, Ingredient.fromItem(Items.ROTTEN_FLESH), Ingredient.fromItem(Items.GOLD_NUGGET));
+        spawner("polar_bear", EntityPolarBear::new, 500, 60, Ingredient.fromItem(Items.FISH), Helper.blockIng(Blocks.ICE));
+        spawner("mooshroom", EntityMooshroom::new, 400, 60, Ingredient.fromItem(Items.LEATHER), Helper.blockIng(Blocks.RED_MUSHROOM));
+        spawner("guardian", EntityGuardian::new, 1500, 150, Ingredient.fromItem(Items.PRISMARINE_SHARD), Ingredient.fromItem(Items.PRISMARINE_CRYSTALS));
+        spawner("horse", EntityHorse::new, 1000, 100, Ingredient.fromItem(Items.LEATHER));
+        spawner("donkey", EntityDonkey::new, 1000, 100, Ingredient.fromItem(Items.LEATHER), Helper.blockIng(Blocks.CHEST));
+        spawner("cave_spider", EntityCaveSpider::new, 1000, 120, Ingredient.fromItem(Items.STRING), Ingredient.fromItem(Items.FERMENTED_SPIDER_EYE));
+        spawner("creeper", EntityCreeper::new, 1000, 120, Ingredient.fromItem(Items.GUNPOWDER));
+        spawner("witch", EntityWitch::new, 1500, 150, Ingredient.fromItem(Items.GLASS_BOTTLE), Ingredient.fromItem(Items.GLOWSTONE_DUST));
+        spawner("wither_skeleton", EntityWitherSkeleton::new, 1500, 150, Ingredient.fromItem(Items.BONE), Helper.blockIng(Blocks.OBSIDIAN));
+        spawner("wolf", EntityWolf::new, 500, 60, Ingredient.fromItem(Items.LEATHER), Ingredient.fromItem(Items.BONE));
+        spawner("zombie", EntityZombie::new, 1000, 100, Ingredient.fromItem(Items.ROTTEN_FLESH));
+    }
+
+    private static void spawner(String name, Function<World, Entity> entity, int aura, int time, Ingredient... ings) {
+        Ingredient[] actualIngs = new Ingredient[ings.length + 1];
+        actualIngs[0] = Ingredient.fromItem(ModItems.BIRTH_SPIRIT);
+        System.arraycopy(ings, 0, actualIngs, 1, ings.length);
+        new AnimalSpawnerRecipe(new ResourceLocation(NaturesAura.MOD_ID, name), entity, aura, time, actualIngs).register();
     }
 }

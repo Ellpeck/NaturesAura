@@ -42,5 +42,5 @@ public final class ModItems {
     public static final Item SKY_INGOT = new ItemImpl("sky_ingot");
     public static final Item CALLING_SPIRIT = new ItemGlowing("calling_spirit");
     public static final Item EFFECT_POWDER = new ItemEffectPowder();
-    public static final Item BIRTH_SPIRIT = new ItemImpl("birth_spirit");
+    public static final Item BIRTH_SPIRIT = new ItemBirthSpirit();
 }
