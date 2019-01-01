@@ -1,0 +1,29 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "SHS",
+        "IWI",
+        "SHS"
+    ],
+    "key": {
+        "H": {
+            "item": "minecraft:hay_block"
+        },
+        "I": {
+            "item": "minecraft:iron_bars"
+        },
+        "S": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "W": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:end"
+            }
+        }
+    },
+    "result": {
+        "item": "naturesaura:animal_spawner"
+    }
+}

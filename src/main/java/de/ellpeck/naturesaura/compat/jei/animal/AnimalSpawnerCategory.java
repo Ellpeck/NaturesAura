@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 
 import java.util.Arrays;
 
@@ -64,17 +63,16 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerWrapp
     @Override
     public void drawExtras(Minecraft minecraft) {
         if (this.entity == null)
-            this.entity = this.recipe.entity.apply(minecraft.world);
+            this.entity = this.recipe.makeEntity(minecraft.world);
 
         float size = Math.max(1F, Math.max(this.entity.width, this.entity.height));
-        renderEntity(this.entity, minecraft.world, 35, 28, 35F, 100F / size * 0.4F, size * 0.5F);
+        renderEntity(this.entity, 35, 28, 35F, 100F / size * 0.4F, size * 0.5F);
 
         String name = this.entity.getDisplayName().getFormattedText();
         minecraft.fontRenderer.drawString(name, 36 - minecraft.fontRenderer.getStringWidth(name) / 2F, 55, 0xFFFFFF, true);
     }
 
-    private static void renderEntity(Entity entity, World world, float x, float y, float rotation, float renderScale, float offset) {
-        entity.world = world;
+    private static void renderEntity(Entity entity, float x, float y, float rotation, float renderScale, float offset) {
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
         GlStateManager.color(1F, 1F, 1F);

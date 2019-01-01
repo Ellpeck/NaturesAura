@@ -10,7 +10,6 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -26,8 +25,7 @@ public final class AnimalSpawnerTweaker {
     public static void addRecipe(String name, String entity, int aura, int time, IItemStack[] ingredients) {
         CraftTweakerCompat.SCHEDULED_ACTIONS.add(() -> {
             ResourceLocation res = new ResourceLocation(name);
-            return new Add(Collections.singletonMap(res, new AnimalSpawnerRecipe(res,
-                    world -> ForgeRegistries.ENTITIES.getValue(new ResourceLocation(entity)).newInstance(world), aura, time,
+            return new Add(Collections.singletonMap(res, new AnimalSpawnerRecipe(res, new ResourceLocation(entity), aura, time,
                     Arrays.stream(ingredients).map(ing -> Ingredient.fromStacks(InputHelper.toStack(ing))).toArray(Ingredient[]::new)
             )));
         });
