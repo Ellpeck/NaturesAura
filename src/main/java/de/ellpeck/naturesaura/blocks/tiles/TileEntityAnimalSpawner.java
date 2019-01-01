@@ -9,7 +9,6 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -53,15 +52,7 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
 
                 this.time += 10;
                 if (this.time >= this.currentRecipe.time) {
-                    Entity entity = this.currentRecipe.makeEntity(this.world);
-                    entity.setLocationAndAngles(this.spawnX, this.pos.getY() + 1, this.spawnZ,
-                            MathHelper.wrapDegrees(this.world.rand.nextFloat() * 360F), 0F);
-                    if (entity instanceof EntityLiving) {
-                        EntityLiving living = (EntityLiving) entity;
-                        living.rotationYawHead = entity.rotationYaw;
-                        living.renderYawOffset = entity.rotationYaw;
-                        living.onInitialSpawn(this.world.getDifficultyForLocation(living.getPosition()), null);
-                    }
+                    Entity entity = this.currentRecipe.makeEntity(this.world, this.spawnX, this.pos.getY() + 1, this.spawnZ);
                     this.world.spawnEntity(entity);
 
                     this.currentRecipe = null;
@@ -125,8 +116,7 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
                     this.world.rand.nextFloat() + 0.5F);
 
             if (this.entityClient == null) {
-                this.entityClient = this.currentRecipe.makeEntity(this.world);
-                this.entityClient.setPosition(this.spawnX, this.pos.getY() + 1, this.spawnZ);
+                this.entityClient = this.currentRecipe.makeEntity(this.world, this.spawnX, this.pos.getY() + 1, this.spawnZ);
             }
             AxisAlignedBB bounds = this.entityClient.getEntityBoundingBox();
             for (int i = this.world.rand.nextInt(5) + 5; i >= 0; i--)

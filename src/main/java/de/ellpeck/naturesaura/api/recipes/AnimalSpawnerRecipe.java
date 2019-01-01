@@ -2,8 +2,10 @@ package de.ellpeck.naturesaura.api.recipes;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -24,11 +26,19 @@ public class AnimalSpawnerRecipe {
         this.time = time;
     }
 
-    public Entity makeEntity(World world) {
+    public Entity makeEntity(World world, double x, double y, double z) {
         EntityEntry entry = ForgeRegistries.ENTITIES.getValue(this.entity);
         if (entry == null)
             return null;
-        return entry.newInstance(world);
+        Entity entity = entry.newInstance(world);
+        entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360F), 0F);
+        if (entity instanceof EntityLiving) {
+            EntityLiving living = (EntityLiving) entity;
+            living.rotationYawHead = entity.rotationYaw;
+            living.renderYawOffset = entity.rotationYaw;
+            living.onInitialSpawn(world.getDifficultyForLocation(living.getPosition()), null);
+        }
+        return entity;
     }
 
     public AnimalSpawnerRecipe register() {

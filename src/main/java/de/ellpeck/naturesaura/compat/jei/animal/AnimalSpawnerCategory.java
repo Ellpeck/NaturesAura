@@ -63,7 +63,7 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerWrapp
     @Override
     public void drawExtras(Minecraft minecraft) {
         if (this.entity == null)
-            this.entity = this.recipe.makeEntity(minecraft.world);
+            this.entity = this.recipe.makeEntity(minecraft.world, 0, 0, 0);
 
         float size = Math.max(1F, Math.max(this.entity.width, this.entity.height));
         renderEntity(this.entity, 35, 28, 35F, 100F / size * 0.4F, size * 0.5F);

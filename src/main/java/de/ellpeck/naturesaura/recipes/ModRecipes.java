@@ -154,8 +154,8 @@ public final class ModRecipes {
                     500, 60, Ingredient.fromItem(ModItems.BIRTH_SPIRIT), Ingredient.fromItem(Items.MUTTON),
                     Ingredient.fromStacks(new ItemStack(Blocks.WOOL, 1, color.getMetadata()))) {
                 @Override
-                public Entity makeEntity(World world) {
-                    EntitySheep sheep = (EntitySheep) super.makeEntity(world);
+                public Entity makeEntity(World world, double x, double y, double z) {
+                    EntitySheep sheep = (EntitySheep) super.makeEntity(world, x, y, z);
                     sheep.setFleeceColor(color);
                     return sheep;
                 }
