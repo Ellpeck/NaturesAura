@@ -31,6 +31,8 @@ public class AnimalSpawnerRecipe {
         if (entry == null)
             return null;
         Entity entity = entry.newInstance(world);
+        if (x == 0 && y == 0 && z == 0)
+            return entity;
         entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360F), 0F);
         if (entity instanceof EntityLiving) {
             EntityLiving living = (EntityLiving) entity;
