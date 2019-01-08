@@ -312,7 +312,7 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextGaussian() * 0.01F,
                                         color, 1.5F, 80, 0F, true, true);
                             break;
-                        case 19: // Animal spawner
+                        case 19: // Animal spawner, auto crafter
                             for (int i = world.rand.nextInt(20) + 10; i >= 0; i--)
                                 NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX, message.posY + 0.5F, message.posZ,

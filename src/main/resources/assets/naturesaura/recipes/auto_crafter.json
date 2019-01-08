@@ -1,0 +1,29 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "AWA",
+        "ACA",
+        "ASA"
+    ],
+    "key": {
+        "C": {
+            "item": "minecraft:crafting_table"
+        },
+        "S": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "A": {
+            "item": "naturesaura:ancient_planks"
+        },
+        "W": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:end"
+            }
+        }
+    },
+    "result": {
+        "item": "naturesaura:auto_crafter"
+    }
+}

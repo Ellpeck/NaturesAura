@@ -73,4 +73,12 @@ public final class Multiblocks {
             'W', ModBlocks.ANCIENT_PLANKS,
             '0', ModBlocks.ANIMAL_SPAWNER,
             ' ', Matcher.wildcard());
+    public static final IMultiblock AUTO_CRAFTER = NaturesAuraAPI.instance().createMultiblock(
+            new ResourceLocation(NaturesAura.MOD_ID, "auto_crafter"),
+            new String[][]{
+                    {"PPPPPPP", "PLPLPLP", "PPPPPPP", "PLP0PLP", "PPPPPPP", "PLPLPLP", "PPPPPPP"}},
+            'P', ModBlocks.ANCIENT_PLANKS,
+            'L', ModBlocks.ANCIENT_LOG,
+            '0', ModBlocks.AUTO_CRAFTER,
+            ' ', Matcher.wildcard());
 }
