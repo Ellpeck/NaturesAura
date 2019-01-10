@@ -93,6 +93,8 @@ public class AnimalEffect implements IDrainSpotEffect {
             if (!secondOptional.isPresent())
                 return;
             EntityAnimal second = secondOptional.get();
+            if (second.getDistanceSq(first) > 5 * 5)
+                return;
 
             this.setInLove(first);
             this.setInLove(second);
