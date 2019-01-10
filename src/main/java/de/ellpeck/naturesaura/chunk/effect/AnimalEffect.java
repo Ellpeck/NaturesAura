@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.util.Comparator;
 import java.util.List;
@@ -53,12 +54,19 @@ public class AnimalEffect implements IDrainSpotEffect {
                     continue;
 
                 ItemStack stack = item.getItem();
-                if (!(stack.getItem() instanceof ItemEgg) || item.getAge() < item.lifespan / 2)
+                if (!(stack.getItem() instanceof ItemEgg))
+                    continue;
+                // The getAge() method is private for absolutely no reason but I want it so I don't care
+                int age = ReflectionHelper.getPrivateValue(EntityItem.class, item, "field_70292_b", "age");
+                if (age < item.lifespan / 2)
                     continue;
 
-                stack.shrink(1);
-                if (stack.isEmpty())
+                if (stack.getCount() <= 1)
                     item.setDead();
+                else {
+                    stack.shrink(1);
+                    item.setItem(stack);
+                }
 
                 EntityChicken chicken = new EntityChicken(world);
                 chicken.setGrowingAge(-24000);
