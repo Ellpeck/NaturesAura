@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -147,7 +148,11 @@ public final class Helper {
                         player.world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                                 SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM, SoundCategory.PLAYERS, 0.75F, 1F);
                     if (!player.world.isRemote) {
-                        player.addItemStackToInventory(handler.getStackInSlot(slot));
+                        ItemStack stack = handler.getStackInSlot(slot);
+                        if (!player.addItemStackToInventory(stack)) {
+                            EntityItem item = new EntityItem(player.world, player.posX, player.posY, player.posZ, stack);
+                            player.world.spawnEntity(item);
+                        }
                         handler.setStackInSlot(slot, ItemStack.EMPTY);
                     }
                     return true;
