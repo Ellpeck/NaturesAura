@@ -43,4 +43,5 @@ public final class ModItems {
     public static final Item CALLING_SPIRIT = new ItemGlowing("calling_spirit");
     public static final Item EFFECT_POWDER = new ItemEffectPowder();
     public static final Item BIRTH_SPIRIT = new ItemBirthSpirit();
+    public static final Item MOVER_MINECART = new ItemMoverMinecart();
 }
