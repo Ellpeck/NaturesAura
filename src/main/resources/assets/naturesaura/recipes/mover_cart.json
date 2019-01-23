@@ -1,0 +1,32 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "EBE",
+        "SIS",
+        " C "
+    ],
+    "key": {
+        "B": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:end"
+            }
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        },
+        "S": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "E": {
+            "item": "minecraft:ender_eye"
+        },
+        "C": {
+            "item": "minecraft:minecart"
+        }
+    },
+    "result": {
+        "item": "naturesaura:mover_cart"
+    }
+}

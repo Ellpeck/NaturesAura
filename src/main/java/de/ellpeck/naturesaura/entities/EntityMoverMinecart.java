@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -77,6 +78,13 @@ public class EntityMoverMinecart extends EntityMinecart {
             });
             this.lastPosition = pos;
         }
+    }
+
+    @Override
+    public void killMinecart(DamageSource source) {
+        this.setDead();
+        if (this.world.getGameRules().getBoolean("doEntityDrops"))
+            this.entityDropItem(new ItemStack(ModItems.MOVER_MINECART), 0);
     }
 
     @Override
