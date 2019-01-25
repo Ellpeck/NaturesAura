@@ -21,6 +21,11 @@
             "recipe": "naturesaura:nature_altar"
         },
         {
+            "type": "crafting",
+            "recipe": "naturesaura:gold_brick",
+            "text": "Creating the $(item)Golden Stone Bricks$() that are used in the $(item)Natural Altar$()'s multiblock"
+        },
+        {
             "type": "text",
             "text": "When the $(item)Natural Altar$() has collected a sufficient amount of $(aura), it will be able to infuse items of certain materials, converting them into different, more powerful materials. To do this, simply place any material onto the altar and wait for the infusion to be completed.$(br2)The following pages list some useful materials that a botanist might frequently need."
         },

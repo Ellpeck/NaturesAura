@@ -39,6 +39,7 @@ tile.naturesaura.end_flower.name=Rose of Oblivion
 tile.naturesaura.grated_chute.name=Adept Hopper
 tile.naturesaura.animal_spawner.name=Altar of Birthing
 tile.naturesaura.auto_crafter.name=Automatic Constructor
+tile.naturesaura.gold_brick.name=Golden Stone Bricks
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.eye_improved.name=Environmental Ocular

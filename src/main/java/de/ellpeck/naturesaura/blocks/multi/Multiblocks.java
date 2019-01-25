@@ -25,7 +25,7 @@ public final class Multiblocks {
             'C', Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, EnumType.CHISELED),
             'B', Blocks.STONEBRICK.getDefaultState(),
             'W', Matcher.oreDict(Blocks.PLANKS, "plankWood"),
-            'M', Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, EnumType.MOSSY),
+            'M', ModBlocks.GOLD_BRICK,
             '0', ModBlocks.NATURE_ALTAR,
             ' ', Matcher.wildcard());
     public static final IMultiblock TREE_RITUAL = NaturesAuraAPI.instance().createMultiblock(

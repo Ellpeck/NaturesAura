@@ -42,4 +42,5 @@ public final class ModBlocks {
     public static final Block GRATED_CHUTE = new BlockGratedChute();
     public static final Block ANIMAL_SPAWNER = new BlockAnimalSpawner();
     public static final Block AUTO_CRAFTER = new BlockAutoCrafter();
+    public static final Block GOLD_BRICK = new BlockImpl("gold_brick", Material.ROCK).setSoundType(SoundType.STONE).setHardness(2F);
 }
