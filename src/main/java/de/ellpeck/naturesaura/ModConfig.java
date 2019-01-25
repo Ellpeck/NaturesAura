@@ -29,12 +29,17 @@ public final class ModConfig {
 
         @Comment("The amount of blocks that can be between two Aura Field Creators for them to be connectable and work together")
         public int fieldCreatorRange = 10;
+
+        @Comment("The Aura to RF ratio used by the RF converter, read as aura*ratio = rf")
+        public float auraToRFRatio = 5;
     }
 
     public static class Features {
 
         @Comment("If using Dragon's Breath in a Brewing Stand should not cause a glass bottle to appear")
         public boolean removeDragonBreathContainerItem = true;
+        @Comment("If the RF converter block should be enabled")
+        public boolean rfConverter = true;
 
         @Comment("If the Aura Imbalance effect of grass and trees dying in the area if the Aura levels are too low should occur")
         public boolean grassDieEffect = true;

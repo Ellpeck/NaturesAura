@@ -18,7 +18,7 @@ import java.util.function.BiFunction;
 public class Multiblock implements IMultiblock {
 
     private final ResourceLocation name;
-    private final Map<BlockPos, de.ellpeck.naturesaura.api.multiblock.Matcher> matchers = new HashMap<>();
+    private final Map<BlockPos, Matcher> matchers = new HashMap<>();
     private final int width;
     private final int height;
     private final int depth;
@@ -129,9 +129,9 @@ public class Multiblock implements IMultiblock {
     }
 
     @Override
-    public boolean forEach(BlockPos center, char c, BiFunction<BlockPos, de.ellpeck.naturesaura.api.multiblock.Matcher, Boolean> function) {
+    public boolean forEach(BlockPos center, char c, BiFunction<BlockPos, Matcher, Boolean> function) {
         BlockPos start = this.getStart(center);
-        for (Map.Entry<BlockPos, de.ellpeck.naturesaura.api.multiblock.Matcher> entry : this.matchers.entrySet()) {
+        for (Map.Entry<BlockPos, Matcher> entry : this.matchers.entrySet()) {
             BlockPos offset = entry.getKey();
             if (c == 0 || this.getChar(offset) == c)
                 if (!function.apply(start.add(offset), entry.getValue()))
@@ -156,7 +156,7 @@ public class Multiblock implements IMultiblock {
     }
 
     @Override
-    public Map<BlockPos, de.ellpeck.naturesaura.api.multiblock.Matcher> getMatchers() {
+    public Map<BlockPos, Matcher> getMatchers() {
         return this.matchers;
     }
 

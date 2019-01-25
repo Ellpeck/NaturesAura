@@ -1,0 +1,42 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "RWR",
+        "ITI",
+        "ROR"
+    ],
+    "key": {
+        "T": {
+            "item": "naturesaura:conversion_catalyst"
+        },
+        "R": {
+            "item": "minecraft:redstone_block"
+        },
+        "I": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "W": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:nether"
+            }
+        },
+        "O": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:overworld"
+            }
+        }
+    },
+    "result": {
+        "item": "naturesaura:rf_converter"
+    },
+    "conditions": [
+        {
+            "type": "minecraft:item_exists",
+            "item": "naturesaura:rf_converter"
+        }
+    ]
+}

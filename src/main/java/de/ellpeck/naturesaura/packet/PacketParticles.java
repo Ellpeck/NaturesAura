@@ -321,6 +321,22 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextGaussian() * 0.02F,
                                         0x16b7b2, 1.5F, 40, 0F, false, true);
                             break;
+                        case 20: // RF converter
+                            for (int i = world.rand.nextInt(5) + 2; i >= 0; i--)
+                                Multiblocks.RF_CONVERTER.forEach(new BlockPos(message.posX, message.posY, message.posZ), 'R', (blockPos, matcher) -> {
+                                    if (world.rand.nextFloat() < 0.35F) {
+                                        NaturesAuraAPI.instance().spawnParticleStream(
+                                                blockPos.getX() + world.rand.nextFloat(),
+                                                blockPos.getY() + world.rand.nextFloat(),
+                                                blockPos.getZ() + world.rand.nextFloat(),
+                                                message.posX + world.rand.nextFloat(),
+                                                message.posY + world.rand.nextFloat(),
+                                                message.posZ + world.rand.nextFloat(),
+                                                0.05F, 0xff1a05, 1.5F);
+                                    }
+                                    return true;
+                                });
+                            break;
                     }
                 }
             });

@@ -8,6 +8,7 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
+import de.ellpeck.naturesaura.blocks.tiles.TileEntityRFConverter;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
@@ -28,6 +29,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -291,15 +293,22 @@ public class ClientEvents {
 
                                 IBlockState state = mc.world.getBlockState(pos);
                                 ItemStack blockStack = state.getBlock().getPickBlock(state, mc.objectMouseOver, mc.world, pos, mc.player);
-                                this.drawContainerInfo(container, mc, res, 35, blockStack.getDisplayName());
+                                this.drawContainerInfo(container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
+                                        mc, res, 35, blockStack.getDisplayName(), null);
 
                                 if (tile instanceof TileEntityNatureAltar) {
                                     ItemStack tileStack = ((TileEntityNatureAltar) tile).getItemHandler(null).getStackInSlot(0);
                                     if (!tileStack.isEmpty() && tileStack.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
-                                        IAuraContainer stackContainer = tileStack.getCapability(NaturesAuraAPI.capAuraContainer, null);
-                                        this.drawContainerInfo(stackContainer, mc, res, 55, tileStack.getDisplayName());
+                                        IAuraContainer stackCont = tileStack.getCapability(NaturesAuraAPI.capAuraContainer, null);
+                                        this.drawContainerInfo(stackCont.getStoredAura(), stackCont.getMaxAura(), stackCont.getAuraColor(),
+                                                mc, res, 55, tileStack.getDisplayName(), null);
                                     }
                                 }
+                            } else if (tile instanceof TileEntityRFConverter) {
+                                EnergyStorage storage = ((TileEntityRFConverter) tile).storage;
+                                this.drawContainerInfo(storage.getEnergyStored(), storage.getMaxEnergyStored(), 0xcc4916,
+                                        mc, res, 35, I18n.format("tile.naturesaura.rf_converter.name"),
+                                        storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
                             }
                         }
                     }
@@ -312,13 +321,12 @@ public class ClientEvents {
         mc.profiler.endSection();
     }
 
-    private void drawContainerInfo(IAuraContainer container, Minecraft mc, ScaledResolution res, int yOffset, String name) {
-        int color = container.getAuraColor();
+    private void drawContainerInfo(int stored, int max, int color, Minecraft mc, ScaledResolution res, int yOffset, String name, String textBelow) {
         GlStateManager.color((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F);
 
         int x = res.getScaledWidth() / 2 - 40;
         int y = res.getScaledHeight() / 2 + yOffset;
-        int width = MathHelper.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
+        int width = MathHelper.ceil(stored / (float) max * 80);
 
         mc.getTextureManager().bindTexture(OVERLAYS);
         if (width < 80)
@@ -327,5 +335,8 @@ public class ClientEvents {
             Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 6, width, 6, 256, 256);
 
         mc.fontRenderer.drawString(name, x + 40 - mc.fontRenderer.getStringWidth(name) / 2F, y - 9, color, true);
+
+        if (textBelow != null)
+            mc.fontRenderer.drawString(textBelow, x + 40 - mc.fontRenderer.getStringWidth(textBelow) / 2F, y + 7, color, true);
     }
 }

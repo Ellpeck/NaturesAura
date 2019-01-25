@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks.multi;
 
+import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
@@ -81,4 +82,17 @@ public final class Multiblocks {
             'L', ModBlocks.ANCIENT_LOG,
             '0', ModBlocks.AUTO_CRAFTER,
             ' ', Matcher.wildcard());
+    public static final IMultiblock RF_CONVERTER = ModConfig.enabledFeatures.rfConverter ? NaturesAuraAPI.instance().createMultiblock(
+            new ResourceLocation(NaturesAura.MOD_ID, "rf_converter"),
+            new String[][]{
+                    {"       ", "       ", "       ", "   R   ", "       ", "       ", "       "},
+                    {"       ", "   R   ", "       ", " R   R ", "       ", "   R   ", "       "},
+                    {"       ", "       ", "       ", "       ", "       ", "       ", "       "},
+                    {"   R   ", " R   R ", "       ", "R  0  R", "       ", " R   R ", "   R   "},
+                    {"       ", "       ", "       ", "       ", "       ", "       ", "       "},
+                    {"       ", "   R   ", "       ", " R   R ", "       ", "   R   ", "       "},
+                    {"       ", "       ", "       ", "   R   ", "       ", "       ", "       "}},
+            'R', Blocks.REDSTONE_BLOCK,
+            '0', ModBlocks.RF_CONVERTER,
+            ' ', Matcher.wildcard()) : null;
 }
