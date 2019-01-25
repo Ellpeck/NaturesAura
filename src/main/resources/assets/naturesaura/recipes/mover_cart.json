@@ -3,7 +3,7 @@
     "pattern": [
         "EBE",
         "SIS",
-        " C "
+        "XCX"
     ],
     "key": {
         "B": {
@@ -24,6 +24,9 @@
         },
         "C": {
             "item": "minecraft:minecart"
+        },
+        "X": {
+            "item": "naturesaura:infused_brick"
         }
     },
     "result": {
