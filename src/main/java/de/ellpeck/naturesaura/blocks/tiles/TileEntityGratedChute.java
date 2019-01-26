@@ -124,13 +124,15 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
     @Override
     public void writeNBT(NBTTagCompound compound, SaveType type) {
         super.writeNBT(compound, type);
-        compound.setInteger("cooldown", this.cooldown);
+        if (type != SaveType.BLOCK)
+            compound.setInteger("cooldown", this.cooldown);
     }
 
     @Override
     public void readNBT(NBTTagCompound compound, SaveType type) {
         super.readNBT(compound, type);
-        this.cooldown = compound.getInteger("cooldown");
+        if (type != SaveType.BLOCK)
+            this.cooldown = compound.getInteger("cooldown");
     }
 
     @Override
