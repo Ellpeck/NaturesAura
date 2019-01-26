@@ -7,6 +7,7 @@ import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -108,8 +109,10 @@ public class WorldGenAncientTree extends WorldGenAbstractTree {
                 for (int z = -radius; z <= radius; z++) {
                     BlockPos goal = pos.add(x, y, z);
                     if (pos.distanceSq(goal) <= radius * radius + rand.nextInt(3) - 1) {
-                        if (this.isReplaceable(world, goal) && !(world.getBlockState(goal).getBlock() instanceof BlockLog)) {
-                            this.setBlockAndNotifyAdequately(world, goal, state);
+                        if (this.isReplaceable(world, goal)) {
+                            Block block = world.getBlockState(goal).getBlock();
+                            if (!(block instanceof BlockLog) && block != Blocks.DIRT && block != Blocks.GRASS)
+                                this.setBlockAndNotifyAdequately(world, goal, state);
                         }
                     }
                 }
