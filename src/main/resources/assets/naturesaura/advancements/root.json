@@ -9,7 +9,7 @@
         "description": {
             "translate": "advancement.naturesaura.root.desc"
         },
-        "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+        "background": "naturesaura:textures/blocks/infused_stone.png",
         "show_toast": false,
         "announce_to_chat": false
     },
