@@ -42,7 +42,7 @@ public class AnimalEffect implements IDrainSpotEffect {
         AxisAlignedBB bb = new AxisAlignedBB(pos).grow(dist);
 
         List<EntityAnimal> animals = world.getEntitiesWithinAABB(EntityAnimal.class, bb);
-        if (animals.size() >= 40)
+        if (animals.size() >= 200)
             return;
 
         if (world.getTotalWorldTime() % 200 == 0) {
