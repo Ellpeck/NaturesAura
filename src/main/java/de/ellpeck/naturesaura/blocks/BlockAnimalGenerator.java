@@ -11,10 +11,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.INpc;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -28,6 +31,16 @@ public class BlockAnimalGenerator extends BlockContainerImpl {
     }
 
     @SubscribeEvent
+    public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
+        EntityLivingBase entity = event.getEntityLiving();
+        if (entity.world.isRemote || !(entity instanceof IAnimals) || entity instanceof IMob || entity instanceof INpc)
+            return;
+        NBTTagCompound data = entity.getEntityData();
+        int timeAlive = data.getInteger(NaturesAura.MOD_ID + ":time_alive");
+        data.setInteger(NaturesAura.MOD_ID + ":time_alive", timeAlive + 1);
+    }
+
+    @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
         if (entity.world.isRemote || !(entity instanceof IAnimals) || entity instanceof IMob || entity instanceof INpc)
@@ -37,14 +50,22 @@ public class BlockAnimalGenerator extends BlockContainerImpl {
             if (!(tile instanceof TileEntityAnimalGenerator))
                 return false;
             TileEntityAnimalGenerator gen = (TileEntityAnimalGenerator) tile;
-            entity.getEntityData().setBoolean(NaturesAura.MOD_ID + ":no_drops", true);
+
+            NBTTagCompound data = entity.getEntityData();
+            data.setBoolean(NaturesAura.MOD_ID + ":no_drops", true);
 
             if (gen.isBusy())
                 return false;
 
             boolean child = entity.isChild();
-            int time = child ? 60 : 120;
-            int amount = child ? 40 : 60;
+            float timeMod = child ? 0.5F : 1;
+            float amountMod = child ? 0.667F : 1;
+
+            int timeAlive = data.getInteger(NaturesAura.MOD_ID + ":time_alive");
+            int time = Math.min(MathHelper.floor((timeAlive - 15000) / 500F * timeMod), 200);
+            int amount = Math.min(MathHelper.floor((timeAlive - 8000) / 250F * amountMod), 100);
+            if (time <= 0 || amount <= 0)
+                return false;
             gen.setGenerationValues(time, amount);
 
             BlockPos genPos = gen.getPos();
