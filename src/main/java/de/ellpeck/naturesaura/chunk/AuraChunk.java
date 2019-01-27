@@ -61,9 +61,8 @@ public class AuraChunk implements IAuraChunk {
             return 0;
         MutableInt spot = this.getActualDrainSpot(pos, true);
         int curr = spot.intValue();
-        if (curr < 0 && curr - amount > 0) { // Underflow protection
+        if (curr < 0 && curr - amount > 0) // Underflow protection
             return this.drainAura(pos.up(), amount, aimForZero, simulate);
-        }
         if (aimForZero) {
             if (curr > 0 && curr - amount < 0)
                 amount = curr;

@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.packet;
 
+import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
@@ -336,6 +337,22 @@ public class PacketParticles implements IMessage {
                                     }
                                     return true;
                                 });
+                            break;
+                        case 21: // Nice looking effect
+                            int excess = message.data[0];
+                            double setting = ModConfig.client.excessParticleAmount;
+                            if (setting >= 1 || world.rand.nextFloat() <= setting)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        message.posX + world.rand.nextFloat(),
+                                        message.posY + world.rand.nextFloat(),
+                                        message.posZ + world.rand.nextFloat(),
+                                        world.rand.nextGaussian() * 0.01F,
+                                        world.rand.nextFloat() * 0.025F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        BiomeColorHelper.getFoliageColorAtPos(world, new BlockPos(message.posX, message.posY, message.posZ)),
+                                        Math.min(2F, 0.5F + world.rand.nextFloat() * (excess / 1000F)),
+                                        Math.min(300, 100 + world.rand.nextInt(excess / 30 + 1)),
+                                        0F, false, true);
                             break;
                     }
                 }

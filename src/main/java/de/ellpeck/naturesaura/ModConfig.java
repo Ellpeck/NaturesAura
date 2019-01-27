@@ -60,13 +60,13 @@ public final class ModConfig {
         @Comment("The percentage of particles that should be displayed, where 1 is 100% and 0 is 0%")
         @RangeDouble(min = 0, max = 1)
         public double particleAmount = 1;
-
         @Comment("If particle spawning should respect the particle setting in Minecraft's video settings screen")
         public boolean respectVanillaParticleSettings = true;
+        @Comment("The percentage of particles that should spawn when there is an excess amount of Aura in the environment, where 1 is 100% and 0 is 0%")
+        public double excessParticleAmount = 1;
 
         @Comment("If debug information about Aura around the player should be displayed in the F3 debug menu if the player is in creative mode")
         public boolean debugText = true;
-
         @Comment("If, when the F3 debug menu is open and the player is in creative mode, every Aura spot should be highlighted in the world for debug purposes")
         public boolean debugWorld = false;
     }
