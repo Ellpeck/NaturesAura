@@ -75,6 +75,7 @@ item.naturesaura.effect_powder.naturesaura:plant_boost.name=Powder of Steady Gro
 item.naturesaura.effect_powder.naturesaura:cache_recharge.name=Powder of no Storage
 item.naturesaura.effect_powder.naturesaura:animal.name=Powder of Chastity
 item.naturesaura.mover_cart.name=Aura Attraction Cart
+item.naturesaura.range_visualizer.name=Mystical Magnifier
 
 container.naturesaura.tree_ritual.name=Ritual of the Forest
 container.naturesaura.altar.name=Natural Altar Infusion

@@ -1,18 +1,22 @@
 package de.ellpeck.naturesaura.events;
 
 import baubles.api.BaublesApi;
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.api.render.IVisualizableBlock;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityRFConverter;
 import de.ellpeck.naturesaura.compat.Compat;
+import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import de.ellpeck.naturesaura.particles.ParticleMagic;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -22,6 +26,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
@@ -102,19 +107,18 @@ public class ClientEvents {
     public void onWorldRender(RenderWorldLastEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
         mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":onWorldRender");
+        GL11.glPushMatrix();
+        float partial = event.getPartialTicks();
+        GL11.glTranslated(
+                -mc.player.prevPosX - (mc.player.posX - mc.player.prevPosX) * partial,
+                -mc.player.prevPosY - (mc.player.posY - mc.player.prevPosY) * partial,
+                -mc.player.prevPosZ - (mc.player.posZ - mc.player.prevPosZ) * partial);
+
         if (mc.gameSettings.showDebugInfo && mc.player.capabilities.isCreativeMode && ModConfig.client.debugWorld) {
+            Map<BlockPos, Integer> spots = new HashMap<>();
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_DEPTH_TEST);
-            float partial = event.getPartialTicks();
-            GL11.glTranslated(
-                    -mc.player.prevPosX - (mc.player.posX - mc.player.prevPosX) * partial,
-                    -mc.player.prevPosY - (mc.player.posY - mc.player.prevPosY) * partial,
-                    -mc.player.prevPosZ - (mc.player.posZ - mc.player.prevPosZ) * partial);
-
-            Map<BlockPos, Integer> spots = new HashMap<>();
-
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-            GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBegin(GL11.GL_QUADS);
@@ -122,40 +126,11 @@ public class ClientEvents {
                 spots.put(pos, spot);
 
                 GlStateManager.color(spot > 0 ? 0F : 1F, spot > 0 ? 1F : 0F, 0F, 0.35F);
-                int x = pos.getX();
-                int y = pos.getY();
-                int z = pos.getZ();
-                GL11.glVertex3d(x, y + 1, z);
-                GL11.glVertex3d(x + 1, y + 1, z);
-                GL11.glVertex3d(x + 1, y, z);
-                GL11.glVertex3d(x, y, z);
-                GL11.glVertex3d(x + 1, y, z + 1);
-                GL11.glVertex3d(x + 1, y, z);
-                GL11.glVertex3d(x + 1, y + 1, z);
-                GL11.glVertex3d(x + 1, y + 1, z + 1);
-                GL11.glVertex3d(x + 1, y + 1, z + 1);
-                GL11.glVertex3d(x, y + 1, z + 1);
-                GL11.glVertex3d(x, y, z + 1);
-                GL11.glVertex3d(x + 1, y, z + 1);
-                GL11.glVertex3d(x, y + 1, z + 1);
-                GL11.glVertex3d(x, y + 1, z);
-                GL11.glVertex3d(x, y, z);
-                GL11.glVertex3d(x, y, z + 1);
-                GL11.glVertex3d(x, y + 1, z);
-                GL11.glVertex3d(x, y + 1, z + 1);
-                GL11.glVertex3d(x + 1, y + 1, z + 1);
-                GL11.glVertex3d(x + 1, y + 1, z);
-                GL11.glVertex3d(x + 1, y, z);
-                GL11.glVertex3d(x + 1, y, z + 1);
-                GL11.glVertex3d(x, y, z + 1);
-                GL11.glVertex3d(x, y, z);
+                Helper.renderWeirdBox(pos.getX(), pos.getY(), pos.getZ(), 1, 1, 1);
             });
             GL11.glEnd();
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            GL11.glPopMatrix();
             GL11.glPopAttrib();
 
-            GL11.glPushMatrix();
             float scale = 0.03F;
             GlStateManager.scale(scale, scale, scale);
             for (Map.Entry<BlockPos, Integer> spot : spots.entrySet()) {
@@ -166,11 +141,43 @@ public class ClientEvents {
                 mc.fontRenderer.drawString(spot.getValue().toString(), 0, 0, 0);
                 GlStateManager.popMatrix();
             }
-            GL11.glPopMatrix();
 
             GL11.glEnable(GL11.GL_DEPTH_TEST);
             GL11.glPopMatrix();
         }
+
+        if (mc.objectMouseOver != null) {
+            if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER)) {
+                GL11.glPushMatrix();
+                GL11.glDisable(GL11.GL_CULL_FACE);
+                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                GL11.glDisable(GL11.GL_TEXTURE_2D);
+                GL11.glEnable(GL11.GL_BLEND);
+                GL11.glBegin(GL11.GL_QUADS);
+                for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_POSITIONS) {
+                    if (!mc.world.isBlockLoaded(pos))
+                        continue;
+                    IBlockState state = mc.world.getBlockState(pos);
+                    Block block = state.getBlock();
+                    if (!(block instanceof IVisualizableBlock))
+                        continue;
+                    IVisualizableBlock visualize = (IVisualizableBlock) block;
+                    AxisAlignedBB box = visualize.getVisualizationBounds(mc.world, pos);
+                    if (box == null)
+                        continue;
+                    box = box.grow(0.05F);
+                    int color = visualize.getVisualizationColor(mc.world, pos);
+                    GlStateManager.color(((color >> 16) & 255) / 255F, ((color >> 8) & 255) / 255F, (color & 255) / 255F, 0.5F);
+                    Helper.renderWeirdBox(box.minX, box.minY, box.minZ, box.maxX - box.minX, box.maxY - box.minY, box.maxZ - box.minZ);
+                }
+                GL11.glEnd();
+                GL11.glPopAttrib();
+                GL11.glEnable(GL11.GL_CULL_FACE);
+                GL11.glPopMatrix();
+            }
+        }
+
+        GL11.glPopMatrix();
         mc.profiler.endSection();
     }
 

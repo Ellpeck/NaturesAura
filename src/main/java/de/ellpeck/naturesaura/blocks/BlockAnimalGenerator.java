@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.render.IVisualizableBlock;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAnimalGenerator;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
@@ -12,16 +13,20 @@ import net.minecraft.entity.INpc;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockAnimalGenerator extends BlockContainerImpl {
+public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizableBlock {
     public BlockAnimalGenerator() {
         super(Material.ROCK, "animal_generator", TileEntityAnimalGenerator.class, "animal_generator");
         this.setSoundType(SoundType.STONE);
@@ -90,5 +95,17 @@ public class BlockAnimalGenerator extends BlockContainerImpl {
         EntityLivingBase entity = event.getEntityLiving();
         if (entity.getEntityData().getBoolean(NaturesAura.MOD_ID + ":no_drops"))
             event.setCanceled(true);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
+        return new AxisAlignedBB(pos).grow(5);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getVisualizationColor(World world, BlockPos pos) {
+        return 0x11377a;
     }
 }

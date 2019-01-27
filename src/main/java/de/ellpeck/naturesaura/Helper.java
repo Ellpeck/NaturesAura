@@ -16,6 +16,7 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTBase;
@@ -253,5 +254,42 @@ public final class Helper {
             if (stack.getCount() > highestAmount)
                 highestAmount = stack.getCount();
         return highestAmount;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderWeirdBox(double x, double y, double z, double width, double height, double depth) {
+        GL11.glVertex3d(x, y + height, z);
+        GL11.glVertex3d(x + width, y + height, z);
+        GL11.glVertex3d(x + width, y, z);
+        GL11.glVertex3d(x, y, z);
+        GL11.glVertex3d(x + width, y, z + depth);
+        GL11.glVertex3d(x + width, y, z);
+        GL11.glVertex3d(x + width, y + height, z);
+        GL11.glVertex3d(x + width, y + height, z + depth);
+        GL11.glVertex3d(x + width, y + height, z + depth);
+        GL11.glVertex3d(x, y + height, z + depth);
+        GL11.glVertex3d(x, y, z + depth);
+        GL11.glVertex3d(x + width, y, z + depth);
+        GL11.glVertex3d(x, y + height, z + depth);
+        GL11.glVertex3d(x, y + height, z);
+        GL11.glVertex3d(x, y, z);
+        GL11.glVertex3d(x, y, z + depth);
+        GL11.glVertex3d(x, y + height, z);
+        GL11.glVertex3d(x, y + height, z + depth);
+        GL11.glVertex3d(x + width, y + height, z + depth);
+        GL11.glVertex3d(x + width, y + height, z);
+        GL11.glVertex3d(x + width, y, z);
+        GL11.glVertex3d(x + width, y, z + depth);
+        GL11.glVertex3d(x, y, z + depth);
+        GL11.glVertex3d(x, y, z);
+    }
+
+    public static boolean isHoldingItem(EntityPlayer player, Item item) {
+        for (EnumHand hand : EnumHand.values()) {
+            ItemStack stack = player.getHeldItem(hand);
+            if (!stack.isEmpty() && stack.getItem() == item)
+                return true;
+        }
+        return false;
     }
 }

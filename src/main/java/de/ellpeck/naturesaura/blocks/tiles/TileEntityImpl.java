@@ -56,6 +56,10 @@ public class TileEntityImpl extends TileEntity {
         }
     }
 
+    public void onRedstonePowerChange(){
+
+    }
+
     @Override
     public final SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound compound = new NBTTagCompound();

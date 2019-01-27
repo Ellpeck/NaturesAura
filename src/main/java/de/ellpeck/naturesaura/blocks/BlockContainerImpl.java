@@ -130,7 +130,11 @@ public class BlockContainerImpl extends BlockContainer implements IModItem, ICre
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TileEntityImpl) {
                 TileEntityImpl impl = (TileEntityImpl) tile;
-                impl.redstonePower = world.getRedstonePowerFromNeighbors(pos);
+                int newPower = world.getRedstonePowerFromNeighbors(pos);
+                if (impl.redstonePower != newPower) {
+                    impl.redstonePower = newPower;
+                    impl.onRedstonePowerChange();
+                }
             }
         }
     }

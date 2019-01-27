@@ -1,0 +1,25 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "IA ",
+        "AGA",
+        " AS"
+    ],
+    "key": {
+        "A": {
+            "item": "naturesaura:ancient_planks"
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        },
+        "G": {
+            "item": "minecraft:glass"
+        },
+        "S": {
+            "item": "naturesaura:ancient_stick"
+        }
+    },
+    "result": {
+        "item": "naturesaura:range_visualizer"
+    }
+}
