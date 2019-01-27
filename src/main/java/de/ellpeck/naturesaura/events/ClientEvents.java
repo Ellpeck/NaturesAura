@@ -82,7 +82,10 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onRenderLast(RenderWorldLastEvent event) {
+        Minecraft mc = Minecraft.getMinecraft();
+        mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":renderParticles");
         ParticleHandler.renderParticles(event.getPartialTicks());
+        mc.profiler.endSection();
     }
 
     @SubscribeEvent
@@ -94,12 +97,12 @@ public class ClientEvents {
     public void onClientTick(ClientTickEvent event) {
         if (event.phase == Phase.END) {
             Minecraft mc = Minecraft.getMinecraft();
-            if (!mc.isGamePaused()) {
+            mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":updateParticles");
+            if (!mc.isGamePaused())
                 ParticleHandler.updateParticles();
-            }
-            if (mc.world == null) {
+            if (mc.world == null)
                 ParticleHandler.clearParticles();
-            }
+            mc.profiler.endSection();
         }
     }
 
