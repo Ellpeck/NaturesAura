@@ -37,8 +37,8 @@ public class ParticleMagic extends Particle {
         TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
         this.setParticleTexture(map.getAtlasSprite(TEXTURE.toString()));
 
-        this.particleAlpha = 0.75F;
-        this.particleScale = this.desiredScale;
+        this.particleAlpha = 1F;
+        this.particleScale = 0F;
     }
 
     @Override
@@ -56,8 +56,11 @@ public class ParticleMagic extends Particle {
 
             if (this.fade) {
                 float lifeRatio = (float) this.particleAge / (float) this.particleMaxAge;
-                this.particleAlpha = 0.75F - (lifeRatio * 0.75F);
-                this.particleScale = this.desiredScale - (this.desiredScale * lifeRatio);
+                this.particleAlpha = 1F - lifeRatio * 0.75F;
+                if (lifeRatio <= 0.25F)
+                    this.particleScale = this.desiredScale * (lifeRatio / 0.25F);
+                else
+                    this.particleScale = this.desiredScale * (1F - (lifeRatio - 0.25F) / 0.75F);
             }
         }
     }
