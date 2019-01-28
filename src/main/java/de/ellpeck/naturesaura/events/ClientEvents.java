@@ -32,6 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -99,18 +100,45 @@ public class ClientEvents {
     public void onClientTick(ClientTickEvent event) {
         if (event.phase == Phase.END) {
             Minecraft mc = Minecraft.getMinecraft();
-
-            mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":updateParticles");
-            if (!mc.isGamePaused())
-                ParticleHandler.updateParticles();
-            mc.profiler.endSection();
-
             if (mc.world == null) {
                 ParticleHandler.clearParticles();
                 if (!ItemRangeVisualizer.VISUALIZED_BLOCKS.isEmpty())
                     ItemRangeVisualizer.VISUALIZED_BLOCKS.clear();
                 if (!ItemRangeVisualizer.VISUALIZED_ENTITIES.isEmpty())
                     ItemRangeVisualizer.VISUALIZED_ENTITIES.clear();
+            } else {
+                if (mc.world.getTotalWorldTime() % 20 == 0) {
+                    mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":spawnExcessParticles");
+                    int amount = MathHelper.floor(190 * ModConfig.client.excessParticleAmount);
+                    for (int i = 0; i < amount; i++) {
+                        int x = MathHelper.floor(mc.player.posX) + mc.world.rand.nextInt(64) - 32;
+                        int z = MathHelper.floor(mc.player.posZ) + mc.world.rand.nextInt(64) - 32;
+                        BlockPos pos = new BlockPos(x, mc.world.getHeight(x, z), z);
+
+                        int excess = IAuraChunk.triangulateAuraInArea(mc.world, pos, 45) - IAuraChunk.DEFAULT_AURA;
+                        if (excess > 0) {
+                            int chance = Math.max(10, 50 - excess / 250);
+                            if (mc.world.rand.nextInt(chance) <= 0)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        pos.getX() + mc.world.rand.nextFloat(),
+                                        pos.getY() - 0.5F,
+                                        pos.getZ() + mc.world.rand.nextFloat(),
+                                        mc.world.rand.nextGaussian() * 0.01F,
+                                        mc.world.rand.nextFloat() * 0.025F,
+                                        mc.world.rand.nextGaussian() * 0.01F,
+                                        BiomeColorHelper.getFoliageColorAtPos(mc.world, pos),
+                                        Math.min(2F, 1F + mc.world.rand.nextFloat() * (excess / 300F)),
+                                        Math.min(300, 100 + mc.world.rand.nextInt(excess / 30 + 1)),
+                                        0F, false, true);
+                        }
+                    }
+                    mc.profiler.endSection();
+                }
+
+                mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":updateParticles");
+                if (!mc.isGamePaused())
+                    ParticleHandler.updateParticles();
+                mc.profiler.endSection();
             }
         }
     }
