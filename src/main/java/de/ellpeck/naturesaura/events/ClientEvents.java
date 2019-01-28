@@ -17,6 +17,7 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import de.ellpeck.naturesaura.particles.ParticleMagic;
 import net.minecraft.block.Block;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -37,6 +38,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -113,23 +115,26 @@ public class ClientEvents {
                     for (int i = 0; i < amount; i++) {
                         int x = MathHelper.floor(mc.player.posX) + mc.world.rand.nextInt(64) - 32;
                         int z = MathHelper.floor(mc.player.posZ) + mc.world.rand.nextInt(64) - 32;
-                        BlockPos pos = new BlockPos(x, mc.world.getHeight(x, z), z);
-
-                        int excess = IAuraChunk.triangulateAuraInArea(mc.world, pos, 45) - IAuraChunk.DEFAULT_AURA;
-                        if (excess > 0) {
-                            int chance = Math.max(10, 50 - excess / 250);
-                            if (mc.world.rand.nextInt(chance) <= 0)
-                                NaturesAuraAPI.instance().spawnMagicParticle(
-                                        pos.getX() + mc.world.rand.nextFloat(),
-                                        pos.getY() - 0.5F,
-                                        pos.getZ() + mc.world.rand.nextFloat(),
-                                        mc.world.rand.nextGaussian() * 0.01F,
-                                        mc.world.rand.nextFloat() * 0.025F,
-                                        mc.world.rand.nextGaussian() * 0.01F,
-                                        BiomeColorHelper.getFoliageColorAtPos(mc.world, pos),
-                                        Math.min(2F, 1F + mc.world.rand.nextFloat() * (excess / 300F)),
-                                        Math.min(300, 100 + mc.world.rand.nextInt(excess / 30 + 1)),
-                                        0F, false, true);
+                        BlockPos pos = new BlockPos(x, mc.world.getHeight(x, z) - 1, z);
+                        IBlockState state = mc.world.getBlockState(pos);
+                        Block block = state.getBlock();
+                        if (block instanceof IGrowable || block instanceof IPlantable || block.isLeaves(state, mc.world, pos)) {
+                            int excess = IAuraChunk.triangulateAuraInArea(mc.world, pos, 45) - IAuraChunk.DEFAULT_AURA;
+                            if (excess > 0) {
+                                int chance = Math.max(10, 50 - excess / 250);
+                                if (mc.world.rand.nextInt(chance) <= 0)
+                                    NaturesAuraAPI.instance().spawnMagicParticle(
+                                            pos.getX() + mc.world.rand.nextFloat(),
+                                            pos.getY() + 0.5F,
+                                            pos.getZ() + mc.world.rand.nextFloat(),
+                                            mc.world.rand.nextGaussian() * 0.01F,
+                                            mc.world.rand.nextFloat() * 0.025F,
+                                            mc.world.rand.nextGaussian() * 0.01F,
+                                            BiomeColorHelper.getFoliageColorAtPos(mc.world, pos),
+                                            Math.min(2F, 1F + mc.world.rand.nextFloat() * (excess / 300F)),
+                                            Math.min(300, 100 + mc.world.rand.nextInt(excess / 30 + 1)),
+                                            0F, false, true);
+                            }
                         }
                     }
                     mc.profiler.endSection();
