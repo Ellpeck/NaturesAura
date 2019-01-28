@@ -11,7 +11,7 @@
         {
             "type": "naturesaura:tree_ritual",
             "recipe": "naturesaura:cache_powder",
-            "text": "This effect can be inhibited in a radius of about 30 blocks around the saturated area using $(l:effects/effect_powder)Powder of no Storage$()."
+            "text": "This effect can be inhibited using $(l:effects/effect_powder)Powder of no Storage$()."
         }
     ]
 }

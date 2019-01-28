@@ -37,7 +37,7 @@ public class StubHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
-    public boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name, int radius) {
+    public boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name) {
         return false;
     }
 

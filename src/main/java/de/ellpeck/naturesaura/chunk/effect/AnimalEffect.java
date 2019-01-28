@@ -50,7 +50,7 @@ public class AnimalEffect implements IDrainSpotEffect {
             for (EntityItem item : items) {
                 if (item.isDead)
                     continue;
-                if (NaturesAuraAPI.instance().isEffectPowderActive(world, item.getPosition(), NAME, 35))
+                if (NaturesAuraAPI.instance().isEffectPowderActive(world, item.getPosition(), NAME))
                     continue;
 
                 ItemStack stack = item.getItem();
@@ -84,7 +84,7 @@ public class AnimalEffect implements IDrainSpotEffect {
             EntityAnimal first = animals.get(world.rand.nextInt(animals.size()));
             if (first.isChild() || first.isInLove())
                 return;
-            if (NaturesAuraAPI.instance().isEffectPowderActive(world, first.getPosition(), NAME, 35))
+            if (NaturesAuraAPI.instance().isEffectPowderActive(world, first.getPosition(), NAME))
                 return;
 
             Optional<EntityAnimal> secondOptional = animals.stream()

@@ -27,7 +27,7 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
         int aura = IAuraChunk.getAuraInArea(world, pos, 20);
         if (aura < 15000)
             return;
-        if (NaturesAuraAPI.instance().isEffectPowderActive(world, pos, NAME, 30))
+        if (NaturesAuraAPI.instance().isEffectPowderActive(world, pos, NAME))
             return;
         int dist = MathHelper.clamp(aura / 3500, 3, 15);
         int amount = aura / 2500 - 2;

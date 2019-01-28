@@ -40,7 +40,7 @@ public final class NaturesAuraAPI {
 
     public static final String MOD_ID = "naturesaura";
     public static final String API_ID = MOD_ID + "api";
-    public static final String VERSION = "6";
+    public static final String VERSION = "7";
 
     /**
      * The list of all {@link AltarRecipe} instances which are the recipes used
@@ -96,7 +96,7 @@ public final class NaturesAuraAPI {
      * A map of all effect powder type. The integer the effect is registered to
      * is the color that the powder and its effect should have. To check if a
      * powder is active in any given area, use {@link IInternalHooks#isEffectPowderActive(World,
-     * BlockPos, ResourceLocation, int)}
+     * BlockPos, ResourceLocation)}
      */
     public static final Map<ResourceLocation, Integer> EFFECT_POWDERS = new HashMap<>();
     /**
@@ -250,16 +250,15 @@ public final class NaturesAuraAPI {
 
         /**
          * Returns true if there is an effect powder entity active anywhere
-         * around the given position in the given radius. To register a powder
-         * with the supplied name, use {@link #EFFECT_POWDERS}
+         * around the given position based on the radius it has. To register a
+         * powder with the supplied name, use {@link #EFFECT_POWDERS}
          *
-         * @param world  The world
-         * @param pos    The center position
-         * @param name   The registry name of the powder
-         * @param radius The radius around the center to check for
+         * @param world The world
+         * @param pos   The center position
+         * @param name  The registry name of the powder
          * @return If the effect is currently inhibited by any inhibitors
          */
-        boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name, int radius);
+        boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name);
 
         /**
          * @see IAuraChunk#getSpotsInArea(World, BlockPos, int, BiConsumer)

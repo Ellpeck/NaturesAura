@@ -29,9 +29,10 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
             EntityEffectInhibitor entity = new EntityEffectInhibitor(worldIn);
             entity.setInhibitedEffect(effect);
             entity.setColor(NaturesAuraAPI.EFFECT_POWDERS.get(effect));
+            entity.amount = stack.getCount();
             entity.setPosition(pos.getX() + hitX, pos.getY() + hitY + 1, pos.getZ() + hitZ);
             worldIn.spawnEntity(entity);
-            stack.shrink(1);
+            stack.setCount(0);
         }
         return EnumActionResult.SUCCESS;
     }

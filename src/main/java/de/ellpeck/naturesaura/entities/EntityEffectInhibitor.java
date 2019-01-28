@@ -18,6 +18,7 @@ public class EntityEffectInhibitor extends Entity {
 
     private static final DataParameter<String> INHIBITED_EFFECT = EntityDataManager.createKey(EntityEffectInhibitor.class, DataSerializers.STRING);
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityEffectInhibitor.class, DataSerializers.VARINT);
+    public int amount;
 
     public EntityEffectInhibitor(World worldIn) {
         super(worldIn);
@@ -34,12 +35,14 @@ public class EntityEffectInhibitor extends Entity {
     protected void readEntityFromNBT(NBTTagCompound compound) {
         this.setInhibitedEffect(new ResourceLocation(compound.getString("effect")));
         this.setColor(compound.getInteger("color"));
+        this.amount = compound.hasKey("amount") ? compound.getInteger("amount") : 24;
     }
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound compound) {
         compound.setString("effect", this.getInhibitedEffect().toString());
         compound.setInteger("color", this.getColor());
+        compound.setInteger("amount", this.amount);
     }
 
     @Override
@@ -67,7 +70,7 @@ public class EntityEffectInhibitor extends Entity {
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (source instanceof EntityDamageSource && !this.world.isRemote) {
             this.setDead();
-            this.entityDropItem(ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER), this.getInhibitedEffect()), 0F);
+            this.entityDropItem(ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, this.amount), this.getInhibitedEffect()), 0F);
             return true;
         } else
             return super.attackEntityFrom(source, amount);

@@ -15,7 +15,7 @@
         {
             "type": "naturesaura:tree_ritual",
             "recipe": "naturesaura:animal_powder",
-            "text": "This effect can be inhibited in a radius of about 15 blocks using $(l:effects/effect_powder)Powder of Chastity$()."
+            "text": "This effect can be inhibited using $(l:effects/effect_powder)Powder of Chastity$()."
         }
     ]
 }

@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.items.IItemHandler;
@@ -95,11 +96,18 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
-    public boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name, int radius) {
+    public boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name) {
         List<EntityEffectInhibitor> inhibitors = world.getEntitiesWithinAABB(
                 EntityEffectInhibitor.class,
-                new AxisAlignedBB(pos).grow(radius),
-                entity -> entity.getDistanceSq(pos) <= radius * radius && name.equals(entity.getInhibitedEffect()));
+                new AxisAlignedBB(pos).grow(64),
+                entity -> {
+                    if (!name.equals(entity.getInhibitedEffect()))
+                        return false;
+                    AxisAlignedBB bounds = new AxisAlignedBB(
+                            entity.posX, entity.posY, entity.posZ,
+                            entity.posX, entity.posY, entity.posZ).grow(entity.amount);
+                    return bounds.contains(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
+                });
         return !inhibitors.isEmpty();
     }
 
