@@ -137,3 +137,6 @@ advancement.naturesaura.end_flower.desc=Kill the Ender Dragon to make a Rose of 
 command.naturesaura.aura.usage=/naaura store|drain <amount> [range] OR /naaura reset <range>
 
 potion.naturesaura.breathless.name=Breathless
+
+entity.naturesaura.effect_inhibitor.name=Effect Powder
+entity.naturesaura.mover_cart.name=Aura Attraction Cart
