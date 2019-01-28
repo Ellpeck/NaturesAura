@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public interface IVisualizableBlock {
+public interface IVisualizable {
 
     @SideOnly(Side.CLIENT)
     AxisAlignedBB getVisualizationBounds(World world, BlockPos pos);

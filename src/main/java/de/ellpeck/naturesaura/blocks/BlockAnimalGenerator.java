@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.api.render.IVisualizableBlock;
+import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAnimalGenerator;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizableBlock {
+public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizable {
     public BlockAnimalGenerator() {
         super(Material.ROCK, "animal_generator", TileEntityAnimalGenerator.class, "animal_generator");
         this.setSoundType(SoundType.STONE);

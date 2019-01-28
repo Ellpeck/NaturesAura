@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.entities;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.entity.Entity;
@@ -12,13 +13,17 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityEffectInhibitor extends Entity {
+public class EntityEffectInhibitor extends Entity implements IVisualizable {
 
     private static final DataParameter<String> INHIBITED_EFFECT = EntityDataManager.createKey(EntityEffectInhibitor.class, DataSerializers.STRING);
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityEffectInhibitor.class, DataSerializers.VARINT);
-    public int amount;
+    private static final DataParameter<Integer> AMOUNT = EntityDataManager.createKey(EntityEffectInhibitor.class, DataSerializers.VARINT);
 
     public EntityEffectInhibitor(World worldIn) {
         super(worldIn);
@@ -29,20 +34,21 @@ public class EntityEffectInhibitor extends Entity {
         this.setSize(0.25F, 0.25F);
         this.dataManager.register(INHIBITED_EFFECT, null);
         this.dataManager.register(COLOR, 0);
+        this.dataManager.register(AMOUNT, 0);
     }
 
     @Override
     protected void readEntityFromNBT(NBTTagCompound compound) {
         this.setInhibitedEffect(new ResourceLocation(compound.getString("effect")));
         this.setColor(compound.getInteger("color"));
-        this.amount = compound.hasKey("amount") ? compound.getInteger("amount") : 24;
+        this.setAmount(compound.hasKey("amount") ? compound.getInteger("amount") : 24);
     }
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound compound) {
         compound.setString("effect", this.getInhibitedEffect().toString());
         compound.setInteger("color", this.getColor());
-        compound.setInteger("amount", this.amount);
+        compound.setInteger("amount", this.getAmount());
     }
 
     @Override
@@ -70,7 +76,7 @@ public class EntityEffectInhibitor extends Entity {
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (source instanceof EntityDamageSource && !this.world.isRemote) {
             this.setDead();
-            this.entityDropItem(ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, this.amount), this.getInhibitedEffect()), 0F);
+            this.entityDropItem(ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, this.getAmount()), this.getInhibitedEffect()), 0F);
             return true;
         } else
             return super.attackEntityFrom(source, amount);
@@ -90,5 +96,27 @@ public class EntityEffectInhibitor extends Entity {
 
     public int getColor() {
         return this.dataManager.get(COLOR);
+    }
+
+    public void setAmount(int amount) {
+        this.dataManager.set(AMOUNT, amount);
+    }
+
+    public int getAmount() {
+        return this.dataManager.get(AMOUNT);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
+        return new AxisAlignedBB(
+                this.posX, this.posY, this.posZ,
+                this.posX, this.posY, this.posZ).grow(this.getAmount());
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getVisualizationColor(World world, BlockPos pos) {
+        return this.getColor();
     }
 }

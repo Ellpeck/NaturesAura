@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.render.IVisualizableBlock;
+import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityOakGenerator;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.SoundType;
@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public class BlockOakGenerator extends BlockContainerImpl implements IVisualizableBlock {
+public class BlockOakGenerator extends BlockContainerImpl implements IVisualizable {
 
     public BlockOakGenerator() {
         super(Material.WOOD, "oak_generator", TileEntityOakGenerator.class, "oak_generator");

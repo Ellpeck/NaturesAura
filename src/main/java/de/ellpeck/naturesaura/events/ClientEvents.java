@@ -8,7 +8,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.api.render.IVisualizableBlock;
+import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityRFConverter;
 import de.ellpeck.naturesaura.compat.Compat;
@@ -23,6 +23,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -30,6 +31,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -97,12 +99,19 @@ public class ClientEvents {
     public void onClientTick(ClientTickEvent event) {
         if (event.phase == Phase.END) {
             Minecraft mc = Minecraft.getMinecraft();
+
             mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":updateParticles");
             if (!mc.isGamePaused())
                 ParticleHandler.updateParticles();
-            if (mc.world == null)
-                ParticleHandler.clearParticles();
             mc.profiler.endSection();
+
+            if (mc.world == null) {
+                ParticleHandler.clearParticles();
+                if (!ItemRangeVisualizer.VISUALIZED_BLOCKS.isEmpty())
+                    ItemRangeVisualizer.VISUALIZED_BLOCKS.clear();
+                if (!ItemRangeVisualizer.VISUALIZED_ENTITIES.isEmpty())
+                    ItemRangeVisualizer.VISUALIZED_ENTITIES.clear();
+            }
         }
     }
 
@@ -157,21 +166,19 @@ public class ClientEvents {
                 GL11.glDisable(GL11.GL_TEXTURE_2D);
                 GL11.glEnable(GL11.GL_BLEND);
                 GL11.glBegin(GL11.GL_QUADS);
-                for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_POSITIONS) {
+                for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_BLOCKS) {
                     if (!mc.world.isBlockLoaded(pos))
                         continue;
                     IBlockState state = mc.world.getBlockState(pos);
                     Block block = state.getBlock();
-                    if (!(block instanceof IVisualizableBlock))
+                    if (!(block instanceof IVisualizable))
                         continue;
-                    IVisualizableBlock visualize = (IVisualizableBlock) block;
-                    AxisAlignedBB box = visualize.getVisualizationBounds(mc.world, pos);
-                    if (box == null)
+                    this.renderVisualize((IVisualizable) block, mc.world, pos);
+                }
+                for (Entity entity : ItemRangeVisualizer.VISUALIZED_ENTITIES) {
+                    if (entity.isDead || !(entity instanceof IVisualizable))
                         continue;
-                    box = box.grow(0.05F);
-                    int color = visualize.getVisualizationColor(mc.world, pos);
-                    GlStateManager.color(((color >> 16) & 255) / 255F, ((color >> 8) & 255) / 255F, (color & 255) / 255F, 0.5F);
-                    Helper.renderWeirdBox(box.minX, box.minY, box.minZ, box.maxX - box.minX, box.maxY - box.minY, box.maxZ - box.minZ);
+                    this.renderVisualize((IVisualizable) entity, mc.world, entity.getPosition());
                 }
                 GL11.glEnd();
                 GL11.glPopAttrib();
@@ -182,6 +189,16 @@ public class ClientEvents {
 
         GL11.glPopMatrix();
         mc.profiler.endSection();
+    }
+
+    private void renderVisualize(IVisualizable visualize, World world, BlockPos pos) {
+        AxisAlignedBB box = visualize.getVisualizationBounds(world, pos);
+        if (box == null)
+            return;
+        box = box.grow(0.05F);
+        int color = visualize.getVisualizationColor(world, pos);
+        GlStateManager.color(((color >> 16) & 255) / 255F, ((color >> 8) & 255) / 255F, (color & 255) / 255F, 0.5F);
+        Helper.renderWeirdBox(box.minX, box.minY, box.minZ, box.maxX - box.minX, box.maxY - box.minY, box.maxZ - box.minZ);
     }
 
     @SubscribeEvent

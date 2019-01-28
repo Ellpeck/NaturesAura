@@ -105,7 +105,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
                         return false;
                     AxisAlignedBB bounds = new AxisAlignedBB(
                             entity.posX, entity.posY, entity.posZ,
-                            entity.posX, entity.posY, entity.posZ).grow(entity.amount);
+                            entity.posX, entity.posY, entity.posZ).grow(entity.getAmount());
                     return bounds.contains(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
                 });
         return !inhibitors.isEmpty();
