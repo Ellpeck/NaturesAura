@@ -20,7 +20,7 @@ public class TileEntityOakGenerator extends TileEntityImpl implements ITickable 
             while (!this.scheduledBigTrees.isEmpty()) {
                 BlockPos pos = this.scheduledBigTrees.remove();
                 if (this.world.getBlockState(pos).getBlock() instanceof BlockLog) {
-                    int toAdd = 500;
+                    int toAdd = 1000;
                     while (toAdd > 0) {
                         BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 25, this.pos);
                         toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);

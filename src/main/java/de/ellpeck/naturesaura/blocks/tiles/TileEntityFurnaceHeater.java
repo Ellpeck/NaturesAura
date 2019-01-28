@@ -41,7 +41,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
 
                     BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 20, this.pos);
                     IAuraChunk chunk = IAuraChunk.getAuraChunk(this.world, spot);
-                    chunk.drainAura(spot, MathHelper.ceil((200 - time) / 4F));
+                    chunk.drainAura(spot, MathHelper.ceil((200 - time) / 6F));
                     did = true;
 
                     if (this.world.getTotalWorldTime() % 15 == 0) {

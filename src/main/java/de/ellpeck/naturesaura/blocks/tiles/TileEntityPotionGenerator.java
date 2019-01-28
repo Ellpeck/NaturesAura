@@ -40,7 +40,7 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
                                 continue;
                             }
 
-                            int toAdd = ((effect.getAmplifier() * 6 + 1) * (effect.getDuration() / 30));
+                            int toAdd = ((effect.getAmplifier() * 7 + 1) * (effect.getDuration() / 25));
                             while (toAdd > 0) {
                                 BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);
                                 toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);

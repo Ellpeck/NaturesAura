@@ -50,7 +50,7 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
             IBlockState state = this.world.getBlockState(pos);
             MutableInt curr = this.consumedRecently.computeIfAbsent(state, s -> new MutableInt());
 
-            int addAmount = 200;
+            int addAmount = 250;
             int toAdd = Math.max(0, addAmount - curr.getValue());
             if (toAdd > 0) {
                 if (NaturesAuraAPI.TYPE_OVERWORLD.isPresentInWorld(this.world)) {

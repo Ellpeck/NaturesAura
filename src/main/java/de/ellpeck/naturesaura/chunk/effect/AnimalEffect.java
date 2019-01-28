@@ -74,7 +74,7 @@ public class AnimalEffect implements IDrainSpotEffect {
                 world.spawnEntity(chicken);
 
                 BlockPos closestSpot = IAuraChunk.getHighestSpot(world, item.getPosition(), 35, pos);
-                IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 150);
+                IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 20);
             }
         }
 
@@ -100,7 +100,7 @@ public class AnimalEffect implements IDrainSpotEffect {
             this.setInLove(second);
 
             BlockPos closestSpot = IAuraChunk.getHighestSpot(world, first.getPosition(), 35, pos);
-            IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 200);
+            IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 35);
         }
     }
 
