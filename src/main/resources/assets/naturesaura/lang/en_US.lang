@@ -15,6 +15,7 @@ tile.naturesaura.furnace_heater.name=Extraneous Firestarter
 tile.naturesaura.potion_generator.name=Lingering Absorber
 tile.naturesaura.aura_detector.name=Aura Detector
 tile.naturesaura.conversion_catalyst.name=Transmutation Catalyst
+tile.naturesaura.crushing_catalyst.name=Crumbling Catalyst
 tile.naturesaura.infused_stairs.name=Infused Rock Stairs
 tile.naturesaura.infused_slab.name=Infused Rock Slab
 tile.naturesaura.infused_slab_double.name=Infused Rock Double Slab

@@ -76,12 +76,18 @@ public final class ModRecipes {
                 new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER))).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "conversion_catalyst"),
                 Ingredient.fromStacks(new ItemStack(Blocks.SAPLING, 1, 3)), new ItemStack(ModBlocks.CONVERSION_CATALYST), 600,
-                Ingredient.fromStacks(new ItemStack(Blocks.STONEBRICK, 1, 1)),
+                Helper.blockIng(ModBlocks.GOLD_BRICK),
                 Helper.blockIng(ModBlocks.INFUSED_STONE),
                 Ingredient.fromItem(Items.BREWING_STAND),
                 Ingredient.fromItem(ModItems.SKY_INGOT),
                 Ingredient.fromItem(ModItems.GOLD_LEAF),
                 Helper.blockIng(Blocks.GLOWSTONE)).register();
+        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "crushing_catalyst"),
+                Helper.blockIng(Blocks.SAPLING), new ItemStack(ModBlocks.CRUSHING_CATALYST), 600,
+                Helper.blockIng(ModBlocks.GOLD_BRICK),
+                Helper.blockIng(ModBlocks.INFUSED_STONE),
+                Helper.blockIng(Blocks.PISTON),
+                Ingredient.fromItem(Items.FLINT)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "plant_powder"),
                 Ingredient.fromStacks(new ItemStack(Blocks.SAPLING)),
                 ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 24), PlantBoostEffect.NAME), 400,
@@ -131,6 +137,23 @@ public final class ModRecipes {
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "prismarine"),
                 Ingredient.fromItem(Items.QUARTZ), new ItemStack(Items.PRISMARINE_SHARD),
                 conversion, 850, 200).register();
+
+        Ingredient crushing = Helper.blockIng(ModBlocks.CRUSHING_CATALYST);
+        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "bone"),
+                Ingredient.fromItem(Items.BONE), new ItemStack(Items.DYE, 6, 15),
+                crushing, 50, 40).register();
+        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sugar"),
+                Ingredient.fromItem(Items.REEDS), new ItemStack(Items.SUGAR, 3),
+                crushing, 50, 40).register();
+        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "blaze"),
+                Ingredient.fromItem(Items.BLAZE_ROD), new ItemStack(Items.BLAZE_POWDER, 4),
+                crushing, 80, 60).register();
+        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "glowstone"),
+                Helper.blockIng(Blocks.GLOWSTONE), new ItemStack(Items.GLOWSTONE_DUST, 4),
+                crushing, 50, 40).register();
+        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sand"),
+                Helper.blockIng(Blocks.COBBLESTONE), new ItemStack(Blocks.SAND),
+                crushing, 50, 40).register();
 
         new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sky_ingot"),
                 new AmountIngredient(new ItemStack(ModItems.INFUSED_IRON, 3)),
