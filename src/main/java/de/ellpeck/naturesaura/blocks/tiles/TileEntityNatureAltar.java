@@ -99,7 +99,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                 ItemStack stack = this.items.getStackInSlot(0);
                 if (!stack.isEmpty() && stack.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
                     IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer, null);
-                    int theoreticalDrain = this.container.drainAura(10, true);
+                    int theoreticalDrain = this.container.drainAura(1000, true);
                     if (theoreticalDrain > 0) {
                         int stored = container.storeAura(theoreticalDrain, false);
                         if (stored > 0) {

@@ -49,6 +49,7 @@ import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.opengl.GL11;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,16 +70,14 @@ public class ClientEvents {
             left.add(prefix + "Particles: " + ParticleHandler.getParticleAmount());
 
             if (mc.player.capabilities.isCreativeMode) {
-                left.add(prefix + "Aura (range 35)");
                 MutableInt amount = new MutableInt(IAuraChunk.DEFAULT_AURA);
                 MutableInt spots = new MutableInt();
                 IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 35, (blockPos, drainSpot) -> {
                     spots.increment();
                     amount.add(drainSpot);
-                    if (mc.player.isSneaking())
-                        left.add(prefix + drainSpot + " @ " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
                 });
-                left.add(prefix + "Total: " + amount.intValue() + " in " + spots.intValue() + " spots");
+                NumberFormat format = NumberFormat.getInstance();
+                left.add(prefix + "Aura: " + format.format(amount.intValue()) + " in " + spots.intValue() + " spots (range 35)");
                 left.add(prefix + "Type: " + IAuraType.forWorld(mc.world).getName());
             }
         }
@@ -177,14 +176,15 @@ public class ClientEvents {
             GL11.glPopAttrib();
 
             float scale = 0.03F;
+            NumberFormat format = NumberFormat.getInstance();
             GlStateManager.scale(scale, scale, scale);
             for (Map.Entry<BlockPos, Integer> spot : spots.entrySet()) {
                 BlockPos pos = spot.getKey();
                 GlStateManager.pushMatrix();
                 GlStateManager.translate((pos.getX() + 0.1) / scale, (pos.getY() + 1) / scale, (pos.getZ() + 0.1) / scale);
                 GlStateManager.rotate(90F, 1F, 0F, 0F);
-                GlStateManager.scale(0.75F, 0.75F, 0.75F);
-                mc.fontRenderer.drawString(spot.getValue().toString(), 0, 0, 0);
+                GlStateManager.scale(0.65F, 0.65F, 0.65F);
+                mc.fontRenderer.drawString(format.format(spot.getValue()), 0, 0, 0);
                 GlStateManager.popMatrix();
             }
 
