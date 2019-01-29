@@ -53,7 +53,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     @SideOnly(Side.CLIENT)
     public int bobTimer;
 
-    private final BasicAuraContainer container = new BasicAuraContainer(NaturesAuraAPI.TYPE_OVERWORLD, 5000);
+    private final BasicAuraContainer container = new BasicAuraContainer(NaturesAuraAPI.TYPE_OVERWORLD, 500000);
     public boolean structureFine;
 
     private AltarRecipe currentRecipe;
@@ -75,7 +75,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
             }
 
             if (this.structureFine) {
-                int space = this.container.storeAura(3, true);
+                int space = this.container.storeAura(300, true);
                 if (space > 0 && this.container.isAcceptableType(IAuraType.forWorld(this.world))) {
                     int toStore = Math.min(IAuraChunk.getAuraInArea(this.world, this.pos, 20), space);
                     if (toStore > 0) {

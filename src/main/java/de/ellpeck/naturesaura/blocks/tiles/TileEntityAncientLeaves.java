@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 
 public class TileEntityAncientLeaves extends TileEntityImpl {
 
-    private final NaturalAuraContainer container = new NaturalAuraContainer(NaturesAuraAPI.TYPE_OVERWORLD, 20, 5) {
+    private final NaturalAuraContainer container = new NaturalAuraContainer(NaturesAuraAPI.TYPE_OVERWORLD, 2000, 500) {
         @Override
         public int getAuraColor() {
             return 0xc46df9;

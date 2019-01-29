@@ -23,7 +23,7 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
     /**
      * The default amount of Aura that a chunk has stored
      */
-    int DEFAULT_AURA = 10000;
+    int DEFAULT_AURA = 1000000;
 
     /**
      * This method is used to get information about the Aura in any given chunk.

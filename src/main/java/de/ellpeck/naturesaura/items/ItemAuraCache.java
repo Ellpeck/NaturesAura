@@ -82,7 +82,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
         return new ICapabilityProvider() {
-            private final ItemAuraContainer container = new ItemAuraContainer(stack, null, 4000);
+            private final ItemAuraContainer container = new ItemAuraContainer(stack, null, 400000);
 
             @Override
             public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {

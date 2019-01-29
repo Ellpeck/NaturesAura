@@ -16,19 +16,19 @@ public class BalanceEffect implements IDrainSpotEffect {
 
     @Override
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (spot < 1000)
+        if (spot < 100000)
             return;
-        int searchRadius = Math.min(45, spot / 100);
+        int searchRadius = Math.min(45, spot / 10000);
         MutableInt positiveAura = new MutableInt();
         IAuraChunk.getSpotsInArea(world, pos, searchRadius, (otherPos, otherSpot) -> {
             if (otherSpot > 0)
                 positiveAura.add(otherSpot);
         });
-        int radius = Math.min(80, positiveAura.intValue() / 50);
+        int radius = Math.min(80, positiveAura.intValue() / 5000);
         BlockPos lowestPos = IAuraChunk.getLowestSpot(world, pos, radius, null);
         if (lowestPos == null)
             return;
-        int stored = IAuraChunk.getAuraChunk(world, lowestPos).storeAura(lowestPos, spot / 10);
+        int stored = IAuraChunk.getAuraChunk(world, lowestPos).storeAura(lowestPos, spot / 500);
         auraChunk.drainAura(pos, stored);
     }
 

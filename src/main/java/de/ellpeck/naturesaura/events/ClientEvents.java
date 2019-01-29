@@ -121,7 +121,7 @@ public class ClientEvents {
                         if (block instanceof IGrowable || block instanceof IPlantable || block.isLeaves(state, mc.world, pos)) {
                             int excess = IAuraChunk.triangulateAuraInArea(mc.world, pos, 45) - IAuraChunk.DEFAULT_AURA;
                             if (excess > 0) {
-                                int chance = Math.max(10, 50 - excess / 250);
+                                int chance = Math.max(10, 50 - excess / 25000);
                                 if (mc.world.rand.nextInt(chance) <= 0)
                                     NaturesAuraAPI.instance().spawnMagicParticle(
                                             pos.getX() + mc.world.rand.nextFloat(),
@@ -131,8 +131,8 @@ public class ClientEvents {
                                             mc.world.rand.nextFloat() * 0.025F,
                                             mc.world.rand.nextGaussian() * 0.01F,
                                             BiomeColorHelper.getFoliageColorAtPos(mc.world, pos),
-                                            Math.min(2F, 1F + mc.world.rand.nextFloat() * (excess / 300F)),
-                                            Math.min(300, 100 + mc.world.rand.nextInt(excess / 30 + 1)),
+                                            Math.min(2F, 1F + mc.world.rand.nextFloat() * (excess / 30000F)),
+                                            Math.min(300, 100 + mc.world.rand.nextInt(excess / 3000 + 1)),
                                             0F, false, true);
                             }
                         }
@@ -183,6 +183,7 @@ public class ClientEvents {
                 GlStateManager.pushMatrix();
                 GlStateManager.translate((pos.getX() + 0.1) / scale, (pos.getY() + 1) / scale, (pos.getZ() + 0.1) / scale);
                 GlStateManager.rotate(90F, 1F, 0F, 0F);
+                GlStateManager.scale(0.75F, 0.75F, 0.75F);
                 mc.fontRenderer.drawString(spot.getValue().toString(), 0, 0, 0);
                 GlStateManager.popMatrix();
             }

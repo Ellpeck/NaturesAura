@@ -112,48 +112,48 @@ public final class ModRecipes {
 
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_iron"),
                 Ingredient.fromItem(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON),
-                Ingredient.EMPTY, 150, 80).register();
+                Ingredient.EMPTY, 15000, 80).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_iron_block"),
                 Helper.blockIng(Blocks.IRON_BLOCK), new ItemStack(ModBlocks.INFUSED_IRON),
-                Ingredient.EMPTY, 1350, 700).register();
+                Ingredient.EMPTY, 135000, 700).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_stone"),
                 Helper.blockIng(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE),
-                Ingredient.EMPTY, 75, 40).register();
+                Ingredient.EMPTY, 7500, 40).register();
 
         Ingredient conversion = Helper.blockIng(ModBlocks.CONVERSION_CATALYST);
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "breath"),
                 new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_END)),
                 new ItemStack(Items.DRAGON_BREATH),
-                conversion, 200, 80).register();
+                conversion, 20000, 80).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "leather"),
                 Ingredient.fromItem(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER),
-                conversion, 100, 50).register();
+                conversion, 10000, 50).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "soul_sand"),
                 Helper.blockIng(Blocks.SAND), new ItemStack(Blocks.SOUL_SAND),
-                conversion, 50, 100).register();
+                conversion, 5000, 100).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "nether_wart"),
                 Helper.blockIng(Blocks.RED_MUSHROOM), new ItemStack(Items.NETHER_WART),
-                conversion, 300, 250).register();
+                conversion, 30000, 250).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "prismarine"),
                 Ingredient.fromItem(Items.QUARTZ), new ItemStack(Items.PRISMARINE_SHARD),
-                conversion, 550, 200).register();
+                conversion, 55000, 200).register();
 
         Ingredient crushing = Helper.blockIng(ModBlocks.CRUSHING_CATALYST);
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "bone"),
                 Ingredient.fromItem(Items.BONE), new ItemStack(Items.DYE, 6, 15),
-                crushing, 30, 40).register();
+                crushing, 3000, 40).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sugar"),
                 Ingredient.fromItem(Items.REEDS), new ItemStack(Items.SUGAR, 3),
-                crushing, 30, 40).register();
+                crushing, 3000, 40).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "blaze"),
                 Ingredient.fromItem(Items.BLAZE_ROD), new ItemStack(Items.BLAZE_POWDER, 4),
-                crushing, 50, 60).register();
+                crushing, 5000, 60).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "glowstone"),
                 Helper.blockIng(Blocks.GLOWSTONE), new ItemStack(Items.GLOWSTONE_DUST, 4),
-                crushing, 30, 40).register();
+                crushing, 3000, 40).register();
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sand"),
                 Helper.blockIng(Blocks.COBBLESTONE), new ItemStack(Blocks.SAND),
-                crushing, 30, 40).register();
+                crushing, 3000, 40).register();
 
         new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sky_ingot"),
                 new AmountIngredient(new ItemStack(ModItems.INFUSED_IRON, 3)),
@@ -171,7 +171,7 @@ public final class ModRecipes {
             if (block instanceof BlockFlower)
                 NaturesAuraAPI.FLOWERS.addAll(block.getBlockState().getValidStates());
 
-        spawner("cow", "minecraft:cow", 500, 60, Ingredient.fromItem(Items.BEEF), Ingredient.fromItem(Items.LEATHER));
+        spawner("cow", "minecraft:cow", 50000, 60, Ingredient.fromItem(Items.BEEF), Ingredient.fromItem(Items.LEATHER));
         for (EnumDyeColor color : EnumDyeColor.values())
             new AnimalSpawnerRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sheep_" + color.getName()), new ResourceLocation("minecraft:sheep"),
                     500, 60, Ingredient.fromItem(ModItems.BIRTH_SPIRIT), Ingredient.fromItem(Items.MUTTON),
@@ -183,39 +183,39 @@ public final class ModRecipes {
                     return sheep;
                 }
             }.register();
-        spawner("chicken", "minecraft:chicken", 300, 40, Ingredient.fromItem(Items.FEATHER), Ingredient.fromItem(Items.EGG));
-        spawner("pig", "minecraft:pig", 500, 60, Ingredient.fromItem(Items.PORKCHOP));
-        spawner("blaze", "minecraft:blaze", 1500, 120, Ingredient.fromItem(Items.BLAZE_ROD), Ingredient.fromItem(Items.BLAZE_POWDER));
-        spawner("ghast", "minecraft:ghast", 1200, 150, Ingredient.fromItem(Items.GUNPOWDER), Ingredient.fromItem(Items.GHAST_TEAR));
-        spawner("ocelot", "minecraft:ocelot", 800, 60, Ingredient.fromItem(Items.FISH), Helper.blockIng(Blocks.WOOL));
-        spawner("mule", "minecraft:mule", 1000, 100, Ingredient.fromItem(Items.LEATHER), Helper.blockIng(Blocks.CHEST), Ingredient.fromItem(Items.APPLE));
-        spawner("bat", "minecraft:bat", 300, 40, Ingredient.fromItem(Items.FEATHER));
-        spawner("endermite", "minecraft:endermite", 300, 40, Ingredient.fromItem(Items.ENDER_PEARL), Helper.blockIng(Blocks.STONE));
-        spawner("parrot", "minecraft:parrot", 500, 60, Ingredient.fromItem(Items.FEATHER), Ingredient.fromItem(Items.COOKIE));
-        spawner("slime", "minecraft:slime", 300, 40, Ingredient.fromItem(Items.SLIME_BALL));
-        spawner("spider", "minecraft:spider", 1000, 120, Ingredient.fromItem(Items.STRING), Ingredient.fromItem(Items.SPIDER_EYE));
-        spawner("skeleton", "minecraft:skeleton", 1000, 120, Ingredient.fromItem(Items.BONE), Ingredient.fromItem(Items.ARROW));
-        spawner("enderman", "minecraft:enderman", 1200, 120, Ingredient.fromItem(Items.ENDER_PEARL));
-        spawner("silverfish", "minecraft:silverfish", 300, 40, Helper.blockIng(Blocks.STONE));
-        spawner("squid", "minecraft:squid", 500, 40, Ingredient.fromStacks(new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage())));
-        spawner("stray", "minecraft:stray", 1000, 120, Ingredient.fromItem(Items.BONE), Helper.blockIng(Blocks.ICE));
-        spawner("shulker", "minecraft:shulker", 1500, 100, Ingredient.fromItem(Items.SHULKER_SHELL));
-        spawner("husk", "minecraft:husk", 1000, 120, Ingredient.fromItem(Items.ROTTEN_FLESH), Helper.blockIng(Blocks.SAND));
-        spawner("llama", "minecraft:llama", 600, 80, Ingredient.fromStacks(new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE)));
-        spawner("rabbit", "minecraft:rabbit", 300, 40, Ingredient.fromItem(Items.RABBIT_HIDE));
-        spawner("magma_cube", "minecraft:magma_cube", 1000, 100, Ingredient.fromItem(Items.MAGMA_CREAM));
-        spawner("zombie_pigman", "minecraft:zombie_pigman", 1200, 150, Ingredient.fromItem(Items.ROTTEN_FLESH), Ingredient.fromItem(Items.GOLD_NUGGET));
-        spawner("polar_bear", "minecraft:polar_bear", 500, 60, Ingredient.fromItem(Items.FISH), Helper.blockIng(Blocks.ICE));
-        spawner("mooshroom", "minecraft:mooshroom", 400, 60, Ingredient.fromItem(Items.LEATHER), Helper.blockIng(Blocks.RED_MUSHROOM));
-        spawner("guardian", "minecraft:guardian", 1500, 150, Ingredient.fromItem(Items.PRISMARINE_SHARD), Ingredient.fromItem(Items.PRISMARINE_CRYSTALS));
-        spawner("horse", "minecraft:horse", 1000, 100, Ingredient.fromItem(Items.LEATHER));
-        spawner("donkey", "minecraft:donkey", 1000, 100, Ingredient.fromItem(Items.LEATHER), Helper.blockIng(Blocks.CHEST));
-        spawner("cave_spider", "minecraft:cave_spider", 1000, 120, Ingredient.fromItem(Items.STRING), Ingredient.fromItem(Items.FERMENTED_SPIDER_EYE));
-        spawner("creeper", "minecraft:creeper", 1000, 120, Ingredient.fromItem(Items.GUNPOWDER));
-        spawner("witch", "minecraft:witch", 1500, 150, Ingredient.fromItem(Items.GLASS_BOTTLE), Ingredient.fromItem(Items.GLOWSTONE_DUST));
-        spawner("wither_skeleton", "minecraft:wither_skeleton", 1500, 150, Ingredient.fromItem(Items.BONE), Helper.blockIng(Blocks.OBSIDIAN));
-        spawner("wolf", "minecraft:wolf", 500, 60, Ingredient.fromItem(Items.LEATHER), Ingredient.fromItem(Items.BONE));
-        spawner("zombie", "minecraft:zombie", 1000, 100, Ingredient.fromItem(Items.ROTTEN_FLESH));
+        spawner("chicken", "minecraft:chicken", 30000, 40, Ingredient.fromItem(Items.FEATHER), Ingredient.fromItem(Items.EGG));
+        spawner("pig", "minecraft:pig", 50000, 60, Ingredient.fromItem(Items.PORKCHOP));
+        spawner("blaze", "minecraft:blaze", 150000, 120, Ingredient.fromItem(Items.BLAZE_ROD), Ingredient.fromItem(Items.BLAZE_POWDER));
+        spawner("ghast", "minecraft:ghast", 120000, 150, Ingredient.fromItem(Items.GUNPOWDER), Ingredient.fromItem(Items.GHAST_TEAR));
+        spawner("ocelot", "minecraft:ocelot", 80000, 60, Ingredient.fromItem(Items.FISH), Helper.blockIng(Blocks.WOOL));
+        spawner("mule", "minecraft:mule", 100000, 100, Ingredient.fromItem(Items.LEATHER), Helper.blockIng(Blocks.CHEST), Ingredient.fromItem(Items.APPLE));
+        spawner("bat", "minecraft:bat", 30000, 40, Ingredient.fromItem(Items.FEATHER));
+        spawner("endermite", "minecraft:endermite", 30000, 40, Ingredient.fromItem(Items.ENDER_PEARL), Helper.blockIng(Blocks.STONE));
+        spawner("parrot", "minecraft:parrot", 50000, 60, Ingredient.fromItem(Items.FEATHER), Ingredient.fromItem(Items.COOKIE));
+        spawner("slime", "minecraft:slime", 30000, 40, Ingredient.fromItem(Items.SLIME_BALL));
+        spawner("spider", "minecraft:spider", 100000, 120, Ingredient.fromItem(Items.STRING), Ingredient.fromItem(Items.SPIDER_EYE));
+        spawner("skeleton", "minecraft:skeleton", 100000, 120, Ingredient.fromItem(Items.BONE), Ingredient.fromItem(Items.ARROW));
+        spawner("enderman", "minecraft:enderman", 120000, 120, Ingredient.fromItem(Items.ENDER_PEARL));
+        spawner("silverfish", "minecraft:silverfish", 30000, 40, Helper.blockIng(Blocks.STONE));
+        spawner("squid", "minecraft:squid", 50000, 40, Ingredient.fromStacks(new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage())));
+        spawner("stray", "minecraft:stray", 100000, 120, Ingredient.fromItem(Items.BONE), Helper.blockIng(Blocks.ICE));
+        spawner("shulker", "minecraft:shulker", 150000, 100, Ingredient.fromItem(Items.SHULKER_SHELL));
+        spawner("husk", "minecraft:husk", 100000, 120, Ingredient.fromItem(Items.ROTTEN_FLESH), Helper.blockIng(Blocks.SAND));
+        spawner("llama", "minecraft:llama", 60000, 80, Ingredient.fromStacks(new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE)));
+        spawner("rabbit", "minecraft:rabbit", 30000, 40, Ingredient.fromItem(Items.RABBIT_HIDE));
+        spawner("magma_cube", "minecraft:magma_cube", 100000, 100, Ingredient.fromItem(Items.MAGMA_CREAM));
+        spawner("zombie_pigman", "minecraft:zombie_pigman", 120000, 150, Ingredient.fromItem(Items.ROTTEN_FLESH), Ingredient.fromItem(Items.GOLD_NUGGET));
+        spawner("polar_bear", "minecraft:polar_bear", 50000, 60, Ingredient.fromItem(Items.FISH), Helper.blockIng(Blocks.ICE));
+        spawner("mooshroom", "minecraft:mooshroom", 40000, 60, Ingredient.fromItem(Items.LEATHER), Helper.blockIng(Blocks.RED_MUSHROOM));
+        spawner("guardian", "minecraft:guardian", 150000, 150, Ingredient.fromItem(Items.PRISMARINE_SHARD), Ingredient.fromItem(Items.PRISMARINE_CRYSTALS));
+        spawner("horse", "minecraft:horse", 100000, 100, Ingredient.fromItem(Items.LEATHER));
+        spawner("donkey", "minecraft:donkey", 100000, 100, Ingredient.fromItem(Items.LEATHER), Helper.blockIng(Blocks.CHEST));
+        spawner("cave_spider", "minecraft:cave_spider", 100000, 120, Ingredient.fromItem(Items.STRING), Ingredient.fromItem(Items.FERMENTED_SPIDER_EYE));
+        spawner("creeper", "minecraft:creeper", 100000, 120, Ingredient.fromItem(Items.GUNPOWDER));
+        spawner("witch", "minecraft:witch", 150000, 150, Ingredient.fromItem(Items.GLASS_BOTTLE), Ingredient.fromItem(Items.GLOWSTONE_DUST));
+        spawner("wither_skeleton", "minecraft:wither_skeleton", 150000, 150, Ingredient.fromItem(Items.BONE), Helper.blockIng(Blocks.OBSIDIAN));
+        spawner("wolf", "minecraft:wolf", 50000, 60, Ingredient.fromItem(Items.LEATHER), Ingredient.fromItem(Items.BONE));
+        spawner("zombie", "minecraft:zombie", 100000, 100, Ingredient.fromItem(Items.ROTTEN_FLESH));
     }
 
     private static void spawner(String name, String entity, int aura, int time, Ingredient... ings) {

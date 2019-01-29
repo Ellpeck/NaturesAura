@@ -28,10 +28,10 @@ public class BreathlessEffect implements IDrainSpotEffect {
         int aura = IAuraChunk.getAuraInArea(world, pos, 50);
         if (aura > 0)
             return;
-        int dist = Math.min(Math.abs(aura) / 500, 75);
+        int dist = Math.min(Math.abs(aura) / 50000, 75);
         if (dist < 10)
             return;
-        int amp = Math.min(MathHelper.floor(Math.abs(aura) / 25000F), 3);
+        int amp = Math.min(MathHelper.floor(Math.abs(aura) / 2500000F), 3);
 
         List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class,
                 new AxisAlignedBB(pos).grow(dist));

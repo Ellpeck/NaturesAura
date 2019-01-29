@@ -30,7 +30,7 @@ public class ItemBirthSpirit extends ItemGlowing {
             parent.world.spawnEntity(item);
 
             BlockPos spot = IAuraChunk.getHighestSpot(parent.world, pos, 30, pos);
-            IAuraChunk.getAuraChunk(parent.world, spot).drainAura(spot, 50 * amount);
+            IAuraChunk.getAuraChunk(parent.world, spot).drainAura(spot, 800 * amount);
         }
     }
 }

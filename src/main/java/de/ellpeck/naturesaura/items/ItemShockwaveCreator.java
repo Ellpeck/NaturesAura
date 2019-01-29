@@ -73,7 +73,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                 return;
             if (living.getDistanceSq(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z")) > 0.75F)
                 return;
-            if (living instanceof EntityPlayer && !NaturesAuraAPI.instance().extractAuraFromPlayer((EntityPlayer) living, 10, false))
+            if (living instanceof EntityPlayer && !NaturesAuraAPI.instance().extractAuraFromPlayer((EntityPlayer) living, 1000, false))
                 return;
 
             DamageSource source;
@@ -92,7 +92,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                     continue;
                 if (living.getDistanceSq(mob) > range * range)
                     continue;
-                if (living instanceof EntityPlayer && !NaturesAuraAPI.instance().extractAuraFromPlayer((EntityPlayer) living, 5, false))
+                if (living instanceof EntityPlayer && !NaturesAuraAPI.instance().extractAuraFromPlayer((EntityPlayer) living, 500, false))
                     break;
                 mob.attackEntityFrom(source, 4F);
 

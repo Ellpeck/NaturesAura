@@ -59,7 +59,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable 
             EntityLiving entity = (EntityLiving) event.getEntityLiving();
             if (entity.getCanSpawnHere() && entity.isNotColliding()) {
                 BlockPos spot = IAuraChunk.getHighestSpot(world, lampPos, 32, lampPos);
-                IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 2);
+                IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 200);
 
                 PacketHandler.sendToAllAround(world, lampPos, 32,
                         new PacketParticles(lampPos.getX(), lampPos.getY(), lampPos.getZ(), 15));

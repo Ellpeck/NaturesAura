@@ -33,12 +33,12 @@ public class AnimalEffect implements IDrainSpotEffect {
         if (spot <= 0)
             return;
         int aura = IAuraChunk.getAuraInArea(world, pos, 30);
-        if (aura < 15000)
+        if (aura < 1500000)
             return;
-        int chance = Math.min(50, Math.abs(aura) / 5000);
+        int chance = Math.min(50, Math.abs(aura) / 500000);
         if (chance <= 0)
             return;
-        int dist = MathHelper.clamp(Math.abs(aura) / 1500, 5, 35);
+        int dist = MathHelper.clamp(Math.abs(aura) / 150000, 5, 35);
         AxisAlignedBB bb = new AxisAlignedBB(pos).grow(dist);
 
         List<EntityAnimal> animals = world.getEntitiesWithinAABB(EntityAnimal.class, bb);
@@ -74,7 +74,7 @@ public class AnimalEffect implements IDrainSpotEffect {
                 world.spawnEntity(chicken);
 
                 BlockPos closestSpot = IAuraChunk.getHighestSpot(world, item.getPosition(), 35, pos);
-                IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 20);
+                IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 2000);
             }
         }
 
@@ -100,7 +100,7 @@ public class AnimalEffect implements IDrainSpotEffect {
             this.setInLove(second);
 
             BlockPos closestSpot = IAuraChunk.getHighestSpot(world, first.getPosition(), 35, pos);
-            IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 35);
+            IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 3500);
         }
     }
 

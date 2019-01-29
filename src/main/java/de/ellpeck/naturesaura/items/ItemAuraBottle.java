@@ -49,7 +49,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
                         dispense = setType(new ItemStack(ItemAuraBottle.this), IAuraType.forWorld(world));
 
                         BlockPos spot = IAuraChunk.getHighestSpot(world, offset, 30, offset);
-                        IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 200);
+                        IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 20000);
                     }
                 }
 
@@ -79,7 +79,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
                     setType(new ItemStack(this), IAuraType.forWorld(player.world)));
 
             BlockPos spot = IAuraChunk.getHighestSpot(player.world, pos, 30, pos);
-            IAuraChunk.getAuraChunk(player.world, spot).drainAura(spot, 200);
+            IAuraChunk.getAuraChunk(player.world, spot).drainAura(spot, 20000);
 
             player.world.playSound(null, player.posX, player.posY, player.posZ,
                     SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.PLAYERS, 1F, 1F);

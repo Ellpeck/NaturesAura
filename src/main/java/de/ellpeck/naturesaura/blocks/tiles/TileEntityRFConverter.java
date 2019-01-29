@@ -71,7 +71,7 @@ public class TileEntityRFConverter extends TileEntityImpl implements ITickable {
             int aura = IAuraChunk.getAuraInArea(this.world, this.pos, 45);
             if (aura <= IAuraChunk.DEFAULT_AURA)
                 return;
-            int amountToGen = Math.min(Math.min(10000, aura / 10), emptyPart);
+            int amountToGen = Math.min(Math.min(1000, aura / 1000), emptyPart);
             int amountToUse = MathHelper.ceil(amountToGen / ModConfig.general.auraToRFRatio);
 
             this.storage.setEnergy(this.storage.getEnergyStored() + amountToGen);

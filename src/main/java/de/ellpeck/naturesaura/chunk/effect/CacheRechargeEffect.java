@@ -22,15 +22,15 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
 
     @Override
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (spot < 1000)
+        if (spot < 100000)
             return;
         int aura = IAuraChunk.getAuraInArea(world, pos, 20);
-        if (aura < 15000)
+        if (aura < 1500000)
             return;
         if (NaturesAuraAPI.instance().isEffectPowderActive(world, pos, NAME))
             return;
         int dist = MathHelper.clamp(aura / 3500, 3, 15);
-        int amount = aura / 2500 - 2;
+        int amount = aura / 250000 - 2;
 
         List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos).grow(dist));
         for (EntityPlayer player : players) {

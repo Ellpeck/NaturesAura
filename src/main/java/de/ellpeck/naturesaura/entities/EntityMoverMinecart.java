@@ -49,7 +49,7 @@ public class EntityMoverMinecart extends EntityMinecart {
             int amount = chunk.getDrainSpot(spot);
             if (amount <= 0)
                 continue;
-            int toMove = Math.min(amount, 3000);
+            int toMove = Math.min(amount, 300000);
             int drained = chunk.drainAura(spot, toMove, false, false);
             if (drained <= 0)
                 continue;

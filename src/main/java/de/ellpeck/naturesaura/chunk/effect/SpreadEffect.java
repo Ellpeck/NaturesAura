@@ -16,10 +16,10 @@ public class SpreadEffect implements IDrainSpotEffect {
 
     @Override
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (Math.abs(spot) < 10000)
+        if (Math.abs(spot) < 1000000)
             return;
         boolean drain = spot > 0;
-        int toMove = 7200;
+        int toMove = 720000;
         while (toMove > 0) {
             BlockPos bestOffset = null;
             int bestAmount = drain ? Integer.MAX_VALUE : Integer.MIN_VALUE;
@@ -42,10 +42,10 @@ public class SpreadEffect implements IDrainSpotEffect {
 
             int moved;
             if (drain) {
-                moved = bestChunk.storeAura(bestPos, 1200);
+                moved = bestChunk.storeAura(bestPos, 120000);
                 auraChunk.drainAura(pos, moved);
             } else {
-                moved = bestChunk.drainAura(bestPos, 1200);
+                moved = bestChunk.drainAura(bestPos, 120000);
                 auraChunk.storeAura(pos, moved);
             }
             toMove -= moved;

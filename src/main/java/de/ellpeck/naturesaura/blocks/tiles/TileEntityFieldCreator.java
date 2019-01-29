@@ -81,11 +81,11 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
                 creator.sendToClients();
             }
 
-            chunk.drainAura(spot, 3);
+            chunk.drainAura(spot, 300);
             this.sendParticles();
         } else {
             if (this.world.getTotalWorldTime() % 40 == 0)
-                chunk.drainAura(spot, 1);
+                chunk.drainAura(spot, 100);
 
             Vec3d dist = new Vec3d(
                     this.pos.getX() - connectedPos.getX(),
@@ -120,7 +120,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
                             for (ItemStack stack : drops)
                                 Block.spawnAsEntity(this.world, pos, stack);
 
-                            chunk.drainAura(spot, 3);
+                            chunk.drainAura(spot, 300);
                             this.sendParticles();
                         }
                     }

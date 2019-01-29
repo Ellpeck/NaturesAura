@@ -58,7 +58,7 @@ public class TileEntityHopperUpgrade extends TileEntityImpl implements ITickable
                         item.setDead();
 
                     BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 25, this.pos);
-                    IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 5);
+                    IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 500);
 
                     PacketHandler.sendToAllAround(this.world, this.pos, 32,
                             new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 10));

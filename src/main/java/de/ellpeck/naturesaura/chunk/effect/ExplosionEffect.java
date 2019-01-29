@@ -20,15 +20,15 @@ public class ExplosionEffect implements IDrainSpotEffect {
         if (spot >= 0 || world.getTotalWorldTime() % 40 != 0)
             return;
         int aura = IAuraChunk.getAuraInArea(world, pos, 85);
-        if (aura > -50000)
+        if (aura > -5000000)
             return;
-        int chance = 140 - Math.abs(aura) / 2000;
+        int chance = 140 - Math.abs(aura) / 200000;
         if (chance > 1 && world.rand.nextInt(chance) != 0)
             return;
-        float strength = Math.min(Math.abs(aura) / 50000F, 5F);
+        float strength = Math.min(Math.abs(aura) / 5000000F, 5F);
         if (strength <= 0)
             return;
-        int dist = MathHelper.clamp(Math.abs(aura) / 2000, 25, 100);
+        int dist = MathHelper.clamp(Math.abs(aura) / 200000, 25, 100);
 
         int x = MathHelper.floor(pos.getX() + world.rand.nextGaussian() * dist);
         int z = MathHelper.floor(pos.getZ() + world.rand.nextGaussian() * dist);

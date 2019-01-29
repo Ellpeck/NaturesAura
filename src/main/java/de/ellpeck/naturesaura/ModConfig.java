@@ -31,7 +31,7 @@ public final class ModConfig {
         public int fieldCreatorRange = 10;
 
         @Comment("The Aura to RF ratio used by the RF converter, read as aura*ratio = rf")
-        public float auraToRFRatio = 5;
+        public float auraToRFRatio = 0.05F;
     }
 
     public static class Features {

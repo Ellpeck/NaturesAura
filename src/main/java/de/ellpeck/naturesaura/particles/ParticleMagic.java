@@ -54,14 +54,13 @@ public class ParticleMagic extends Particle {
             this.motionY -= 0.04D * (double) this.particleGravity;
             this.move(this.motionX, this.motionY, this.motionZ);
 
-            if (this.fade) {
-                float lifeRatio = (float) this.particleAge / (float) this.particleMaxAge;
+            float lifeRatio = (float) this.particleAge / (float) this.particleMaxAge;
+            if (this.fade)
                 this.particleAlpha = 1F - lifeRatio * 0.75F;
-                if (lifeRatio <= 0.25F)
-                    this.particleScale = this.desiredScale * (lifeRatio / 0.25F);
-                else
-                    this.particleScale = this.desiredScale * (1F - (lifeRatio - 0.25F) / 0.75F);
-            }
+            if (lifeRatio <= 0.25F)
+                this.particleScale = this.desiredScale * (lifeRatio / 0.25F);
+            else if (this.fade)
+                this.particleScale = this.desiredScale * (1F - (lifeRatio - 0.25F) / 0.75F);
         }
     }
 

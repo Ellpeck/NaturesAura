@@ -25,9 +25,9 @@ public class GrassDieEffect implements IDrainSpotEffect {
         if (spot < 0) {
             int aura = IAuraChunk.getAuraInArea(world, pos, 50);
             if (aura < 0) {
-                int amount = Math.min(300, Math.abs(aura) / 1000);
+                int amount = Math.min(300, Math.abs(aura) / 100000);
                 if (amount > 1) {
-                    int dist = MathHelper.clamp(Math.abs(aura) / 750, 5, 75);
+                    int dist = MathHelper.clamp(Math.abs(aura) / 75000, 5, 75);
                     for (int i = amount / 2 + world.rand.nextInt(amount / 2); i >= 0; i--) {
                         BlockPos grassPos = new BlockPos(
                                 pos.getX() + world.rand.nextGaussian() * dist,

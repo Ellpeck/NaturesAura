@@ -14,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class TileEntityEndFlower extends TileEntityImpl implements ITickable {
 
-    private final BasicAuraContainer container = new BasicAuraContainer(null, 5000) {
+    private final BasicAuraContainer container = new BasicAuraContainer(null, 500000) {
         {
             this.aura = this.maxAura;
         }
@@ -51,7 +51,7 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickable {
                 if (amount < IAuraChunk.DEFAULT_AURA)
                     this.isDrainMode = true;
             } else {
-                int toDrain = Math.min(50, this.container.getStoredAura());
+                int toDrain = Math.min(5000, this.container.getStoredAura());
                 this.container.drainAura(toDrain, false);
 
                 while (toDrain > 0) {
