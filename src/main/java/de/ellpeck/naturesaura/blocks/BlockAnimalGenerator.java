@@ -67,7 +67,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
             float amountMod = child ? 0.667F : 1;
 
             int timeAlive = data.getInteger(NaturesAura.MOD_ID + ":time_alive");
-            int time = Math.min(MathHelper.floor((timeAlive - 15000) / 5F * timeMod), 30000);
+            int time = Math.min(MathHelper.floor((timeAlive - 15000) / 500F * timeMod), 300);
             int amount = Math.min(MathHelper.floor((timeAlive - 8000) / 2.5F * amountMod), 15000);
             if (time <= 0 || amount <= 0)
                 return false;
