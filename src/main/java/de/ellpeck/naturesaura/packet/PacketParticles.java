@@ -279,7 +279,7 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextGaussian() * 0.01F,
                                         world.rand.nextFloat() * 0.04F + 0.02F,
                                         world.rand.nextGaussian() * 0.01F,
-                                        0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 40, 0F, false, true);
+                                        0xd13308, 1F + world.rand.nextFloat() * 1.5F, 40, 0F, false, true);
                             break;
                         case 17: // Animal generator consuming
                             boolean child = message.data[0] > 0;
