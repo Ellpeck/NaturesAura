@@ -11,7 +11,8 @@
         {
             "type": "spotlight",
             "item": "naturesaura:end_flower",
-            "text": "These flowers bear very large amounts of $(aura) that they $(thing)disperse$() in an interesting way: Initially, they will do nothing; however, if there is even the slightest bit of $(aura) missing from the area, they will start slowly feeding their $(aura) into the environment, dying after all of it is drained. During this process, they can neither be stopped, nor harvested."
+            "text": "This flower bears very large amounts of $(aura) that can be harvested in an interesting way: Dropping an $(item)Ender Eye$() on the ground close to it will cause the rose to consume it and start dispersing its $(aura) into the environment. During this process, it can neither be stopped, nor harvested.",
+            "link_recipe": true
         }
     ]
 }

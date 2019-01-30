@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.packet;
 
-import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
@@ -337,6 +336,16 @@ public class PacketParticles implements IMessage {
                                     }
                                     return true;
                                 });
+                            break;
+                        case 21: // End flower item consuming
+                            color = message.data[0];
+                            for (int i = world.rand.nextInt(20) + 10; i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        message.posX, message.posY + 0.5F, message.posZ,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        world.rand.nextFloat() * 0.01F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        color, 1.5F, 40, 0F, false, true);
                             break;
                     }
                 }

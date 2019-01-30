@@ -6,11 +6,18 @@ import de.ellpeck.naturesaura.api.aura.container.BasicAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.List;
 
 public class TileEntityEndFlower extends TileEntityImpl implements ITickable {
 
@@ -47,9 +54,24 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickable {
                 return;
 
             if (!this.isDrainMode) {
-                int amount = IAuraChunk.getAuraInArea(this.world, this.pos, 30);
-                if (amount < IAuraChunk.DEFAULT_AURA)
+                List<EntityItem> items = this.world.getEntitiesWithinAABB(EntityItem.class,
+                        new AxisAlignedBB(this.pos).grow(1), EntitySelectors.IS_ALIVE);
+                for (EntityItem item : items) {
+                    if (item.cannotPickup())
+                        continue;
+                    ItemStack stack = item.getItem();
+                    if (stack.getCount() != 1)
+                        continue;
+                    if (stack.getItem() != Items.ENDER_EYE)
+                        continue;
+
                     this.isDrainMode = true;
+                    item.setDead();
+
+                    PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 21, this.container.getAuraColor()));
+                    break;
+                }
             } else {
                 int toDrain = Math.min(5000, this.container.getStoredAura());
                 this.container.drainAura(toDrain, false);
