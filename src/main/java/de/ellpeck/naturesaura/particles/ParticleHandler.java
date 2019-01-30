@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,14 +29,12 @@ public final class ParticleHandler {
                 int setting = mc.gameSettings.particleSetting;
                 if (setting != 0 &&
                         (setting != 1 || mc.world.rand.nextInt(3) != 0) &&
-                        (setting != 2 || mc.world.rand.nextInt(10) != 0)) {
+                        (setting != 2 || mc.world.rand.nextInt(10) != 0))
                     return;
-                }
             }
             double setting = ModConfig.client.particleAmount;
-            if (setting < 1 && mc.world.rand.nextDouble() > setting) {
+            if (setting < 1 && mc.world.rand.nextDouble() > setting)
                 return;
-            }
             PARTICLES.add(particle.get());
         }
     }
@@ -46,9 +43,8 @@ public final class ParticleHandler {
         for (int i = PARTICLES.size() - 1; i >= 0; i--) {
             Particle particle = PARTICLES.get(i);
             particle.onUpdate();
-            if (!particle.isAlive()) {
+            if (!particle.isAlive())
                 PARTICLES.remove(i);
-            }
         }
     }
 
@@ -77,15 +73,14 @@ public final class ParticleHandler {
 
             GlStateManager.depthMask(false);
 
-            mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            mc.getTextureManager().bindTexture(ParticleMagic.TEXTURE);
             Tessellator tessy = Tessellator.getInstance();
             BufferBuilder buffer = tessy.getBuffer();
 
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-            for (Particle particle : PARTICLES) {
+            for (Particle particle : PARTICLES)
                 particle.renderParticle(buffer, player, partialTicks, x, xz, z, yz, xy);
-            }
 
             tessy.draw();
 

@@ -1,9 +1,9 @@
 package de.ellpeck.naturesaura.particles;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleMagic extends Particle {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(NaturesAura.MOD_ID, "particles/magic_round");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(NaturesAura.MOD_ID, "textures/particles/magic_round.png");
 
     private final float desiredScale;
     private final boolean fade;
@@ -33,9 +33,6 @@ public class ParticleMagic extends Particle {
         float g = (((color >> 8) & 255) / 255F) * (1F - this.rand.nextFloat() * 0.25F);
         float b = ((color & 255) / 255F) * (1F - this.rand.nextFloat() * 0.25F);
         this.setRBGColorF(r, g, b);
-
-        TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
-        this.setParticleTexture(map.getAtlasSprite(TEXTURE.toString()));
 
         this.particleAlpha = 1F;
         this.particleScale = 0F;
@@ -65,8 +62,28 @@ public class ParticleMagic extends Particle {
     }
 
     @Override
-    public int getFXLayer() {
-        return 1;
+    public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+        double x = this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX;
+        double y = this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY;
+        double z = this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ;
+        float sc = 0.1F * this.particleScale;
+
+        int brightness = this.getBrightnessForRender(partialTicks);
+        int sky = brightness >> 16 & 0xFFFF;
+        int block = brightness & 0xFFFF;
+
+        buffer.pos(x + (-rotationX * sc - rotationXY * sc), y + -rotationZ * sc, z + (-rotationYZ * sc - rotationXZ * sc))
+                .tex(0, 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
+                .lightmap(sky, block).endVertex();
+        buffer.pos(x + (-rotationX * sc + rotationXY * sc), y + (rotationZ * sc), z + (-rotationYZ * sc + rotationXZ * sc))
+                .tex(1, 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
+                .lightmap(sky, block).endVertex();
+        buffer.pos(x + (rotationX * sc + rotationXY * sc), y + (rotationZ * sc), z + (rotationYZ * sc + rotationXZ * sc))
+                .tex(1, 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
+                .lightmap(sky, block).endVertex();
+        buffer.pos(x + (rotationX * sc - rotationXY * sc), y + (-rotationZ * sc), z + (rotationYZ * sc - rotationXZ * sc))
+                .tex(0, 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
+                .lightmap(sky, block).endVertex();
     }
 
     @Override

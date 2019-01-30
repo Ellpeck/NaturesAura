@@ -93,11 +93,6 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void onTextureStitch(TextureStitchEvent event) {
-        event.getMap().registerSprite(ParticleMagic.TEXTURE);
-    }
-
-    @SubscribeEvent
     public void onClientTick(ClientTickEvent event) {
         if (event.phase == Phase.END) {
             Minecraft mc = Minecraft.getMinecraft();
