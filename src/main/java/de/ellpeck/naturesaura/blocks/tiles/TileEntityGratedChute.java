@@ -19,7 +19,7 @@ import java.util.List;
 
 public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
 
-    private final ItemStackHandlerNA items = new ItemStackHandlerNA(1, this, false) {
+    private final ItemStackHandlerNA items = new ItemStackHandlerNA(1, this, true) {
         @Override
         protected boolean canExtract(ItemStack stack, int slot, int amount) {
             return TileEntityGratedChute.this.redstonePower <= 0;
@@ -124,15 +124,19 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
     @Override
     public void writeNBT(NBTTagCompound compound, SaveType type) {
         super.writeNBT(compound, type);
-        if (type != SaveType.BLOCK)
+        if (type != SaveType.BLOCK) {
             compound.setInteger("cooldown", this.cooldown);
+            compound.setTag("items", this.items.serializeNBT());
+        }
     }
 
     @Override
     public void readNBT(NBTTagCompound compound, SaveType type) {
         super.readNBT(compound, type);
-        if (type != SaveType.BLOCK)
+        if (type != SaveType.BLOCK) {
             this.cooldown = compound.getInteger("cooldown");
+            this.items.deserializeNBT(compound.getCompoundTag("items"));
+        }
     }
 
     @Override

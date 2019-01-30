@@ -14,7 +14,7 @@
         },
         {
             "type": "crafting",
-            "text": "Creating the $(item)Adept Hopper$()",
+            "text": "Creating the $(item)Adept Hopper$()$(p)It should be noted that, when equipping an $(l:items/eye)Environmental Eye$(), the amount of items currently stored in the hopper can be seen.",
             "recipe": "naturesaura:grated_chute"
         }
     ]

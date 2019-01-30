@@ -9,13 +9,13 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
+import de.ellpeck.naturesaura.blocks.tiles.TileEntityGratedChute;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityRFConverter;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
-import de.ellpeck.naturesaura.particles.ParticleMagic;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
@@ -37,7 +37,6 @@ import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -365,6 +364,17 @@ public class ClientEvents {
                                 this.drawContainerInfo(storage.getEnergyStored(), storage.getMaxEnergyStored(), 0xcc4916,
                                         mc, res, 35, I18n.format("tile.naturesaura.rf_converter.name"),
                                         storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
+                            } else if (tile instanceof TileEntityGratedChute) {
+                                ItemStack stack = ((TileEntityGratedChute) tile).getItemHandler(null).getStackInSlot(0);
+
+                                int x = res.getScaledWidth() / 2;
+                                int y = res.getScaledHeight() / 2;
+                                if (stack.isEmpty())
+                                    mc.fontRenderer.drawString(
+                                            TextFormatting.GRAY.toString() + TextFormatting.ITALIC + I18n.format("info.naturesaura.empty"),
+                                            x + 5, y - 11, 0xFFFFFF, true);
+                                else
+                                    Helper.renderItemInGui(stack, x + 2, y - 18, 1F);
                             }
                         }
                     }
