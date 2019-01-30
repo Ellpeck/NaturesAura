@@ -117,13 +117,13 @@ public class BlockAncientLeaves extends BlockLeaves implements
     @Override
     @SideOnly(Side.CLIENT)
     public IBlockColor getBlockColor() {
-        return (state, worldIn, pos, tintIndex) -> 0xE480D9;
+        return (state, worldIn, pos, tintIndex) -> 0xE55B97;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IItemColor getItemColor() {
-        return (stack, tintIndex) -> 0xE480D9;
+        return (stack, tintIndex) -> 0xE55B97;
     }
 
     @Override
@@ -136,7 +136,7 @@ public class BlockAncientLeaves extends BlockLeaves implements
                 if (((TileEntityAncientLeaves) tile).getAuraContainer(null).getStoredAura() > 0) {
                     NaturesAuraAPI.instance().spawnMagicParticle(
                             pos.getX() + rand.nextDouble(), pos.getY(), pos.getZ() + rand.nextDouble(),
-                            0F, 0F, 0F, 0xc46df9,
+                            0F, 0F, 0F, 0xCC4780,
                             rand.nextFloat() * 2F + 0.5F,
                             rand.nextInt(50) + 75,
                             rand.nextFloat() * 0.02F + 0.002F, true, true);
