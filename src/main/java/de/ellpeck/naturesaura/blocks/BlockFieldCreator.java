@@ -49,6 +49,7 @@ public class BlockFieldCreator extends BlockContainerImpl {
 
                                 TileEntityFieldCreator otherCreator = (TileEntityFieldCreator) otherTile;
                                 otherCreator.connectionOffset = pos.subtract(stored);
+                                otherCreator.isMain = false;
                                 otherCreator.sendToClients();
 
                                 compound.removeTag(key);

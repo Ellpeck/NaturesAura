@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
@@ -8,6 +9,8 @@ import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -17,12 +20,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.IFluidBlock;
+
+import java.util.List;
 
 public class TileEntityFieldCreator extends TileEntityImpl implements ITickable {
 
@@ -87,6 +93,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
             if (this.world.getTotalWorldTime() % 40 == 0)
                 chunk.drainAura(spot, 100);
 
+            boolean shears = this.shears() || creator.shears();
             Vec3d dist = new Vec3d(
                     this.pos.getX() - connectedPos.getX(),
                     this.pos.getY() - connectedPos.getY(),
@@ -112,21 +119,37 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
 
                     FakePlayer fake = FakePlayerFactory.getMinecraft((WorldServer) this.world);
                     if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.world, pos, state, fake))) {
-                        NonNullList<ItemStack> drops = NonNullList.create();
-                        block.getDrops(drops, this.world, pos, state, 0);
+                        boolean shearBlock = shears && block instanceof IShearable;
+                        List<ItemStack> drops;
+                        if (shearBlock && ((IShearable) block).isShearable(ItemStack.EMPTY, this.world, pos))
+                            drops = ((IShearable) block).onSheared(ItemStack.EMPTY, this.world, pos, 0);
+                        else {
+                            drops = NonNullList.create();
+                            block.getDrops((NonNullList) drops, this.world, pos, state, 0);
+                        }
                         float chance = ForgeEventFactory.fireBlockHarvesting(drops, this.world, pos, state, 0, 1, false, fake);
                         if (chance > 0 && this.world.rand.nextFloat() <= chance) {
                             this.world.destroyBlock(pos, false);
                             for (ItemStack stack : drops)
                                 Block.spawnAsEntity(this.world, pos, stack);
 
-                            chunk.drainAura(spot, 300);
+                            chunk.drainAura(spot, shearBlock ? 1000 : 300);
                             this.sendParticles();
                         }
                     }
                 }
             }
         }
+    }
+
+    public boolean shears() {
+        List<EntityItemFrame> frames = Helper.getAttachedItemFrames(this.world, this.pos);
+        for (EntityItemFrame frame : frames) {
+            ItemStack stack = frame.getDisplayedItem();
+            if (!stack.isEmpty() && stack.getItem() instanceof ItemShears)
+                return true;
+        }
+        return false;
     }
 
     private void sendParticles() {
