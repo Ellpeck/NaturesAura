@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
@@ -346,6 +347,18 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextFloat() * 0.01F,
                                         world.rand.nextGaussian() * 0.01F,
                                         color, 1.5F, 40, 0F, false, true);
+                            break;
+                        case 22: // Mover cart
+                            float motionX = message.data[0] / 100F;
+                            float motionY = message.data[1] / 100F;
+                            float motionZ = message.data[2] / 100F;
+                            for (int i = world.rand.nextInt(60) + 30; i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        message.posX + world.rand.nextGaussian() * 10F,
+                                        message.posY + world.rand.nextGaussian() * 10F,
+                                        message.posZ + world.rand.nextGaussian() * 10F,
+                                        motionX * 0.2F, motionY * 0.2F, motionZ * 0.2F,
+                                        IAuraType.forWorld(world).getColor(), 2F, 30, 0F, false, true);
                             break;
                     }
                 }

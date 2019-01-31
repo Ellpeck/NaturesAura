@@ -2,6 +2,8 @@ package de.ellpeck.naturesaura.entities;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
@@ -40,6 +42,12 @@ public class EntityMoverMinecart extends EntityMinecart {
         if (!this.isActive)
             return;
         BlockPos pos = this.getPosition();
+
+        if (!this.spotOffsets.isEmpty() && this.world.getTotalWorldTime() % 10 == 0)
+            PacketHandler.sendToAllAround(this.world, pos, 32, new PacketParticles(
+                    (float) this.posX, (float) this.posY, (float) this.posZ, 22,
+                    MathHelper.floor(this.motionX * 100F), MathHelper.floor(this.motionY * 100F), MathHelper.floor(this.motionZ * 100F)));
+
         if (pos.distanceSq(this.lastPosition) < 8 * 8)
             return;
 
