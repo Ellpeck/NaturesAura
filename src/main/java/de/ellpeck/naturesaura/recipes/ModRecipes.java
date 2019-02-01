@@ -19,6 +19,7 @@ import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.BlockWall;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Blocks;
@@ -166,6 +167,9 @@ public final class ModRecipes {
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
                 Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT),
                 Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY));
+        NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
+                Blocks.COBBLESTONE_WALL.getDefaultState().withProperty(BlockWall.VARIANT, BlockWall.EnumType.NORMAL),
+                Blocks.COBBLESTONE_WALL.getDefaultState().withProperty(BlockWall.VARIANT, BlockWall.EnumType.MOSSY));
 
         for (Block block : ForgeRegistries.BLOCKS)
             if (block instanceof BlockFlower)

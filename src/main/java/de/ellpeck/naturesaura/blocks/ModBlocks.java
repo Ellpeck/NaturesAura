@@ -46,4 +46,5 @@ public final class ModBlocks {
     public static final Block AUTO_CRAFTER = new BlockAutoCrafter();
     public static final Block GOLD_BRICK = new BlockImpl("gold_brick", Material.ROCK).setSoundType(SoundType.STONE).setHardness(2F);
     public static final Block RF_CONVERTER = ModConfig.enabledFeatures.rfConverter ? new BlockRFConverter() : null;
+    public static final Block MOSS_GENERATOR = new BlockMossGenerator();
 }

@@ -65,7 +65,7 @@ public class ItemPickaxeNA extends ItemPickaxe implements IModItem, ICreativeIte
                 if (!worldIn.isRemote)
                     worldIn.setBlockState(pos, result);
                 worldIn.playSound(player, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                stack.damageItem(3, player);
+                stack.damageItem(15, player);
                 return EnumActionResult.SUCCESS;
             }
         }

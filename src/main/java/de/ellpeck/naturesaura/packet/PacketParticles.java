@@ -360,6 +360,29 @@ public class PacketParticles implements IMessage {
                                         motionX * 0.2F, motionY * 0.2F, motionZ * 0.2F,
                                         IAuraType.forWorld(world).getColor(), 2F, 30, 0F, false, true);
                             break;
+                        case 23: // Moss generator
+                            for (int i = world.rand.nextInt(30) + 30; i >= 0; i--) {
+                                int side = world.rand.nextInt(3);
+                                float x = side != 0 ? world.rand.nextFloat() : (world.rand.nextBoolean() ? 1.1F : -0.1F);
+                                float y = side != 1 ? world.rand.nextFloat() : (world.rand.nextBoolean() ? 1.1F : -0.1F);
+                                float z = side != 2 ? world.rand.nextFloat() : (world.rand.nextBoolean() ? 1.1F : -0.1F);
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        message.posX + x,
+                                        message.posY + y,
+                                        message.posZ + z,
+                                        0F, 0F, 0F,
+                                        0x184c0d, world.rand.nextFloat() + 1F, 30, 0F, true, true);
+                            }
+                            for (int i = world.rand.nextInt(20) + 10; i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        message.posX + world.rand.nextFloat(),
+                                        message.posY + 1F,
+                                        message.posZ + world.rand.nextFloat(),
+                                        world.rand.nextGaussian() * 0.01F,
+                                        world.rand.nextFloat() * 0.04F + 0.02F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 40, 0F, true, true);
+                            break;
                     }
                 }
             });

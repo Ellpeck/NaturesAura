@@ -1,5 +1,7 @@
 package de.ellpeck.naturesaura.api;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
@@ -40,7 +42,7 @@ public final class NaturesAuraAPI {
 
     public static final String MOD_ID = "naturesaura";
     public static final String API_ID = MOD_ID + "api";
-    public static final String VERSION = "7";
+    public static final String VERSION = "8";
 
     /**
      * The list of all {@link AltarRecipe} instances which are the recipes used
@@ -72,7 +74,7 @@ public final class NaturesAuraAPI {
      * into their mossy variations. Contains mossy brick and mossy cobblestone
      * by default, along with all blocks specified in the config file
      */
-    public static final Map<IBlockState, IBlockState> BOTANIST_PICKAXE_CONVERSIONS = new HashMap<>();
+    public static final BiMap<IBlockState, IBlockState> BOTANIST_PICKAXE_CONVERSIONS = HashBiMap.create();
     /**
      * A map of all {@link IAuraType} instances which are types of Aura present
      * in different types of worlds. {@link BasicAuraType} instances can be
