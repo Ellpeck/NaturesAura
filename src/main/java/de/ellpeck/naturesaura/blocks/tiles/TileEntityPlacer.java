@@ -130,6 +130,9 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickable {
             IBlockState plant = plantable.getPlant(this.world, pos);
             if (!plant.getBlock().canPlaceBlockAt(this.world, pos))
                 return false;
+            IBlockState state = this.world.getBlockState(pos);
+            if (!state.getBlock().isAir(state, this.world, pos))
+                return false;
             this.world.setBlockState(pos, plant);
         } else
             return false;
