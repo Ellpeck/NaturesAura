@@ -42,6 +42,7 @@ tile.naturesaura.animal_spawner.name=Altar of Birthing
 tile.naturesaura.auto_crafter.name=Automatic Constructor
 tile.naturesaura.gold_brick.name=Golden Stone Bricks
 tile.naturesaura.rf_converter.name=Energetic Aura Forge
+tile.naturesaura.moss_generator.name=Swamp Homi
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.eye_improved.name=Environmental Ocular
