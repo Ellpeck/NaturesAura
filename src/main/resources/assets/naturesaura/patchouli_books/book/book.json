@@ -8,8 +8,8 @@
     "advancements_tab": "naturesaura",
     "book_texture": "naturesaura:textures/gui/book.png",
     "filler_texture": "naturesaura:textures/gui/book_filler.png",
-    "proress_bar_background": "d6f9a4",
-    "proress_bar_color": "6ab203",
+    "progress_bar_background": "d6f9a4",
+    "progress_bar_color": "6ab203",
     "model": "naturesaura:book",
     "subtitle": "info.naturesaura.book.subtitle",
     "macros": {
