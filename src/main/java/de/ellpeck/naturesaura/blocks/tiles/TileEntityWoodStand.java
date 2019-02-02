@@ -149,6 +149,11 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
         if (!Multiblocks.TREE_RITUAL.isComplete(this.world, this.ritualPos)) {
             return false;
         }
+        for (int i = 0; i < 2; i++) {
+            IBlockState state = this.world.getBlockState(this.ritualPos.up(i));
+            if(!(state.getBlock() instanceof BlockLog))
+                return false;
+        }
         if (this.timer < this.recipe.time / 2) {
             List<Ingredient> required = new ArrayList<>(Arrays.asList(this.recipe.ingredients));
             boolean fine = Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'W', (pos, matcher) -> {
