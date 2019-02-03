@@ -15,6 +15,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
@@ -85,7 +86,9 @@ public class TileEntityAutoCrafter extends TileEntityImpl implements ITickable {
             resultItem.motionX = resultItem.motionY = resultItem.motionZ = 0;
             this.world.spawnEntity(resultItem);
 
-            for (EntityItem item : items) {
+            NonNullList<ItemStack> remainingItems = recipe.getRemainingItems(this.crafting);
+            for (int i = 0; i < items.length; i++) {
+                EntityItem item = items[i];
                 if (item == null)
                     continue;
                 ItemStack stack = item.getItem();
@@ -94,6 +97,13 @@ public class TileEntityAutoCrafter extends TileEntityImpl implements ITickable {
                 else {
                     stack.shrink(1);
                     item.setItem(stack);
+                }
+
+                ItemStack remain = remainingItems.get(i);
+                if (!remain.isEmpty()) {
+                    EntityItem remItem = new EntityItem(this.world, item.posX, item.posY, item.posZ, remain.copy());
+                    remItem.motionX = remItem.motionY = remItem.motionZ = 0;
+                    this.world.spawnEntity(remItem);
                 }
 
                 PacketHandler.sendToAllAround(this.world, this.pos, 32,
