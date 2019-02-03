@@ -45,7 +45,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
 
                 ItemStack dispense = stack.splitStack(1);
                 if (offsetState.getBlock().isAir(offsetState, world, offset)) {
-                    if (IAuraChunk.getAuraInArea(world, offset, 30) >= 1000) {
+                    if (IAuraChunk.getAuraInArea(world, offset, 30) >= 100000) {
                         dispense = setType(new ItemStack(ItemAuraBottle.this), IAuraType.forWorld(world));
 
                         BlockPos spot = IAuraChunk.getHighestSpot(world, offset, 30, offset);
@@ -69,7 +69,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
         if (ray != null && ray.typeOfHit == RayTraceResult.Type.BLOCK)
             return;
         BlockPos pos = player.getPosition();
-        if (IAuraChunk.getAuraInArea(player.world, pos, 30) < 1000)
+        if (IAuraChunk.getAuraInArea(player.world, pos, 30) < 100000)
             return;
 
         if (!player.world.isRemote) {

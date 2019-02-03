@@ -21,7 +21,7 @@ public class TileEntityHopperUpgrade extends TileEntityImpl implements ITickable
     @Override
     public void update() {
         if (!this.world.isRemote && this.world.getTotalWorldTime() % 10 == 0) {
-            if (IAuraChunk.getAuraInArea(this.world, this.pos, 25) < 1000)
+            if (IAuraChunk.getAuraInArea(this.world, this.pos, 25) < 100000)
                 return;
             TileEntity tile = this.world.getTileEntity(this.pos.down());
             if (!isValidHopper(tile))

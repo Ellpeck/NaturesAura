@@ -57,7 +57,7 @@ public class CommonEvents {
             int aura = IAuraChunk.triangulateAuraInArea(event.player.world, event.player.getPosition(), 25);
             if (aura <= 0)
                 Helper.addAdvancement(event.player, new ResourceLocation(NaturesAura.MOD_ID, "negative_imbalance"), "triggered_in_code");
-            else if (aura >= 15000)
+            else if (aura >= 1500000)
                 Helper.addAdvancement(event.player, new ResourceLocation(NaturesAura.MOD_ID, "positive_imbalance"), "triggered_in_code");
         }
     }

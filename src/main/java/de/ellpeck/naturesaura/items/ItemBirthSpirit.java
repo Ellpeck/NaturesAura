@@ -21,7 +21,7 @@ public class ItemBirthSpirit extends ItemGlowing {
         if (!parent.world.isRemote && event.getCausedByPlayer() != null) {
             BlockPos pos = parent.getPosition();
             int aura = IAuraChunk.getAuraInArea(parent.world, pos, 30);
-            if (aura < 12000)
+            if (aura < 1200000)
                 return;
 
             int amount = parent.world.rand.nextInt(3) + 1;
