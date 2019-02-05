@@ -64,6 +64,9 @@ public final class ModConfig {
         public boolean respectVanillaParticleSettings = true;
         @Comment("The percentage of particles that should spawn when there is an excess amount of Aura in the environment, where 1 is 100% and 0 is 0%")
         public double excessParticleAmount = 1;
+        @Comment("The location of the aura bar, where 0 is top left, 1 is top right, 2 is bottom left and 3 is bottom right")
+        @Config.RangeInt(min = 0, max = 3)
+        public int auraBarLocation = 0;
 
         @Comment("If debug information about Aura around the player should be displayed in the F3 debug menu if the player is in creative mode")
         public boolean debugText = true;
