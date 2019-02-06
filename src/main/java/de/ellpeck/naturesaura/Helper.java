@@ -167,7 +167,7 @@ public final class Helper {
         return new ICapabilityProvider() {
             private final IAuraRecharge recharge = (container, containerSlot, itemSlot, isSelected) -> {
                 if (isSelected || !needsSelected) {
-                    int toDrain = 3;
+                    int toDrain = 300;
                     if (stack.getItemDamage() > 0 && container.drainAura(toDrain, true) >= toDrain) {
                         stack.setItemDamage(stack.getItemDamage() - 1);
                         container.drainAura(toDrain, false);
