@@ -45,4 +45,5 @@ public final class ModItems {
     public static final Item BIRTH_SPIRIT = new ItemBirthSpirit();
     public static final Item MOVER_MINECART = new ItemMoverMinecart();
     public static final Item RANGE_VISUALIZER = new ItemRangeVisualizer();
+    public static final Item CLOCK_HAND = new ItemImpl("clock_hand");
 }

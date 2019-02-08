@@ -29,7 +29,7 @@ public final class ModBlocks {
     public static final Block POTION_GENERATOR = new BlockPotionGenerator();
     public static final Block AURA_DETECTOR = new BlockAuraDetector();
     public static final Block CONVERSION_CATALYST = new BlockImpl("conversion_catalyst", Material.ROCK).setSoundType(SoundType.STONE).setHardness(2.5F);
-    public static final Block CRUSHING_CATALYST = new BlockImpl("crushing_catalyst",Material.ROCK).setSoundType(SoundType.STONE).setHardness(2.5F);
+    public static final Block CRUSHING_CATALYST = new BlockImpl("crushing_catalyst", Material.ROCK).setSoundType(SoundType.STONE).setHardness(2.5F);
     public static final Block FLOWER_GENERATOR = new BlockFlowerGenerator();
     public static final Block PLACER = new BlockPlacer();
     public static final Block HOPPER_UPGRADE = new BlockHopperUpgrade();
@@ -47,4 +47,5 @@ public final class ModBlocks {
     public static final Block GOLD_BRICK = new BlockImpl("gold_brick", Material.ROCK).setSoundType(SoundType.STONE).setHardness(2F);
     public static final Block RF_CONVERTER = ModConfig.enabledFeatures.rfConverter ? new BlockRFConverter() : null;
     public static final Block MOSS_GENERATOR = new BlockMossGenerator();
+    public static final Block TIME_CHANGER = new BlockTimeChanger();
 }
