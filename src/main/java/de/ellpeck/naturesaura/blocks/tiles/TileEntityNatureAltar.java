@@ -38,7 +38,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
         @Override
         protected boolean canInsert(ItemStack stack, int slot) {
-            return getRecipeForInput(stack) != null || stack.hasCapability(NaturesAuraAPI.capAuraContainer, null);
+            return TileEntityNatureAltar.this.getRecipeForInput(stack) != null || stack.hasCapability(NaturesAuraAPI.capAuraContainer, null);
         }
 
         @Override
@@ -46,7 +46,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
             if (stack.hasCapability(NaturesAuraAPI.capAuraContainer, null))
                 return stack.getCapability(NaturesAuraAPI.capAuraContainer, null).storeAura(1, true) <= 0;
             else
-                return getRecipeForInput(stack) == null;
+                return TileEntityNatureAltar.this.getRecipeForInput(stack) == null;
         }
     };
 
@@ -54,6 +54,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     public int bobTimer;
 
     private final BasicAuraContainer container = new BasicAuraContainer(NaturesAuraAPI.TYPE_OVERWORLD, 500000);
+    private final ItemStack[] catalysts = new ItemStack[4];
     public boolean structureFine;
 
     private AltarRecipe currentRecipe;
@@ -71,6 +72,18 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                 if (fine != this.structureFine) {
                     this.structureFine = fine;
                     this.sendToClients();
+                }
+
+                if (this.structureFine) {
+                    int index = 0;
+                    for (int x = -2; x <= 2; x += 4) {
+                        for (int z = -2; z <= 2; z += 4) {
+                            BlockPos offset = this.pos.add(x, 1, z);
+                            IBlockState state = this.world.getBlockState(offset);
+                            this.catalysts[index] = state.getBlock().getItem(this.world, offset, state);
+                            index++;
+                        }
+                    }
                 }
             }
 
@@ -113,13 +126,13 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                 } else {
                     if (this.currentRecipe == null) {
                         if (!stack.isEmpty()) {
-                            this.currentRecipe = getRecipeForInput(stack);
+                            this.currentRecipe = this.getRecipeForInput(stack);
                         }
                     } else {
                         if (stack.isEmpty() || !this.currentRecipe.input.apply(stack)) {
                             this.currentRecipe = null;
                             this.timer = 0;
-                        } else if (this.hasCatalyst(this.currentRecipe.catalyst)) {
+                        } else {
                             int req = MathHelper.ceil(this.currentRecipe.aura / (double) this.currentRecipe.time);
                             if (this.container.getStoredAura() >= req) {
                                 this.container.drainAura(req, false);
@@ -179,29 +192,17 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
         }
     }
 
-    private static AltarRecipe getRecipeForInput(ItemStack input) {
+    private AltarRecipe getRecipeForInput(ItemStack input) {
         for (AltarRecipe recipe : NaturesAuraAPI.ALTAR_RECIPES.values()) {
             if (recipe.input.apply(input)) {
-                return recipe;
+                if (recipe.catalyst == Ingredient.EMPTY)
+                    return recipe;
+                for (ItemStack stack : this.catalysts)
+                    if (recipe.catalyst.apply(stack))
+                        return recipe;
             }
         }
         return null;
-    }
-
-    private boolean hasCatalyst(Ingredient catalyst) {
-        if (catalyst == Ingredient.EMPTY)
-            return true;
-
-        for (int x = -2; x <= 2; x += 4) {
-            for (int z = -2; z <= 2; z += 4) {
-                BlockPos offset = this.pos.add(x, 1, z);
-                IBlockState state = this.world.getBlockState(offset);
-                ItemStack stack = state.getBlock().getItem(this.world, offset, state);
-                if (catalyst.apply(stack))
-                    return true;
-            }
-        }
-        return false;
     }
 
     @Override
