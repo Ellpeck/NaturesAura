@@ -29,6 +29,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -58,6 +59,10 @@ import java.util.Map;
 public class ClientEvents {
 
     public static final ResourceLocation OVERLAYS = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/overlays.png");
+    private static final Map<ResourceLocation, Tuple<ItemStack, Boolean>> SHOWING_EFFECTS = new HashMap<>();
+    private static ItemStack heldCache = ItemStack.EMPTY;
+    private static ItemStack heldEye = ItemStack.EMPTY;
+    private static ItemStack heldOcular = ItemStack.EMPTY;
 
     @SubscribeEvent
     public void onDebugRender(RenderGameOverlayEvent.Text event) {
@@ -95,6 +100,10 @@ public class ClientEvents {
     @SubscribeEvent
     public void onClientTick(ClientTickEvent event) {
         if (event.phase == Phase.END) {
+            heldCache = ItemStack.EMPTY;
+            heldEye = ItemStack.EMPTY;
+            heldOcular = ItemStack.EMPTY;
+
             Minecraft mc = Minecraft.getMinecraft();
             if (mc.world == null) {
                 ParticleHandler.clearParticles();
@@ -138,6 +147,41 @@ public class ClientEvents {
                 if (!mc.isGamePaused())
                     ParticleHandler.updateParticles();
                 mc.profiler.endSection();
+
+                if (mc.player != null) {
+                    if (Compat.baubles) {
+                        IItemHandler baubles = BaublesApi.getBaublesHandler(mc.player);
+                        for (int i = 0; i < baubles.getSlots(); i++) {
+                            ItemStack slot = baubles.getStackInSlot(i);
+                            if (!slot.isEmpty()) {
+                                if (slot.getItem() == ModItems.AURA_CACHE)
+                                    heldCache = slot;
+                                else if (slot.getItem() == ModItems.EYE)
+                                    heldEye = slot;
+                                else if (slot.getItem() == ModItems.EYE_IMPROVED)
+                                    heldOcular = slot;
+                            }
+                        }
+                    }
+
+                    for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
+                        ItemStack slot = mc.player.inventory.getStackInSlot(i);
+                        if (!slot.isEmpty()) {
+                            if (slot.getItem() == ModItems.AURA_CACHE)
+                                heldCache = slot;
+                            else if (slot.getItem() == ModItems.EYE && i <= 8)
+                                heldEye = slot;
+                            else if (slot.getItem() == ModItems.EYE_IMPROVED)
+                                heldOcular = slot;
+                        }
+                    }
+
+                    if (!heldOcular.isEmpty() && mc.world.getTotalWorldTime() % 20 == 0) {
+                        SHOWING_EFFECTS.clear();
+                        Helper.getAuraChunksInArea(mc.world, mc.player.getPosition(), 100,
+                                chunk -> chunk.getActiveEffectIcons(mc.player, SHOWING_EFFECTS));
+                    }
+                }
             }
         }
     }
@@ -237,39 +281,8 @@ public class ClientEvents {
         if (event.getType() == ElementType.ALL) {
             ScaledResolution res = event.getResolution();
             if (mc.player != null) {
-                ItemStack cache = ItemStack.EMPTY;
-                ItemStack eye = ItemStack.EMPTY;
-                ItemStack eyeImproved = ItemStack.EMPTY;
-
-                if (Compat.baubles) {
-                    IItemHandler baubles = BaublesApi.getBaublesHandler(mc.player);
-                    for (int i = 0; i < baubles.getSlots(); i++) {
-                        ItemStack slot = baubles.getStackInSlot(i);
-                        if (!slot.isEmpty()) {
-                            if (slot.getItem() == ModItems.AURA_CACHE)
-                                cache = slot;
-                            else if (slot.getItem() == ModItems.EYE)
-                                eye = slot;
-                            else if (slot.getItem() == ModItems.EYE_IMPROVED)
-                                eyeImproved = slot;
-                        }
-                    }
-                }
-
-                for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
-                    ItemStack slot = mc.player.inventory.getStackInSlot(i);
-                    if (!slot.isEmpty()) {
-                        if (slot.getItem() == ModItems.AURA_CACHE)
-                            cache = slot;
-                        else if (slot.getItem() == ModItems.EYE && i <= 8)
-                            eye = slot;
-                        else if (slot.getItem() == ModItems.EYE_IMPROVED)
-                            eyeImproved = slot;
-                    }
-                }
-
-                if (!cache.isEmpty()) {
-                    IAuraContainer container = cache.getCapability(NaturesAuraAPI.capAuraContainer, null);
+                if (!heldCache.isEmpty()) {
+                    IAuraContainer container = heldCache.getCapability(NaturesAuraAPI.capAuraContainer, null);
                     int width = MathHelper.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
                     int x = res.getScaledWidth() / 2 - 173 - (mc.player.getHeldItemOffhand().isEmpty() ? 0 : 29);
                     int y = res.getScaledHeight() - 8;
@@ -286,14 +299,14 @@ public class ClientEvents {
 
                     float scale = 0.75F;
                     GlStateManager.scale(scale, scale, scale);
-                    String s = cache.getDisplayName();
+                    String s = heldCache.getDisplayName();
                     mc.fontRenderer.drawString(s, (x + 80) / scale - mc.fontRenderer.getStringWidth(s), (y - 7) / scale, color, true);
 
                     GlStateManager.color(1F, 1F, 1F);
                     GlStateManager.popMatrix();
                 }
 
-                if (!eye.isEmpty() || !eyeImproved.isEmpty()) {
+                if (!heldEye.isEmpty() || !heldOcular.isEmpty()) {
                     GlStateManager.pushMatrix();
                     mc.getTextureManager().bindTexture(OVERLAYS);
 
@@ -307,19 +320,19 @@ public class ClientEvents {
                         float textScale = 0.75F;
 
                         int startX = conf % 2 == 0 ? 3 : res.getScaledWidth() - 3 - 6;
-                        int startY = conf < 2 ? 10 : (!eyeImproved.isEmpty() && (totalPercentage > 1F || totalPercentage < 0) ? -26 : 0) + res.getScaledHeight() - 60;
+                        int startY = conf < 2 ? 10 : (!heldOcular.isEmpty() && (totalPercentage > 1F || totalPercentage < 0) ? -26 : 0) + res.getScaledHeight() - 60;
                         float plusOffX = conf % 2 == 0 ? 7 : -1 - 6;
                         float textX = conf % 2 == 0 ? 3 : res.getScaledWidth() - 3 - mc.fontRenderer.getStringWidth(text) * textScale;
                         float textY = conf < 2 ? 3 : res.getScaledHeight() - 3 - 6;
 
                         int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
-                        int y = !eyeImproved.isEmpty() && totalPercentage > 1F ? startY + 26 : startY;
+                        int y = !heldOcular.isEmpty() && totalPercentage > 1F ? startY + 26 : startY;
                         if (tHeight < 50)
                             Gui.drawModalRectWithCustomSizedTexture(startX, y, 6, 12, 6, 50 - tHeight, 256, 256);
                         if (tHeight > 0)
                             Gui.drawModalRectWithCustomSizedTexture(startX, y + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
 
-                        if (!eyeImproved.isEmpty()) {
+                        if (!heldOcular.isEmpty()) {
                             GlStateManager.color(160 / 255F, 83 / 255F, 8 / 255F);
 
                             int topHeight = MathHelper.ceil(MathHelper.clamp((totalPercentage - 1F) * 2F, 0F, 1F) * 25);
@@ -336,16 +349,37 @@ public class ClientEvents {
                             }
                         }
 
-                        int color = eyeImproved.isEmpty() ? 0x53a008 : 0xa05308;
-                        if (totalPercentage > (eyeImproved.isEmpty() ? 1F : 1.5F))
+                        int color = heldOcular.isEmpty() ? 0x53a008 : 0xa05308;
+                        if (totalPercentage > (heldOcular.isEmpty() ? 1F : 1.5F))
                             mc.fontRenderer.drawString("+", startX + plusOffX, startY - 0.5F, color, true);
-                        if (totalPercentage < (eyeImproved.isEmpty() ? 0F : -0.5F))
-                            mc.fontRenderer.drawString("-", startX + plusOffX, startY - 0.5F + (eyeImproved.isEmpty() ? 44 : 70), color, true);
+                        if (totalPercentage < (heldOcular.isEmpty() ? 0F : -0.5F))
+                            mc.fontRenderer.drawString("-", startX + plusOffX, startY - 0.5F + (heldOcular.isEmpty() ? 44 : 70), color, true);
 
                         GlStateManager.pushMatrix();
                         GlStateManager.scale(textScale, textScale, textScale);
                         mc.fontRenderer.drawString(text, textX / textScale, textY / textScale, 0x53a008, true);
                         GlStateManager.popMatrix();
+
+                        if (!heldOcular.isEmpty()) {
+                            float scale = 0.75F;
+                            GlStateManager.pushMatrix();
+                            GlStateManager.scale(scale, scale, scale);
+                            int stackY = 15;
+                            for (Tuple<ItemStack, Boolean> effect : SHOWING_EFFECTS.values()) {
+                                int theX = (int) (10 / scale);
+                                int theY = (int) (stackY / scale);
+                                ItemStack stack = effect.getFirst();
+                                Helper.renderItemInGui(stack, theX, theY, 1F);
+                                if (effect.getSecond()) {
+                                    GlStateManager.disableDepth();
+                                    mc.getTextureManager().bindTexture(OVERLAYS);
+                                    Gui.drawModalRectWithCustomSizedTexture(theX, theY, 240, 0, 16, 16, 256, 256);
+                                    GlStateManager.enableDepth();
+                                }
+                                stackY += 8;
+                            }
+                            GlStateManager.popMatrix();
+                        }
                     }
 
                     if (mc.objectMouseOver != null) {

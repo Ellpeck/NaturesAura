@@ -6,10 +6,14 @@ import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -42,16 +46,6 @@ public class AuraChunk implements IAuraChunk {
             IDrainSpotEffect effect = supplier.get();
             if (effect.appliesHere(this.chunk, this, this.type))
                 this.effects.add(effect);
-        }
-    }
-
-    @Override
-    public void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
-        for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
-            BlockPos drainPos = entry.getKey();
-            if (drainPos.distanceSq(pos) <= radius * radius) {
-                consumer.accept(drainPos, entry.getValue().intValue());
-            }
         }
     }
 
@@ -172,6 +166,34 @@ public class AuraChunk implements IAuraChunk {
 
     public IMessage makePacket() {
         return new PacketAuraChunk(this.chunk.x, this.chunk.z, this.drainSpots);
+    }
+
+    public void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
+        for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
+            BlockPos drainPos = entry.getKey();
+            if (drainPos.distanceSq(pos) <= radius * radius) {
+                consumer.accept(drainPos, entry.getValue().intValue());
+            }
+        }
+    }
+
+    public void getActiveEffectIcons(EntityPlayer player, Map<ResourceLocation, Tuple<ItemStack, Boolean>> icons) {
+        for (IDrainSpotEffect effect : this.effects) {
+            Tuple<ItemStack, Boolean> alreadyThere = icons.get(effect.getName());
+            if (alreadyThere != null && alreadyThere.getSecond())
+                continue;
+            for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
+                BlockPos pos = entry.getKey();
+                MutableInt amount = entry.getValue();
+                int state = effect.isActiveHere(player, this.chunk, this, pos, amount.intValue());
+                if (state < 0)
+                    continue;
+                ItemStack stack = effect.getDisplayIcon();
+                if (stack.isEmpty())
+                    continue;
+                icons.put(effect.getName(), new Tuple<>(stack, state == 0));
+            }
+        }
     }
 
     @Override

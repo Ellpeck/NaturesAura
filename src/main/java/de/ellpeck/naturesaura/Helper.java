@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
+import de.ellpeck.naturesaura.chunk.AuraChunk;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
@@ -28,6 +29,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.capabilities.Capability;
@@ -41,23 +43,44 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public final class Helper {
 
     public static boolean getTileEntitiesInArea(World world, BlockPos pos, int radius, Function<TileEntity, Boolean> consumer) {
+        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getAuraChunksInArea");
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
                 if (isChunkLoaded(world, x, z)) {
                     for (TileEntity tile : world.getChunk(x, z).getTileEntityMap().values()) {
                         if (tile.getPos().distanceSq(pos) <= radius * radius)
-                            if (consumer.apply(tile))
+                            if (consumer.apply(tile)) {
+                                world.profiler.endSection();
                                 return true;
+                            }
                     }
                 }
             }
         }
+        world.profiler.endSection();
         return false;
+    }
+
+    public static void getAuraChunksInArea(World world, BlockPos pos, int radius, Consumer<AuraChunk> consumer) {
+        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getAuraChunksInArea");
+        for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
+            for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
+                if (Helper.isChunkLoaded(world, x, z)) {
+                    Chunk chunk = world.getChunk(x, z);
+                    if (chunk.hasCapability(NaturesAuraAPI.capAuraChunk, null)) {
+                        AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null);
+                        consumer.accept(auraChunk);
+                    }
+                }
+            }
+        }
+        world.profiler.endSection();
     }
 
     public static List<EntityItemFrame> getAttachedItemFrames(World world, BlockPos pos) {

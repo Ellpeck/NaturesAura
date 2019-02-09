@@ -15,7 +15,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -114,17 +113,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     @Override
     public void getAuraSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
         world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getSpotsInArea");
-        for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
-            for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
-                if (Helper.isChunkLoaded(world, x, z)) {
-                    Chunk chunk = world.getChunk(x, z);
-                    if (chunk.hasCapability(NaturesAuraAPI.capAuraChunk, null)) {
-                        IAuraChunk auraChunk = chunk.getCapability(NaturesAuraAPI.capAuraChunk, null);
-                        auraChunk.getSpotsInArea(pos, radius, consumer);
-                    }
-                }
-            }
-        }
+        Helper.getAuraChunksInArea(world, pos, radius, chunk -> chunk.getSpotsInArea(pos, radius, consumer));
         world.profiler.endSection();
     }
 

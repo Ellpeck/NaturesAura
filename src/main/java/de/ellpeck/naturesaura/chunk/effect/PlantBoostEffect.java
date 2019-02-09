@@ -11,7 +11,10 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -22,23 +25,47 @@ public class PlantBoostEffect implements IDrainSpotEffect {
 
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "plant_boost");
 
-    @Override
-    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    private int amount;
+    private int dist;
+
+    private boolean calcValues(World world, BlockPos pos, Integer spot) {
         if (spot <= 0)
-            return;
+            return false;
         int aura = IAuraChunk.getAuraInArea(world, pos, 30);
         if (aura < 1500000)
-            return;
-        int amount = Math.min(45, Math.abs(aura) / 100000);
-        if (amount <= 1)
-            return;
-        int dist = MathHelper.clamp(Math.abs(aura) / 150000, 5, 35);
+            return false;
+        this.amount = Math.min(45, Math.abs(aura) / 100000);
+        if (this.amount <= 1)
+            return false;
+        this.dist = MathHelper.clamp(Math.abs(aura) / 150000, 5, 35);
+        return true;
+    }
 
-        for (int i = amount / 2 + world.rand.nextInt(amount / 2); i >= 0; i--) {
-            int x = MathHelper.floor(pos.getX() + world.rand.nextGaussian() * dist);
-            int z = MathHelper.floor(pos.getZ() + world.rand.nextGaussian() * dist);
+    @Override
+    public int isActiveHere(EntityPlayer player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (!this.calcValues(player.world, pos, spot))
+            return -1;
+        if (player.getDistanceSq(pos) > this.dist * this.dist)
+            return -1;
+        if (NaturesAuraAPI.instance().isEffectPowderActive(player.world, player.getPosition(), NAME))
+            return 0;
+        return 1;
+    }
+
+    @Override
+    public ItemStack getDisplayIcon() {
+        return new ItemStack(Items.WHEAT_SEEDS);
+    }
+
+    @Override
+    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (!this.calcValues(world, pos, spot))
+            return;
+        for (int i = this.amount / 2 + world.rand.nextInt(this.amount / 2); i >= 0; i--) {
+            int x = MathHelper.floor(pos.getX() + world.rand.nextGaussian() * this.dist);
+            int z = MathHelper.floor(pos.getZ() + world.rand.nextGaussian() * this.dist);
             BlockPos plantPos = new BlockPos(x, world.getHeight(x, z), z);
-            if (plantPos.distanceSq(pos) <= dist * dist && world.isBlockLoaded(plantPos)) {
+            if (plantPos.distanceSq(pos) <= this.dist * this.dist && world.isBlockLoaded(plantPos)) {
                 if (NaturesAuraAPI.instance().isEffectPowderActive(world, plantPos, NAME))
                     continue;
 

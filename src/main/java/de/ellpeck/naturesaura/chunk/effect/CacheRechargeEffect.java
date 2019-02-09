@@ -6,7 +6,9 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -20,23 +22,48 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
 
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "cache_recharge");
 
-    @Override
-    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    private int amount;
+    private AxisAlignedBB bb;
+
+    private boolean calcValues(World world, BlockPos pos, Integer spot) {
         if (spot < 100000)
-            return;
+            return false;
         int aura = IAuraChunk.getAuraInArea(world, pos, 20);
         if (aura < 1500000)
-            return;
-        if (NaturesAuraAPI.instance().isEffectPowderActive(world, pos, NAME))
-            return;
+            return false;
         int dist = MathHelper.clamp(aura / 3500, 3, 15);
-        int amount = aura / 250000 - 2;
+        this.bb = new AxisAlignedBB(pos).grow(dist);
+        this.amount = aura / 250000 - 2;
+        return true;
+    }
 
-        List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos).grow(dist));
+    @Override
+    public int isActiveHere(EntityPlayer player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (!this.calcValues(player.world, pos, spot))
+            return -1;
+        if (!this.bb.contains(player.getPositionVector()))
+            return -1;
+        if (NaturesAuraAPI.instance().isEffectPowderActive(player.world, player.getPosition(), NAME))
+            return 0;
+        return 1;
+    }
+
+    @Override
+    public ItemStack getDisplayIcon() {
+        return new ItemStack(ModItems.AURA_CACHE);
+    }
+
+    @Override
+    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (!this.calcValues(world, pos, spot))
+            return;
+        List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.bb);
         for (EntityPlayer player : players) {
-            if (NaturesAuraAPI.instance().insertAuraIntoPlayer(player, amount, true)) {
-                NaturesAuraAPI.instance().insertAuraIntoPlayer(player, amount, false);
-                auraChunk.drainAura(pos, amount);
+            if (NaturesAuraAPI.instance().isEffectPowderActive(world, player.getPosition(), NAME))
+                continue;
+            if (NaturesAuraAPI.instance().insertAuraIntoPlayer(player, this.amount, true)) {
+                NaturesAuraAPI.instance().insertAuraIntoPlayer(player, this.amount, false);
+                auraChunk.drainAura(pos, this.amount);
             }
         }
     }

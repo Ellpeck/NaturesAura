@@ -9,7 +9,9 @@ import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -20,37 +22,61 @@ public class GrassDieEffect implements IDrainSpotEffect {
 
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "grass_die");
 
-    @Override
-    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    private int amount;
+    private int dist;
+
+    private boolean calcValues(World world, BlockPos pos, Integer spot) {
         if (spot < 0) {
             int aura = IAuraChunk.getAuraInArea(world, pos, 50);
             if (aura < 0) {
-                int amount = Math.min(300, Math.abs(aura) / 100000);
-                if (amount > 1) {
-                    int dist = MathHelper.clamp(Math.abs(aura) / 75000, 5, 75);
-                    for (int i = amount / 2 + world.rand.nextInt(amount / 2); i >= 0; i--) {
-                        BlockPos grassPos = new BlockPos(
-                                pos.getX() + world.rand.nextGaussian() * dist,
-                                pos.getY() + world.rand.nextGaussian() * dist,
-                                pos.getZ() + world.rand.nextGaussian() * dist
-                        );
-                        if (grassPos.distanceSq(pos) <= dist * dist && world.isBlockLoaded(grassPos)) {
-                            IBlockState state = world.getBlockState(grassPos);
-                            Block block = state.getBlock();
-
-                            IBlockState newState = null;
-                            if (block instanceof BlockLeaves) {
-                                newState = ModBlocks.DECAYED_LEAVES.getDefaultState();
-                            } else if (block instanceof BlockGrass) {
-                                newState = Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT);
-                            } else if (block instanceof BlockBush) {
-                                newState = Blocks.AIR.getDefaultState();
-                            }
-                            if (newState != null)
-                                world.setBlockState(grassPos, newState);
-                        }
-                    }
+                this.amount = Math.min(300, Math.abs(aura) / 100000);
+                if (this.amount > 1) {
+                    this.dist = MathHelper.clamp(Math.abs(aura) / 75000, 5, 75);
+                    return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int isActiveHere(EntityPlayer player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (!this.calcValues(player.world, pos, spot))
+            return -1;
+        if (player.getDistanceSq(pos) > this.dist * this.dist)
+            return -1;
+        return 1;
+    }
+
+    @Override
+    public ItemStack getDisplayIcon() {
+        return new ItemStack(ModBlocks.DECAYED_LEAVES);
+    }
+
+    @Override
+    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (!this.calcValues(world, pos, spot))
+            return;
+        for (int i = this.amount / 2 + world.rand.nextInt(this.amount / 2); i >= 0; i--) {
+            BlockPos grassPos = new BlockPos(
+                    pos.getX() + world.rand.nextGaussian() * this.dist,
+                    pos.getY() + world.rand.nextGaussian() * this.dist,
+                    pos.getZ() + world.rand.nextGaussian() * this.dist
+            );
+            if (grassPos.distanceSq(pos) <= this.dist * this.dist && world.isBlockLoaded(grassPos)) {
+                IBlockState state = world.getBlockState(grassPos);
+                Block block = state.getBlock();
+
+                IBlockState newState = null;
+                if (block instanceof BlockLeaves) {
+                    newState = ModBlocks.DECAYED_LEAVES.getDefaultState();
+                } else if (block instanceof BlockGrass) {
+                    newState = Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT);
+                } else if (block instanceof BlockBush) {
+                    newState = Blocks.AIR.getDefaultState();
+                }
+                if (newState != null)
+                    world.setBlockState(grassPos, newState);
             }
         }
     }

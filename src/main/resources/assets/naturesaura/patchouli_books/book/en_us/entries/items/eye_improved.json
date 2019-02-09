@@ -10,7 +10,10 @@
         },
         {
             "type": "text",
-            "text": "It needs be noted that the extended bar only shows if $(aura) levels are high or low enough.$(br)An additional perk is that, while the $(item)Environmental Eye$() needs to be held in the hotbar, the $(item)Environmental Ocular$() can be anywhere in the user's inventory to work.$(p)All other properties of the $(item)Environmental Eye$() carry over to the $(item)Environmental Ocular$() as expected."
+            "text": "It needs be noted that the extended bar only shows if $(aura) levels are high or low enough.$(p)Secondly, the $(item)Environmental Ocular$() has the ability to display all $(thing)Aura Imbalance$() effects that are currently occuring in the place the user is standing. The icons it displays are the same as the ones depicted for each effect in the $(thing)Aura Imbalance$() section of this book."
+        },{
+            "type": "text",
+            "text": "An additional perk is that, while the $(item)Environmental Eye$() needs to be held in the hotbar, the $(item)Environmental Ocular$() can be anywhere in the user's inventory to work.$(p)All other properties of the $(item)Environmental Eye$() carry over to the $(item)Environmental Ocular$() as expected."
         },
         {
             "type": "naturesaura:tree_ritual",

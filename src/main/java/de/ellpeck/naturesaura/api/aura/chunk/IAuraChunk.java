@@ -46,11 +46,6 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
      * This method uses the supplied consumer to iterate over all the drain
      * spots, represented as a position and the number of Aura in them, in any
      * given area.
-     * <p>
-     * Notice that this is different from {@link #getSpotsInArea(BlockPos, int,
-     * BiConsumer)} because this method iterates over several chunks while the
-     * former only uses the current aura chunk instance. Most of the time, you
-     * will want to use this method.
      *
      * @param world    The world
      * @param pos      The center position
@@ -132,11 +127,6 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
     static BlockPos getHighestSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot) {
         return NaturesAuraAPI.instance().getHighestAuraDrainSpot(world, pos, radius, defaultSpot);
     }
-
-    /**
-     * @see #getSpotsInArea(World, BlockPos, int, BiConsumer)
-     */
-    void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer);
 
     /**
      * Drains the given amount of Aura from the given position. Returns the
