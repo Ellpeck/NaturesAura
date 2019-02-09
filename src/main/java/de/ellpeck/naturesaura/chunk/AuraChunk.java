@@ -145,6 +145,7 @@ public class AuraChunk implements IAuraChunk {
 
     @Override
     public void markDirty() {
+        this.chunk.markDirty();
         this.needsSync = true;
     }
 
