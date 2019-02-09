@@ -49,7 +49,7 @@ import java.util.function.Function;
 public final class Helper {
 
     public static boolean getTileEntitiesInArea(World world, BlockPos pos, int radius, Function<TileEntity, Boolean> consumer) {
-        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getAuraChunksInArea");
+        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getTileEntitiesInArea");
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
                 if (isChunkLoaded(world, x, z)) {
