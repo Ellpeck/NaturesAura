@@ -160,6 +160,10 @@ public final class ModRecipes {
                 new AmountIngredient(new ItemStack(ModItems.INFUSED_IRON, 3)),
                 Ingredient.fromItem(ModItems.CALLING_SPIRIT),
                 new ItemStack(ModItems.SKY_INGOT)).register();
+        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "clock_hand"),
+                Ingredient.fromItem(Items.NETHER_STAR),
+                Ingredient.fromItem(ModItems.CALLING_SPIRIT),
+                new ItemStack(ModItems.CLOCK_HAND)).register();
 
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
                 Blocks.COBBLESTONE.getDefaultState(),

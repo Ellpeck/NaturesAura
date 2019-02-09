@@ -1,0 +1,33 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        " O ",
+        "BCB",
+        " N "
+    ],
+    "key": {
+        "C": {
+            "item": "minecraft:clock"
+        },
+        "B": {
+            "item": "naturesaura:infused_brick"
+        },
+        "N": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:nether"
+            }
+        },
+        "O": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:overworld"
+            }
+        }
+    },
+    "result": {
+        "item": "naturesaura:time_changer"
+    }
+}

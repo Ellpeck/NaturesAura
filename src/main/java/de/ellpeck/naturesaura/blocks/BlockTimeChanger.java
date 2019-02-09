@@ -6,8 +6,8 @@ import net.minecraft.block.material.Material;
 
 public class BlockTimeChanger extends BlockContainerImpl {
     public BlockTimeChanger() {
-        super(Material.WOOD, "time_changer", TileEntityTimeChanger.class, "time_changer");
-        this.setSoundType(SoundType.WOOD);
-        this.setHardness(2);
+        super(Material.ROCK, "time_changer", TileEntityTimeChanger.class, "time_changer");
+        this.setSoundType(SoundType.STONE);
+        this.setHardness(2.5F);
     }
 }

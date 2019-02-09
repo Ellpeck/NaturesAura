@@ -87,29 +87,21 @@ public class TileEntityTimeChanger extends TileEntityImpl implements ITickable {
                 this.goalTime = 0;
                 this.sendToClients();
             }
-        } else if (this.goalTime > 0) {
-            if (this.world.getTotalWorldTime() % 5 == 0)
-                NaturesAuraAPI.instance().spawnParticleStream(
-                        this.pos.getX() + (float) this.world.rand.nextGaussian() * 5F,
-                        this.pos.getY() + 1 + this.world.rand.nextFloat() * 5F,
-                        this.pos.getZ() + (float) this.world.rand.nextGaussian() * 5F,
-                        this.pos.getX() + this.world.rand.nextFloat(),
-                        this.pos.getY() + this.world.rand.nextFloat(),
-                        this.pos.getZ() + this.world.rand.nextFloat(),
-                        this.world.rand.nextFloat() * 0.07F + 0.07F, IAuraType.forWorld(this.world).getColor(), this.world.rand.nextFloat() + 0.5F);
-
-            if (this.world.rand.nextFloat() >= 0.25F) {
-                int color = this.goalTime % 24000 > 12000 ? 0xe2e2e2 : 0xffe926;
-                NaturesAuraAPI.instance().spawnMagicParticle(
-                        this.pos.getX() + this.world.rand.nextFloat(),
-                        this.pos.getY() + 1,
-                        this.pos.getZ() + this.world.rand.nextFloat(),
-                        -0.05F - this.world.rand.nextFloat() * 0.02F,
-                        this.world.rand.nextFloat() * 0.25F,
-                        this.world.rand.nextGaussian() * 0.02F,
-                        color, 1F + this.world.rand.nextFloat() * 2F,
-                        this.world.rand.nextInt(100) + 100, 0, true, true);
-            }
+        } else if (this.goalTime > 0 && this.world.rand.nextFloat() >= 0.25F) {
+            double angle = Math.toRadians(this.world.getTotalWorldTime() * 5F % 360);
+            double x = this.pos.getX() + 0.5 + Math.sin(angle) * 3F;
+            double z = this.pos.getZ() + 0.5 + Math.cos(angle) * 3F;
+            int color = this.goalTime % 24000 > 12000 ? 0xe2e2e2 : 0xffe926;
+            NaturesAuraAPI.instance().spawnMagicParticle(
+                    x, this.pos.getY() + 0.1F, z,
+                    0F, 0.12F, 0F,
+                    color, 1F + this.world.rand.nextFloat() * 2F,
+                    this.world.rand.nextInt(100) + 100, 0, false, true);
+            NaturesAuraAPI.instance().spawnMagicParticle(
+                    x, this.pos.getY() + 0.1F, z,
+                    0F, 0F, 0F,
+                    IAuraType.forWorld(this.world).getColor(), 1F + this.world.rand.nextFloat(),
+                    150, 0, false, true);
         }
     }
 
