@@ -364,9 +364,10 @@ public class ClientEvents {
                             float scale = 0.75F;
                             GlStateManager.pushMatrix();
                             GlStateManager.scale(scale, scale, scale);
-                            int stackY = 15;
+                            int stackX = conf % 2 == 0 ? 10 : res.getScaledWidth() - 22;
+                            int stackY = conf < 2 ? 15 : res.getScaledHeight() - 55;
                             for (Tuple<ItemStack, Boolean> effect : SHOWING_EFFECTS.values()) {
-                                int theX = (int) (10 / scale);
+                                int theX = (int) (stackX / scale);
                                 int theY = (int) (stackY / scale);
                                 ItemStack stack = effect.getFirst();
                                 Helper.renderItemInGui(stack, theX, theY, 1F);
