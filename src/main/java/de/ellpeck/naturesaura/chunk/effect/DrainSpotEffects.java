@@ -17,6 +17,6 @@ public final class DrainSpotEffects {
 
         NaturesAuraAPI.EFFECT_POWDERS.put(PlantBoostEffect.NAME, 0xc2f442);
         NaturesAuraAPI.EFFECT_POWDERS.put(CacheRechargeEffect.NAME, 0x1fb0d1);
-        NaturesAuraAPI.EFFECT_POWDERS.put(AnimalEffect.NAME, 0xba1010);
+        NaturesAuraAPI.EFFECT_POWDERS.put(AnimalEffect.NAME, 0xc842f4);
     }
 }

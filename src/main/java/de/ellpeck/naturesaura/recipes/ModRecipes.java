@@ -105,7 +105,7 @@ public final class ModRecipes {
                 Ingredient.fromItem(ModItems.AURA_CACHE)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "animal_powder"),
                 Ingredient.fromStacks(new ItemStack(Blocks.SAPLING, 1, 3)),
-                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 24), AnimalEffect.NAME), 400,
+                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 8), AnimalEffect.NAME), 400,
                 Helper.blockIng(ModBlocks.GOLD_POWDER),
                 Helper.blockIng(ModBlocks.GOLD_POWDER),
                 Ingredient.fromItem(ModItems.SKY_INGOT),
