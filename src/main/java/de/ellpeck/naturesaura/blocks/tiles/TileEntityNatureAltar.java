@@ -66,24 +66,24 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     public void update() {
         Random rand = this.world.rand;
 
+        if (this.world.getTotalWorldTime() % 40 == 0) {
+            int index = 0;
+            for (int x = -2; x <= 2; x += 4) {
+                for (int z = -2; z <= 2; z += 4) {
+                    BlockPos offset = this.pos.add(x, 1, z);
+                    IBlockState state = this.world.getBlockState(offset);
+                    this.catalysts[index] = state.getBlock().getItem(this.world, offset, state);
+                    index++;
+                }
+            }
+        }
+
         if (!this.world.isRemote) {
             if (this.world.getTotalWorldTime() % 40 == 0) {
                 boolean fine = Multiblocks.ALTAR.isComplete(this.world, this.pos);
                 if (fine != this.structureFine) {
                     this.structureFine = fine;
                     this.sendToClients();
-                }
-
-                if (this.structureFine) {
-                    int index = 0;
-                    for (int x = -2; x <= 2; x += 4) {
-                        for (int z = -2; z <= 2; z += 4) {
-                            BlockPos offset = this.pos.add(x, 1, z);
-                            IBlockState state = this.world.getBlockState(offset);
-                            this.catalysts[index] = state.getBlock().getItem(this.world, offset, state);
-                            index++;
-                        }
-                    }
                 }
             }
 
