@@ -16,11 +16,7 @@
             "item": "naturesaura:sky_ingot"
         },
         "W": {
-            "type": "minecraft:item_nbt",
-            "item": "naturesaura:aura_bottle",
-            "nbt": {
-                "stored_type": "naturesaura:end"
-            }
+            "item": "naturesaura:token_euphoria"
         }
     },
     "result": {

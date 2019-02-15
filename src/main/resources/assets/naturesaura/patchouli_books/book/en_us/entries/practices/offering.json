@@ -28,9 +28,29 @@
             "recipe": "naturesaura:calling_spirit"
         },
         {
-            "type":"naturesaura:offering",
-            "text":"Asking for $(item)Ingots of the Sky$(), a powerful metal infused with divine energy.",
-            "recipe":"naturesaura:sky_ingot"
+            "type": "naturesaura:offering",
+            "text": "Asking for $(item)Ingots of the Sky$(), a powerful metal infused with divine energy.",
+            "recipe": "naturesaura:sky_ingot"
+        },
+        {
+            "type": "naturesaura:offering",
+            "text": "Exchanging the $(item)Token of Joy$() for a much stronger version, the $(item)Token of Euphoria$()",
+            "recipe": "naturesaura:token_euphoria"
+        },
+        {
+            "type": "naturesaura:offering",
+            "text": "Exchanging the $(item)Token of Fear$() for a much stronger version, the $(item)Token of Terror$()",
+            "recipe": "naturesaura:token_terror"
+        },
+        {
+            "type": "naturesaura:offering",
+            "text": "Exchanging the $(item)Token of Anger$() for a much stronger version, the $(item)Token of Rage$()",
+            "recipe": "naturesaura:token_rage"
+        },
+        {
+            "type": "naturesaura:offering",
+            "text": "Exchanging the $(item)Token of Sorrow$() for a much stronger version, the $(item)Token of Grief$()",
+            "recipe": "naturesaura:token_grief"
         }
     ]
 }

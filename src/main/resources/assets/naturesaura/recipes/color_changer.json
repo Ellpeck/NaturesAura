@@ -2,7 +2,7 @@
     "type": "forge:ore_shaped",
     "pattern": [
         "RYB",
-        "I I",
+        "ITI",
         " I "
     ],
     "key": {
@@ -20,6 +20,9 @@
         "B": {
             "type": "forge:ore_dict",
             "ore": "dyeBlue"
+        },
+        "T": {
+            "item": "naturesaura:token_euphoria"
         }
     },
     "result": {

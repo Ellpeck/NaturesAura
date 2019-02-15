@@ -7,8 +7,7 @@
     ],
     "key": {
         "I": {
-            "type": "forge:ore_dict",
-            "ore": "ingotIron"
+            "item": "naturesaura:token_rage"
         },
         "B": {
             "item": "minecraft:diamond_boots"

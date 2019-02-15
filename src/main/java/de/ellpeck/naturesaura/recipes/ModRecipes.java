@@ -56,7 +56,7 @@ public final class ModRecipes {
                 Helper.blockIng(Blocks.STONE),
                 Ingredient.fromItem(ModItems.GOLD_LEAF),
                 Ingredient.fromItem(Items.GOLD_INGOT),
-                new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD))).register();
+                Ingredient.fromItem(ModItems.TOKEN_JOY)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "ancient_sapling"),
                 Helper.blockIng(Blocks.SAPLING), new ItemStack(ModBlocks.ANCIENT_SAPLING), 200,
                 Helper.blockIng(Blocks.SAPLING),
@@ -74,7 +74,7 @@ public final class ModRecipes {
                 Ingredient.fromItem(Items.FIRE_CHARGE),
                 Ingredient.fromItem(Items.FLINT),
                 Helper.blockIng(Blocks.MAGMA),
-                new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER))).register();
+                Ingredient.fromItem(ModItems.TOKEN_FEAR)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "conversion_catalyst"),
                 Ingredient.fromStacks(new ItemStack(Blocks.SAPLING, 1, 3)), new ItemStack(ModBlocks.CONVERSION_CATALYST), 600,
                 Helper.blockIng(ModBlocks.GOLD_BRICK),
@@ -88,7 +88,8 @@ public final class ModRecipes {
                 Helper.blockIng(ModBlocks.GOLD_BRICK),
                 Helper.blockIng(ModBlocks.INFUSED_STONE),
                 Helper.blockIng(Blocks.PISTON),
-                Ingredient.fromItem(Items.FLINT)).register();
+                Ingredient.fromItem(Items.FLINT),
+                Ingredient.fromItem(ModItems.TOKEN_ANGER)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "plant_powder"),
                 Ingredient.fromStacks(new ItemStack(Blocks.SAPLING)),
                 ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 24), PlantBoostEffect.NAME), 400,
@@ -110,6 +111,34 @@ public final class ModRecipes {
                 Helper.blockIng(ModBlocks.GOLD_POWDER),
                 Ingredient.fromItem(ModItems.SKY_INGOT),
                 Ingredient.fromItem(Items.EGG)).register();
+        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_joy"),
+                Helper.blockIng(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_JOY, 2), 200,
+                new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)),
+                Ingredient.fromItem(ModItems.GOLD_LEAF),
+                Ingredient.fromStacks(new ItemStack(Blocks.RED_FLOWER, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.YELLOW_FLOWER)),
+                Ingredient.fromItem(Items.APPLE),
+                Helper.blockIng(Blocks.TORCH)).register();
+        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_anger"),
+                Helper.blockIng(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_ANGER, 2), 200,
+                new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER)),
+                Ingredient.fromItem(ModItems.GOLD_LEAF),
+                Helper.blockIng(Blocks.MAGMA),
+                Ingredient.fromItem(Items.BLAZE_POWDER),
+                Ingredient.fromItem(Items.GUNPOWDER)).register();
+        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_sorrow"),
+                Helper.blockIng(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_SORROW, 2), 200,
+                new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)),
+                Ingredient.fromItem(ModItems.GOLD_LEAF),
+                Ingredient.fromItem(Items.GHAST_TEAR),
+                Ingredient.fromItems(Items.BEEF, Items.MUTTON, Items.CHICKEN, Items.PORKCHOP),
+                Helper.blockIng(Blocks.GLASS)).register();
+        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_fear"),
+                Helper.blockIng(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_FEAR, 2), 200,
+                new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER)),
+                Ingredient.fromItem(ModItems.GOLD_LEAF),
+                Ingredient.fromItem(Items.ROTTEN_FLESH),
+                Ingredient.fromItem(Items.FEATHER),
+                Ingredient.fromItem(Items.BONE)).register();
 
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_iron"),
                 Ingredient.fromItem(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON),
@@ -164,6 +193,22 @@ public final class ModRecipes {
                 Ingredient.fromItem(Items.NETHER_STAR),
                 Ingredient.fromItem(ModItems.CALLING_SPIRIT),
                 new ItemStack(ModItems.CLOCK_HAND)).register();
+        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_euphoria"),
+                Ingredient.fromItem(ModItems.TOKEN_JOY),
+                Ingredient.fromItem(ModItems.CALLING_SPIRIT),
+                new ItemStack(ModItems.TOKEN_EUPHORIA)).register();
+        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_rage"),
+                Ingredient.fromItem(ModItems.TOKEN_ANGER),
+                Ingredient.fromItem(ModItems.CALLING_SPIRIT),
+                new ItemStack(ModItems.TOKEN_RAGE)).register();
+        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_grief"),
+                Ingredient.fromItem(ModItems.TOKEN_SORROW),
+                Ingredient.fromItem(ModItems.CALLING_SPIRIT),
+                new ItemStack(ModItems.TOKEN_GRIEF)).register();
+        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_terror"),
+                Ingredient.fromItem(ModItems.TOKEN_FEAR),
+                Ingredient.fromItem(ModItems.CALLING_SPIRIT),
+                new ItemStack(ModItems.TOKEN_TERROR)).register();
 
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
                 Blocks.COBBLESTONE.getDefaultState(),

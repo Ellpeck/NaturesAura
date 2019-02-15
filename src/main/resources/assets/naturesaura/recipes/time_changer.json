@@ -13,18 +13,10 @@
             "item": "naturesaura:infused_brick"
         },
         "N": {
-            "type": "minecraft:item_nbt",
-            "item": "naturesaura:aura_bottle",
-            "nbt": {
-                "stored_type": "naturesaura:nether"
-            }
+            "item": "naturesaura:token_terror"
         },
         "O": {
-            "type": "minecraft:item_nbt",
-            "item": "naturesaura:aura_bottle",
-            "nbt": {
-                "stored_type": "naturesaura:overworld"
-            }
+            "item": "naturesaura:token_euphoria"
         }
     },
     "result": {

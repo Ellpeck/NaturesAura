@@ -19,11 +19,7 @@
             "item": "minecraft:soul_sand"
         },
         "W": {
-            "type": "minecraft:item_nbt",
-            "item": "naturesaura:aura_bottle",
-            "nbt": {
-                "stored_type": "naturesaura:nether"
-            }
+            "item": "naturesaura:token_grief"
         }
     },
     "result": {

@@ -80,6 +80,14 @@ item.naturesaura.effect_powder.naturesaura:animal.name=Powder of Fertility
 item.naturesaura.mover_cart.name=Aura Attraction Cart
 item.naturesaura.range_visualizer.name=Mystical Magnifier
 item.naturesaura.clock_hand.name=Hand of Time
+item.naturesaura.token_anger.name=Token of Anger
+item.naturesaura.token_euphoria.name=Token of Euphoria
+item.naturesaura.token_fear.name=Token of Fear
+item.naturesaura.token_grief.name=Token of Grief
+item.naturesaura.token_joy.name=Token of Joy
+item.naturesaura.token_rage.name=Token of Rage
+item.naturesaura.token_sorrow.name=Token of Sorrow
+item.naturesaura.token_terror.name=Token of Terror
 
 container.naturesaura.tree_ritual.name=Ritual of the Forest
 container.naturesaura.altar.name=Natural Altar Infusion

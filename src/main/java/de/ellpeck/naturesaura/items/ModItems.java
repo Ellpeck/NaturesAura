@@ -46,4 +46,13 @@ public final class ModItems {
     public static final Item MOVER_MINECART = new ItemMoverMinecart();
     public static final Item RANGE_VISUALIZER = new ItemRangeVisualizer();
     public static final Item CLOCK_HAND = new ItemImpl("clock_hand");
+    public static final Item TOKEN_JOY = new ItemImpl("token_joy");
+    public static final Item TOKEN_FEAR = new ItemImpl("token_fear");
+    public static final Item TOKEN_ANGER = new ItemImpl("token_anger");
+    public static final Item TOKEN_SORROW = new ItemImpl("token_sorrow");
+    public static final Item TOKEN_EUPHORIA = new ItemImpl("token_euphoria");
+    public static final Item TOKEN_TERROR = new ItemImpl("token_terror");
+    public static final Item TOKEN_RAGE = new ItemImpl("token_rage");
+    public static final Item TOKEN_GRIEF = new ItemImpl("token_grief");
+
 }

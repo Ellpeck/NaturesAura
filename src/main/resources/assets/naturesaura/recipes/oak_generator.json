@@ -1,7 +1,7 @@
 {
     "type": "forge:ore_shaped",
     "pattern": [
-        "MBI",
+        "MTI",
         "SOS",
         "IBM"
     ],
@@ -27,6 +27,9 @@
         },
         "I": {
             "item": "naturesaura:infused_iron"
+        },
+        "T": {
+            "item": "naturesaura:token_fear"
         }
     },
     "result": {
