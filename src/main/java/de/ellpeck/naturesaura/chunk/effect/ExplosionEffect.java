@@ -18,7 +18,6 @@ public class ExplosionEffect implements IDrainSpotEffect {
 
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "explosions");
 
-    private int chance;
     private float strength;
     private int dist;
 
@@ -28,8 +27,8 @@ public class ExplosionEffect implements IDrainSpotEffect {
         int aura = IAuraChunk.getAuraInArea(world, pos, 85);
         if (aura > -5000000)
             return false;
-        this.chance = 140 - Math.abs(aura) / 200000;
-        if (this.chance > 1 && world.rand.nextInt(this.chance) != 0)
+        int chance = 140 - Math.abs(aura) / 200000;
+        if (chance > 1 && world.rand.nextInt(chance) != 0)
             return false;
         this.strength = Math.min(Math.abs(aura) / 5000000F, 5F);
         if (this.strength <= 0)

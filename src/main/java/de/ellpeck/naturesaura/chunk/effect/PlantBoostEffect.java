@@ -34,7 +34,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
         int aura = IAuraChunk.getAuraInArea(world, pos, 30);
         if (aura < 1500000)
             return false;
-        this.amount = Math.min(45, Math.abs(aura) / 100000);
+        this.amount = Math.min(45, Math.abs(aura) / 100000 / IAuraChunk.getSpotAmountInArea(world, pos, 30));
         if (this.amount <= 1)
             return false;
         this.dist = MathHelper.clamp(Math.abs(aura) / 150000, 5, 35);

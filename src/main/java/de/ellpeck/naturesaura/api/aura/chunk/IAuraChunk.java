@@ -58,6 +58,19 @@ public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTag
     }
 
     /**
+     * Convenience method that adds up the amount of aura spots from {@link
+     * #getSpotsInArea(World, BlockPos, int, BiConsumer)} and returns it.
+     *
+     * @param world  The world
+     * @param pos    The center position
+     * @param radius The radius around the center to search for spots in
+     * @return The amount of spots found in the area
+     */
+    static int getSpotAmountInArea(World world, BlockPos pos, int radius) {
+        return NaturesAuraAPI.instance().getSpotAmountInArea(world, pos, radius);
+    }
+
+    /**
      * Convenience method that adds up all of the aura from each drain spot from
      * {@link #getSpotsInArea(World, BlockPos, int, BiConsumer)} and
      * conveniently returns it. For a better visual display with a more gradual

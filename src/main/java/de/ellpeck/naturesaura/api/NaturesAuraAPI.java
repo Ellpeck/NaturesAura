@@ -268,6 +268,11 @@ public final class NaturesAuraAPI {
         void getAuraSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer);
 
         /**
+         * @see IAuraChunk#getSpotAmountInArea(World, BlockPos, int)
+         */
+        int getSpotAmountInArea(World world, BlockPos pos, int radius);
+
+        /**
          * @see IAuraChunk#getAuraInArea(World, BlockPos, int)
          */
         int getAuraInArea(World world, BlockPos pos, int radius);

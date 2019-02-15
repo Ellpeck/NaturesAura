@@ -118,6 +118,13 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
+    public int getSpotAmountInArea(World world, BlockPos pos, int radius) {
+        MutableInt result = new MutableInt();
+        this.getAuraSpotsInArea(world, pos, radius, (blockpos, drainSpot) -> result.increment());
+        return result.intValue();
+    }
+
+    @Override
     public int getAuraInArea(World world, BlockPos pos, int radius) {
         MutableInt result = new MutableInt(IAuraChunk.DEFAULT_AURA);
         this.getAuraSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> result.add(drainSpot));

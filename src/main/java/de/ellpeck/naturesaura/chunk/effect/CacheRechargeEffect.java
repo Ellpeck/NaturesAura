@@ -33,7 +33,7 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
             return false;
         int dist = MathHelper.clamp(aura / 3500, 3, 15);
         this.bb = new AxisAlignedBB(pos).grow(dist);
-        this.amount = aura / 250000 - 2;
+        this.amount = aura / 250000 / IAuraChunk.getSpotAmountInArea(world, pos, 20) - 2;
         return true;
     }
 

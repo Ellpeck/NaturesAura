@@ -47,6 +47,11 @@ public class StubHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
+    public int getSpotAmountInArea(World world, BlockPos pos, int radius) {
+        return 0;
+    }
+
+    @Override
     public int getAuraInArea(World world, BlockPos pos, int radius) {
         return IAuraChunk.DEFAULT_AURA;
     }
