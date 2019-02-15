@@ -117,28 +117,32 @@ public final class ModRecipes {
                 Ingredient.fromItem(ModItems.GOLD_LEAF),
                 Ingredient.fromStacks(new ItemStack(Blocks.RED_FLOWER, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.YELLOW_FLOWER)),
                 Ingredient.fromItem(Items.APPLE),
-                Helper.blockIng(Blocks.TORCH)).register();
+                Helper.blockIng(Blocks.TORCH),
+                Ingredient.fromItem(Items.IRON_INGOT)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_anger"),
                 Helper.blockIng(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_ANGER, 2), 200,
                 new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER)),
                 Ingredient.fromItem(ModItems.GOLD_LEAF),
                 Helper.blockIng(Blocks.MAGMA),
                 Ingredient.fromItem(Items.BLAZE_POWDER),
-                Ingredient.fromItem(Items.GUNPOWDER)).register();
+                Ingredient.fromItem(Items.GUNPOWDER),
+                Ingredient.fromItem(Items.ENDER_PEARL)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_sorrow"),
                 Helper.blockIng(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_SORROW, 2), 200,
                 new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)),
                 Ingredient.fromItem(ModItems.GOLD_LEAF),
                 Ingredient.fromItem(Items.GHAST_TEAR),
                 Ingredient.fromItems(Items.BEEF, Items.MUTTON, Items.CHICKEN, Items.PORKCHOP),
-                Helper.blockIng(Blocks.GLASS)).register();
+                Helper.blockIng(Blocks.GLASS),
+                Ingredient.fromItem(Items.FISH)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_fear"),
                 Helper.blockIng(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_FEAR, 2), 200,
                 new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER)),
                 Ingredient.fromItem(ModItems.GOLD_LEAF),
                 Ingredient.fromItem(Items.ROTTEN_FLESH),
                 Ingredient.fromItem(Items.FEATHER),
-                Ingredient.fromItem(Items.BONE)).register();
+                Ingredient.fromItem(Items.BONE),
+                Helper.blockIng(Blocks.SOUL_SAND)).register();
 
         new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_iron"),
                 Ingredient.fromItem(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON),
