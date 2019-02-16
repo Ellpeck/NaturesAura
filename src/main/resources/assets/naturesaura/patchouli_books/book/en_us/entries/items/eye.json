@@ -3,6 +3,7 @@
     "icon": "naturesaura:eye",
     "category": "items",
     "advancement": "naturesaura:wood_stand",
+    "turnin": "naturesaura:eye",
     "priority": true,
     "pages": [
         {

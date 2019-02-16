@@ -1,23 +1,23 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:flower_generator"
+            "item": "naturesaura:eye_improved"
         },
         "title": {
-            "translate": "advancement.naturesaura.flower_generator"
+            "translate": "advancement.naturesaura.eye_improved"
         },
         "description": {
-            "translate": "advancement.naturesaura.flower_generator.desc"
+            "translate": "advancement.naturesaura.eye_improved.desc"
         }
     },
-    "parent": "naturesaura:infused_materials",
+    "parent": "naturesaura:eye",
     "criteria": {
-        "generator": {
+        "eye": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:flower_generator"
+                        "item": "naturesaura:eye_improved"
                     }
                 ]
             }

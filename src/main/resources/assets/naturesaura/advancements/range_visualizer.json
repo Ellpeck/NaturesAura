@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:range_visualizer"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.range_visualizer"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.range_visualizer.desc"
+        }
+    },
+    "parent": "naturesaura:placer",
+    "criteria": {
+        "range_visualizer": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "naturesaura:range_visualizer"
+                    }
+                ]
+            }
+        }
+    }
+}
