@@ -44,6 +44,7 @@ tile.naturesaura.gold_brick.name=Golden Stone Bricks
 tile.naturesaura.rf_converter.name=Energetic Aura Forge
 tile.naturesaura.moss_generator.name=Swamp Homi
 tile.naturesaura.time_changer.name=Shifting Sundial
+tile.naturesaura.generator_limit_remover.name=Creational Catalyst
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.eye_improved.name=Environmental Ocular

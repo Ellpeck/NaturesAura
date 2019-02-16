@@ -20,15 +20,17 @@ public class TileEntityAnimalGenerator extends TileEntityImpl implements ITickab
                 return;
 
             int remain = this.amountToRelease;
-            while (remain > 0) {
-                BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 35, this.pos);
-                remain -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, remain);
+            if (this.canGenerateRightNow(35, remain)) {
+                while (remain > 0) {
+                    BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 35, this.pos);
+                    remain -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, remain);
+                }
+
+                PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                        new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 16));
             }
 
             this.timeRemaining -= 10;
-
-            PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                    new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 16));
         }
     }
 

@@ -41,14 +41,16 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
                             }
 
                             int toAdd = ((effect.getAmplifier() * 7 + 1) * (effect.getDuration() / 25)) * 100;
-                            while (toAdd > 0) {
-                                BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);
-                                toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
-                            }
+                            boolean canGen = this.canGenerateRightNow(30, toAdd);
+                            if (canGen)
+                                while (toAdd > 0) {
+                                    BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);
+                                    toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
+                                }
 
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
                                     this.pos.getX(), this.pos.getY(), this.pos.getZ(), 5,
-                                    PotionUtils.getPotionColor(type)));
+                                    PotionUtils.getPotionColor(type), canGen ? 1 : 0));
 
                             addedOne = true;
                             break;

@@ -124,6 +124,7 @@ public class PacketParticles implements IMessage {
                             break;
                         case 5: // Potion generator
                             int color = message.data[0];
+                            boolean releaseAura = message.data[1] > 0;
                             for (int i = world.rand.nextInt(5) + 5; i >= 0; i--) {
                                 NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX + world.rand.nextFloat(),
@@ -132,17 +133,18 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextGaussian() * 0.01F, world.rand.nextFloat() * 0.1F, world.rand.nextGaussian() * 0.01F,
                                         color, 2F + world.rand.nextFloat(), 40, 0F, true, true);
 
-                                for (int x = -1; x <= 1; x += 2)
-                                    for (int z = -1; z <= 1; z += 2) {
-                                        NaturesAuraAPI.instance().spawnMagicParticle(
-                                                message.posX + x * 3 + 0.5F,
-                                                message.posY + 2.5,
-                                                message.posZ + z * 3 + 0.5F,
-                                                world.rand.nextGaussian() * 0.02F,
-                                                world.rand.nextFloat() * 0.04F,
-                                                world.rand.nextGaussian() * 0.02F,
-                                                0xd6340c, 1F + world.rand.nextFloat() * 2F, 75, 0F, true, true);
-                                    }
+                                if (releaseAura)
+                                    for (int x = -1; x <= 1; x += 2)
+                                        for (int z = -1; z <= 1; z += 2) {
+                                            NaturesAuraAPI.instance().spawnMagicParticle(
+                                                    message.posX + x * 3 + 0.5F,
+                                                    message.posY + 2.5,
+                                                    message.posZ + z * 3 + 0.5F,
+                                                    world.rand.nextGaussian() * 0.02F,
+                                                    world.rand.nextFloat() * 0.04F,
+                                                    world.rand.nextGaussian() * 0.02F,
+                                                    0xd6340c, 1F + world.rand.nextFloat() * 2F, 75, 0F, true, true);
+                                        }
                             }
                             break;
                         case 6: // Plant boost effect
@@ -213,6 +215,7 @@ public class PacketParticles implements IMessage {
                             int sapX = message.data[0];
                             int sapY = message.data[1];
                             int sapZ = message.data[2];
+                            releaseAura = message.data[3] > 0;
                             for (int i = world.rand.nextInt(20) + 10; i >= 0; i--)
                                 NaturesAuraAPI.instance().spawnParticleStream(
                                         sapX + 0.5F + (float) world.rand.nextGaussian() * 3F,
@@ -222,15 +225,16 @@ public class PacketParticles implements IMessage {
                                         message.posY + 0.5F,
                                         message.posZ + 0.5F,
                                         0.6F, BiomeColorHelper.getFoliageColorAtPos(world, new BlockPos(sapX, sapY, sapZ)), 1.5F);
-                            for (int i = world.rand.nextInt(10) + 10; i >= 0; i--)
-                                NaturesAuraAPI.instance().spawnMagicParticle(
-                                        message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
-                                        message.posY + 1.01F,
-                                        message.posZ + 0.25F + world.rand.nextFloat() * 0.5F,
-                                        world.rand.nextGaussian() * 0.03F,
-                                        world.rand.nextFloat() * 0.04F + 0.04F,
-                                        world.rand.nextGaussian() * 0.03F,
-                                        0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 60, 0F, false, true);
+                            if (releaseAura)
+                                for (int i = world.rand.nextInt(10) + 10; i >= 0; i--)
+                                    NaturesAuraAPI.instance().spawnMagicParticle(
+                                            message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
+                                            message.posY + 1.01F,
+                                            message.posZ + 0.25F + world.rand.nextFloat() * 0.5F,
+                                            world.rand.nextGaussian() * 0.03F,
+                                            world.rand.nextFloat() * 0.04F + 0.04F,
+                                            world.rand.nextGaussian() * 0.03F,
+                                            0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 60, 0F, false, true);
                             break;
                         case 13: // Offering table
                             int genX = message.data[0];

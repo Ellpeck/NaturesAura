@@ -1,7 +1,9 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -56,7 +58,7 @@ public class TileEntityImpl extends TileEntity {
         }
     }
 
-    public void onRedstonePowerChange(){
+    public void onRedstonePowerChange() {
 
     }
 
@@ -163,6 +165,14 @@ public class TileEntityImpl extends TileEntity {
             if (compound != null)
                 this.readNBT(compound, SaveType.BLOCK);
         }
+    }
+
+    public boolean canGenerateRightNow(int range, int toAdd) {
+        IBlockState below = this.world.getBlockState(this.pos.down());
+        if (below.getBlock() == ModBlocks.GENERATOR_LIMIT_REMOVER)
+            return true;
+        int aura = IAuraChunk.getAuraInArea(this.world, this.pos, range);
+        return aura + toAdd <= IAuraChunk.DEFAULT_AURA * 2;
     }
 
     public enum SaveType {
