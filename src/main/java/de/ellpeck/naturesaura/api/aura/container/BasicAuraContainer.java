@@ -49,7 +49,7 @@ public class BasicAuraContainer implements IAuraContainer {
 
     @Override
     public boolean isAcceptableType(IAuraType type) {
-        return this.type == null || this.type.isSimilar(type);
+        return this.type == null || type.isSimilar(this.type);
     }
 
     public void writeNBT(NBTTagCompound compound) {
