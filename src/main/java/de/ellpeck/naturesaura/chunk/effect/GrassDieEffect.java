@@ -83,7 +83,7 @@ public class GrassDieEffect implements IDrainSpotEffect {
 
     @Override
     public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
-        return ModConfig.enabledFeatures.grassDieEffect && type == NaturesAuraAPI.TYPE_OVERWORLD;
+        return ModConfig.enabledFeatures.grassDieEffect && type.isSimilar(NaturesAuraAPI.TYPE_OVERWORLD);
     }
 
     @Override

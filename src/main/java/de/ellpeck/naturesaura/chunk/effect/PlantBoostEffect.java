@@ -90,7 +90,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
 
     @Override
     public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
-        return ModConfig.enabledFeatures.plantBoostEffect && type == NaturesAuraAPI.TYPE_OVERWORLD;
+        return ModConfig.enabledFeatures.plantBoostEffect && type.isSimilar(NaturesAuraAPI.TYPE_OVERWORLD);
     }
 
     @Override

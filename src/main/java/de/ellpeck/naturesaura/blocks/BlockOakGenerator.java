@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityOakGenerator;
 import net.minecraft.block.BlockSapling;
@@ -32,7 +33,7 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
     public void onTreeGrow(SaplingGrowTreeEvent event) {
         World world = event.getWorld();
         BlockPos pos = event.getPos();
-        if (!world.isRemote && NaturesAuraAPI.TYPE_OVERWORLD.isPresentInWorld(world)
+        if (!world.isRemote && IAuraType.forWorld(world).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD)
                 && world.getBlockState(pos).getBlock() instanceof BlockSapling) {
             Helper.getTileEntitiesInArea(world, pos, 10, tile -> {
                 if (!(tile instanceof TileEntityOakGenerator))

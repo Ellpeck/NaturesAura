@@ -21,4 +21,8 @@ public interface IAuraType {
     int getColor();
 
     int getPriority();
+
+    default boolean isSimilar(IAuraType type) {
+        return this == type;
+    }
 }
