@@ -39,7 +39,7 @@ public class AnimalEffect implements IDrainSpotEffect {
         int aura = IAuraChunk.getAuraInArea(world, pos, 30);
         if (aura < 1500000)
             return false;
-        this.chance = Math.min(50, Math.abs(aura) / 500000 / IAuraChunk.getSpotAmountInArea(world, pos, 30));
+        this.chance = Math.min(50, MathHelper.ceil(Math.abs(aura) / 500000F / IAuraChunk.getSpotAmountInArea(world, pos, 30)));
         if (this.chance <= 0)
             return false;
         int dist = MathHelper.clamp(Math.abs(aura) / 150000, 5, 35);
