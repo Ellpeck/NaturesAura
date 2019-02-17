@@ -7,8 +7,10 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.config.Config;
@@ -28,6 +30,12 @@ public class CommonEvents {
         Chunk chunk = event.getObject();
         IAuraType type = IAuraType.forWorld(chunk.getWorld());
         event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "aura"), new AuraChunk(chunk, type));
+    }
+
+    @SubscribeEvent
+    public void onWorldCapsAttach(AttachCapabilitiesEvent<World> event) {
+        World world = event.getObject();
+        event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "data"), new WorldData(world));
     }
 
     @SubscribeEvent

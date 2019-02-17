@@ -9,6 +9,7 @@ import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.internal.StubHooks;
+import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
@@ -136,6 +137,13 @@ public final class NaturesAuraAPI {
      */
     @CapabilityInject(IAuraChunk.class)
     public static Capability<IAuraChunk> capAuraChunk;
+    /**
+     * The capability that any world has to store Nature's Aura specific data in
+     * it. To retrieve this capability from any world, use the helper methods
+     * {@link IWorldData#getWorldData(World)} or {@link IWorldData#getOverworldData()}.
+     */
+    @CapabilityInject(IWorldData.class)
+    public static Capability<IWorldData> capWorldData;
 
     /**
      * This method returns the active {@link IInternalHooks} instance which can

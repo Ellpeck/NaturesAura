@@ -37,6 +37,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.lwjgl.opengl.GL11;
 
@@ -314,5 +315,12 @@ public final class Helper {
                 return true;
         }
         return false;
+    }
+
+    public static boolean isEmpty(IItemHandler handler) {
+        for (int i = 0; i < handler.getSlots(); i++)
+            if (!handler.getStackInSlot(i).isEmpty())
+                return false;
+        return true;
     }
 }

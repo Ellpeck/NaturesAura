@@ -45,6 +45,7 @@ tile.naturesaura.rf_converter.name=Energetic Aura Forge
 tile.naturesaura.moss_generator.name=Swamp Homi
 tile.naturesaura.time_changer.name=Shifting Sundial
 tile.naturesaura.generator_limit_remover.name=Creational Catalyst
+tile.naturesaura.ender_crate.name=Ender Crate
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.eye_improved.name=Environmental Ocular
@@ -104,6 +105,7 @@ info.naturesaura.same_position=This seems to be the position from your notes...
 info.naturesaura.too_far=The distance seems too great...
 info.naturesaura.stored_pos_gone=Your notes seem out of date...
 info.naturesaura.empty=Empty
+info.naturesaura.ender_crate=Ender Crate (%s)
 
 advancement.naturesaura.root=Nature's Aura
 advancement.naturesaura.root.desc=Becoming a magical botanist
