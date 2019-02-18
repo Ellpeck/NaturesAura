@@ -6,7 +6,6 @@ import de.ellpeck.naturesaura.blocks.tiles.render.RenderEnderCrate;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +15,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,8 +35,10 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityEnderCrate) {
                 TileEntityEnderCrate crate = (TileEntityEnderCrate) tile;
-                if (crate.canOpen())
+                if (crate.canOpen()) {
+                    crate.drainAura(5000);
                     playerIn.openGui(NaturesAura.MOD_ID, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                }
             }
         }
         return true;

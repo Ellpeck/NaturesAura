@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -19,8 +20,9 @@ public class ItemEnderAccess extends ItemImpl {
             return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
         ItemStack stack = playerIn.getHeldItemMainhand();
         if (stack.hasDisplayName()) {
-            if (!worldIn.isRemote)
+            if (!worldIn.isRemote && NaturesAuraAPI.instance().extractAuraFromPlayer(playerIn, 5000, false)) {
                 playerIn.openGui(NaturesAura.MOD_ID, 1, worldIn, (int) playerIn.posX, (int) playerIn.posY, (int) playerIn.posZ);
+            }
             return new ActionResult<>(EnumActionResult.SUCCESS, stack);
         }
         return new ActionResult<>(EnumActionResult.FAIL, stack);
