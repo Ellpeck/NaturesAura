@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.gui;
 
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
@@ -9,12 +8,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerEnderCrate extends Container {
-    private final TileEntityEnderCrate crate;
 
-    public ContainerEnderCrate(EntityPlayer player, TileEntityEnderCrate crate) {
-        this.crate = crate;
-        IItemHandler handler = this.crate.getItemHandler(null);
-
+    public ContainerEnderCrate(EntityPlayer player, IItemHandler handler) {
         int i = (3 - 4) * 18;
         for (int j = 0; j < 3; ++j)
             for (int k = 0; k < 9; ++k)
@@ -28,7 +23,7 @@ public class ContainerEnderCrate extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
-        return !this.crate.isInvalid();
+        return true;
     }
 
     @Override

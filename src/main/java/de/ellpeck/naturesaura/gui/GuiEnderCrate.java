@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura.gui;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -10,17 +9,20 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 
 @SideOnly(Side.CLIENT)
 public class GuiEnderCrate extends GuiContainer {
     private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
     private final EntityPlayer player;
-    private final TileEntityEnderCrate crate;
+    private final String nameKey;
+    private final String name;
 
-    public GuiEnderCrate(EntityPlayer player, TileEntityEnderCrate crate) {
-        super(new ContainerEnderCrate(player, crate));
+    public GuiEnderCrate(EntityPlayer player, IItemHandler handler, String nameKey, String name) {
+        super(new ContainerEnderCrate(player, handler));
         this.player = player;
-        this.crate = crate;
+        this.nameKey = nameKey;
+        this.name = name;
         this.allowUserInput = false;
         this.ySize = 114 + 3 * 18;
     }
@@ -34,7 +36,7 @@ public class GuiEnderCrate extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String display = I18n.format("info." + NaturesAura.MOD_ID + ".ender_crate", TextFormatting.ITALIC + this.crate.name + TextFormatting.RESET);
+        String display = I18n.format("info." + NaturesAura.MOD_ID + "." + this.nameKey, TextFormatting.ITALIC + this.name + TextFormatting.RESET);
         this.fontRenderer.drawString(display, 8, 6, 4210752);
         this.fontRenderer.drawString(this.player.inventory.getDisplayName().getFormattedText(), 8, this.ySize - 96 + 2, 4210752);
     }

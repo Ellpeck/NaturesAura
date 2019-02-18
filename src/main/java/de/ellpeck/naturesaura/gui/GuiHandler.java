@@ -1,8 +1,11 @@
 package de.ellpeck.naturesaura.gui;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
+import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -25,8 +28,12 @@ public class GuiHandler implements IGuiHandler {
             if (tile instanceof TileEntityEnderCrate) {
                 TileEntityEnderCrate crate = (TileEntityEnderCrate) tile;
                 if (crate.canOpen())
-                    return new ContainerEnderCrate(player, crate);
+                    return new ContainerEnderCrate(player, crate.getItemHandler(null));
             }
+        } else if (id == 1) {
+            ItemStack stack = player.getHeldItemMainhand();
+            if (stack.getItem() == ModItems.ENDER_ACCESS && stack.hasDisplayName())
+                return new ContainerEnderCrate(player, IWorldData.getOverworldData(world).getEnderStorage(stack.getDisplayName()));
         }
         return null;
     }
@@ -39,7 +46,13 @@ public class GuiHandler implements IGuiHandler {
             if (tile instanceof TileEntityEnderCrate) {
                 TileEntityEnderCrate crate = (TileEntityEnderCrate) tile;
                 if (crate.canOpen())
-                    return new GuiEnderCrate(player, crate);
+                    return new GuiEnderCrate(player, crate.getItemHandler(null), "ender_crate", crate.name);
+            }
+        } else if (id == 1) {
+            ItemStack stack = player.getHeldItemMainhand();
+            if (stack.getItem() == ModItems.ENDER_ACCESS && stack.hasDisplayName()) {
+                String name = stack.getDisplayName();
+                return new GuiEnderCrate(player, IWorldData.getOverworldData(world).getEnderStorage(name), "ender_access", name);
             }
         }
         return null;
