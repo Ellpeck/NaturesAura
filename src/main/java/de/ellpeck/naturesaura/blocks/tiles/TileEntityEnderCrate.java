@@ -1,7 +1,9 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.blocks.BlockEnderCrate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,7 +37,7 @@ public class TileEntityEnderCrate extends TileEntityImpl {
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
             ItemStack remain = this.getStorage().insertItem(slot, stack, simulate);
             if (!simulate)
-                TileEntityEnderCrate.this.drainAura((stack.getCount() - remain.getCount()) * 200);
+                TileEntityEnderCrate.this.drainAura((stack.getCount() - remain.getCount()) * 500);
             return remain;
         }
 
@@ -44,7 +46,7 @@ public class TileEntityEnderCrate extends TileEntityImpl {
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
             ItemStack extracted = this.getStorage().extractItem(slot, amount, simulate);
             if (!simulate)
-                TileEntityEnderCrate.this.drainAura(extracted.getCount() * 200);
+                TileEntityEnderCrate.this.drainAura(extracted.getCount() * 500);
             return extracted;
         }
 
@@ -77,16 +79,22 @@ public class TileEntityEnderCrate extends TileEntityImpl {
     @Override
     public ItemStack getDrop(IBlockState state, int fortune) {
         ItemStack drop = super.getDrop(state, fortune);
-        if (this.name != null)
-            drop.setStackDisplayName(this.name);
+        if (this.name != null) {
+            if (!drop.hasTagCompound())
+                drop.setTagCompound(new NBTTagCompound());
+            drop.getTagCompound().setString(NaturesAura.MOD_ID + ":ender_name", this.name);
+        }
         return drop;
     }
 
     @Override
     public void loadDataOnPlace(ItemStack stack) {
         super.loadDataOnPlace(stack);
-        if (!this.world.isRemote && stack.hasDisplayName())
-            this.name = stack.getDisplayName();
+        if (!this.world.isRemote) {
+            String name = BlockEnderCrate.getEnderName(stack);
+            if (name != null && !name.isEmpty())
+                this.name = name;
+        }
     }
 
     @Override

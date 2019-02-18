@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.gui;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.blocks.BlockEnderCrate;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,8 +33,11 @@ public class GuiHandler implements IGuiHandler {
             }
         } else if (id == 1) {
             ItemStack stack = player.getHeldItemMainhand();
-            if (stack.getItem() == ModItems.ENDER_ACCESS && stack.hasDisplayName())
-                return new ContainerEnderCrate(player, IWorldData.getOverworldData(world).getEnderStorage(stack.getDisplayName()));
+            if (stack.getItem() == ModItems.ENDER_ACCESS) {
+                String name = BlockEnderCrate.getEnderName(stack);
+                if (name != null && !name.isEmpty())
+                    return new ContainerEnderCrate(player, IWorldData.getOverworldData(world).getEnderStorage(name));
+            }
         }
         return null;
     }
@@ -50,9 +54,10 @@ public class GuiHandler implements IGuiHandler {
             }
         } else if (id == 1) {
             ItemStack stack = player.getHeldItemMainhand();
-            if (stack.getItem() == ModItems.ENDER_ACCESS && stack.hasDisplayName()) {
-                String name = stack.getDisplayName();
-                return new GuiEnderCrate(player, IWorldData.getOverworldData(world).getEnderStorage(name), "ender_access", name);
+            if (stack.getItem() == ModItems.ENDER_ACCESS) {
+                String name = BlockEnderCrate.getEnderName(stack);
+                if (name != null && !name.isEmpty())
+                    return new GuiEnderCrate(player, IWorldData.getOverworldData(world).getEnderStorage(name), "ender_access", name);
             }
         }
         return null;

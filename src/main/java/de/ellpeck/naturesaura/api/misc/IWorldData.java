@@ -24,4 +24,6 @@ public interface IWorldData extends ICapabilityProvider, INBTSerializable<NBTTag
     }
 
     IItemHandlerModifiable getEnderStorage(String name);
+
+    boolean isEnderStorageLocked(String name);
 }

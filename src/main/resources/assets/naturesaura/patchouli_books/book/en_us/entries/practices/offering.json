@@ -40,7 +40,8 @@
         {
             "type": "naturesaura:offering",
             "text": "Exchanging the $(item)Token of Fear$() for a much stronger version, the $(item)Token of Terror$()",
-            "recipe": "naturesaura:token_terror"
+            "recipe": "naturesaura:token_terror",
+            "anchor": "terror"
         },
         {
             "type": "naturesaura:offering",

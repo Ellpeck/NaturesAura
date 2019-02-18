@@ -140,7 +140,7 @@ public final class NaturesAuraAPI {
     /**
      * The capability that any world has to store Nature's Aura specific data in
      * it. To retrieve this capability from any world, use the helper methods
-     * {@link IWorldData#getWorldData(World)} or {@link IWorldData#getOverworldData()}.
+     * {@link IWorldData#getWorldData(World)} or {@link IWorldData#getOverworldData(World)}.
      */
     @CapabilityInject(IWorldData.class)
     public static Capability<IWorldData> capWorldData;

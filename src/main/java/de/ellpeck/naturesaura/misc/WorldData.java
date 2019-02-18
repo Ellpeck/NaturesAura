@@ -4,6 +4,8 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.tiles.ItemStackHandlerNA;
+import de.ellpeck.naturesaura.items.ModItems;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -67,5 +69,16 @@ public class WorldData implements IWorldData {
     @Override
     public ItemStackHandlerNA getEnderStorage(String name) {
         return this.enderStorages.computeIfAbsent(name, n -> new ItemStackHandlerNA(27));
+    }
+
+    @Override
+    public boolean isEnderStorageLocked(String name) {
+        ItemStackHandlerNA handler = this.getEnderStorage(name);
+        for (int i = 0; i < handler.getSlots(); i++) {
+            ItemStack stack = handler.getStackInSlot(i);
+            if (!stack.isEmpty() && stack.getItem() == ModItems.TOKEN_TERROR)
+                return true;
+        }
+        return false;
     }
 }

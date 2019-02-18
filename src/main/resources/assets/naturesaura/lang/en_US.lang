@@ -108,6 +108,8 @@ info.naturesaura.stored_pos_gone=Your notes seem out of date...
 info.naturesaura.empty=Empty
 info.naturesaura.ender_crate=Ender Crate: %s
 info.naturesaura.ender_access=Ender Ocular: %s
+info.naturesaura.ender_name.missing=No Ender Name
+info.naturesaura.ender_name=Ender Name: %s
 
 advancement.naturesaura.root=Nature's Aura
 advancement.naturesaura.root.desc=Becoming a magical botanist
