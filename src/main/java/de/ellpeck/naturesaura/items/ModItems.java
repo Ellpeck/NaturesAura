@@ -55,4 +55,5 @@ public final class ModItems {
     public static final Item TOKEN_RAGE = new ItemImpl("token_rage");
     public static final Item TOKEN_GRIEF = new ItemImpl("token_grief");
     public static final Item ENDER_ACCESS = new ItemEnderAccess();
+    public static final Item CAVE_FINDER = new ItemCaveFinder();
 }

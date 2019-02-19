@@ -62,6 +62,16 @@ public class ServerProxy implements IProxy {
     }
 
     @Override
+    public void setParticleDepth(boolean depth) {
+
+    }
+
+    @Override
+    public void setParticleSpawnRange(int range) {
+
+    }
+
+    @Override
     public void scheduleTask(Runnable runnable) {
         FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(runnable);
     }

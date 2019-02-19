@@ -243,6 +243,24 @@ public final class NaturesAuraAPI {
         void spawnParticleStream(float startX, float startY, float startZ, float endX, float endY, float endZ, float speed, int color, float scale);
 
         /**
+         * Sets wether Nature's Aura particles that are spawned will be rendered
+         * with depth test enabled or not. Default value is true, please reset
+         * after changing.
+         *
+         * @param depth Wether depth test should be enabled or not
+         */
+        void setParticleDepth(boolean depth);
+
+        /**
+         * Sets the range that Nature's Aura particles that are spawned will
+         * have to have from the player at most to actually be spawned. Default
+         * value is 32, please reset after changing.
+         *
+         * @param range The range that particle spawning should have
+         */
+        void setParticleSpawnRange(int range);
+
+        /**
          * This method is used to create a custom multiblock from within the
          * API. The multiblock will automatically be registered both to Nature's
          * Aura's multiblock registry and Patchouli's multiblock registry.

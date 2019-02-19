@@ -32,6 +32,16 @@ public class StubHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
+    public void setParticleDepth(boolean depth) {
+
+    }
+
+    @Override
+    public void setParticleSpawnRange(int range) {
+
+    }
+
+    @Override
     public IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
         return new StubMultiblock();
     }

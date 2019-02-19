@@ -72,7 +72,11 @@ public class ClientEvents {
             String prefix = TextFormatting.GREEN + "[" + NaturesAura.MOD_NAME + "]" + TextFormatting.RESET + " ";
             List<String> left = event.getLeft();
             left.add("");
-            left.add(prefix + "Particles: " + ParticleHandler.getParticleAmount());
+
+            int depth = ParticleHandler.getParticleAmount(true);
+            int noDepth = ParticleHandler.getParticleAmount(false);
+            left.add(prefix + "P: " + (depth + noDepth) + " (D: " + depth + " nD: " + noDepth + ")");
+            left.add(prefix + "PR: " + ParticleHandler.range + " PD: " + ParticleHandler.depthEnabled);
 
             if (mc.player.capabilities.isCreativeMode) {
                 MutableInt amount = new MutableInt(IAuraChunk.DEFAULT_AURA);
@@ -82,8 +86,8 @@ public class ClientEvents {
                     amount.add(drainSpot);
                 });
                 NumberFormat format = NumberFormat.getInstance();
-                left.add(prefix + "Aura: " + format.format(amount.intValue()) + " in " + spots.intValue() + " spots (range 35)");
-                left.add(prefix + "Type: " + IAuraType.forWorld(mc.world).getName());
+                left.add(prefix + "A: " + format.format(amount.intValue()) + " (S: " + spots.intValue() + ")");
+                left.add(prefix + "AT: " + IAuraType.forWorld(mc.world).getName());
             }
         }
         mc.profiler.endSection();

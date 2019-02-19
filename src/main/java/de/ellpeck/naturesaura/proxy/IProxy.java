@@ -32,5 +32,9 @@ public interface IProxy {
 
     void spawnMagicParticle(double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade);
 
+    void setParticleDepth(boolean depth);
+
+    void setParticleSpawnRange(int range);
+
     void scheduleTask(Runnable runnable);
 }

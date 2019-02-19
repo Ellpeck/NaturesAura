@@ -20,9 +20,12 @@ import java.util.function.Supplier;
 @SideOnly(Side.CLIENT)
 public final class ParticleHandler {
 
+    public static boolean depthEnabled = true;
+    public static int range = 32;
     private static final List<Particle> PARTICLES = new ArrayList<>();
+    private static final List<Particle> PARTICLES_NO_DEPTH = new ArrayList<>();
 
-    public static void spawnParticle(Supplier<Particle> particle, double x, double y, double z, int range) {
+    public static void spawnParticle(Supplier<Particle> particle, double x, double y, double z) {
         if (Minecraft.getMinecraft().player.getDistanceSq(x, y, z) <= range * range) {
             Minecraft mc = Minecraft.getMinecraft();
             if (ModConfig.client.respectVanillaParticleSettings) {
@@ -35,16 +38,25 @@ public final class ParticleHandler {
             double setting = ModConfig.client.particleAmount;
             if (setting < 1 && mc.world.rand.nextDouble() > setting)
                 return;
-            PARTICLES.add(particle.get());
+
+            if (depthEnabled)
+                PARTICLES.add(particle.get());
+            else
+                PARTICLES_NO_DEPTH.add(particle.get());
         }
     }
 
     public static void updateParticles() {
-        for (int i = PARTICLES.size() - 1; i >= 0; i--) {
-            Particle particle = PARTICLES.get(i);
+        updateList(PARTICLES);
+        updateList(PARTICLES_NO_DEPTH);
+    }
+
+    private static void updateList(List<Particle> particles) {
+        for (int i = particles.size() - 1; i >= 0; i--) {
+            Particle particle = particles.get(i);
             particle.onUpdate();
             if (!particle.isAlive())
-                PARTICLES.remove(i);
+                particles.remove(i);
         }
     }
 
@@ -70,6 +82,7 @@ public final class ParticleHandler {
             GlStateManager.enableBlend();
             GlStateManager.alphaFunc(516, 0.003921569F);
             GlStateManager.disableCull();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 
             GlStateManager.depthMask(false);
 
@@ -77,12 +90,17 @@ public final class ParticleHandler {
             Tessellator tessy = Tessellator.getInstance();
             BufferBuilder buffer = tessy.getBuffer();
 
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
             for (Particle particle : PARTICLES)
                 particle.renderParticle(buffer, player, partialTicks, x, xz, z, yz, xy);
-
             tessy.draw();
+
+            GlStateManager.disableDepth();
+            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+            for (Particle particle : PARTICLES_NO_DEPTH)
+                particle.renderParticle(buffer, player, partialTicks, x, xz, z, yz, xy);
+            tessy.draw();
+            GlStateManager.enableDepth();
 
             GlStateManager.enableCull();
             GlStateManager.depthMask(true);
@@ -94,13 +112,14 @@ public final class ParticleHandler {
         }
     }
 
-    public static int getParticleAmount() {
-        return PARTICLES.size();
+    public static int getParticleAmount(boolean depth) {
+        return depth ? PARTICLES.size() : PARTICLES_NO_DEPTH.size();
     }
 
     public static void clearParticles() {
-        if (!PARTICLES.isEmpty()) {
+        if (!PARTICLES.isEmpty())
             PARTICLES.clear();
-        }
+        if (!PARTICLES_NO_DEPTH.isEmpty())
+            PARTICLES_NO_DEPTH.clear();
     }
 }

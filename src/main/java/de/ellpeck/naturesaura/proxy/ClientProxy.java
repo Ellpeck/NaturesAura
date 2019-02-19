@@ -90,7 +90,17 @@ public class ClientProxy implements IProxy {
         ParticleHandler.spawnParticle(() -> new ParticleMagic(Minecraft.getMinecraft().world,
                 posX, posY, posZ,
                 motionX, motionY, motionZ,
-                color, scale, maxAge, gravity, collision, fade), posX, posY, posZ, 32);
+                color, scale, maxAge, gravity, collision, fade), posX, posY, posZ);
+    }
+
+    @Override
+    public void setParticleDepth(boolean depth) {
+        ParticleHandler.depthEnabled = depth;
+    }
+
+    @Override
+    public void setParticleSpawnRange(int range) {
+        ParticleHandler.range = range;
     }
 
     @Override

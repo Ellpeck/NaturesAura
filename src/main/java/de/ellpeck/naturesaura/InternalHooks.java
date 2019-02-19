@@ -90,6 +90,16 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
+    public void setParticleDepth(boolean depth) {
+        NaturesAura.proxy.setParticleDepth(depth);
+    }
+
+    @Override
+    public void setParticleSpawnRange(int range) {
+        NaturesAura.proxy.setParticleSpawnRange(range);
+    }
+
+    @Override
     public IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
         return new Multiblock(name, pattern, rawMatchers);
     }
