@@ -1,0 +1,23 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        " ST",
+        "SRS",
+        "RS "
+    ],
+    "key": {
+        "R": {
+            "item": "naturesaura:ancient_stick"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "stone"
+        },
+        "T": {
+            "item": "naturesaura:token_terror"
+        }
+    },
+    "result": {
+        "item": "naturesaura:cave_finder"
+    }
+}

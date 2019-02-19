@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 public class ItemCaveFinder extends ItemImpl {
     public ItemCaveFinder() {
         super("cave_finder");
+        this.setMaxStackSize(1);
     }
 
     @Override
