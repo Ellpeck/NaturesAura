@@ -12,14 +12,13 @@ import de.ellpeck.naturesaura.api.internal.StubHooks;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
-import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
-import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
-import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
-import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.api.recipes.*;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
@@ -114,6 +113,16 @@ public final class NaturesAuraAPI {
      * AnimalSpawnerRecipe#register()}.
      */
     public static final Map<ResourceLocation, AnimalSpawnerRecipe> ANIMAL_SPAWNER_RECIPES = new HashMap<>();
+    /**
+     * A list of all {@link WeightedOre} objects that represent ores that can
+     * spawn inside of stone blocks in the overworld
+     */
+    public static final List<WeightedOre> OVERWORLD_ORES = new ArrayList<>();
+    /**
+     * A list of all {@link WeightedOre} objects that represent ores that can
+     * spawn inside of netherrack blocks in the nether
+     */
+    public static final List<WeightedOre> NETHER_ORES = new ArrayList<>();
 
     /**
      * The capability for any item or block that stores Aura in the form of an
@@ -277,9 +286,23 @@ public final class NaturesAuraAPI {
         IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers);
 
         /**
+         * Get all of the active effect powders in the given area and consume
+         * the position and the range that they have. To register a powder with
+         * the supplied name, use {@link #EFFECT_POWDERS}
+         *
+         * @param world The world
+         * @param area  The area to find powders in
+         * @param name  The registry name of the powder
+         * @return A list of powders' positions and ranges
+         */
+        List<Tuple<BlockPos, Integer>> getActiveEffectPowders(World world, AxisAlignedBB area, ResourceLocation name);
+
+        /**
          * Returns true if there is an effect powder entity active anywhere
-         * around the given position based on the radius it has. To register a
-         * powder with the supplied name, use {@link #EFFECT_POWDERS}
+         * around the given position based on the radius it has. This is a
+         * shorthand function of {@link #getActiveEffectPowders(World,
+         * AxisAlignedBB, ResourceLocation)} that returns true if the list is
+         * non-empty
          *
          * @param world The world
          * @param pos   The center position

@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.api.recipes.WeightedOre;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.config.Config;
@@ -26,6 +27,9 @@ public final class ModConfig {
 
         @Comment("Additional dimensions that map to Aura types that should be present in them. This is useful if you have a modpack with custom dimensions that should have Aura act similarly to an existing dimension in them. Each entry needs to be formatted as dimension_name->aura_type, where aura_type can be any of naturesaura:overworld, naturesaura:nether and naturesaura:end.")
         public String[] auraTypeOverrides = new String[0];
+
+        @Comment("Additional blocks that are recognized as generatable ores for the passive ore generation effect. Each entry needs to be formatted as oredictEntry:oreWeight:dimension where a higher weight makes the ore more likely to spawn with 5000 being the weight of coal, the default ore with the highest weight, and dimension being any of overworld and nether")
+        public String[] additionalOres = new String[0];
 
         @Comment("The amount of blocks that can be between two Aura Field Creators for them to be connectable and work together")
         public int fieldCreatorRange = 10;
@@ -53,6 +57,8 @@ public final class ModConfig {
         public boolean breathlessEffect = true;
         @Comment("If the Aura Imbalance effect of farm animals being affected in positive ways if Aura levels are too high should occur")
         public boolean animalEffect = true;
+        @Comment("If the Aura Imbalance effect of ores spawning in the area if Aura levels are too high should occur")
+        public boolean oreEffect = true;
     }
 
     public static class Client {
@@ -103,6 +109,20 @@ public final class ModConfig {
                 }
             } catch (Exception e) {
                 NaturesAura.LOGGER.warn("Error parsing auraTypeOverrides", e);
+            }
+
+            try {
+                for (String s : general.additionalOres) {
+                    String[] split = s.split(":");
+                    WeightedOre ore = new WeightedOre(split[0], Integer.parseInt(split[1]));
+                    String dimension = split[2];
+                    if ("nether".equalsIgnoreCase(dimension))
+                        NaturesAuraAPI.NETHER_ORES.add(ore);
+                    else
+                        NaturesAuraAPI.OVERWORLD_ORES.add(ore);
+                }
+            } catch (Exception e) {
+                NaturesAura.LOGGER.warn("Error parsing additionalOres", e);
             }
         }
     }

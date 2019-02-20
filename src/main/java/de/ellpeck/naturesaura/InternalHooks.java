@@ -11,6 +11,7 @@ import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -23,6 +24,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     @Override
@@ -105,19 +107,31 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
-    public boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name) {
+    public List<Tuple<BlockPos, Integer>> getActiveEffectPowders(World world, AxisAlignedBB area, ResourceLocation name) {
+        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getActiveEffectPowders");
         List<EntityEffectInhibitor> inhibitors = world.getEntitiesWithinAABB(
-                EntityEffectInhibitor.class,
-                new AxisAlignedBB(pos).grow(64),
-                entity -> {
-                    if (!name.equals(entity.getInhibitedEffect()))
-                        return false;
-                    AxisAlignedBB bounds = new AxisAlignedBB(
-                            entity.posX, entity.posY, entity.posZ,
-                            entity.posX, entity.posY, entity.posZ).grow(entity.getAmount());
-                    return bounds.contains(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
-                });
-        return !inhibitors.isEmpty();
+                EntityEffectInhibitor.class, area,
+                entity -> name.equals(entity.getInhibitedEffect()));
+        List<Tuple<BlockPos, Integer>> tuples = inhibitors.stream()
+                .map(entity -> new Tuple<>(entity.getPosition(), entity.getAmount()))
+                .collect(Collectors.toList());
+        world.profiler.endSection();
+        return tuples;
+    }
+
+    @Override
+    public boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name) {
+        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":isEffectPowderActive");
+        List<Tuple<BlockPos, Integer>> powders = this.getActiveEffectPowders(world, new AxisAlignedBB(pos).grow(64), name);
+        for (Tuple<BlockPos, Integer> powder : powders) {
+            AxisAlignedBB bounds = new AxisAlignedBB(powder.getFirst()).grow(powder.getSecond());
+            if (bounds.contains(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5))) {
+                world.profiler.endSection();
+                return true;
+            }
+        }
+        world.profiler.endSection();
+        return false;
     }
 
     @Override

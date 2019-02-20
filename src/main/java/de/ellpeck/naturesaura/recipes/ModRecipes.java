@@ -3,10 +3,7 @@ package de.ellpeck.naturesaura.recipes;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
-import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
-import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
-import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.api.recipes.*;
 import de.ellpeck.naturesaura.api.recipes.ing.AmountIngredient;
 import de.ellpeck.naturesaura.api.recipes.ing.NBTIngredient;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
@@ -273,6 +270,66 @@ public final class ModRecipes {
         spawner("wither_skeleton", "minecraft:wither_skeleton", 150000, 150, Ingredient.fromItem(Items.BONE), Helper.blockIng(Blocks.OBSIDIAN));
         spawner("wolf", "minecraft:wolf", 50000, 60, Ingredient.fromItem(Items.LEATHER), Ingredient.fromItem(Items.BONE));
         spawner("zombie", "minecraft:zombie", 100000, 100, Ingredient.fromItem(Items.ROTTEN_FLESH));
+
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreCoal", 5000));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherCoal", 5000));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreIron", 3000));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherIron", 3000));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreGold", 500));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherGold", 500));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreDiamond", 50));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherDiamond", 50));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreLapis", 250));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherLapis", 250));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreRedstone", 200));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherRedstone", 200));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreEmerald", 30));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreQuartz", 3000));
+
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreCopper", 2000));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherCopper", 2000));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreTin", 1800));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherTin", 1800));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreLead", 1500));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherLead", 1500));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreSilver", 1000));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherSilver", 1000));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreNickel", 100));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherNickel", 100));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("orePlatinum", 20));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherPlatinum", 20));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreAluminum", 1200));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreAluminium", 1200));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreOsmium", 1500));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreZinc", 1000));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreYellorite", 1200));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreUranium", 400));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreCertusQuartz", 800));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreApatite", 700));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreQuartzBlack", 3000));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreRuby", 40));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("orePeridot", 40));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreTopaz", 40));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreTanzanite", 40));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreMalachite", 40));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreSapphire", 40));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreAmber", 150));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreResonating", 50));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreSulfur", 3000));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreSaltpeter", 250));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreFirestone", 30));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreSalt", 2900));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreDraconium", 5));
+
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("orePoorIron", 3000));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("orePoorGold", 500));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("orePoorCopper", 2000));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("orePoorTin", 1800));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("orePoorLead", 1500));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("orePoorSilver", 1000));
+
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreCobalt", 50));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreArdite", 50));
     }
 
     private static void spawner(String name, String entity, int aura, int time, Ingredient... ings) {

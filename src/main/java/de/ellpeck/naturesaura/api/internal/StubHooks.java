@@ -5,9 +5,13 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class StubHooks implements NaturesAuraAPI.IInternalHooks {
@@ -44,6 +48,11 @@ public class StubHooks implements NaturesAuraAPI.IInternalHooks {
     @Override
     public IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
         return new StubMultiblock();
+    }
+
+    @Override
+    public List<Tuple<BlockPos, Integer>> getActiveEffectPowders(World world, AxisAlignedBB area, ResourceLocation name) {
+        return Collections.emptyList();
     }
 
     @Override
