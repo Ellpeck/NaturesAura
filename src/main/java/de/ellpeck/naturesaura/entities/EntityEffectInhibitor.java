@@ -33,6 +33,9 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityEffectInhibitor.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> AMOUNT = EntityDataManager.createKey(EntityEffectInhibitor.class, DataSerializers.VARINT);
 
+    @SideOnly(Side.CLIENT)
+    public int renderTicks;
+
     public EntityEffectInhibitor(World worldIn) {
         super(worldIn);
     }
@@ -118,6 +121,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
                         this.world.rand.nextGaussian() * 0.005F,
                         this.getColor(), this.world.rand.nextFloat() * 3F + 1F, 120, 0F, true, true);
             }
+            this.renderTicks++;
         }
     }
 

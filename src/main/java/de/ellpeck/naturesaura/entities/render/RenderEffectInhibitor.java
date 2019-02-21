@@ -35,7 +35,7 @@ public class RenderEffectInhibitor extends Render<EntityEffectInhibitor> {
     @Override
     public void doRender(EntityEffectInhibitor entity, double x, double y, double z, float entityYaw, float partialTicks) {
         GlStateManager.pushMatrix();
-        float time = entity.world.getTotalWorldTime() + entity.getEntityId() + partialTicks;
+        float time = entity.renderTicks + entity.getEntityId() + partialTicks;
         float bob = (float) Math.sin(time / 10F) * 0.05F;
         GlStateManager.translate(x, y + 0.15F + bob, z);
         GlStateManager.rotate((time * 3) % 360, 0F, 1F, 0F);
