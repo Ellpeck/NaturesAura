@@ -34,8 +34,7 @@ public class CommonEvents {
 
     @SubscribeEvent
     public void onWorldCapsAttach(AttachCapabilitiesEvent<World> event) {
-        World world = event.getObject();
-        event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "data"), new WorldData(world));
+        event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "data"), new WorldData());
     }
 
     @SubscribeEvent

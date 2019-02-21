@@ -1,9 +1,13 @@
 package de.ellpeck.naturesaura.entities;
 
+import com.google.common.collect.ListMultimap;
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.misc.WorldData;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,11 +17,15 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class EntityEffectInhibitor extends Entity implements IVisualizable {
 
@@ -27,6 +35,52 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
 
     public EntityEffectInhibitor(World worldIn) {
         super(worldIn);
+    }
+
+    @Override
+    public void onAddedToWorld() {
+        super.onAddedToWorld();
+        this.addToPowderList();
+    }
+
+    @Override
+    public void onRemovedFromWorld() {
+        this.removeFromPowderList();
+        super.onRemovedFromWorld();
+    }
+
+    @Override
+    public void setPosition(double x, double y, double z) {
+        boolean should = x != this.posX || y != this.posY || z != this.posZ;
+        if (should)
+            this.removeFromPowderList();
+        super.setPosition(x, y, z);
+        if (should)
+            this.addToPowderList();
+    }
+
+    private void addToPowderList() {
+        if (!this.isAddedToWorld())
+            return;
+        List<Tuple<Vec3d, Integer>> powders = this.getPowderList();
+        powders.add(new Tuple<>(this.getPositionVector(), this.getAmount()));
+    }
+
+    private void removeFromPowderList() {
+        if (!this.isAddedToWorld())
+            return;
+        List<Tuple<Vec3d, Integer>> powders = this.getPowderList();
+        Vec3d pos = this.getPositionVector();
+        for (int i = 0; i < powders.size(); i++)
+            if (pos.equals(powders.get(i).getFirst())) {
+                powders.remove(i);
+                break;
+            }
+    }
+
+    private List<Tuple<Vec3d, Integer>> getPowderList() {
+        ListMultimap<ResourceLocation, Tuple<Vec3d, Integer>> powders = ((WorldData) IWorldData.getWorldData(this.world)).effectPowders;
+        return powders.get(this.getInhibitedEffect());
     }
 
     @Override
@@ -83,7 +137,9 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     public void setInhibitedEffect(ResourceLocation effect) {
+        this.removeFromPowderList();
         this.dataManager.set(INHIBITED_EFFECT, effect.toString());
+        this.addToPowderList();
     }
 
     public ResourceLocation getInhibitedEffect() {
@@ -99,7 +155,9 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     public void setAmount(int amount) {
+        this.removeFromPowderList();
         this.dataManager.set(AMOUNT, amount);
+        this.addToPowderList();
     }
 
     public int getAmount() {
@@ -109,9 +167,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
-        return new AxisAlignedBB(
-                this.posX, this.posY, this.posZ,
-                this.posX, this.posY, this.posZ).grow(this.getAmount());
+        return Helper.aabb(this.getPositionVector()).grow(this.getAmount());
     }
 
     @Override

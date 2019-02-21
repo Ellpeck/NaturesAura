@@ -18,6 +18,7 @@ import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.oredict.OreDictionary;
@@ -78,19 +79,20 @@ public class OreSpawnEffect implements IDrainSpotEffect {
         }
         int totalWeight = WeightedRandom.getTotalWeight(ores);
 
-        List<Tuple<BlockPos, Integer>> powders = NaturesAuraAPI.instance().getActiveEffectPowders(world,
+        List<Tuple<Vec3d, Integer>> powders = NaturesAuraAPI.instance().getActiveEffectPowders(world,
                 new AxisAlignedBB(pos).grow(this.dist), NAME);
         if (powders.isEmpty())
             return;
         for (int i = 0; i < this.amount; i++) {
-            Tuple<BlockPos, Integer> powder = powders.get(i % powders.size());
-            BlockPos powderPos = powder.getFirst();
+            Tuple<Vec3d, Integer> powder = powders.get(i % powders.size());
+            Vec3d powderPos = powder.getFirst();
             int range = powder.getSecond();
-            int x = MathHelper.floor(powderPos.getX() + world.rand.nextGaussian() * range);
-            int y = MathHelper.floor(powderPos.getY() + world.rand.nextGaussian() * range);
-            int z = MathHelper.floor(powderPos.getZ() + world.rand.nextGaussian() * range);
+            int x = MathHelper.floor(powderPos.x + world.rand.nextGaussian() * range);
+            int y = MathHelper.floor(powderPos.y + world.rand.nextGaussian() * range);
+            int z = MathHelper.floor(powderPos.z + world.rand.nextGaussian() * range);
             BlockPos orePos = new BlockPos(x, y, z);
-            if (orePos.distanceSq(powderPos) <= range * range && orePos.distanceSq(pos) <= this.dist * this.dist && world.isBlockLoaded(orePos)) {
+            if (orePos.distanceSq(powderPos.x, powderPos.y, powderPos.z) <= range * range
+                    && orePos.distanceSq(pos) <= this.dist * this.dist && world.isBlockLoaded(orePos)) {
                 IBlockState state = world.getBlockState(orePos);
                 Block block = state.getBlock();
                 if (block != requiredBlock)

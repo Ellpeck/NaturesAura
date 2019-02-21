@@ -20,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -295,7 +296,7 @@ public final class NaturesAuraAPI {
          * @param name  The registry name of the powder
          * @return A list of powders' positions and ranges
          */
-        List<Tuple<BlockPos, Integer>> getActiveEffectPowders(World world, AxisAlignedBB area, ResourceLocation name);
+        List<Tuple<Vec3d, Integer>> getActiveEffectPowders(World world, AxisAlignedBB area, ResourceLocation name);
 
         /**
          * Returns true if there is an effect powder entity active anywhere

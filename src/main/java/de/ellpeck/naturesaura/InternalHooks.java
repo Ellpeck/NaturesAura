@@ -4,10 +4,11 @@ import baubles.api.BaublesApi;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.blocks.multi.Multiblock;
 import de.ellpeck.naturesaura.compat.Compat;
-import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
+import de.ellpeck.naturesaura.misc.WorldData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -22,9 +23,9 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.lwjgl.util.vector.Vector3f;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     @Override
@@ -107,25 +108,24 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
-    public List<Tuple<BlockPos, Integer>> getActiveEffectPowders(World world, AxisAlignedBB area, ResourceLocation name) {
+    public List<Tuple<Vec3d, Integer>> getActiveEffectPowders(World world, AxisAlignedBB area, ResourceLocation name) {
         world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getActiveEffectPowders");
-        List<EntityEffectInhibitor> inhibitors = world.getEntitiesWithinAABB(
-                EntityEffectInhibitor.class, area,
-                entity -> name.equals(entity.getInhibitedEffect()));
-        List<Tuple<BlockPos, Integer>> tuples = inhibitors.stream()
-                .map(entity -> new Tuple<>(entity.getPosition(), entity.getAmount()))
-                .collect(Collectors.toList());
+        List<Tuple<Vec3d, Integer>> found = new ArrayList<>();
+        for (Tuple<Vec3d, Integer> powder : ((WorldData) IWorldData.getWorldData(world)).effectPowders.get(name))
+            if (area.contains(powder.getFirst()))
+                found.add(powder);
         world.profiler.endSection();
-        return tuples;
+        return found;
     }
 
     @Override
     public boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name) {
         world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":isEffectPowderActive");
-        List<Tuple<BlockPos, Integer>> powders = this.getActiveEffectPowders(world, new AxisAlignedBB(pos).grow(64), name);
-        for (Tuple<BlockPos, Integer> powder : powders) {
-            AxisAlignedBB bounds = new AxisAlignedBB(powder.getFirst()).grow(powder.getSecond());
-            if (bounds.contains(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5))) {
+        Vec3d posVec = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+        List<Tuple<Vec3d, Integer>> powders = this.getActiveEffectPowders(world, new AxisAlignedBB(pos).grow(64), name);
+        for (Tuple<Vec3d, Integer> powder : powders) {
+            AxisAlignedBB bounds = Helper.aabb(powder.getFirst()).grow(powder.getSecond());
+            if (bounds.contains(posVec)) {
                 world.profiler.endSection();
                 return true;
             }

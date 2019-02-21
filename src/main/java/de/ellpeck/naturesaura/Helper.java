@@ -28,6 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -322,5 +323,9 @@ public final class Helper {
             if (!handler.getStackInSlot(i).isEmpty())
                 return false;
         return true;
+    }
+
+    public static AxisAlignedBB aabb(Vec3d pos) {
+        return new AxisAlignedBB(pos.x, pos.y, pos.z, pos.x, pos.y, pos.z);
     }
 }
