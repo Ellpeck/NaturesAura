@@ -29,7 +29,7 @@ public class GrassDieEffect implements IDrainSpotEffect {
         if (spot < 0) {
             int aura = IAuraChunk.getAuraInArea(world, pos, 50);
             if (aura < 0) {
-                this.amount = Math.min(300, Math.abs(aura) / 100000 / IAuraChunk.getSpotAmountInArea(world, pos, 50));
+                this.amount = Math.min(300, MathHelper.ceil(Math.abs(aura) / 100000F / IAuraChunk.getSpotAmountInArea(world, pos, 50)));
                 if (this.amount > 1) {
                     this.dist = MathHelper.clamp(Math.abs(aura) / 75000, 5, 75);
                     return true;
