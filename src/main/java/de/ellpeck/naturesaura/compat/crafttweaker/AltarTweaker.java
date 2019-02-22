@@ -5,13 +5,13 @@ import com.blamejared.mtlib.helpers.LogHelper;
 import com.blamejared.mtlib.utils.BaseMapAddition;
 import com.blamejared.mtlib.utils.BaseMapRemoval;
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
-import de.ellpeck.naturesaura.api.recipes.ing.NBTIngredient;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -25,13 +25,13 @@ import java.util.Map;
 public final class AltarTweaker {
 
     @ZenMethod
-    public static void addRecipe(String name, IItemStack input, IItemStack output, IItemStack catalyst, int aura, int time) {
+    public static void addRecipe(String name, IIngredient input, IItemStack output, IIngredient catalyst, int aura, int time) {
         CraftTweakerCompat.SCHEDULED_ACTIONS.add(() -> {
             ResourceLocation res = new ResourceLocation(name);
             return new Add(Collections.singletonMap(res, new AltarRecipe(res,
-                    new NBTIngredient(InputHelper.toStack(input)),
+                    CraftTweakerMC.getIngredient(input),
                     InputHelper.toStack(output),
-                    Ingredient.fromStacks(InputHelper.toStack(catalyst)),
+                    CraftTweakerMC.getIngredient(catalyst),
                     aura, time)));
         });
     }

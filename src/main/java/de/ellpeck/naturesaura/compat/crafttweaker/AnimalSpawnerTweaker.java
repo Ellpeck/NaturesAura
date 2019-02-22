@@ -1,10 +1,10 @@
 package de.ellpeck.naturesaura.compat.crafttweaker;
 
-import com.blamejared.mtlib.helpers.InputHelper;
 import com.blamejared.mtlib.utils.BaseMapAddition;
 import com.blamejared.mtlib.utils.BaseMapRemoval;
 import crafttweaker.annotations.ZenRegister;
-import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.item.IIngredient;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
@@ -22,11 +22,11 @@ import java.util.Map;
 public final class AnimalSpawnerTweaker {
 
     @ZenMethod
-    public static void addRecipe(String name, String entity, int aura, int time, IItemStack[] ingredients) {
+    public static void addRecipe(String name, String entity, int aura, int time, IIngredient[] ingredients) {
         CraftTweakerCompat.SCHEDULED_ACTIONS.add(() -> {
             ResourceLocation res = new ResourceLocation(name);
             return new Add(Collections.singletonMap(res, new AnimalSpawnerRecipe(res, new ResourceLocation(entity), aura, time,
-                    Arrays.stream(ingredients).map(ing -> Ingredient.fromStacks(InputHelper.toStack(ing))).toArray(Ingredient[]::new)
+                    Arrays.stream(ingredients).map(CraftTweakerMC::getIngredient).toArray(Ingredient[]::new)
             )));
         });
     }

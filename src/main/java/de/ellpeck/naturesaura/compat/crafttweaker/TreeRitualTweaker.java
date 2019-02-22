@@ -5,12 +5,13 @@ import com.blamejared.mtlib.helpers.LogHelper;
 import com.blamejared.mtlib.utils.BaseMapAddition;
 import com.blamejared.mtlib.utils.BaseMapRemoval;
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
-import de.ellpeck.naturesaura.api.recipes.ing.NBTIngredient;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -26,14 +27,14 @@ import java.util.Map;
 public final class TreeRitualTweaker {
 
     @ZenMethod
-    public static void addRecipe(String name, IItemStack saplingType, IItemStack result, int time, IItemStack[] items) {
+    public static void addRecipe(String name, IIngredient saplingType, IItemStack result, int time, IIngredient[] items) {
         CraftTweakerCompat.SCHEDULED_ACTIONS.add(() -> {
             ResourceLocation res = new ResourceLocation(name);
             return new Add(Collections.singletonMap(res, new TreeRitualRecipe(res,
-                    Ingredient.fromStacks(InputHelper.toStack(saplingType)),
+                    CraftTweakerMC.getIngredient(saplingType),
                     InputHelper.toStack(result),
                     time,
-                    Arrays.stream(items).map(item -> new NBTIngredient(InputHelper.toStack(item))).toArray(Ingredient[]::new)
+                    Arrays.stream(items).map(CraftTweakerMC::getIngredient).toArray(Ingredient[]::new)
             )));
         });
     }

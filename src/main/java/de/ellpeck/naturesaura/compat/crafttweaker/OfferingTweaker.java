@@ -5,13 +5,14 @@ import com.blamejared.mtlib.helpers.LogHelper;
 import com.blamejared.mtlib.utils.BaseMapAddition;
 import com.blamejared.mtlib.utils.BaseMapRemoval;
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.api.recipes.ing.AmountIngredient;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -25,12 +26,12 @@ import java.util.Map;
 public final class OfferingTweaker {
 
     @ZenMethod
-    public static void addRecipe(String name, IItemStack input, IItemStack startItem, IItemStack output) {
+    public static void addRecipe(String name, IIngredient input, int inputAmount, IIngredient startItem, IItemStack output) {
         CraftTweakerCompat.SCHEDULED_ACTIONS.add(() -> {
             ResourceLocation res = new ResourceLocation(name);
             return new Add(Collections.singletonMap(res, new OfferingRecipe(res,
-                    new AmountIngredient(InputHelper.toStack(input)),
-                    Ingredient.fromStacks(InputHelper.toStack(startItem)),
+                    new AmountIngredient(CraftTweakerMC.getIngredient(input), inputAmount),
+                    CraftTweakerMC.getIngredient(startItem),
                     InputHelper.toStack(output))));
         });
     }

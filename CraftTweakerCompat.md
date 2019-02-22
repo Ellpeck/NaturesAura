@@ -1,0 +1,27 @@
+# Editing Nature's Aura recipes with CraftTweaker
+A few notes that apply for most of the recipe types:
+- If you don't know how the CraftTweaker syntax works, [read up on it](https://docs.blamejared.com/en/#Getting_Started/) first.
+- `name` is the name of a recipe, it can really be anything, but cannot clash with existing recipe names
+- `IIngredient` is any kind of ingredient, meaning either an OreDictionary entry or an item
+- `IItemStack` is an item
+- `aura` is the amount of Aura required and represents the total amount required for the completion of the recipe (for reference, 1,000,000 is the default amount of Aura present in the world and 2,000,000 is the amount that is required for the Environmental Eye's bar to fill up fully)
+- `time` is the time processes take in ticks
+
+## Natural Altar
+`mods.naturesaura.Altar.addRecipe(String name, IIngredient input, IItemStack output, IIngredient catalyst, int aura, int time)`
+
+- `catalyst` is the catalyst block that is placed on one of the four corner blocks, can be `null`
+
+## Altar of Birthing
+`mods.naturesaura.AnimalSpawner.addRecipe(String name, String entity, int aura, int time, IIngredient[] ingredients)`
+- `entity` is the registry name of the entity that you want to spawn
+
+## Offering to the Gods
+`mods.naturesaura.Offering.addRecipe(String name, IIngredient input, int inputAmount, IIngredient startItem, IItemStack output)`
+- `inputAmount` is the amount of items required for the input. Note that this means that the amount of the `input` variable is ignored
+- `startItem` is the item required to start the offering, should pretty much always be `naturesaura:calling_spirit`
+
+## Ritual of the Forest
+`mods.naturesaura.TreeRitual.addRecipe(String name, IIngredient saplingType, IItemStack result, int time, IIngredient[] items)`
+- `saplingType` is an item representation of the sapling that needs to be placed and grown into a tree
+- `items` are the items that need to be placed on the wooden stands
