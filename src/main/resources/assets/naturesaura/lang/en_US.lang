@@ -79,6 +79,7 @@ item.naturesaura.infused_iron_shoes.name=Botanist's Shoes
 item.naturesaura.effect_powder.naturesaura:plant_boost.name=Powder of Steady Growth
 item.naturesaura.effect_powder.naturesaura:cache_recharge.name=Powder of no Storage
 item.naturesaura.effect_powder.naturesaura:animal.name=Powder of Fertility
+item.naturesaura.effect_powder.naturesaura:ore_spawn.name=Powder of the Bountiful Core
 item.naturesaura.mover_cart.name=Aura Attraction Cart
 item.naturesaura.range_visualizer.name=Mystical Magnifier
 item.naturesaura.clock_hand.name=Hand of Time

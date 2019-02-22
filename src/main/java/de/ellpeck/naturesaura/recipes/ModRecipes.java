@@ -9,6 +9,7 @@ import de.ellpeck.naturesaura.api.recipes.ing.NBTIngredient;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.chunk.effect.AnimalEffect;
 import de.ellpeck.naturesaura.chunk.effect.CacheRechargeEffect;
+import de.ellpeck.naturesaura.chunk.effect.OreSpawnEffect;
 import de.ellpeck.naturesaura.chunk.effect.PlantBoostEffect;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ItemEffectPowder;
@@ -108,6 +109,13 @@ public final class ModRecipes {
                 Helper.blockIng(ModBlocks.GOLD_POWDER),
                 Ingredient.fromItem(ModItems.SKY_INGOT),
                 Ingredient.fromItem(Items.EGG)).register();
+        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "ore_spawn_powder"),
+                Ingredient.fromStacks(new ItemStack(Blocks.SAPLING)),
+                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 4), OreSpawnEffect.NAME), 400,
+                Helper.blockIng(ModBlocks.GOLD_POWDER),
+                Helper.blockIng(ModBlocks.GOLD_POWDER),
+                Helper.blockIng(Blocks.DIAMOND_ORE),
+                Helper.blockIng(Blocks.REDSTONE_ORE)).register();
         new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_joy"),
                 Helper.blockIng(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_JOY, 2), 200,
                 new NBTIngredient(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)),

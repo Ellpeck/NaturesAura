@@ -98,6 +98,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                 if (block != requiredBlock)
                     continue;
 
+                outer:
                 while (true) {
                     WeightedOre ore = WeightedRandom.getRandomItem(world.rand, ores, totalWeight);
                     List<ItemStack> stacks = OreDictionary.getOres(ore.name, false);
@@ -115,8 +116,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                         int toDrain = (20000 - ore.itemWeight * 2) * 2;
                         BlockPos highestSpot = IAuraChunk.getHighestSpot(world, orePos, 30, pos);
                         IAuraChunk.getAuraChunk(world, highestSpot).drainAura(highestSpot, toDrain);
-
-                        return;
+                        break outer;
                     }
                 }
             }
