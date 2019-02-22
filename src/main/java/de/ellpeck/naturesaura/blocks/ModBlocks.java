@@ -50,4 +50,5 @@ public final class ModBlocks {
     public static final Block TIME_CHANGER = new BlockTimeChanger();
     public static final Block GENERATOR_LIMIT_REMOVER = new BlockImpl("generator_limit_remover", Material.ROCK).setSoundType(SoundType.STONE).setHardness(2F);
     public static final Block ENDER_CRATE = new BlockEnderCrate();
+    public static final Block POWDER_PLACER = new BlockPowderPlacer();
 }

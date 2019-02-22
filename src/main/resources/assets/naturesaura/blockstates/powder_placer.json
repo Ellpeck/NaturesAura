@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "naturesaura:powder_placer",
+        "textures": {
+            "texture": "naturesaura:blocks/powder_placer",
+            "top": "naturesaura:blocks/powder_placer_top",
+            "particle": "#top"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

@@ -46,6 +46,7 @@ tile.naturesaura.moss_generator.name=Swamp Homi
 tile.naturesaura.time_changer.name=Shifting Sundial
 tile.naturesaura.generator_limit_remover.name=Creational Catalyst
 tile.naturesaura.ender_crate.name=Ender Crate
+tile.naturesaura.powder_placer.name=Powder Manipulator
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.eye_improved.name=Environmental Ocular

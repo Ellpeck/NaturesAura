@@ -114,7 +114,6 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable 
             int radius = ((TileEntitySpawnLamp) tile).getRadius();
             if (radius > 0)
                 return new AxisAlignedBB(pos).grow(radius);
-            System.out.println(radius);
         }
         return null;
     }

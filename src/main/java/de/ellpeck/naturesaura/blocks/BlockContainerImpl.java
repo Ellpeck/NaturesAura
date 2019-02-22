@@ -26,6 +26,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class BlockContainerImpl extends BlockContainer implements IModItem, ICreativeItem, IModelProvider {
 
@@ -132,10 +133,22 @@ public class BlockContainerImpl extends BlockContainer implements IModItem, ICre
                 TileEntityImpl impl = (TileEntityImpl) tile;
                 int newPower = world.getRedstonePowerFromNeighbors(pos);
                 if (impl.redstonePower != newPower) {
+                    boolean pulse = impl.redstonePower <= 0 && newPower > 0;
                     impl.redstonePower = newPower;
                     impl.onRedstonePowerChange();
+                    if (pulse)
+                        world.scheduleUpdate(pos, this, this.tickRate(world));
                 }
             }
+        }
+    }
+
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        if (!worldIn.isRemote) {
+            TileEntity tile = worldIn.getTileEntity(pos);
+            if (tile instanceof TileEntityImpl)
+                ((TileEntityImpl) tile).onRedstonePulse();
         }
     }
 }

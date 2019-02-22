@@ -1,0 +1,25 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        " A ",
+        "PSP",
+        " T "
+    ],
+    "key": {
+        "P": {
+            "item": "naturesaura:gold_powder"
+        },
+        "S": {
+            "item": "naturesaura:infused_stone"
+        },
+        "T": {
+            "item": "naturesaura:token_joy"
+        },
+        "A": {
+            "item": "naturesaura:token_anger"
+        }
+    },
+    "result": {
+        "item": "naturesaura:powder_placer"
+    }
+}

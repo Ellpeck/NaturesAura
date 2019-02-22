@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.entities;
 import com.google.common.collect.ListMultimap;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.items.ItemEffectPowder;
@@ -38,6 +39,16 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
 
     public EntityEffectInhibitor(World worldIn) {
         super(worldIn);
+    }
+
+    public static void place(World world, ItemStack stack, double posX, double posY, double posZ) {
+        ResourceLocation effect = ItemEffectPowder.getEffect(stack);
+        EntityEffectInhibitor entity = new EntityEffectInhibitor(world);
+        entity.setInhibitedEffect(effect);
+        entity.setColor(NaturesAuraAPI.EFFECT_POWDERS.get(effect));
+        entity.setAmount(stack.getCount());
+        entity.setPosition(posX, posY, posZ);
+        world.spawnEntity(entity);
     }
 
     @Override
@@ -134,10 +145,14 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (source instanceof EntityDamageSource && !this.world.isRemote) {
             this.setDead();
-            this.entityDropItem(ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, this.getAmount()), this.getInhibitedEffect()), 0F);
+            this.entityDropItem(this.getDrop(), 0F);
             return true;
         } else
             return super.attackEntityFrom(source, amount);
+    }
+
+    public ItemStack getDrop() {
+        return ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, this.getAmount()), this.getInhibitedEffect());
     }
 
     public void setInhibitedEffect(ResourceLocation effect) {

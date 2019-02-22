@@ -25,13 +25,7 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             ItemStack stack = player.getHeldItem(hand);
-            ResourceLocation effect = getEffect(stack);
-            EntityEffectInhibitor entity = new EntityEffectInhibitor(worldIn);
-            entity.setInhibitedEffect(effect);
-            entity.setColor(NaturesAuraAPI.EFFECT_POWDERS.get(effect));
-            entity.setAmount(stack.getCount());
-            entity.setPosition(pos.getX() + hitX, pos.getY() + hitY + 1, pos.getZ() + hitZ);
-            worldIn.spawnEntity(entity);
+            EntityEffectInhibitor.place(worldIn, stack, pos.getX() + hitX, pos.getY() + hitY + 1, pos.getZ() + hitZ);
             stack.setCount(0);
         }
         return EnumActionResult.SUCCESS;
