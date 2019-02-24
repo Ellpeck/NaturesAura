@@ -260,10 +260,6 @@ public final class Helper {
         }, () -> null);
     }
 
-    public static Ingredient blockIng(Block block) {
-        return Ingredient.fromStacks(new ItemStack(block));
-    }
-
     public static void addAdvancement(EntityPlayer player, ResourceLocation advancement, String criterion) {
         if (!(player instanceof EntityPlayerMP))
             return;
