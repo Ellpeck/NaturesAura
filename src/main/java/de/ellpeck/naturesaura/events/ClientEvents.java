@@ -115,7 +115,7 @@ public class ClientEvents {
                     ItemRangeVisualizer.VISUALIZED_BLOCKS.clear();
                 if (!ItemRangeVisualizer.VISUALIZED_ENTITIES.isEmpty())
                     ItemRangeVisualizer.VISUALIZED_ENTITIES.clear();
-            } else {
+            } else if (!mc.isGamePaused()) {
                 if (mc.world.getTotalWorldTime() % 20 == 0) {
                     mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":spawnExcessParticles");
                     int amount = MathHelper.floor(190 * ModConfig.client.excessParticleAmount);
@@ -148,8 +148,7 @@ public class ClientEvents {
                 }
 
                 mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":updateParticles");
-                if (!mc.isGamePaused())
-                    ParticleHandler.updateParticles();
+                ParticleHandler.updateParticles();
                 mc.profiler.endSection();
 
                 if (mc.player != null) {
