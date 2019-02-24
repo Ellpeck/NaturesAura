@@ -169,7 +169,7 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextGaussian() * 0.02F,
                                         color, world.rand.nextFloat() * 2F + 1F, 25, 0F, false, true);
                             break;
-                        case 8: // Flower generator aura creation
+                        case 8: // Flower generator, firework generator aura creation
                             for (int i = world.rand.nextInt(10) + 5; i >= 0; i--)
                                 NaturesAuraAPI.instance().spawnMagicParticle(
                                         message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
@@ -386,6 +386,22 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextFloat() * 0.04F + 0.02F,
                                         world.rand.nextGaussian() * 0.01F,
                                         0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 40, 0F, true, true);
+                            break;
+                        case 24: // Firework generator
+                            int goalX = message.data[0];
+                            int goalY = message.data[1];
+                            int goalZ = message.data[2];
+                            NaturesAuraAPI.instance().setParticleSpawnRange(64);
+                            for (int i = world.rand.nextInt(30) + 30; i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnParticleStream(
+                                        message.posX + (float) world.rand.nextGaussian(),
+                                        message.posY + (float) world.rand.nextGaussian(),
+                                        message.posZ + (float) world.rand.nextGaussian(),
+                                        goalX + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        goalY + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        goalZ + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        0.65F, message.data[3 + world.rand.nextInt(message.data.length - 3)], 1F);
+                            NaturesAuraAPI.instance().setParticleSpawnRange(32);
                             break;
                     }
                 }
