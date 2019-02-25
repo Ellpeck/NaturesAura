@@ -66,4 +66,9 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
             }
         }
     }
+
+    @Override
+    public boolean wantsLimitRemover() {
+        return true;
+    }
 }

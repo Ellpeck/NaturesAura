@@ -94,6 +94,11 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
     }
 
     @Override
+    public boolean wantsLimitRemover() {
+        return true;
+    }
+
+    @Override
     public void writeNBT(NBTTagCompound compound, SaveType type) {
         super.writeNBT(compound, type);
 

@@ -34,6 +34,11 @@ public class TileEntityAnimalGenerator extends TileEntityImpl implements ITickab
         }
     }
 
+    @Override
+    public boolean wantsLimitRemover() {
+        return true;
+    }
+
     public boolean isBusy() {
         return this.timeRemaining > 0;
     }

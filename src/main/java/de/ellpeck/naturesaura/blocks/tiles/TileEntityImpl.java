@@ -62,7 +62,7 @@ public class TileEntityImpl extends TileEntity {
 
     }
 
-    public void onRedstonePulse(){
+    public void onRedstonePulse() {
 
     }
 
@@ -172,11 +172,17 @@ public class TileEntityImpl extends TileEntity {
     }
 
     public boolean canGenerateRightNow(int range, int toAdd) {
-        IBlockState below = this.world.getBlockState(this.pos.down());
-        if (below.getBlock() == ModBlocks.GENERATOR_LIMIT_REMOVER)
-            return true;
+        if (this.wantsLimitRemover()) {
+            IBlockState below = this.world.getBlockState(this.pos.down());
+            if (below.getBlock() == ModBlocks.GENERATOR_LIMIT_REMOVER)
+                return true;
+        }
         int aura = IAuraChunk.getAuraInArea(this.world, this.pos, range);
         return aura + toAdd <= IAuraChunk.DEFAULT_AURA * 2;
+    }
+
+    public boolean wantsLimitRemover() {
+        return false;
     }
 
     public enum SaveType {

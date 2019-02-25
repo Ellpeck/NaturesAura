@@ -48,7 +48,7 @@ public final class ModBlocks {
     public static final Block RF_CONVERTER = ModConfig.enabledFeatures.rfConverter ? new BlockRFConverter() : null;
     public static final Block MOSS_GENERATOR = new BlockMossGenerator();
     public static final Block TIME_CHANGER = new BlockTimeChanger();
-    public static final Block GENERATOR_LIMIT_REMOVER = new BlockImpl("generator_limit_remover", Material.ROCK).setSoundType(SoundType.STONE).setHardness(2F);
+    public static final Block GENERATOR_LIMIT_REMOVER = new BlockGeneratorLimitRemover();
     public static final Block ENDER_CRATE = new BlockEnderCrate();
     public static final Block POWDER_PLACER = new BlockPowderPlacer();
     public static final Block FIREWORK_GENERATOR = new BlockFireworkGenerator();

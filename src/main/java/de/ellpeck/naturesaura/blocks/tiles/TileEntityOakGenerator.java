@@ -34,4 +34,9 @@ public class TileEntityOakGenerator extends TileEntityImpl implements ITickable 
                 }
             }
     }
+
+    @Override
+    public boolean wantsLimitRemover() {
+        return true;
+    }
 }

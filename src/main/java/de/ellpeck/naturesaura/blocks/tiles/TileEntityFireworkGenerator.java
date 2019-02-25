@@ -44,7 +44,7 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                     if (this.trackedEntity == null && this.releaseTimer <= 0) {
                         EntityFireworkRocket entity = new EntityFireworkRocket(this.world, item.posX, item.posY, item.posZ, stack);
                         this.trackedEntity = entity;
-                        this.trackedItem = stack;
+                        this.trackedItem = stack.copy();
                         this.world.spawnEntity(entity);
                     }
                     stack.shrink(1);
@@ -127,5 +127,10 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                 }
             }
         }
+    }
+
+    @Override
+    public boolean wantsLimitRemover() {
+        return true;
     }
 }

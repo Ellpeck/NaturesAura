@@ -52,4 +52,9 @@ public class TileEntityMossGenerator extends TileEntityImpl implements ITickable
             this.world.setBlockState(offset, result);
         }
     }
+
+    @Override
+    public boolean wantsLimitRemover() {
+        return true;
+    }
 }
