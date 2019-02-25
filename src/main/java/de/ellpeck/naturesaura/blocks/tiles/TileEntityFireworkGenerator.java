@@ -56,55 +56,59 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
             }
 
             if (this.trackedEntity != null && this.trackedEntity.isDead) {
-                float generateFactor = 0;
-                Set<Integer> usedColors = new HashSet<>();
+                if (this.trackedItem.hasTagCompound()) {
+                    float generateFactor = 0;
+                    Set<Integer> usedColors = new HashSet<>();
 
-                NBTTagCompound compound = this.trackedItem.getTagCompound();
-                NBTTagCompound fireworks = compound.getCompoundTag("Fireworks");
+                    NBTTagCompound compound = this.trackedItem.getTagCompound();
+                    NBTTagCompound fireworks = compound.getCompoundTag("Fireworks");
 
-                NBTTagList explosions = fireworks.getTagList("Explosions", 10);
-                if (!explosions.isEmpty()) {
                     int flightTime = fireworks.getInteger("Flight");
-                    generateFactor += flightTime;
+                    NBTTagList explosions = fireworks.getTagList("Explosions", 10);
+                    if (!explosions.isEmpty()) {
+                        generateFactor += flightTime;
 
-                    for (NBTBase base : explosions) {
-                        NBTTagCompound explosion = (NBTTagCompound) base;
-                        generateFactor += 1.5F;
+                        for (NBTBase base : explosions) {
+                            NBTTagCompound explosion = (NBTTagCompound) base;
+                            generateFactor += 1.5F;
 
-                        boolean flicker = explosion.getBoolean("Flicker");
-                        if (flicker)
-                            generateFactor += 1;
+                            boolean flicker = explosion.getBoolean("Flicker");
+                            if (flicker)
+                                generateFactor += 1;
 
-                        boolean trail = explosion.getBoolean("Trail");
-                        if (trail)
-                            generateFactor += 8;
+                            boolean trail = explosion.getBoolean("Trail");
+                            if (trail)
+                                generateFactor += 8;
 
-                        byte type = explosion.getByte("Type");
-                        generateFactor += new float[]{0, 1, 0.5F, 20, 0.5F}[type];
+                            byte type = explosion.getByte("Type");
+                            generateFactor += new float[]{0, 1, 0.5F, 20, 0.5F}[type];
 
-                        Set<Integer> colors = new HashSet<>();
-                        for (int color : explosion.getIntArray("Colors")) {
-                            usedColors.add(color);
-                            colors.add(color);
+                            Set<Integer> colors = new HashSet<>();
+                            for (int color : explosion.getIntArray("Colors")) {
+                                usedColors.add(color);
+                                colors.add(color);
+                            }
+                            generateFactor += 0.75F * colors.size();
                         }
-                        generateFactor += 0.75F * colors.size();
+                    }
+
+                    if (generateFactor > 0) {
+                        int toAdd = MathHelper.ceil(generateFactor * 10000F);
+                        if (this.canGenerateRightNow(35, toAdd)) {
+                            this.toRelease = toAdd;
+                            this.releaseTimer = 15 * flightTime + 40;
+                        }
+
+                        List<Integer> data = new ArrayList<>();
+                        data.add(this.pos.getX());
+                        data.add(this.pos.getY());
+                        data.add(this.pos.getZ());
+                        data.addAll(usedColors);
+                        PacketHandler.sendToAllLoaded(this.world, this.pos, new PacketParticles(
+                                (float) this.trackedEntity.posX, (float) this.trackedEntity.posY, (float) this.trackedEntity.posZ,
+                                24, Ints.toArray(data)));
                     }
                 }
-
-                int toAdd = MathHelper.ceil(generateFactor * 10000F);
-                if (this.canGenerateRightNow(35, toAdd)) {
-                    this.toRelease = toAdd;
-                    this.releaseTimer = 80;
-                }
-
-                List<Integer> data = new ArrayList<>();
-                data.add(this.pos.getX());
-                data.add(this.pos.getY());
-                data.add(this.pos.getZ());
-                data.addAll(usedColors);
-                PacketHandler.sendToAllLoaded(this.world, this.pos, new PacketParticles(
-                        (float) this.trackedEntity.posX, (float) this.trackedEntity.posY, (float) this.trackedEntity.posZ,
-                        24, Ints.toArray(data)));
 
                 this.trackedEntity = null;
                 this.trackedItem = null;

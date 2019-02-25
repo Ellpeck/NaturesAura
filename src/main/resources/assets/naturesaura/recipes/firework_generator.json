@@ -1,0 +1,31 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "SFS",
+        "GIG",
+        "TSJ"
+    ],
+    "key": {
+        "F": {
+            "item": "minecraft:fireworks"
+        },
+        "G": {
+            "item": "minecraft:gunpowder"
+        },
+        "S": {
+            "item": "naturesaura:infused_stone"
+        },
+        "T": {
+            "item": "naturesaura:token_rage"
+        },
+        "J": {
+            "item": "naturesaura:token_joy"
+        },
+        "I": {
+            "item": "naturesaura:sky_ingot"
+        }
+    },
+    "result": {
+        "item": "naturesaura:firework_generator"
+    }
+}
