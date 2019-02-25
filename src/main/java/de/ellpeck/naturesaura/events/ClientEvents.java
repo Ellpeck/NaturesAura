@@ -26,6 +26,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -59,6 +60,7 @@ import java.util.Map;
 public class ClientEvents {
 
     public static final ResourceLocation OVERLAYS = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/overlays.png");
+    private static final ItemStack ITEM_FRAME = new ItemStack(Items.ITEM_FRAME);
     private static final Map<ResourceLocation, Tuple<ItemStack, Boolean>> SHOWING_EFFECTS = new HashMap<>();
     private static ItemStack heldCache = ItemStack.EMPTY;
     private static ItemStack heldEye = ItemStack.EMPTY;
@@ -412,7 +414,8 @@ public class ClientEvents {
                                         mc, res, 35, I18n.format("tile.naturesaura.rf_converter.name"),
                                         storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
                             } else if (tile instanceof TileEntityGratedChute) {
-                                ItemStack stack = ((TileEntityGratedChute) tile).getItemHandler(null).getStackInSlot(0);
+                                TileEntityGratedChute chute = (TileEntityGratedChute) tile;
+                                ItemStack stack = chute.getItemHandler(null).getStackInSlot(0);
 
                                 int x = res.getScaledWidth() / 2;
                                 int y = res.getScaledHeight() / 2;
@@ -422,6 +425,14 @@ public class ClientEvents {
                                             x + 5, y - 11, 0xFFFFFF, true);
                                 else
                                     Helper.renderItemInGui(stack, x + 2, y - 18, 1F);
+
+
+                                Helper.renderItemInGui(ITEM_FRAME, x - 24, y - 24, 1F);
+                                mc.getTextureManager().bindTexture(OVERLAYS);
+                                int u = chute.isBlacklist ? 240 : 224;
+                                GlStateManager.disableDepth();
+                                Gui.drawModalRectWithCustomSizedTexture(x - 18, y - 18, u, 0, 16, 16, 256, 256);
+                                GlStateManager.enableDepth();
                             }
                         }
                     }

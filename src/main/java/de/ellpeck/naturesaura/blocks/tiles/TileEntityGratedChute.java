@@ -27,10 +27,10 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
 
         @Override
         protected boolean canInsert(ItemStack stack, int slot) {
-            return TileEntityGratedChute.this.isItemInFrame(stack);
+            return TileEntityGratedChute.this.isBlacklist != TileEntityGratedChute.this.isItemInFrame(stack);
         }
     };
-
+    public boolean isBlacklist;
     private int cooldown;
 
     @Override
@@ -111,7 +111,7 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
     private boolean isItemInFrame(ItemStack stack) {
         List<EntityItemFrame> frames = Helper.getAttachedItemFrames(this.world, this.pos);
         if (frames.isEmpty())
-            return true;
+            return false;
         for (EntityItemFrame frame : frames) {
             ItemStack frameStack = frame.getDisplayedItem();
             if (Helper.areItemsEqual(stack, frameStack, true)) {
@@ -127,6 +127,7 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
         if (type != SaveType.BLOCK) {
             compound.setInteger("cooldown", this.cooldown);
             compound.setTag("items", this.items.serializeNBT());
+            compound.setBoolean("blacklist", this.isBlacklist);
         }
     }
 
@@ -136,6 +137,7 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
         if (type != SaveType.BLOCK) {
             this.cooldown = compound.getInteger("cooldown");
             this.items.deserializeNBT(compound.getCompoundTag("items"));
+            this.isBlacklist = compound.getBoolean("blacklist");
         }
     }
 

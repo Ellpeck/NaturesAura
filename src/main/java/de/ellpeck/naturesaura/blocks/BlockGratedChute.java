@@ -10,6 +10,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -39,6 +40,21 @@ public class BlockGratedChute extends BlockContainerImpl {
         this.setHardness(3.0F);
         this.setResistance(8.0F);
         this.setSoundType(SoundType.METAL);
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!playerIn.isSneaking())
+            return false;
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (!(tile instanceof TileEntityGratedChute))
+            return false;
+        if (!worldIn.isRemote) {
+            TileEntityGratedChute chute = (TileEntityGratedChute) tile;
+            chute.isBlacklist = !chute.isBlacklist;
+            chute.sendToClients();
+        }
+        return true;
     }
 
     @Override
