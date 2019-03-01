@@ -38,9 +38,9 @@ repositories {
 }
 
 dependencies {
-    compile "vazkii.patchouli:Patchouli:1.0-17.85"
+    compile "vazkii.patchouli:Patchouli:1.0-18.91"
 
-    deobfCompile "mezz.jei:jei_1.12.2:4.13.1.220"
+    deobfCompile "mezz.jei:jei_1.12.2:4.14.4.267"
     deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
 
     compile "com.blamejared:MTLib:3.0.4.8"
