@@ -3,13 +3,12 @@ package de.ellpeck.naturesaura.blocks.multi;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
-import de.ellpeck.naturesaura.api.multiblock.Matcher.ICheck;
+import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -103,19 +102,7 @@ public class Multiblock implements IMultiblock {
                         this.matchers.put(new BlockPos(x, y, z), matcher);
                 }
 
-        for (int i = 1; i < rawMatchers.length; i += 2) {
-            if (rawMatchers[i] instanceof Matcher) {
-                Matcher matcher = (Matcher) rawMatchers[i];
-                ICheck check = matcher.getCheck();
-                if (check == null)
-                    rawMatchers[i] = PatchouliAPI.instance.anyMatcher();
-                else
-                    rawMatchers[i] = PatchouliAPI.instance.predicateMatcher(matcher.getDefaultState(),
-                            state -> check.matches(null, null, null, null, state, (char) 0));
-            }
-        }
-        PatchouliAPI.instance.registerMultiblock(name, PatchouliAPI.instance.makeMultiblock(pattern, rawMatchers));
-
+        PatchouliCompat.addPatchouliMultiblock(name, pattern, rawMatchers);
         NaturesAuraAPI.MULTIBLOCKS.put(this.name, this);
     }
 

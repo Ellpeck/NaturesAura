@@ -13,6 +13,7 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityGratedChute;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityRFConverter;
 import de.ellpeck.naturesaura.compat.Compat;
+import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
@@ -22,8 +23,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
@@ -37,11 +41,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -52,6 +58,9 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.opengl.GL11;
 
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +69,7 @@ import java.util.Map;
 public class ClientEvents {
 
     public static final ResourceLocation OVERLAYS = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/overlays.png");
+    private static final ResourceLocation BOOK_GUI = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/book.png");
     private static final ItemStack ITEM_FRAME = new ItemStack(Items.ITEM_FRAME);
     private static final Map<ResourceLocation, Tuple<ItemStack, Boolean>> SHOWING_EFFECTS = new HashMap<>();
     private static ItemStack heldCache = ItemStack.EMPTY;
@@ -93,6 +103,29 @@ public class ClientEvents {
             }
         }
         mc.profiler.endSection();
+    }
+
+    @SubscribeEvent
+    public void onGuiRender(GuiScreenEvent.DrawScreenEvent.Post event) {
+        GuiScreen gui = event.getGui();
+        if (PatchouliCompat.bookGuiClass != null && PatchouliCompat.bookGuiClass.isAssignableFrom(gui.getClass())) {
+            int mouseX = event.getMouseX();
+            int mouseY = event.getMouseY();
+            LocalDateTime now = LocalDateTime.now();
+            if (now.getMonth() == Month.MAY && now.getDayOfMonth() == 21) {
+                int x = gui.width / 2 + 272 / 2 - 16;
+                int y = gui.height / 2 - 180 / 2 - 26;
+
+                RenderHelper.disableStandardItemLighting();
+                GlStateManager.color(1, 1, 1, 1);
+                gui.mc.getTextureManager().bindTexture(BOOK_GUI);
+                Gui.drawModalRectWithCustomSizedTexture(x, y, 469, 0, 43, 42, 512, 256);
+
+                if (mouseX >= x && mouseY >= y && mouseX < x + 43 && mouseY < y + 42)
+                    GuiUtils.drawHoveringText(Collections.singletonList(TextFormatting.GOLD + "It's the author Ellpeck's birthday!"),
+                            mouseX, mouseY, gui.width, gui.height, 0, gui.mc.fontRenderer);
+            }
+        }
     }
 
     @SubscribeEvent

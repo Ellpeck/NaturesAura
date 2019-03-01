@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.proxy;
 
+import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.ClientEvents;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import de.ellpeck.naturesaura.particles.ParticleMagic;
@@ -35,6 +36,7 @@ public class ClientProxy implements IProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
+        Compat.preInitClient();
     }
 
     @Override

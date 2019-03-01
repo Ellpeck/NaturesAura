@@ -3,9 +3,9 @@ package de.ellpeck.naturesaura.compat;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.compat.crafttweaker.CraftTweakerCompat;
+import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
-import vazkii.patchouli.api.PatchouliAPI;
 
 public final class Compat {
 
@@ -21,7 +21,11 @@ public final class Compat {
         if (baubles)
             MinecraftForge.EVENT_BUS.register(new BaublesCompat());
 
-        PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":rf_converter", ModConfig.enabledFeatures.rfConverter);
+        PatchouliCompat.preInit();
+    }
+
+    public static void preInitClient(){
+        PatchouliCompat.preInitClient();
     }
 
     public static void postInit() {
