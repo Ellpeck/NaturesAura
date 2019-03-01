@@ -4,10 +4,13 @@ import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.events.ClientEvents;
+import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
+import de.ellpeck.naturesaura.renderers.SupporterFancyHandler.FancyInfo;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiUtils;
@@ -48,8 +51,37 @@ public final class PatchouliCompat {
                 Gui.drawModalRectWithCustomSizedTexture(x, y, 469, 0, 43, 42, 512, 256);
 
                 if (mouseX >= x && mouseY >= y && mouseX < x + 43 && mouseY < y + 42)
-                    GuiUtils.drawHoveringText(Collections.singletonList(TextFormatting.GOLD + "It's the author Ellpeck's birthday!"),
+                    GuiUtils.drawHoveringText(
+                            Collections.singletonList(TextFormatting.GOLD + "It's the author Ellpeck's birthday!"),
                             mouseX, mouseY, gui.width, gui.height, 0, gui.mc.fontRenderer);
+            }
+
+            String name = gui.mc.player.getName();
+            FancyInfo info = SupporterFancyHandler.FANCY_INFOS.get(name);
+            if (info != null) {
+                int x = gui.width / 2 - 272 / 2 + 20;
+                int y = gui.height / 2 + 180 / 2;
+
+                RenderHelper.disableStandardItemLighting();
+                GlStateManager.color(1, 1, 1, 1);
+                gui.mc.getTextureManager().bindTexture(ClientEvents.BOOK_GUI);
+
+                Gui.drawModalRectWithCustomSizedTexture(x, y, 496, 44, 16, 18, 512, 256);
+                if (info.tier == 1) {
+                    Gui.drawModalRectWithCustomSizedTexture(x, y, 496 - 16, 44, 16, 18, 512, 256);
+                } else {
+                    float r = ((info.color >> 16) & 255) / 255F;
+                    float g = ((info.color >> 8) & 255) / 255F;
+                    float b = (info.color & 255) / 255F;
+                    GlStateManager.color(r, g, b);
+                    Gui.drawModalRectWithCustomSizedTexture(x, y, 496 - 32, 44, 16, 18, 512, 256);
+                }
+
+                if (mouseX >= x && mouseY >= y && mouseX < x + 16 && mouseY < y + 18)
+                    GuiUtils.drawHoveringText(
+                            Collections.singletonList(TextFormatting.YELLOW + "Thanks for your support, " + name + "!"),
+                            mouseX, mouseY, gui.width, gui.height, 0, gui.mc.fontRenderer);
+
             }
         }
     }

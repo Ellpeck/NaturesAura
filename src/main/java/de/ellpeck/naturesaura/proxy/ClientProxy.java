@@ -8,6 +8,7 @@ import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
+import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -44,6 +45,7 @@ public class ClientProxy implements IProxy {
         for (RenderPlayer render : new RenderPlayer[]{skinMap.get("default"), skinMap.get("slim")}) {
             render.addLayer(new PlayerLayerTrinkets());
         }
+        new SupporterFancyHandler();
     }
 
     @Override
