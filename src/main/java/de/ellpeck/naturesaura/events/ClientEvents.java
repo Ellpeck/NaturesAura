@@ -58,9 +58,6 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.opengl.GL11;
 
 import java.text.NumberFormat;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +66,7 @@ import java.util.Map;
 public class ClientEvents {
 
     public static final ResourceLocation OVERLAYS = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/overlays.png");
-    private static final ResourceLocation BOOK_GUI = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/book.png");
+    public static final ResourceLocation BOOK_GUI = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/book.png");
     private static final ItemStack ITEM_FRAME = new ItemStack(Items.ITEM_FRAME);
     private static final Map<ResourceLocation, Tuple<ItemStack, Boolean>> SHOWING_EFFECTS = new HashMap<>();
     private static ItemStack heldCache = ItemStack.EMPTY;
@@ -107,25 +104,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onGuiRender(GuiScreenEvent.DrawScreenEvent.Post event) {
-        GuiScreen gui = event.getGui();
-        if (PatchouliCompat.bookGuiClass != null && PatchouliCompat.bookGuiClass.isAssignableFrom(gui.getClass())) {
-            int mouseX = event.getMouseX();
-            int mouseY = event.getMouseY();
-            LocalDateTime now = LocalDateTime.now();
-            if (now.getMonth() == Month.MAY && now.getDayOfMonth() == 21) {
-                int x = gui.width / 2 + 272 / 2 - 16;
-                int y = gui.height / 2 - 180 / 2 - 26;
-
-                RenderHelper.disableStandardItemLighting();
-                GlStateManager.color(1, 1, 1, 1);
-                gui.mc.getTextureManager().bindTexture(BOOK_GUI);
-                Gui.drawModalRectWithCustomSizedTexture(x, y, 469, 0, 43, 42, 512, 256);
-
-                if (mouseX >= x && mouseY >= y && mouseX < x + 43 && mouseY < y + 42)
-                    GuiUtils.drawHoveringText(Collections.singletonList(TextFormatting.GOLD + "It's the author Ellpeck's birthday!"),
-                            mouseX, mouseY, gui.width, gui.height, 0, gui.mc.fontRenderer);
-            }
-        }
+        PatchouliCompat.onGuiRender(event.getGui(), event.getMouseX(), event.getMouseY());
     }
 
     @SubscribeEvent

@@ -3,22 +3,54 @@ package de.ellpeck.naturesaura.compat.patchouli;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
+import de.ellpeck.naturesaura.events.ClientEvents;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import vazkii.patchouli.api.PatchouliAPI;
+
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.Collections;
 
 public final class PatchouliCompat {
 
-    public static Class bookGuiClass;
+    private static final ResourceLocation BOOK = new ResourceLocation(NaturesAura.MOD_ID, "book");
 
     public static void preInit() {
         PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":rf_converter", ModConfig.enabledFeatures.rfConverter);
     }
 
-    public static void preInitClient() {
+    @SideOnly(Side.CLIENT)
+    public static void onGuiRender(GuiScreen gui, int mouseX, int mouseY) {
+        boolean display = false;
         try {
-            bookGuiClass = Class.forName("vazkii.patchouli.client.book.gui.GuiBook");
-        } catch (ClassNotFoundException e) {
-            NaturesAura.LOGGER.warn("Couldn't find Patchouli book class, not loading special visuals :(");
+            ResourceLocation open = PatchouliAPI.instance.getOpenBookGui();
+            display = open != null && open.equals(BOOK);
+        } catch (Throwable ignored) {
+            // TODO remove this once Patchouli update is out long enough
+        }
+        if (display) {
+            LocalDateTime now = LocalDateTime.now();
+            if (now.getMonth() == Month.MAY && now.getDayOfMonth() == 21) {
+                int x = gui.width / 2 + 272 / 2 - 16;
+                int y = gui.height / 2 - 180 / 2 - 26;
+
+                RenderHelper.disableStandardItemLighting();
+                GlStateManager.color(1, 1, 1, 1);
+                gui.mc.getTextureManager().bindTexture(ClientEvents.BOOK_GUI);
+                Gui.drawModalRectWithCustomSizedTexture(x, y, 469, 0, 43, 42, 512, 256);
+
+                if (mouseX >= x && mouseY >= y && mouseX < x + 43 && mouseY < y + 42)
+                    GuiUtils.drawHoveringText(Collections.singletonList(TextFormatting.GOLD + "It's the author Ellpeck's birthday!"),
+                            mouseX, mouseY, gui.width, gui.height, 0, gui.mc.fontRenderer);
+            }
         }
     }
 

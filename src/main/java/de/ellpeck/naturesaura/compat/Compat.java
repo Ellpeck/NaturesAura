@@ -1,7 +1,5 @@
 package de.ellpeck.naturesaura.compat;
 
-import de.ellpeck.naturesaura.ModConfig;
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.compat.crafttweaker.CraftTweakerCompat;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,10 +20,6 @@ public final class Compat {
             MinecraftForge.EVENT_BUS.register(new BaublesCompat());
 
         PatchouliCompat.preInit();
-    }
-
-    public static void preInitClient(){
-        PatchouliCompat.preInitClient();
     }
 
     public static void postInit() {
