@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -18,7 +19,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.ITeleporter;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,9 +54,14 @@ public class EntityMoverMinecart extends EntityMinecart {
         if (pos.distanceSq(this.lastPosition) < 8 * 8)
             return;
 
+        this.moveAura(this.world, this.lastPosition, this.world, pos);
+        this.lastPosition = pos;
+    }
+
+    private void moveAura(World oldWorld, BlockPos oldPos, World newWorld, BlockPos newPos) {
         for (BlockPos offset : this.spotOffsets) {
-            BlockPos spot = this.lastPosition.add(offset);
-            IAuraChunk chunk = IAuraChunk.getAuraChunk(this.world, spot);
+            BlockPos spot = oldPos.add(offset);
+            IAuraChunk chunk = IAuraChunk.getAuraChunk(oldWorld, spot);
             int amount = chunk.getDrainSpot(spot);
             if (amount <= 0)
                 continue;
@@ -62,10 +70,9 @@ public class EntityMoverMinecart extends EntityMinecart {
             if (drained <= 0)
                 continue;
             int toLose = MathHelper.ceil(drained / 250F);
-            BlockPos newSpot = pos.add(offset);
-            IAuraChunk.getAuraChunk(this.world, newSpot).storeAura(newSpot, drained - toLose, false, false);
+            BlockPos newSpot = newPos.add(offset);
+            IAuraChunk.getAuraChunk(newWorld, newSpot).storeAura(newSpot, drained - toLose, false, false);
         }
-        this.lastPosition = pos;
     }
 
     @Override
@@ -117,6 +124,18 @@ public class EntityMoverMinecart extends EntityMinecart {
         NBTTagList list = compound.getTagList("offsets", Constants.NBT.TAG_LONG);
         for (NBTBase base : list)
             this.spotOffsets.add(BlockPos.fromLong(((NBTTagLong) base).getLong()));
+    }
+
+    @Nullable
+    @Override
+    public Entity changeDimension(int dimensionIn, ITeleporter teleporter) {
+        Entity entity = super.changeDimension(dimensionIn, teleporter);
+        if (entity instanceof EntityMoverMinecart) {
+            BlockPos pos = entity.getPosition();
+            this.moveAura(this.world, this.lastPosition, entity.world, pos);
+            ((EntityMoverMinecart) entity).lastPosition = pos;
+        }
+        return entity;
     }
 
     @Override
