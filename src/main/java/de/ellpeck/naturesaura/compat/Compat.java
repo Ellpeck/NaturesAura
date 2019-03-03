@@ -4,6 +4,8 @@ import de.ellpeck.naturesaura.compat.crafttweaker.CraftTweakerCompat;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class Compat {
 
@@ -20,6 +22,10 @@ public final class Compat {
             MinecraftForge.EVENT_BUS.register(new BaublesCompat());
 
         PatchouliCompat.preInit();
+    }
+
+    public static void preInitClient() {
+        PatchouliCompat.preInitClient();
     }
 
     public static void postInit() {

@@ -103,11 +103,6 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void onGuiRender(GuiScreenEvent.DrawScreenEvent.Post event) {
-        PatchouliCompat.onGuiRender(event.getGui(), event.getMouseX(), event.getMouseY());
-    }
-
-    @SubscribeEvent
     public void onRenderLast(RenderWorldLastEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
         mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":renderParticles");
