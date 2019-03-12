@@ -124,6 +124,11 @@ public final class NaturesAuraAPI {
      * spawn inside of netherrack blocks in the nether
      */
     public static final List<WeightedOre> NETHER_ORES = new ArrayList<>();
+    /**
+     * A map of all of the entities' registry names to the amounts of aura they
+     * each generate in the projectile generator
+     */
+    public static final Map<ResourceLocation, Integer> PROJECTILE_GENERATIONS = new HashMap<>();
 
     /**
      * The capability for any item or block that stores Aura in the form of an

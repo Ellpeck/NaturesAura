@@ -31,6 +31,9 @@ public final class ModConfig {
         @Comment("Additional blocks that are recognized as generatable ores for the passive ore generation effect. Each entry needs to be formatted as oredictEntry:oreWeight:dimension where a higher weight makes the ore more likely to spawn with 5000 being the weight of coal, the default ore with the highest weight, and dimension being any of overworld and nether")
         public String[] additionalOres = new String[0];
 
+        @Comment("Additional projectile types that are allowed to be consumed by the projectile generator. Each entry needs to be formatted as entity_registry_name->aura_amount")
+        public String[] additionalProjectiles = new String[0];
+
         @Comment("The amount of blocks that can be between two Aura Field Creators for them to be connectable and work together")
         public int fieldCreatorRange = 10;
 
@@ -123,6 +126,17 @@ public final class ModConfig {
                 }
             } catch (Exception e) {
                 NaturesAura.LOGGER.warn("Error parsing additionalOres", e);
+            }
+
+            try {
+                for (String s : general.additionalProjectiles) {
+                    String[] split = s.split("->");
+                    ResourceLocation name = new ResourceLocation(split[0]);
+                    int amount = Integer.parseInt(split[1]);
+                    NaturesAuraAPI.PROJECTILE_GENERATIONS.put(name, amount);
+                }
+            } catch (Exception e) {
+                NaturesAura.LOGGER.warn("Error parsing additionalProjectiles", e);
             }
         }
     }

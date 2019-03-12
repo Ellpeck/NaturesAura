@@ -340,6 +340,15 @@ public final class ModRecipes {
 
         NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreCobalt", 50));
         NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreArdite", 50));
+
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("egg"), 2500);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("snowball"), 3500);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("small_fireball"), 15000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("ender_pearl"), 30000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("xp_bottle"), 75000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("arrow"), 10000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("shulker_bullet"), 250000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("llama_spit"), 80000);
     }
 
     private static void spawner(String name, String entity, int aura, int time, Ingredient... ings) {
