@@ -49,6 +49,9 @@ public final class ParticleHandler {
     public static void updateParticles() {
         updateList(PARTICLES);
         updateList(PARTICLES_NO_DEPTH);
+
+        depthEnabled = true;
+        range = 32;
     }
 
     private static void updateList(List<Particle> particles) {

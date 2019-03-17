@@ -85,7 +85,6 @@ public class ClientEvents {
             int depth = ParticleHandler.getParticleAmount(true);
             int noDepth = ParticleHandler.getParticleAmount(false);
             left.add(prefix + "P: " + (depth + noDepth) + " (D: " + depth + " nD: " + noDepth + ")");
-            left.add(prefix + "PR: " + ParticleHandler.range + " PD: " + ParticleHandler.depthEnabled);
 
             if (mc.player.capabilities.isCreativeMode) {
                 MutableInt amount = new MutableInt(IAuraChunk.DEFAULT_AURA);

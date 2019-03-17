@@ -21,10 +21,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.potion.PotionHelper;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -35,13 +39,13 @@ import java.util.Arrays;
 public final class ModRecipes {
 
     public static void init() {
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "eye"),
+        new TreeRitualRecipe(res("eye"),
                 ing(new ItemStack(Blocks.SAPLING)), new ItemStack(ModItems.EYE), 250,
                 ing(Items.SPIDER_EYE),
                 ing(Items.GOLD_INGOT),
                 ing(ModItems.GOLD_LEAF),
                 ing(ModItems.GOLD_LEAF)).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "eye_improved"),
+        new TreeRitualRecipe(res("eye_improved"),
                 ing(new ItemStack(Blocks.SAPLING)), new ItemStack(ModItems.EYE_IMPROVED), 500,
                 ing(ModItems.EYE),
                 ing(ModItems.SKY_INGOT),
@@ -49,7 +53,7 @@ public final class ModRecipes {
                 ing(ModBlocks.END_FLOWER),
                 ing(ModItems.GOLD_LEAF),
                 ing(ModItems.GOLD_LEAF)).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "nature_altar"),
+        new TreeRitualRecipe(res("nature_altar"),
                 ing(Blocks.SAPLING), new ItemStack(ModBlocks.NATURE_ALTAR), 500,
                 ing(Blocks.STONE),
                 ing(Blocks.STONE),
@@ -57,7 +61,7 @@ public final class ModRecipes {
                 ing(ModItems.GOLD_LEAF),
                 ing(Items.GOLD_INGOT),
                 ing(ModItems.TOKEN_JOY)).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "ancient_sapling"),
+        new TreeRitualRecipe(res("ancient_sapling"),
                 ing(Blocks.SAPLING), new ItemStack(ModBlocks.ANCIENT_SAPLING), 200,
                 ing(Blocks.SAPLING),
                 ing(Blocks.YELLOW_FLOWER),
@@ -65,7 +69,7 @@ public final class ModRecipes {
                 ing(Items.WHEAT_SEEDS),
                 ing(Items.REEDS),
                 ing(ModItems.GOLD_LEAF)).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "furnace_heater"),
+        new TreeRitualRecipe(res("furnace_heater"),
                 ing(Blocks.SAPLING), new ItemStack(ModBlocks.FURNACE_HEATER), 600,
                 ing(ModBlocks.INFUSED_STONE),
                 ing(ModBlocks.INFUSED_STONE),
@@ -75,7 +79,7 @@ public final class ModRecipes {
                 ing(Items.FLINT),
                 ing(Blocks.MAGMA),
                 ing(ModItems.TOKEN_FEAR)).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "conversion_catalyst"),
+        new TreeRitualRecipe(res("conversion_catalyst"),
                 ing(new ItemStack(Blocks.SAPLING, 1, 3)), new ItemStack(ModBlocks.CONVERSION_CATALYST), 600,
                 ing(ModBlocks.GOLD_BRICK),
                 ing(ModBlocks.INFUSED_STONE),
@@ -83,42 +87,42 @@ public final class ModRecipes {
                 ing(ModItems.SKY_INGOT),
                 ing(ModItems.GOLD_LEAF),
                 ing(Blocks.GLOWSTONE)).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "crushing_catalyst"),
+        new TreeRitualRecipe(res("crushing_catalyst"),
                 ing(Blocks.SAPLING), new ItemStack(ModBlocks.CRUSHING_CATALYST), 600,
                 ing(ModBlocks.GOLD_BRICK),
                 ing(ModBlocks.INFUSED_STONE),
                 ing(Blocks.PISTON),
                 ing(Items.FLINT),
                 ing(ModItems.TOKEN_ANGER)).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "plant_powder"),
+        new TreeRitualRecipe(res("plant_powder"),
                 ing(new ItemStack(Blocks.SAPLING)),
                 ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 24), PlantBoostEffect.NAME), 400,
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModItems.SKY_INGOT),
                 ing(Items.WHEAT)).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "cache_powder"),
+        new TreeRitualRecipe(res("cache_powder"),
                 ing(new ItemStack(Blocks.SAPLING)),
                 ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 32), CacheRechargeEffect.NAME), 400,
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModItems.SKY_INGOT),
                 ing(ModItems.AURA_CACHE)).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "animal_powder"),
+        new TreeRitualRecipe(res("animal_powder"),
                 ing(new ItemStack(Blocks.SAPLING, 1, 3)),
                 ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 8), AnimalEffect.NAME), 400,
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModItems.SKY_INGOT),
                 ing(Items.EGG)).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "ore_spawn_powder"),
+        new TreeRitualRecipe(res("ore_spawn_powder"),
                 ing(new ItemStack(Blocks.SAPLING)),
                 ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 4), OreSpawnEffect.NAME), 400,
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModBlocks.GOLD_POWDER),
                 ing(Blocks.DIAMOND_ORE),
                 ing(Blocks.REDSTONE_ORE)).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_joy"),
+        new TreeRitualRecipe(res("token_joy"),
                 ing(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_JOY, 2), 200,
                 nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)),
                 ing(ModItems.GOLD_LEAF),
@@ -126,7 +130,7 @@ public final class ModRecipes {
                 ing(Items.APPLE),
                 ing(Blocks.TORCH),
                 ing(Items.IRON_INGOT)).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_anger"),
+        new TreeRitualRecipe(res("token_anger"),
                 ing(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_ANGER, 2), 200,
                 nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER)),
                 ing(ModItems.GOLD_LEAF),
@@ -134,7 +138,7 @@ public final class ModRecipes {
                 ing(Items.BLAZE_POWDER),
                 ing(Items.GUNPOWDER),
                 ing(Items.ENDER_PEARL)).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_sorrow"),
+        new TreeRitualRecipe(res("token_sorrow"),
                 ing(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_SORROW, 2), 200,
                 nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)),
                 ing(ModItems.GOLD_LEAF),
@@ -142,7 +146,7 @@ public final class ModRecipes {
                 ing(Items.BEEF, Items.MUTTON, Items.CHICKEN, Items.PORKCHOP),
                 ing(Blocks.GLASS),
                 ing(new ItemStack(Items.FISH, 1, OreDictionary.WILDCARD_VALUE))).register();
-        new TreeRitualRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_fear"),
+        new TreeRitualRecipe(res("token_fear"),
                 ing(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_FEAR, 2), 200,
                 nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER)),
                 ing(ModItems.GOLD_LEAF),
@@ -151,72 +155,53 @@ public final class ModRecipes {
                 ing(Items.BONE),
                 ing(Blocks.SOUL_SAND)).register();
 
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_iron"),
+        new AltarRecipe(res("infused_iron"),
                 ing(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON),
                 Ingredient.EMPTY, 15000, 80).register();
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_iron_block"),
+        new AltarRecipe(res("infused_iron_block"),
                 ing(Blocks.IRON_BLOCK), new ItemStack(ModBlocks.INFUSED_IRON),
                 Ingredient.EMPTY, 135000, 700).register();
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "infused_stone"),
+        new AltarRecipe(res("infused_stone"),
                 ing(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE),
                 Ingredient.EMPTY, 7500, 40).register();
 
         Ingredient conversion = ing(ModBlocks.CONVERSION_CATALYST);
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "breath"),
-                nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_END)),
-                new ItemStack(Items.DRAGON_BREATH),
-                conversion, 20000, 80).register();
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "leather"),
-                ing(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER),
-                conversion, 10000, 50).register();
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "soul_sand"),
-                ing(Blocks.SAND), new ItemStack(Blocks.SOUL_SAND),
-                conversion, 5000, 100).register();
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "nether_wart"),
-                ing(Blocks.RED_MUSHROOM), new ItemStack(Items.NETHER_WART),
-                conversion, 30000, 250).register();
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "prismarine"),
-                ing(Items.QUARTZ), new ItemStack(Items.PRISMARINE_SHARD),
-                conversion, 55000, 200).register();
+        new AltarRecipe(res("breath"), nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_END)), new ItemStack(Items.DRAGON_BREATH), conversion, 20000, 80).register();
+        new AltarRecipe(res("leather"), ing(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER), conversion, 10000, 50).register();
+        new AltarRecipe(res("soul_sand"), ing(Blocks.SAND), new ItemStack(Blocks.SOUL_SAND), conversion, 5000, 100).register();
+        new AltarRecipe(res("nether_wart"), ing(Blocks.RED_MUSHROOM), new ItemStack(Items.NETHER_WART), conversion, 30000, 250).register();
+        new AltarRecipe(res("prismarine"), ing(Items.QUARTZ), new ItemStack(Items.PRISMARINE_SHARD), conversion, 55000, 200).register();
+        new AltarRecipe(res("water"), ing(Items.GLASS_BOTTLE), PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER), conversion, 25000, 200).register();
+        new AltarRecipe(res("coal"),ing(new ItemStack(Items.COAL, 1, 1)), new ItemStack(Items.COAL), conversion, 30000, 250).register();
 
         Ingredient crushing = ing(ModBlocks.CRUSHING_CATALYST);
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "bone"),
-                ing(Items.BONE), new ItemStack(Items.DYE, 6, 15),
-                crushing, 3000, 40).register();
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sugar"),
-                ing(Items.REEDS), new ItemStack(Items.SUGAR, 3),
-                crushing, 3000, 40).register();
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "blaze"),
-                ing(Items.BLAZE_ROD), new ItemStack(Items.BLAZE_POWDER, 4),
-                crushing, 5000, 60).register();
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "glowstone"),
-                ing(Blocks.GLOWSTONE), new ItemStack(Items.GLOWSTONE_DUST, 4),
-                crushing, 3000, 40).register();
-        new AltarRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sand"),
-                ing(Blocks.COBBLESTONE), new ItemStack(Blocks.SAND),
-                crushing, 3000, 40).register();
+        new AltarRecipe(res("bone"), ing(Items.BONE), new ItemStack(Items.DYE, 6, 15), crushing, 3000, 40).register();
+        new AltarRecipe(res("sugar"), ing(Items.REEDS), new ItemStack(Items.SUGAR, 3), crushing, 3000, 40).register();
+        new AltarRecipe(res("blaze"), ing(Items.BLAZE_ROD), new ItemStack(Items.BLAZE_POWDER, 4), crushing, 5000, 60).register();
+        new AltarRecipe(res("glowstone"), ing(Blocks.GLOWSTONE), new ItemStack(Items.GLOWSTONE_DUST, 4), crushing, 3000, 40).register();
+        new AltarRecipe(res("sand"), ing(Blocks.COBBLESTONE), new ItemStack(Blocks.SAND), crushing, 3000, 40).register();
 
-        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sky_ingot"),
+        new OfferingRecipe(res("sky_ingot"),
                 amountIng(new ItemStack(ModItems.INFUSED_IRON, 3)),
                 ing(ModItems.CALLING_SPIRIT),
                 new ItemStack(ModItems.SKY_INGOT)).register();
-        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "clock_hand"),
+        new OfferingRecipe(res("clock_hand"),
                 ing(Items.NETHER_STAR),
                 ing(ModItems.CALLING_SPIRIT),
                 new ItemStack(ModItems.CLOCK_HAND)).register();
-        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_euphoria"),
+        new OfferingRecipe(res("token_euphoria"),
                 ing(ModItems.TOKEN_JOY),
                 ing(ModItems.CALLING_SPIRIT),
                 new ItemStack(ModItems.TOKEN_EUPHORIA)).register();
-        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_rage"),
+        new OfferingRecipe(res("token_rage"),
                 ing(ModItems.TOKEN_ANGER),
                 ing(ModItems.CALLING_SPIRIT),
                 new ItemStack(ModItems.TOKEN_RAGE)).register();
-        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_grief"),
+        new OfferingRecipe(res("token_grief"),
                 ing(ModItems.TOKEN_SORROW),
                 ing(ModItems.CALLING_SPIRIT),
                 new ItemStack(ModItems.TOKEN_GRIEF)).register();
-        new OfferingRecipe(new ResourceLocation(NaturesAura.MOD_ID, "token_terror"),
+        new OfferingRecipe(res("token_terror"),
                 ing(ModItems.TOKEN_FEAR),
                 ing(ModItems.CALLING_SPIRIT),
                 new ItemStack(ModItems.TOKEN_TERROR)).register();
@@ -237,7 +222,7 @@ public final class ModRecipes {
 
         spawner("cow", "minecraft:cow", 50000, 60, ing(Items.BEEF), ing(Items.LEATHER));
         for (EnumDyeColor color : EnumDyeColor.values())
-            new AnimalSpawnerRecipe(new ResourceLocation(NaturesAura.MOD_ID, "sheep_" + color.getName()), new ResourceLocation("minecraft:sheep"),
+            new AnimalSpawnerRecipe(res("sheep_" + color.getName()), new ResourceLocation("minecraft:sheep"),
                     500, 60, ing(ModItems.BIRTH_SPIRIT), ing(Items.MUTTON),
                     ing(new ItemStack(Blocks.WOOL, 1, color.getMetadata()))) {
                 @Override
@@ -355,7 +340,7 @@ public final class ModRecipes {
         Ingredient[] actualIngs = new Ingredient[ings.length + 1];
         actualIngs[0] = ing(ModItems.BIRTH_SPIRIT);
         System.arraycopy(ings, 0, actualIngs, 1, ings.length);
-        new AnimalSpawnerRecipe(new ResourceLocation(NaturesAura.MOD_ID, name), new ResourceLocation(entity), aura, time, actualIngs).register();
+        new AnimalSpawnerRecipe(res(name), new ResourceLocation(entity), aura, time, actualIngs).register();
     }
 
     private static Ingredient ing(Block... blocks) {
@@ -376,5 +361,9 @@ public final class ModRecipes {
 
     private static Ingredient amountIng(ItemStack stack) {
         return new AmountIngredient(stack);
+    }
+
+    private static ResourceLocation res(String name) {
+        return new ResourceLocation(NaturesAura.MOD_ID, name);
     }
 }

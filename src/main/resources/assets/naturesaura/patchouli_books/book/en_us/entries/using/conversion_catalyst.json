@@ -37,6 +37,16 @@
             "type": "naturesaura:altar",
             "text": "Conjuring $(item)Prismarine Shards$() from the nether's ore",
             "recipe": "naturesaura:prismarine"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Causing $(thing)water$() to accumulate inside an empty $(item)bottle$()",
+            "recipe": "naturesaura:water"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Turning $(item)Charcoal$() into $(item)Coal$()",
+            "recipe": "naturesaura:coal"
         }
     ]
 }
