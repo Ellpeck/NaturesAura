@@ -33,7 +33,8 @@ public final class ModItems {
     public static final Item INFUSED_IRON = new ItemImpl("infused_iron");
     public static final Item ANCIENT_STICK = new ItemImpl("ancient_stick");
     public static final Item COLOR_CHANGER = new ItemColorChanger();
-    public static final Item AURA_CACHE = new ItemAuraCache();
+    public static final Item AURA_CACHE = new ItemAuraCache("aura_cache", 400000);
+    public static final Item AURA_TROVE = new ItemAuraCache("aura_trove", 1200000);
     public static final Item SHOCKWAVE_CREATOR = new ItemShockwaveCreator();
     public static final Item MULTIBLOCK_MAKER = new ItemMultiblockMaker();
     public static final Item BOTTLE_TWO = new ItemImpl("bottle_two_the_rebottling");

@@ -95,6 +95,7 @@ item.naturesaura.token_sorrow.name=Token of Sorrow
 item.naturesaura.token_terror.name=Token of Terror
 item.naturesaura.ender_access.name=Ender Ocular
 item.naturesaura.cave_finder.name=Staff of Shadows
+item.naturesaura.aura_trove.name=Aura Trove
 
 container.naturesaura.tree_ritual.name=Ritual of the Forest
 container.naturesaura.altar.name=Natural Altar Infusion

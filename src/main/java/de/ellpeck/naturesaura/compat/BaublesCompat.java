@@ -20,44 +20,17 @@ import javax.annotation.Nullable;
 
 public class BaublesCompat {
 
-    private final IBauble eye = stack -> BaubleType.CHARM;
-    private final IBauble cache = new IBauble() {
-        @Override
-        public BaubleType getBaubleType(ItemStack itemstack) {
-            return BaubleType.BELT;
-        }
-
-        @Override
-        public void onWornTick(ItemStack stack, EntityLivingBase player) {
-            stack.getItem().onUpdate(stack, player.world, player, -1, false);
-        }
-
-        @Override
-        public boolean willAutoSync(ItemStack stack, EntityLivingBase player) {
-            return true;
-        }
-    };
-    private final IBauble shockwaveCreator = new IBauble() {
-        @Override
-        public BaubleType getBaubleType(ItemStack itemstack) {
-            return BaubleType.AMULET;
-        }
-
-        @Override
-        public void onWornTick(ItemStack stack, EntityLivingBase player) {
-            stack.getItem().onUpdate(stack, player.world, player, -1, false);
-        }
-    };
-
     @SubscribeEvent
     public void onCapabilitiesAttach(AttachCapabilitiesEvent<ItemStack> event) {
         Item item = event.getObject().getItem();
         if (item == ModItems.EYE || item == ModItems.EYE_IMPROVED)
-            this.addCap(event, this.eye);
+            this.addCap(event, stack -> BaubleType.CHARM);
         else if (item == ModItems.AURA_CACHE)
-            this.addCap(event, this.cache);
+            this.addCap(event, new UpdatingBauble(BaubleType.BELT, true));
+        else if (item == ModItems.AURA_TROVE)
+            this.addCap(event, new UpdatingBauble(BaubleType.BELT, true));
         else if (item == ModItems.SHOCKWAVE_CREATOR)
-            this.addCap(event, this.shockwaveCreator);
+            this.addCap(event, new UpdatingBauble(BaubleType.AMULET, false));
 
     }
 
@@ -74,5 +47,31 @@ public class BaublesCompat {
                 return capability == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE ? (T) type : null;
             }
         });
+    }
+
+    private static class UpdatingBauble implements IBauble {
+
+        private final BaubleType type;
+        private final boolean sync;
+
+        public UpdatingBauble(BaubleType type, boolean sync) {
+            this.type = type;
+            this.sync = sync;
+        }
+
+        @Override
+        public BaubleType getBaubleType(ItemStack itemstack) {
+            return this.type;
+        }
+
+        @Override
+        public boolean willAutoSync(ItemStack itemstack, EntityLivingBase player) {
+            return this.sync;
+        }
+
+        @Override
+        public void onWornTick(ItemStack stack, EntityLivingBase player) {
+            stack.getItem().onUpdate(stack, player.world, player, -1, false);
+        }
     }
 }

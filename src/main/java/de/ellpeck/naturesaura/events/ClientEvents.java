@@ -14,6 +14,7 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityRFConverter;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
+import de.ellpeck.naturesaura.items.ItemAuraCache;
 import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
@@ -165,7 +166,7 @@ public class ClientEvents {
                         for (int i = 0; i < baubles.getSlots(); i++) {
                             ItemStack slot = baubles.getStackInSlot(i);
                             if (!slot.isEmpty()) {
-                                if (slot.getItem() == ModItems.AURA_CACHE)
+                                if (slot.getItem() instanceof ItemAuraCache)
                                     heldCache = slot;
                                 else if (slot.getItem() == ModItems.EYE)
                                     heldEye = slot;
@@ -178,7 +179,7 @@ public class ClientEvents {
                     for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
                         ItemStack slot = mc.player.inventory.getStackInSlot(i);
                         if (!slot.isEmpty()) {
-                            if (slot.getItem() == ModItems.AURA_CACHE)
+                            if (slot.getItem() instanceof ItemAuraCache)
                                 heldCache = slot;
                             else if (slot.getItem() == ModItems.EYE && i <= 8)
                                 heldEye = slot;

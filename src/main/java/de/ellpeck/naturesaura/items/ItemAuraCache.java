@@ -26,8 +26,11 @@ import javax.annotation.Nullable;
 
 public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
-    public ItemAuraCache() {
-        super("aura_cache");
+    private final int capacity;
+
+    public ItemAuraCache(String name, int capacity) {
+        super(name);
+        this.capacity = capacity;
         this.setMaxStackSize(1);
     }
 
@@ -82,7 +85,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
         return new ICapabilityProvider() {
-            private final ItemAuraContainer container = new ItemAuraContainer(stack, null, 400000);
+            private final ItemAuraContainer container = new ItemAuraContainer(stack, null, ItemAuraCache.this.capacity);
 
             @Override
             public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {

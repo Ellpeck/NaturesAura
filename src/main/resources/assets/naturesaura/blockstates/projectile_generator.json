@@ -1,0 +1,20 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:cube",
+        "textures": {
+            "particle": "naturesaura:blocks/projectile_generator",
+            "up": "naturesaura:blocks/projectile_generator_top",
+            "down": "#particle",
+            "north": "#particle",
+            "east": "#particle",
+            "south": "#particle",
+            "west": "#particle"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}
