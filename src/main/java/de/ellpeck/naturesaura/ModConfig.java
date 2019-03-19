@@ -47,6 +47,8 @@ public final class ModConfig {
         public boolean removeDragonBreathContainerItem = true;
         @Comment("If the RF converter block should be enabled")
         public boolean rfConverter = true;
+        @Comment("If the chunk loader block should be enabled")
+        public boolean chunkLoader = true;
 
         @Comment("If the Aura Imbalance effect of grass and trees dying in the area if the Aura levels are too low should occur")
         public boolean grassDieEffect = true;

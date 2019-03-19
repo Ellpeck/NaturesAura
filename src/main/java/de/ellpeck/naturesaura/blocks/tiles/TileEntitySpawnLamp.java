@@ -7,7 +7,8 @@ public class TileEntitySpawnLamp extends TileEntityImpl {
     }
 
     @Override
-    public void onRedstonePowerChange() {
+    public void onRedstonePowerChange(int newPower) {
+        super.onRedstonePowerChange(newPower);
         if (!this.world.isRemote)
             this.sendToClients();
     }

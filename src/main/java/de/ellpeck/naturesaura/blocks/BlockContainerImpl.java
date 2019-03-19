@@ -132,23 +132,27 @@ public class BlockContainerImpl extends BlockContainer implements IModItem, ICre
             if (tile instanceof TileEntityImpl) {
                 TileEntityImpl impl = (TileEntityImpl) tile;
                 int newPower = world.getRedstonePowerFromNeighbors(pos);
-                if (impl.redstonePower != newPower) {
-                    boolean pulse = impl.redstonePower <= 0 && newPower > 0;
-                    impl.redstonePower = newPower;
-                    impl.onRedstonePowerChange();
-                    if (pulse)
-                        world.scheduleUpdate(pos, this, this.tickRate(world));
-                }
+                if (impl.redstonePower != newPower)
+                    world.scheduleUpdate(pos, this, this.tickRate(world));
             }
         }
+    }
+
+    @Override
+    public int tickRate(World worldIn) {
+        return 4;
     }
 
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TileEntityImpl)
-                ((TileEntityImpl) tile).onRedstonePulse();
+            if (tile instanceof TileEntityImpl) {
+                TileEntityImpl impl = (TileEntityImpl) tile;
+                int newPower = worldIn.getRedstonePowerFromNeighbors(pos);
+                if (impl.redstonePower != newPower)
+                    ((TileEntityImpl) tile).onRedstonePowerChange(newPower);
+            }
         }
     }
 }

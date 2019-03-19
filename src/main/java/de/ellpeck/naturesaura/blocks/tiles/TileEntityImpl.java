@@ -58,12 +58,8 @@ public class TileEntityImpl extends TileEntity {
         }
     }
 
-    public void onRedstonePowerChange() {
-
-    }
-
-    public void onRedstonePulse() {
-
+    public void onRedstonePowerChange(int newPower) {
+        this.redstonePower = newPower;
     }
 
     @Override
