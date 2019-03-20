@@ -54,4 +54,5 @@ public final class ModBlocks {
     public static final Block FIREWORK_GENERATOR = new BlockFireworkGenerator();
     public static final Block PROJECTILE_GENERATOR = new BlockProjectileGenerator();
     public static final Block CHUNK_LOADER = ModConfig.enabledFeatures.chunkLoader ? new BlockChunkLoader() : null;
+    public static final Block DIMENSION_RAIL = new BlockDimensionRail();
 }

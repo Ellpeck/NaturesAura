@@ -1,6 +1,9 @@
 package de.ellpeck.naturesaura.items;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
+import de.ellpeck.naturesaura.blocks.BlockDimensionRail;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -20,8 +23,9 @@ import java.util.Set;
 
 public class ItemRangeVisualizer extends ItemImpl {
 
-    public static final Set<BlockPos> VISUALIZED_BLOCKS = new HashSet<>();
-    public static final Set<Entity> VISUALIZED_ENTITIES = new HashSet<>();
+    public static final ListMultimap<Integer, BlockPos> VISUALIZED_BLOCKS = ArrayListMultimap.create();
+    public static final ListMultimap<Integer, Entity> VISUALIZED_ENTITIES = ArrayListMultimap.create();
+    public static final ListMultimap<Integer, BlockPos> VISUALIZED_RAILS = ArrayListMultimap.create();
 
     public ItemRangeVisualizer() {
         super("range_visualizer");
@@ -33,14 +37,24 @@ public class ItemRangeVisualizer extends ItemImpl {
         IBlockState state = worldIn.getBlockState(pos);
         Block block = state.getBlock();
         if (block instanceof IVisualizable) {
+            int dim = worldIn.provider.getDimension();
             if (worldIn.isRemote)
-                if (VISUALIZED_BLOCKS.contains(pos))
-                    VISUALIZED_BLOCKS.remove(pos);
+                if (VISUALIZED_BLOCKS.containsEntry(dim, pos))
+                    VISUALIZED_BLOCKS.remove(dim, pos);
                 else
-                    VISUALIZED_BLOCKS.add(pos);
+                    VISUALIZED_BLOCKS.put(dim, pos);
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.PASS;
+    }
+
+    public static void clear() {
+        if (!VISUALIZED_BLOCKS.isEmpty())
+            VISUALIZED_BLOCKS.clear();
+        if (!VISUALIZED_ENTITIES.isEmpty())
+            VISUALIZED_ENTITIES.clear();
+        if (!VISUALIZED_RAILS.isEmpty())
+            VISUALIZED_RAILS.clear();
     }
 
     @SubscribeEvent
@@ -51,10 +65,11 @@ public class ItemRangeVisualizer extends ItemImpl {
         Entity entity = event.getTarget();
         if (entity instanceof IVisualizable) {
             if (entity.world.isRemote) {
-                if (VISUALIZED_ENTITIES.contains(entity))
-                    VISUALIZED_ENTITIES.remove(entity);
+                int dim = entity.world.provider.getDimension();
+                if (VISUALIZED_ENTITIES.containsEntry(dim, entity))
+                    VISUALIZED_ENTITIES.remove(dim, entity);
                 else
-                    VISUALIZED_ENTITIES.add(entity);
+                    VISUALIZED_ENTITIES.put(dim, entity);
             }
             event.getEntityPlayer().swingArm(event.getHand());
             event.setCancellationResult(EnumActionResult.SUCCESS);

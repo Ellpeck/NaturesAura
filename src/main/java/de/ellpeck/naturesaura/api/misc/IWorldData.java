@@ -2,11 +2,12 @@ package de.ellpeck.naturesaura.api.misc;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 public interface IWorldData extends ICapabilityProvider, INBTSerializable<NBTTagCompound> {
@@ -18,8 +19,9 @@ public interface IWorldData extends ICapabilityProvider, INBTSerializable<NBTTag
     }
 
     static IWorldData getOverworldData(World world) {
-        if (!world.isRemote)
-            return getWorldData(DimensionManager.getWorld(DimensionType.OVERWORLD.getId()));
+        if (!world.isRemote) {
+            return getWorldData(world.getMinecraftServer().getWorld(DimensionType.OVERWORLD.getId()));
+        }
         return getWorldData(world);
     }
 

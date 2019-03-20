@@ -9,6 +9,7 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
+import de.ellpeck.naturesaura.blocks.BlockDimensionRail;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityGratedChute;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityRFConverter;
@@ -120,10 +121,7 @@ public class ClientEvents {
             Minecraft mc = Minecraft.getMinecraft();
             if (mc.world == null) {
                 ParticleHandler.clearParticles();
-                if (!ItemRangeVisualizer.VISUALIZED_BLOCKS.isEmpty())
-                    ItemRangeVisualizer.VISUALIZED_BLOCKS.clear();
-                if (!ItemRangeVisualizer.VISUALIZED_ENTITIES.isEmpty())
-                    ItemRangeVisualizer.VISUALIZED_ENTITIES.clear();
+                ItemRangeVisualizer.clear();
             } else if (!mc.isGamePaused()) {
                 if (mc.world.getTotalWorldTime() % 20 == 0) {
                     mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":spawnExcessParticles");
@@ -156,43 +154,56 @@ public class ClientEvents {
                     mc.profiler.endSection();
                 }
 
+                if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER) && mc.world.getTotalWorldTime() % 5 == 0) {
+                    NaturesAuraAPI.IInternalHooks inst = NaturesAuraAPI.instance();
+                    inst.setParticleSpawnRange(512);
+                    inst.setParticleDepth(false);
+                    for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_RAILS.get(mc.world.provider.getDimension())) {
+                        NaturesAuraAPI.instance().spawnMagicParticle(
+                                pos.getX() + mc.world.rand.nextFloat(),
+                                pos.getY() + mc.world.rand.nextFloat(),
+                                pos.getZ() + mc.world.rand.nextFloat(),
+                                0F, 0F, 0F, 0xe0faff, mc.world.rand.nextFloat() * 5 + 1, 100, 0F, false, true);
+                    }
+                    inst.setParticleDepth(true);
+                    inst.setParticleSpawnRange(32);
+                }
+
                 mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":updateParticles");
                 ParticleHandler.updateParticles();
                 mc.profiler.endSection();
 
-                if (mc.player != null) {
-                    if (Compat.baubles) {
-                        IItemHandler baubles = BaublesApi.getBaublesHandler(mc.player);
-                        for (int i = 0; i < baubles.getSlots(); i++) {
-                            ItemStack slot = baubles.getStackInSlot(i);
-                            if (!slot.isEmpty()) {
-                                if (slot.getItem() instanceof ItemAuraCache)
-                                    heldCache = slot;
-                                else if (slot.getItem() == ModItems.EYE)
-                                    heldEye = slot;
-                                else if (slot.getItem() == ModItems.EYE_IMPROVED)
-                                    heldOcular = slot;
-                            }
-                        }
-                    }
-
-                    for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
-                        ItemStack slot = mc.player.inventory.getStackInSlot(i);
+                if (Compat.baubles) {
+                    IItemHandler baubles = BaublesApi.getBaublesHandler(mc.player);
+                    for (int i = 0; i < baubles.getSlots(); i++) {
+                        ItemStack slot = baubles.getStackInSlot(i);
                         if (!slot.isEmpty()) {
                             if (slot.getItem() instanceof ItemAuraCache)
                                 heldCache = slot;
-                            else if (slot.getItem() == ModItems.EYE && i <= 8)
+                            else if (slot.getItem() == ModItems.EYE)
                                 heldEye = slot;
                             else if (slot.getItem() == ModItems.EYE_IMPROVED)
                                 heldOcular = slot;
                         }
                     }
+                }
 
-                    if (!heldOcular.isEmpty() && mc.world.getTotalWorldTime() % 20 == 0) {
-                        SHOWING_EFFECTS.clear();
-                        Helper.getAuraChunksInArea(mc.world, mc.player.getPosition(), 100,
-                                chunk -> chunk.getActiveEffectIcons(mc.player, SHOWING_EFFECTS));
+                for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
+                    ItemStack slot = mc.player.inventory.getStackInSlot(i);
+                    if (!slot.isEmpty()) {
+                        if (slot.getItem() instanceof ItemAuraCache)
+                            heldCache = slot;
+                        else if (slot.getItem() == ModItems.EYE && i <= 8)
+                            heldEye = slot;
+                        else if (slot.getItem() == ModItems.EYE_IMPROVED)
+                            heldOcular = slot;
                     }
+                }
+
+                if (!heldOcular.isEmpty() && mc.world.getTotalWorldTime() % 20 == 0) {
+                    SHOWING_EFFECTS.clear();
+                    Helper.getAuraChunksInArea(mc.world, mc.player.getPosition(), 100,
+                            chunk -> chunk.getActiveEffectIcons(mc.player, SHOWING_EFFECTS));
                 }
             }
         }
@@ -243,33 +254,32 @@ public class ClientEvents {
             GL11.glPopMatrix();
         }
 
-        if (mc.objectMouseOver != null) {
-            if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER)) {
-                GL11.glPushMatrix();
-                GL11.glDisable(GL11.GL_CULL_FACE);
-                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                GL11.glDisable(GL11.GL_TEXTURE_2D);
-                GL11.glEnable(GL11.GL_BLEND);
-                GL11.glBegin(GL11.GL_QUADS);
-                for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_BLOCKS) {
-                    if (!mc.world.isBlockLoaded(pos))
-                        continue;
-                    IBlockState state = mc.world.getBlockState(pos);
-                    Block block = state.getBlock();
-                    if (!(block instanceof IVisualizable))
-                        continue;
-                    this.renderVisualize((IVisualizable) block, mc.world, pos);
-                }
-                for (Entity entity : ItemRangeVisualizer.VISUALIZED_ENTITIES) {
-                    if (entity.isDead || !(entity instanceof IVisualizable))
-                        continue;
-                    this.renderVisualize((IVisualizable) entity, mc.world, entity.getPosition());
-                }
-                GL11.glEnd();
-                GL11.glPopAttrib();
-                GL11.glEnable(GL11.GL_CULL_FACE);
-                GL11.glPopMatrix();
+        if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER)) {
+            int dim = mc.world.provider.getDimension();
+            GL11.glPushMatrix();
+            GL11.glDisable(GL11.GL_CULL_FACE);
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBegin(GL11.GL_QUADS);
+            for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_BLOCKS.get(dim)) {
+                if (!mc.world.isBlockLoaded(pos))
+                    continue;
+                IBlockState state = mc.world.getBlockState(pos);
+                Block block = state.getBlock();
+                if (!(block instanceof IVisualizable))
+                    continue;
+                this.renderVisualize((IVisualizable) block, mc.world, pos);
             }
+            for (Entity entity : ItemRangeVisualizer.VISUALIZED_ENTITIES.get(dim)) {
+                if (entity.isDead || !(entity instanceof IVisualizable))
+                    continue;
+                this.renderVisualize((IVisualizable) entity, mc.world, entity.getPosition());
+            }
+            GL11.glEnd();
+            GL11.glPopAttrib();
+            GL11.glEnable(GL11.GL_CULL_FACE);
+            GL11.glPopMatrix();
         }
 
         GL11.glPopMatrix();

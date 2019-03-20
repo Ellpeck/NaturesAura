@@ -19,6 +19,7 @@ public final class PacketHandler {
         network.registerMessage(PacketParticleStream.Handler.class, PacketParticleStream.class, 0, Side.CLIENT);
         network.registerMessage(PacketParticles.Handler.class, PacketParticles.class, 1, Side.CLIENT);
         network.registerMessage(PacketAuraChunk.Handler.class, PacketAuraChunk.class, 2, Side.CLIENT);
+        network.registerMessage(PacketClient.Handler.class, PacketClient.class, 3, Side.CLIENT);
     }
 
     public static void sendToAllLoaded(World world, BlockPos pos, IMessage message) {
