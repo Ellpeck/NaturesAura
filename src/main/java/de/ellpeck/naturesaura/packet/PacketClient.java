@@ -5,7 +5,6 @@ import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -48,17 +47,13 @@ public class PacketClient implements IMessage {
         @SideOnly(Side.CLIENT)
         public IMessage onMessage(PacketClient message, MessageContext ctx) {
             NaturesAura.proxy.scheduleTask(() -> {
-                World world = Minecraft.getMinecraft().world;
-                if (world != null) {
+                Minecraft mc = Minecraft.getMinecraft();
+                if (mc.world != null) {
                     switch (message.type) {
                         case 0: // dimension rail visualization
                             int goalDim = message.data[0];
                             BlockPos goalPos = new BlockPos(message.data[1], message.data[2], message.data[3]);
-                            if (ItemRangeVisualizer.VISUALIZED_RAILS.containsEntry(goalDim, goalPos))
-                                ItemRangeVisualizer.VISUALIZED_RAILS.remove(goalDim, goalPos);
-                            else
-                                ItemRangeVisualizer.VISUALIZED_RAILS.put(goalDim, goalPos);
-                            break;
+                            ItemRangeVisualizer.visualize(mc.player, ItemRangeVisualizer.VISUALIZED_RAILS, goalDim, goalPos);
                     }
                 }
             });
