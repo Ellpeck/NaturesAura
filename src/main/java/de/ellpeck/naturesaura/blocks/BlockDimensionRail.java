@@ -1,9 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
-import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketClient;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -13,7 +10,6 @@ import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -23,29 +19,37 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Random;
 
 public class BlockDimensionRail extends BlockRailBase implements IModItem, ICreativeItem, IModelProvider {
 
-    public static final PropertyEnum<Type> TYPE = PropertyEnum.create("type", Type.class);
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", EnumRailDirection.class, EnumRailDirection.NORTH_SOUTH, EnumRailDirection.EAST_WEST);
 
-    public BlockDimensionRail() {
+    private final String name;
+    private final int goalDim;
+    private final DimensionType[] canUseDims;
+
+    public BlockDimensionRail(String name, DimensionType goalDim, DimensionType... canUseDims) {
         super(false);
+        this.name = name;
+        this.goalDim = goalDim.getId();
+        this.canUseDims = canUseDims;
+
         ModRegistry.add(this);
+    }
+
+    private boolean canUseHere(DimensionType dimension) {
+        for (DimensionType dim : this.canUseDims)
+            if (dim == dimension)
+                return true;
+        return false;
     }
 
     @Override
@@ -53,10 +57,9 @@ public class BlockDimensionRail extends BlockRailBase implements IModItem, ICrea
         ItemStack stack = playerIn.getHeldItem(hand);
         if (stack.getItem() == ModItems.RANGE_VISUALIZER) {
             if (!worldIn.isRemote) {
-                Type type = state.getValue(TYPE);
-                BlockPos goalPos = this.getGoalCoords(worldIn, pos, type);
+                BlockPos goalPos = this.getGoalCoords(worldIn, pos);
                 PacketHandler.sendTo(playerIn,
-                        new PacketClient(0, type.goalDim, goalPos.getX(), goalPos.getY(), goalPos.getZ()));
+                        new PacketClient(0, this.goalDim, goalPos.getX(), goalPos.getY(), goalPos.getZ()));
             }
             return true;
         }
@@ -69,23 +72,25 @@ public class BlockDimensionRail extends BlockRailBase implements IModItem, ICrea
             return;
         if (cart.isBeingRidden())
             return;
-        IBlockState state = world.getBlockState(pos);
-        Type type = state.getValue(TYPE);
-        if (!type.canUseHere(world.provider.getDimensionType()))
+        if (!this.canUseHere(world.provider.getDimensionType()))
             return;
-        BlockPos goalCoords = this.getGoalCoords(world, pos, type);
-        cart.changeDimension(type.goalDim, (newWorld, entity, yaw) ->
+
+        BlockPos goalCoords = this.getGoalCoords(world, pos);
+        cart.changeDimension(this.goalDim, (newWorld, entity, yaw) ->
                 entity.moveToBlockPosAndAngles(goalCoords, yaw, entity.rotationPitch));
+
+        BlockPos spot = IAuraChunk.getHighestSpot(world, pos, 35, pos);
+        IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 50000);
     }
 
-    private BlockPos getGoalCoords(World world, BlockPos pos, Type type) {
+    private BlockPos getGoalCoords(World world, BlockPos pos) {
         MinecraftServer server = world.getMinecraftServer();
-        if (type == Type.NETHER) {
+        if (this == ModBlocks.DIMENSION_RAIL_NETHER) {
             // travel to the nether from the overworld
             return new BlockPos(pos.getX() / 8, pos.getY() / 2, pos.getZ() / 8);
-        } else if (type == Type.END) {
+        } else if (this == ModBlocks.DIMENSION_RAIL_END) {
             // travel to the end from the overworld
-            WorldServer end = server.getWorld(type.goalDim);
+            WorldServer end = server.getWorld(this.goalDim);
             return end.getSpawnCoordinate().up(8);
         } else {
             if (world.provider.getDimensionType() == DimensionType.NETHER) {
@@ -93,7 +98,7 @@ public class BlockDimensionRail extends BlockRailBase implements IModItem, ICrea
                 return new BlockPos(pos.getX() * 8, pos.getY() * 2, pos.getZ() * 8);
             } else {
                 // travel to the overworld from the end
-                World overworld = server.getWorld(type.goalDim);
+                World overworld = server.getWorld(this.goalDim);
                 return overworld.getTopSolidOrLiquidBlock(overworld.getSpawnPoint());
             }
         }
@@ -116,27 +121,22 @@ public class BlockDimensionRail extends BlockRailBase implements IModItem, ICrea
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, TYPE, SHAPE);
+        return new BlockStateContainer(this, SHAPE);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        int meta = 0;
-        meta |= state.getValue(SHAPE).getMetadata();
-        meta |= state.getValue(TYPE).ordinal() << 1;
-        return meta;
+        return state.getValue(SHAPE).getMetadata();
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState()
-                .withProperty(SHAPE, EnumRailDirection.byMetadata(meta & 1))
-                .withProperty(TYPE, Type.values()[meta >> 1]);
+        return this.getDefaultState().withProperty(SHAPE, EnumRailDirection.byMetadata(meta));
     }
 
     @Override
     public String getBaseName() {
-        return "dimension_rail";
+        return "dimension_rail_" + this.name;
     }
 
     @Override
@@ -152,33 +152,5 @@ public class BlockDimensionRail extends BlockRailBase implements IModItem, ICrea
     @Override
     public void onPostInit(FMLPostInitializationEvent event) {
 
-    }
-
-    public enum Type implements IStringSerializable {
-        OVERWORLD("overworld", DimensionType.OVERWORLD, DimensionType.NETHER, DimensionType.THE_END),
-        NETHER("nether", DimensionType.NETHER, DimensionType.OVERWORLD),
-        END("end", DimensionType.THE_END, DimensionType.OVERWORLD);
-
-        private final String name;
-        private final int goalDim;
-        private final DimensionType[] canUseDims;
-
-        Type(String name, DimensionType goalDim, DimensionType... canUseDims) {
-            this.name = name;
-            this.goalDim = goalDim.getId();
-            this.canUseDims = canUseDims;
-        }
-
-        public boolean canUseHere(DimensionType dimension) {
-            for (DimensionType dim : this.canUseDims)
-                if (dim == dimension)
-                    return true;
-            return false;
-        }
-
-        @Override
-        public String getName() {
-            return this.name;
-        }
     }
 }

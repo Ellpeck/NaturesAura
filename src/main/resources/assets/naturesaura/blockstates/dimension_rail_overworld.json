@@ -2,6 +2,9 @@
     "forge_marker": 1,
     "defaults": {
         "model": "minecraft:rail_flat",
+        "textures": {
+            "rail": "naturesaura:blocks/dimension_rail_overworld"
+        },
         "transform": "forge:default-block"
     },
     "variants": {
@@ -19,23 +22,6 @@
             "north_south": {},
             "east_west": {
                 "y": 90
-            }
-        },
-        "type": {
-            "overworld": {
-                "textures": {
-                    "rail": "naturesaura:blocks/dimension_rail_overworld"
-                }
-            },
-            "nether": {
-                "textures": {
-                    "rail": "naturesaura:blocks/dimension_rail_nether"
-                }
-            },
-            "end": {
-                "textures": {
-                    "rail": "naturesaura:blocks/dimension_rail_end"
-                }
             }
         }
     }

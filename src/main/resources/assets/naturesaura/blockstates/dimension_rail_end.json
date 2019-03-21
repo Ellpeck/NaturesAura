@@ -1,0 +1,28 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:rail_flat",
+        "textures": {
+            "rail": "naturesaura:blocks/dimension_rail_end"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [
+            {
+                "model": "builtin/generated",
+                "textures": {
+                    "layer0": "naturesaura:blocks/dimension_rail_end"
+                },
+                "transform": "forge:default-item"
+            }
+        ],
+        "shape": {
+            "north_south": {},
+            "east_west": {
+                "y": 90
+            }
+        }
+    }
+}

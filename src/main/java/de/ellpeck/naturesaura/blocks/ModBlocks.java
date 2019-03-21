@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.ModConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.world.DimensionType;
 
 public final class ModBlocks {
 
@@ -54,5 +55,7 @@ public final class ModBlocks {
     public static final Block FIREWORK_GENERATOR = new BlockFireworkGenerator();
     public static final Block PROJECTILE_GENERATOR = new BlockProjectileGenerator();
     public static final Block CHUNK_LOADER = ModConfig.enabledFeatures.chunkLoader ? new BlockChunkLoader() : null;
-    public static final Block DIMENSION_RAIL = new BlockDimensionRail();
+    public static final Block DIMENSION_RAIL_OVERWORLD = new BlockDimensionRail("overworld", DimensionType.OVERWORLD, DimensionType.NETHER, DimensionType.THE_END);
+    public static final Block DIMENSION_RAIL_NETHER = new BlockDimensionRail("nether", DimensionType.NETHER, DimensionType.OVERWORLD);
+    public static final Block DIMENSION_RAIL_END = new BlockDimensionRail("end", DimensionType.THE_END, DimensionType.OVERWORLD);
 }
