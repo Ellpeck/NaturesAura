@@ -9,6 +9,7 @@ import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -41,6 +42,8 @@ public class BlockDimensionRail extends BlockRailBase implements IModItem, ICrea
         this.name = name;
         this.goalDim = goalDim.getId();
         this.canUseDims = canUseDims;
+        this.setHardness(0.8F);
+        this.setSoundType(SoundType.METAL);
 
         ModRegistry.add(this);
     }

@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityChunkLoader;
 import net.minecraft.block.SoundType;
@@ -12,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -21,6 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import java.util.Random;
 
 public class BlockChunkLoader extends BlockContainerImpl implements IVisualizable {
 
@@ -55,6 +58,20 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
             }
         }
         return null;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof TileEntityChunkLoader) {
+            int range = ((TileEntityChunkLoader) tile).range();
+            for (int i = MathHelper.ceil(range / 8F); i > 0; i--) {
+                NaturesAuraAPI.instance().spawnMagicParticle(
+                        pos.getX() + worldIn.rand.nextFloat(), pos.getY() + worldIn.rand.nextFloat(), pos.getZ() + worldIn.rand.nextFloat(),
+                        0, 0, 0, 0xa12dff, 1F + worldIn.rand.nextFloat(), 100, 0, false, true);
+            }
+        }
     }
 
     @Override
