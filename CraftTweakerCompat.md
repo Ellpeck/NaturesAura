@@ -13,7 +13,7 @@ __The replacement recipe that is added for any given item inside of Nature's Aur
 As an example, the following piece of code will remove the existing recipe of the Imperceptible Builder and replace it with a new one. Checking its Book of Natural Aura entry will then also display the new recipe correctly without errors.  
 ```
 recipes.remove(<naturesaura:placer>);
-recipes.addShapeless("placer", <naturesaura:placer>, <naturesaura:infused_iron>, <minecraft:piston>);
+recipes.addShapeless("placer", <naturesaura:placer>, [<naturesaura:infused_iron>, <minecraft:piston>]);
 ```
 Note that the name of the recipe is supplied as `placer` because the item id of the Imperceptible Builder is `naturesaura:placer`. Not doing this would lead to the Book of Natural Aura not displaying the new recipe.
 
