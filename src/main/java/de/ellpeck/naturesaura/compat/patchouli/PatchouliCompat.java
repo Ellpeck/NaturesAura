@@ -31,6 +31,7 @@ public final class PatchouliCompat {
 
     public static void preInit() {
         PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":rf_converter", ModConfig.enabledFeatures.rfConverter);
+        PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":chunk_loader", ModConfig.enabledFeatures.chunkLoader);
     }
 
     public static void preInitClient() {

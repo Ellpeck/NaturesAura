@@ -1,0 +1,35 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "ONO",
+        "PEP",
+        "ONO"
+    ],
+    "key": {
+        "E": {
+            "item": "naturesaura:eye"
+        },
+        "P": {
+            "item": "minecraft:ender_pearl"
+        },
+        "O": {
+            "item": "minecraft:obsidian"
+        },
+        "N": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:end"
+            }
+        }
+    },
+    "result": {
+        "item": "naturesaura:chunk_loader"
+    },
+    "conditions": [
+        {
+            "type": "minecraft:item_exists",
+            "item": "naturesaura:chunk_loader"
+        }
+    ]
+}

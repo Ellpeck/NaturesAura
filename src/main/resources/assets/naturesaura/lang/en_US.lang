@@ -48,6 +48,7 @@ tile.naturesaura.generator_limit_remover.name=Creational Catalyst
 tile.naturesaura.ender_crate.name=Ender Crate
 tile.naturesaura.powder_placer.name=Powder Manipulator
 tile.naturesaura.firework_generator.name=Firecracker Gaze
+tile.naturesaura.chunk_loader.name=World Eye
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.eye_improved.name=Environmental Ocular
