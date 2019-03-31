@@ -1,4 +1,6 @@
 # Editing Nature's Aura recipes with CraftTweaker
+Note that both [CraftTweaker](https://minecraft.curseforge.com/projects/crafttweaker) and [MTLib](https://minecraft.curseforge.com/projects/mtlib) are required for this compatibility.
+
 A few notes that apply for most of the recipe types:
 - If you don't know how the CraftTweaker syntax works, [read up on it](https://docs.blamejared.com/en/#Getting_Started/) first.
 - `name` is the name of a recipe. Read on for more information about this.
