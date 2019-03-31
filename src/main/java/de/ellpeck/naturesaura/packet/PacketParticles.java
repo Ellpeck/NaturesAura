@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -414,6 +415,25 @@ public class PacketParticles implements IMessage {
                                         message.posZ + world.rand.nextFloat() * depth,
                                         0F, 0F, 0F, 0xd60cff, 1F + world.rand.nextFloat(), 60, 0F, false, true);
                             break;
+                        case 26: // Projectile generator
+                            int x = message.data[0];
+                            int y = message.data[1];
+                            int z = message.data[2];
+                            for (int i = world.rand.nextInt(10) + 5; i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        x + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        y + 1.01F,
+                                        z + 0.25F + world.rand.nextFloat() * 0.5F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        world.rand.nextFloat() * 0.04F + 0.02F,
+                                        world.rand.nextGaussian() * 0.01F,
+                                        0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 40, 0F, false, true);
+                            for (int i = world.rand.nextInt(10) + 10; i >= 0; i--)
+                                world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK,
+                                        message.posX, message.posY, message.posZ,
+                                        world.rand.nextGaussian() * 0.03F,
+                                        world.rand.nextGaussian() * 0.03F,
+                                        world.rand.nextGaussian() * 0.03F);
                     }
                 }
             });

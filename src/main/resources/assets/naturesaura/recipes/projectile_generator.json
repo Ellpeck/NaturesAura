@@ -1,0 +1,31 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "SFI",
+        "TXT",
+        "ILS"
+    ],
+    "key": {
+        "F": {
+            "item": "minecraft:feather"
+        },
+        "L": {
+            "item": "minecraft:flint"
+        },
+        "S": {
+            "item": "naturesaura:infused_stone"
+        },
+        "T": {
+            "item": "naturesaura:token_rage"
+        },
+        "I": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "X": {
+            "item": "minecraft:compass"
+        }
+    },
+    "result": {
+        "item": "naturesaura:projectile_generator"
+    }
+}

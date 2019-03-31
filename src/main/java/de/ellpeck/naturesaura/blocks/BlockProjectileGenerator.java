@@ -3,19 +3,30 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityProjectileGenerator;
+import de.ellpeck.naturesaura.blocks.tiles.render.RenderProjectileGenerator;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
+import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockProjectileGenerator extends BlockContainerImpl {
+public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider {
     public BlockProjectileGenerator() {
         super(Material.ROCK, "projectile_generator", TileEntityProjectileGenerator.class, "projectile_generator");
         this.setSoundType(SoundType.STONE);
@@ -47,10 +58,30 @@ public class BlockProjectileGenerator extends BlockContainerImpl {
         BlockPos spot = IAuraChunk.getLowestSpot(entity.world, pos, 35, pos);
         IAuraChunk.getAuraChunk(entity.world, spot).storeAura(spot, amount);
 
+        PacketHandler.sendToAllAround(entity.world, pos, 32,
+                new PacketParticles((float) entity.posX, (float) entity.posY, (float) entity.posZ, 26, pos.getX(), pos.getY(), pos.getZ()));
+        entity.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ENDEREYE_LAUNCH, SoundCategory.BLOCKS, 0.8F, 1F);
+
         generator.nextSide = generator.nextSide.rotateY();
         generator.sendToClients();
 
         entity.setDead();
         event.setCanceled(true);
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public Tuple<Class, TileEntitySpecialRenderer> getTESR() {
+        return new Tuple<>(TileEntityProjectileGenerator.class, new RenderProjectileGenerator());
     }
 }

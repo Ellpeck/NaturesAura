@@ -11,7 +11,7 @@
         },
         {
             "type": "text",
-            "text": "$(aura) to maintain its sight.$(p)To set it up, simply place it down and provide it with a $(thing)redstone signal$() - the stronger the signal, the higher its range in blocks will be. Due to the nature of how observation in this manner seems to function, the range isn't always met exactly, meaning that sometimes, the areas that will be loaded are $(thing)slightly bigger$() than the range that is shown - it's a bit $(thing)chunky$(), to say the least."
+            "text": "$(aura) to maintain its sight.$(p)To set it up, simply place it down and provide it with a $(thing)redstone signal$() - the stronger the signal, the higher its radius in blocks will be, with about 30 being the maximum. Due to the nature of how observation in this manner seems to function, the range isn't always met exactly, meaning that sometimes, the areas that will be loaded are $(thing)slightly bigger$() than the expected range."
         },
         {
             "type": "crafting",

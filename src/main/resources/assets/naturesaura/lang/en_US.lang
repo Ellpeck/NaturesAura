@@ -52,6 +52,7 @@ tile.naturesaura.chunk_loader.name=World Eye
 tile.naturesaura.dimension_rail_overworld.name=Rail of the Overworld
 tile.naturesaura.dimension_rail_end.name=Rail of the End
 tile.naturesaura.dimension_rail_nether.name=Rail of the Nether
+tile.naturesaura.projectile_generator.name=Shooting Mark
 
 item.naturesaura.eye.name=Environmental Eye
 item.naturesaura.eye_improved.name=Environmental Ocular
