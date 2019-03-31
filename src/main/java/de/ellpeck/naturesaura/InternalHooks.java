@@ -82,13 +82,12 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     @Override
     public void spawnParticleStream(float startX, float startY, float startZ, float endX, float endY, float endZ, float speed, int color, float scale) {
         Vector3f dir = new Vector3f(endX - startX, endY - startY, endZ - startZ);
-        if (dir.length() > 0) {
-            int maxAge = (int) (dir.length() / speed);
+        float length = dir.length();
+        if (length > 0) {
             dir.normalise();
-
             this.spawnMagicParticle(startX, startY, startZ,
                     dir.x * speed, dir.y * speed, dir.z * speed,
-                    color, scale, maxAge, 0F, false, false);
+                    color, scale, (int) (length / speed), 0F, false, false);
         }
     }
 

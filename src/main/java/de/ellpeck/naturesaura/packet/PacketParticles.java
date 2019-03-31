@@ -403,6 +403,17 @@ public class PacketParticles implements IMessage {
                                         0.65F, message.data[3 + world.rand.nextInt(message.data.length - 3)], 1F);
                             NaturesAuraAPI.instance().setParticleSpawnRange(32);
                             break;
+                        case 25: // Dimension rail
+                            float width = message.data[0] / 100F;
+                            height = message.data[1] / 100F;
+                            float depth = message.data[2] / 100F;
+                            for (int i = world.rand.nextInt(100) + 50; i >= 0; i--)
+                                NaturesAuraAPI.instance().spawnMagicParticle(
+                                        message.posX + world.rand.nextFloat() * width,
+                                        message.posY + world.rand.nextFloat() * height,
+                                        message.posZ + world.rand.nextFloat() * depth,
+                                        0F, 0F, 0F, 0xd60cff, 1F + world.rand.nextFloat(), 60, 0F, false, true);
+                            break;
                     }
                 }
             });

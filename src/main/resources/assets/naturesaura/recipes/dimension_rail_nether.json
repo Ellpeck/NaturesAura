@@ -1,0 +1,30 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "IEI",
+        "ISI",
+        "IOI"
+    ],
+    "key": {
+        "E": {
+            "item": "naturesaura:token_terror"
+        },
+        "O": {
+            "type": "minecraft:item_nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:nether"
+            }
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        },
+        "I": {
+            "item": "naturesaura:sky_ingot"
+        }
+    },
+    "result": {
+        "item": "naturesaura:dimension_rail_nether"
+    }
+}

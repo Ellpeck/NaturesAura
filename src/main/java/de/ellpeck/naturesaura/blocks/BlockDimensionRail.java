@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketClient;
 import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
@@ -16,10 +17,13 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.IBlockAccess;
@@ -77,6 +81,12 @@ public class BlockDimensionRail extends BlockRailBase implements IModItem, ICrea
             return;
         if (!this.canUseHere(world.provider.getDimensionType()))
             return;
+
+        AxisAlignedBB box = cart.getEntityBoundingBox();
+        PacketHandler.sendToAllAround(world, pos, 32,
+                new PacketParticles((float) box.minX, (float) box.minY, (float) box.minZ, 25,
+                        (int) ((box.maxX - box.minX) * 100F), (int) ((box.maxY - box.minY) * 100F), (int) ((box.maxZ - box.minZ) * 100F)));
+        world.playSound(null, pos, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.BLOCKS, 1F, 1F);
 
         BlockPos goalCoords = this.getGoalCoords(world, pos);
         cart.changeDimension(this.goalDim, (newWorld, entity, yaw) ->
