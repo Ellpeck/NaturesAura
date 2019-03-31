@@ -6,7 +6,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import vazkii.patchouli.api.IComponentProcessor;
@@ -19,12 +18,13 @@ public class ProcessorAnimalSpawner implements IComponentProcessor {
 
     @Override
     public void setup(IVariableProvider<String> provider) {
-        ResourceLocation res = new ResourceLocation(provider.get("recipe"));
-        this.recipe = NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.get(res);
+        this.recipe = PatchouliCompat.getRecipe(NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES, provider.get("recipe"));
     }
 
     @Override
     public String process(String key) {
+        if (this.recipe == null)
+            return null;
         if (key.startsWith("input")) {
             int id = Integer.parseInt(key.substring(5)) - 1;
             if (this.recipe.ingredients.length > id)

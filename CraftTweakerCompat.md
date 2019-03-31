@@ -1,13 +1,23 @@
 # Editing Nature's Aura recipes with CraftTweaker
 A few notes that apply for most of the recipe types:
 - If you don't know how the CraftTweaker syntax works, [read up on it](https://docs.blamejared.com/en/#Getting_Started/) first.
-- `name` is the name of a recipe. For most recipes, the name is important as recipes are referenced by name in the Book of Natural Aura. When replacing an existing recipe, make sure to give it the same name as the original recipe. All recipes are prefixed with `naturesaura:`, and crafting recipes get their name from their [json files](https://github.com/Ellpeck/NaturesAura/tree/master/src/main/resources/assets/naturesaura/recipes) and other recipes get their name from their [registration call](https://github.com/Ellpeck/NaturesAura/blob/master/src/main/java/de/ellpeck/naturesaura/recipes/ModRecipes.java). To see which recipes are referenced where, you can also see the [Patchouli documentation](https://github.com/Ellpeck/NaturesAura/tree/master/src/main/resources/assets/naturesaura/patchouli_books/book/en_us/entries).
-- `IIngredient` is any kind of ingredient, meaning either an OreDictionary entry or an item
-- `IItemStack` is an item
+- `name` is the name of a recipe. Read on for more information about this.
 - `aura` is the amount of Aura required and represents the total amount required for the completion of the recipe (for reference, 1,000,000 is the default amount of Aura present in the world and 2,000,000 is the amount that is required for the Environmental Eye's bar to fill up fully)
 - `time` is the time processes take in ticks
 - For most removal recipes, `output` is the output of the recipe that should be removed. All recipes with the given outupt will be removed.
 
+## On the Importance of Recipe Names
+When replacing an existing recipe with a new one, the `name` variable of the recipe matters greatly, both for Nature's Aura's custom recipe types and for [vanilla crafting recipes](https://crafttweaker.readthedocs.io/en/latest/#Vanilla/Recipes/Crafting/Recipes_Crafting_Table/), if the replacement recipe should be displayed correctly in the Book of Natural Aura in place of the original recipe.  
+__The replacement recipe that is added for any given item inside of Nature's Aura needs to be named after the item id of the item that is being crafted.__ 
+
+As an example, the following piece of code will remove the existing recipe of the Imperceptible Builder and replace it with a new one. Checking its Book of Natural Aura entry will then also display the new recipe correctly without errors.  
+```
+recipes.remove(<naturesaura:placer>);
+recipes.addShapeless("placer", <naturesaura:placer>, <naturesaura:infused_iron>, <minecraft:piston>);
+```
+Note that the name of the recipe is supplied as `placer` because the item id of the Imperceptible Builder is `naturesaura:placer`. Not doing this would lead to the Book of Natural Aura not displaying the new recipe.
+
+_When adding a new recipe without replacing an existing one, the name of the newly added recipe does not matter._
 
 ## Natural Altar
 `mods.naturesaura.Altar.addRecipe(String name, IIngredient input, IItemStack output, IIngredient catalyst, int aura, int time)`

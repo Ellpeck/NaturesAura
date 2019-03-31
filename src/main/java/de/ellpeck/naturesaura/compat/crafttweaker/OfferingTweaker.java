@@ -13,6 +13,7 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.api.recipes.ing.AmountIngredient;
+import de.ellpeck.naturesaura.compat.Compat;
 import net.minecraft.util.ResourceLocation;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -28,7 +29,7 @@ public final class OfferingTweaker {
     @ZenMethod
     public static void addRecipe(String name, IIngredient input, int inputAmount, IIngredient startItem, IItemStack output) {
         CraftTweakerCompat.SCHEDULED_ACTIONS.add(() -> {
-            ResourceLocation res = new ResourceLocation(name);
+            ResourceLocation res = new ResourceLocation(Compat.CRAFT_TWEAKER, name);
             return new Add(Collections.singletonMap(res, new OfferingRecipe(res,
                     new AmountIngredient(CraftTweakerMC.getIngredient(input), inputAmount),
                     CraftTweakerMC.getIngredient(startItem),

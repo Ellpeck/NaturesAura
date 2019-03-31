@@ -3,14 +3,13 @@ package de.ellpeck.naturesaura.compat.patchouli;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
+import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.ClientEvents;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler.FancyInfo;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
@@ -24,6 +23,7 @@ import vazkii.patchouli.api.PatchouliAPI;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Collections;
+import java.util.Map;
 
 public final class PatchouliCompat {
 
@@ -100,5 +100,13 @@ public final class PatchouliCompat {
             }
         }
         PatchouliAPI.instance.registerMultiblock(name, PatchouliAPI.instance.makeMultiblock(pattern, rawMatchers));
+    }
+
+    public static <T> T getRecipe(Map<ResourceLocation, T> recipes, String name) {
+        ResourceLocation res = new ResourceLocation(name);
+        T recipe = recipes.get(res);
+        if (recipe == null)
+            recipe = recipes.get(new ResourceLocation(Compat.CRAFT_TWEAKER, res.getPath()));
+        return recipe;
     }
 }

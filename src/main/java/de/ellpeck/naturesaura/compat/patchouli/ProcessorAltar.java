@@ -3,7 +3,6 @@ package de.ellpeck.naturesaura.compat.patchouli;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariableProvider;
 import vazkii.patchouli.api.PatchouliAPI;
@@ -14,12 +13,13 @@ public class ProcessorAltar implements IComponentProcessor {
 
     @Override
     public void setup(IVariableProvider<String> provider) {
-        ResourceLocation res = new ResourceLocation(provider.get("recipe"));
-        this.recipe = NaturesAuraAPI.ALTAR_RECIPES.get(res);
+        this.recipe = PatchouliCompat.getRecipe(NaturesAuraAPI.ALTAR_RECIPES, provider.get("recipe"));
     }
 
     @Override
     public String process(String key) {
+        if (this.recipe == null)
+            return null;
         switch (key) {
             case "input":
                 return PatchouliAPI.instance.serializeIngredient(this.recipe.input);

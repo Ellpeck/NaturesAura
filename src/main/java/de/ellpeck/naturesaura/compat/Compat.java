@@ -4,18 +4,17 @@ import de.ellpeck.naturesaura.compat.crafttweaker.CraftTweakerCompat;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class Compat {
 
+    public static final String CRAFT_TWEAKER = "crafttweaker";
     public static boolean baubles;
     public static boolean craftTweaker;
     public static boolean mtLib;
 
     public static void preInit() {
         baubles = Loader.isModLoaded("baubles");
-        craftTweaker = Loader.isModLoaded("crafttweaker");
+        craftTweaker = Loader.isModLoaded(CRAFT_TWEAKER);
         mtLib = Loader.isModLoaded("mtlib");
 
         if (baubles)
