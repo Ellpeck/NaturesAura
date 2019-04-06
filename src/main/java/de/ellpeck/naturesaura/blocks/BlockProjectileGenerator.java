@@ -51,8 +51,8 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
         if (generator.nextSide != ray.sideHit)
             return;
         ResourceLocation name = EntityList.getKey(entity);
-        int amount = NaturesAuraAPI.PROJECTILE_GENERATIONS.get(name);
-        if (amount <= 0)
+        Integer amount = NaturesAuraAPI.PROJECTILE_GENERATIONS.get(name);
+        if (amount == null || amount <= 0)
             return;
 
         BlockPos spot = IAuraChunk.getLowestSpot(entity.world, pos, 35, pos);
