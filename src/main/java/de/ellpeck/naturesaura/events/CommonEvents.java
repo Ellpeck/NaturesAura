@@ -28,7 +28,12 @@ public class CommonEvents {
     @SubscribeEvent
     public void onChunkCapsAttach(AttachCapabilitiesEvent<Chunk> event) {
         Chunk chunk = event.getObject();
-        IAuraType type = IAuraType.forWorld(chunk.getWorld());
+        World world = chunk.getWorld();
+        if (world == null) {
+            NaturesAura.LOGGER.warn("Chunk with null world found. This is most likely due to OptiFine doing stuff that should really be disallowed. I don't know if this will cause any further issues, but hopefully not.");
+            return;
+        }
+        IAuraType type = IAuraType.forWorld(world);
         event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "aura"), new AuraChunk(chunk, type));
     }
 
