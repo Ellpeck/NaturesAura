@@ -6,7 +6,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.function.BiConsumer;
@@ -19,7 +18,7 @@ import java.util.function.BiConsumer;
  * It is not intended for API users to create custom implementation of this
  * class.
  */
-public interface IAuraChunk extends ICapabilityProvider, INBTSerializable<NBTTagCompound> {
+public interface IAuraChunk extends INBTSerializable<NBTTagCompound> {
     /**
      * The default amount of Aura that a chunk has stored
      */

@@ -5,8 +5,8 @@ import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.chunk.AuraChunkProvider;
 import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.util.ResourceLocation;
@@ -28,13 +28,7 @@ public class CommonEvents {
     @SubscribeEvent
     public void onChunkCapsAttach(AttachCapabilitiesEvent<Chunk> event) {
         Chunk chunk = event.getObject();
-        World world = chunk.getWorld();
-        if (world == null) {
-            NaturesAura.LOGGER.warn("Chunk with null world found. This is most likely due to OptiFine doing stuff that should really be disallowed. I don't know if this will cause any further issues, but hopefully not.");
-            return;
-        }
-        IAuraType type = IAuraType.forWorld(world);
-        event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "aura"), new AuraChunk(chunk, type));
+        event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "aura"), new AuraChunkProvider(chunk));
     }
 
     @SubscribeEvent
