@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.recipes.WeightedOre;
+import de.ellpeck.naturesaura.chunk.effect.OreSpawnEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.config.Config;
@@ -30,6 +31,9 @@ public final class ModConfig {
 
         @Comment("Additional blocks that are recognized as generatable ores for the passive ore generation effect. Each entry needs to be formatted as oredictEntry:oreWeight:dimension where a higher weight makes the ore more likely to spawn with 5000 being the weight of coal, the default ore with the highest weight, and dimension being any of overworld and nether")
         public String[] additionalOres = new String[0];
+
+        @Comment("Blocks that are exempt from being recognized as generatable ores for the passive ore generation effect. Each entry needs to be formatted as modid:block[prop1=value1,...] where block state properties are optional")
+        public String[] oreExceptions = new String[0];
 
         @Comment("Additional projectile types that are allowed to be consumed by the projectile generator. Each entry needs to be formatted as entity_registry_name->aura_amount")
         public String[] additionalProjectiles = new String[0];
@@ -128,6 +132,13 @@ public final class ModConfig {
                 }
             } catch (Exception e) {
                 NaturesAura.LOGGER.warn("Error parsing additionalOres", e);
+            }
+
+            try {
+                for (String s : general.oreExceptions)
+                    OreSpawnEffect.SPAWN_EXCEPTIONS.add(Helper.getStateFromString(s));
+            } catch (Exception e) {
+                NaturesAura.LOGGER.warn("Error parsing oreExceptions", e);
             }
 
             try {

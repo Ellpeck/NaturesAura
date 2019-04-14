@@ -12,21 +12,25 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
-import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class OreSpawnEffect implements IDrainSpotEffect {
 
+    public static final Set<IBlockState> SPAWN_EXCEPTIONS = new HashSet<>();
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "ore_spawn");
 
     private int amount;
@@ -109,7 +113,11 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                         if (toPlace == Blocks.AIR)
                             continue;
 
-                        IBlockState stateToPlace = toPlace.getDefaultState();
+                        FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
+                        IBlockState stateToPlace = toPlace.getStateForPlacement(world, pos, EnumFacing.UP, 0, 0, 0, stack.getMetadata(), player, EnumHand.MAIN_HAND);
+                        if (SPAWN_EXCEPTIONS.contains(stateToPlace))
+                            continue;
+
                         world.setBlockState(orePos, stateToPlace);
                         world.playEvent(2001, orePos, Block.getStateId(stateToPlace));
 
