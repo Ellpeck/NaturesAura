@@ -37,6 +37,8 @@ public class WorldGenAncientTree extends WorldGenAbstractTree {
             BlockPos goal = pos.add(x, 0, z);
             while (!world.getBlockState(goal).isFullBlock()) {
                 goal = goal.down();
+                if (goal.distanceSq(pos) >= 10 * 10)
+                    break;
             }
             this.makeBranch(world, pos.up(rand.nextInt(1)), goal, ModBlocks.ANCIENT_BARK.getDefaultState(), false);
         }
