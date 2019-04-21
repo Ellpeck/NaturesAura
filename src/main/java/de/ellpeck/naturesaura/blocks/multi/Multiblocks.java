@@ -40,8 +40,13 @@ public final class Multiblocks {
                     (world, start, offset, pos, state, c) -> {
                         if (state.getBlock() instanceof BlockSapling || state.getBlock() instanceof BlockLog)
                             return true;
-                        ItemStack stack = state.getBlock().getItem(world, pos, state);
-                        return !stack.isEmpty() && NaturesAuraAPI.TREE_RITUAL_RECIPES.values().stream().anyMatch(recipe -> recipe.saplingType.apply(stack));
+                        // try-catch to prevent blocks that need to have been placed crashing here
+                        try {
+                            ItemStack stack = state.getBlock().getItem(world, pos, state);
+                            return !stack.isEmpty() && NaturesAuraAPI.TREE_RITUAL_RECIPES.values().stream().anyMatch(recipe -> recipe.saplingType.apply(stack));
+                        } catch (Exception e) {
+                            return false;
+                        }
                     }
             ),
             ' ', Matcher.wildcard());
