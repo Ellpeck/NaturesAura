@@ -1,36 +1,83 @@
 buildscript {
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
+apply plugin: 'net.minecraftforge.gradle'
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
 
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'maven'
+version = 'r17'
+group = 'de.ellpeck.naturesaura' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'NaturesAura'
 
-version = "r17"
-group = "de.ellpeck.naturesaura"
-archivesBaseName = "NaturesAura"
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
-if (hasProperty('buildnumber')) {
-    version = "${version}-${this.properties['buildnumber']}"
-}
+minecraft {
+    mappings channel: 'snapshot', version: '20190719-1.14.3'
 
-sourceCompatibility = targetCompatibility = '1.8'
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 repositories {
-    mavenCentral()
     maven {
         url = "https://dvs1.progwml6.com/files/maven"
-    }
-    maven {
-        url = "http://maven.thiakil.com"
     }
     maven {
         url = "https://maven.blamejared.com"
@@ -38,88 +85,47 @@ repositories {
 }
 
 dependencies {
-    compile "vazkii.patchouli:Patchouli:1.0-19.96"
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.61'
 
-    deobfCompile "mezz.jei:jei_1.12.2:4.14.4.267"
-    deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
+    compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11")
 
-    compile "com.blamejared:MTLib:3.0.4.8"
-    compile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.11.494"
+    compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.14.4:5.0.0.89")
 }
 
-
-minecraft {
-    version = "1.12.2-14.23.5.2768"
-    mappings = "snapshot_20180720"
-
-    runDir = "run"
-    makeObfSourceJar = false
-
-    replaceIn "NaturesAura.java"
-    replace "@VERSION@", project.version.toString()
-}
-
-processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version': project.version, 'mcversion': project.minecraft.version
-    }
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-}
-
-apply plugin: 'maven-publish'
-
+// Example for how to get properties into the manifest for reading by the runtime..
 jar {
-    
+    manifest {
+        attributes([
+                "Specification-Title"     : "naturesaura",
+                "Specification-Vendor"    : "Ellpeck",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${version}",
+                "Implementation-Vendor"   : "Ellpeck",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
 }
 
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    from sourceSets.main.java
-    classifier = 'dev'
+// Example configuration to allow publishing using the maven-publish task
+// we define a custom artifact that is sourced from the reobfJar output task
+// and then declare that to be published
+// Note you'll need to add a repository here
+def reobfFile = file("$buildDir/reobfJar/output.jar")
+def reobfArtifact = artifacts.add('default', reobfFile) {
+    type 'jar'
+    builtBy 'reobfJar'
 }
-
-task apiJar(type: Jar) {
-    from sourceSets.main.output
-    from sourceSets.main.java
-    classifier = 'api'
-    include 'de/ellpeck/naturesaura/api/**'
-}
-
-javadoc {
-    include 'de/ellpeck/naturesaura/api/**'
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    from 'build/docs/javadoc'
-    classifier 'javadoc'
-}
-
-task sourcesJar(type: Jar) {
-    from sourceSets.main.java
-    classifier = 'sources'
-}
-
-apply plugin: 'maven-publish'
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact jar
-            artifact apiJar
-            artifact javadocJar
-            artifact sourcesJar
-            artifact deobfJar
+            artifact reobfArtifact
         }
     }
     repositories {
         maven {
-            url "file:///srv/nginx/maven"
-            //url "file:///tmp/maven"
+            url "file:///${project.projectDir}/mcmodsrepo"
         }
     }
 }
