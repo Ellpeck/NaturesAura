@@ -8,10 +8,10 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickable {
 
-    private final Map<IBlockState, MutableInt> consumedRecently = new HashMap<>();
+    private final Map<BlockState, MutableInt> consumedRecently = new HashMap<>();
 
     @Override
     public void update() {
@@ -36,7 +36,7 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
                 for (int y = -1; y <= 1; y++) {
                     for (int z = -range; z <= range; z++) {
                         BlockPos offset = this.pos.add(x, y, z);
-                        IBlockState state = this.world.getBlockState(offset);
+                        BlockState state = this.world.getBlockState(offset);
                         if (NaturesAuraAPI.FLOWERS.contains(state)) {
                             possible.add(offset);
                         }
@@ -48,7 +48,7 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
                 return;
 
             BlockPos pos = possible.get(this.world.rand.nextInt(possible.size()));
-            IBlockState state = this.world.getBlockState(pos);
+            BlockState state = this.world.getBlockState(pos);
             MutableInt curr = this.consumedRecently.computeIfAbsent(state, s -> new MutableInt());
 
             int addAmount = 25000;
@@ -64,7 +64,7 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
                     toAdd = 0;
             }
 
-            for (Map.Entry<IBlockState, MutableInt> entry : this.consumedRecently.entrySet()) {
+            for (Map.Entry<BlockState, MutableInt> entry : this.consumedRecently.entrySet()) {
                 if (entry.getKey() != state) {
                     MutableInt val = entry.getValue();
                     if (val.getValue() > 0)
@@ -99,16 +99,16 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
+    public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
 
         if (type != SaveType.SYNC && !this.consumedRecently.isEmpty()) {
-            NBTTagList list = new NBTTagList();
-            for (Map.Entry<IBlockState, MutableInt> entry : this.consumedRecently.entrySet()) {
-                IBlockState state = entry.getKey();
+            ListNBT list = new ListNBT();
+            for (Map.Entry<BlockState, MutableInt> entry : this.consumedRecently.entrySet()) {
+                BlockState state = entry.getKey();
                 Block block = state.getBlock();
 
-                NBTTagCompound tag = new NBTTagCompound();
+                CompoundNBT tag = new CompoundNBT();
                 tag.setString("block", block.getRegistryName().toString());
                 tag.setInteger("meta", block.getMetaFromState(state));
                 tag.setInteger("amount", entry.getValue().intValue());
@@ -119,19 +119,19 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
+    public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
 
         if (type != SaveType.SYNC) {
             this.consumedRecently.clear();
 
-            NBTTagList list = compound.getTagList("consumed_recently", 10);
+            ListNBT list = compound.getTagList("consumed_recently", 10);
             for (NBTBase base : list) {
-                NBTTagCompound tag = (NBTTagCompound) base;
+                CompoundNBT tag = (CompoundNBT) base;
 
                 Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tag.getString("block")));
                 if (block != null) {
-                    IBlockState state = block.getStateFromMeta(tag.getInteger("meta"));
+                    BlockState state = block.getStateFromMeta(tag.getInteger("meta"));
                     this.consumedRecently.put(state, new MutableInt(tag.getInteger("amount")));
                 }
             }

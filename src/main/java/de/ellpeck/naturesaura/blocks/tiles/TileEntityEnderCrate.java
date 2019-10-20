@@ -4,10 +4,10 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.BlockEnderCrate;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
@@ -62,7 +62,7 @@ public class TileEntityEnderCrate extends TileEntityImpl {
     public String name;
 
     @Override
-    public IItemHandlerModifiable getItemHandler(EnumFacing facing) {
+    public IItemHandlerModifiable getItemHandler(Direction facing) {
         if (this.canOpen())
             return this.wrappedEnderStorage;
         return null;
@@ -77,11 +77,11 @@ public class TileEntityEnderCrate extends TileEntityImpl {
     }
 
     @Override
-    public ItemStack getDrop(IBlockState state, int fortune) {
+    public ItemStack getDrop(BlockState state, int fortune) {
         ItemStack drop = super.getDrop(state, fortune);
         if (this.name != null) {
             if (!drop.hasTagCompound())
-                drop.setTagCompound(new NBTTagCompound());
+                drop.setTagCompound(new CompoundNBT());
             drop.getTagCompound().setString(NaturesAura.MOD_ID + ":ender_name", this.name);
         }
         return drop;
@@ -98,7 +98,7 @@ public class TileEntityEnderCrate extends TileEntityImpl {
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
+    public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (this.name != null)
@@ -107,7 +107,7 @@ public class TileEntityEnderCrate extends TileEntityImpl {
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
+    public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (compound.hasKey("name"))

@@ -2,14 +2,14 @@ package de.ellpeck.naturesaura.blocks;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
@@ -24,25 +24,25 @@ public class BlockDecayedLeaves extends BlockImpl {
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return false;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random random) {
+    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random random) {
         if (!worldIn.isRemote) {
             worldIn.setBlockToAir(pos);
         }
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    public Item getItemDropped(BlockState state, Random rand, int fortune) {
         return Items.AIR;
     }
 }

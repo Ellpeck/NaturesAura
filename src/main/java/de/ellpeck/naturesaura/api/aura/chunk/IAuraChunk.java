@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.api.aura.chunk;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -18,7 +18,7 @@ import java.util.function.BiConsumer;
  * It is not intended for API users to create custom implementation of this
  * class.
  */
-public interface IAuraChunk extends INBTSerializable<NBTTagCompound> {
+public interface IAuraChunk extends INBTSerializable<CompoundNBT> {
     /**
      * The default amount of Aura that a chunk has stored
      */

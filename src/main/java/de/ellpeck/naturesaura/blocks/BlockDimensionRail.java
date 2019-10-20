@@ -9,31 +9,31 @@ import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-public class BlockDimensionRail extends BlockRailBase implements IModItem, ICreativeItem, IModelProvider {
+public class BlockDimensionRail extends AbstractRailBlock implements IModItem, ICreativeItem, IModelProvider {
 
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", EnumRailDirection.class, EnumRailDirection.NORTH_SOUTH, EnumRailDirection.EAST_WEST);
 
@@ -60,7 +60,7 @@ public class BlockDimensionRail extends BlockRailBase implements IModItem, ICrea
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = playerIn.getHeldItem(hand);
         if (stack.getItem() == ModItems.RANGE_VISUALIZER) {
             if (!worldIn.isRemote) {
@@ -74,7 +74,7 @@ public class BlockDimensionRail extends BlockRailBase implements IModItem, ICrea
     }
 
     @Override
-    public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos) {
+    public void onMinecartPass(World world, AbstractMinecartEntity cart, BlockPos pos) {
         if (world.isRemote)
             return;
         if (cart.isBeingRidden())
@@ -103,7 +103,7 @@ public class BlockDimensionRail extends BlockRailBase implements IModItem, ICrea
             return new BlockPos(pos.getX() / 8, pos.getY() / 2, pos.getZ() / 8);
         } else if (this == ModBlocks.DIMENSION_RAIL_END) {
             // travel to the end from the overworld
-            WorldServer end = server.getWorld(this.goalDim);
+            ServerWorld end = server.getWorld(this.goalDim);
             return end.getSpawnCoordinate().up(8);
         } else {
             if (world.provider.getDimensionType() == DimensionType.NETHER) {
@@ -138,12 +138,12 @@ public class BlockDimensionRail extends BlockRailBase implements IModItem, ICrea
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return state.getValue(SHAPE).getMetadata();
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(SHAPE, EnumRailDirection.byMetadata(meta));
     }
 

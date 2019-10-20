@@ -6,11 +6,11 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockSapling;
+import net.minecraft.block.LogBlock;
+import net.minecraft.block.SaplingBlock;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.BlockStoneBrick.EnumType;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -38,7 +38,7 @@ public final class Multiblocks {
             'G', ModBlocks.GOLD_POWDER,
             '0', new Matcher(Blocks.SAPLING.getDefaultState(),
                     (world, start, offset, pos, state, c) -> {
-                        if (state.getBlock() instanceof BlockSapling || state.getBlock() instanceof BlockLog)
+                        if (state.getBlock() instanceof SaplingBlock || state.getBlock() instanceof LogBlock)
                             return true;
                         // try-catch to prevent blocks that need to have been placed crashing here
                         try {

@@ -5,8 +5,8 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -38,7 +38,7 @@ public class ExplosionEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public int isActiveHere(EntityPlayer player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.world, pos, spot))
             return -1;
         if (player.getDistanceSq(pos) > this.dist * this.dist)

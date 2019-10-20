@@ -4,8 +4,8 @@ import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EntityPredicates;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -18,8 +18,8 @@ public class TileEntityPowderPlacer extends TileEntityImpl {
     public void onRedstonePowerChange(int newPower) {
         if (this.redstonePower <= 0 && newPower > 0) {
             List<EntityEffectInhibitor> powders = this.world.getEntitiesWithinAABB(EntityEffectInhibitor.class,
-                    new AxisAlignedBB(this.pos, this.pos.add(1, 2, 1)), EntitySelectors.IS_ALIVE);
-            for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+                    new AxisAlignedBB(this.pos, this.pos.add(1, 2, 1)), EntityPredicates.IS_ALIVE);
+            for (Direction facing : Direction.HORIZONTALS) {
                 TileEntity tile = this.world.getTileEntity(this.pos.offset(facing));
                 if (tile == null || !tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite()))
                     continue;

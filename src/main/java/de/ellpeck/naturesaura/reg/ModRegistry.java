@@ -2,12 +2,12 @@ package de.ellpeck.naturesaura.reg;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
+import net.minecraft.potion.Effect;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -25,14 +25,14 @@ public final class ModRegistry {
         ALL_ITEMS.add(item);
     }
 
-    private static void registerPotion(Potion potion, String name) {
+    private static void registerPotion(Effect potion, String name) {
         potion.setPotionName("potion." + NaturesAura.MOD_ID + "." + name + ".name");
 
         potion.setRegistryName(NaturesAura.MOD_ID, name);
         ForgeRegistries.POTIONS.register(potion);
     }
 
-    private static void registerItem(Item item, String name, CreativeTabs tab) {
+    private static void registerItem(Item item, String name, ItemGroup tab) {
         item.setTranslationKey(NaturesAura.MOD_ID + "." + name);
 
         item.setRegistryName(NaturesAura.MOD_ID, name);
@@ -41,7 +41,7 @@ public final class ModRegistry {
         item.setCreativeTab(tab);
     }
 
-    private static void registerBlock(Block block, String name, ItemBlock item, CreativeTabs tab) {
+    private static void registerBlock(Block block, String name, BlockItem item, ItemGroup tab) {
         block.setTranslationKey(NaturesAura.MOD_ID + "." + name);
 
         block.setRegistryName(NaturesAura.MOD_ID, name);
@@ -55,7 +55,7 @@ public final class ModRegistry {
         block.setCreativeTab(tab);
     }
 
-    private static CreativeTabs getTab(IModItem item) {
+    private static ItemGroup getTab(IModItem item) {
         if (item instanceof ICreativeItem)
             return ((ICreativeItem) item).getTabToAdd();
         return null;
@@ -68,15 +68,15 @@ public final class ModRegistry {
             } else if (item instanceof Block) {
                 Block block = (Block) item;
 
-                ItemBlock itemBlock;
+                BlockItem itemBlock;
                 if (item instanceof ICustomItemBlockProvider)
                     itemBlock = ((ICustomItemBlockProvider) item).getItemBlock();
                 else
-                    itemBlock = new ItemBlock(block);
+                    itemBlock = new BlockItem(block);
 
                 registerBlock(block, item.getBaseName(), itemBlock, getTab(item));
-            } else if (item instanceof Potion)
-                registerPotion((Potion) item, item.getBaseName());
+            } else if (item instanceof Effect)
+                registerPotion((Effect) item, item.getBaseName());
 
             if (item instanceof IModelProvider) {
                 Map<ItemStack, ModelResourceLocation> models = ((IModelProvider) item).getModelLocations();

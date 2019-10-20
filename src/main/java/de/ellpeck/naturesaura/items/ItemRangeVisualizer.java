@@ -5,20 +5,20 @@ import com.google.common.collect.ListMultimap;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class ItemRangeVisualizer extends ItemImpl {
 
@@ -34,26 +34,26 @@ public class ItemRangeVisualizer extends ItemImpl {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
         if (playerIn.isSneaking()) {
             clear();
-            playerIn.sendStatusMessage(new TextComponentTranslation("info." + NaturesAura.MOD_ID + ".range_visualizer.end_all"), true);
-            return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+            playerIn.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.end_all"), true);
+            return new ActionResult<>(ActionResultType.SUCCESS, stack);
         }
-        return new ActionResult<>(EnumActionResult.PASS, stack);
+        return new ActionResult<>(ActionResultType.PASS, stack);
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        IBlockState state = worldIn.getBlockState(pos);
+    public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
+        BlockState state = worldIn.getBlockState(pos);
         Block block = state.getBlock();
         if (block instanceof IVisualizable) {
             if (worldIn.isRemote)
                 visualize(player, VISUALIZED_BLOCKS, worldIn.provider.getDimension(), pos);
-            return EnumActionResult.SUCCESS;
+            return ActionResultType.SUCCESS;
         }
-        return EnumActionResult.PASS;
+        return ActionResultType.PASS;
     }
 
     public static void clear() {
@@ -65,13 +65,13 @@ public class ItemRangeVisualizer extends ItemImpl {
             VISUALIZED_RAILS.clear();
     }
 
-    public static <T> void visualize(EntityPlayer player, ListMultimap<Integer, T> map, int dim, T value) {
+    public static <T> void visualize(PlayerEntity player, ListMultimap<Integer, T> map, int dim, T value) {
         if (map.containsEntry(dim, value)) {
             map.remove(dim, value);
-            player.sendStatusMessage(new TextComponentTranslation("info." + NaturesAura.MOD_ID + ".range_visualizer.end"), true);
+            player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.end"), true);
         } else {
             map.put(dim, value);
-            player.sendStatusMessage(new TextComponentTranslation("info." + NaturesAura.MOD_ID + ".range_visualizer.start"), true);
+            player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.start"), true);
         }
     }
 
@@ -87,7 +87,7 @@ public class ItemRangeVisualizer extends ItemImpl {
                 visualize(event.getEntityPlayer(), VISUALIZED_ENTITIES, dim, entity);
             }
             event.getEntityPlayer().swingArm(event.getHand());
-            event.setCancellationResult(EnumActionResult.SUCCESS);
+            event.setCancellationResult(ActionResultType.SUCCESS);
             event.setCanceled(true);
         }
     }

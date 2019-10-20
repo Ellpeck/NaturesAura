@@ -7,23 +7,23 @@ import de.ellpeck.naturesaura.chunk.AuraChunk;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.item.ItemFrameEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -31,13 +31,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.ChunkProviderServer;
+import net.minecraft.world.chunk.AbstractChunkProvider;
+import net.minecraft.world.chunk.ServerChunkProvider;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.lwjgl.opengl.GL11;
@@ -85,10 +85,10 @@ public final class Helper {
         world.profiler.endSection();
     }
 
-    public static List<EntityItemFrame> getAttachedItemFrames(World world, BlockPos pos) {
-        List<EntityItemFrame> frames = world.getEntitiesWithinAABB(EntityItemFrame.class, new AxisAlignedBB(pos).grow(0.25));
+    public static List<ItemFrameEntity> getAttachedItemFrames(World world, BlockPos pos) {
+        List<ItemFrameEntity> frames = world.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(pos).grow(0.25));
         for (int i = frames.size() - 1; i >= 0; i--) {
-            EntityItemFrame frame = frames.get(i);
+            ItemFrameEntity frame = frames.get(i);
             BlockPos framePos = frame.getHangingPosition().offset(frame.facingDirection.getOpposite());
             if (!pos.equals(framePos))
                 frames.remove(i);
@@ -99,9 +99,9 @@ public final class Helper {
     // For some reason this method isn't public in World, but I also don't want to have to make a new BlockPos
     // or use the messy MutableBlockPos system just to see if a chunk is loaded, so this will have to do I guess
     public static boolean isChunkLoaded(World world, int x, int z) {
-        IChunkProvider provider = world.getChunkProvider();
-        if (provider instanceof ChunkProviderServer)
-            return ((ChunkProviderServer) provider).chunkExists(x, z);
+        AbstractChunkProvider provider = world.getChunkProvider();
+        if (provider instanceof ServerChunkProvider)
+            return ((ServerChunkProvider) provider).chunkExists(x, z);
         else
             return !provider.provideChunk(x, z).isEmpty();
     }
@@ -120,7 +120,7 @@ public final class Helper {
         return !nbt || ItemStack.areItemStackShareTagsEqual(first, second);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void renderItemInWorld(ItemStack stack) {
         if (!stack.isEmpty()) {
             GlStateManager.pushMatrix();
@@ -135,7 +135,7 @@ public final class Helper {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void renderItemInGui(ItemStack stack, int x, int y, float scale) {
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
@@ -151,7 +151,7 @@ public final class Helper {
         GlStateManager.popMatrix();
     }
 
-    public static boolean putStackOnTile(EntityPlayer player, EnumHand hand, BlockPos pos, int slot, boolean sound) {
+    public static boolean putStackOnTile(PlayerEntity player, Hand hand, BlockPos pos, int slot, boolean sound) {
         TileEntity tile = player.world.getTileEntity(pos);
         if (tile instanceof TileEntityImpl) {
             IItemHandlerModifiable handler = ((TileEntityImpl) tile).getItemHandler(null);
@@ -176,7 +176,7 @@ public final class Helper {
                     if (!player.world.isRemote) {
                         ItemStack stack = handler.getStackInSlot(slot);
                         if (!player.addItemStackToInventory(stack)) {
-                            EntityItem item = new EntityItem(player.world, player.posX, player.posY, player.posZ, stack);
+                            ItemEntity item = new ItemEntity(player.world, player.posX, player.posY, player.posZ, stack);
                             player.world.spawnEntity(item);
                         }
                         handler.setStackInSlot(slot, ItemStack.EMPTY);
@@ -203,28 +203,28 @@ public final class Helper {
             };
 
             @Override
-            public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+            public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing) {
                 return capability == NaturesAuraAPI.capAuraRecharge;
             }
 
             @Nullable
             @Override
-            public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+            public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
                 return capability == NaturesAuraAPI.capAuraRecharge ? (T) this.recharge : null;
             }
         };
     }
 
-    public static IBlockState getStateFromString(String raw) {
+    public static BlockState getStateFromString(String raw) {
         String[] split = raw.split("\\[");
         Block block = Block.REGISTRY.getObject(new ResourceLocation(split[0]));
         if (block != null) {
-            IBlockState state = block.getDefaultState();
+            BlockState state = block.getDefaultState();
             if (split.length > 1) {
                 for (String part : split[1].replace("]", "").split(",")) {
                     String[] keyValue = part.split("=");
                     for (IProperty<?> prop : state.getProperties().keySet()) {
-                        IBlockState changed = findProperty(state, prop, keyValue[0], keyValue[1]);
+                        BlockState changed = findProperty(state, prop, keyValue[0], keyValue[1]);
                         if (changed != null) {
                             state = changed;
                             break;
@@ -237,7 +237,7 @@ public final class Helper {
             return null;
     }
 
-    private static <T extends Comparable<T>> IBlockState findProperty(IBlockState state, IProperty<T> prop, String key, String newValue) {
+    private static <T extends Comparable<T>> BlockState findProperty(BlockState state, IProperty<T> prop, String key, String newValue) {
         if (key.equals(prop.getName()))
             for (T value : prop.getAllowedValues())
                 if (prop.getName(value).equals(newValue))
@@ -249,21 +249,21 @@ public final class Helper {
         CapabilityManager.INSTANCE.register(type, new Capability.IStorage<T>() {
             @Nullable
             @Override
-            public NBTBase writeNBT(Capability capability, Object instance, EnumFacing side) {
+            public NBTBase writeNBT(Capability capability, Object instance, Direction side) {
                 return null;
             }
 
             @Override
-            public void readNBT(Capability capability, Object instance, EnumFacing side, NBTBase nbt) {
+            public void readNBT(Capability capability, Object instance, Direction side, NBTBase nbt) {
 
             }
         }, () -> null);
     }
 
-    public static void addAdvancement(EntityPlayer player, ResourceLocation advancement, String criterion) {
-        if (!(player instanceof EntityPlayerMP))
+    public static void addAdvancement(PlayerEntity player, ResourceLocation advancement, String criterion) {
+        if (!(player instanceof ServerPlayerEntity))
             return;
-        EntityPlayerMP playerMp = (EntityPlayerMP) player;
+        ServerPlayerEntity playerMp = (ServerPlayerEntity) player;
         Advancement adv = playerMp.getServerWorld().getAdvancementManager().getAdvancement(advancement);
         if (adv != null)
             playerMp.getAdvancements().grantCriterion(adv, criterion);
@@ -277,7 +277,7 @@ public final class Helper {
         return highestAmount;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void renderWeirdBox(double x, double y, double z, double width, double height, double depth) {
         GL11.glVertex3d(x, y + height, z);
         GL11.glVertex3d(x + width, y + height, z);
@@ -305,8 +305,8 @@ public final class Helper {
         GL11.glVertex3d(x, y, z);
     }
 
-    public static boolean isHoldingItem(EntityPlayer player, Item item) {
-        for (EnumHand hand : EnumHand.values()) {
+    public static boolean isHoldingItem(PlayerEntity player, Item item) {
+        for (Hand hand : Hand.values()) {
             ItemStack stack = player.getHeldItem(hand);
             if (!stack.isEmpty() && stack.getItem() == item)
                 return true;

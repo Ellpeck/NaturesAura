@@ -7,10 +7,10 @@ import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemAxe;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import javax.annotation.Nullable;
 
-public class ItemAxeNA extends ItemAxe implements IModItem, ICreativeItem, IModelProvider {
+public class ItemAxeNA extends AxeItem implements IModItem, ICreativeItem, IModelProvider {
     private final String baseName;
 
     public ItemAxeNA(String baseName, ToolMaterial material, float damage, float speed) {
@@ -47,7 +47,7 @@ public class ItemAxeNA extends ItemAxe implements IModItem, ICreativeItem, IMode
     }
 
     @Override
-    public float getDestroySpeed(ItemStack stack, IBlockState state) {
+    public float getDestroySpeed(ItemStack stack, BlockState state) {
         if (this == ModItems.INFUSED_AXE && state.getMaterial() == Material.LEAVES) {
             return this.efficiency;
         } else {
@@ -57,7 +57,7 @@ public class ItemAxeNA extends ItemAxe implements IModItem, ICreativeItem, IMode
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         if (this == ModItems.INFUSED_AXE)
             return Helper.makeRechargeProvider(stack, true);
         else return null;

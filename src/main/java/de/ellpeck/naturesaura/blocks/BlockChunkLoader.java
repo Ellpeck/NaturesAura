@@ -7,10 +7,10 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityChunkLoader;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -19,8 +19,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 import java.util.Random;
@@ -42,7 +42,7 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileEntityChunkLoader) {
@@ -61,8 +61,8 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    @OnlyIn(Dist.CLIENT)
+    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityChunkLoader) {
             int range = ((TileEntityChunkLoader) tile).range();
@@ -75,33 +75,33 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getVisualizationColor(World world, BlockPos pos) {
         return 0xc159f9;
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
         return BOUND_BOX;
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) {
+    public boolean isFullCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public boolean isNormalCube(BlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -110,7 +110,7 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
         @Override
         public void ticketsLoaded(List<Ticket> tickets, World world) {
             for (Ticket ticket : tickets) {
-                NBTTagCompound data = ticket.getModData();
+                CompoundNBT data = ticket.getModData();
                 BlockPos pos = BlockPos.fromLong(data.getLong("pos"));
                 TileEntity tile = world.getTileEntity(pos);
                 if (!(tile instanceof TileEntityChunkLoader))

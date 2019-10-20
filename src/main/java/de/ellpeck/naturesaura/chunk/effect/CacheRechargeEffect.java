@@ -7,7 +7,7 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.items.ModItems;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -38,7 +38,7 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public int isActiveHere(EntityPlayer player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.world, pos, spot))
             return -1;
         if (!this.bb.contains(player.getPositionVector()))
@@ -57,8 +57,8 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(world, pos, spot))
             return;
-        List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.bb);
-        for (EntityPlayer player : players) {
+        List<PlayerEntity> players = world.getEntitiesWithinAABB(PlayerEntity.class, this.bb);
+        for (PlayerEntity player : players) {
             if (NaturesAuraAPI.instance().isEffectPowderActive(world, player.getPosition(), NAME))
                 continue;
             if (NaturesAuraAPI.instance().insertAuraIntoPlayer(player, this.amount, true)) {

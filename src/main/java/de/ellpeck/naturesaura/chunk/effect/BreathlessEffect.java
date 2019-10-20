@@ -7,11 +7,11 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.potion.ModPotions;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -43,7 +43,7 @@ public class BreathlessEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public int isActiveHere(EntityPlayer player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.world, pos, spot))
             return -1;
         if (!this.bb.contains(player.getPositionVector()))
@@ -62,9 +62,9 @@ public class BreathlessEffect implements IDrainSpotEffect {
             return;
         if (!this.calcValues(world, pos, spot))
             return;
-        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, this.bb);
-        for (EntityLivingBase entity : entities)
-            entity.addPotionEffect(new PotionEffect(ModPotions.BREATHLESS, 300, this.amp));
+        List<LivingEntity> entities = world.getEntitiesWithinAABB(LivingEntity.class, this.bb);
+        for (LivingEntity entity : entities)
+            entity.addPotionEffect(new EffectInstance(ModPotions.BREATHLESS, 300, this.amp));
     }
 
     @Override

@@ -6,16 +6,16 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.block.LeavesBlock;
+import net.minecraft.block.LogBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -80,7 +80,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
                                 return true;
                             });
 
-                            EntityItem item = new EntityItem(this.world,
+                            ItemEntity item = new ItemEntity(this.world,
                                     this.ritualPos.getX() + 0.5, this.ritualPos.getY() + 4.5, this.ritualPos.getZ() + 0.5,
                                     this.recipe.result.copy());
                             this.world.spawnEntity(item);
@@ -133,8 +133,8 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
                     BlockPos offset = pos.add(x, y, z);
-                    IBlockState state = this.world.getBlockState(offset);
-                    if (state.getBlock() instanceof BlockLog || state.getBlock() instanceof BlockLeaves) {
+                    BlockState state = this.world.getBlockState(offset);
+                    if (state.getBlock() instanceof LogBlock || state.getBlock() instanceof LeavesBlock) {
                         this.world.setBlockToAir(offset);
                         PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), 2));
 
@@ -150,8 +150,8 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
             return false;
         }
         for (int i = 0; i < 2; i++) {
-            IBlockState state = this.world.getBlockState(this.ritualPos.up(i));
-            if(!(state.getBlock() instanceof BlockLog))
+            BlockState state = this.world.getBlockState(this.ritualPos.up(i));
+            if(!(state.getBlock() instanceof LogBlock))
                 return false;
         }
         if (this.timer < this.recipe.time / 2) {
@@ -179,7 +179,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
+    public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK)
             compound.setTag("items", this.items.serializeNBT());
@@ -194,7 +194,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
+    public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK)
             this.items.deserializeNBT(compound.getCompoundTag("items"));
@@ -209,7 +209,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public IItemHandlerModifiable getItemHandler(EnumFacing facing) {
+    public IItemHandlerModifiable getItemHandler(Direction facing) {
         return this.items;
     }
 }

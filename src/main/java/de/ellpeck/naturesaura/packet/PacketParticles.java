@@ -5,18 +5,18 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketParticles implements IMessage {
 
@@ -67,7 +67,7 @@ public class PacketParticles implements IMessage {
     public static class Handler implements IMessageHandler<PacketParticles, IMessage> {
 
         @Override
-        @SideOnly(Side.CLIENT)
+        @OnlyIn(Dist.CLIENT)
         public IMessage onMessage(PacketParticles message, MessageContext ctx) {
             NaturesAura.proxy.scheduleTask(() -> {
                 World world = Minecraft.getMinecraft().world;
@@ -76,7 +76,7 @@ public class PacketParticles implements IMessage {
                         case 0: // Tree ritual: Gold powder
                             BlockPos pos = new BlockPos(message.posX, message.posY, message.posZ);
                             Multiblocks.TREE_RITUAL.forEach(pos, 'G', (dustPos, matcher) -> {
-                                IBlockState state = world.getBlockState(dustPos);
+                                BlockState state = world.getBlockState(dustPos);
                                 AxisAlignedBB box = state.getBoundingBox(world, dustPos);
                                 NaturesAuraAPI.instance().spawnMagicParticle(
                                         dustPos.getX() + box.minX + (box.maxX - box.minX) * world.rand.nextFloat(),
@@ -225,7 +225,7 @@ public class PacketParticles implements IMessage {
                                         message.posX + 0.5F,
                                         message.posY + 0.5F,
                                         message.posZ + 0.5F,
-                                        0.6F, BiomeColorHelper.getFoliageColorAtPos(world, new BlockPos(sapX, sapY, sapZ)), 1.5F);
+                                        0.6F, BiomeColors.getFoliageColorAtPos(world, new BlockPos(sapX, sapY, sapZ)), 1.5F);
                             if (releaseAura)
                                 for (int i = world.rand.nextInt(10) + 10; i >= 0; i--)
                                     NaturesAuraAPI.instance().spawnMagicParticle(

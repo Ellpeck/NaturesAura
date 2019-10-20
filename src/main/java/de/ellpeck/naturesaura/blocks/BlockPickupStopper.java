@@ -7,17 +7,17 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable {
     public BlockPickupStopper() {
@@ -30,9 +30,9 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
 
     @SubscribeEvent
     public void onPickup(EntityItemPickupEvent event) {
-        EntityPlayer player = event.getEntityPlayer();
+        PlayerEntity player = event.getEntityPlayer();
         if (player != null && !player.isSneaking()) {
-            EntityItem item = event.getItem();
+            ItemEntity item = event.getItem();
             BlockPos pos = item.getPosition();
             Helper.getTileEntitiesInArea(item.world, pos, 8, tile -> {
                 if (!(tile instanceof TileEntityPickupStopper))
@@ -56,7 +56,7 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileEntityPickupStopper) {
@@ -68,7 +68,7 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getVisualizationColor(World world, BlockPos pos) {
         return 0xf4aa42;
     }

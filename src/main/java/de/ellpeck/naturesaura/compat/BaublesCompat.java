@@ -5,15 +5,15 @@ import baubles.api.IBauble;
 import baubles.api.cap.BaublesCapabilities;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.items.ModItems;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,13 +37,13 @@ public class BaublesCompat {
     private void addCap(AttachCapabilitiesEvent<ItemStack> event, IBauble type) {
         event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "bauble"), new ICapabilityProvider() {
             @Override
-            public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+            public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing) {
                 return capability == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE;
             }
 
             @Nullable
             @Override
-            public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+            public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
                 return capability == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE ? (T) type : null;
             }
         });
@@ -65,12 +65,12 @@ public class BaublesCompat {
         }
 
         @Override
-        public boolean willAutoSync(ItemStack itemstack, EntityLivingBase player) {
+        public boolean willAutoSync(ItemStack itemstack, LivingEntity player) {
             return this.sync;
         }
 
         @Override
-        public void onWornTick(ItemStack stack, EntityLivingBase player) {
+        public void onWornTick(ItemStack stack, LivingEntity player) {
             stack.getItem().onUpdate(stack, player.world, player, -1, false);
         }
     }

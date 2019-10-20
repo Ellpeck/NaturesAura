@@ -3,27 +3,27 @@ package de.ellpeck.naturesaura.items;
 import de.ellpeck.naturesaura.blocks.BlockSlabsNA;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSlab;
+import net.minecraft.block.SlabBlock;
 import net.minecraft.block.BlockSlab.EnumBlockHalf;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.Supplier;
 
-public class ItemSlabNA extends ItemBlock {
+public class ItemSlabNA extends BlockItem {
 
     private final Supplier<BlockSlabsNA> singleSlab;
     private final Supplier<BlockSlabsNA> doubleSlab;
@@ -35,14 +35,14 @@ public class ItemSlabNA extends ItemBlock {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
         if (!stack.isEmpty() && player.canPlayerEdit(pos.offset(facing), facing, stack)) {
-            IBlockState state = worldIn.getBlockState(pos);
+            BlockState state = worldIn.getBlockState(pos);
             if (state.getBlock() == this.singleSlab.get()) {
-                EnumBlockHalf half = state.getValue(BlockSlab.HALF);
-                if (facing == EnumFacing.UP && half == EnumBlockHalf.BOTTOM || facing == EnumFacing.DOWN && half == EnumBlockHalf.TOP) {
-                    IBlockState newState = this.doubleSlab.get().getDefaultState();
+                EnumBlockHalf half = state.getValue(SlabBlock.HALF);
+                if (facing == Direction.UP && half == EnumBlockHalf.BOTTOM || facing == Direction.DOWN && half == EnumBlockHalf.TOP) {
+                    BlockState newState = this.doubleSlab.get().getDefaultState();
                     AxisAlignedBB bound = newState.getCollisionBoundingBox(worldIn, pos);
 
                     if (bound != Block.NULL_AABB && worldIn.checkNoEntityCollision(bound.offset(pos)) && worldIn.setBlockState(pos, newState, 11)) {
@@ -51,29 +51,29 @@ public class ItemSlabNA extends ItemBlock {
                                 (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
                         stack.shrink(1);
 
-                        if (player instanceof EntityPlayerMP) {
-                            CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP) player, pos, stack);
+                        if (player instanceof ServerPlayerEntity) {
+                            CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, pos, stack);
                         }
                     }
 
-                    return EnumActionResult.SUCCESS;
+                    return ActionResultType.SUCCESS;
                 }
             }
             return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
         } else {
-            return EnumActionResult.FAIL;
+            return ActionResultType.FAIL;
         }
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, EntityPlayer player, ItemStack stack) {
-        IBlockState state = worldIn.getBlockState(pos);
+    @OnlyIn(Dist.CLIENT)
+    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, Direction side, PlayerEntity player, ItemStack stack) {
+        BlockState state = worldIn.getBlockState(pos);
         if (state.getBlock() == this.singleSlab.get())
-            if (state.getValue(BlockSlab.HALF) == EnumBlockHalf.TOP ? side == EnumFacing.DOWN : side == EnumFacing.UP)
+            if (state.getValue(SlabBlock.HALF) == EnumBlockHalf.TOP ? side == Direction.DOWN : side == Direction.UP)
                 return true;
 
-        IBlockState other = worldIn.getBlockState(pos.offset(side));
+        BlockState other = worldIn.getBlockState(pos.offset(side));
         return other.getBlock() == this.singleSlab.get() || super.canPlaceBlockOnSide(worldIn, pos, side, player, stack);
     }
 }

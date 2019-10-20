@@ -2,17 +2,17 @@ package de.ellpeck.naturesaura.blocks.tiles.render;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityOfferingTable;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.Random;
 
-public class RenderOfferingTable extends TileEntitySpecialRenderer<TileEntityOfferingTable> {
+public class RenderOfferingTable extends TileEntityRenderer<TileEntityOfferingTable> {
 
     private final Random rand = new Random();
 
@@ -29,7 +29,7 @@ public class RenderOfferingTable extends TileEntitySpecialRenderer<TileEntityOff
 
                 float scale;
                 float yOff;
-                if (item instanceof ItemBlock && ((ItemBlock) item).getBlock().getRenderLayer() == BlockRenderLayer.SOLID) {
+                if (item instanceof BlockItem && ((BlockItem) item).getBlock().getRenderLayer() == BlockRenderLayer.SOLID) {
                     scale = 0.4F;
                     yOff = 0.08F;
                 } else {

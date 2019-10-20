@@ -4,28 +4,28 @@ import baubles.api.BaublesApi;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.api.render.ITrinketItem.RenderType;
 import de.ellpeck.naturesaura.compat.Compat;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
-@SideOnly(Side.CLIENT)
-public class PlayerLayerTrinkets implements LayerRenderer<EntityPlayer> {
+@OnlyIn(Dist.CLIENT)
+public class PlayerLayerTrinkets implements LayerRenderer<PlayerEntity> {
 
     private final Set<Item> alreadyRendered = new HashSet<>();
 
     @Override
-    public void doRenderLayer(@Nonnull EntityPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        if (player.getActivePotionEffect(MobEffects.INVISIBILITY) != null)
+    public void doRenderLayer(@Nonnull PlayerEntity player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        if (player.getActivePotionEffect(Effects.INVISIBILITY) != null)
             return;
         ItemStack main = player.getHeldItemMainhand();
         ItemStack second = player.getHeldItemOffhand();
@@ -45,7 +45,7 @@ public class PlayerLayerTrinkets implements LayerRenderer<EntityPlayer> {
 
     }
 
-    private void render(EntityPlayer player, RenderType type, ItemStack main, ItemStack second) {
+    private void render(PlayerEntity player, RenderType type, ItemStack main, ItemStack second) {
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
             this.renderStack(player.inventory.getStackInSlot(i), player, type, main, second);
         }
@@ -58,7 +58,7 @@ public class PlayerLayerTrinkets implements LayerRenderer<EntityPlayer> {
         }
     }
 
-    private void renderStack(ItemStack stack, EntityPlayer player, RenderType type, ItemStack main, ItemStack second) {
+    private void renderStack(ItemStack stack, PlayerEntity player, RenderType type, ItemStack main, ItemStack second) {
         if (!stack.isEmpty()) {
             Item item = stack.getItem();
             if (item instanceof ITrinketItem && !this.alreadyRendered.contains(item)) {

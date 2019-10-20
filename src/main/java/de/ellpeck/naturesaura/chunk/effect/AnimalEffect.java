@@ -6,12 +6,12 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemEgg;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.ChickenEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
+import net.minecraft.item.EggItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -48,7 +48,7 @@ public class AnimalEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public int isActiveHere(EntityPlayer player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.world, pos, spot))
             return -1;
         if (!this.bb.contains(player.getPositionVector()))
@@ -68,23 +68,23 @@ public class AnimalEffect implements IDrainSpotEffect {
         if (!this.calcValues(world, pos, spot))
             return;
 
-        List<EntityAnimal> animals = world.getEntitiesWithinAABB(EntityAnimal.class, this.bb);
+        List<AnimalEntity> animals = world.getEntitiesWithinAABB(AnimalEntity.class, this.bb);
         if (animals.size() >= 200)
             return;
 
         if (world.getTotalWorldTime() % 200 == 0) {
-            List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, this.bb);
-            for (EntityItem item : items) {
+            List<ItemEntity> items = world.getEntitiesWithinAABB(ItemEntity.class, this.bb);
+            for (ItemEntity item : items) {
                 if (item.isDead)
                     continue;
                 if (!NaturesAuraAPI.instance().isEffectPowderActive(world, item.getPosition(), NAME))
                     continue;
 
                 ItemStack stack = item.getItem();
-                if (!(stack.getItem() instanceof ItemEgg))
+                if (!(stack.getItem() instanceof EggItem))
                     continue;
                 // The getAge() method is private for absolutely no reason but I want it so I don't care
-                int age = ReflectionHelper.getPrivateValue(EntityItem.class, item, "field_70292_b", "age");
+                int age = ReflectionHelper.getPrivateValue(ItemEntity.class, item, "field_70292_b", "age");
                 if (age < item.lifespan / 2)
                     continue;
 
@@ -95,7 +95,7 @@ public class AnimalEffect implements IDrainSpotEffect {
                     item.setItem(stack);
                 }
 
-                EntityChicken chicken = new EntityChicken(world);
+                ChickenEntity chicken = new ChickenEntity(world);
                 chicken.setGrowingAge(-24000);
                 chicken.setPosition(item.posX, item.posY, item.posZ);
                 world.spawnEntity(chicken);
@@ -108,18 +108,18 @@ public class AnimalEffect implements IDrainSpotEffect {
         if (world.rand.nextInt(200) <= this.chance) {
             if (animals.size() < 2)
                 return;
-            EntityAnimal first = animals.get(world.rand.nextInt(animals.size()));
+            AnimalEntity first = animals.get(world.rand.nextInt(animals.size()));
             if (first.isChild() || first.isInLove())
                 return;
             if (!NaturesAuraAPI.instance().isEffectPowderActive(world, first.getPosition(), NAME))
                 return;
 
-            Optional<EntityAnimal> secondOptional = animals.stream()
+            Optional<AnimalEntity> secondOptional = animals.stream()
                     .filter(e -> e != first && !e.isInLove() && !e.isChild())
                     .min(Comparator.comparingDouble(e -> e.getDistanceSq(first)));
             if (!secondOptional.isPresent())
                 return;
-            EntityAnimal second = secondOptional.get();
+            AnimalEntity second = secondOptional.get();
             if (second.getDistanceSq(first) > 5 * 5)
                 return;
 
@@ -131,7 +131,7 @@ public class AnimalEffect implements IDrainSpotEffect {
         }
     }
 
-    private void setInLove(EntityAnimal animal) {
+    private void setInLove(AnimalEntity animal) {
         animal.setInLove(null);
         for (int j = 0; j < 7; j++)
             animal.world.spawnParticle(EnumParticleTypes.HEART,

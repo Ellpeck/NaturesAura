@@ -2,20 +2,20 @@ package de.ellpeck.naturesaura.gen;
 
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockLog;
+import net.minecraft.block.LeavesBlock;
+import net.minecraft.block.LogBlock;
 import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import net.minecraft.world.gen.feature.AbstractTreeFeature;
 
 import java.util.Random;
 
-public class WorldGenAncientTree extends WorldGenAbstractTree {
+public class WorldGenAncientTree extends AbstractTreeFeature {
 
     public WorldGenAncientTree(boolean notify) {
         super(notify);
@@ -50,13 +50,13 @@ public class WorldGenAncientTree extends WorldGenAbstractTree {
                     BlockPos goal = pos.add(x, i, z);
                     if (this.isReplaceable(world, goal)) {
                         this.setBlockAndNotifyAdequately(world, goal,
-                                ModBlocks.ANCIENT_LOG.getDefaultState().withProperty(BlockLog.LOG_AXIS, EnumAxis.Y));
+                                ModBlocks.ANCIENT_LOG.getDefaultState().withProperty(LogBlock.LOG_AXIS, EnumAxis.Y));
                     }
                 }
             }
         }
         this.makeLeaves(world, trunkTop.up(rand.nextInt(2) - 1),
-                ModBlocks.ANCIENT_LEAVES.getDefaultState().withProperty(BlockLeaves.CHECK_DECAY, false), rand.nextInt(2) + 3, rand);
+                ModBlocks.ANCIENT_LEAVES.getDefaultState().withProperty(LeavesBlock.CHECK_DECAY, false), rand.nextInt(2) + 3, rand);
 
         //Branches
         int branchAmount = rand.nextInt(3) + 4;
@@ -69,7 +69,7 @@ public class WorldGenAncientTree extends WorldGenAbstractTree {
             BlockPos goal = trunkTop.add(x, rand.nextInt(3) + 1, z);
             this.makeBranch(world, trunkTop, goal, ModBlocks.ANCIENT_LOG.getDefaultState(), true);
             this.makeLeaves(world, goal,
-                    ModBlocks.ANCIENT_LEAVES.getDefaultState().withProperty(BlockLeaves.CHECK_DECAY, false), rand.nextInt(2) + 2, rand);
+                    ModBlocks.ANCIENT_LEAVES.getDefaultState().withProperty(LeavesBlock.CHECK_DECAY, false), rand.nextInt(2) + 2, rand);
         }
 
         return true;
@@ -85,7 +85,7 @@ public class WorldGenAncientTree extends WorldGenAbstractTree {
         }
     }
 
-    private void makeBranch(World world, BlockPos first, BlockPos second, IBlockState state, boolean hasAxis) {
+    private void makeBranch(World world, BlockPos first, BlockPos second, BlockState state, boolean hasAxis) {
         BlockPos pos = second.add(-first.getX(), -first.getY(), -first.getZ());
         int length = this.getHighestCoord(pos);
         float stepX = (float) pos.getX() / (float) length;
@@ -97,7 +97,7 @@ public class WorldGenAncientTree extends WorldGenAbstractTree {
             if (this.isReplaceable(world, goal)) {
                 if (hasAxis) {
                     EnumAxis axis = this.getLogAxis(first, goal);
-                    this.setBlockAndNotifyAdequately(world, goal, state.withProperty(BlockLog.LOG_AXIS, axis));
+                    this.setBlockAndNotifyAdequately(world, goal, state.withProperty(LogBlock.LOG_AXIS, axis));
                 } else {
                     this.setBlockAndNotifyAdequately(world, goal, state);
                 }
@@ -105,7 +105,7 @@ public class WorldGenAncientTree extends WorldGenAbstractTree {
         }
     }
 
-    private void makeLeaves(World world, BlockPos pos, IBlockState state, int radius, Random rand) {
+    private void makeLeaves(World world, BlockPos pos, BlockState state, int radius, Random rand) {
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {
                 for (int z = -radius; z <= radius; z++) {
@@ -113,7 +113,7 @@ public class WorldGenAncientTree extends WorldGenAbstractTree {
                     if (pos.distanceSq(goal) <= radius * radius + rand.nextInt(3) - 1) {
                         if (this.isReplaceable(world, goal)) {
                             Block block = world.getBlockState(goal).getBlock();
-                            if (!(block instanceof BlockLog) && block != Blocks.DIRT && block != Blocks.GRASS)
+                            if (!(block instanceof LogBlock) && block != Blocks.DIRT && block != Blocks.GRASS)
                                 this.setBlockAndNotifyAdequately(world, goal, state);
                         }
                     }

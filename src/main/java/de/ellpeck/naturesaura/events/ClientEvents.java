@@ -21,18 +21,18 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Items;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -42,7 +42,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -50,11 +50,11 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fml.client.config.GuiUtils;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.opengl.GL11;
@@ -64,7 +64,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ClientEvents {
 
     public static final ResourceLocation OVERLAYS = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/overlays.png");
@@ -130,7 +130,7 @@ public class ClientEvents {
                         int x = MathHelper.floor(mc.player.posX) + mc.world.rand.nextInt(64) - 32;
                         int z = MathHelper.floor(mc.player.posZ) + mc.world.rand.nextInt(64) - 32;
                         BlockPos pos = new BlockPos(x, mc.world.getHeight(x, z) - 1, z);
-                        IBlockState state = mc.world.getBlockState(pos);
+                        BlockState state = mc.world.getBlockState(pos);
                         Block block = state.getBlock();
                         if (block instanceof IGrowable || block instanceof IPlantable || block.isLeaves(state, mc.world, pos)) {
                             int excess = IAuraChunk.triangulateAuraInArea(mc.world, pos, 45) - IAuraChunk.DEFAULT_AURA;
@@ -144,7 +144,7 @@ public class ClientEvents {
                                             mc.world.rand.nextGaussian() * 0.01F,
                                             mc.world.rand.nextFloat() * 0.025F,
                                             mc.world.rand.nextGaussian() * 0.01F,
-                                            BiomeColorHelper.getFoliageColorAtPos(mc.world, pos),
+                                            BiomeColors.getFoliageColorAtPos(mc.world, pos),
                                             Math.min(2F, 1F + mc.world.rand.nextFloat() * (excess / 30000F)),
                                             Math.min(300, 100 + mc.world.rand.nextInt(excess / 3000 + 1)),
                                             0F, false, true);
@@ -265,7 +265,7 @@ public class ClientEvents {
             for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_BLOCKS.get(dim)) {
                 if (!mc.world.isBlockLoaded(pos))
                     continue;
-                IBlockState state = mc.world.getBlockState(pos);
+                BlockState state = mc.world.getBlockState(pos);
                 Block block = state.getBlock();
                 if (!(block instanceof IVisualizable))
                     continue;
@@ -315,9 +315,9 @@ public class ClientEvents {
                     GlStateManager.color((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F);
                     mc.getTextureManager().bindTexture(OVERLAYS);
                     if (width < 80)
-                        Gui.drawModalRectWithCustomSizedTexture(x + width, y, width, 0, 80 - width, 6, 256, 256);
+                        AbstractGui.drawModalRectWithCustomSizedTexture(x + width, y, width, 0, 80 - width, 6, 256, 256);
                     if (width > 0)
-                        Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 6, width, 6, 256, 256);
+                        AbstractGui.drawModalRectWithCustomSizedTexture(x, y, 0, 6, width, 6, 256, 256);
 
                     float scale = 0.75F;
                     GlStateManager.scale(scale, scale, scale);
@@ -333,7 +333,7 @@ public class ClientEvents {
                     mc.getTextureManager().bindTexture(OVERLAYS);
 
                     int conf = ModConfig.client.auraBarLocation;
-                    if (!mc.gameSettings.showDebugInfo && (conf != 2 || !(mc.currentScreen instanceof GuiChat))) {
+                    if (!mc.gameSettings.showDebugInfo && (conf != 2 || !(mc.currentScreen instanceof ChatScreen))) {
                         GlStateManager.color(83 / 255F, 160 / 255F, 8 / 255F);
 
                         int totalAmount = IAuraChunk.triangulateAuraInArea(mc.world, mc.player.getPosition(), 35);
@@ -350,9 +350,9 @@ public class ClientEvents {
                         int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
                         int y = !heldOcular.isEmpty() && totalPercentage > 1F ? startY + 26 : startY;
                         if (tHeight < 50)
-                            Gui.drawModalRectWithCustomSizedTexture(startX, y, 6, 12, 6, 50 - tHeight, 256, 256);
+                            AbstractGui.drawModalRectWithCustomSizedTexture(startX, y, 6, 12, 6, 50 - tHeight, 256, 256);
                         if (tHeight > 0)
-                            Gui.drawModalRectWithCustomSizedTexture(startX, y + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
+                            AbstractGui.drawModalRectWithCustomSizedTexture(startX, y + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
 
                         if (!heldOcular.isEmpty()) {
                             GlStateManager.color(160 / 255F, 83 / 255F, 8 / 255F);
@@ -360,14 +360,14 @@ public class ClientEvents {
                             int topHeight = MathHelper.ceil(MathHelper.clamp((totalPercentage - 1F) * 2F, 0F, 1F) * 25);
                             if (topHeight > 0) {
                                 if (topHeight < 25)
-                                    Gui.drawModalRectWithCustomSizedTexture(startX, startY, 18, 12, 6, 25 - topHeight, 256, 256);
-                                Gui.drawModalRectWithCustomSizedTexture(startX, startY + 25 - topHeight, 12, 12 + 25 - topHeight, 6, topHeight, 256, 256);
+                                    AbstractGui.drawModalRectWithCustomSizedTexture(startX, startY, 18, 12, 6, 25 - topHeight, 256, 256);
+                                AbstractGui.drawModalRectWithCustomSizedTexture(startX, startY + 25 - topHeight, 12, 12 + 25 - topHeight, 6, topHeight, 256, 256);
                             }
                             int bottomHeight = MathHelper.floor(MathHelper.clamp((totalPercentage + 1F) * 2F - 1F, 0F, 1F) * 25);
                             if (bottomHeight < 25) {
-                                Gui.drawModalRectWithCustomSizedTexture(startX, startY + 51, 18, 12, 6, 25 - bottomHeight, 256, 256);
+                                AbstractGui.drawModalRectWithCustomSizedTexture(startX, startY + 51, 18, 12, 6, 25 - bottomHeight, 256, 256);
                                 if (bottomHeight > 0)
-                                    Gui.drawModalRectWithCustomSizedTexture(startX, startY + 51 + 25 - bottomHeight, 12, 12 + 25 - bottomHeight, 6, bottomHeight, 256, 256);
+                                    AbstractGui.drawModalRectWithCustomSizedTexture(startX, startY + 51 + 25 - bottomHeight, 12, 12 + 25 - bottomHeight, 6, bottomHeight, 256, 256);
                             }
                         }
 
@@ -396,7 +396,7 @@ public class ClientEvents {
                                 if (effect.getSecond()) {
                                     GlStateManager.disableDepth();
                                     mc.getTextureManager().bindTexture(OVERLAYS);
-                                    Gui.drawModalRectWithCustomSizedTexture(theX, theY, 240, 0, 16, 16, 256, 256);
+                                    AbstractGui.drawModalRectWithCustomSizedTexture(theX, theY, 240, 0, 16, 16, 256, 256);
                                     GlStateManager.enableDepth();
                                 }
                                 stackY += 8;
@@ -412,7 +412,7 @@ public class ClientEvents {
                             if (tile != null && tile.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
                                 IAuraContainer container = tile.getCapability(NaturesAuraAPI.capAuraContainer, null);
 
-                                IBlockState state = mc.world.getBlockState(pos);
+                                BlockState state = mc.world.getBlockState(pos);
                                 ItemStack blockStack = state.getBlock().getPickBlock(state, mc.objectMouseOver, mc.world, pos, mc.player);
                                 this.drawContainerInfo(container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
                                         mc, res, 35, blockStack.getDisplayName(), null);
@@ -448,7 +448,7 @@ public class ClientEvents {
                                 mc.getTextureManager().bindTexture(OVERLAYS);
                                 int u = chute.isBlacklist ? 240 : 224;
                                 GlStateManager.disableDepth();
-                                Gui.drawModalRectWithCustomSizedTexture(x - 18, y - 18, u, 0, 16, 16, 256, 256);
+                                AbstractGui.drawModalRectWithCustomSizedTexture(x - 18, y - 18, u, 0, 16, 16, 256, 256);
                                 GlStateManager.enableDepth();
                             }
                         }
@@ -471,9 +471,9 @@ public class ClientEvents {
 
         mc.getTextureManager().bindTexture(OVERLAYS);
         if (width < 80)
-            Gui.drawModalRectWithCustomSizedTexture(x + width, y, width, 0, 80 - width, 6, 256, 256);
+            AbstractGui.drawModalRectWithCustomSizedTexture(x + width, y, width, 0, 80 - width, 6, 256, 256);
         if (width > 0)
-            Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 6, width, 6, 256, 256);
+            AbstractGui.drawModalRectWithCustomSizedTexture(x, y, 0, 6, width, 6, 256, 256);
 
         mc.fontRenderer.drawString(name, x + 40 - mc.fontRenderer.getStringWidth(name) / 2F, y - 9, color, true);
 

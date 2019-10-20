@@ -8,8 +8,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketClient implements IMessage {
 
@@ -44,7 +44,7 @@ public class PacketClient implements IMessage {
     public static class Handler implements IMessageHandler<PacketClient, IMessage> {
 
         @Override
-        @SideOnly(Side.CLIENT)
+        @OnlyIn(Dist.CLIENT)
         public IMessage onMessage(PacketClient message, MessageContext ctx) {
             NaturesAura.proxy.scheduleTask(() -> {
                 Minecraft mc = Minecraft.getMinecraft();

@@ -6,8 +6,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketParticleStream implements IMessage {
 
@@ -68,7 +68,7 @@ public class PacketParticleStream implements IMessage {
     public static class Handler implements IMessageHandler<PacketParticleStream, IMessage> {
 
         @Override
-        @SideOnly(Side.CLIENT)
+        @OnlyIn(Dist.CLIENT)
         public IMessage onMessage(PacketParticleStream message, MessageContext ctx) {
             NaturesAura.proxy.scheduleTask(() -> NaturesAuraAPI.instance().spawnParticleStream(
                     message.startX, message.startY, message.startZ,

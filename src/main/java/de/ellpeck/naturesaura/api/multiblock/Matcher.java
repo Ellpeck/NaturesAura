@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.api.multiblock;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -13,15 +13,15 @@ import java.util.List;
 
 public class Matcher {
 
-    private final IBlockState defaultState;
+    private final BlockState defaultState;
     private final ICheck check;
 
-    public Matcher(IBlockState defaultState, ICheck check) {
+    public Matcher(BlockState defaultState, ICheck check) {
         this.defaultState = defaultState;
         this.check = check;
     }
 
-    public IBlockState getDefaultState() {
+    public BlockState getDefaultState() {
         return this.defaultState;
     }
 
@@ -35,10 +35,10 @@ public class Matcher {
 
     public static Matcher oreDict(Block defaultBlock, String name) {
         return new Matcher(defaultBlock.getDefaultState(), new ICheck() {
-            private List<IBlockState> states;
+            private List<BlockState> states;
 
             @Override
-            public boolean matches(World world, BlockPos start, BlockPos offset, BlockPos pos, IBlockState state, char c) {
+            public boolean matches(World world, BlockPos start, BlockPos offset, BlockPos pos, BlockState state, char c) {
                 if (this.states == null) {
                     this.states = new ArrayList<>();
                     for (ItemStack stack : OreDictionary.getOres(name)) {
@@ -59,6 +59,6 @@ public class Matcher {
     }
 
     public interface ICheck {
-        boolean matches(World world, BlockPos start, BlockPos offset, BlockPos pos, IBlockState state, char c);
+        boolean matches(World world, BlockPos start, BlockPos offset, BlockPos pos, BlockState state, char c);
     }
 }

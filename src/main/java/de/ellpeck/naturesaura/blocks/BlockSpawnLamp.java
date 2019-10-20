@@ -9,11 +9,11 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -21,10 +21,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable {
 
@@ -56,7 +56,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable 
             if (!new AxisAlignedBB(lampPos).grow(range).contains(new Vec3d(pos)))
                 return false;
 
-            EntityLiving entity = (EntityLiving) event.getEntityLiving();
+            MobEntity entity = (MobEntity) event.getEntityLiving();
             if (entity.getCanSpawnHere() && entity.isNotColliding()) {
                 BlockPos spot = IAuraChunk.getHighestSpot(world, lampPos, 32, lampPos);
                 IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 200);
@@ -71,43 +71,43 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable 
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
         return AABB;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) {
+    public boolean isFullCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public boolean isNormalCube(BlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean isSideSolid(IBlockState baseState, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(BlockState baseState, IBlockAccess world, BlockPos pos, Direction side) {
         return false;
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
         return BlockFaceShape.UNDEFINED;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileEntitySpawnLamp) {
@@ -119,7 +119,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable 
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getVisualizationColor(World world, BlockPos pos) {
         return 0x825ee5;
     }

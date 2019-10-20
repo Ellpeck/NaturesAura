@@ -10,10 +10,10 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -42,7 +42,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public int isActiveHere(EntityPlayer player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.world, pos, spot))
             return -1;
         if (player.getDistanceSq(pos) > this.dist * this.dist)
@@ -69,7 +69,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
                 if (NaturesAuraAPI.instance().isEffectPowderActive(world, plantPos, NAME))
                     continue;
 
-                IBlockState state = world.getBlockState(plantPos);
+                BlockState state = world.getBlockState(plantPos);
                 Block block = state.getBlock();
                 if (block instanceof IGrowable &&
                         block != Blocks.TALLGRASS && block != Blocks.GRASS && block != Blocks.DOUBLE_PLANT) {

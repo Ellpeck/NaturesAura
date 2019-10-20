@@ -5,7 +5,7 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
@@ -26,7 +26,7 @@ public class TileEntityMossGenerator extends TileEntityImpl implements ITickable
                 for (int y = -range; y <= range; y++)
                     for (int z = -range; z <= range; z++) {
                         BlockPos offset = this.pos.add(x, y, z);
-                        IBlockState state = this.world.getBlockState(offset);
+                        BlockState state = this.world.getBlockState(offset);
                         if (NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.inverse().containsKey(state))
                             possibleOffsets.add(offset);
                     }
@@ -34,8 +34,8 @@ public class TileEntityMossGenerator extends TileEntityImpl implements ITickable
             if (possibleOffsets.isEmpty())
                 return;
             BlockPos offset = possibleOffsets.get(this.world.rand.nextInt(possibleOffsets.size()));
-            IBlockState state = this.world.getBlockState(offset);
-            IBlockState result = NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.inverse().get(state);
+            BlockState state = this.world.getBlockState(offset);
+            BlockState result = NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.inverse().get(state);
 
             int toAdd = 7500;
             if (this.canGenerateRightNow(35, toAdd)) {

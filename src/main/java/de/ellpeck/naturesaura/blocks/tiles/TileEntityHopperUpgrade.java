@@ -3,12 +3,12 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.BlockHopper;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.block.HopperBlock;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityHopper;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.HopperTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -26,18 +26,18 @@ public class TileEntityHopperUpgrade extends TileEntityImpl implements ITickable
             TileEntity tile = this.world.getTileEntity(this.pos.down());
             if (!isValidHopper(tile))
                 return;
-            if (!tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP))
+            if (!tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP))
                 return;
-            IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
+            IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP);
             if (handler == null)
                 return;
 
-            List<EntityItem> items = this.world.getEntitiesWithinAABB(EntityItem.class,
+            List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class,
                     new AxisAlignedBB(this.pos).grow(7));
             if (items.isEmpty())
                 return;
 
-            for (EntityItem item : items) {
+            for (ItemEntity item : items) {
                 if (item.isDead || item.cannotPickup())
                     continue;
                 ItemStack stack = item.getItem();
@@ -68,8 +68,8 @@ public class TileEntityHopperUpgrade extends TileEntityImpl implements ITickable
     }
 
     private static boolean isValidHopper(TileEntity tile) {
-        if (tile instanceof TileEntityHopper)
-            return BlockHopper.isEnabled(tile.getBlockMetadata());
+        if (tile instanceof HopperTileEntity)
+            return HopperBlock.isEnabled(tile.getBlockMetadata());
         if (tile instanceof TileEntityGratedChute)
             return ((TileEntityGratedChute) tile).redstonePower <= 0;
         return false;

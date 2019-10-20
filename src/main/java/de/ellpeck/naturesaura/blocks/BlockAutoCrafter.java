@@ -1,19 +1,19 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAutoCrafter;
-import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockAutoCrafter extends BlockContainerImpl {
-    public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    public static final PropertyDirection FACING = HorizontalBlock.FACING;
 
     public BlockAutoCrafter() {
         super(Material.WOOD, "auto_crafter", TileEntityAutoCrafter.class, "auto_crafter");
@@ -27,17 +27,17 @@ public class BlockAutoCrafter extends BlockContainerImpl {
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return state.getValue(FACING).getHorizontalIndex();
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+    public BlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(FACING, Direction.byHorizontalIndex(meta));
     }
 
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public BlockState getStateForPlacement(World worldIn, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
     }
 }

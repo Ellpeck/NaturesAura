@@ -6,13 +6,13 @@ import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.effect.LightningBoltEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -42,7 +42,7 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
                 if (stack.isEmpty())
                     return;
 
-                List<EntityItem> items = this.world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(this.pos).grow(1));
+                List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(this.pos).grow(1));
                 if (items.isEmpty())
                     return;
 
@@ -50,7 +50,7 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
                 if (recipe == null)
                     return;
 
-                for (EntityItem item : items) {
+                for (ItemEntity item : items) {
                     if (item.isDead || item.cannotPickup())
                         continue;
 
@@ -70,7 +70,7 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
                     for (int i = 0; i < recipeCount; i++)
                         this.itemsToSpawn.add(recipe.output.copy());
 
-                    this.world.addWeatherEffect(new EntityLightningBolt(this.world, this.pos.getX(), this.pos.getY(), this.pos.getZ(), true));
+                    this.world.addWeatherEffect(new LightningBoltEntity(this.world, this.pos.getX(), this.pos.getY(), this.pos.getZ(), true));
                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
                             (float) item.posX, (float) item.posY, (float) item.posZ, 13,
                             this.pos.getX(), this.pos.getY(), this.pos.getZ()));
@@ -79,7 +79,7 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
                 }
             } else if (this.world.getTotalWorldTime() % 3 == 0) {
                 if (!this.itemsToSpawn.isEmpty())
-                    this.world.spawnEntity(new EntityItem(
+                    this.world.spawnEntity(new ItemEntity(
                             this.world,
                             this.pos.getX() + 0.5F, 256, this.pos.getZ() + 0.5F,
                             this.itemsToSpawn.remove()));
@@ -95,13 +95,13 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
+    public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             compound.setTag("items", this.items.serializeNBT());
 
             if (type != SaveType.SYNC) {
-                NBTTagList list = new NBTTagList();
+                ListNBT list = new ListNBT();
                 for (ItemStack stack : this.itemsToSpawn) {
                     list.appendTag(stack.serializeNBT());
                 }
@@ -111,23 +111,23 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
+    public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.items.deserializeNBT(compound.getCompoundTag("items"));
 
             if (type != SaveType.SYNC) {
                 this.itemsToSpawn.clear();
-                NBTTagList list = compound.getTagList("items_to_spawn", 10);
+                ListNBT list = compound.getTagList("items_to_spawn", 10);
                 for (NBTBase base : list) {
-                    this.itemsToSpawn.add(new ItemStack((NBTTagCompound) base));
+                    this.itemsToSpawn.add(new ItemStack((CompoundNBT) base));
                 }
             }
         }
     }
 
     @Override
-    public IItemHandlerModifiable getItemHandler(EnumFacing facing) {
+    public IItemHandlerModifiable getItemHandler(Direction facing) {
         return this.items;
     }
 }

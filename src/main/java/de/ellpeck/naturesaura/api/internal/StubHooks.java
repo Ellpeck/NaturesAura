@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.api.internal;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -17,12 +17,12 @@ import java.util.function.BiConsumer;
 
 public class StubHooks implements NaturesAuraAPI.IInternalHooks {
     @Override
-    public boolean extractAuraFromPlayer(EntityPlayer player, int amount, boolean simulate) {
+    public boolean extractAuraFromPlayer(PlayerEntity player, int amount, boolean simulate) {
         return false;
     }
 
     @Override
-    public boolean insertAuraIntoPlayer(EntityPlayer player, int amount, boolean simulate) {
+    public boolean insertAuraIntoPlayer(PlayerEntity player, int amount, boolean simulate) {
         return false;
     }
 

@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.BlockLog;
+import net.minecraft.block.LogBlock;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
@@ -19,7 +19,7 @@ public class TileEntityOakGenerator extends TileEntityImpl implements ITickable 
         if (!this.world.isRemote)
             while (!this.scheduledBigTrees.isEmpty()) {
                 BlockPos pos = this.scheduledBigTrees.remove();
-                if (this.world.getBlockState(pos).getBlock() instanceof BlockLog) {
+                if (this.world.getBlockState(pos).getBlock() instanceof LogBlock) {
                     int toAdd = 100000;
                     boolean canGen = this.canGenerateRightNow(25, toAdd);
                     if (canGen)

@@ -9,10 +9,10 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -60,14 +60,14 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
                     this.sendToClients();
                 }
             } else {
-                List<EntityItem> items = this.world.getEntitiesWithinAABB(EntityItem.class,
+                List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class,
                         new AxisAlignedBB(this.pos).grow(2));
 
                 for (AnimalSpawnerRecipe recipe : NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.values()) {
                     if (recipe.ingredients.length != items.size())
                         continue;
                     List<Ingredient> required = new ArrayList<>(Arrays.asList(recipe.ingredients));
-                    for (EntityItem item : items) {
+                    for (ItemEntity item : items) {
                         if (item.isDead || item.cannotPickup())
                             break;
                         ItemStack stack = item.getItem();
@@ -83,7 +83,7 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
                     if (!required.isEmpty())
                         continue;
 
-                    for (EntityItem item : items) {
+                    for (ItemEntity item : items) {
                         item.setDead();
                         PacketHandler.sendToAllAround(this.world, this.pos, 32,
                                 new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 19));
@@ -129,7 +129,7 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
+    public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (this.currentRecipe != null) {
@@ -142,7 +142,7 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
+    public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (compound.hasKey("recipe")) {

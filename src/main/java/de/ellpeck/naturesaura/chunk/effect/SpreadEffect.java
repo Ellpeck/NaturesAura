@@ -4,7 +4,7 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,7 +23,7 @@ public class SpreadEffect implements IDrainSpotEffect {
         while (toMove > 0) {
             BlockPos bestOffset = null;
             int bestAmount = drain ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-            for (EnumFacing facing : EnumFacing.VALUES) {
+            for (Direction facing : Direction.VALUES) {
                 BlockPos offset = pos.offset(facing, 15);
                 if (world.isBlockLoaded(offset) && offset.getY() >= 0 && offset.getY() <= world.getHeight()) {
                     int amount = IAuraChunk.getAuraInArea(world, offset, 14);

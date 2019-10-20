@@ -6,20 +6,20 @@ import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.ItemAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.creativetab.CreativeTabs;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,8 +36,8 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
     @Override
     public void onUpdate(ItemStack stackIn, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (!worldIn.isRemote && entityIn instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) entityIn;
+        if (!worldIn.isRemote && entityIn instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) entityIn;
             if (player.isSneaking()) {
                 IAuraContainer container = stackIn.getCapability(NaturesAuraAPI.capAuraContainer, null);
                 if (container.getStoredAura() <= 0)
@@ -55,7 +55,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+    public void getSubItems(ItemGroup tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
             items.add(new ItemStack(this));
 
@@ -83,18 +83,18 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         return new ICapabilityProvider() {
             private final ItemAuraContainer container = new ItemAuraContainer(stack, null, ItemAuraCache.this.capacity);
 
             @Override
-            public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+            public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing) {
                 return capability == NaturesAuraAPI.capAuraContainer;
             }
 
             @Nullable
             @Override
-            public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+            public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
                 if (capability == NaturesAuraAPI.capAuraContainer) {
                     return (T) this.container;
                 } else {
@@ -105,11 +105,11 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void render(ItemStack stack, EntityPlayer player, RenderType type, boolean isHolding) {
+    @OnlyIn(Dist.CLIENT)
+    public void render(ItemStack stack, PlayerEntity player, RenderType type, boolean isHolding) {
         if (type == RenderType.BODY && !isHolding) {
-            boolean chest = !player.inventory.armorInventory.get(EntityEquipmentSlot.CHEST.getIndex()).isEmpty();
-            boolean legs = !player.inventory.armorInventory.get(EntityEquipmentSlot.LEGS.getIndex()).isEmpty();
+            boolean chest = !player.inventory.armorInventory.get(EquipmentSlotType.CHEST.getIndex()).isEmpty();
+            boolean legs = !player.inventory.armorInventory.get(EquipmentSlotType.LEGS.getIndex()).isEmpty();
             GlStateManager.translate(-0.15F, 0.65F, chest ? -0.195F : (legs ? -0.165F : -0.1475F));
             GlStateManager.scale(0.25F, 0.25F, 0.25F);
             GlStateManager.rotate(180F, 1F, 0F, 0F);

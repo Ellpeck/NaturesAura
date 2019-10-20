@@ -11,7 +11,7 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.misc.WorldData;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -23,8 +23,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityEffectInhibitor.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> AMOUNT = EntityDataManager.createKey(EntityEffectInhibitor.class, DataSerializers.VARINT);
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int renderTicks;
 
     public EntityEffectInhibitor(World worldIn) {
@@ -106,14 +106,14 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound compound) {
+    protected void readEntityFromNBT(CompoundNBT compound) {
         this.setInhibitedEffect(new ResourceLocation(compound.getString("effect")));
         this.setColor(compound.getInteger("color"));
         this.setAmount(compound.hasKey("amount") ? compound.getInteger("amount") : 24);
     }
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound compound) {
+    protected void writeEntityToNBT(CompoundNBT compound) {
         compound.setString("effect", this.getInhibitedEffect().toString());
         compound.setInteger("color", this.getColor());
         compound.setInteger("amount", this.getAmount());
@@ -184,13 +184,13 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
         return Helper.aabb(this.getPositionVector()).grow(this.getAmount());
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getVisualizationColor(World world, BlockPos pos) {
         return this.getColor();
     }

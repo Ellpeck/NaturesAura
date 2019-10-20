@@ -4,19 +4,19 @@ import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-public class BlockStairsNA extends BlockStairs implements IModItem, ICreativeItem, IModelProvider {
+public class BlockStairsNA extends StairsBlock implements IModItem, ICreativeItem, IModelProvider {
 
     private final String baseName;
 
-    protected BlockStairsNA(String baseName, IBlockState modelState) {
+    protected BlockStairsNA(String baseName, BlockState modelState) {
         super(modelState);
         this.baseName = baseName;
         ModRegistry.add(this);
@@ -45,22 +45,22 @@ public class BlockStairsNA extends BlockStairs implements IModItem, ICreativeIte
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) {
+    public boolean isFullCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isFullBlock(IBlockState state) {
+    public boolean isFullBlock(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public boolean isNormalCube(BlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 }

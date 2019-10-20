@@ -2,8 +2,8 @@ package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.items.tools.*;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -21,10 +21,10 @@ public final class ModItems {
     public static final ArmorMaterial ARMOR_INFUSED = EnumHelper.addArmorMaterial(
             NaturesAura.MOD_ID_UPPER + "INFUSED_IRON", NaturesAura.MOD_ID + ":infused_iron",
             19, new int[]{2, 5, 6, 2}, 16, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0F);
-    public static final Item INFUSED_HELMET = new ItemArmorNA("infused_iron_helmet", ARMOR_INFUSED, EntityEquipmentSlot.HEAD);
-    public static final Item INFUSED_CHEST = new ItemArmorNA("infused_iron_chest", ARMOR_INFUSED, EntityEquipmentSlot.CHEST);
-    public static final Item INFUSED_PANTS = new ItemArmorNA("infused_iron_pants", ARMOR_INFUSED, EntityEquipmentSlot.LEGS);
-    public static final Item INFUSED_SHOES = new ItemArmorNA("infused_iron_shoes", ARMOR_INFUSED, EntityEquipmentSlot.FEET);
+    public static final Item INFUSED_HELMET = new ItemArmorNA("infused_iron_helmet", ARMOR_INFUSED, EquipmentSlotType.HEAD);
+    public static final Item INFUSED_CHEST = new ItemArmorNA("infused_iron_chest", ARMOR_INFUSED, EquipmentSlotType.CHEST);
+    public static final Item INFUSED_PANTS = new ItemArmorNA("infused_iron_pants", ARMOR_INFUSED, EquipmentSlotType.LEGS);
+    public static final Item INFUSED_SHOES = new ItemArmorNA("infused_iron_shoes", ARMOR_INFUSED, EquipmentSlotType.FEET);
 
     public static final Item EYE = new ItemEye("eye");
     public static final Item EYE_IMPROVED = new ItemEye("eye_improved");

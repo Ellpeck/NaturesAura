@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.api.aura.chunk;
 
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -16,7 +16,7 @@ public interface IDrainSpotEffect {
 
     ResourceLocation getName();
 
-    default int isActiveHere(EntityPlayer player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    default int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         return -1;
     }
 

@@ -9,7 +9,7 @@ import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.blocks.multi.Multiblock;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.misc.WorldData;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
@@ -29,16 +29,16 @@ import java.util.function.BiConsumer;
 
 public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     @Override
-    public boolean extractAuraFromPlayer(EntityPlayer player, int amount, boolean simulate) {
+    public boolean extractAuraFromPlayer(PlayerEntity player, int amount, boolean simulate) {
         return this.auraPlayerInteraction(player, amount, true, simulate);
     }
 
     @Override
-    public boolean insertAuraIntoPlayer(EntityPlayer player, int amount, boolean simulate) {
+    public boolean insertAuraIntoPlayer(PlayerEntity player, int amount, boolean simulate) {
         return this.auraPlayerInteraction(player, amount, false, simulate);
     }
 
-    private boolean auraPlayerInteraction(EntityPlayer player, int amount, boolean extract, boolean simulate) {
+    private boolean auraPlayerInteraction(PlayerEntity player, int amount, boolean extract, boolean simulate) {
         if (extract && player.capabilities.isCreativeMode)
             return true;
 

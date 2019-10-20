@@ -6,17 +6,17 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
-public class RenderGeneratorLimitRemover extends TileEntitySpecialRenderer<TileEntityGeneratorLimitRemover> {
+@OnlyIn(Dist.CLIENT)
+public class RenderGeneratorLimitRemover extends TileEntityRenderer<TileEntityGeneratorLimitRemover> {
     private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/generator_limit_remover_glint.png");
     private final ModelLimitRemoverGlint model = new ModelLimitRemoverGlint();
 

@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.items;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemGlowing extends ItemImpl {
     public ItemGlowing(String baseName) {
@@ -10,7 +10,7 @@ public class ItemGlowing extends ItemImpl {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public boolean hasEffect(ItemStack stack) {
         return true;
     }

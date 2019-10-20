@@ -5,19 +5,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public final class ParticleHandler {
 
     public static boolean depthEnabled = true;
@@ -65,7 +65,7 @@ public final class ParticleHandler {
 
     public static void renderParticles(float partialTicks) {
         Minecraft mc = Minecraft.getMinecraft();
-        EntityPlayer player = mc.player;
+        PlayerEntity player = mc.player;
 
         if (player != null) {
             float x = ActiveRenderInfo.getRotationX();

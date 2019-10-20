@@ -1,24 +1,24 @@
 package de.ellpeck.naturesaura.gui;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 
-@SideOnly(Side.CLIENT)
-public class GuiEnderCrate extends GuiContainer {
+@OnlyIn(Dist.CLIENT)
+public class GuiEnderCrate extends ContainerScreen {
     private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
-    private final EntityPlayer player;
+    private final PlayerEntity player;
     private final String nameKey;
     private final String name;
 
-    public GuiEnderCrate(EntityPlayer player, IItemHandler handler, String nameKey, String name) {
+    public GuiEnderCrate(PlayerEntity player, IItemHandler handler, String nameKey, String name) {
         super(new ContainerEnderCrate(player, handler));
         this.player = player;
         this.nameKey = nameKey;

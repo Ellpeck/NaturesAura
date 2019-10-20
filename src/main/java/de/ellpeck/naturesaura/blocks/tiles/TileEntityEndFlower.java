@@ -6,13 +6,13 @@ import de.ellpeck.naturesaura.api.aura.container.BasicAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.EntityPredicates;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -54,9 +54,9 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickable {
                 return;
 
             if (!this.isDrainMode) {
-                List<EntityItem> items = this.world.getEntitiesWithinAABB(EntityItem.class,
-                        new AxisAlignedBB(this.pos).grow(1), EntitySelectors.IS_ALIVE);
-                for (EntityItem item : items) {
+                List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class,
+                        new AxisAlignedBB(this.pos).grow(1), EntityPredicates.IS_ALIVE);
+                for (ItemEntity item : items) {
                     if (item.cannotPickup())
                         continue;
                     ItemStack stack = item.getItem();
@@ -101,12 +101,12 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public IAuraContainer getAuraContainer(EnumFacing facing) {
+    public IAuraContainer getAuraContainer(Direction facing) {
         return this.container;
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
+    public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.container.writeNBT(compound);
@@ -115,7 +115,7 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
+    public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.container.readNBT(compound);

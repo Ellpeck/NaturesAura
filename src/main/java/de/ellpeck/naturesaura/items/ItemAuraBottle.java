@@ -4,29 +4,29 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
 
@@ -34,14 +34,14 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
         super("aura_bottle");
         MinecraftForge.EVENT_BUS.register(this);
 
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.BOTTLE_TWO, new BehaviorDefaultDispenseItem() {
+        DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.BOTTLE_TWO, new DefaultDispenseItemBehavior() {
             @Override
             protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
                 World world = source.getWorld();
-                IBlockState state = source.getBlockState();
-                EnumFacing facing = state.getValue(BlockDispenser.FACING);
+                BlockState state = source.getBlockState();
+                Direction facing = state.getValue(DispenserBlock.FACING);
                 BlockPos offset = source.getBlockPos().offset(facing);
-                IBlockState offsetState = world.getBlockState(offset);
+                BlockState offsetState = world.getBlockState(offset);
 
                 ItemStack dispense = stack.splitStack(1);
                 if (offsetState.getBlock().isAir(offsetState, world, offset)) {
@@ -53,7 +53,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
                     }
                 }
 
-                doDispense(world, dispense, 6, facing, BlockDispenser.getDispensePosition(source));
+                doDispense(world, dispense, 6, facing, DispenserBlock.getDispensePosition(source));
                 return stack;
             }
         });
@@ -64,7 +64,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
         ItemStack held = event.getItemStack();
         if (held.isEmpty() || held.getItem() != ModItems.BOTTLE_TWO)
             return;
-        EntityPlayer player = event.getEntityPlayer();
+        PlayerEntity player = event.getEntityPlayer();
         RayTraceResult ray = this.rayTrace(player.world, player, true);
         if (ray != null && ray.typeOfHit == RayTraceResult.Type.BLOCK)
             return;
@@ -88,7 +88,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+    public void getSubItems(ItemGroup tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
             for (IAuraType type : NaturesAuraAPI.AURA_TYPES.values()) {
                 ItemStack stack = new ItemStack(this);
@@ -114,13 +114,13 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
 
     public static ItemStack setType(ItemStack stack, IAuraType type) {
         if (!stack.hasTagCompound())
-            stack.setTagCompound(new NBTTagCompound());
+            stack.setTagCompound(new CompoundNBT());
         stack.getTagCompound().setString("stored_type", type.getName().toString());
         return stack;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IItemColor getItemColor() {
         return (stack, tintIndex) -> tintIndex > 0 ? getType(stack).getColor() : 0xFFFFFF;
     }

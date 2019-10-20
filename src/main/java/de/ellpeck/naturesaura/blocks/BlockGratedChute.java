@@ -1,16 +1,16 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityGratedChute;
-import net.minecraft.block.BlockHopper;
+import net.minecraft.block.HopperBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -19,8 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class BlockGratedChute extends BlockContainerImpl {
 
-    public static final PropertyDirection FACING = BlockHopper.FACING;
+    public static final PropertyDirection FACING = HopperBlock.FACING;
     private static final AxisAlignedBB BASE_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D);
     private static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.125D);
     private static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.875D, 1.0D, 1.0D, 1.0D);
@@ -43,7 +43,7 @@ public class BlockGratedChute extends BlockContainerImpl {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!playerIn.isSneaking())
             return false;
         TileEntity tile = worldIn.getTileEntity(pos);
@@ -58,12 +58,12 @@ public class BlockGratedChute extends BlockContainerImpl {
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
         return FULL_BLOCK_AABB;
     }
 
     @Override
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
+    public void addCollisionBoxToList(BlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
         addCollisionBoxToList(pos, entityBox, collidingBoxes, BASE_AABB);
         addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_AABB);
         addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_AABB);
@@ -72,7 +72,7 @@ public class BlockGratedChute extends BlockContainerImpl {
     }
 
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
         EnumFacing newFacing = facing.getOpposite();
         if (newFacing == EnumFacing.UP)
             newFacing = EnumFacing.DOWN;
@@ -80,38 +80,38 @@ public class BlockGratedChute extends BlockContainerImpl {
     }
 
     @Override
-    public boolean isTopSolid(IBlockState state) {
+    public boolean isTopSolid(BlockState state) {
         return true;
     }
 
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
+    public EnumBlockRenderType getRenderType(BlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) {
+    public boolean isFullCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return false;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+    @OnlyIn(Dist.CLIENT)
+    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
         return true;
     }
 
     @Override
-    public boolean hasComparatorInputOverride(IBlockState state) {
+    public boolean hasComparatorInputOverride(BlockState state) {
         return true;
     }
 
     @Override
-    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
+    public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityGratedChute) {
             IItemHandler handler = ((TileEntityGratedChute) tile).getItemHandler(null);
@@ -124,28 +124,28 @@ public class BlockGratedChute extends BlockContainerImpl {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return state.getValue(FACING).getIndex();
     }
 
     @Override
-    public IBlockState withRotation(IBlockState state, Rotation rot) {
+    public BlockState withRotation(BlockState state, Rotation rot) {
         return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
-    public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+    public BlockState withMirror(BlockState state, Mirror mirrorIn) {
         return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
     }
 
@@ -155,7 +155,7 @@ public class BlockGratedChute extends BlockContainerImpl {
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, EnumFacing face) {
         return face == EnumFacing.UP ? BlockFaceShape.BOWL : BlockFaceShape.UNDEFINED;
     }
 }

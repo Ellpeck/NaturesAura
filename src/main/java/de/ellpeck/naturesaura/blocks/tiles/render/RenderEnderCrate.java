@@ -4,19 +4,19 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.nio.FloatBuffer;
 import java.util.Random;
 
-@SideOnly(Side.CLIENT)
-public class RenderEnderCrate extends TileEntitySpecialRenderer<TileEntityEnderCrate> {
+@OnlyIn(Dist.CLIENT)
+public class RenderEnderCrate extends TileEntityRenderer<TileEntityEnderCrate> {
     private static final ResourceLocation END_SKY_TEXTURE = new ResourceLocation("textures/environment/end_sky.png");
     private static final ResourceLocation END_PORTAL_TEXTURE = new ResourceLocation("textures/entity/end_portal.png");
     private static final Random RANDOM = new Random(31100L);

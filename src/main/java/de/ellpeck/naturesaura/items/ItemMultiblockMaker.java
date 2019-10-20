@@ -2,13 +2,13 @@ package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -24,25 +24,25 @@ public class ItemMultiblockMaker extends ItemImpl {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
         if (!worldIn.isRemote && playerIn.capabilities.isCreativeMode) {
             int curr = getMultiblock(stack);
             int next = (curr + 1) % multiblocks().size();
 
             if (!stack.hasTagCompound())
-                stack.setTagCompound(new NBTTagCompound());
+                stack.setTagCompound(new CompoundNBT());
             stack.getTagCompound().setInteger("multiblock", next);
         }
-        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+        return new ActionResult<>(ActionResultType.SUCCESS, stack);
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         if (player.capabilities.isCreativeMode) {
             IMultiblock multi = multiblocks().get(getMultiblock(player.getHeldItem(hand)));
             if (multi == null)
-                return EnumActionResult.PASS;
+                return ActionResultType.PASS;
 
             if (!worldIn.isRemote)
                 multi.forEach(pos.up(), (char) 0, (blockPos, matcher) -> {
@@ -50,9 +50,9 @@ public class ItemMultiblockMaker extends ItemImpl {
                     return true;
                 });
 
-            return EnumActionResult.SUCCESS;
+            return ActionResultType.SUCCESS;
         }
-        return EnumActionResult.PASS;
+        return ActionResultType.PASS;
     }
 
     @Override

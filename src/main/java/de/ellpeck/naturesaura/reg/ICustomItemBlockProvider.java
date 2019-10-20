@@ -1,9 +1,9 @@
 package de.ellpeck.naturesaura.reg;
 
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 
 public interface ICustomItemBlockProvider {
 
-    ItemBlock getItemBlock();
+    BlockItem getItemBlock();
 
 }

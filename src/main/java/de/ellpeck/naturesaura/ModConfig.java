@@ -6,7 +6,7 @@ import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.recipes.WeightedOre;
 import de.ellpeck.naturesaura.chunk.effect.OreSpawnEffect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.DimensionType;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.RangeDouble;

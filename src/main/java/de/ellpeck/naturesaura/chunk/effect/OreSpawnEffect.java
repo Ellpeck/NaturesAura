@@ -8,9 +8,9 @@ import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.recipes.WeightedOre;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -30,7 +30,7 @@ import java.util.Set;
 
 public class OreSpawnEffect implements IDrainSpotEffect {
 
-    public static final Set<IBlockState> SPAWN_EXCEPTIONS = new HashSet<>();
+    public static final Set<BlockState> SPAWN_EXCEPTIONS = new HashSet<>();
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "ore_spawn");
 
     private int amount;
@@ -50,7 +50,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public int isActiveHere(EntityPlayer player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.world, pos, spot))
             return -1;
         if (player.getDistanceSq(pos) > this.dist * this.dist)
@@ -97,7 +97,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
             BlockPos orePos = new BlockPos(x, y, z);
             if (orePos.distanceSq(powderPos.x, powderPos.y, powderPos.z) <= range * range
                     && orePos.distanceSq(pos) <= this.dist * this.dist && world.isBlockLoaded(orePos)) {
-                IBlockState state = world.getBlockState(orePos);
+                BlockState state = world.getBlockState(orePos);
                 Block block = state.getBlock();
                 if (block != requiredBlock)
                     continue;
@@ -113,8 +113,8 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                         if (toPlace == Blocks.AIR)
                             continue;
 
-                        FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
-                        IBlockState stateToPlace = toPlace.getStateForPlacement(world, pos, EnumFacing.UP, 0, 0, 0, stack.getMetadata(), player, EnumHand.MAIN_HAND);
+                        FakePlayer player = FakePlayerFactory.getMinecraft((ServerWorld) world);
+                        BlockState stateToPlace = toPlace.getStateForPlacement(world, pos, EnumFacing.UP, 0, 0, 0, stack.getMetadata(), player, EnumHand.MAIN_HAND);
                         if (SPAWN_EXCEPTIONS.contains(stateToPlace))
                             continue;
 

@@ -4,16 +4,16 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityProjectileGenerator;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
-public class RenderProjectileGenerator extends TileEntitySpecialRenderer<TileEntityProjectileGenerator> {
+@OnlyIn(Dist.CLIENT)
+public class RenderProjectileGenerator extends TileEntityRenderer<TileEntityProjectileGenerator> {
     private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/projectile_generator_overlay.png");
     private final ModelOverlay model = new ModelOverlay();
 
@@ -21,13 +21,13 @@ public class RenderProjectileGenerator extends TileEntitySpecialRenderer<TileEnt
     public void render(TileEntityProjectileGenerator te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
-        if (te.nextSide == EnumFacing.NORTH) {
+        if (te.nextSide == Direction.NORTH) {
             GlStateManager.rotate(270, 0, 1, 0);
             GlStateManager.translate(-0.001F, 0, -1);
-        } else if (te.nextSide == EnumFacing.EAST) {
+        } else if (te.nextSide == Direction.EAST) {
             GlStateManager.rotate(180, 0, 1, 0);
             GlStateManager.translate(-1.001F, 0, -1);
-        } else if (te.nextSide == EnumFacing.SOUTH) {
+        } else if (te.nextSide == Direction.SOUTH) {
             GlStateManager.rotate(90, 0, 1, 0);
             GlStateManager.translate(-1.001F, 0, 0);
         } else {

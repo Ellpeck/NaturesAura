@@ -8,18 +8,18 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.item.ItemShears;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ItemFrameEntity;
+import net.minecraft.item.ShearsItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
@@ -111,13 +111,13 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
                 if (pos.equals(this.pos) || pos.equals(connectedPos))
                     continue;
 
-                IBlockState state = this.world.getBlockState(pos);
+                BlockState state = this.world.getBlockState(pos);
                 Block block = state.getBlock();
                 if (!block.isAir(state, this.world, pos)
                         && !(block instanceof BlockLiquid) && !(block instanceof IFluidBlock)
                         && state.getBlockHardness(this.world, pos) >= 0F) {
 
-                    FakePlayer fake = FakePlayerFactory.getMinecraft((WorldServer) this.world);
+                    FakePlayer fake = FakePlayerFactory.getMinecraft((ServerWorld) this.world);
                     if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.world, pos, state, fake))) {
                         boolean shearBlock = shears && block instanceof IShearable;
                         List<ItemStack> drops;
@@ -143,10 +143,10 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
     }
 
     public boolean shears() {
-        List<EntityItemFrame> frames = Helper.getAttachedItemFrames(this.world, this.pos);
-        for (EntityItemFrame frame : frames) {
+        List<ItemFrameEntity> frames = Helper.getAttachedItemFrames(this.world, this.pos);
+        for (ItemFrameEntity frame : frames) {
             ItemStack stack = frame.getDisplayedItem();
-            if (!stack.isEmpty() && stack.getItem() instanceof ItemShears)
+            if (!stack.isEmpty() && stack.getItem() instanceof ShearsItem)
                 return true;
         }
         return false;
@@ -179,7 +179,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
+    public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (this.connectionOffset != null)
@@ -193,7 +193,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
+    public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (compound.hasKey("connection"))

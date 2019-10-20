@@ -5,7 +5,7 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import net.minecraft.command.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -38,7 +38,7 @@ public class CommandAura extends CommandBase {
                 BlockPos spot = IAuraChunk.getLowestSpot(world, pos, range, pos);
                 amount -= IAuraChunk.getAuraChunk(world, spot).storeAura(spot, amount);
             }
-            sender.sendMessage(new TextComponentString("Stored Aura successfully"));
+            sender.sendMessage(new StringTextComponent("Stored Aura successfully"));
         } else if ("drain".equals(action)) {
             int amount = parse(args, 1, -1);
             int range = parse(args, 2, 35);
@@ -46,7 +46,7 @@ public class CommandAura extends CommandBase {
                 BlockPos spot = IAuraChunk.getHighestSpot(world, pos, range, pos);
                 amount -= IAuraChunk.getAuraChunk(world, spot).drainAura(spot, amount);
             }
-            sender.sendMessage(new TextComponentString("Drained Aura successfully"));
+            sender.sendMessage(new StringTextComponent("Drained Aura successfully"));
         } else if ("reset".equals(action)) {
             int range = parse(args, 1, -1);
             IAuraChunk.getSpotsInArea(world, pos, range, (spot, amount) -> {
@@ -56,7 +56,7 @@ public class CommandAura extends CommandBase {
                 else
                     chunk.storeAura(spot, -amount);
             });
-            sender.sendMessage(new TextComponentString("Reset Aura successfully"));
+            sender.sendMessage(new StringTextComponent("Reset Aura successfully"));
         } else {
             throw new SyntaxErrorException("Invalid action " + action);
         }

@@ -7,14 +7,14 @@ import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +28,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockContainerImpl extends BlockContainer implements IModItem, ICreativeItem, IModelProvider {
+public class BlockContainerImpl extends ContainerBlock implements IModItem, ICreativeItem, IModelProvider {
 
     private final String baseName;
 
@@ -75,12 +75,12 @@ public class BlockContainerImpl extends BlockContainer implements IModItem, ICre
     }
 
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityImpl)
@@ -90,7 +90,7 @@ public class BlockContainerImpl extends BlockContainer implements IModItem, ICre
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, BlockState state, int fortune) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileEntityImpl)
             drops.add(((TileEntityImpl) tile).getDrop(state, fortune));
@@ -99,30 +99,30 @@ public class BlockContainerImpl extends BlockContainer implements IModItem, ICre
     }
 
     @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest) {
         return willHarvest || super.removedByPlayer(state, world, pos, player, false);
     }
 
     @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
+    public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
         super.harvestBlock(worldIn, player, pos, state, te, stack);
         worldIn.setBlockToAir(pos);
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityImpl)
             ((TileEntityImpl) tile).loadDataOnPlace(stack);
     }
 
     @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+    public void onBlockAdded(World worldIn, BlockPos pos, BlockState state) {
         this.updateRedstoneState(worldIn, pos);
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         this.updateRedstoneState(worldIn, pos);
     }
 
@@ -144,7 +144,7 @@ public class BlockContainerImpl extends BlockContainer implements IModItem, ICre
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityImpl) {

@@ -5,18 +5,18 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
 
@@ -31,7 +31,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
         if (changeOrCopyColor(player, stack, worldIn, pos, null)) {
             return EnumActionResult.SUCCESS;
@@ -40,13 +40,13 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
         }
     }
 
-    private static boolean changeOrCopyColor(EntityPlayer player, ItemStack stack, World world, BlockPos pos, EnumDyeColor firstColor) {
-        IBlockState state = world.getBlockState(pos);
+    private static boolean changeOrCopyColor(PlayerEntity player, ItemStack stack, World world, BlockPos pos, DyeColor firstColor) {
+        BlockState state = world.getBlockState(pos);
         for (IProperty prop : state.getProperties().keySet()) {
-            if (prop.getValueClass() == EnumDyeColor.class) {
-                EnumDyeColor color = (EnumDyeColor) state.getValue(prop);
+            if (prop.getValueClass() == DyeColor.class) {
+                DyeColor color = (DyeColor) state.getValue(prop);
                 if (firstColor == null || color == firstColor) {
-                    EnumDyeColor stored = getStoredColor(stack);
+                    DyeColor stored = getStoredColor(stack);
                     if (player.isSneaking()) {
                         if (stored != color) {
                             world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
@@ -82,7 +82,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, EnumHand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
         if (playerIn.isSneaking() && getStoredColor(stack) != null) {
             worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundCategory.PLAYERS, 0.65F, 1F);
@@ -96,18 +96,18 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
     }
 
 
-    private static EnumDyeColor getStoredColor(ItemStack stack) {
+    private static DyeColor getStoredColor(ItemStack stack) {
         if (!stack.hasTagCompound()) {
             return null;
         } else {
             int color = stack.getTagCompound().getInteger("color");
-            return EnumDyeColor.byMetadata(color);
+            return DyeColor.byMetadata(color);
         }
     }
 
-    private static void storeColor(ItemStack stack, EnumDyeColor color) {
+    private static void storeColor(ItemStack stack, DyeColor color) {
         if (!stack.hasTagCompound()) {
-            stack.setTagCompound(new NBTTagCompound());
+            stack.setTagCompound(new CompoundNBT());
         }
         stack.getTagCompound().setInteger("color", color.getMetadata());
     }
@@ -122,17 +122,17 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
 
     private static void setFillMode(ItemStack stack, boolean fill) {
         if (!stack.hasTagCompound()) {
-            stack.setTagCompound(new NBTTagCompound());
+            stack.setTagCompound(new CompoundNBT());
         }
         stack.getTagCompound().setBoolean("fill", fill);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IItemColor getItemColor() {
         return (stack, tintIndex) -> {
             if (tintIndex > 0) {
-                EnumDyeColor color = getStoredColor(stack);
+                DyeColor color = getStoredColor(stack);
                 if (color != null) {
                     return color.getColorValue();
                 }

@@ -6,21 +6,21 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderEnderCrate;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
-import net.minecraft.block.BlockAnvil;
+import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
@@ -29,9 +29,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
@@ -55,11 +55,11 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     public static String getEnderName(ItemStack stack) {
         if (!stack.hasTagCompound())
             return "";
-        NBTTagCompound compound = stack.getTagCompound();
+        CompoundNBT compound = stack.getTagCompound();
         return compound.getString(NaturesAura.MOD_ID + ":ender_name");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void addEnderNameInfo(ItemStack stack, List<String> tooltip) {
         String name = getEnderName(stack);
         if (name != null && !name.isEmpty())
@@ -73,8 +73,8 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     public void onRightClick(PlayerInteractEvent.RightClickBlock event) {
         World world = event.getWorld();
         BlockPos pos = event.getPos();
-        IBlockState state = world.getBlockState(pos);
-        if (state.getBlock() instanceof BlockAnvil) {
+        BlockState state = world.getBlockState(pos);
+        if (state.getBlock() instanceof AnvilBlock) {
             CACHED_WORLD.set(new WeakReference<>(world));
         }
     }
@@ -97,7 +97,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
             return;
         ItemStack output = stack.copy();
         if (!output.hasTagCompound())
-            output.setTagCompound(new NBTTagCompound());
+            output.setTagCompound(new CompoundNBT());
         output.getTagCompound().setString(NaturesAura.MOD_ID + ":ender_name", name);
         event.setOutput(output);
         event.setMaterialCost(stack.getCount());
@@ -105,7 +105,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityEnderCrate) {
@@ -120,14 +120,14 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         addEnderNameInfo(stack, tooltip);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    @OnlyIn(Dist.CLIENT)
+    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
@@ -142,8 +142,8 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public Tuple<Class, TileEntitySpecialRenderer> getTESR() {
+    @OnlyIn(Dist.CLIENT)
+    public Tuple<Class, TileEntityRenderer> getTESR() {
         return new Tuple<>(TileEntityEnderCrate.class, new RenderEnderCrate());
     }
 }

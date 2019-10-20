@@ -11,11 +11,11 @@ import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.entity.PlayerRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,8 +42,8 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void init(FMLInitializationEvent event) {
-        Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
-        for (RenderPlayer render : new RenderPlayer[]{skinMap.get("default"), skinMap.get("slim")}) {
+        Map<String, PlayerRenderer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
+        for (PlayerRenderer render : new PlayerRenderer[]{skinMap.get("default"), skinMap.get("slim")}) {
             render.addLayer(new PlayerLayerTrinkets());
         }
         new SupporterFancyHandler();
@@ -80,7 +80,7 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void registerTESR(ITESRProvider provider) {
-        Tuple<Class, TileEntitySpecialRenderer> tesr = provider.getTESR();
+        Tuple<Class, TileEntityRenderer> tesr = provider.getTESR();
         ClientRegistry.bindTileEntitySpecialRenderer(tesr.getFirst(), tesr.getSecond());
     }
 

@@ -4,32 +4,32 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.*;
-import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 import java.util.Random;
 
-public class BlockGoldenLeaves extends BlockLeaves implements
+public class BlockGoldenLeaves extends LeavesBlock implements
         IModItem, IModelProvider, IColorProvidingBlock, IColorProvidingItem {
 
     private static final int HIGHEST_STAGE = 3;
@@ -41,8 +41,8 @@ public class BlockGoldenLeaves extends BlockLeaves implements
     }
 
     @Override
-    public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return MapColor.GOLD;
+    public MaterialColor getMapColor(BlockState state, IBlockAccess worldIn, BlockPos pos) {
+        return MaterialColor.GOLD;
     }
 
     @Override
@@ -66,8 +66,8 @@ public class BlockGoldenLeaves extends BlockLeaves implements
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    @OnlyIn(Dist.CLIENT)
+    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (stateIn.getValue(STAGE) == HIGHEST_STAGE && rand.nextFloat() >= 0.75F)
             NaturesAuraAPI.instance().spawnMagicParticle(
                     pos.getX() + rand.nextFloat(),
@@ -90,7 +90,7 @@ public class BlockGoldenLeaves extends BlockLeaves implements
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         boolean check = (meta & 4) != 0; // 4th bit
         boolean decay = (meta & 8) != 0; // 3rd bit
         int stage = meta & HIGHEST_STAGE; // 1st and 2nd bit
@@ -99,7 +99,7 @@ public class BlockGoldenLeaves extends BlockLeaves implements
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         boolean check = state.getValue(CHECK_DECAY);
         boolean decay = state.getValue(DECAYABLE);
 
@@ -107,7 +107,7 @@ public class BlockGoldenLeaves extends BlockLeaves implements
     }
 
     @Override
-    public void beginLeavesDecay(IBlockState state, World world, BlockPos pos) {
+    public void beginLeavesDecay(BlockState state, World world, BlockPos pos) {
         if (!state.getValue(CHECK_DECAY) && state.getValue(DECAYABLE)) {
             world.setBlockState(pos, state.withProperty(CHECK_DECAY, true), 4);
         }
@@ -119,12 +119,12 @@ public class BlockGoldenLeaves extends BlockLeaves implements
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IBlockColor getBlockColor() {
         return (state, worldIn, pos, tintIndex) -> {
             int color = 0xF2FF00;
             if (state != null && worldIn != null && pos != null) {
-                int foliage = BiomeColorHelper.getFoliageColorAtPos(worldIn, pos);
+                int foliage = BiomeColors.getFoliageColorAtPos(worldIn, pos);
                 return Helper.blendColors(color, foliage, state.getValue(STAGE) / (float) HIGHEST_STAGE);
             } else {
                 return color;
@@ -133,13 +133,13 @@ public class BlockGoldenLeaves extends BlockLeaves implements
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IItemColor getItemColor() {
         return (stack, tintIndex) -> 0xF2FF00;
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, BlockState state, int fortune) {
         Random rand = world instanceof World ? ((World) world).rand : RANDOM;
         if (state.getValue(STAGE) < HIGHEST_STAGE) {
             if (rand.nextFloat() >= 0.75F) {
@@ -151,7 +151,7 @@ public class BlockGoldenLeaves extends BlockLeaves implements
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
         super.updateTick(worldIn, pos, state, rand);
         if (!worldIn.isRemote) {
             int stage = state.getValue(STAGE);
@@ -160,7 +160,7 @@ public class BlockGoldenLeaves extends BlockLeaves implements
             }
 
             if (stage > 1) {
-                BlockPos offset = pos.offset(EnumFacing.random(rand));
+                BlockPos offset = pos.offset(Direction.random(rand));
                 if (worldIn.isBlockLoaded(offset))
                     convert(worldIn, offset);
             }
@@ -168,12 +168,12 @@ public class BlockGoldenLeaves extends BlockLeaves implements
     }
 
     @Override
-    public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+    public boolean canSilkHarvest(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         return false;
     }
 
     public static boolean convert(World world, BlockPos pos) {
-        IBlockState state = world.getBlockState(pos);
+        BlockState state = world.getBlockState(pos);
         if (state.getBlock().isLeaves(state, world, pos) &&
                 !(state.getBlock() instanceof BlockAncientLeaves || state.getBlock() instanceof BlockGoldenLeaves)) {
             if (!world.isRemote) {

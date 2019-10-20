@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.proxy;
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.registry.IRenderFactory;

@@ -6,15 +6,15 @@ import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemHoe;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
+import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
@@ -25,7 +25,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import javax.annotation.Nullable;
 
-public class ItemHoeNA extends ItemHoe implements IModItem, ICreativeItem, IModelProvider {
+public class ItemHoeNA extends HoeItem implements IModItem, ICreativeItem, IModelProvider {
 
     private final String baseName;
 
@@ -36,9 +36,9 @@ public class ItemHoeNA extends ItemHoe implements IModItem, ICreativeItem, IMode
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        EnumActionResult result = super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
-        if (!worldIn.isRemote && result == EnumActionResult.SUCCESS && this == ModItems.INFUSED_HOE) {
+    public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
+        ActionResultType result = super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+        if (!worldIn.isRemote && result == ActionResultType.SUCCESS && this == ModItems.INFUSED_HOE) {
             ItemStack seed = ItemStack.EMPTY;
 
             if (worldIn.rand.nextInt(5) == 0) {
@@ -55,7 +55,7 @@ public class ItemHoeNA extends ItemHoe implements IModItem, ICreativeItem, IMode
             }
 
             if (!seed.isEmpty()) {
-                EntityItem item = new EntityItem(worldIn, pos.getX() + worldIn.rand.nextFloat(), pos.getY() + 1F, pos.getZ() + worldIn.rand.nextFloat(), seed);
+                ItemEntity item = new ItemEntity(worldIn, pos.getX() + worldIn.rand.nextFloat(), pos.getY() + 1F, pos.getZ() + worldIn.rand.nextFloat(), seed);
                 worldIn.spawnEntity(item);
             }
         }
@@ -84,7 +84,7 @@ public class ItemHoeNA extends ItemHoe implements IModItem, ICreativeItem, IMode
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         if (this == ModItems.INFUSED_HOE)
             return Helper.makeRechargeProvider(stack, true);
         else return null;

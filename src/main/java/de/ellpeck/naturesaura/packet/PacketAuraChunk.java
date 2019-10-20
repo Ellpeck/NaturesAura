@@ -11,8 +11,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.HashMap;
@@ -64,7 +64,7 @@ public class PacketAuraChunk implements IMessage {
     public static class Handler implements IMessageHandler<PacketAuraChunk, IMessage> {
 
         @Override
-        @SideOnly(Side.CLIENT)
+        @OnlyIn(Dist.CLIENT)
         public IMessage onMessage(PacketAuraChunk message, MessageContext ctx) {
             NaturesAura.proxy.scheduleTask(() -> {
                 World world = Minecraft.getMinecraft().world;

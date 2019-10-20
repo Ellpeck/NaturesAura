@@ -3,14 +3,14 @@ package de.ellpeck.naturesaura.api.render;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IVisualizable {
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     AxisAlignedBB getVisualizationBounds(World world, BlockPos pos);
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     int getVisualizationColor(World world, BlockPos pos);
 }

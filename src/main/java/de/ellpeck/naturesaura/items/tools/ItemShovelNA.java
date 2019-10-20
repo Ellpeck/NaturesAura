@@ -8,16 +8,16 @@ import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemSpade;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.item.ShovelItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -28,7 +28,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import javax.annotation.Nullable;
 
-public class ItemShovelNA extends ItemSpade implements IModItem, ICreativeItem, IModelProvider {
+public class ItemShovelNA extends ShovelItem implements IModItem, ICreativeItem, IModelProvider {
     private final String baseName;
 
     public ItemShovelNA(String baseName, ToolMaterial material) {
@@ -38,10 +38,10 @@ public class ItemShovelNA extends ItemSpade implements IModItem, ICreativeItem, 
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         if (this == ModItems.INFUSED_SHOVEL) {
             ItemStack stack = player.getHeldItem(hand);
-            IBlockState state = worldIn.getBlockState(pos);
+            BlockState state = worldIn.getBlockState(pos);
             int damage = 0;
 
             if (state.getBlock() instanceof BlockDirt) {
@@ -55,7 +55,7 @@ public class ItemShovelNA extends ItemSpade implements IModItem, ICreativeItem, 
                     for (int y = -range; y <= range; y++) {
                         BlockPos actualPos = pos.add(x, 0, y);
                         if (player.canPlayerEdit(actualPos.offset(facing), facing, stack)) {
-                            if (facing != EnumFacing.DOWN
+                            if (facing != Direction.DOWN
                                     && worldIn.getBlockState(actualPos.up()).getMaterial() == Material.AIR
                                     && worldIn.getBlockState(actualPos).getBlock() == Blocks.GRASS) {
                                 if (!worldIn.isRemote) {
@@ -71,10 +71,10 @@ public class ItemShovelNA extends ItemSpade implements IModItem, ICreativeItem, 
             if (damage > 0) {
                 worldIn.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 stack.damageItem(damage, player);
-                return EnumActionResult.SUCCESS;
+                return ActionResultType.SUCCESS;
             }
         }
-        return EnumActionResult.PASS;
+        return ActionResultType.PASS;
     }
 
     @Override
@@ -98,7 +98,7 @@ public class ItemShovelNA extends ItemSpade implements IModItem, ICreativeItem, 
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         if (this == ModItems.INFUSED_SHOVEL)
             return Helper.makeRechargeProvider(stack, true);
         else return null;

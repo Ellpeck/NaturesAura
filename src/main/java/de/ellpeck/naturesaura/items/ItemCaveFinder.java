@@ -1,15 +1,15 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
 public class ItemCaveFinder extends ItemImpl {
@@ -19,11 +19,11 @@ public class ItemCaveFinder extends ItemImpl {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
         NaturesAuraAPI.IInternalHooks inst = NaturesAuraAPI.instance();
         if (!inst.extractAuraFromPlayer(playerIn, 20000, worldIn.isRemote))
-            return new ActionResult<>(EnumActionResult.FAIL, stack);
+            return new ActionResult<>(ActionResultType.FAIL, stack);
         if (worldIn.isRemote) {
             inst.setParticleDepth(false);
             inst.setParticleSpawnRange(64);
@@ -33,17 +33,17 @@ public class ItemCaveFinder extends ItemImpl {
                 for (int y = -range; y <= range; y++)
                     for (int z = -range; z <= range; z++) {
                         BlockPos offset = pos.add(x, y, z);
-                        IBlockState state = worldIn.getBlockState(offset);
-                        if (!state.getBlock().canCreatureSpawn(state, worldIn, offset, EntityLiving.SpawnPlacementType.ON_GROUND))
+                        BlockState state = worldIn.getBlockState(offset);
+                        if (!state.getBlock().canCreatureSpawn(state, worldIn, offset, MobEntity.SpawnPlacementType.ON_GROUND))
                             continue;
 
                         BlockPos offUp = offset.up();
-                        IBlockState stateUp = worldIn.getBlockState(offUp);
+                        BlockState stateUp = worldIn.getBlockState(offUp);
                         if (stateUp.isBlockNormalCube() || stateUp.getMaterial().isLiquid())
                             continue;
 
-                        int sky = worldIn.getLightFor(EnumSkyBlock.SKY, offUp);
-                        int block = worldIn.getLightFor(EnumSkyBlock.BLOCK, offUp);
+                        int sky = worldIn.getLightFor(LightType.SKY, offUp);
+                        int block = worldIn.getLightFor(LightType.BLOCK, offUp);
                         if (sky > 7 || block > 7)
                             continue;
 
@@ -57,6 +57,6 @@ public class ItemCaveFinder extends ItemImpl {
             playerIn.swingArm(handIn);
         }
         playerIn.getCooldownTracker().setCooldown(this, 20 * 30);
-        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+        return new ActionResult<>(ActionResultType.SUCCESS, stack);
     }
 }

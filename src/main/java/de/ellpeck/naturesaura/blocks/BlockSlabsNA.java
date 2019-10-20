@@ -8,12 +8,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.item.BlockItem;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -40,7 +40,7 @@ public abstract class BlockSlabsNA extends BlockImpl implements ICustomItemBlock
     }
 
     @Override
-    public CreativeTabs getTabToAdd() {
+    public ItemGroup getTabToAdd() {
         return this.isDouble() ? null : super.getTabToAdd();
     }
 
@@ -50,7 +50,7 @@ public abstract class BlockSlabsNA extends BlockImpl implements ICustomItemBlock
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
         if (this.isDouble())
             return FULL_BLOCK_AABB;
         else
@@ -58,42 +58,42 @@ public abstract class BlockSlabsNA extends BlockImpl implements ICustomItemBlock
     }
 
     @Override
-    public boolean isTopSolid(IBlockState state) {
+    public boolean isTopSolid(BlockState state) {
         return this.isDouble() || state.getValue(HALF) == EnumBlockHalf.TOP;
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
         if (this.isDouble())
             return BlockFaceShape.SOLID;
-        else if (face == EnumFacing.UP && state.getValue(HALF) == EnumBlockHalf.TOP)
+        else if (face == Direction.UP && state.getValue(HALF) == EnumBlockHalf.TOP)
             return BlockFaceShape.SOLID;
         else
-            return face == EnumFacing.DOWN && state.getValue(HALF) == EnumBlockHalf.BOTTOM ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
+            return face == Direction.DOWN && state.getValue(HALF) == EnumBlockHalf.BOTTOM ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return this.isDouble();
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) {
+    public boolean isFullCube(BlockState state) {
         return this.isDouble();
     }
 
     @Override
-    public boolean isFullBlock(IBlockState state) {
+    public boolean isFullBlock(BlockState state) {
         return this.isDouble();
     }
 
     @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public boolean isNormalCube(BlockState state, IBlockAccess world, BlockPos pos) {
         return this.isDouble();
     }
 
     @Override
-    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+    public boolean doesSideBlockRendering(BlockState state, IBlockAccess world, BlockPos pos, Direction face) {
         if (ForgeModContainer.disableStairSlabCulling)
             return super.doesSideBlockRendering(state, world, pos, face);
 
@@ -101,16 +101,16 @@ public abstract class BlockSlabsNA extends BlockImpl implements ICustomItemBlock
             return true;
 
         EnumBlockHalf side = state.getValue(HALF);
-        return (side == EnumBlockHalf.TOP && face == EnumFacing.UP) || (side == EnumBlockHalf.BOTTOM && face == EnumFacing.DOWN);
+        return (side == EnumBlockHalf.TOP && face == Direction.UP) || (side == EnumBlockHalf.BOTTOM && face == Direction.DOWN);
     }
 
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public BlockState getStateForPlacement(World worldIn, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
         if (this.isDouble())
             return this.getDefaultState();
         else {
-            IBlockState state = this.getStateFromMeta(meta);
-            return facing != EnumFacing.DOWN && (facing == EnumFacing.UP || (double) hitY <= 0.5D) ?
+            BlockState state = this.getStateFromMeta(meta);
+            return facing != Direction.DOWN && (facing == Direction.UP || (double) hitY <= 0.5D) ?
                     state.withProperty(HALF, EnumBlockHalf.BOTTOM) : state.withProperty(HALF, EnumBlockHalf.TOP);
         }
     }
@@ -121,12 +121,12 @@ public abstract class BlockSlabsNA extends BlockImpl implements ICustomItemBlock
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    public Item getItemDropped(BlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(this.singleSlab.get());
     }
 
     @Override
-    public ItemBlock getItemBlock() {
+    public BlockItem getItemBlock() {
         return new ItemSlabNA(this, this.singleSlab, this.doubleSlab);
     }
 
@@ -136,12 +136,12 @@ public abstract class BlockSlabsNA extends BlockImpl implements ICustomItemBlock
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return this.isDouble() ? 0 : (state.getValue(HALF) == EnumBlockHalf.TOP ? 1 : 0);
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.isDouble() ? this.getDefaultState() : this.getDefaultState().withProperty(HALF, meta == 1 ? EnumBlockHalf.TOP : EnumBlockHalf.BOTTOM);
     }
 

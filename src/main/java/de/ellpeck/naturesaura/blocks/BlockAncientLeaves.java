@@ -4,12 +4,12 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAncientLeaves;
 import de.ellpeck.naturesaura.reg.*;
-import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
@@ -23,15 +23,15 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class BlockAncientLeaves extends BlockLeaves implements
+public class BlockAncientLeaves extends LeavesBlock implements
         IModItem, ICreativeItem, IModelProvider, IColorProvidingBlock, IColorProvidingItem, ITileEntityProvider {
 
     public BlockAncientLeaves() {
@@ -40,8 +40,8 @@ public class BlockAncientLeaves extends BlockLeaves implements
     }
 
     @Override
-    public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return MapColor.PINK;
+    public MaterialColor getMapColor(BlockState state, IBlockAccess worldIn, BlockPos pos) {
+        return MaterialColor.PINK;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class BlockAncientLeaves extends BlockLeaves implements
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         boolean check = (meta & 1) != 0;
         boolean decay = (meta & 2) != 0;
 
@@ -83,7 +83,7 @@ public class BlockAncientLeaves extends BlockLeaves implements
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         boolean check = state.getValue(CHECK_DECAY);
         boolean decay = state.getValue(DECAYABLE);
 
@@ -91,14 +91,14 @@ public class BlockAncientLeaves extends BlockLeaves implements
     }
 
     @Override
-    public void beginLeavesDecay(IBlockState state, World world, BlockPos pos) {
+    public void beginLeavesDecay(BlockState state, World world, BlockPos pos) {
         if (!state.getValue(CHECK_DECAY) && state.getValue(DECAYABLE)) {
             world.setBlockState(pos, state.withProperty(CHECK_DECAY, true), 4);
         }
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
         super.breakBlock(worldIn, pos, state);
         worldIn.removeTileEntity(pos);
     }
@@ -115,20 +115,20 @@ public class BlockAncientLeaves extends BlockLeaves implements
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IBlockColor getBlockColor() {
         return (state, worldIn, pos, tintIndex) -> 0xE55B97;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IItemColor getItemColor() {
         return (stack, tintIndex) -> 0xE55B97;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    @OnlyIn(Dist.CLIENT)
+    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         super.randomDisplayTick(stateIn, worldIn, pos, rand);
         if (rand.nextFloat() >= 0.95F && !worldIn.getBlockState(pos.down()).isFullBlock()) {
             TileEntity tile = worldIn.getTileEntity(pos);
@@ -147,12 +147,12 @@ public class BlockAncientLeaves extends BlockLeaves implements
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    public Item getItemDropped(BlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(ModBlocks.ANCIENT_SAPLING);
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
         super.updateTick(worldIn, pos, state, rand);
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);

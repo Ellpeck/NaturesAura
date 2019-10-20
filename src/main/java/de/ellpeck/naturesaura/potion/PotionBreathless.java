@@ -1,11 +1,11 @@
 package de.ellpeck.naturesaura.potion;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Random;
 
@@ -20,7 +20,7 @@ public class PotionBreathless extends PotionImpl {
 
     @SubscribeEvent
     public void onHeal(LivingHealEvent event) {
-        PotionEffect effect = event.getEntityLiving().getActivePotionEffect(this);
+        EffectInstance effect = event.getEntityLiving().getActivePotionEffect(this);
         if (effect == null)
             return;
         float chance = (effect.getAmplifier() + 1) / 15F;
@@ -36,7 +36,7 @@ public class PotionBreathless extends PotionImpl {
     }
 
     @Override
-    public void performEffect(EntityLivingBase entity, int amplifier) {
+    public void performEffect(LivingEntity entity, int amplifier) {
         entity.attackEntityFrom(DamageSource.MAGIC, 1F);
     }
 }

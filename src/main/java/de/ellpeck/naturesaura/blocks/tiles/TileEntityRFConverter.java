@@ -5,9 +5,9 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -24,13 +24,13 @@ public class TileEntityRFConverter extends TileEntityImpl implements ITickable {
     private int lastEnergy;
 
     @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
+    public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         compound.setInteger("energy", this.storage.getEnergyStored());
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
+    public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         this.storage.setEnergy(compound.getInteger("energy"));
     }
@@ -43,7 +43,7 @@ public class TileEntityRFConverter extends TileEntityImpl implements ITickable {
                 this.lastEnergy = this.storage.getEnergyStored();
             }
 
-            for (EnumFacing facing : EnumFacing.VALUES) {
+            for (Direction facing : Direction.VALUES) {
                 TileEntity tile = this.world.getTileEntity(this.pos.offset(facing));
                 if (tile == null || !tile.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite()))
                     continue;
@@ -84,13 +84,13 @@ public class TileEntityRFConverter extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
         return capability == CapabilityEnergy.ENERGY || super.hasCapability(capability, facing);
     }
 
     @Nullable
     @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
         if (capability == CapabilityEnergy.ENERGY)
             return (T) this.storage;
         else

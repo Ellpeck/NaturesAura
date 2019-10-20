@@ -13,15 +13,15 @@ import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.api.recipes.*;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.FlowerBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.DimensionType;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -66,16 +66,16 @@ public final class NaturesAuraAPI {
     /**
      * The list of all types of blocks that several mechanics in the mod use as
      * flowers. Right now, this includes the Herbivorous Absorber and the
-     * Offering Table. By default, all {@link BlockFlower} instances and all
+     * Offering Table. By default, all {@link FlowerBlock} instances and all
      * blocks specified in the config file are added
      */
-    public static final List<IBlockState> FLOWERS = new ArrayList<>();
+    public static final List<BlockState> FLOWERS = new ArrayList<>();
     /**
      * A map of all of the block states that the Botanist's Pickaxe can convert
      * into their mossy variations. Contains mossy brick and mossy cobblestone
      * by default, along with all blocks specified in the config file
      */
-    public static final BiMap<IBlockState, IBlockState> BOTANIST_PICKAXE_CONVERSIONS = HashBiMap.create();
+    public static final BiMap<BlockState, BlockState> BOTANIST_PICKAXE_CONVERSIONS = HashBiMap.create();
     /**
      * A map of all {@link IAuraType} instances which are types of Aura present
      * in different types of worlds. {@link BasicAuraType} instances can be
@@ -201,7 +201,7 @@ public final class NaturesAuraAPI {
          * @param simulate If the extraction should be simulated
          * @return If the extraction was successful
          */
-        boolean extractAuraFromPlayer(EntityPlayer player, int amount, boolean simulate);
+        boolean extractAuraFromPlayer(PlayerEntity player, int amount, boolean simulate);
 
         /**
          * Helper method to insert aura into an {@link IAuraContainer} in the
@@ -213,7 +213,7 @@ public final class NaturesAuraAPI {
          * @param simulate If the insertion should be simulated
          * @return If the insertion was successful
          */
-        boolean insertAuraIntoPlayer(EntityPlayer player, int amount, boolean simulate);
+        boolean insertAuraIntoPlayer(PlayerEntity player, int amount, boolean simulate);
 
         /**
          * This method can be used to spawn the magic particle effect used by
@@ -285,7 +285,7 @@ public final class NaturesAuraAPI {
          *                    each character is mapped to a raw matcher
          * @param rawMatchers Each char matcher in the form of the char followed
          *                    by a matcher, either in the form of a Block, an
-         *                    IBlockState or a {@link Matcher}, similar to the
+         *                    BlockState or a {@link Matcher}, similar to the
          *                    old way that crafting recipes work.
          * @return the multiblock instance
          */

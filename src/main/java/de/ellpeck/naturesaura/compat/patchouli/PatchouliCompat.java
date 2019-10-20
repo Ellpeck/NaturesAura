@@ -7,16 +7,16 @@ import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.ClientEvents;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler.FancyInfo;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.AbstractGui;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.config.GuiUtils;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import vazkii.patchouli.api.BookDrawScreenEvent;
 import vazkii.patchouli.api.PatchouliAPI;
 
@@ -39,7 +39,7 @@ public final class PatchouliCompat {
     }
 
     @SubscribeEvent
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onBookDraw(BookDrawScreenEvent event) {
         if (event.book == null || !event.book.equals(BOOK))
             return;
@@ -51,7 +51,7 @@ public final class PatchouliCompat {
             RenderHelper.disableStandardItemLighting();
             GlStateManager.color(1, 1, 1, 1);
             event.gui.mc.getTextureManager().bindTexture(ClientEvents.BOOK_GUI);
-            Gui.drawModalRectWithCustomSizedTexture(x, y, 469, 0, 43, 42, 512, 256);
+            AbstractGui.drawModalRectWithCustomSizedTexture(x, y, 469, 0, 43, 42, 512, 256);
 
             if (event.mouseX >= x && event.mouseY >= y && event.mouseX < x + 43 && event.mouseY < y + 42)
                 GuiUtils.drawHoveringText(
@@ -69,15 +69,15 @@ public final class PatchouliCompat {
             GlStateManager.color(1, 1, 1, 1);
             event.gui.mc.getTextureManager().bindTexture(ClientEvents.BOOK_GUI);
 
-            Gui.drawModalRectWithCustomSizedTexture(x, y, 496, 44, 16, 18, 512, 256);
+            AbstractGui.drawModalRectWithCustomSizedTexture(x, y, 496, 44, 16, 18, 512, 256);
             if (info.tier == 1) {
-                Gui.drawModalRectWithCustomSizedTexture(x, y, 496 - 16, 44, 16, 18, 512, 256);
+                AbstractGui.drawModalRectWithCustomSizedTexture(x, y, 496 - 16, 44, 16, 18, 512, 256);
             } else {
                 float r = ((info.color >> 16) & 255) / 255F;
                 float g = ((info.color >> 8) & 255) / 255F;
                 float b = (info.color & 255) / 255F;
                 GlStateManager.color(r, g, b);
-                Gui.drawModalRectWithCustomSizedTexture(x, y, 496 - 32, 44, 16, 18, 512, 256);
+                AbstractGui.drawModalRectWithCustomSizedTexture(x, y, 496 - 32, 44, 16, 18, 512, 256);
             }
 
             if (event.mouseX >= x && event.mouseY >= y && event.mouseX < x + 16 && event.mouseY < y + 18)

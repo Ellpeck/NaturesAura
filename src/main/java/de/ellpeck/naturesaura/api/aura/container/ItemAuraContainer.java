@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.api.aura.container;
 
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class ItemAuraContainer implements IAuraContainer {
 
@@ -38,7 +38,7 @@ public class ItemAuraContainer implements IAuraContainer {
 
     private void setAura(int amount) {
         if (!this.stack.hasTagCompound()) {
-            this.stack.setTagCompound(new NBTTagCompound());
+            this.stack.setTagCompound(new CompoundNBT());
         }
         this.stack.getTagCompound().setInteger("aura", amount);
     }

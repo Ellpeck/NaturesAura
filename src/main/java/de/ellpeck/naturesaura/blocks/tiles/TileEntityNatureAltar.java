@@ -10,19 +10,19 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -50,7 +50,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
         }
     };
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int bobTimer;
 
     private final BasicAuraContainer container = new BasicAuraContainer(NaturesAuraAPI.TYPE_OVERWORLD, 500000);
@@ -71,7 +71,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
             for (int x = -2; x <= 2; x += 4) {
                 for (int z = -2; z <= 2; z += 4) {
                     BlockPos offset = this.pos.add(x, 1, z);
-                    IBlockState state = this.world.getBlockState(offset);
+                    BlockState state = this.world.getBlockState(offset);
                     this.catalysts[index] = state.getBlock().getItem(this.world, offset, state);
                     index++;
                 }
@@ -206,7 +206,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
+    public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             compound.setTag("items", this.items.serializeNBT());
@@ -222,7 +222,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
+    public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.items.deserializeNBT(compound.getCompoundTag("items"));
@@ -238,12 +238,12 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public IAuraContainer getAuraContainer(EnumFacing facing) {
+    public IAuraContainer getAuraContainer(Direction facing) {
         return this.container;
     }
 
     @Override
-    public IItemHandlerModifiable getItemHandler(EnumFacing facing) {
+    public IItemHandlerModifiable getItemHandler(Direction facing) {
         return this.items;
     }
 }

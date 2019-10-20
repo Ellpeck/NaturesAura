@@ -4,15 +4,15 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.potion.Potion;
+import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class PotionImpl extends Potion implements IModItem {
+public class PotionImpl extends Effect implements IModItem {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/potions.png");
     protected final String baseName;
@@ -25,12 +25,12 @@ public class PotionImpl extends Potion implements IModItem {
     }
 
     @Override
-    public Potion setIconIndex(int x, int y) {
+    public Effect setIconIndex(int x, int y) {
         return super.setIconIndex(x, y);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getStatusIconIndex() {
         Minecraft.getMinecraft().renderEngine.bindTexture(TEXTURE);
         return super.getStatusIconIndex();

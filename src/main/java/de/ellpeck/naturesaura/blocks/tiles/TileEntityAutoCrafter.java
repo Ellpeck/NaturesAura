@@ -4,16 +4,16 @@ import de.ellpeck.naturesaura.blocks.BlockAutoCrafter;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EntityPredicates;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -22,9 +22,9 @@ import net.minecraft.util.math.BlockPos;
 import java.util.List;
 
 public class TileEntityAutoCrafter extends TileEntityImpl implements ITickable {
-    public final InventoryCrafting crafting = new InventoryCrafting(new Container() {
+    public final CraftingInventory crafting = new CraftingInventory(new Container() {
         @Override
-        public boolean canInteractWith(EntityPlayer playerIn) {
+        public boolean canInteractWith(PlayerEntity playerIn) {
             return false;
         }
     }, 3, 3);
@@ -39,8 +39,8 @@ public class TileEntityAutoCrafter extends TileEntityImpl implements ITickable {
                 return;
             this.crafting.clear();
 
-            IBlockState state = this.world.getBlockState(this.pos);
-            EnumFacing facing = state.getValue(BlockAutoCrafter.FACING);
+            BlockState state = this.world.getBlockState(this.pos);
+            Direction facing = state.getValue(BlockAutoCrafter.FACING);
             BlockPos middlePos = this.pos.up();
             BlockPos topPos = middlePos.offset(facing, 2);
             BlockPos bottomPos = middlePos.offset(facing.getOpposite(), 2);
@@ -56,15 +56,15 @@ public class TileEntityAutoCrafter extends TileEntityImpl implements ITickable {
                     bottomPos.offset(facing.rotateY(), 2)
             };
 
-            EntityItem[] items = new EntityItem[9];
+            ItemEntity[] items = new ItemEntity[9];
             for (int i = 0; i < poses.length; i++) {
-                List<EntityItem> entities = this.world.getEntitiesWithinAABB(
-                        EntityItem.class, new AxisAlignedBB(poses[i]).grow(0.25), EntitySelectors.IS_ALIVE);
+                List<ItemEntity> entities = this.world.getEntitiesWithinAABB(
+                        ItemEntity.class, new AxisAlignedBB(poses[i]).grow(0.25), EntityPredicates.IS_ALIVE);
                 if (entities.size() > 1)
                     return;
                 if (entities.isEmpty())
                     continue;
-                EntityItem entity = entities.get(0);
+                ItemEntity entity = entities.get(0);
                 if (entity.cannotPickup())
                     return;
                 ItemStack stack = entity.getItem();
@@ -81,14 +81,14 @@ public class TileEntityAutoCrafter extends TileEntityImpl implements ITickable {
             ItemStack result = recipe.getCraftingResult(this.crafting);
             if (result.isEmpty())
                 return;
-            EntityItem resultItem = new EntityItem(this.world,
+            ItemEntity resultItem = new ItemEntity(this.world,
                     this.pos.getX() + 0.5F, this.pos.getY() - 0.35F, this.pos.getZ() + 0.5F, result.copy());
             resultItem.motionX = resultItem.motionY = resultItem.motionZ = 0;
             this.world.spawnEntity(resultItem);
 
             NonNullList<ItemStack> remainingItems = recipe.getRemainingItems(this.crafting);
             for (int i = 0; i < items.length; i++) {
-                EntityItem item = items[i];
+                ItemEntity item = items[i];
                 if (item == null)
                     continue;
                 ItemStack stack = item.getItem();
@@ -101,7 +101,7 @@ public class TileEntityAutoCrafter extends TileEntityImpl implements ITickable {
 
                 ItemStack remain = remainingItems.get(i);
                 if (!remain.isEmpty()) {
-                    EntityItem remItem = new EntityItem(this.world, item.posX, item.posY, item.posZ, remain.copy());
+                    ItemEntity remItem = new ItemEntity(this.world, item.posX, item.posY, item.posZ, remain.copy());
                     remItem.motionX = remItem.motionY = remItem.motionZ = 0;
                     this.world.spawnEntity(remItem);
                 }

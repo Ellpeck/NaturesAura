@@ -14,17 +14,17 @@ import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFlower;
+import net.minecraft.block.FlowerBlock;
 import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.BlockWall;
+import net.minecraft.block.WallBlock;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
+import net.minecraft.potion.Potions;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemPotion;
+import net.minecraft.item.PotionItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.PotionHelper;
@@ -171,7 +171,7 @@ public final class ModRecipes {
         new AltarRecipe(res("soul_sand"), ing(Blocks.SAND), new ItemStack(Blocks.SOUL_SAND), conversion, 5000, 100).register();
         new AltarRecipe(res("nether_wart"), ing(Blocks.RED_MUSHROOM), new ItemStack(Items.NETHER_WART), conversion, 30000, 250).register();
         new AltarRecipe(res("prismarine"), ing(Items.QUARTZ), new ItemStack(Items.PRISMARINE_SHARD), conversion, 55000, 200).register();
-        new AltarRecipe(res("water"), ing(Items.GLASS_BOTTLE), PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER), conversion, 25000, 200).register();
+        new AltarRecipe(res("water"), ing(Items.GLASS_BOTTLE), PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), Potions.WATER), conversion, 25000, 200).register();
         new AltarRecipe(res("coal"),ing(new ItemStack(Items.COAL, 1, 1)), new ItemStack(Items.COAL), conversion, 30000, 250).register();
 
         Ingredient crushing = ing(ModBlocks.CRUSHING_CATALYST);
@@ -213,21 +213,21 @@ public final class ModRecipes {
                 Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT),
                 Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY));
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
-                Blocks.COBBLESTONE_WALL.getDefaultState().withProperty(BlockWall.VARIANT, BlockWall.EnumType.NORMAL),
-                Blocks.COBBLESTONE_WALL.getDefaultState().withProperty(BlockWall.VARIANT, BlockWall.EnumType.MOSSY));
+                Blocks.COBBLESTONE_WALL.getDefaultState().withProperty(WallBlock.VARIANT, WallBlock.EnumType.NORMAL),
+                Blocks.COBBLESTONE_WALL.getDefaultState().withProperty(WallBlock.VARIANT, WallBlock.EnumType.MOSSY));
 
         for (Block block : ForgeRegistries.BLOCKS)
-            if (block instanceof BlockFlower)
+            if (block instanceof FlowerBlock)
                 NaturesAuraAPI.FLOWERS.addAll(block.getBlockState().getValidStates());
 
         spawner("cow", "minecraft:cow", 50000, 60, ing(Items.BEEF), ing(Items.LEATHER));
-        for (EnumDyeColor color : EnumDyeColor.values())
+        for (DyeColor color : DyeColor.values())
             new AnimalSpawnerRecipe(res("sheep_" + color.getName()), new ResourceLocation("minecraft:sheep"),
                     500, 60, ing(ModItems.BIRTH_SPIRIT), ing(Items.MUTTON),
                     ing(new ItemStack(Blocks.WOOL, 1, color.getMetadata()))) {
                 @Override
                 public Entity makeEntity(World world, double x, double y, double z) {
-                    EntitySheep sheep = (EntitySheep) super.makeEntity(world, x, y, z);
+                    SheepEntity sheep = (SheepEntity) super.makeEntity(world, x, y, z);
                     sheep.setFleeceColor(color);
                     return sheep;
                 }
@@ -246,7 +246,7 @@ public final class ModRecipes {
         spawner("skeleton", "minecraft:skeleton", 100000, 120, ing(Items.BONE), ing(Items.ARROW));
         spawner("enderman", "minecraft:enderman", 120000, 120, ing(Items.ENDER_PEARL));
         spawner("silverfish", "minecraft:silverfish", 30000, 40, ing(Blocks.STONE));
-        spawner("squid", "minecraft:squid", 50000, 40, ing(new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage())));
+        spawner("squid", "minecraft:squid", 50000, 40, ing(new ItemStack(Items.DYE, 1, DyeColor.BLACK.getDyeDamage())));
         spawner("stray", "minecraft:stray", 100000, 120, ing(Items.BONE), ing(Blocks.ICE));
         spawner("shulker", "minecraft:shulker", 150000, 100, ing(Items.SHULKER_SHELL));
         spawner("husk", "minecraft:husk", 100000, 120, ing(Items.ROTTEN_FLESH), ing(Blocks.SAND));

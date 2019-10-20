@@ -5,16 +5,16 @@ import com.google.gson.stream.JsonReader;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EnumPlayerModelParts;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerModelPart;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class SupporterFancyHandler {
 
     public static final Map<String, FancyInfo> FANCY_INFOS = new HashMap<>();
@@ -39,10 +39,10 @@ public class SupporterFancyHandler {
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END)
             return;
-        EntityPlayer player = event.player;
+        PlayerEntity player = event.player;
         if (!player.world.isRemote)
             return;
-        if (player.isInvisible() || !player.isWearing(EnumPlayerModelParts.CAPE))
+        if (player.isInvisible() || !player.isWearing(PlayerModelPart.CAPE))
             return;
         Minecraft mc = Minecraft.getMinecraft();
         if (player == mc.player && mc.gameSettings.thirdPersonView == 0)
@@ -56,7 +56,7 @@ public class SupporterFancyHandler {
             int color;
             if (info.tier == 1) {
                 BlockPos pos = player.getPosition();
-                color = BiomeColorHelper.getFoliageColorAtPos(player.world, pos);
+                color = BiomeColors.getFoliageColorAtPos(player.world, pos);
             } else {
                 color = info.color;
             }

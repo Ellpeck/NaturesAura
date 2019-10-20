@@ -6,11 +6,11 @@ import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
@@ -173,7 +173,7 @@ public class AuraChunk implements IAuraChunk {
         }
     }
 
-    public void getActiveEffectIcons(EntityPlayer player, Map<ResourceLocation, Tuple<ItemStack, Boolean>> icons) {
+    public void getActiveEffectIcons(PlayerEntity player, Map<ResourceLocation, Tuple<ItemStack, Boolean>> icons) {
         for (IDrainSpotEffect effect : this.effects) {
             Tuple<ItemStack, Boolean> alreadyThere = icons.get(effect.getName());
             if (alreadyThere != null && alreadyThere.getSecond())
@@ -193,26 +193,26 @@ public class AuraChunk implements IAuraChunk {
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagList list = new NBTTagList();
+    public CompoundNBT serializeNBT() {
+        ListNBT list = new ListNBT();
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
-            NBTTagCompound tag = new NBTTagCompound();
+            CompoundNBT tag = new CompoundNBT();
             tag.setLong("pos", entry.getKey().toLong());
             tag.setInteger("amount", entry.getValue().intValue());
             list.appendTag(tag);
         }
 
-        NBTTagCompound compound = new NBTTagCompound();
+        CompoundNBT compound = new CompoundNBT();
         compound.setTag("drain_spots", list);
         return compound;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound compound) {
+    public void deserializeNBT(CompoundNBT compound) {
         this.drainSpots.clear();
-        NBTTagList list = compound.getTagList("drain_spots", 10);
+        ListNBT list = compound.getTagList("drain_spots", 10);
         for (NBTBase base : list) {
-            NBTTagCompound tag = (NBTTagCompound) base;
+            CompoundNBT tag = (CompoundNBT) base;
             this.addDrainSpot(
                     BlockPos.fromLong(tag.getLong("pos")),
                     new MutableInt(tag.getInteger("amount")));

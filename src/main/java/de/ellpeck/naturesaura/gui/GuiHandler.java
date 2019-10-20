@@ -5,7 +5,7 @@ import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.BlockEnderCrate;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import de.ellpeck.naturesaura.items.ModItems;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +23,7 @@ public class GuiHandler implements IGuiHandler {
 
     @Nullable
     @Override
-    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+    public Object getServerGuiElement(int id, PlayerEntity player, World world, int x, int y, int z) {
         if (id == 0) {
             TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
             if (tile instanceof TileEntityEnderCrate) {
@@ -44,7 +44,7 @@ public class GuiHandler implements IGuiHandler {
 
     @Nullable
     @Override
-    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+    public Object getClientGuiElement(int id, PlayerEntity player, World world, int x, int y, int z) {
         if (id == 0) {
             TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
             if (tile instanceof TileEntityEnderCrate) {

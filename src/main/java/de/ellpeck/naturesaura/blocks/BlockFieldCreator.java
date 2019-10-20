@@ -6,19 +6,19 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityFieldCreator;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
@@ -30,12 +30,12 @@ public class BlockFieldCreator extends BlockContainerImpl {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityFieldCreator) {
             if (!worldIn.isRemote) {
                 String key = NaturesAura.MOD_ID + ":field_creator_pos";
-                NBTTagCompound compound = playerIn.getEntityData();
+                CompoundNBT compound = playerIn.getEntityData();
                 if (!playerIn.isSneaking() && compound.hasKey(key)) {
                     BlockPos stored = BlockPos.fromLong(compound.getLong(key));
                     TileEntityFieldCreator creator = (TileEntityFieldCreator) tile;
@@ -53,16 +53,16 @@ public class BlockFieldCreator extends BlockContainerImpl {
                                 otherCreator.sendToClients();
 
                                 compound.removeTag(key);
-                                playerIn.sendStatusMessage(new TextComponentTranslation("info." + NaturesAura.MOD_ID + ".connected"), true);
+                                playerIn.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".connected"), true);
                             } else
-                                playerIn.sendStatusMessage(new TextComponentTranslation("info." + NaturesAura.MOD_ID + ".stored_pos_gone"), true);
+                                playerIn.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".stored_pos_gone"), true);
                         } else
-                            playerIn.sendStatusMessage(new TextComponentTranslation("info." + NaturesAura.MOD_ID + ".too_far"), true);
+                            playerIn.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".too_far"), true);
                     } else
-                        playerIn.sendStatusMessage(new TextComponentTranslation("info." + NaturesAura.MOD_ID + ".same_position"), true);
+                        playerIn.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".same_position"), true);
                 } else {
                     compound.setLong(key, pos.toLong());
-                    playerIn.sendStatusMessage(new TextComponentTranslation("info." + NaturesAura.MOD_ID + ".stored_pos"), true);
+                    playerIn.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".stored_pos"), true);
                 }
             }
             return true;
@@ -71,8 +71,8 @@ public class BlockFieldCreator extends BlockContainerImpl {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    @OnlyIn(Dist.CLIENT)
+    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityFieldCreator) {
             TileEntityFieldCreator creator = (TileEntityFieldCreator) tile;
@@ -93,33 +93,33 @@ public class BlockFieldCreator extends BlockContainerImpl {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) {
+    public boolean isFullCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public boolean isNormalCube(BlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean isSideSolid(IBlockState baseState, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(BlockState baseState, IBlockAccess world, BlockPos pos, Direction side) {
         return false;
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
         return BlockFaceShape.UNDEFINED;
     }
 }

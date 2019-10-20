@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.compat.patchouli;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.init.Items;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.EntityEntry;

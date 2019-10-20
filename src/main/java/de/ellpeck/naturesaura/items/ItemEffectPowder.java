@@ -4,16 +4,16 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
 
@@ -22,7 +22,7 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             ItemStack stack = player.getHeldItem(hand);
             EntityEffectInhibitor.place(worldIn, stack, pos.getX() + hitX, pos.getY() + hitY + 1, pos.getZ() + hitZ);
@@ -32,7 +32,7 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+    public void getSubItems(ItemGroup tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
             for (ResourceLocation effect : NaturesAuraAPI.EFFECT_POWDERS.keySet()) {
                 ItemStack stack = new ItemStack(this);
@@ -58,13 +58,13 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
 
     public static ItemStack setEffect(ItemStack stack, ResourceLocation effect) {
         if (!stack.hasTagCompound())
-            stack.setTagCompound(new NBTTagCompound());
+            stack.setTagCompound(new CompoundNBT());
         stack.getTagCompound().setString("effect", effect.toString());
         return stack;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IItemColor getItemColor() {
         return (stack, tintIndex) -> NaturesAuraAPI.EFFECT_POWDERS.getOrDefault(getEffect(stack), 0xFFFFFF);
     }

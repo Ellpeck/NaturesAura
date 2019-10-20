@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;

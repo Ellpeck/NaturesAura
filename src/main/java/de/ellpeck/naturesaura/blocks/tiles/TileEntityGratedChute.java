@@ -2,13 +2,13 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.BlockGratedChute;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -44,8 +44,8 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
                 ItemStack curr = this.items.getStackInSlot(0);
                 push:
                 if (!curr.isEmpty()) {
-                    IBlockState state = this.world.getBlockState(this.pos);
-                    EnumFacing facing = state.getValue(BlockGratedChute.FACING);
+                    BlockState state = this.world.getBlockState(this.pos);
+                    Direction facing = state.getValue(BlockGratedChute.FACING);
                     TileEntity tile = this.world.getTileEntity(this.pos.offset(facing));
                     if (tile == null || !tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
                             facing.getOpposite()))
@@ -67,10 +67,10 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
                 }
                 pull:
                 if (curr.isEmpty() || curr.getCount() < curr.getMaxStackSize()) {
-                    List<EntityItem> items = this.world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(
+                    List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(
                             this.pos.getX(), this.pos.getY() + 0.5, this.pos.getZ(),
                             this.pos.getX() + 1, this.pos.getY() + 2, this.pos.getZ() + 1));
-                    for (EntityItem item : items) {
+                    for (ItemEntity item : items) {
                         if (item.isDead)
                             continue;
                         ItemStack stack = item.getItem();
@@ -87,9 +87,9 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
                     }
 
                     TileEntity tileUp = this.world.getTileEntity(this.pos.up());
-                    if (tileUp == null || !tileUp.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN))
+                    if (tileUp == null || !tileUp.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN))
                         break pull;
-                    IItemHandler handlerUp = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN);
+                    IItemHandler handlerUp = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN);
                     if (handlerUp == null)
                         break pull;
                     for (int i = 0; i < handlerUp.getSlots(); i++) {
@@ -109,10 +109,10 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
     }
 
     private boolean isItemInFrame(ItemStack stack) {
-        List<EntityItemFrame> frames = Helper.getAttachedItemFrames(this.world, this.pos);
+        List<ItemFrameEntity> frames = Helper.getAttachedItemFrames(this.world, this.pos);
         if (frames.isEmpty())
             return false;
-        for (EntityItemFrame frame : frames) {
+        for (ItemFrameEntity frame : frames) {
             ItemStack frameStack = frame.getDisplayedItem();
             if (Helper.areItemsEqual(stack, frameStack, true)) {
                 return true;
@@ -122,7 +122,7 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
+    public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             compound.setInteger("cooldown", this.cooldown);
@@ -132,7 +132,7 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
+    public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.cooldown = compound.getInteger("cooldown");
@@ -142,7 +142,7 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public IItemHandlerModifiable getItemHandler(EnumFacing facing) {
+    public IItemHandlerModifiable getItemHandler(Direction facing) {
         return this.items;
     }
 }

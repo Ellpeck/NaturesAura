@@ -4,15 +4,15 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.LongNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityMoverMinecart extends EntityMinecart {
+public class EntityMoverMinecart extends AbstractMinecartEntity {
 
     private final List<BlockPos> spotOffsets = new ArrayList<>();
     private BlockPos lastPosition = BlockPos.ORIGIN;
@@ -103,27 +103,27 @@ public class EntityMoverMinecart extends EntityMinecart {
     }
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound compound) {
+    protected void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.setBoolean("active", this.isActive);
         compound.setLong("last_pos", this.lastPosition.toLong());
 
-        NBTTagList list = new NBTTagList();
+        ListNBT list = new ListNBT();
         for (BlockPos offset : this.spotOffsets)
-            list.appendTag(new NBTTagLong(offset.toLong()));
+            list.appendTag(new LongNBT(offset.toLong()));
         compound.setTag("offsets", list);
     }
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound compound) {
+    protected void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         this.isActive = compound.getBoolean("active");
         this.lastPosition = BlockPos.fromLong(compound.getLong("last_pos"));
 
         this.spotOffsets.clear();
-        NBTTagList list = compound.getTagList("offsets", Constants.NBT.TAG_LONG);
+        ListNBT list = compound.getTagList("offsets", Constants.NBT.TAG_LONG);
         for (NBTBase base : list)
-            this.spotOffsets.add(BlockPos.fromLong(((NBTTagLong) base).getLong()));
+            this.spotOffsets.add(BlockPos.fromLong(((LongNBT) base).getLong()));
     }
 
     @Nullable
@@ -139,7 +139,7 @@ public class EntityMoverMinecart extends EntityMinecart {
     }
 
     @Override
-    public IBlockState getDisplayTile() {
+    public BlockState getDisplayTile() {
         return Blocks.STONE.getDefaultState();
     }
 

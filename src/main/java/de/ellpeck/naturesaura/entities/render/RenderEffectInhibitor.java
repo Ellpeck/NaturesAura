@@ -4,32 +4,32 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureMap;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-@SideOnly(Side.CLIENT)
-public class RenderEffectInhibitor extends Render<EntityEffectInhibitor> {
+@OnlyIn(Dist.CLIENT)
+public class RenderEffectInhibitor extends EntityRenderer<EntityEffectInhibitor> {
 
     private final Map<ResourceLocation, ItemStack> items = new HashMap<>();
 
-    public RenderEffectInhibitor(RenderManager renderManager) {
+    public RenderEffectInhibitor(EntityRendererManager renderManager) {
         super(renderManager);
     }
 
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(EntityEffectInhibitor entity) {
-        return TextureMap.LOCATION_BLOCKS_TEXTURE;
+        return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
     }
 
     @Override

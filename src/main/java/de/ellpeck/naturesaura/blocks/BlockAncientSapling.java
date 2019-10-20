@@ -5,12 +5,12 @@ import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockSapling;
+import net.minecraft.block.BushBlock;
+import net.minecraft.block.SaplingBlock;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.util.Random;
 
-public class BlockAncientSapling extends BlockBush implements IGrowable, IModItem, ICreativeItem, IModelProvider {
+public class BlockAncientSapling extends BushBlock implements IGrowable, IModItem, ICreativeItem, IModelProvider {
 
     private static final AxisAlignedBB AABB = new AxisAlignedBB(
             0.09999999403953552D, 0.0D, 0.09999999403953552D,
@@ -36,12 +36,12 @@ public class BlockAncientSapling extends BlockBush implements IGrowable, IModIte
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
         return AABB;
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(World world, BlockPos pos, BlockState state, Random rand) {
         if (!world.isRemote) {
             super.updateTick(world, pos, state, rand);
 
@@ -72,34 +72,34 @@ public class BlockAncientSapling extends BlockBush implements IGrowable, IModIte
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(BlockSapling.STAGE, meta);
+    public BlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(SaplingBlock.STAGE, meta);
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(BlockSapling.STAGE);
+    public int getMetaFromState(BlockState state) {
+        return state.getValue(SaplingBlock.STAGE);
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, BlockSapling.STAGE);
+        return new BlockStateContainer(this, SaplingBlock.STAGE);
     }
 
     @Override
-    public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
+    public boolean canGrow(World world, BlockPos pos, BlockState state, boolean isClient) {
         return true;
     }
 
     @Override
-    public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
+    public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state) {
         return world.rand.nextFloat() < 0.45F;
     }
 
     @Override
-    public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
-        if (state.getValue(BlockSapling.STAGE) == 0) {
-            world.setBlockState(pos, state.cycleProperty(BlockSapling.STAGE), 4);
+    public void grow(World world, Random rand, BlockPos pos, BlockState state) {
+        if (state.getValue(SaplingBlock.STAGE) == 0) {
+            world.setBlockState(pos, state.cycleProperty(SaplingBlock.STAGE), 4);
         } else if (TerrainGen.saplingGrowTree(world, rand, pos)) {
             new WorldGenAncientTree(true).generate(world, rand, pos);
         }

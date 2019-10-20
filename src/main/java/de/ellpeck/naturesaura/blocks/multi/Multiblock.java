@@ -5,7 +5,7 @@ import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -80,8 +80,8 @@ public class Multiblock implements IMultiblock {
                 continue;
 
             Object value = rawMatchers[i + 1];
-            if (value instanceof IBlockState) {
-                IBlockState state = (IBlockState) value;
+            if (value instanceof BlockState) {
+                BlockState state = (BlockState) value;
                 matchers.put(c, new Matcher(state,
                         (world, start, offset, pos, other, otherC) -> other == state));
             } else if (value instanceof Block) {

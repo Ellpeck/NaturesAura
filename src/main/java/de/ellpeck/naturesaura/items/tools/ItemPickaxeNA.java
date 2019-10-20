@@ -7,15 +7,15 @@ import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemPickaxe;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import javax.annotation.Nullable;
 
-public class ItemPickaxeNA extends ItemPickaxe implements IModItem, ICreativeItem, IModelProvider {
+public class ItemPickaxeNA extends PickaxeItem implements IModItem, ICreativeItem, IModelProvider {
 
     private final String baseName;
 
@@ -56,25 +56,25 @@ public class ItemPickaxeNA extends ItemPickaxe implements IModItem, ICreativeIte
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         if (this == ModItems.INFUSED_PICKAXE) {
             ItemStack stack = player.getHeldItem(hand);
-            IBlockState state = worldIn.getBlockState(pos);
-            IBlockState result = NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.get(state);
+            BlockState state = worldIn.getBlockState(pos);
+            BlockState result = NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.get(state);
             if (result != null) {
                 if (!worldIn.isRemote)
                     worldIn.setBlockState(pos, result);
                 worldIn.playSound(player, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 stack.damageItem(15, player);
-                return EnumActionResult.SUCCESS;
+                return ActionResultType.SUCCESS;
             }
         }
-        return EnumActionResult.PASS;
+        return ActionResultType.PASS;
     }
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         if (this == ModItems.INFUSED_PICKAXE)
             return Helper.makeRechargeProvider(stack, true);
         else return null;

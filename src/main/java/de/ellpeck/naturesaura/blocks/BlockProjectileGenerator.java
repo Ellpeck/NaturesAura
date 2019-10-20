@@ -9,11 +9,11 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -22,9 +22,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider {
     public BlockProjectileGenerator() {
@@ -70,18 +70,18 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) {
+    public boolean isFullCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return false;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public Tuple<Class, TileEntitySpecialRenderer> getTESR() {
+    @OnlyIn(Dist.CLIENT)
+    public Tuple<Class, TileEntityRenderer> getTESR() {
         return new Tuple<>(TileEntityProjectileGenerator.class, new RenderProjectileGenerator());
     }
 }

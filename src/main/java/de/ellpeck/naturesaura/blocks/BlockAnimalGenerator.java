@@ -8,11 +8,11 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.INpc;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.INPC;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.passive.IAnimal;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -22,9 +22,9 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizable {
     public BlockAnimalGenerator() {
@@ -37,18 +37,18 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
 
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        EntityLivingBase entity = event.getEntityLiving();
-        if (entity.world.isRemote || !(entity instanceof IAnimals) || entity instanceof IMob || entity instanceof INpc)
+        LivingEntity entity = event.getEntityLiving();
+        if (entity.world.isRemote || !(entity instanceof IAnimal) || entity instanceof IMob || entity instanceof INPC)
             return;
-        NBTTagCompound data = entity.getEntityData();
+        CompoundNBT data = entity.getEntityData();
         int timeAlive = data.getInteger(NaturesAura.MOD_ID + ":time_alive");
         data.setInteger(NaturesAura.MOD_ID + ":time_alive", timeAlive + 1);
     }
 
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
-        EntityLivingBase entity = event.getEntityLiving();
-        if (entity.world.isRemote || !(entity instanceof IAnimals) || entity instanceof IMob || entity instanceof INpc)
+        LivingEntity entity = event.getEntityLiving();
+        if (entity.world.isRemote || !(entity instanceof IAnimal) || entity instanceof IMob || entity instanceof INPC)
             return;
         BlockPos pos = entity.getPosition();
         Helper.getTileEntitiesInArea(entity.world, pos, 5, tile -> {
@@ -56,7 +56,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
                 return false;
             TileEntityAnimalGenerator gen = (TileEntityAnimalGenerator) tile;
 
-            NBTTagCompound data = entity.getEntityData();
+            CompoundNBT data = entity.getEntityData();
             data.setBoolean(NaturesAura.MOD_ID + ":no_drops", true);
 
             if (gen.isBusy())
@@ -85,26 +85,26 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
 
     @SubscribeEvent
     public void onEntityDrops(LivingDropsEvent event) {
-        EntityLivingBase entity = event.getEntityLiving();
+        LivingEntity entity = event.getEntityLiving();
         if (entity.getEntityData().getBoolean(NaturesAura.MOD_ID + ":no_drops"))
             event.setCanceled(true);
     }
 
     @SubscribeEvent
     public void onEntityExp(LivingExperienceDropEvent event) {
-        EntityLivingBase entity = event.getEntityLiving();
+        LivingEntity entity = event.getEntityLiving();
         if (entity.getEntityData().getBoolean(NaturesAura.MOD_ID + ":no_drops"))
             event.setCanceled(true);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
         return new AxisAlignedBB(pos).grow(5);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getVisualizationColor(World world, BlockPos pos) {
         return 0x11377a;
     }

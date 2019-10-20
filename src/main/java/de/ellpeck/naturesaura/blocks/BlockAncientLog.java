@@ -4,14 +4,14 @@ import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.block.BlockLog;
+import net.minecraft.block.LogBlock;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-public class BlockAncientLog extends BlockLog implements IModItem, ICreativeItem, IModelProvider {
+public class BlockAncientLog extends LogBlock implements IModItem, ICreativeItem, IModelProvider {
 
     private final String baseName;
 
@@ -46,12 +46,12 @@ public class BlockAncientLog extends BlockLog implements IModItem, ICreativeItem
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return state.getValue(LOG_AXIS).ordinal();
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(LOG_AXIS, EnumAxis.values()[meta]);
     }
 }

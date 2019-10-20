@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.api.aura.type;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.DimensionType;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.World;
 
 import java.util.HashSet;

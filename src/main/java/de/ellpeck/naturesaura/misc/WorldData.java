@@ -9,9 +9,9 @@ import de.ellpeck.naturesaura.blocks.tiles.ItemStackHandlerNA;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.Vec3d;
@@ -27,26 +27,26 @@ public class WorldData implements IWorldData {
     public final ListMultimap<ResourceLocation, Tuple<Vec3d, Integer>> effectPowders = ArrayListMultimap.create();
 
     @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing) {
         return capability == NaturesAuraAPI.capWorldData;
     }
 
     @Nullable
     @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
         return capability == NaturesAuraAPI.capWorldData ? (T) this : null;
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound compound = new NBTTagCompound();
+    public CompoundNBT serializeNBT() {
+        CompoundNBT compound = new CompoundNBT();
 
-        NBTTagList storages = new NBTTagList();
+        ListNBT storages = new ListNBT();
         for (Map.Entry<String, ItemStackHandlerNA> entry : this.enderStorages.entrySet()) {
             ItemStackHandlerNA handler = entry.getValue();
             if (Helper.isEmpty(handler))
                 continue;
-            NBTTagCompound storageComp = handler.serializeNBT();
+            CompoundNBT storageComp = handler.serializeNBT();
             storageComp.setString("name", entry.getKey());
             storages.appendTag(storageComp);
         }
@@ -56,11 +56,11 @@ public class WorldData implements IWorldData {
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound compound) {
+    public void deserializeNBT(CompoundNBT compound) {
         this.enderStorages.clear();
-        NBTTagList storages = compound.getTagList("storages", 10);
+        ListNBT storages = compound.getTagList("storages", 10);
         for (NBTBase base : storages) {
-            NBTTagCompound storageComp = (NBTTagCompound) base;
+            CompoundNBT storageComp = (CompoundNBT) base;
             ItemStackHandlerNA storage = this.getEnderStorage(storageComp.getString("name"));
             storage.deserializeNBT(storageComp);
         }

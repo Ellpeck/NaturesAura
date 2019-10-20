@@ -6,12 +6,12 @@ import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.MobEffects;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.item.SwordItem;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import javax.annotation.Nullable;
 
-public class ItemSwordNA extends ItemSword implements IModItem, ICreativeItem, IModelProvider {
+public class ItemSwordNA extends SwordItem implements IModItem, ICreativeItem, IModelProvider {
     private final String baseName;
 
     public ItemSwordNA(String baseName, ToolMaterial material) {
@@ -49,15 +49,15 @@ public class ItemSwordNA extends ItemSword implements IModItem, ICreativeItem, I
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (this == ModItems.INFUSED_SWORD)
-            target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 60, 2));
+            target.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 60, 2));
         return super.hitEntity(stack, target, attacker);
     }
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         if (this == ModItems.INFUSED_SWORD)
             return Helper.makeRechargeProvider(stack, true);
         else return null;

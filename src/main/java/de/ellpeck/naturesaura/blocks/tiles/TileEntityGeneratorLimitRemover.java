@@ -1,13 +1,13 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class TileEntityGeneratorLimitRemover extends TileEntityImpl {
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return new AxisAlignedBB(this.pos, this.pos.add(1, 2, 1));
     }

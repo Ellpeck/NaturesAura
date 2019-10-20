@@ -20,8 +20,8 @@ import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.proxy.IProxy;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -55,7 +55,7 @@ public final class NaturesAura {
     @SidedProxy(modId = MOD_ID, clientSide = PROXY_LOCATION + "ClientProxy", serverSide = PROXY_LOCATION + "ServerProxy")
     public static IProxy proxy;
 
-    public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(MOD_ID) {
+    public static final ItemGroup CREATIVE_TAB = new ItemGroup(MOD_ID) {
         @Override
         public ItemStack createIcon() {
             return new ItemStack(ModItems.GOLD_LEAF);

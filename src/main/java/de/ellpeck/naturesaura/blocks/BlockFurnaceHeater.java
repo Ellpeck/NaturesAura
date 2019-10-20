@@ -6,17 +6,17 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
@@ -37,20 +37,20 @@ public class BlockFurnaceHeater extends BlockContainerImpl {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    @OnlyIn(Dist.CLIENT)
+    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityFurnaceHeater && ((TileEntityFurnaceHeater) tile).isActive) {
-            EnumFacing facing = stateIn.getValue(FACING);
+            Direction facing = stateIn.getValue(FACING);
 
             float x;
             float y;
             float z;
-            if (facing == EnumFacing.UP) {
+            if (facing == Direction.UP) {
                 x = 0.35F + rand.nextFloat() * 0.3F;
                 y = 0F;
                 z = 0.35F + rand.nextFloat() * 0.3F;
-            } else if (facing == EnumFacing.DOWN) {
+            } else if (facing == Direction.DOWN) {
                 x = 0.35F + rand.nextFloat() * 0.3F;
                 y = 1F;
                 z = 0.35F + rand.nextFloat() * 0.3F;
@@ -70,7 +70,7 @@ public class BlockFurnaceHeater extends BlockContainerImpl {
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
         switch (state.getValue(FACING)) {
             case DOWN:
                 return AABB_DOWN;
@@ -88,27 +88,27 @@ public class BlockFurnaceHeater extends BlockContainerImpl {
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) {
+    public boolean isFullCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public boolean isNormalCube(BlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean isSideSolid(IBlockState baseState, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(BlockState baseState, IBlockAccess world, BlockPos pos, Direction side) {
         return false;
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -118,17 +118,17 @@ public class BlockFurnaceHeater extends BlockContainerImpl {
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return state.getValue(FACING).getIndex();
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
+    public BlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(FACING, Direction.byIndex(meta));
     }
 
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+    public BlockState getStateForPlacement(World world, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer, Hand hand) {
         return this.getDefaultState().withProperty(FACING, facing);
     }
 }

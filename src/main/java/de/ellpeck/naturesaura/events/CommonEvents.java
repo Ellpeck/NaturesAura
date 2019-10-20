@@ -11,14 +11,14 @@ import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.Iterator;
@@ -41,7 +41,7 @@ public class CommonEvents {
         if (!event.world.isRemote && event.phase == TickEvent.Phase.END) {
             if (event.world.getTotalWorldTime() % 20 == 0) {
                 event.world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":onWorldTick");
-                Iterator<Chunk> chunks = event.world.getPersistentChunkIterable(((WorldServer) event.world).getPlayerChunkMap().getChunkIterator());
+                Iterator<Chunk> chunks = event.world.getPersistentChunkIterable(((ServerWorld) event.world).getPlayerChunkMap().getChunkIterator());
                 while (chunks.hasNext()) {
                     Chunk chunk = chunks.next();
                     if (chunk.hasCapability(NaturesAuraAPI.capAuraChunk, null)) {

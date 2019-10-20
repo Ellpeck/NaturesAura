@@ -7,8 +7,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockMossGenerator extends BlockContainerImpl implements IVisualizable {
     public BlockMossGenerator() {
@@ -18,13 +18,13 @@ public class BlockMossGenerator extends BlockContainerImpl implements IVisualiza
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
         return new AxisAlignedBB(pos).grow(2);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getVisualizationColor(World world, BlockPos pos) {
         return 0x15702d;
     }

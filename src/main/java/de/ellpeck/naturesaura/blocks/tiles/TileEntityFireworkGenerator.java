@@ -4,14 +4,14 @@ import com.google.common.primitives.Ints;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.entity.item.EntityFireworkRocket;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Items;
+import net.minecraft.entity.item.FireworkRocketEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EntitySelectors;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -24,7 +24,7 @@ import java.util.Set;
 
 public class TileEntityFireworkGenerator extends TileEntityImpl implements ITickable {
 
-    private EntityFireworkRocket trackedEntity;
+    private FireworkRocketEntity trackedEntity;
     private ItemStack trackedItem;
     private int toRelease;
     private int releaseTimer;
@@ -33,16 +33,16 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
     public void update() {
         if (!this.world.isRemote) {
             if (this.world.getTotalWorldTime() % 10 == 0) {
-                List<EntityItem> items = this.world.getEntitiesWithinAABB(EntityItem.class,
-                        new AxisAlignedBB(this.pos).grow(4), EntitySelectors.IS_ALIVE);
-                for (EntityItem item : items) {
+                List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class,
+                        new AxisAlignedBB(this.pos).grow(4), EntityPredicates.IS_ALIVE);
+                for (ItemEntity item : items) {
                     if (item.cannotPickup())
                         continue;
                     ItemStack stack = item.getItem();
                     if (stack.isEmpty() || stack.getItem() != Items.FIREWORKS)
                         continue;
                     if (this.trackedEntity == null && this.releaseTimer <= 0) {
-                        EntityFireworkRocket entity = new EntityFireworkRocket(this.world, item.posX, item.posY, item.posZ, stack);
+                        FireworkRocketEntity entity = new FireworkRocketEntity(this.world, item.posX, item.posY, item.posZ, stack);
                         this.trackedEntity = entity;
                         this.trackedItem = stack.copy();
                         this.world.spawnEntity(entity);
@@ -60,16 +60,16 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                     float generateFactor = 0;
                     Set<Integer> usedColors = new HashSet<>();
 
-                    NBTTagCompound compound = this.trackedItem.getTagCompound();
-                    NBTTagCompound fireworks = compound.getCompoundTag("Fireworks");
+                    CompoundNBT compound = this.trackedItem.getTagCompound();
+                    CompoundNBT fireworks = compound.getCompoundTag("Fireworks");
 
                     int flightTime = fireworks.getInteger("Flight");
-                    NBTTagList explosions = fireworks.getTagList("Explosions", 10);
+                    ListNBT explosions = fireworks.getTagList("Explosions", 10);
                     if (!explosions.isEmpty()) {
                         generateFactor += flightTime;
 
                         for (NBTBase base : explosions) {
-                            NBTTagCompound explosion = (NBTTagCompound) base;
+                            CompoundNBT explosion = (CompoundNBT) base;
                             generateFactor += 1.5F;
 
                             boolean flicker = explosion.getBoolean("Flicker");

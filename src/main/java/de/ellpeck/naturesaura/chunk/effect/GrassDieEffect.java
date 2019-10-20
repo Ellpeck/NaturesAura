@@ -8,9 +8,9 @@ import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.block.*;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -40,7 +40,7 @@ public class GrassDieEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public int isActiveHere(EntityPlayer player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.world, pos, spot))
             return -1;
         if (player.getDistanceSq(pos) > this.dist * this.dist)
@@ -64,10 +64,10 @@ public class GrassDieEffect implements IDrainSpotEffect {
                     pos.getZ() + world.rand.nextGaussian() * this.dist
             );
             if (grassPos.distanceSq(pos) <= this.dist * this.dist && world.isBlockLoaded(grassPos)) {
-                IBlockState state = world.getBlockState(grassPos);
+                BlockState state = world.getBlockState(grassPos);
                 Block block = state.getBlock();
 
-                IBlockState newState = null;
+                BlockState newState = null;
                 if (block instanceof BlockLeaves) {
                     newState = ModBlocks.DECAYED_LEAVES.getDefaultState();
                 } else if (block instanceof BlockGrass) {

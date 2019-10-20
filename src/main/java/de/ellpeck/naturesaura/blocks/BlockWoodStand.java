@@ -10,14 +10,14 @@ import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -25,9 +25,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider 
         BlockPos pos = event.getPos();
         if (!world.isRemote) {
             if (Multiblocks.TREE_RITUAL.isComplete(world, pos)) {
-                IBlockState sapling = world.getBlockState(pos);
+                BlockState sapling = world.getBlockState(pos);
                 ItemStack saplingStack = sapling.getBlock().getItem(world, pos, sapling);
                 if (!saplingStack.isEmpty()) {
                     for (TreeRitualRecipe recipe : NaturesAuraAPI.TREE_RITUAL_RECIPES.values()) {
@@ -96,43 +96,43 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider 
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         return Helper.putStackOnTile(playerIn, hand, pos, 0, true);
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
         return BOUND_BOX;
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) {
+    public boolean isFullCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public boolean isNormalCube(BlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean isSideSolid(IBlockState baseState, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(BlockState baseState, IBlockAccess world, BlockPos pos, Direction side) {
         return false;
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
         return BlockFaceShape.UNDEFINED;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public Tuple<Class, TileEntitySpecialRenderer> getTESR() {
+    @OnlyIn(Dist.CLIENT)
+    public Tuple<Class, TileEntityRenderer> getTESR() {
         return new Tuple<>(TileEntityWoodStand.class, new RenderWoodStand());
     }
 }

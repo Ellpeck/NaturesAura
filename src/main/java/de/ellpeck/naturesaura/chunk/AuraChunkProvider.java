@@ -3,8 +3,8 @@ package de.ellpeck.naturesaura.chunk;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -13,7 +13,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AuraChunkProvider implements ICapabilityProvider, INBTSerializable<NBTTagCompound> {
+public class AuraChunkProvider implements ICapabilityProvider, INBTSerializable<CompoundNBT> {
 
     private final Chunk chunk;
     private IAuraChunk auraChunk;
@@ -29,23 +29,23 @@ public class AuraChunkProvider implements ICapabilityProvider, INBTSerializable<
     }
 
     @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing) {
         return capability == NaturesAuraAPI.capAuraChunk;
     }
 
     @Nullable
     @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
         return capability == NaturesAuraAPI.capAuraChunk ? (T) this.getAuraChunk() : null;
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
+    public CompoundNBT serializeNBT() {
         return this.getAuraChunk().serializeNBT();
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
         this.getAuraChunk().deserializeNBT(nbt);
     }
 }

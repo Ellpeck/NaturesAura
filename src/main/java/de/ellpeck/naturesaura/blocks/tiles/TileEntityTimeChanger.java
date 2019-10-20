@@ -5,19 +5,19 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.items.ModItems;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.init.Items;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.item.ItemFrameEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.SPacketTimeUpdate;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.play.server.SUpdateTimePacket;
 import net.minecraft.server.management.PlayerList;
-import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 
 import java.util.List;
 
@@ -28,8 +28,8 @@ public class TileEntityTimeChanger extends TileEntityImpl implements ITickable {
     @Override
     public void update() {
         if (!this.world.isRemote) {
-            List<EntityItemFrame> frames = Helper.getAttachedItemFrames(this.world, this.pos);
-            for (EntityItemFrame frame : frames) {
+            List<ItemFrameEntity> frames = Helper.getAttachedItemFrames(this.world, this.pos);
+            for (ItemFrameEntity frame : frames) {
                 ItemStack frameStack = frame.getDisplayedItem();
                 if (frameStack.isEmpty() || frameStack.getItem() != ModItems.CLOCK_HAND)
                     continue;
@@ -47,9 +47,9 @@ public class TileEntityTimeChanger extends TileEntityImpl implements ITickable {
                     BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 35, this.pos);
                     IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, (int) toAdd * 20);
 
-                    if (this.world instanceof WorldServer) {
+                    if (this.world instanceof ServerWorld) {
                         PlayerList list = this.world.getMinecraftServer().getPlayerList();
-                        list.sendPacketToAllPlayersInDimension(new SPacketTimeUpdate(
+                        list.sendPacketToAllPlayersInDimension(new SUpdateTimePacket(
                                 this.world.getTotalWorldTime(), this.world.getWorldTime(),
                                 this.world.getGameRules().getBoolean("doDaylightCycle")), this.world.provider.getDimension());
                     }
@@ -59,9 +59,9 @@ public class TileEntityTimeChanger extends TileEntityImpl implements ITickable {
                 if (this.world.getTotalWorldTime() % 20 != 0)
                     return;
 
-                List<EntityItem> items = this.world.getEntitiesWithinAABB(EntityItem.class,
-                        new AxisAlignedBB(this.pos).grow(1), EntitySelectors.IS_ALIVE);
-                for (EntityItem item : items) {
+                List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class,
+                        new AxisAlignedBB(this.pos).grow(1), EntityPredicates.IS_ALIVE);
+                for (ItemEntity item : items) {
                     if (item.cannotPickup())
                         continue;
                     ItemStack stack = item.getItem();
@@ -106,14 +106,14 @@ public class TileEntityTimeChanger extends TileEntityImpl implements ITickable {
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
+    public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK)
             compound.setLong("goal", this.goalTime);
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
+    public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK)
             this.goalTime = compound.getLong("goal");

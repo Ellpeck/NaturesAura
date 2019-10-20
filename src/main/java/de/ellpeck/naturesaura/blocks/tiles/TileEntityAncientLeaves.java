@@ -3,8 +3,8 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.NaturalAuraContainer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 
 public class TileEntityAncientLeaves extends TileEntityImpl {
 
@@ -25,19 +25,19 @@ public class TileEntityAncientLeaves extends TileEntityImpl {
     };
 
     @Override
-    public IAuraContainer getAuraContainer(EnumFacing facing) {
+    public IAuraContainer getAuraContainer(Direction facing) {
         return this.container;
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
+    public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK)
             this.container.writeNBT(compound);
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
+    public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK)
             this.container.readNBT(compound);

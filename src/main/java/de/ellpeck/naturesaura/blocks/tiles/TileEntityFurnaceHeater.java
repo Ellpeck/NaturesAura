@@ -6,13 +6,13 @@ import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.BlockFurnaceHeater;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
-import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.FurnaceBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.FurnaceTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -26,15 +26,15 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
         if (!this.world.isRemote && this.world.getTotalWorldTime() % 5 == 0) {
             boolean did = false;
 
-            EnumFacing facing = this.world.getBlockState(this.pos).getValue(BlockFurnaceHeater.FACING);
+            Direction facing = this.world.getBlockState(this.pos).getValue(BlockFurnaceHeater.FACING);
             BlockPos tilePos = this.pos.offset(facing.getOpposite());
             TileEntity tile = this.world.getTileEntity(tilePos);
-            if (tile instanceof TileEntityFurnace) {
-                TileEntityFurnace furnace = (TileEntityFurnace) tile;
+            if (tile instanceof FurnaceTileEntity) {
+                FurnaceTileEntity furnace = (FurnaceTileEntity) tile;
                 if (isReady(furnace)) {
                     int time = furnace.getField(0);
                     if (time <= 0)
-                        BlockFurnace.setState(true, this.world, furnace.getPos());
+                        FurnaceBlock.setState(true, this.world, furnace.getPos());
                     furnace.setField(0, 200);
                     //if set higher than 199, it'll never finish because the furnace does ++ and then ==
                     furnace.setField(2, Math.min(199, furnace.getField(2) + 5));
@@ -65,7 +65,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
         }
     }
 
-    private static boolean isReady(TileEntityFurnace furnace) {
+    private static boolean isReady(FurnaceTileEntity furnace) {
         if (!furnace.getStackInSlot(1).isEmpty())
             return false;
 
@@ -83,7 +83,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound, SaveType type) {
+    public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
 
         if (type == SaveType.SYNC)
@@ -91,7 +91,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
     }
 
     @Override
-    public void readNBT(NBTTagCompound compound, SaveType type) {
+    public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
 
         if (type == SaveType.SYNC)

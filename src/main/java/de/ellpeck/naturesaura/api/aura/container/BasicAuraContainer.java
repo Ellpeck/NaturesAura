@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.api.aura.container;
 
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class BasicAuraContainer implements IAuraContainer {
 
@@ -52,11 +52,11 @@ public class BasicAuraContainer implements IAuraContainer {
         return this.type == null || type.isSimilar(this.type);
     }
 
-    public void writeNBT(NBTTagCompound compound) {
+    public void writeNBT(CompoundNBT compound) {
         compound.setInteger("aura", this.aura);
     }
 
-    public void readNBT(NBTTagCompound compound) {
+    public void readNBT(CompoundNBT compound) {
         this.aura = compound.getInteger("aura");
     }
 }

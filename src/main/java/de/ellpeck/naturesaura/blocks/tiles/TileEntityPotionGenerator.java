@@ -4,10 +4,10 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.entity.EntityAreaEffectCloud;
+import net.minecraft.entity.AreaEffectCloudEntity;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -24,18 +24,18 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
             if (Multiblocks.POTION_GENERATOR.isComplete(this.world, this.pos)) {
                 boolean addedOne = false;
 
-                List<EntityAreaEffectCloud> clouds = this.world.getEntitiesWithinAABB(EntityAreaEffectCloud.class, new AxisAlignedBB(this.pos).grow(2));
-                for (EntityAreaEffectCloud cloud : clouds) {
+                List<AreaEffectCloudEntity> clouds = this.world.getEntitiesWithinAABB(AreaEffectCloudEntity.class, new AxisAlignedBB(this.pos).grow(2));
+                for (AreaEffectCloudEntity cloud : clouds) {
                     if (cloud.isDead)
                         continue;
 
                     if (!addedOne) {
-                        PotionType type = ReflectionHelper.getPrivateValue(EntityAreaEffectCloud.class, cloud, "field_184502_e", "potion");
+                        Potion type = ReflectionHelper.getPrivateValue(AreaEffectCloudEntity.class, cloud, "field_184502_e", "potion");
                         if (type == null)
                             continue;
 
-                        for (PotionEffect effect : type.getEffects()) {
-                            Potion potion = effect.getPotion();
+                        for (EffectInstance effect : type.getEffects()) {
+                            Effect potion = effect.getPotion();
                             if (potion.isBadEffect() || potion.isInstant()) {
                                 continue;
                             }
