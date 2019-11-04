@@ -1,61 +1,125 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.ModConfig;
+import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.block.material.MaterialColor;
+import net.minecraftforge.registries.ObjectHolder;
 
-public final class ModBlocks {
+public class ModBlocks {
 
-    public static final Block ANCIENT_LOG = new BlockAncientLog("ancient_log");
-    public static final Block ANCIENT_BARK = new BlockAncientLog("ancient_bark");
-    public static final Block ANCIENT_PLANKS = new BlockImpl("ancient_planks", Material.WOOD).setSoundType(SoundType.WOOD).setHardness(2F);
-    public static final Block ANCIENT_STAIRS = new BlockStairsNA("ancient_stairs", ANCIENT_PLANKS.getDefaultState());
-    public static final Block ANCIENT_SLAB = BlockSlabsNA.makeSlab("ancient_slab", Material.WOOD, SoundType.WOOD, 1.5F);
-    public static final Block ANCIENT_LEAVES = new BlockAncientLeaves();
-    public static final Block ANCIENT_SAPLING = new BlockAncientSapling();
-    public static final Block NATURE_ALTAR = new BlockNatureAltar();
-    public static final Block DECAYED_LEAVES = new BlockDecayedLeaves();
-    public static final Block GOLDEN_LEAVES = new BlockGoldenLeaves();
-    public static final Block GOLD_POWDER = new BlockGoldPowder();
-    public static final Block WOOD_STAND = new BlockWoodStand();
-    public static final Block INFUSED_STONE = new BlockImpl("infused_stone", Material.ROCK).setSoundType(SoundType.STONE).setHardness(1.75F);
-    public static final Block INFUSED_STAIRS = new BlockStairsNA("infused_stairs", INFUSED_STONE.getDefaultState());
-    public static final Block INFUSED_SLAB = BlockSlabsNA.makeSlab("infused_slab", Material.ROCK, SoundType.STONE, 1.25F);
-    public static final Block INFUSED_BRICK = new BlockImpl("infused_brick", Material.ROCK).setSoundType(SoundType.STONE).setHardness(1.5F);
-    public static final Block INFUSED_BRICK_STAIRS = new BlockStairsNA("infused_brick_stairs", INFUSED_BRICK.getDefaultState());
-    public static final Block INFUSED_BRICK_SLAB = BlockSlabsNA.makeSlab("infused_brick_slab", Material.ROCK, SoundType.STONE, 1.25F);
-    public static final Block FURNACE_HEATER = new BlockFurnaceHeater();
-    public static final Block POTION_GENERATOR = new BlockPotionGenerator();
-    public static final Block AURA_DETECTOR = new BlockAuraDetector();
-    public static final Block CONVERSION_CATALYST = new BlockImpl("conversion_catalyst", Material.ROCK).setSoundType(SoundType.STONE).setHardness(2.5F);
-    public static final Block CRUSHING_CATALYST = new BlockImpl("crushing_catalyst", Material.ROCK).setSoundType(SoundType.STONE).setHardness(2.5F);
-    public static final Block FLOWER_GENERATOR = new BlockFlowerGenerator();
-    public static final Block PLACER = new BlockPlacer();
-    public static final Block HOPPER_UPGRADE = new BlockHopperUpgrade();
-    public static final Block FIELD_CREATOR = new BlockFieldCreator();
-    public static final Block OAK_GENERATOR = new BlockOakGenerator();
-    public static final Block INFUSED_IRON = new BlockImpl("infused_iron_block", Material.IRON).setSoundType(SoundType.METAL).setHardness(3F);
-    public static final Block OFFERING_TABLE = new BlockOfferingTable();
-    public static final Block PICKUP_STOPPER = new BlockPickupStopper();
-    public static final Block SPAWN_LAMP = new BlockSpawnLamp();
-    public static final Block ANIMAL_GENERATOR = new BlockAnimalGenerator();
-    public static final Block END_FLOWER = new BlockEndFlower();
-    public static final Block GRATED_CHUTE = new BlockGratedChute();
-    public static final Block ANIMAL_SPAWNER = new BlockAnimalSpawner();
-    public static final Block AUTO_CRAFTER = new BlockAutoCrafter();
-    public static final Block GOLD_BRICK = new BlockImpl("gold_brick", Material.ROCK).setSoundType(SoundType.STONE).setHardness(2F);
-    public static final Block RF_CONVERTER = ModConfig.enabledFeatures.rfConverter ? new BlockRFConverter() : null;
-    public static final Block MOSS_GENERATOR = new BlockMossGenerator();
-    public static final Block TIME_CHANGER = new BlockTimeChanger();
-    public static final Block GENERATOR_LIMIT_REMOVER = new BlockGeneratorLimitRemover();
-    public static final Block ENDER_CRATE = new BlockEnderCrate();
-    public static final Block POWDER_PLACER = new BlockPowderPlacer();
-    public static final Block FIREWORK_GENERATOR = new BlockFireworkGenerator();
-    public static final Block PROJECTILE_GENERATOR = new BlockProjectileGenerator();
-    public static final Block CHUNK_LOADER = ModConfig.enabledFeatures.chunkLoader ? new BlockChunkLoader() : null;
-    public static final Block DIMENSION_RAIL_OVERWORLD = new BlockDimensionRail("overworld", DimensionType.OVERWORLD, DimensionType.NETHER, DimensionType.THE_END);
-    public static final Block DIMENSION_RAIL_NETHER = new BlockDimensionRail("nether", DimensionType.NETHER, DimensionType.OVERWORLD);
-    public static final Block DIMENSION_RAIL_END = new BlockDimensionRail("end", DimensionType.THE_END, DimensionType.OVERWORLD);
+    @ObjectHolder(NaturesAura.MOD_ID + ":ancient_log")
+    public static Block ANCIENT_LOG;
+    @ObjectHolder(NaturesAura.MOD_ID + ":ancient_bark")
+    public static Block ANCIENT_BARK;
+    @ObjectHolder(NaturesAura.MOD_ID + ":ancient_planks")
+    public static Block ANCIENT_PLANKS;
+    @ObjectHolder(NaturesAura.MOD_ID + ":ancient_stairs")
+    public static Block ANCIENT_STAIRS;
+    @ObjectHolder(NaturesAura.MOD_ID + ":ancient_slab")
+    public static Block ANCIENT_SLAB;
+    @ObjectHolder(NaturesAura.MOD_ID + ":ancient_leaves")
+    public static Block ANCIENT_LEAVES;
+    @ObjectHolder(NaturesAura.MOD_ID + ":ancient_sapling")
+    public static Block ANCIENT_SAPLING;
+    @ObjectHolder(NaturesAura.MOD_ID + ":nature_altar")
+    public static Block NATURE_ALTAR;
+    @ObjectHolder(NaturesAura.MOD_ID + ":decayed_leaves")
+    public static Block DECAYED_LEAVES;
+    @ObjectHolder(NaturesAura.MOD_ID + ":golden_leaves")
+    public static Block GOLDEN_LEAVES;
+    @ObjectHolder(NaturesAura.MOD_ID + ":gold_powder")
+    public static Block GOLD_POWDER;
+    @ObjectHolder(NaturesAura.MOD_ID + ":wood_stand")
+    public static Block WOOD_STAND;
+    @ObjectHolder(NaturesAura.MOD_ID + ":infused_stone")
+    public static Block INFUSED_STONE;
+    @ObjectHolder(NaturesAura.MOD_ID + ":infused_stairs")
+    public static Block INFUSED_STAIRS;
+    @ObjectHolder(NaturesAura.MOD_ID + ":infused_slab")
+    public static Block INFUSED_SLAB;
+    @ObjectHolder(NaturesAura.MOD_ID + ":infused_brick")
+    public static Block INFUSED_BRICK;
+    @ObjectHolder(NaturesAura.MOD_ID + ":infused_brick_stairs")
+    public static Block INFUSED_BRICK_STAIRS;
+    @ObjectHolder(NaturesAura.MOD_ID + ":infused_brick_slab")
+    public static Block INFUSED_BRICK_SLAB;
+    @ObjectHolder(NaturesAura.MOD_ID + ":furnace_heater")
+    public static Block FURNACE_HEATER;
+    @ObjectHolder(NaturesAura.MOD_ID + ":potion_generator")
+    public static Block POTION_GENERATOR;
+    @ObjectHolder(NaturesAura.MOD_ID + ":aura_detector")
+    public static Block AURA_DETECTOR;
+    @ObjectHolder(NaturesAura.MOD_ID + ":conversion_catalyst")
+    public static Block CONVERSION_CATALYST;
+    @ObjectHolder(NaturesAura.MOD_ID + ":crushing_catalyst")
+    public static Block CRUSHING_CATALYST;
+    @ObjectHolder(NaturesAura.MOD_ID + ":flower_generator")
+    public static Block FLOWER_GENERATOR;
+    @ObjectHolder(NaturesAura.MOD_ID + ":placer")
+    public static Block PLACER;
+    @ObjectHolder(NaturesAura.MOD_ID + ":hopper_upgrade")
+    public static Block HOPPER_UPGRADE;
+    @ObjectHolder(NaturesAura.MOD_ID + ":field_creator")
+    public static Block FIELD_CREATOR;
+    @ObjectHolder(NaturesAura.MOD_ID + ":oak_generator")
+    public static Block OAK_GENERATOR;
+    @ObjectHolder(NaturesAura.MOD_ID + ":infused_iron_block")
+    public static Block INFUSED_IRON;
+    @ObjectHolder(NaturesAura.MOD_ID + ":offering_table")
+    public static Block OFFERING_TABLE;
+    @ObjectHolder(NaturesAura.MOD_ID + ":pickup_stopper")
+    public static Block PICKUP_STOPPER;
+    @ObjectHolder(NaturesAura.MOD_ID + ":spawn_lamp")
+    public static Block SPAWN_LAMP;
+    @ObjectHolder(NaturesAura.MOD_ID + ":animal_generator")
+    public static Block ANIMAL_GENERATOR;
+    @ObjectHolder(NaturesAura.MOD_ID + ":end_flower")
+    public static Block END_FLOWER;
+    @ObjectHolder(NaturesAura.MOD_ID + ":grated_chute")
+    public static Block GRATED_CHUTE;
+    @ObjectHolder(NaturesAura.MOD_ID + ":animal_spawner")
+    public static Block ANIMAL_SPAWNER;
+    @ObjectHolder(NaturesAura.MOD_ID + ":auto_crafter")
+    public static Block AUTO_CRAFTER;
+    @ObjectHolder(NaturesAura.MOD_ID + ":gold_brick")
+    public static Block GOLD_BRICK;
+    @ObjectHolder(NaturesAura.MOD_ID + ":rf_converter")
+    public static Block RF_CONVERTER;
+    @ObjectHolder(NaturesAura.MOD_ID + ":moss_generator")
+    public static Block MOSS_GENERATOR;
+    @ObjectHolder(NaturesAura.MOD_ID + ":time_changer")
+    public static Block TIME_CHANGER;
+    @ObjectHolder(NaturesAura.MOD_ID + ":generator_limit_remover")
+    public static Block GENERATOR_LIMIT_REMOVER;
+    @ObjectHolder(NaturesAura.MOD_ID + ":ender_crate")
+    public static Block ENDER_CRATE;
+    @ObjectHolder(NaturesAura.MOD_ID + ":powder_placer")
+    public static Block POWDER_PLACER;
+    @ObjectHolder(NaturesAura.MOD_ID + ":firework_generator")
+    public static Block FIREWORK_GENERATOR;
+    @ObjectHolder(NaturesAura.MOD_ID + ":projectile_generator")
+    public static Block PROJECTILE_GENERATOR;
+    @ObjectHolder(NaturesAura.MOD_ID + ":chunk_loader")
+    public static Block CHUNK_LOADER;
+    @ObjectHolder(NaturesAura.MOD_ID + ":dimentional_rail_overworld")
+    public static Block DIMENSION_RAIL_OVERWORLD;
+    @ObjectHolder(NaturesAura.MOD_ID + ":dimentional_rail_nether")
+    public static Block DIMENSION_RAIL_NETHER;
+    @ObjectHolder(NaturesAura.MOD_ID + ":dimentional_rail_end")
+    public static Block DIMENSION_RAIL_END;
+
+    public static Block.Properties prop(Material material, MaterialColor color) {
+        return Block.Properties.create(material, color);
+    }
+
+    public static Block.Properties prop(Material material) {
+        return Block.Properties.create(material);
+    }
+
+    public static Block.Properties prop(Block block) {
+        return Block.Properties.from(block);
+    }
+
 }

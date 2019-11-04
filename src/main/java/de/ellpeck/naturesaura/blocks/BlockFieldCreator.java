@@ -3,19 +3,18 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityFieldCreator;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -24,19 +23,17 @@ import java.util.Random;
 
 public class BlockFieldCreator extends BlockContainerImpl {
     public BlockFieldCreator() {
-        super(Material.ROCK, "field_creator", TileEntityFieldCreator.class, "field_creator");
-        this.setSoundType(SoundType.STONE);
-        this.setHardness(2F);
+        super("field_creator", TileEntityFieldCreator.class, "field_creator", ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityFieldCreator) {
             if (!worldIn.isRemote) {
                 String key = NaturesAura.MOD_ID + ":field_creator_pos";
-                CompoundNBT compound = playerIn.getEntityData();
-                if (!playerIn.isSneaking() && compound.hasKey(key)) {
+                CompoundNBT compound = player.getPersistentData();
+                if (!player.isSneaking() && compound.contains(key)) {
                     BlockPos stored = BlockPos.fromLong(compound.getLong(key));
                     TileEntityFieldCreator creator = (TileEntityFieldCreator) tile;
                     if (!pos.equals(stored)) {
@@ -52,17 +49,17 @@ public class BlockFieldCreator extends BlockContainerImpl {
                                 otherCreator.isMain = false;
                                 otherCreator.sendToClients();
 
-                                compound.removeTag(key);
-                                playerIn.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".connected"), true);
+                                compound.remove(key);
+                                player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".connected"), true);
                             } else
-                                playerIn.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".stored_pos_gone"), true);
+                                player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".stored_pos_gone"), true);
                         } else
-                            playerIn.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".too_far"), true);
+                            player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".too_far"), true);
                     } else
-                        playerIn.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".same_position"), true);
+                        player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".same_position"), true);
                 } else {
-                    compound.setLong(key, pos.toLong());
-                    playerIn.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".stored_pos"), true);
+                    compound.putLong(key, pos.toLong());
+                    player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".stored_pos"), true);
                 }
             }
             return true;
@@ -72,7 +69,7 @@ public class BlockFieldCreator extends BlockContainerImpl {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityFieldCreator) {
             TileEntityFieldCreator creator = (TileEntityFieldCreator) tile;
@@ -99,27 +96,12 @@ public class BlockFieldCreator extends BlockContainerImpl {
     }
 
     @Override
-    public boolean isFullCube(BlockState state) {
+    public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube(BlockState state) {
+    public boolean isSolid(BlockState state) {
         return false;
-    }
-
-    @Override
-    public boolean isNormalCube(BlockState state, IBlockAccess world, BlockPos pos) {
-        return false;
-    }
-
-    @Override
-    public boolean isSideSolid(BlockState baseState, IBlockAccess world, BlockPos pos, Direction side) {
-        return false;
-    }
-
-    @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
-        return BlockFaceShape.UNDEFINED;
     }
 }

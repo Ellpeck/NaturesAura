@@ -10,8 +10,8 @@ import de.ellpeck.naturesaura.chunk.effect.AnimalEffect;
 import de.ellpeck.naturesaura.chunk.effect.CacheRechargeEffect;
 import de.ellpeck.naturesaura.chunk.effect.OreSpawnEffect;
 import de.ellpeck.naturesaura.chunk.effect.PlantBoostEffect;
-import de.ellpeck.naturesaura.items.ItemAuraBottle;
-import de.ellpeck.naturesaura.items.ItemEffectPowder;
+import de.ellpeck.naturesaura.items.AuraBottle;
+import de.ellpeck.naturesaura.items.EffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowerBlock;
@@ -24,7 +24,6 @@ import net.minecraft.item.Items;
 import net.minecraft.potion.Potions;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
-import net.minecraft.item.PotionItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.PotionHelper;
@@ -96,35 +95,35 @@ public final class ModRecipes {
                 ing(ModItems.TOKEN_ANGER)).register();
         new TreeRitualRecipe(res("plant_powder"),
                 ing(new ItemStack(Blocks.SAPLING)),
-                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 24), PlantBoostEffect.NAME), 400,
+                EffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 24), PlantBoostEffect.NAME), 400,
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModItems.SKY_INGOT),
                 ing(Items.WHEAT)).register();
         new TreeRitualRecipe(res("cache_powder"),
                 ing(new ItemStack(Blocks.SAPLING)),
-                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 32), CacheRechargeEffect.NAME), 400,
+                EffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 32), CacheRechargeEffect.NAME), 400,
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModItems.SKY_INGOT),
                 ing(ModItems.AURA_CACHE)).register();
         new TreeRitualRecipe(res("animal_powder"),
                 ing(new ItemStack(Blocks.SAPLING, 1, 3)),
-                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 8), AnimalEffect.NAME), 400,
+                EffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 8), AnimalEffect.NAME), 400,
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModItems.SKY_INGOT),
                 ing(Items.EGG)).register();
         new TreeRitualRecipe(res("ore_spawn_powder"),
                 ing(new ItemStack(Blocks.SAPLING)),
-                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 4), OreSpawnEffect.NAME), 400,
+                EffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 4), OreSpawnEffect.NAME), 400,
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModBlocks.GOLD_POWDER),
                 ing(Blocks.DIAMOND_ORE),
                 ing(Blocks.REDSTONE_ORE)).register();
         new TreeRitualRecipe(res("token_joy"),
                 ing(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_JOY, 2), 200,
-                nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)),
+                nbtIng(AuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)),
                 ing(ModItems.GOLD_LEAF),
                 ing(new ItemStack(Blocks.RED_FLOWER, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.YELLOW_FLOWER)),
                 ing(Items.APPLE),
@@ -132,7 +131,7 @@ public final class ModRecipes {
                 ing(Items.IRON_INGOT)).register();
         new TreeRitualRecipe(res("token_anger"),
                 ing(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_ANGER, 2), 200,
-                nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER)),
+                nbtIng(AuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER)),
                 ing(ModItems.GOLD_LEAF),
                 ing(Blocks.MAGMA),
                 ing(Items.BLAZE_POWDER),
@@ -140,7 +139,7 @@ public final class ModRecipes {
                 ing(Items.ENDER_PEARL)).register();
         new TreeRitualRecipe(res("token_sorrow"),
                 ing(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_SORROW, 2), 200,
-                nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)),
+                nbtIng(AuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)),
                 ing(ModItems.GOLD_LEAF),
                 ing(Items.GHAST_TEAR),
                 ing(Items.BEEF, Items.MUTTON, Items.CHICKEN, Items.PORKCHOP),
@@ -148,7 +147,7 @@ public final class ModRecipes {
                 ing(new ItemStack(Items.FISH, 1, OreDictionary.WILDCARD_VALUE))).register();
         new TreeRitualRecipe(res("token_fear"),
                 ing(Blocks.SAPLING), new ItemStack(ModItems.TOKEN_FEAR, 2), 200,
-                nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER)),
+                nbtIng(AuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER)),
                 ing(ModItems.GOLD_LEAF),
                 ing(Items.ROTTEN_FLESH),
                 ing(Items.FEATHER),
@@ -166,7 +165,7 @@ public final class ModRecipes {
                 Ingredient.EMPTY, 7500, 40).register();
 
         Ingredient conversion = ing(ModBlocks.CONVERSION_CATALYST);
-        new AltarRecipe(res("breath"), nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_END)), new ItemStack(Items.DRAGON_BREATH), conversion, 20000, 80).register();
+        new AltarRecipe(res("breath"), nbtIng(AuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_END)), new ItemStack(Items.DRAGON_BREATH), conversion, 20000, 80).register();
         new AltarRecipe(res("leather"), ing(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER), conversion, 10000, 50).register();
         new AltarRecipe(res("soul_sand"), ing(Blocks.SAND), new ItemStack(Blocks.SOUL_SAND), conversion, 5000, 100).register();
         new AltarRecipe(res("nether_wart"), ing(Blocks.RED_MUSHROOM), new ItemStack(Items.NETHER_WART), conversion, 30000, 250).register();

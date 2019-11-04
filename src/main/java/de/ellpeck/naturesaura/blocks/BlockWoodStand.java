@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderWoodStand;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -24,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -39,10 +41,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider 
     private static final AxisAlignedBB BOUND_BOX = new AxisAlignedBB(3 / 16F, 0F, 3 / 16F, 13 / 16F, 13 / 16F, 13 / 16F);
 
     public BlockWoodStand() {
-        super(Material.WOOD, "wood_stand", TileEntityWoodStand.class, "wood_stand");
-        this.setHardness(1.5F);
-        this.setSoundType(SoundType.WOOD);
-        this.setHarvestLevel("axe", 0);
+        super("wood_stand", TileEntityWoodStand.class, "wood_stand", ModBlocks.prop(Material.WOOD).hardnessAndResistance(1.5F).sound(SoundType.WOOD).harvestLevel(0).harvestTool(ToolType.AXE));
 
         MinecraftForge.TERRAIN_GEN_BUS.register(this);
     }

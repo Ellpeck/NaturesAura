@@ -2,41 +2,38 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
-import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockContainerImpl extends ContainerBlock implements IModItem, ICreativeItem, IModelProvider {
+public class BlockContainerImpl extends ContainerBlock implements IModItem, IModelProvider {
 
     private final String baseName;
 
     private final Class<? extends TileEntity> tileClass;
     private final String tileRegName;
 
-    public BlockContainerImpl(Material material, String baseName, Class<? extends TileEntity> tileClass, String tileReg) {
-        super(material);
+    public BlockContainerImpl(String baseName, Class<? extends TileEntity> tileClass, String tileReg, Block.Properties properties) {
+        super(properties);
 
         this.baseName = baseName;
         this.tileClass = tileClass;
@@ -47,7 +44,8 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem, ICre
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
+    public TileEntity createNewTileEntity(IBlockReader world) {
+        // TODO TYPES BLUTRGHGHGH
         try {
             return this.tileClass.newInstance();
         } catch (Exception e) {
@@ -60,18 +58,8 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem, ICre
         return this.baseName;
     }
 
-    @Override
-    public void onPreInit(FMLPreInitializationEvent event) {
-    }
-
-    @Override
     public void onInit(FMLInitializationEvent event) {
         GameRegistry.registerTileEntity(this.tileClass, new ResourceLocation(NaturesAura.MOD_ID, this.tileRegName));
-    }
-
-    @Override
-    public void onPostInit(FMLPostInitializationEvent event) {
-
     }
 
     @Override

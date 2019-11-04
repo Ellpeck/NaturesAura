@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderNatureAltar;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.BlockState;
@@ -18,15 +19,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 
 public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvider {
 
     private static final AxisAlignedBB BOUND_BOX = new AxisAlignedBB(0F, 0F, 0F, 1F, 12 / 16F, 1F);
 
     public BlockNatureAltar() {
-        super(Material.ROCK, "nature_altar", TileEntityNatureAltar.class, "nature_altar");
-        this.setHardness(4F);
-        this.setHarvestLevel("pickaxe", 1);
+        super("nature_altar", TileEntityNatureAltar.class, "nature_altar", ModBlocks.prop(Material.ROCK).hardnessAndResistance(4F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
     }
 
     @Override

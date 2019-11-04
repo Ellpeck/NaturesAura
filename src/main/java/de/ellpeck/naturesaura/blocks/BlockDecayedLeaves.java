@@ -1,10 +1,9 @@
 package de.ellpeck.naturesaura.blocks;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Items;
-import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -16,16 +15,7 @@ import java.util.Random;
 public class BlockDecayedLeaves extends BlockImpl {
 
     public BlockDecayedLeaves() {
-        super("decayed_leaves", Material.LEAVES);
-        this.setTickRandomly(true);
-        this.setHardness(0.2F);
-        this.setLightOpacity(1);
-        this.setSoundType(SoundType.PLANT);
-    }
-
-    @Override
-    public boolean isOpaqueCube(BlockState state) {
-        return false;
+        super("decayed_leaves", ModBlocks.prop(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT).variableOpacity().tickRandomly());
     }
 
     @Override
@@ -35,14 +25,9 @@ public class BlockDecayedLeaves extends BlockImpl {
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random random) {
-        if (!worldIn.isRemote) {
-            worldIn.setBlockToAir(pos);
+    public void tick(BlockState state, World world, BlockPos pos, Random random) {
+        if (!world.isRemote) {
+            world.setBlockState(pos, Blocks.AIR.getDefaultState());
         }
-    }
-
-    @Override
-    public Item getItemDropped(BlockState state, Random rand, int fortune) {
-        return Items.AIR;
     }
 }

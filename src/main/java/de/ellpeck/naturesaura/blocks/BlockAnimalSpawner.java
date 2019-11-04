@@ -6,8 +6,6 @@ import net.minecraft.block.material.Material;
 
 public class BlockAnimalSpawner extends BlockContainerImpl {
     public BlockAnimalSpawner() {
-        super(Material.ROCK, "animal_spawner", TileEntityAnimalSpawner.class, "animal_spawner");
-        this.setHardness(2F);
-        this.setSoundType(SoundType.STONE);
+        super("animal_spawner", TileEntityAnimalSpawner.class, "animal_spawner", ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
     }
 }

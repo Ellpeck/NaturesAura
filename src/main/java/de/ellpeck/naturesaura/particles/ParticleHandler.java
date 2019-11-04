@@ -26,10 +26,10 @@ public final class ParticleHandler {
     private static final List<Particle> PARTICLES_NO_DEPTH = new ArrayList<>();
 
     public static void spawnParticle(Supplier<Particle> particle, double x, double y, double z) {
-        if (Minecraft.getMinecraft().player.getDistanceSq(x, y, z) <= range * range) {
-            Minecraft mc = Minecraft.getMinecraft();
+        if (Minecraft.getInstance().player.getDistanceSq(x, y, z) <= range * range) {
+            Minecraft mc = Minecraft.getInstance();
             if (ModConfig.client.respectVanillaParticleSettings) {
-                int setting = mc.gameSettings.particleSetting;
+                int setting = mc.gameSettings.particles.func_216832_b();
                 if (setting != 0 &&
                         (setting != 1 || mc.world.rand.nextInt(3) != 0) &&
                         (setting != 2 || mc.world.rand.nextInt(10) != 0))
@@ -57,14 +57,14 @@ public final class ParticleHandler {
     private static void updateList(List<Particle> particles) {
         for (int i = particles.size() - 1; i >= 0; i--) {
             Particle particle = particles.get(i);
-            particle.onUpdate();
+            particle.tick();
             if (!particle.isAlive())
                 particles.remove(i);
         }
     }
 
     public static void renderParticles(float partialTicks) {
-        Minecraft mc = Minecraft.getMinecraft();
+        Minecraft mc = Minecraft.getInstance();
         PlayerEntity player = mc.player;
 
         if (player != null) {
@@ -77,7 +77,7 @@ public final class ParticleHandler {
             Particle.interpPosX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
             Particle.interpPosY = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
             Particle.interpPosZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
-            Particle.cameraViewDir = player.getLook(partialTicks);
+            Particle.dir = player.getLook(partialTicks);
 
             GlStateManager.pushMatrix();
 

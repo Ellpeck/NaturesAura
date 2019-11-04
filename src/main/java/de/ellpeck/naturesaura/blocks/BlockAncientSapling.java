@@ -1,16 +1,12 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.gen.WorldGenAncientTree;
-import de.ellpeck.naturesaura.reg.ICreativeItem;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.block.BushBlock;
-import net.minecraft.block.SaplingBlock;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.BlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -22,16 +18,15 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.util.Random;
 
-public class BlockAncientSapling extends BushBlock implements IGrowable, IModItem, ICreativeItem, IModelProvider {
+// Make this extend SaplingBlock?
+public class BlockAncientSapling extends BushBlock implements IGrowable, IModItem, IModelProvider {
 
     private static final AxisAlignedBB AABB = new AxisAlignedBB(
             0.09999999403953552D, 0.0D, 0.09999999403953552D,
             0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
 
     public BlockAncientSapling() {
-        this.setHardness(0.0F);
-        this.setSoundType(SoundType.PLANT);
-
+        super(ModBlocks.prop(Material.PLANTS).hardnessAndResistance(0.0F).sound(SoundType.PLANT));
         ModRegistry.add(this);
     }
 
@@ -54,21 +49,6 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
     @Override
     public String getBaseName() {
         return "ancient_sapling";
-    }
-
-    @Override
-    public void onPreInit(FMLPreInitializationEvent event) {
-
-    }
-
-    @Override
-    public void onInit(FMLInitializationEvent event) {
-
-    }
-
-    @Override
-    public void onPostInit(FMLPostInitializationEvent event) {
-
     }
 
     @Override

@@ -12,11 +12,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,23 +32,33 @@ import java.util.List;
 
 public class BlockGratedChute extends BlockContainerImpl {
 
-    public static final PropertyDirection FACING = HopperBlock.FACING;
+    public static final DirectionProperty FACING = HopperBlock.FACING;
     private static final AxisAlignedBB BASE_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D);
     private static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.125D);
     private static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.875D, 1.0D, 1.0D, 1.0D);
     private static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(0.875D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
     private static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.125D, 1.0D, 1.0D);
 
+    private static final VoxelShape BASE_TOP = makeCuboidShape(0, 9, 0, 16, 10, 16);
+    private static final VoxelShape BASE_SOUTH = makeCuboidShape(0, 9, 0, 16, 16, 1);
+    private static final VoxelShape BASE_NORTH = makeCuboidShape(0, 9, 15, 16, 16, 16);
+    private static final VoxelShape BASE_WEST = makeCuboidShape(15, 9, 0, 16, 26, 16);
+    private static final VoxelShape BASE_EAST = makeCuboidShape(0, 9, 0, 1, 16, 16);
+    private static final VoxelShape BASE_BOTTOM = makeCuboidShape(4, 4, 4, 12, 9, 12);
+
+    private static VoxelShape BASE = VoxelShapes.combine()
+
+    private static final VoxelShape SHAPES[] {
+
+    }
+
     public BlockGratedChute() {
-        super(Material.IRON, "grated_chute", TileEntityGratedChute.class, "grated_chute");
-        this.setHardness(3.0F);
-        this.setResistance(8.0F);
-        this.setSoundType(SoundType.METAL);
+        super("grated_chute", TileEntityGratedChute.class, "grated_chute", ModBlocks.prop(Material.IRON).hardnessAndResistance(3.0F, 8.0F).sound(SoundType.METAL));
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!playerIn.isSneaking())
+    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if (!player.isSneaking())
             return false;
         TileEntity tile = worldIn.getTileEntity(pos);
         if (!(tile instanceof TileEntityGratedChute))

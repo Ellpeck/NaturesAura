@@ -18,6 +18,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -31,18 +32,15 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable 
     private static final AxisAlignedBB AABB = new AxisAlignedBB(4 / 16F, 0F, 4 / 16F, 12 / 16F, 13 / 16F, 12 / 16F);
 
     public BlockSpawnLamp() {
-        super(Material.IRON, "spawn_lamp", TileEntitySpawnLamp.class, "spawn_lamp");
+        super("spawn_lamp", TileEntitySpawnLamp.class, "spawn_lamp", ModBlocks.prop(Material.IRON).hardnessAndResistance(3F).lightValue(1F).sound(SoundType.METAL));
         MinecraftForge.EVENT_BUS.register(this);
-        this.setLightLevel(1F);
-        this.setSoundType(SoundType.METAL);
-        this.setHardness(3F);
     }
 
     @SubscribeEvent
     public void onSpawn(LivingSpawnEvent.CheckSpawn event) {
         if (event.getSpawner() != null)
             return;
-        World world = event.getWorld();
+        IWorld world = event.getWorld();
         BlockPos pos = new BlockPos(event.getX(), event.getY(), event.getZ());
         Helper.getTileEntitiesInArea(world, pos, 48, tile -> {
             if (!(tile instanceof TileEntitySpawnLamp))

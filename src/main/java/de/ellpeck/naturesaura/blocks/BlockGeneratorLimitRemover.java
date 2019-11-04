@@ -13,9 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockGeneratorLimitRemover extends BlockContainerImpl implements ITESRProvider {
 
     public BlockGeneratorLimitRemover() {
-        super(Material.ROCK, "generator_limit_remover", TileEntityGeneratorLimitRemover.class, "generator_limit_remover");
-        this.setSoundType(SoundType.STONE);
-        this.setHardness(2F);
+        super("generator_limit_remover", TileEntityGeneratorLimitRemover.class, "generator_limit_remover", ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
     }
 
     @Override

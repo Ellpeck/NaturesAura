@@ -1,0 +1,124 @@
+package de.ellpeck.naturesaura.items;
+
+import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.reg.IColorProvidingItem;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import static net.minecraft.dispenser.DefaultDispenseItemBehavior.doDispense;
+
+public class AuraBottle extends ItemImpl implements IColorProvidingItem {
+
+    public AuraBottle() {
+        super("aura_bottle", new Properties().group(NaturesAura.CREATIVE_TAB));
+        MinecraftForge.EVENT_BUS.register(this);
+
+        DispenserBlock.registerDispenseBehavior(ModItems.BOTTLE_TWO, (source, stack) -> {
+                World world = source.getWorld();
+                BlockState state = source.getBlockState();
+                Direction facing = state.get(DispenserBlock.FACING);
+                BlockPos offset = source.getBlockPos().offset(facing);
+                BlockState offsetState = world.getBlockState(offset);
+
+                ItemStack dispense = stack.split(1);
+                if (offsetState.getBlock().isAir(offsetState, world, offset)) {
+                    if (IAuraChunk.getAuraInArea(world, offset, 30) >= 100000) {
+                        dispense = setType(new ItemStack(AuraBottle.this), IAuraType.forWorld(world));
+
+                        BlockPos spot = IAuraChunk.getHighestSpot(world, offset, 30, offset);
+                        IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 20000);
+                    }
+                }
+
+                doDispense(world, dispense, 6, facing, DispenserBlock.getDispensePosition(source));
+                return stack;
+        });
+    }
+
+    @SubscribeEvent
+    public void onRightClick(PlayerInteractEvent.RightClickItem event) {
+        ItemStack held = event.getItemStack();
+        if (held.isEmpty() || held.getItem() != ModItems.BOTTLE_TWO)
+            return;
+        PlayerEntity player = event.getPlayer();
+        RayTraceResult ray = rayTrace(player.world, player, RayTraceContext.FluidMode.NONE);
+        if (ray.getType() == RayTraceResult.Type.BLOCK)
+            return;
+        BlockPos pos = player.getPosition();
+        if (IAuraChunk.getAuraInArea(player.world, pos, 30) < 100000)
+            return;
+
+        if (!player.world.isRemote) {
+            held.shrink(1);
+
+            player.inventory.addItemStackToInventory(
+                    setType(new ItemStack(this), IAuraType.forWorld(player.world)));
+
+            BlockPos spot = IAuraChunk.getHighestSpot(player.world, pos, 30, pos);
+            IAuraChunk.getAuraChunk(player.world, spot).drainAura(spot, 20000);
+
+            player.world.playSound(null, player.posX, player.posY, player.posZ,
+                    SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.PLAYERS, 1F, 1F);
+        }
+        player.swingArm(event.getHand());
+    }
+
+    @Override
+    public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> items) {
+        if (this.isInGroup(tab)) {
+            for (IAuraType type : NaturesAuraAPI.AURA_TYPES.values()) {
+                ItemStack stack = new ItemStack(this);
+                setType(stack, type);
+                items.add(stack);
+            }
+        }
+    }
+
+    @Override
+    public ITextComponent getDisplayName(ItemStack stack) {
+        return new TranslationTextComponent(stack.getTranslationKey() + "." + getType(stack).getName() + ".name");
+    }
+
+    public static IAuraType getType(ItemStack stack) {
+        if (!stack.hasTag())
+            return NaturesAuraAPI.TYPE_OTHER;
+        String type = stack.getTag().getString("stored_type");
+        if (type.isEmpty())
+            return NaturesAuraAPI.TYPE_OTHER;
+        return NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(type));
+    }
+
+    public static ItemStack setType(ItemStack stack, IAuraType type) {
+        stack.getOrCreateTag().putString("stored_type", type.getName().toString());
+        return stack;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public IItemColor getItemColor() {
+        return (stack, tintIndex) -> tintIndex > 0 ? getType(stack).getColor() : 0xFFFFFF;
+    }
+}

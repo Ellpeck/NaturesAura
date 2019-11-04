@@ -21,9 +21,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable {
     public BlockPickupStopper() {
-        super(Material.ROCK, "pickup_stopper", TileEntityPickupStopper.class, "pickup_stopper");
-        this.setSoundType(SoundType.STONE);
-        this.setHardness(2F);
+        super("pickup_stopper", TileEntityPickupStopper.class, "pickup_stopper", ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }
