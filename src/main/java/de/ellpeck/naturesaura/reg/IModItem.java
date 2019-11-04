@@ -1,16 +1,12 @@
 package de.ellpeck.naturesaura.reg;
 
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-
 public interface IModItem {
 
     String getBaseName();
 
-    void onPreInit(FMLPreInitializationEvent event);
+    //void onPreInit(FMLCommonSetupEvent event);
 
-    void onInit(FMLInitializationEvent event);
+    //void onInit(FMLCommonSetupEvent event);
 
-    void onPostInit(FMLPostInitializationEvent event);
+    //void onPostInit(FMLCommonSetupEvent event);
 }

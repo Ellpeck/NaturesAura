@@ -13,9 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockPlacer extends BlockContainerImpl implements IVisualizable {
 
     public BlockPlacer() {
-        super(Material.ROCK, "placer", TileEntityPlacer.class, "placer");
-        this.setSoundType(SoundType.STONE);
-        this.setHardness(2.5F);
+        super("placer", TileEntityPlacer.class, "placer", ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
     }
 
     @Override

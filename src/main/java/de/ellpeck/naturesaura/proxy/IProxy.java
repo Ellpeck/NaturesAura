@@ -7,18 +7,16 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.function.Supplier;
 
 public interface IProxy {
-    void preInit(FMLPreInitializationEvent event);
+    void preInit(FMLCommonSetupEvent event);
 
-    void init(FMLInitializationEvent event);
+    void init(FMLCommonSetupEvent event);
 
-    void postInit(FMLPostInitializationEvent event);
+    void postInit(FMLCommonSetupEvent event);
 
     void registerRenderer(ItemStack stack, ModelResourceLocation location);
 

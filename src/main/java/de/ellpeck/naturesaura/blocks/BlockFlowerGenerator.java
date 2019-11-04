@@ -13,9 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockFlowerGenerator extends BlockContainerImpl implements IVisualizable {
 
     public BlockFlowerGenerator() {
-        super(Material.WOOD, "flower_generator", TileEntityFlowerGenerator.class, "flower_generator");
-        this.setSoundType(SoundType.WOOD);
-        this.setHardness(2F);
+        super("flower_generator", TileEntityFlowerGenerator.class, "flower_generator", ModBlocks.prop(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2F));
     }
 
     @Override

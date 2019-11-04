@@ -2,46 +2,49 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityFurnaceHeater;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockFurnaceHeater extends BlockContainerImpl {
-    public static final PropertyDirection FACING = PropertyDirection.create("facing");
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-    private static final AxisAlignedBB AABB_UP = new AxisAlignedBB(2 / 16F, 0F, 2 / 16F, 14 / 16F, 4 / 16F, 14 / 16F);
-    private static final AxisAlignedBB AABB_DOWN = new AxisAlignedBB(2 / 16F, 12 / 16F, 2 / 16F, 14 / 16F, 1F, 14 / 16F);
-    private static final AxisAlignedBB AABB_NORTH = new AxisAlignedBB(2 / 16F, 2 / 16F, 12 / 16F, 14 / 16F, 14 / 16F, 1F);
-    private static final AxisAlignedBB AABB_EAST = new AxisAlignedBB(0F, 2 / 16F, 2 / 16F, 4 / 16F, 14 / 16F, 14 / 16F);
-    private static final AxisAlignedBB AABB_SOUTH = new AxisAlignedBB(2 / 16F, 2 / 16F, 0F, 14 / 16F, 14 / 16F, 4 / 16F);
-    private static final AxisAlignedBB AABB_WEST = new AxisAlignedBB(12 / 16F, 2 / 16F, 2 / 16F, 1F, 14 / 16F, 14 / 16F);
+    private static final VoxelShape[] SHAPES = new VoxelShape[]{
+            Block.makeCuboidShape(2, 12, 2, 14, 1, 14),     // Down
+            Block.makeCuboidShape(2, 0, 2, 14, 4, 14),      // Up
+            Block.makeCuboidShape(2, 2, 12, 14, 14, 1F),    // North
+            Block.makeCuboidShape(2, 2, 0, 14, 14, 4),      // South
+            Block.makeCuboidShape(12, 2, 2, 1, 14, 14),     // West
+            Block.makeCuboidShape(0, 2, 2, 4, 14, 14)       // East
+    };
 
     public BlockFurnaceHeater() {
-        super(Material.ROCK, "furnace_heater", TileEntityFurnaceHeater.class, "furnace_heater");
-        this.setHardness(3F);
-        this.setHarvestLevel("pickaxe", 1);
+        super("furnace_heater", TileEntityFurnaceHeater.class, "furnace_heater", ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityFurnaceHeater && ((TileEntityFurnaceHeater) tile).isActive) {
-            Direction facing = stateIn.getValue(FACING);
+            Direction facing = stateIn.get(FACING);
 
             float x;
             float y;
@@ -70,65 +73,28 @@ public class BlockFurnaceHeater extends BlockContainerImpl {
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
-        switch (state.getValue(FACING)) {
-            case DOWN:
-                return AABB_DOWN;
-            case NORTH:
-                return AABB_NORTH;
-            case EAST:
-                return AABB_EAST;
-            case SOUTH:
-                return AABB_SOUTH;
-            case WEST:
-                return AABB_WEST;
-            default:
-                return AABB_UP;
-        }
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return SHAPES[state.get(FACING).getIndex()];
     }
 
     @Override
-    public boolean isFullCube(BlockState state) {
+    public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube(BlockState state) {
+    public boolean isSolid(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean isNormalCube(BlockState state, IBlockAccess world, BlockPos pos) {
-        return false;
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
     }
 
+    @Nullable
     @Override
-    public boolean isSideSolid(BlockState baseState, IBlockAccess world, BlockPos pos, Direction side) {
-        return false;
-    }
-
-    @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
-        return BlockFaceShape.UNDEFINED;
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
-    }
-
-    @Override
-    public int getMetaFromState(BlockState state) {
-        return state.getValue(FACING).getIndex();
-    }
-
-    @Override
-    public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, Direction.byIndex(meta));
-    }
-
-    @Override
-    public BlockState getStateForPlacement(World world, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer, Hand hand) {
-        return this.getDefaultState().withProperty(FACING, facing);
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.getDefaultState().with(FACING, context.getFace());
     }
 }

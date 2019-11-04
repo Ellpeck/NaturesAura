@@ -14,9 +14,7 @@ public class BlockPowderPlacer extends BlockContainerImpl {
     private static final AxisAlignedBB BOUND_BOX = new AxisAlignedBB(0F, 0F, 0F, 1F, 4 / 16F, 1F);
 
     public BlockPowderPlacer() {
-        super(Material.ROCK, "powder_placer", TileEntityPowderPlacer.class, "powder_placer");
-        this.setSoundType(SoundType.STONE);
-        this.setHardness(2.5F);
+        super("powder_placer", TileEntityPowderPlacer.class, "powder_placer", ModBlocks.prop(Material.ROCK).hardnessAndResistance(2,5F).sound(SoundType.STONE));
     }
 
     @Override

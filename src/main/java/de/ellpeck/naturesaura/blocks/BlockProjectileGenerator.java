@@ -28,9 +28,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider {
     public BlockProjectileGenerator() {
-        super(Material.ROCK, "projectile_generator", TileEntityProjectileGenerator.class, "projectile_generator");
-        this.setSoundType(SoundType.STONE);
-        this.setHardness(2.5F);
+        super("projectile_generator", TileEntityProjectileGenerator.class, "projectile_generator", ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

@@ -25,9 +25,7 @@ public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvi
     private static final AxisAlignedBB BOUND_BOX = new AxisAlignedBB(2 / 16F, 0F, 2 / 16F, 14 / 16F, 1F, 14 / 16F);
 
     public BlockOfferingTable() {
-        super(Material.WOOD, "offering_table", TileEntityOfferingTable.class, "offering_table");
-        this.setSoundType(SoundType.WOOD);
-        this.setHardness(2F);
+        super("offering_table", TileEntityOfferingTable.class, "offering_table", ModBlocks.prop(Material.WOOD).hardnessAndResistance(2F).sound(SoundType.WOOD));
     }
 
     @Override

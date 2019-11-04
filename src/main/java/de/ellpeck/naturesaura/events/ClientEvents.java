@@ -9,14 +9,12 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
-import de.ellpeck.naturesaura.blocks.BlockDimensionRail;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityGratedChute;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityRFConverter;
 import de.ellpeck.naturesaura.compat.Compat;
-import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
-import de.ellpeck.naturesaura.items.ItemAuraCache;
-import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
+import de.ellpeck.naturesaura.items.AuraCache;
+import de.ellpeck.naturesaura.items.RangeVisualizer;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import net.minecraft.block.Block;
@@ -25,11 +23,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.ScaledResolution;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Items;
@@ -43,13 +39,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColors;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -121,7 +115,7 @@ public class ClientEvents {
             Minecraft mc = Minecraft.getMinecraft();
             if (mc.world == null) {
                 ParticleHandler.clearParticles();
-                ItemRangeVisualizer.clear();
+                RangeVisualizer.clear();
             } else if (!mc.isGamePaused()) {
                 if (mc.world.getTotalWorldTime() % 20 == 0) {
                     mc.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":spawnExcessParticles");
@@ -158,7 +152,7 @@ public class ClientEvents {
                     NaturesAuraAPI.IInternalHooks inst = NaturesAuraAPI.instance();
                     inst.setParticleSpawnRange(512);
                     inst.setParticleDepth(false);
-                    for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_RAILS.get(mc.world.provider.getDimension())) {
+                    for (BlockPos pos : RangeVisualizer.VISUALIZED_RAILS.get(mc.world.provider.getDimension())) {
                         NaturesAuraAPI.instance().spawnMagicParticle(
                                 pos.getX() + mc.world.rand.nextFloat(),
                                 pos.getY() + mc.world.rand.nextFloat(),
@@ -178,7 +172,7 @@ public class ClientEvents {
                     for (int i = 0; i < baubles.getSlots(); i++) {
                         ItemStack slot = baubles.getStackInSlot(i);
                         if (!slot.isEmpty()) {
-                            if (slot.getItem() instanceof ItemAuraCache)
+                            if (slot.getItem() instanceof AuraCache)
                                 heldCache = slot;
                             else if (slot.getItem() == ModItems.EYE)
                                 heldEye = slot;
@@ -191,7 +185,7 @@ public class ClientEvents {
                 for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
                     ItemStack slot = mc.player.inventory.getStackInSlot(i);
                     if (!slot.isEmpty()) {
-                        if (slot.getItem() instanceof ItemAuraCache)
+                        if (slot.getItem() instanceof AuraCache)
                             heldCache = slot;
                         else if (slot.getItem() == ModItems.EYE && i <= 8)
                             heldEye = slot;
@@ -262,7 +256,7 @@ public class ClientEvents {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBegin(GL11.GL_QUADS);
-            for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_BLOCKS.get(dim)) {
+            for (BlockPos pos : RangeVisualizer.VISUALIZED_BLOCKS.get(dim)) {
                 if (!mc.world.isBlockLoaded(pos))
                     continue;
                 BlockState state = mc.world.getBlockState(pos);
@@ -271,7 +265,7 @@ public class ClientEvents {
                     continue;
                 this.renderVisualize((IVisualizable) block, mc.world, pos);
             }
-            for (Entity entity : ItemRangeVisualizer.VISUALIZED_ENTITIES.get(dim)) {
+            for (Entity entity : RangeVisualizer.VISUALIZED_ENTITIES.get(dim)) {
                 if (entity.isDead || !(entity instanceof IVisualizable))
                     continue;
                 this.renderVisualize((IVisualizable) entity, mc.world, entity.getPosition());

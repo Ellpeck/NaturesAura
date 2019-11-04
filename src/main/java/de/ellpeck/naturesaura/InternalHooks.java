@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura;
 
-import baubles.api.BaublesApi;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
@@ -9,6 +8,7 @@ import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.blocks.multi.Multiblock;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.misc.WorldData;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -17,11 +17,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
-import org.lwjgl.util.vector.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +37,11 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     private boolean auraPlayerInteraction(PlayerEntity player, int amount, boolean extract, boolean simulate) {
-        if (extract && player.capabilities.isCreativeMode)
+        if (extract && player.isCreative())
             return true;
 
-        if (Compat.baubles) {
+        if (Compat.baubles) { // Baubles dont exist for 1.14 yet
+            /*
             IItemHandler baubles = BaublesApi.getBaublesHandler(player);
             for (int i = 0; i < baubles.getSlots(); i++) {
                 ItemStack stack = baubles.getStackInSlot(i);
@@ -56,12 +55,13 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
                         return true;
                 }
             }
+            */
         }
 
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
             ItemStack stack = player.inventory.getStackInSlot(i);
-            if (!stack.isEmpty() && stack.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
-                IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer, null);
+            if (!stack.isEmpty() && stack.getCapability(NaturesAuraAPI.capAuraContainer).isPresent()) {
+                IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
                 if (extract)
                     amount -= container.drainAura(amount, simulate);
                 else
@@ -81,10 +81,10 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public void spawnParticleStream(float startX, float startY, float startZ, float endX, float endY, float endZ, float speed, int color, float scale) {
-        Vector3f dir = new Vector3f(endX - startX, endY - startY, endZ - startZ);
-        float length = dir.length();
+        Vec3d dir = new Vec3d(endX - startX, endY - startY, endZ - startZ);
+        double length = dir.length();
         if (length > 0) {
-            dir.normalise();
+            dir.normalize();
             this.spawnMagicParticle(startX, startY, startZ,
                     dir.x * speed, dir.y * speed, dir.z * speed,
                     color, scale, (int) (length / speed), 0F, false, false);

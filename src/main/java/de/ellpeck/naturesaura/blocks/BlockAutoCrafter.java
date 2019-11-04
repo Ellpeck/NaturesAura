@@ -1,43 +1,29 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAutoCrafter;
-import net.minecraft.block.HorizontalBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 
 public class BlockAutoCrafter extends BlockContainerImpl {
-    public static final PropertyDirection FACING = HorizontalBlock.FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockAutoCrafter() {
-        super(Material.WOOD, "auto_crafter", TileEntityAutoCrafter.class, "auto_crafter");
-        this.setSoundType(SoundType.WOOD);
-        this.setHardness(1.5F);
+        super("auto_crafter", TileEntityAutoCrafter.class, "auto_crafter", ModBlocks.prop(Material.WOOD).hardnessAndResistance(1.5F).sound(SoundType.WOOD));
     }
 
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
     }
 
     @Override
-    public int getMetaFromState(BlockState state) {
-        return state.getValue(FACING).getHorizontalIndex();
-    }
-
-    @Override
-    public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, Direction.byHorizontalIndex(meta));
-    }
-
-    @Override
-    public BlockState getStateForPlacement(World worldIn, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.getDefaultState().with(FACING, context.getPlayer().getHorizontalFacing());
     }
 }

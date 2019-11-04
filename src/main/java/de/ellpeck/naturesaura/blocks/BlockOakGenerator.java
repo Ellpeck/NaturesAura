@@ -22,9 +22,7 @@ import java.util.Random;
 public class BlockOakGenerator extends BlockContainerImpl implements IVisualizable {
 
     public BlockOakGenerator() {
-        super(Material.WOOD, "oak_generator", TileEntityOakGenerator.class, "oak_generator");
-        this.setHardness(2F);
-        this.setSoundType(SoundType.WOOD);
+        super("oak_generator", TileEntityOakGenerator.class, "oak_generator", ModBlocks.prop(Material.WOOD).hardnessAndResistance(2F).sound(SoundType.WOOD));
 
         MinecraftForge.TERRAIN_GEN_BUS.register(this);
     }

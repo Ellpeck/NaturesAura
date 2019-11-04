@@ -7,27 +7,25 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.function.Supplier;
 
 public class ServerProxy implements IProxy {
 
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
+    public void preInit(FMLCommonSetupEvent event) {
 
     }
 
     @Override
-    public void init(FMLInitializationEvent event) {
+    public void init(FMLCommonSetupEvent event) {
 
     }
 
     @Override
-    public void postInit(FMLPostInitializationEvent event) {
+    public void postInit(FMLCommonSetupEvent event) {
 
     }
 
@@ -73,6 +71,6 @@ public class ServerProxy implements IProxy {
 
     @Override
     public void scheduleTask(Runnable runnable) {
-        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(runnable);
+        ServerLifecycleHooks.getCurrentServer().runAsync(runnable);
     }
 }

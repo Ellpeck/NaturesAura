@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
+import de.ellpeck.naturesaura.items.RangeVisualizer;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
@@ -53,7 +53,7 @@ public class PacketClient implements IMessage {
                         case 0: // dimension rail visualization
                             int goalDim = message.data[0];
                             BlockPos goalPos = new BlockPos(message.data[1], message.data[2], message.data[3]);
-                            ItemRangeVisualizer.visualize(mc.player, ItemRangeVisualizer.VISUALIZED_RAILS, goalDim, goalPos);
+                            RangeVisualizer.visualize(mc.player, RangeVisualizer.VISUALIZED_RAILS, goalDim, goalPos);
                     }
                 }
             });

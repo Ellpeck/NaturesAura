@@ -11,10 +11,10 @@ import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -25,9 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -35,14 +33,14 @@ import java.util.function.Supplier;
 public class ClientProxy implements IProxy {
 
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
+    public void preInit(FMLCommonSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
         Compat.preInitClient();
     }
 
     @Override
-    public void init(FMLInitializationEvent event) {
-        Map<String, PlayerRenderer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
+    public void init(FMLCommonSetupEvent event) {
+        Map<String, PlayerRenderer> skinMap = Minecraft.getInstance().getRenderManager().getSkinMap();
         for (PlayerRenderer render : new PlayerRenderer[]{skinMap.get("default"), skinMap.get("slim")}) {
             render.addLayer(new PlayerLayerTrinkets());
         }
@@ -50,38 +48,38 @@ public class ClientProxy implements IProxy {
     }
 
     @Override
-    public void postInit(FMLPostInitializationEvent event) {
+    public void postInit(FMLCommonSetupEvent event) {
 
     }
 
     @Override
     public void registerRenderer(ItemStack stack, ModelResourceLocation location) {
-        ModelLoader.setCustomModelResourceLocation(stack.getItem(), stack.getItemDamage(), location);
+        //ModelLoader.setCustomModelResourceLocation(stack.getItem(), stack.getItemDamage(), location);
     }
 
     @Override
     public void addColorProvidingItem(IColorProvidingItem item) {
-        ItemColors colors = Minecraft.getMinecraft().getItemColors();
+        ItemColors colors = Minecraft.getInstance().getItemColors();
         IItemColor color = item.getItemColor();
 
         if (item instanceof Item) {
-            colors.registerItemColorHandler(color, (Item) item);
+            colors.register(color, (Item) item);
         } else if (item instanceof Block) {
-            colors.registerItemColorHandler(color, (Block) item);
+            colors.register(color, (Block) item);
         }
     }
 
     @Override
     public void addColorProvidingBlock(IColorProvidingBlock block) {
         if (block instanceof Block) {
-            Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(block.getBlockColor(), (Block) block);
+            Minecraft.getInstance().getBlockColors().register(block.getBlockColor(), (Block) block);
         }
     }
 
     @Override
     public void registerTESR(ITESRProvider provider) {
         Tuple<Class, TileEntityRenderer> tesr = provider.getTESR();
-        ClientRegistry.bindTileEntitySpecialRenderer(tesr.getFirst(), tesr.getSecond());
+        ClientRegistry.bindTileEntitySpecialRenderer(tesr.getA(), tesr.getB());
     }
 
     @Override
@@ -91,7 +89,7 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void spawnMagicParticle(double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade) {
-        ParticleHandler.spawnParticle(() -> new ParticleMagic(Minecraft.getMinecraft().world,
+        ParticleHandler.spawnParticle(() -> new ParticleMagic(Minecraft.getInstance().world,
                 posX, posY, posZ,
                 motionX, motionY, motionZ,
                 color, scale, maxAge, gravity, collision, fade), posX, posY, posZ);
@@ -109,6 +107,6 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void scheduleTask(Runnable runnable) {
-        Minecraft.getMinecraft().addScheduledTask(runnable);
+        Minecraft.getInstance().runAsync(runnable);
     }
 }
