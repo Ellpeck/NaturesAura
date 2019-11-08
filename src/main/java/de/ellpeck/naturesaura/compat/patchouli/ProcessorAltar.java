@@ -39,6 +39,8 @@ public class ProcessorAltar implements IComponentProcessor {
 
     @Override
     public boolean allowRender(String group) {
+        if(this.recipe == null)
+            return false;
         return group.isEmpty() || group.equals(this.recipe.catalyst == Ingredient.EMPTY ? "altar" : "catalyst");
     }
 }
