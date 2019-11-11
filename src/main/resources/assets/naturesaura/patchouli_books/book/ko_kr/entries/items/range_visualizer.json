@@ -1,0 +1,17 @@
+{
+  "name": "신비한 돋보기",
+  "icon": "naturesaura:range_visualizer",
+  "category": "items",
+  "advancement": "naturesaura:infused_materials",
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(item)신비한 돋보기$()는 기계로 일하는 모든 마법의 식물학자를 위한 $(t:is a mod by vazkii)아기자기한$() 장치다. 어느 한 손에 장착하고 호환되는 기기와 상호작용할 때, 그것의 $(thing)작동 범위$()가 그 주위에 표시되므로, 그것과 함께 구축된 모든 기기는 쉽게 정확하게 검사될 수 있다. 장치가 범위를 표시하는 것을 중지하려면 두 번 장치와 상호작용 하기만 하면 된다."
+    },
+    {
+      "type": "crafting",
+      "text": "$(item)신비한 돋보기$() 만들기",
+      "recipe": "naturesaura:range_visualizer"
+    }
+  ]
+}

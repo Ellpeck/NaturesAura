@@ -1,0 +1,6 @@
+{
+  "name": "오라 불균형",
+  "description": "세게에서 $(#419600)오라$()를 빼내거나 더 추가하는 것은 $(thing)오라 불균형$()이라 한다 - 이것은 긍정적인 효과와 부정적인 효과를 둘 다 가질 수 있다. 이것들은 이 카테고리에 열거되어 있다.",
+  "icon": "naturesaura:textures/gui/patchouli/categories/effects.png",
+  "sortnum": 20
+}

@@ -1,0 +1,18 @@
+{
+  "name": "생산 촉매제",
+  "icon": "naturesaura:generator_limit_remover",
+  "category": "creating",
+  "advancement": "naturesaura:offering",
+  "priority": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(l:creating/on_generating)오라의 생산$() 섹션에서 설명한 것처럼 대부분의 $(thing)생산 장치$()는 특정 지점을 넘게 $(#419600)오라$()를 만들 수 있는 기능이 부족하다. $(item)생산 촉매제$()는 다음과 같은 문제를 쉽게 해결한다: 이것을 어떤 생산 장치 바로 아래에 놓으면 그것의 한계가 해제되어 이전에 언급한 지점을 훨씬 넘어서는 $(#419600)오라$()를 생성할 수 있게 된다.$(br)이것은 아무런 소모 비용이 없다."
+    },
+    {
+      "type": "crafting",
+      "recipe": "naturesaura:generator_limit_remover",
+      "text": "토큰을 사용하여 $(item)생산 촉매제$() 만들기"
+    }
+  ]
+}

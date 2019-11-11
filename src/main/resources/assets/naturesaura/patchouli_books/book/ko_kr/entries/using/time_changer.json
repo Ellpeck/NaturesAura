@@ -1,0 +1,26 @@
+{
+  "name": "변화의 해시계",
+  "icon": "naturesaura:time_changer",
+  "category": "using",
+  "advancement": "naturesaura:aura_bottle_end",
+  "pages": [
+    {
+      "type": "text",
+      "text": "특정한 활동, 특히 몬스터를 만들고 사냥하는 것은 특정 시간에만 쉽게 할 수 있다. 수년간 마법의 식물학자들은 개인적인 이익을 위해 $(thing)시간$() 자체를 조작하는 방법을 찾으려고 노력해왔다. $(item)변화의 해시계$()는 정확히 그 일을 할 수 있는 능력을 가지고 있다. 설치 비용이 꽤 들지만, 그것은 $(thing)낮이나 밤의 어떤 시간$()에도 쉽게 속도를 낼 수 있는 능력을 가지고 있다."
+    },
+    {
+      "type": "text",
+      "text": "그것을 설치하기 위해서, $(item)변화의 해시계$()에 $(item)시간의 손$()이 들어 있는 $(item)아이템 액자$()가 있으면 된다. 그런 다음 아이템 액자에서 손을 $(thing)회전$()시키면 건너뛰는 시간이 결정되며, 손은 자정에 해당하는 상단을 가리킨다. 시간 건너뛰기를 활성화하려면 일반 $(item)시계$()를 해시계에 매우 가까이 떨어뜨려야 한다.$(br)물론, 이것은 많은 양의 $(#419600)오라$()를 소모시킨다. 시간을 건너뛸수록 더 많이 소모될 것이다."
+    },
+    {
+      "type": "crafting",
+      "text": "$(item)변화의 해시계$() 만들기",
+      "recipe": "naturesaura:time_changer"
+    },
+    {
+      "type": "naturesaura:offering",
+      "text": "$(l:practices/offering)신께 공물을 바쳐$() $(item)시간의 손$() 요청하기",
+      "recipe": "naturesaura:clock_hand"
+    }
+  ]
+}

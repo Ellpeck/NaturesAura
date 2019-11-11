@@ -1,0 +1,21 @@
+{
+  "name": "식물 성장 증가",
+  "icon": "minecraft:wheat_seeds",
+  "category": "effects",
+  "advancement": "naturesaura:positive_imbalance",
+  "pages": [
+    {
+      "type": "text",
+      "text": "한 지역의 $(#419600)오라$()의 양이 불안정해질 정도로 많을 때, 이것은 가까이 있는 식물들, 특히 $(item)밀$(), $(item)감자$() 등과 같은 식물들로 이동하기 시작한다. 이것은 그것들의 $(thing)성장을 촉진$() 시키는 동시에, 그 결과 그 지역의 $(#419600)오라$()가 약간 감소하게 될 것이다."
+    },
+    {
+      "type": "text",
+      "text": "이러한 효과는 $(l:items/eye)자연의 눈$()의 계량기가 약 사분의 삼을 채울 때 명백해진다.$(br)이 효과는 오직 $(thing)오버월드$()에서만 나타나는 것으로 알려져 있다."
+    },
+    {
+      "type": "naturesaura:tree_ritual",
+      "recipe": "naturesaura:plant_powder",
+      "text": "이 효과는 $(l:effects/effect_powder)꾸준한 성장의 가루$()를 사용하여 억제될 수 있다."
+    }
+  ]
+}

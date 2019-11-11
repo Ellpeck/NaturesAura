@@ -1,0 +1,17 @@
+{
+  "name": "아이템 그라운더",
+  "icon": "naturesaura:pickup_stopper",
+  "category": "devices",
+  "advancement": "naturesaura:infused_materials",
+  "pages": [
+    {
+      "type": "text",
+      "text": "많은 기계장치들은 월드에서 떨어진 $(thing)아이템들$()의 사용을 필요로 하는데, 이것은 사고시 기계장치를 검사하는 사람들에 의해 쉽게 주워질 수 있다.$(br)$(item)아이템 그라운더$()는 이 지역의 아이템들을 움크리고 주웠을 경우에만 수집하도록 한다. 이것의 영향 영역은 이것의 주위에 0에서 8블록까지 다양하며, 상대적으로 적용된 $(thing)레드스톤 신호$()의 강도에 의해 결정된다."
+    },
+    {
+      "type": "crafting",
+      "text": "$(item)아이템 그라운더$() 만들기",
+      "recipe": "naturesaura:pickup_stopper"
+    }
+  ]
+}

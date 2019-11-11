@@ -1,0 +1,12 @@
+{
+  "name": "자연의 죽음",
+  "icon": "naturesaura:decayed_leaves",
+  "category": "effects",
+  "advancement": "naturesaura:negative_imbalance",
+  "pages": [
+    {
+      "type": "text",
+      "text": "초목과 식물들이 더 이상 자신을 지탱하는 데 필요한 자연 에너지를 갖지 못할 정도로 $(#419600)오라$()를 한 지역에서 배출할 때, $(thing)자연의 죽음$()이 시작된다. 모든 $(item)풀$()과 나무의 $(item)잎$()이 함께 썩을 것이다. 어떤 지역에서 더 많은 $(#419600)오라$()가 배출될수록, 이 효과는 더 나빠질 것이다.$(br)이 효과는 단지 $(thing)오버월드$()에서만 나타나는 것 같다."
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "name": "신께 바치는 공물",
+  "icon": "naturesaura:offering_table",
+  "category": "practices",
+  "advancement": "naturesaura:aura_bottle_nether",
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(item)스며든 철$()은 적절하고 좋으며, 스스로 다양한 일을 할 수 있는 충분한 자연의 힘을 가지고 있다. 그러나 더 발전된 메커니즘을 위해서는 더 강력한 금속이 필요하다. 그것을 위해서, 그리고 다른 많은 것들을 위해서, $(item)신께 바치는 공물$()이 필요하다.$(br)신들은 오랫동안 가장 강하고 강력한 존재였으며, 이와 같이 인간에게 알려진 가장 강한 금속도 지니고 있었다."
+    },
+    {
+      "type": "text",
+      "text": "신들에게 직접 전할 수 있는 방법을 구성하려면 다음 페이지에 설명된 것처럼 꽃들이 둘러져 있는 $(item)공물 탁자$()를 내려 놓으세요. 그런 다음 공물 제공을 시작하려면, 탁자 위에 놓인 그릇 안에 얼마만큼의 물건을 내놓고, 그 다음에 신들을 직접 부를 물건을 버리세요. 대개의 경우, $(item)부름의 영혼$()을 테이블 가까이에 둡니다.$(br)요청된 물품은 운 좋게도 하늘에서 비 처럼 내릴 것이다."
+    },
+    {
+      "type": "multiblock",
+      "multiblock_id": "naturesaura:offering_table",
+      "text": "$(item)신께 바치는 공물$()에 준비하세요. 어떤 종류의 꽃도 사용할 수 있다."
+    },
+    {
+      "type": "crafting",
+      "text": "$(item)공물 탁자$() 제작",
+      "recipe": "naturesaura:offering_table"
+    },
+    {
+      "type": "crafting",
+      "text": "$(item)부름의 영혼$() 제작",
+      "recipe": "naturesaura:calling_spirit"
+    },
+    {
+      "type": "naturesaura:offering",
+      "text": "$(item)하늘의 철$()은, 신성한 기운이 배어 있는 강력한 금속이다.",
+      "recipe": "naturesaura:sky_ingot"
+    },
+    {
+      "type": "naturesaura:offering",
+      "text": "$(item)기쁨의 토큰$()을 훨씬 더 강한 $(item)희열의 토큰$()으로 교환",
+      "recipe": "naturesaura:token_euphoria"
+    },
+    {
+      "type": "naturesaura:offering",
+      "text": "$(item)두려움의 토큰$()을 훨씬 더 강한 $(item)공포의 토큰$()으로 교환",
+      "recipe": "naturesaura:token_terror",
+      "anchor": "terror"
+    },
+    {
+      "type": "naturesaura:offering",
+      "text": "$(item)분노의 토큰$()을 훨씬 더 강한 $(item)격분의 토큰$()으로 교환",
+      "recipe": "naturesaura:token_rage"
+    },
+    {
+      "type": "naturesaura:offering",
+      "text": "$(item)슬픔의 토큰$()을 훨씬 더 강한 $(item)비탄의 토큰$()으로 교환",
+      "recipe": "naturesaura:token_grief"
+    }
+  ]
+}

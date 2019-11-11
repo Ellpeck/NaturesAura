@@ -1,0 +1,26 @@
+{
+  "name": "자동 제작기",
+  "icon": "naturesaura:auto_crafter",
+  "category": "devices",
+  "advancement": "naturesaura:sky_ingot",
+  "pages": [
+    {
+      "type": "text",
+      "text": "식물학자의 삶의 큰 부분은 특히 $(item)제작대$()에 있는 아이템의 $(thing)제작$()이다. 그러나 이것은 특히 규칙적으로 만들어지고 사용되는 제작법의 경우 쉽게 지루하고 시간이 많이 소요될 수 있다. 이를 위해 $(item)자동 제작기$()가 유용하다. 이것은 사람의 도움이 필요없이 제작에 의해 정기적으로 만들어질 수 있는 어떤 아이템도 만들어낼 것이다."
+    },
+    {
+      "type": "text",
+      "text": "이를 달성하기 위해서는 먼저 다음 페이지의 $(thing)구조물$()에 $(item)자동 제작기$()를 중앙에 두고 건설해야 한다. 배치되었을 때, 화살표의 면은 마치 $(item)제작대$()에서 가장 높은 슬롯 열을 가리키듯이 $(thing)제작법의 상단$()을 나타낸다. 그런 다음 필요한 재료는 정상적인 구성으로 $(item)고대의 나무$()에 떨어뜨려야 한다. 일단 자리를 잡으면, 몇 초 후, 결과물은 $(item)자동 제작기$() $(thing)아래$()로 떨어질 것이다."
+    },
+    {
+      "type": "multiblock",
+      "multiblock_id": "naturesaura:auto_crafter",
+      "text": "자동 제작 과정에 필요한 구조물 만들기"
+    },
+    {
+      "type": "crafting",
+      "text": "$(item)자동 제작기$() 만들기",
+      "recipe": "naturesaura:auto_crafter"
+    }
+  ]
+}

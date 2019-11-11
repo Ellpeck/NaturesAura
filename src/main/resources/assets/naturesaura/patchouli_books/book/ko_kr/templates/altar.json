@@ -1,0 +1,54 @@
+{
+    "processor": "de.ellpeck.naturesaura.compat.patchouli.ProcessorAltar",
+    "components": [
+        {
+            "type": "item",
+            "item": "#input",
+            "x": 24,
+            "y": 26
+        },
+        {
+            "type": "item",
+            "item": "#output",
+            "x": 76,
+            "y": 26,
+            "link_recipe": true
+        },
+        {
+            "group": "catalyst",
+            "type": "item",
+            "item": "#catalyst",
+            "x": 50,
+            "y": 28
+        },
+        {
+            "group": "altar",
+            "type": "item",
+            "item": "naturesaura:nature_altar",
+            "x": 50,
+            "y": 26
+        },
+        {
+            "type": "image",
+            "image": "naturesaura:textures/gui/patchouli/elements.png",
+            "x": 20,
+            "y": 13,
+            "u": 0,
+            "v": 0,
+            "width": 75,
+            "height": 44
+        },
+        {
+            "type": "header",
+            "text": "#name",
+            "x": -1,
+            "y": 0
+        },
+        {
+            "type": "text",
+            "text": "#text",
+            "x": 0,
+            "y": 63
+        }
+    ]
+}

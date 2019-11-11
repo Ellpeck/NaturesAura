@@ -1,0 +1,17 @@
+{
+  "name": "자연의 충전",
+  "icon": "naturesaura:aura_cache",
+  "category": "effects",
+  "advancement": "naturesaura:positive_imbalance",
+  "pages": [
+    {
+      "type": "text",
+      "text": "자연에 충분한 $(#419600)오라$()가 존재하여 $(l:items/eye)자연의 눈$()의 막대가 기본 수치보다 약 절반 정도 더 채워지면, $(item)자연의 충전$()이 시작되게 된다: $(l:items/aura_cache)오라 캐시$()를 들고 다니는 포화 지역 주변의 모든 사람들에게, 이것은 과포화 $(#419600)오라$()에서 빠져 나와 천천히 $(thing)채워지기$() 시작할 것이다."
+    },
+    {
+      "type": "naturesaura:tree_ritual",
+      "recipe": "naturesaura:cache_powder",
+      "text": "이 효과는 $(l:effects/effect_powder)비충전의 가루$()를 사용하여 억제할 수 있다."
+    }
+  ]
+}
