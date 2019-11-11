@@ -1,26 +1,26 @@
 {
-    "name": "Ritual of the Brewer",
-    "icon": "naturesaura:potion_generator",
-    "category": "creating",
-    "advancement": "naturesaura:sky_ingot",
-    "pages": [
-        {
-            "type": "text",
-            "text": "As ashes turn to ashes, and dust to dust, a similar natural conversion can be achieved with $(aura) and equally magic $(item)Potions$(). Specifically, $(item)Lingering Potions$() have certain magical abilities that allow one to extract the effects and convert them into $(aura) efficiently.$(p)To do this, simply build the $(item)Ritual of the Brewer$() as depicted on the next page."
-        },
-        {
-            "type": "text",
-            "text": "Then, throwing any kind of positive, lasting $(item)Lingering Potion$() down in its vicinity will cause the effect to be consumed and turned into $(aura). Needless to say, the longer and higher the effect, the more $(aura) gets created.$(br)Notice that, however, only one effect can be converted at one time, and throwing multiple potions at the ritual will cause their powers to go to waste."
-        },
-        {
-            "type": "multiblock",
-            "multiblock_id": "naturesaura:potion_generator",
-            "text": "Creating the $(item)Ritual of the Brewer$() with the $(item)Lingering Absorber$() in the center"
-        },
-        {
-            "type": "crafting",
-            "recipe": "naturesaura:potion_generator",
-            "text": "Creating the $(item)Lingering Absorber$()"
-        }
-    ]
+  "name": "물약의 의식",
+  "icon": "naturesaura:potion_generator",
+  "category": "creating",
+  "advancement": "naturesaura:sky_ingot",
+  "pages": [
+    {
+      "type": "text",
+      "text": "재는 재로 변하고, 먼지는 먼지로 변하니, 비슷한 자연의 변환은 $(#419600)오라$()와 동등한 마법 $(item)물약$()으로 이루어질 수 있다. 구체적으로, $(item)잔류형 물약$()은 효과를 추출하여 효율적으로 $(#419600)오라$()로 변환할 수 있는 마법적 능력을 가지고 있다.$(p)이를 위해 다음 페이지에 설명된 대로 $(item)물약의 의식$()을 지으면 된다."
+    },
+    {
+      "type": "text",
+      "text": "그러면, 그 근처에 어떤 종류의 긍정적이고, 지속적인 $(item)잔류 물약$()을 던지면 그 효과가 소비되어 $(#419600)오라$()로 변할 것이다. 말할 필요도 없이 효과가 길어질수록 더 많은 $(#419600)오라$()가 만들어진다.$(br)그러나 한 번에 한 가지 효과만 전환될 수 있고, 의식에 여러 가지 물약을 던지면 그 힘이 소모된다는 점에 주의해야 한다."
+    },
+    {
+      "type": "multiblock",
+      "multiblock_id": "naturesaura:potion_generator",
+      "text": "$(item)물약 흡수기$()를 중심에 놓고 $(item)물약의 의식$() 완성하기"
+    },
+    {
+      "type": "crafting",
+      "recipe": "naturesaura:potion_generator",
+      "text": "$(item)물약 흡수기$() 만들기"
+    }
+  ]
 }

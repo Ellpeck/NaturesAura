@@ -1,17 +1,17 @@
 {
-    "name": "Powder Manipulator",
-    "icon": "naturesaura:powder_placer",
-    "category": "devices",
-    "advancement": "naturesaura:positive_imbalance",
-    "pages": [
-        {
-            "type": "text",
-            "text": "Using $(l:effects/effect_powder)Effect Powder$() can prove to be quite useful when trying to inhibit or start certain $(thing)Aura Imbalance$() effects. The $(item)Powder Manipulator$() helps with this greatly: Placing a chest on any side of it and placing any kind of $(item)Effect Powder$() into it will cause it to, upon receiving a $(thing)redstone pulse$(), place that powder down in the world."
-        },
-        {
-            "type": "crafting",
-            "text": "Similarly, upon giving it another pulse, it will collect the powder that it has placed on top of it once again and deposit it in a nearby chest.",
-            "recipe": "naturesaura:powder_placer"
-        }
-    ]
+  "name": "가루 조작기",
+  "icon": "naturesaura:powder_placer",
+  "category": "devices",
+  "advancement": "naturesaura:positive_imbalance",
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(l:effects/effect_powder)효과 가루$()를 사용하면 특정 $(thing)오라 불균형$() 효과를 억제하거나 시작할 때 상당히 유용할 수 있다. $(item)가루 조작기$()는 이것을 크게 도와준다: 상자를 어느쪽에든 붙이고 $(item)효과 가루$()를 안에 넣고 $(thing)레드스톤 신호$()를 주면, 이 가루를 월드에 내려 놓는다."
+    },
+    {
+      "type": "crafting",
+      "text": "마찬가지로, 또 다시 신호를 주면 그 위에 올려놓은 가루를 다시 모아서 가까운 상자에 넣는다.",
+      "recipe": "naturesaura:powder_placer"
+    }
+  ]
 }

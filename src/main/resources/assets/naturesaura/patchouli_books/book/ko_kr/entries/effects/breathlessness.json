@@ -1,12 +1,12 @@
 {
-    "name": "Breathlessness",
-    "icon": "minecraft:wool",
-    "category": "effects",
-    "advancement": "naturesaura:negative_imbalance",
-    "pages": [
-        {
-            "type": "text",
-            "text": "The removal of $(aura) from an area not only has an effect on plantlife around the effected area, but also on creatures that require $(item)oxygen$() to breathe. These creatures will quickly notice that, the more $(aura) is drained, the less easy it becomes to breathe: Their lungs will start producing an acute pain that stings in irregular intervals, and it becomes severely harder to regenerate health."
-        }
-    ]
+  "name": "호흡 장애",
+  "icon": "minecraft:wool",
+  "category": "effects",
+  "advancement": "naturesaura:negative_imbalance",
+  "pages": [
+    {
+      "type": "text",
+      "text": "한 지역에서 $(#419600)오라$()를 제거하는 것은 영향을 받은 지역 주변의 식물 생물뿐만 아니라 숨쉬기 위해 필요한 $(item)산소$()를 필요로 하는 생물에도 영향을 미친다. 이 생명체들은 빠르게 알아차릴 수 있을 것이다: $(#419600)오라$()가 더 많이 배출될수록 호흡하기가 더 쉬워진다는 것을. 그들의 폐는 불규칙한 간격으로 찌르는 급성 통증이 발생하기 시작할 것이고, 건강을 회복하는 것이 심각하게 어려워 진다."
+    }
+  ]
 }
