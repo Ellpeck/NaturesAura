@@ -1,0 +1,28 @@
+{
+  "name": "오라 보틀링",
+  "icon": "naturesaura:aura_bottle{stored_type:'naturesaura:overworld'}",
+  "category": "practices",
+  "advancement": "naturesaura:wood_stand",
+  "turnin": "naturesaura:aura_bottle_overworld",
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(#419600)오라$()와, 월드에서의 그것의 존재는 오랫동안 연구자들에게 난제였다. 옛날에는 $(item)병$()을 이용해 $(#419600)오라$()를 수집하고, 그렇게 육안으로 볼 수 있게 되면서 더욱 자세히 분석하곤 했다. 그들은 곧, \"과학자들은 이미 병을 사용하고 있어. 이것은 문제를 일으킬 것이다\"라고 지식이 없는 일반인들의 불평이 그들을 괴롭히기 시작했다."
+    },
+    {
+      "type": "crafting",
+      "text": "이와 같이, 앞뒤가 맞지 않는 모든 소문을 없애기 위해, 그들은 $(item)병과 코르크$()를 만들었다: 공기와 함께 단순히 상호작용함으로써 $(#419600)오라$()를 모으는 데만 사용할 수 있는 병과 비슷하지만 약간 다른 기구",
+      "recipe": "naturesaura:bottle_two_the_rebottling"
+    },
+    {
+      "type": "spotlight",
+      "item": "naturesaura:aura_bottle{stored_type:'naturesaura:overworld'}",
+      "link_recipe": true,
+      "text": "물론, 현재 당신이 살고 있는 월드를 기준으로 하면, 수집된 $(#419600)오라$()의 종류는 약간 다를 것이다. 예를 들어, 정상적인 월드에서는 $(#419600)오라$()를 햇빛의 형태로 모을 수 있고, 네더에서는 $(#419600)오라$()를 유령의 형태로 모을 수 있고, 엔더 지역에서는 $(#419600)오라$()가 과다한 어둠의 형태로 존재한다."
+    },
+    {
+      "type": "text",
+      "text": "또한, 이러한 방식으로 $(#419600)오라$()의 수집은 $(item)발사기$()를 이용하여 쉽게 자동화 할 수 있다: 빈 $(item)병과 코르크$()를 그 안에 넣으면 그것이 열리게 되어 그 과정에서 $(#419600)오라$()가 가득차게 된다. 이후에 다시 발사기에 의해 흡수되지 않기 때문에 $(item)호퍼$()와 같은 추가 도구가 필요하다."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "오라 캐시",
+  "icon": "naturesaura:aura_cache",
+  "category": "items",
+  "advancement": "naturesaura:infused_materials",
+  "priority": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(l:collecting/altar)자연의 제단$()에 $(#419600)오라$()가 저장되어 있는 것은 좋지만, 그것을 가지고 다닐 수 있는 것이 더 편리할 것이다. 이 경우, $(item)오라 캐시$()는 다음과 같이 유용함을 입증한다: 상당한 양의 $(#419600)오라$()를 저장해서 이동 중에 사용할 수 있다.$(br)캐시를 채우려면, 그냥 $(item)자연의 제단$()에 놓고 $(#419600)오라$()가 그 안으로 빠져나갈 때까지 기다리면 된다."
+    },
+    {
+      "type": "crafting",
+      "text": "$(item)오라 캐시$() 만들기",
+      "recipe": "naturesaura:aura_cache"
+    }
+  ]
+}

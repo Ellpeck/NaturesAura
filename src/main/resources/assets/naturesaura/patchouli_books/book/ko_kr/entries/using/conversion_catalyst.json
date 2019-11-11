@@ -1,0 +1,52 @@
+{
+  "name": "변환의 촉매제",
+  "icon": "naturesaura:conversion_catalyst",
+  "category": "using",
+  "advancement": "naturesaura:sky_ingot",
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(l:collecting/altar)자연의 제단$()은 특정 아이템을 $(#419600)오라$()의 힘을 주입하는 데 유용할 수 있지만, 또한 아이템을 다른 종류로 변환시키는 데 도움을 줄 수 있다.$(br)이것은 $(item)변환의 촉매제$()를 만들어 제단 주위의 아래의 4개의 $(item)금빛 석재 벽돌$() 중 어느 위에든 올려놓은 다음, 평소와 같이 제단 위에 재료를 올려 놓으면 이룰 수 있다."
+    },
+    {
+      "type": "naturesaura:tree_ritual",
+      "text": "$(l:practices/tree_ritual)숲의 의식$()을 사용하여 $(item)변환 촉매제$() 만들기",
+      "recipe": "naturesaura:conversion_catalyst"
+    },
+    {
+      "type": "naturesaura:altar",
+      "text": "엔더의 $(#419600)오라$()로 $(item)드래곤의 숨결$() 만들기",
+      "recipe": "naturesaura:breath"
+    },
+    {
+      "type": "naturesaura:altar",
+      "text": "좀비의 유해로 $(item)가죽$() 만들기",
+      "recipe": "naturesaura:leather"
+    },
+    {
+      "type": "naturesaura:altar",
+      "text": "세계의 모래로 $(item)영혼 모래$() 만들기",
+      "recipe": "naturesaura:soul_sand"
+    },
+    {
+      "type": "naturesaura:altar",
+      "text": "버섯으로 $(item)지옥 사마귀$() 만들기",
+      "recipe": "naturesaura:nether_wart"
+    },
+    {
+      "type": "naturesaura:altar",
+      "text": "네더의 광물로 $(item)프리즈머린 조각$() 만들기",
+      "recipe": "naturesaura:prismarine"
+    },
+    {
+      "type": "naturesaura:altar",
+      "text": "빈 $(item)유리병$() 안에 $(thing)물$() 채우기",
+      "recipe": "naturesaura:water"
+    },
+    {
+      "type": "naturesaura:altar",
+      "text": "$(item)숯$()을 $(item)석탄$()으로 변환하기",
+      "recipe": "naturesaura:coal"
+    }
+  ]
+}

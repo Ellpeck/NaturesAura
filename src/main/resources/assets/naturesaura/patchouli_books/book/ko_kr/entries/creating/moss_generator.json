@@ -1,0 +1,17 @@
+{
+  "name": "습지 호미",
+  "icon": "naturesaura:moss_generator",
+  "category": "creating",
+  "advancement": "naturesaura:infused_materials",
+  "pages": [
+    {
+      "type": "text",
+      "text": "자연의 $(#419600)오라$()의 가장 큰 원천은 어떤 종류의 이끼 낀 블록에 있는 $(thing)이끼$()다. 이 속성은 $(item)슾지 호미$()의 형태로 사용해 만들 수 있다: 이것은 주위에 이끼로 뒤덮인 어떤 블록도 가져다가 깨끗한 블록으로 되돌릴 것이다. 제거하여, 약간의 $(#419600)오라$()를 발생시켜 환경으로 확산시킨다."
+    },
+    {
+      "type": "crafting",
+      "recipe": "naturesaura:moss_generator",
+      "text": "$(item)습지 호미$() 만들기"
+    }
+  ]
+}

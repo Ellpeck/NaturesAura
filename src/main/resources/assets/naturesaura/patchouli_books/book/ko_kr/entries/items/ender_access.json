@@ -1,0 +1,17 @@
+{
+  "name": "엔더의 시각",
+  "icon": "naturesaura:ender_access",
+  "category": "items",
+  "advancement": "naturesaura:aura_bottle_end",
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(item)엔더의 시각$()은 간단히 말해서, $(l:using/ender_crate)엔더 운송 상자$()의 휴대용 버전이다. $(thing)엔더 이름$()을 정확히 같은 방식으로 준 후 손에 들고 상호작용하면 상자가 여기저기 열린다. 이를 위해 $(l:items/aura_cache)오라 캐시$()가 약간의 $(#419600)오라$()를 배출해야 한다."
+    },
+    {
+      "type": "crafting",
+      "text": "$(item)엔더의 시각$() 만들기",
+      "recipe": "naturesaura:ender_access"
+    }
+  ]
+}

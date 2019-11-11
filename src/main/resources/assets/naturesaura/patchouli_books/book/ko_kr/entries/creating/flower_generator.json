@@ -1,0 +1,21 @@
+{
+  "name": "식물 흡수기",
+  "icon": "naturesaura:flower_generator",
+  "category": "creating",
+  "advancement": "naturesaura:infused_materials",
+  "pages": [
+    {
+      "type": "text",
+      "text": "상당히 높은 자연 레벨의 $(#419600)오라$()를 확실히 가지고 있는 세속적인 아이템이 바로 $(item)꽃$()이라고 알려져 있다. 이것은 $(item)식물 흡수기$()를 사용하는데, 이 흡수기는, 월드에 놓였을 때, 가까운 곳의 어떤 작은 꽃도 먹어 그것의 에너지를 $(#419600)오라$()로 변화시킬 것이다."
+    },
+    {
+      "type": "text",
+      "text": "그러나 주의할 점은 하나의 꽃을 지속적으로 공급하면 그 꽃의 $(#419600)오라$()를 소비할 수 있는 능력을 잃게 된다는 것이다.$(br)이는 흡수기를 효율적으로 작동시키려면 $(thing)여러 종류의 꽃$()을 차례로 공급해야 한다는 뜻이다.$(br)흡수기가 최대 효율에 도달하려면 약 6종류의 다른 종류가 필요하다."
+    },
+    {
+      "type": "crafting",
+      "recipe": "naturesaura:flower_generator",
+      "text": "$(item)식물 흡수기$() 만들기"
+    }
+  ]
+}

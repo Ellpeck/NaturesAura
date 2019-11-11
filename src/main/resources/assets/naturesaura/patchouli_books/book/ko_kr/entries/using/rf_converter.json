@@ -1,0 +1,27 @@
+{
+  "name": "오라 에너지 가공기",
+  "icon": "naturesaura:rf_converter",
+  "category": "using",
+  "advancement": "naturesaura:sky_ingot",
+  "flag": "naturesaura:rf_converter",
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(#419600)오라$()는 꽤 다재다능하고 유용하지만, 확실히 가장 많이 쓰이는 $(thing)에너지 자원$()은 아니다. 최근 역사에서, 자연적으로 여겨지지 않는 새로운 에너지 자원이 사람들에 의해 $(italic)만들어$()졌다. 때때로, 그런 에너지 자원을 대신 가지고 있는 것이 유용할 수도 있다. $(item)오라 에너지 가공기$()는 $(#419600)오라$()를 대부분의 사람들에게 $(thing)레드스톤 플럭스(RF)$()라고 알려진 것으로, 또는 어떤 사람들은 포지 에너지(FE)라고, 그리고 심지어"
+    },
+    {
+      "type": "text",
+      "text": "크리스탈 플럭스(CF)로 직접 변한한다.$(br)이를 달성하기 위해 다음 페이지에 표시된 것처럼 $(item)오라 에너지 가공기$()에 동봉된 구조물을 배치하기만 하면 된다. 그러면, 그 지역의 초과한 양의 $(#419600)오라$()는 자동적으로 전력 에너지로 바뀔 것이다. $(#419600)오라$()가 많을 수록 변환 과정은 더 빨라질 것이다.$(br)또한, $(l:items/eye)자연의 눈$()을 장착하면 장치의 에너지 양을 표시할 수 있다."
+    },
+    {
+      "type": "multiblock",
+      "multiblock_id": "naturesaura:rf_converter",
+      "text": "$(item)오라 에너지 가공기$() 주변에 구조물 만들기"
+    },
+    {
+      "type": "crafting",
+      "text": "$(item)오라 에너지 가공기$() 만들기",
+      "recipe": "naturesaura:rf_converter"
+    }
+  ]
+}
