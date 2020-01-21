@@ -8,25 +8,19 @@ import de.ellpeck.naturesaura.items.tools.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Mod.EventBusSubscriber
 public final class ModRegistry {
@@ -90,18 +84,14 @@ public final class ModRegistry {
                 new BlockDimensionRail("end", DimensionType.THE_END, DimensionType.OVERWORLD)
         );
 
-        if (ModConfig.enabledFeatures.rfConverter) {
+        if (ModConfig.enabledFeatures.rfConverter)
             event.getRegistry().register(new BlockRFConverter());
-        }
-
-        if (ModConfig.enabledFeatures.chunkLoader) {
+        if (ModConfig.enabledFeatures.chunkLoader)
             event.getRegistry().register(new BlockChunkLoader());
-        }
     }
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
-
         for (IModItem item : ALL_ITEMS) {
             if (item instanceof Block) {
                 if (item instanceof ICustomItemBlockProvider) {
@@ -117,7 +107,7 @@ public final class ModRegistry {
                 new Axe("infused_iron_axe", NAItemTier.INFUSED, 8.25F, 3.2F),
                 new Shovel("infused_iron_shovel", NAItemTier.INFUSED, 8.25F, 3.2F),
                 new Hoe("infused_iron_hoe", NAItemTier.INFUSED, 3.2F),
-                new Sword("infused_iron_sword", NAItemTier.INFUSED, 3, 3), // dmg and speed values need to be changed
+                new Sword("infused_iron_sword", NAItemTier.INFUSED, 3, 3), // TODO dmg and speed values need to be changed
                 new Armor("infused_iron_helmet", NAArmorMaterial.INFUSED, EquipmentSlotType.HEAD),
                 new Armor("infused_iron_chest", NAArmorMaterial.INFUSED, EquipmentSlotType.CHEST),
                 new Armor("infused_iron_pants", NAArmorMaterial.INFUSED, EquipmentSlotType.LEGS),
@@ -165,18 +155,16 @@ public final class ModRegistry {
     public static void registerPotions(RegistryEvent.Register<Effect> event) {
 
     }
-
-
+    
+/*
     private static void registerPotion(Effect potion, String name) {
-        potion.setPotionName("potion." + NaturesAura.MOD_ID + "." + name + ".name");
+        potion.setRegistryName("potion." + NaturesAura.MOD_ID + "." + name + ".name");
 
         potion.setRegistryName(NaturesAura.MOD_ID, name);
         ForgeRegistries.POTIONS.register(potion);
     }
 
     private static void registerItem(Item item, String name, ItemGroup tab) {
-        item.setTranslationKey(NaturesAura.MOD_ID + "." + name);
-
         item.setRegistryName(NaturesAura.MOD_ID, name);
         ForgeRegistries.ITEMS.register(item);
 
@@ -232,6 +220,7 @@ public final class ModRegistry {
             item.onPreInit(event);
         }
     }
+*/
 
     public static void init(FMLCommonSetupEvent event) {
         for (IModItem item : ALL_ITEMS) {

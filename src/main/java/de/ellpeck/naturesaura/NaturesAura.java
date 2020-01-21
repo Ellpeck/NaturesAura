@@ -87,7 +87,6 @@ public final class NaturesAura {
 
         Compat.preInit();
         PacketHandler.init();
-        ModRegistry.preInit(event);
         ModEntities.init();
         new Multiblocks();
 
@@ -107,7 +106,6 @@ public final class NaturesAura {
     }
 
     public void postInit(FMLCommonSetupEvent event) {
-        ModRegistry.postInit(event);
         Compat.postInit();
         proxy.postInit(event);
 
