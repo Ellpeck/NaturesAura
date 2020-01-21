@@ -1,19 +1,19 @@
+/* TODO World gen
 package de.ellpeck.naturesaura.gen;
 
 import de.ellpeck.naturesaura.blocks.ModBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.LogBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.IWorldGenerationReader;
 import net.minecraft.world.gen.feature.AbstractTreeFeature;
 
 import java.util.Random;
+import java.util.Set;
 
 public class WorldGenAncientTree extends AbstractTreeFeature {
 
@@ -22,7 +22,7 @@ public class WorldGenAncientTree extends AbstractTreeFeature {
     }
 
     @Override
-    public boolean generate(World world, Random rand, BlockPos pos) {
+    protected boolean place(Set changedBlocks, IWorldGenerationReader world, Random rand, BlockPos pos, MutableBoundingBox box) {
         int height = rand.nextInt(3) + 5;
         BlockPos trunkTop = pos.up(height);
 
@@ -140,4 +140,4 @@ public class WorldGenAncientTree extends AbstractTreeFeature {
         }
         return axis;
     }
-}
+}*/

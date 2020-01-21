@@ -23,7 +23,7 @@ public class SpreadEffect implements IDrainSpotEffect {
         while (toMove > 0) {
             BlockPos bestOffset = null;
             int bestAmount = drain ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-            for (Direction facing : Direction.VALUES) {
+            for (Direction facing : Direction.values()) {
                 BlockPos offset = pos.offset(facing, 15);
                 if (world.isBlockLoaded(offset) && offset.getY() >= 0 && offset.getY() <= world.getHeight()) {
                     int amount = IAuraChunk.getAuraInArea(world, offset, 14);
@@ -33,7 +33,7 @@ public class SpreadEffect implements IDrainSpotEffect {
                     }
                 }
             }
-            if(bestOffset == null)
+            if (bestOffset == null)
                 break;
 
             BlockPos bestPos = drain ? IAuraChunk.getLowestSpot(world, bestOffset, 14, bestOffset)

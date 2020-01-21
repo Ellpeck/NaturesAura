@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityOfferingTable;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderOfferingTable;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
@@ -24,7 +25,7 @@ public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvi
     private static final AxisAlignedBB BOUND_BOX = new AxisAlignedBB(2 / 16F, 0F, 2 / 16F, 14 / 16F, 1F, 14 / 16F);
 
     public BlockOfferingTable() {
-        super("offering_table", TileEntityOfferingTable.class, "offering_table", ModBlocks.prop(Material.WOOD).hardnessAndResistance(2F).sound(SoundType.WOOD));
+        super("offering_table", ModTileEntities.OFFERING_TABLE, ModBlocks.prop(Material.WOOD).hardnessAndResistance(2F).sound(SoundType.WOOD));
     }
 
     @Override

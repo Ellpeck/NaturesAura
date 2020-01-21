@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityPickupStopper;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.block.SoundType;
@@ -20,7 +21,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable {
     public BlockPickupStopper() {
-        super("pickup_stopper", TileEntityPickupStopper.class, "pickup_stopper", ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
+        super("pickup_stopper", ModTileEntities.PICKUP_STOPPER, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

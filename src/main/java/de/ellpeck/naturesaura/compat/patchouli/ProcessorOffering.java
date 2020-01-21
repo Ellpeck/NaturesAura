@@ -27,7 +27,7 @@ public class ProcessorOffering implements IComponentProcessor {
             case "start":
                 return PatchouliAPI.instance.serializeIngredient(this.recipe.startItem);
             case "name":
-                return this.recipe.output.getDisplayName();
+                return this.recipe.output.getDisplayName().getFormattedText();
             default:
                 return null;
         }

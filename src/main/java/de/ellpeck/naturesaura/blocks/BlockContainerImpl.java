@@ -9,6 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -19,39 +20,27 @@ import java.util.Random;
 public class BlockContainerImpl extends ContainerBlock implements IModItem, IModelProvider {
 
     private final String baseName;
+    public final TileEntityType<? extends TileEntity> tileType;
 
-    private final Class<? extends TileEntity> tileClass;
-    private final String tileRegName;
-
-    public BlockContainerImpl(String baseName, Class<? extends TileEntity> tileClass, String tileReg, Block.Properties properties) {
+    public BlockContainerImpl(String baseName, TileEntityType tileClass, Block.Properties properties) {
         super(properties);
 
         this.baseName = baseName;
-        this.tileClass = tileClass;
-        this.tileRegName = tileReg;
+        this.tileType = tileClass;
 
         ModRegistry.add(this);
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader world) {
-        // TODO TYPES BLUTRGHGHGH
-        try {
-            return this.tileClass.newInstance();
-        } catch (Exception e) {
-            return null;
-        }
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+        return this.tileType.create();
     }
 
     @Override
     public String getBaseName() {
         return this.baseName;
     }
-/* TODO tile entties???
-    public void onInit(FMLInitializationEvent event) {
-        ForgeRegistries.TILE_ENTITIES.register(this.tileClass, new ResourceLocation(NaturesAura.MOD_ID, this.tileRegName));
-    }*/
 
     @Override
     public BlockRenderType getRenderType(BlockState state) {

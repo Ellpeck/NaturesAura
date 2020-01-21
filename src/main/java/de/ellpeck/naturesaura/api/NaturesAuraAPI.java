@@ -344,9 +344,9 @@ public final class NaturesAuraAPI {
         BlockPos getLowestAuraDrainSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot);
 
         /**
-         * @see IAuraChunk#getHighestSpot(IWorld, BlockPos, int, BlockPos)
+         * @see IAuraChunk#getHighestSpot(World, BlockPos, int, BlockPos)
          */
-        BlockPos getHighestAuraDrainSpot(IWorld world, BlockPos pos, int radius, BlockPos defaultSpot);
+        BlockPos getHighestAuraDrainSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot);
     }
 
 }

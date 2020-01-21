@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderEnderCrate;
 import de.ellpeck.naturesaura.items.ModItems;
@@ -46,7 +47,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     private static final ThreadLocal<WeakReference<World>> CACHED_WORLD = new ThreadLocal<>();
 
     public BlockEnderCrate() {
-        super("ender_crate", TileEntityEnderCrate.class, "ender_crate", ModBlocks.prop(Material.ROCK).hardnessAndResistance(5F).lightValue(7).sound(SoundType.STONE));
+        super("ender_crate", ModTileEntities.ENDER_CRATE, ModBlocks.prop(Material.ROCK).hardnessAndResistance(5F).lightValue(7).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

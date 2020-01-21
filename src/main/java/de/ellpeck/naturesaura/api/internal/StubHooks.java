@@ -83,11 +83,11 @@ public class StubHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public BlockPos getLowestAuraDrainSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot) {
-        return BlockPos.ORIGIN;
+        return BlockPos.ZERO;
     }
 
     @Override
     public BlockPos getHighestAuraDrainSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot) {
-        return BlockPos.ORIGIN;
+        return BlockPos.ZERO;
     }
 }

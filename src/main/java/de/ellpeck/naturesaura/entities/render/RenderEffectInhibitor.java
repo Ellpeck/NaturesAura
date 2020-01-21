@@ -1,10 +1,10 @@
 package de.ellpeck.naturesaura.entities.render;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.items.EffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.AtlasTexture;
@@ -37,9 +37,9 @@ public class RenderEffectInhibitor extends EntityRenderer<EntityEffectInhibitor>
         GlStateManager.pushMatrix();
         float time = entity.renderTicks + entity.getEntityId() + partialTicks;
         float bob = (float) Math.sin(time / 10F) * 0.05F;
-        GlStateManager.translate(x, y + 0.15F + bob, z);
-        GlStateManager.rotate((time * 3) % 360, 0F, 1F, 0F);
-        GlStateManager.scale(0.5F, 0.5F, 0.5F);
+        GlStateManager.translated(x, y + 0.15F + bob, z);
+        GlStateManager.rotatef((time * 3) % 360, 0F, 1F, 0F);
+        GlStateManager.scalef(0.5F, 0.5F, 0.5F);
         ResourceLocation effect = entity.getInhibitedEffect();
         Helper.renderItemInWorld(this.items.computeIfAbsent(effect,
                 res -> EffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER), effect)));

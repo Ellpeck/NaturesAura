@@ -8,7 +8,6 @@ import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.blocks.multi.Multiblock;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.misc.WorldData;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -16,6 +15,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -108,36 +108,28 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public List<Tuple<Vec3d, Integer>> getActiveEffectPowders(World world, AxisAlignedBB area, ResourceLocation name) {
-        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getActiveEffectPowders");
         List<Tuple<Vec3d, Integer>> found = new ArrayList<>();
         for (Tuple<Vec3d, Integer> powder : ((WorldData) IWorldData.getWorldData(world)).effectPowders.get(name))
-            if (area.contains(powder.getFirst()))
+            if (area.contains(powder.getA()))
                 found.add(powder);
-        world.profiler.endSection();
         return found;
     }
 
     @Override
     public boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name) {
-        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":isEffectPowderActive");
         Vec3d posVec = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         List<Tuple<Vec3d, Integer>> powders = this.getActiveEffectPowders(world, new AxisAlignedBB(pos).grow(64), name);
         for (Tuple<Vec3d, Integer> powder : powders) {
-            AxisAlignedBB bounds = Helper.aabb(powder.getFirst()).grow(powder.getSecond());
-            if (bounds.contains(posVec)) {
-                world.profiler.endSection();
+            AxisAlignedBB bounds = Helper.aabb(powder.getA()).grow(powder.getB());
+            if (bounds.contains(posVec))
                 return true;
-            }
         }
-        world.profiler.endSection();
         return false;
     }
 
     @Override
     public void getAuraSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
-        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getSpotsInArea");
         Helper.getAuraChunksInArea(world, pos, radius, chunk -> chunk.getSpotsInArea(pos, radius, consumer));
-        world.profiler.endSection();
     }
 
     @Override
@@ -158,7 +150,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     public int triangulateAuraInArea(World world, BlockPos pos, int radius) {
         MutableFloat result = new MutableFloat(IAuraChunk.DEFAULT_AURA);
         IAuraChunk.getSpotsInArea(world, pos, radius, (blockPos, spot) -> {
-            float percentage = 1F - (float) pos.getDistance(blockPos.getX(), blockPos.getY(), blockPos.getZ()) / radius;
+            float percentage = 1F - (float) Math.sqrt(pos.distanceSq(blockPos)) / radius;
             result.add(spot * percentage);
         });
         return result.intValue();

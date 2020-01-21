@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.render.IVisualizable;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityPlacer;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockPlacer extends BlockContainerImpl implements IVisualizable {
 
     public BlockPlacer() {
-        super("placer", TileEntityPlacer.class, "placer", ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
+        super("placer", ModTileEntities.PLACER, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
     }
 
     @Override

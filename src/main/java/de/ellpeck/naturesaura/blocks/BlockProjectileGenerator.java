@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityProjectileGenerator;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -19,7 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class BlockProjectileGenerator extends BlockContainerImpl/* implements ITESRProvider*/ {
     public BlockProjectileGenerator() {
-        super("projectile_generator", TileEntityProjectileGenerator.class, "projectile_generator", ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
+        super("projectile_generator", ModTileEntities.PROJECTILE_GENERATOR, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

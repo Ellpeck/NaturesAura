@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAncientLeaves;
 import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.BlockState;
@@ -58,7 +59,7 @@ public class BlockAncientLeaves extends LeavesBlock implements
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileEntityAncientLeaves();
+        return ModTileEntities.ANCIENT_LEAVES.create();
     }
 
     @Override

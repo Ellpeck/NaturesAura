@@ -4,8 +4,9 @@ import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EntityPredicates;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -14,16 +15,22 @@ import java.util.List;
 
 public class TileEntityPowderPlacer extends TileEntityImpl {
 
+    public TileEntityPowderPlacer(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
+
     @Override
     public void onRedstonePowerChange(int newPower) {
         if (this.redstonePower <= 0 && newPower > 0) {
             List<EntityEffectInhibitor> powders = this.world.getEntitiesWithinAABB(EntityEffectInhibitor.class,
                     new AxisAlignedBB(this.pos, this.pos.add(1, 2, 1)), EntityPredicates.IS_ALIVE);
-            for (Direction facing : Direction.HORIZONTALS) {
-                TileEntity tile = this.world.getTileEntity(this.pos.offset(facing));
-                if (tile == null || !tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite()))
+            for (Direction facing : Direction.values()) {
+                if (!facing.getAxis().isHorizontal())
                     continue;
-                IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite());
+                TileEntity tile = this.world.getTileEntity(this.pos.offset(facing));
+                if (tile == null)
+                    continue;
+                IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite()).orElse(null);
                 if (handler == null)
                     continue;
 
@@ -33,7 +40,7 @@ public class TileEntityPowderPlacer extends TileEntityImpl {
                         for (int i = 0; i < handler.getSlots(); i++) {
                             ItemStack remain = handler.insertItem(i, drop, false);
                             if (remain.isEmpty()) {
-                                powder.setDead();
+                                powder.remove();
                                 break;
                             } else if (remain.getCount() != drop.getCount()) {
                                 powder.setAmount(remain.getCount());

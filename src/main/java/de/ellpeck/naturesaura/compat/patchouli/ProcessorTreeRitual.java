@@ -32,7 +32,7 @@ public class ProcessorTreeRitual implements IComponentProcessor {
                 case "sapling":
                     return PatchouliAPI.instance.serializeIngredient(this.recipe.saplingType);
                 case "name":
-                    return this.recipe.result.getDisplayName();
+                    return this.recipe.result.getDisplayName().getFormattedText();
                 default:
                     return null;
             }

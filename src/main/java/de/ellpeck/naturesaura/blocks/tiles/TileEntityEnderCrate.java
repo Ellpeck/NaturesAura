@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.blocks.BlockEnderCrate;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -55,11 +56,20 @@ public class TileEntityEnderCrate extends TileEntityImpl {
             return this.getStorage().getSlotLimit(slot);
         }
 
+        @Override
+        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+            return this.getStorage().isItemValid(slot, stack);
+        }
+
         private IItemHandlerModifiable getStorage() {
             return IWorldData.getOverworldData(TileEntityEnderCrate.this.world).getEnderStorage(TileEntityEnderCrate.this.name);
         }
     };
     public String name;
+
+    public TileEntityEnderCrate(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
 
     @Override
     public IItemHandlerModifiable getItemHandler(Direction facing) {
@@ -80,9 +90,9 @@ public class TileEntityEnderCrate extends TileEntityImpl {
     public ItemStack getDrop(BlockState state, int fortune) {
         ItemStack drop = super.getDrop(state, fortune);
         if (this.name != null) {
-            if (!drop.hasTagCompound())
-                drop.setTagCompound(new CompoundNBT());
-            drop.getTagCompound().setString(NaturesAura.MOD_ID + ":ender_name", this.name);
+            if (!drop.hasTag())
+                drop.setTag(new CompoundNBT());
+            drop.getTag().putString(NaturesAura.MOD_ID + ":ender_name", this.name);
         }
         return drop;
     }
@@ -102,7 +112,7 @@ public class TileEntityEnderCrate extends TileEntityImpl {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (this.name != null)
-                compound.setString("name", this.name);
+                compound.putString("name", this.name);
         }
     }
 
@@ -110,7 +120,7 @@ public class TileEntityEnderCrate extends TileEntityImpl {
     public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
-            if (compound.hasKey("name"))
+            if (compound.contains("name"))
                 this.name = compound.getString("name");
         }
     }

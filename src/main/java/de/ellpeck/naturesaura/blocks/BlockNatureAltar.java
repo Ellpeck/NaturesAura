@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderNatureAltar;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
@@ -21,7 +22,7 @@ public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvide
 
     // TODO bounds
     public BlockNatureAltar() {
-        super("nature_altar", TileEntityNatureAltar.class, "nature_altar", ModBlocks.prop(Material.ROCK).hardnessAndResistance(4F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
+        super("nature_altar", ModTileEntities.NATURE_ALTAR, ModBlocks.prop(Material.ROCK).hardnessAndResistance(4F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
     }
 
     @Override

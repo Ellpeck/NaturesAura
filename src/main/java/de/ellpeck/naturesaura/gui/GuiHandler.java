@@ -1,6 +1,7 @@
+/*        TODO gui handler
+
 package de.ellpeck.naturesaura.gui;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.BlockEnderCrate;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
@@ -11,14 +12,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import javax.annotation.Nullable;
 
 public class GuiHandler implements IGuiHandler {
 
     public GuiHandler() {
-        NetworkRegistry.INSTANCE.registerGuiHandler(NaturesAura.MOD_ID, this);
+        //NetworkRegistry.registerGuiHandler(NaturesAura.MOD_ID, this);
     }
 
     @Nullable
@@ -63,3 +63,4 @@ public class GuiHandler implements IGuiHandler {
         return null;
     }
 }
+*/

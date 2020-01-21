@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.gen.WorldGenAncientTree;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
@@ -65,7 +64,8 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
         if (state.get(SaplingBlock.STAGE) == 0) {
             world.setBlockState(pos, state.cycle(SaplingBlock.STAGE), 4);
         } else if (ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
-            new WorldGenAncientTree(true).generate(world, rand, pos);
+            // TODO generate tree
+            //new WorldGenAncientTree(true).generate(world, rand, pos);
         }
     }
 }

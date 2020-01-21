@@ -3,11 +3,16 @@ package de.ellpeck.naturesaura.reg;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.*;
+import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
+import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
 import de.ellpeck.naturesaura.items.*;
 import de.ellpeck.naturesaura.items.tools.*;
+import de.ellpeck.naturesaura.potion.PotionBreathless;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -148,14 +153,30 @@ public final class ModRegistry {
 
     @SubscribeEvent
     public static void registerTiles(RegistryEvent.Register<TileEntityType<?>> event) {
-
+        for (IModItem item : ALL_ITEMS) {
+            if (item instanceof BlockContainerImpl)
+                event.getRegistry().register(((BlockContainerImpl) item).tileType.setRegistryName(item.getBaseName()));
+        }
     }
 
     @SubscribeEvent
     public static void registerPotions(RegistryEvent.Register<Effect> event) {
-
+        event.getRegistry().registerAll(
+                new PotionBreathless()
+        );
     }
-    
+
+    @SubscribeEvent
+    public static void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
+        event.getRegistry().registerAll(
+                EntityType.Builder.create(EntityMoverMinecart::new, EntityClassification.MISC)
+                        .setTrackingRange(64).setUpdateInterval(3).immuneToFire().build(NaturesAura.MOD_ID + ":mover_minecart")
+                        .setRegistryName("mover_cart"),
+                EntityType.Builder.create(EntityEffectInhibitor::new, EntityClassification.MISC)
+                        .setTrackingRange(64).setUpdateInterval(20).immuneToFire().build(NaturesAura.MOD_ID + ":effect_inhibitor")
+                        .setRegistryName("effect_inhibitor")
+        );
+    }
 /*
     private static void registerPotion(Effect potion, String name) {
         potion.setRegistryName("potion." + NaturesAura.MOD_ID + "." + name + ".name");

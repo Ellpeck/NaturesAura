@@ -1,14 +1,15 @@
 package de.ellpeck.naturesaura.particles;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import de.ellpeck.naturesaura.ModConfig;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -65,23 +66,22 @@ public final class ParticleHandler {
 
     public static void renderParticles(float partialTicks) {
         Minecraft mc = Minecraft.getInstance();
-        PlayerEntity player = mc.player;
+        ClientPlayerEntity player = mc.player;
 
         if (player != null) {
-            float x = ActiveRenderInfo.getRotationX();
-            float z = ActiveRenderInfo.getRotationZ();
-            float yz = ActiveRenderInfo.getRotationYZ();
-            float xy = ActiveRenderInfo.getRotationXY();
-            float xz = ActiveRenderInfo.getRotationXZ();
-
-            Particle.interpPosX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
-            Particle.interpPosY = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
-            Particle.interpPosZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
-            Particle.dir = player.getLook(partialTicks);
+            ActiveRenderInfo info = mc.gameRenderer.getActiveRenderInfo();
+            float f = MathHelper.cos(info.getYaw() * ((float) Math.PI / 180F));
+            float f1 = MathHelper.sin(info.getYaw() * ((float) Math.PI / 180F));
+            float f2 = -f1 * MathHelper.sin(info.getPitch() * ((float) Math.PI / 180F));
+            float f3 = f * MathHelper.sin(info.getPitch() * ((float) Math.PI / 180F));
+            float f4 = MathHelper.cos(info.getPitch() * ((float) Math.PI / 180F));
+            Particle.interpPosX = info.getProjectedView().x;
+            Particle.interpPosY = info.getProjectedView().y;
+            Particle.interpPosZ = info.getProjectedView().z;
 
             GlStateManager.pushMatrix();
 
-            GlStateManager.enableAlpha();
+            GlStateManager.enableAlphaTest();
             GlStateManager.enableBlend();
             GlStateManager.alphaFunc(516, 0.003921569F);
             GlStateManager.disableCull();
@@ -95,15 +95,15 @@ public final class ParticleHandler {
 
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
             for (Particle particle : PARTICLES)
-                particle.renderParticle(buffer, player, partialTicks, x, xz, z, yz, xy);
+                particle.renderParticle(buffer, info, partialTicks, f, f4, f1, f2, f3);
             tessy.draw();
 
-            GlStateManager.disableDepth();
+            GlStateManager.disableDepthTest();
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
             for (Particle particle : PARTICLES_NO_DEPTH)
-                particle.renderParticle(buffer, player, partialTicks, x, xz, z, yz, xy);
+                particle.renderParticle(buffer, info, partialTicks, f, f4, f1, f2, f3);
             tessy.draw();
-            GlStateManager.enableDepth();
+            GlStateManager.enableDepthTest();
 
             GlStateManager.enableCull();
             GlStateManager.depthMask(true);

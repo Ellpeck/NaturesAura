@@ -10,8 +10,10 @@ import de.ellpeck.naturesaura.items.EffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.misc.WorldData;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -37,18 +39,18 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     @OnlyIn(Dist.CLIENT)
     public int renderTicks;
 
-    public EntityEffectInhibitor(World worldIn) {
-        super(worldIn);
+    public EntityEffectInhibitor(EntityType<?> entityTypeIn, World worldIn) {
+        super(entityTypeIn, worldIn);
     }
 
     public static void place(World world, ItemStack stack, double posX, double posY, double posZ) {
         ResourceLocation effect = EffectPowder.getEffect(stack);
-        EntityEffectInhibitor entity = new EntityEffectInhibitor(world);
+        EntityEffectInhibitor entity = new EntityEffectInhibitor(ModEntities.EFFECT_INHIBITOR, world);
         entity.setInhibitedEffect(effect);
         entity.setColor(NaturesAuraAPI.EFFECT_POWDERS.get(effect));
         entity.setAmount(stack.getCount());
         entity.setPosition(posX, posY, posZ);
-        world.spawnEntity(entity);
+        world.addEntity(entity);
     }
 
     @Override
@@ -61,6 +63,13 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     public void onRemovedFromWorld() {
         this.removeFromPowderList();
         super.onRemovedFromWorld();
+    }
+
+    @Override
+    protected void registerData() {
+        this.dataManager.register(INHIBITED_EFFECT, null);
+        this.dataManager.register(COLOR, 0);
+        this.dataManager.register(AMOUNT, 0);
     }
 
     @Override
@@ -86,7 +95,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
         List<Tuple<Vec3d, Integer>> powders = this.getPowderList();
         Vec3d pos = this.getPositionVector();
         for (int i = 0; i < powders.size(); i++)
-            if (pos.equals(powders.get(i).getFirst())) {
+            if (pos.equals(powders.get(i).getA())) {
                 powders.remove(i);
                 break;
             }
@@ -98,31 +107,10 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     @Override
-    protected void entityInit() {
-        this.setSize(0.25F, 0.25F);
-        this.dataManager.register(INHIBITED_EFFECT, null);
-        this.dataManager.register(COLOR, 0);
-        this.dataManager.register(AMOUNT, 0);
-    }
-
-    @Override
-    protected void readEntityFromNBT(CompoundNBT compound) {
-        this.setInhibitedEffect(new ResourceLocation(compound.getString("effect")));
-        this.setColor(compound.getInteger("color"));
-        this.setAmount(compound.hasKey("amount") ? compound.getInteger("amount") : 24);
-    }
-
-    @Override
-    protected void writeEntityToNBT(CompoundNBT compound) {
-        compound.setString("effect", this.getInhibitedEffect().toString());
-        compound.setInteger("color", this.getColor());
-        compound.setInteger("amount", this.getAmount());
-    }
-
-    @Override
-    public void onEntityUpdate() {
+    public void tick() {
+        super.tick();
         if (this.world.isRemote) {
-            if (this.world.getTotalWorldTime() % 5 == 0) {
+            if (this.world.getGameTime() % 5 == 0) {
                 NaturesAura.proxy.spawnMagicParticle(
                         this.posX + this.world.rand.nextGaussian() * 0.1F,
                         this.posY,
@@ -142,9 +130,28 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     @Override
+    protected void readAdditional(CompoundNBT compound) {
+        this.setInhibitedEffect(new ResourceLocation(compound.getString("effect")));
+        this.setColor(compound.getInt("color"));
+        this.setAmount(compound.contains("amount") ? compound.getInt("amount") : 24);
+    }
+
+    @Override
+    protected void writeAdditional(CompoundNBT compound) {
+        compound.putString("effect", this.getInhibitedEffect().toString());
+        compound.putInt("color", this.getColor());
+        compound.putInt("amount", this.getAmount());
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return null;
+    }
+
+    @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (source instanceof EntityDamageSource && !this.world.isRemote) {
-            this.setDead();
+            this.remove();
             this.entityDropItem(this.getDrop(), 0F);
             return true;
         } else

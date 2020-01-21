@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.potion;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.EffectType;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
@@ -13,8 +14,8 @@ public class PotionBreathless extends PotionImpl {
 
     private final Random random = new Random();
 
-    protected PotionBreathless() {
-        super("breathless", true, 0);
+    public PotionBreathless() {
+        super("breathless", EffectType.HARMFUL, 0);
         MinecraftForge.EVENT_BUS.register(this);
     }
 

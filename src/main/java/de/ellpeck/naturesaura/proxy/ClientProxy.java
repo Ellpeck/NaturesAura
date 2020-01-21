@@ -20,7 +20,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -41,9 +40,8 @@ public class ClientProxy implements IProxy {
     @Override
     public void init(FMLCommonSetupEvent event) {
         Map<String, PlayerRenderer> skinMap = Minecraft.getInstance().getRenderManager().getSkinMap();
-        for (PlayerRenderer render : new PlayerRenderer[]{skinMap.get("default"), skinMap.get("slim")}) {
-            render.addLayer(new PlayerLayerTrinkets());
-        }
+        for (PlayerRenderer render : new PlayerRenderer[]{skinMap.get("default"), skinMap.get("slim")})
+            render.addLayer(new PlayerLayerTrinkets(render));
         new SupporterFancyHandler();
     }
 

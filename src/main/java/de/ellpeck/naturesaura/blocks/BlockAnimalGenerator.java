@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAnimalGenerator;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -26,7 +27,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizable {
     public BlockAnimalGenerator() {
-        super("animal_generator", TileEntityAnimalGenerator.class, "animal_generator", ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
+        super("animal_generator", ModTileEntities.ANIMAL_GENERATOR, ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

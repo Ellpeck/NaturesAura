@@ -2,14 +2,13 @@ package de.ellpeck.naturesaura.chunk.effect;
 
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.potion.ModPotions;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
@@ -53,12 +52,12 @@ public class BreathlessEffect implements IDrainSpotEffect {
 
     @Override
     public ItemStack getDisplayIcon() {
-        return new ItemStack(Blocks.WOOL);
+        return new ItemStack(Blocks.WHITE_WOOL);
     }
 
     @Override
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (world.getTotalWorldTime() % 100 != 0)
+        if (world.getGameTime() % 100 != 0)
             return;
         if (!this.calcValues(world, pos, spot))
             return;

@@ -8,7 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -107,7 +107,7 @@ public class Multiblock implements IMultiblock {
     }
 
     @Override
-    public boolean isComplete(World world, BlockPos center) {
+    public boolean isComplete(IWorld world, BlockPos center) {
         BlockPos start = this.getStart(center);
         return this.forEach(center, (char) 0, (pos, matcher) -> {
             BlockPos offset = pos.subtract(start);

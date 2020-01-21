@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEndFlower;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
@@ -78,7 +79,7 @@ public class BlockEndFlower extends BushBlock implements IModItem, IModelProvide
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileEntityEndFlower();
+        return new TileEntityEndFlower(ModTileEntities.END_FLOWER);
     }
 
     @Override

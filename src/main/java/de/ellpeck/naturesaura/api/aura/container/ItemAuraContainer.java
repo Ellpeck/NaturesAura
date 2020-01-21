@@ -37,16 +37,16 @@ public class ItemAuraContainer implements IAuraContainer {
     }
 
     private void setAura(int amount) {
-        if (!this.stack.hasTagCompound()) {
-            this.stack.setTagCompound(new CompoundNBT());
+        if (!this.stack.hasTag()) {
+            this.stack.setTag(new CompoundNBT());
         }
-        this.stack.getTagCompound().setInteger("aura", amount);
+        this.stack.getTag().putInt("aura", amount);
     }
 
     @Override
     public int getStoredAura() {
-        if (this.stack.hasTagCompound()) {
-            return this.stack.getTagCompound().getInteger("aura");
+        if (this.stack.hasTag()) {
+            return this.stack.getTag().getInt("aura");
         } else {
             return 0;
         }

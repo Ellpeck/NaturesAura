@@ -1,11 +1,8 @@
 package de.ellpeck.naturesaura.blocks;
 
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityGratedChute;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HopperBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -44,7 +41,7 @@ public class BlockGratedChute extends BlockContainerImpl {
     private static final VoxelShape BASE_BOTTOM = makeCuboidShape(4, 4, 4, 12, 9, 12);
 
     public BlockGratedChute() {
-        super("grated_chute", TileEntityGratedChute.class, "grated_chute", ModBlocks.prop(Material.IRON).hardnessAndResistance(3.0F, 8.0F).sound(SoundType.METAL));
+        super("grated_chute", ModTileEntities.GRATED_CHUTE, ModBlocks.prop(Material.IRON).hardnessAndResistance(3.0F, 8.0F).sound(SoundType.METAL));
     }
 
     @Override

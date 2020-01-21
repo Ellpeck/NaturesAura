@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 
 public class Matcher {
 
@@ -56,6 +56,6 @@ public class Matcher {
     }
 
     public interface ICheck {
-        boolean matches(World world, BlockPos start, BlockPos offset, BlockPos pos, BlockState state, char c);
+        boolean matches(IWorld world, BlockPos start, BlockPos offset, BlockPos pos, BlockState state, char c);
     }
 }

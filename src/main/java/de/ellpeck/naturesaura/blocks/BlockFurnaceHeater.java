@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityFurnaceHeater;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -36,7 +37,7 @@ public class BlockFurnaceHeater extends BlockContainerImpl {
     };
 
     public BlockFurnaceHeater() {
-        super("furnace_heater", TileEntityFurnaceHeater.class, "furnace_heater", ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
+        super("furnace_heater", ModTileEntities.FURNACE_HEATER, ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
     }
 
     @Override

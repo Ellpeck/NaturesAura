@@ -14,7 +14,7 @@ import java.util.function.BiConsumer;
 /**
  * A class whose instances hold information about the aura present in any given
  * {@link Chunk}. To get an instance for a chunk, use {@link
- * #getAuraChunk(IWorld, BlockPos)}.
+ * #getAuraChunk(World, BlockPos)}.
  * <p>
  * It is not intended for API users to create custom implementation of this
  * class.
@@ -49,28 +49,28 @@ public interface IAuraChunk extends INBTSerializable<CompoundNBT> {
      * @param consumer A consumer that gets given the position and amount of
      *                 aura in each drain spot found
      */
-    static void getSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
-        NaturesAuraAPI.instance().getAuraSpotsInArea(world, pos, radius, consumer);
+    static void getSpotsInArea(IWorld world, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
+        NaturesAuraAPI.instance().getAuraSpotsInArea((World) world, pos, radius, consumer);
     }
 
     /**
      * Convenience method that adds up the amount of aura spots from {@link
-     * #getSpotsInArea(World, BlockPos, int, BiConsumer)} and returns it.
+     * #getSpotsInArea(IWorld, BlockPos, int, BiConsumer)} and returns it.
      *
      * @param world  The world
      * @param pos    The center position
      * @param radius The radius around the center to search for spots in
      * @return The amount of spots found in the area
      */
-    static int getSpotAmountInArea(World world, BlockPos pos, int radius) {
-        return NaturesAuraAPI.instance().getSpotAmountInArea(world, pos, radius);
+    static int getSpotAmountInArea(IWorld world, BlockPos pos, int radius) {
+        return NaturesAuraAPI.instance().getSpotAmountInArea((World) world, pos, radius);
     }
 
     /**
      * Convenience method that adds up all of the aura from each drain spot from
-     * {@link #getSpotsInArea(World, BlockPos, int, BiConsumer)} and
+     * {@link #getSpotsInArea(IWorld, BlockPos, int, BiConsumer)} and
      * conveniently returns it. For a better visual display with a more gradual
-     * increase, use {@link #triangulateAuraInArea(World, BlockPos, int)}.
+     * increase, use {@link #triangulateAuraInArea(IWorld, BlockPos, int)}.
      *
      * @param world  The world
      * @param pos    The center position
@@ -78,18 +78,18 @@ public interface IAuraChunk extends INBTSerializable<CompoundNBT> {
      * @return The amount of Aura present in that area, based on the drain spots
      * that are found
      */
-    static int getAuraInArea(World world, BlockPos pos, int radius) {
-        return NaturesAuraAPI.instance().getAuraInArea(world, pos, radius);
+    static int getAuraInArea(IWorld world, BlockPos pos, int radius) {
+        return NaturesAuraAPI.instance().getAuraInArea((World) world, pos, radius);
     }
 
     /**
      * Convenience method that adds up all of the aura from each drain spot from
-     * {@link #getSpotsInArea(World, BlockPos, int, BiConsumer)}, but multiplies
-     * their amount by the percentual distance to the supplied position. This
-     * will cause for a lot more gradual of an increase and decrease of Aura
-     * when moving closer to actual spots. This should be used for visual
-     * purposes as it is more performance intensive than {@link
-     * #getAuraInArea(World, BlockPos, int)}.
+     * {@link #getSpotsInArea(IWorld, BlockPos, int, BiConsumer)}, but
+     * multiplies their amount by the percentual distance to the supplied
+     * position. This will cause for a lot more gradual of an increase and
+     * decrease of Aura when moving closer to actual spots. This should be used
+     * for visual purposes as it is more performance intensive than {@link
+     * #getAuraInArea(IWorld, BlockPos, int)}.
      *
      * @param world  The world
      * @param pos    The center position
@@ -97,8 +97,8 @@ public interface IAuraChunk extends INBTSerializable<CompoundNBT> {
      * @return The amount of Aura presetn in that area, based on the drain spots
      * that are found and their distance to the center
      */
-    static int triangulateAuraInArea(World world, BlockPos pos, int radius) {
-        return NaturesAuraAPI.instance().triangulateAuraInArea(world, pos, radius);
+    static int triangulateAuraInArea(IWorld world, BlockPos pos, int radius) {
+        return NaturesAuraAPI.instance().triangulateAuraInArea((World) world, pos, radius);
     }
 
     /**
@@ -115,8 +115,8 @@ public interface IAuraChunk extends INBTSerializable<CompoundNBT> {
      *                    spot when none are found
      * @return The position of the lowest drain spot
      */
-    static BlockPos getLowestSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot) {
-        return NaturesAuraAPI.instance().getLowestAuraDrainSpot(world, pos, radius, defaultSpot);
+    static BlockPos getLowestSpot(IWorld world, BlockPos pos, int radius, BlockPos defaultSpot) {
+        return NaturesAuraAPI.instance().getLowestAuraDrainSpot((World) world, pos, radius, defaultSpot);
     }
 
     /**
@@ -134,7 +134,7 @@ public interface IAuraChunk extends INBTSerializable<CompoundNBT> {
      * @return The position of the highest drain spot
      */
     static BlockPos getHighestSpot(IWorld world, BlockPos pos, int radius, BlockPos defaultSpot) {
-        return NaturesAuraAPI.instance().getHighestAuraDrainSpot(world, pos, radius, defaultSpot);
+        return NaturesAuraAPI.instance().getHighestAuraDrainSpot((World) world, pos, radius, defaultSpot);
     }
 
     /**

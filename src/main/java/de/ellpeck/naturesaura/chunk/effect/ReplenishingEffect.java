@@ -25,12 +25,9 @@ public class ReplenishingEffect implements IDrainSpotEffect {
         if (spot < 0) {
             List<ISpotDrainable> tiles = new ArrayList<>();
             Helper.getTileEntitiesInArea(world, pos, 25, tile -> {
-                if (tile.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
-                    IAuraContainer container = tile.getCapability(NaturesAuraAPI.capAuraContainer, null);
-                    if (container instanceof ISpotDrainable) {
-                        tiles.add((ISpotDrainable) container);
-                    }
-                }
+                IAuraContainer container = tile.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
+                if (container instanceof ISpotDrainable)
+                    tiles.add((ISpotDrainable) container);
                 return false;
             });
             if (!tiles.isEmpty()) {

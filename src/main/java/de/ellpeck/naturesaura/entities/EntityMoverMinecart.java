@@ -2,24 +2,25 @@ package de.ellpeck.naturesaura.entities;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.LongNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ITeleporter;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -28,15 +29,15 @@ import java.util.List;
 public class EntityMoverMinecart extends AbstractMinecartEntity {
 
     private final List<BlockPos> spotOffsets = new ArrayList<>();
-    private BlockPos lastPosition = BlockPos.ORIGIN;
+    private BlockPos lastPosition = BlockPos.ZERO;
     public boolean isActive;
 
-    public EntityMoverMinecart(World worldIn) {
-        super(worldIn);
+    public EntityMoverMinecart(EntityType<?> type, World world) {
+        super(type, world);
     }
 
-    public EntityMoverMinecart(World worldIn, double x, double y, double z) {
-        super(worldIn, x, y, z);
+    public EntityMoverMinecart(EntityType<?> type, World world, double x, double y, double z) {
+        super(type, world, x, y, z);
     }
 
     @Override
@@ -46,13 +47,14 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
             return;
         BlockPos pos = this.getPosition();
 
-        if (!this.spotOffsets.isEmpty() && this.world.getTotalWorldTime() % 10 == 0)
-            PacketHandler.sendToAllAround(this.world, pos, 32, new PacketParticles(
+        if (!this.spotOffsets.isEmpty() && this.world.getGameTime() % 10 == 0)
+            // TODO particles
+            /*PacketHandler.sendToAllAround(this.world, pos, 32, new PacketParticles(
                     (float) this.posX, (float) this.posY, (float) this.posZ, 22,
-                    MathHelper.floor(this.motionX * 100F), MathHelper.floor(this.motionY * 100F), MathHelper.floor(this.motionZ * 100F)));
+                    MathHelper.floor(this.motionX * 100F), MathHelper.floor(this.motionY * 100F), MathHelper.floor(this.motionZ * 100F)));*/
 
-        if (pos.distanceSq(this.lastPosition) < 8 * 8)
-            return;
+            if (pos.distanceSq(this.lastPosition) < 8 * 8)
+                return;
 
         this.moveAura(this.world, this.lastPosition, this.world, pos);
         this.lastPosition = pos;
@@ -82,7 +84,7 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
 
             if (!this.isActive) {
                 this.spotOffsets.clear();
-                this.lastPosition = BlockPos.ORIGIN;
+                this.lastPosition = BlockPos.ZERO;
                 return;
             }
 
@@ -97,39 +99,40 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
 
     @Override
     public void killMinecart(DamageSource source) {
-        this.setDead();
-        if (this.world.getGameRules().getBoolean("doEntityDrops"))
+        this.remove();
+        if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS))
             this.entityDropItem(new ItemStack(ModItems.MOVER_MINECART), 0);
     }
 
     @Override
-    protected void writeEntityToNBT(CompoundNBT compound) {
-        super.writeEntityToNBT(compound);
-        compound.setBoolean("active", this.isActive);
-        compound.setLong("last_pos", this.lastPosition.toLong());
+    public CompoundNBT serializeNBT() {
+        CompoundNBT compound = super.serializeNBT();
+        compound.putBoolean("active", this.isActive);
+        compound.putLong("last_pos", this.lastPosition.toLong());
 
         ListNBT list = new ListNBT();
         for (BlockPos offset : this.spotOffsets)
-            list.appendTag(new LongNBT(offset.toLong()));
-        compound.setTag("offsets", list);
+            list.add(new LongNBT(offset.toLong()));
+        compound.put("offsets", list);
+        return compound;
     }
 
     @Override
-    protected void readEntityFromNBT(CompoundNBT compound) {
-        super.readEntityFromNBT(compound);
+    public void deserializeNBT(CompoundNBT compound) {
+        super.deserializeNBT(compound);
         this.isActive = compound.getBoolean("active");
         this.lastPosition = BlockPos.fromLong(compound.getLong("last_pos"));
 
         this.spotOffsets.clear();
-        ListNBT list = compound.getTagList("offsets", Constants.NBT.TAG_LONG);
-        for (NBTBase base : list)
+        ListNBT list = compound.getList("offsets", Constants.NBT.TAG_LONG);
+        for (INBT base : list)
             this.spotOffsets.add(BlockPos.fromLong(((LongNBT) base).getLong()));
     }
 
     @Nullable
     @Override
-    public Entity changeDimension(int dimensionIn, ITeleporter teleporter) {
-        Entity entity = super.changeDimension(dimensionIn, teleporter);
+    public Entity changeDimension(DimensionType destination) {
+        Entity entity = super.changeDimension(destination);
         if (entity instanceof EntityMoverMinecart) {
             BlockPos pos = entity.getPosition();
             this.moveAura(this.world, this.lastPosition, entity.world, pos);
@@ -144,7 +147,7 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
     }
 
     @Override
-    public Type getType() {
+    public Type getMinecartType() {
         return Type.RIDEABLE;
     }
 
@@ -165,8 +168,8 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
 
     @Override
     protected void applyDrag() {
-        this.motionX *= 0.99F;
-        this.motionY *= 0.0D;
-        this.motionZ *= 0.99F;
+        Vec3d motion = this.getMotion();
+        this.setMotion(motion.x * 0.99F, 0, motion.z * 0.99F);
     }
+
 }

@@ -2,13 +2,11 @@ package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
+import de.ellpeck.naturesaura.entities.ModEntities;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -27,7 +25,7 @@ public class MoverMinecart extends ItemImpl {
         BlockPos pos = context.getPos();
         if (AbstractRailBlock.isRail(world.getBlockState(pos))) {
             if (!world.isRemote) {
-                AbstractMinecartEntity cart = new EntityMoverMinecart(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                AbstractMinecartEntity cart = new EntityMoverMinecart(ModEntities.MOVER_MINECART, world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 world.addEntity(cart);
             }
             context.getPlayer().getHeldItem(context.getHand()).shrink(1);

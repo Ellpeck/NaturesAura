@@ -9,9 +9,7 @@ import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.chunk.effect.DrainSpotEffects;
 import de.ellpeck.naturesaura.compat.Compat;
-import de.ellpeck.naturesaura.entities.ModEntities;
 import de.ellpeck.naturesaura.events.CommonEvents;
-import de.ellpeck.naturesaura.gui.GuiHandler;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.potion.ModPotions;
@@ -87,7 +85,6 @@ public final class NaturesAura {
 
         Compat.preInit();
         PacketHandler.init();
-        ModEntities.init();
         new Multiblocks();
 
         MinecraftForge.EVENT_BUS.register(new CommonEvents());
@@ -100,7 +97,6 @@ public final class NaturesAura {
         ModRecipes.init();
         ModRegistry.init(event);
         DrainSpotEffects.init();
-        new GuiHandler();
 
         proxy.init(event);
     }

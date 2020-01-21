@@ -5,14 +5,16 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.Heightmap;
 
 public class ExplosionEffect implements IDrainSpotEffect {
 
@@ -21,7 +23,7 @@ public class ExplosionEffect implements IDrainSpotEffect {
     private float strength;
     private int dist;
 
-    private boolean calcValues(World world, BlockPos pos, Integer spot){
+    private boolean calcValues(World world, BlockPos pos, Integer spot) {
         if (spot >= 0)
             return false;
         int aura = IAuraChunk.getAuraInArea(world, pos, 85);
@@ -41,7 +43,7 @@ public class ExplosionEffect implements IDrainSpotEffect {
     public int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.world, pos, spot))
             return -1;
-        if (player.getDistanceSq(pos) > this.dist * this.dist)
+        if (player.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return -1;
         return 1;
     }
@@ -53,18 +55,18 @@ public class ExplosionEffect implements IDrainSpotEffect {
 
     @Override
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if(world.getTotalWorldTime() % 40 != 0)
+        if (world.getGameTime() % 40 != 0)
             return;
-        if(!this.calcValues(world, pos, spot))
+        if (!this.calcValues(world, pos, spot))
             return;
 
         int x = MathHelper.floor(pos.getX() + world.rand.nextGaussian() * this.dist);
         int z = MathHelper.floor(pos.getZ() + world.rand.nextGaussian() * this.dist);
-        BlockPos chosenPos = new BlockPos(x, world.getHeight(x, z), z);
+        BlockPos chosenPos = new BlockPos(x, world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z), z);
         if (chosenPos.distanceSq(pos) <= this.dist * this.dist && world.isBlockLoaded(chosenPos)) {
-            world.newExplosion(null,
+            world.createExplosion(null,
                     chosenPos.getX() + 0.5, chosenPos.getY() + 0.5, chosenPos.getZ() + 0.5,
-                    this.strength, false, true);
+                    this.strength, false, Explosion.Mode.DESTROY);
         }
     }
 

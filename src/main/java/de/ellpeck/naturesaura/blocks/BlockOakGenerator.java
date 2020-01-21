@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityOakGenerator;
 import net.minecraft.block.SaplingBlock;
 import net.minecraft.block.SoundType;
@@ -23,7 +24,7 @@ import java.util.Random;
 public class BlockOakGenerator extends BlockContainerImpl implements IVisualizable {
 
     public BlockOakGenerator() {
-        super("oak_generator", TileEntityOakGenerator.class, "oak_generator", ModBlocks.prop(Material.WOOD).hardnessAndResistance(2F).sound(SoundType.WOOD));
+        super("oak_generator", ModTileEntities.OAK_GENERATOR, ModBlocks.prop(Material.WOOD).hardnessAndResistance(2F).sound(SoundType.WOOD));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

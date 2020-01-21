@@ -5,7 +5,7 @@ import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 
 import java.util.Collections;
 import java.util.Map;
@@ -16,7 +16,7 @@ public class StubMultiblock implements IMultiblock {
     private static final ResourceLocation NAME = new ResourceLocation(NaturesAuraAPI.MOD_ID, "stub");
 
     @Override
-    public boolean isComplete(World world, BlockPos center) {
+    public boolean isComplete(IWorld world, BlockPos center) {
         return false;
     }
 
@@ -27,7 +27,7 @@ public class StubMultiblock implements IMultiblock {
 
     @Override
     public BlockPos getStart(BlockPos center) {
-        return BlockPos.ORIGIN;
+        return BlockPos.ZERO;
     }
 
     @Override

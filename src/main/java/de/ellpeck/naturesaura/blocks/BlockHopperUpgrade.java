@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.render.IVisualizable;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityHopperUpgrade;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -12,7 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockHopperUpgrade extends BlockContainerImpl implements IVisualizable {
     public BlockHopperUpgrade() {
-        super("hopper_upgrade", TileEntityHopperUpgrade.class, "hopper_upgrade", ModBlocks.prop(Material.IRON).hardnessAndResistance(2.5F).sound(SoundType.METAL));
+        super("hopper_upgrade", ModTileEntities.HOPPER_UPGRADE, ModBlocks.prop(Material.IRON).hardnessAndResistance(2.5F).sound(SoundType.METAL));
     }
 
     @Override
