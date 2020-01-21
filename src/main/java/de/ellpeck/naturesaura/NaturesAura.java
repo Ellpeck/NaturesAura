@@ -67,9 +67,9 @@ public final class NaturesAura {
     }
 
     public void setup(FMLCommonSetupEvent event) {
-        preInit(event);
-        init(event);
-        postInit(event);
+        this.preInit(event);
+        this.init(event);
+        this.postInit(event);
     }
 
     public void preInit(FMLCommonSetupEvent event) {

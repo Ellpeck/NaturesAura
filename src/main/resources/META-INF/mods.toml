@@ -8,13 +8,13 @@ modLoader="javafml" #mandatory
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
 loaderVersion="[28,)" #mandatory (28 is current forge version)
 # A URL to refer people to when problems occur with this mod
-issueTrackerURL="https://github.com/Quarris/NaturesAura" #optional
+issueTrackerURL="https://github.com/Ellpeck/NaturesAura" #optional
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
 # The modid of the mod
 modId="naturesaura" #mandatory
 # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
-version="r17" #mandatory
+version="${version}" #mandatory
  # A display name for the mod
 displayName="Nature's Aura" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
@@ -38,7 +38,7 @@ Nature's Aura is a Minecraft mod about collecting, using and replenishing the Au
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[28,)" #mandatory
+    versionRange="[1.1-23,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER

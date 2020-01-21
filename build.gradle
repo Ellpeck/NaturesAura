@@ -33,7 +33,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                naturesaura {
                     source sourceSets.main
                 }
             }
@@ -49,7 +49,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                naturesaura {
                     source sourceSets.main
                 }
             }
@@ -64,10 +64,10 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'naturesaura', '--all', '--output', file('src/generated/resources/')
 
             mods {
-                examplemod {
+                naturesaura {
                     source sourceSets.main
                 }
             }
@@ -85,13 +85,13 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.61'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.92'
 
     compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11")
 
     compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.14.4:5.0.0.89")
-    compile fg.deobf("vazkii.patchouli:Patchouli:1.1-25.4")
+    compile fg.deobf("vazkii.patchouli:Patchouli:1.1-23.115")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

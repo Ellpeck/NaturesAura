@@ -1,0 +1,6 @@
+{
+    "pack": {
+        "description": "Nature's Aura",
+        "pack_format": 4,
+        "_comment": "A pack_format of 4 requires json lang files. Note: we require v4 pack meta for all mods."
+    }
