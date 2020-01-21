@@ -3,13 +3,8 @@ package de.ellpeck.naturesaura.api.multiblock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Matcher {
 
@@ -34,7 +29,9 @@ public class Matcher {
     }
 
     public static Matcher oreDict(Block defaultBlock, String name) {
-        return new Matcher(defaultBlock.getDefaultState(), new ICheck() {
+        return new Matcher(defaultBlock.getDefaultState(),
+                (world, start, offset, pos, state, otherC) -> state.getBlock() == defaultBlock);
+        /* TODO return new Matcher(defaultBlock.getDefaultState(), new ICheck() {
             private List<BlockState> states;
 
             @Override
@@ -55,7 +52,7 @@ public class Matcher {
 
                 return this.states.isEmpty() || this.states.contains(state);
             }
-        });
+        });*/
     }
 
     public interface ICheck {

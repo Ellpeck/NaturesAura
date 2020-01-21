@@ -7,18 +7,16 @@ import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticleStream;
-import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,7 +26,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.Random;
 
-public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
+public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTileEntity {
 
     public final ItemStackHandler items = new ItemStackHandlerNA(1, this, true) {
         @Override
@@ -38,13 +36,14 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
         @Override
         protected boolean canInsert(ItemStack stack, int slot) {
-            return TileEntityNatureAltar.this.getRecipeForInput(stack) != null || stack.hasCapability(NaturesAuraAPI.capAuraContainer, null);
+            return TileEntityNatureAltar.this.getRecipeForInput(stack) != null || stack.getCapability(NaturesAuraAPI.capAuraContainer, null).isPresent();
         }
 
         @Override
         protected boolean canExtract(ItemStack stack, int slot, int amount) {
-            if (stack.hasCapability(NaturesAuraAPI.capAuraContainer, null))
-                return stack.getCapability(NaturesAuraAPI.capAuraContainer, null).storeAura(1, true) <= 0;
+            IAuraContainer cap = stack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
+            if (cap != null)
+                return cap.storeAura(1, true) <= 0;
             else
                 return TileEntityNatureAltar.this.getRecipeForInput(stack) == null;
         }
@@ -62,11 +61,15 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
     private int lastAura;
 
+    public TileEntityNatureAltar(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         Random rand = this.world.rand;
 
-        if (this.world.getTotalWorldTime() % 40 == 0) {
+        if (this.world.getGameTime() % 40 == 0) {
             int index = 0;
             for (int x = -2; x <= 2; x += 4) {
                 for (int z = -2; z <= 2; z += 4) {
@@ -79,7 +82,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
         }
 
         if (!this.world.isRemote) {
-            if (this.world.getTotalWorldTime() % 40 == 0) {
+            if (this.world.getGameTime() % 40 == 0) {
                 boolean fine = Multiblocks.ALTAR.isComplete(this.world, this.pos);
                 if (fine != this.structureFine) {
                     this.structureFine = fine;
@@ -98,29 +101,31 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                         chunk.drainAura(spot, toStore);
                         this.container.storeAura(toStore, false);
 
-                        if (this.world.getTotalWorldTime() % 3 == 0)
+                        // TODO particles
+                        /*if (this.world.getGameTime() % 3 == 0)
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
                                     this.pos.getX() + (float) rand.nextGaussian() * 10F,
                                     this.pos.getY() + rand.nextFloat() * 10F,
                                     this.pos.getZ() + (float) rand.nextGaussian() * 10F,
                                     this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F,
                                     rand.nextFloat() * 0.1F + 0.1F, 0x89cc37, rand.nextFloat() * 1F + 1F
-                            ));
+                            ));*/
                     }
                 }
 
                 ItemStack stack = this.items.getStackInSlot(0);
-                if (!stack.isEmpty() && stack.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
-                    IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer, null);
+                IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
+                if (!stack.isEmpty() && container != null) {
                     int theoreticalDrain = this.container.drainAura(1000, true);
                     if (theoreticalDrain > 0) {
                         int stored = container.storeAura(theoreticalDrain, false);
                         if (stored > 0) {
                             this.container.drainAura(stored, false);
 
-                            if (this.world.getTotalWorldTime() % 4 == 0) {
+                            // TODO particles
+                            /*if (this.world.getGameTime() % 4 == 0)
                                 PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 4));
-                            }
+                            */
                         }
                     }
                 } else {
@@ -129,7 +134,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                             this.currentRecipe = this.getRecipeForInput(stack);
                         }
                     } else {
-                        if (stack.isEmpty() || !this.currentRecipe.input.apply(stack)) {
+                        if (stack.isEmpty() || !this.currentRecipe.input.test(stack)) {
                             this.currentRecipe = null;
                             this.timer = 0;
                         } else {
@@ -137,9 +142,10 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                             if (this.container.getStoredAura() >= req) {
                                 this.container.drainAura(req, false);
 
-                                if (this.timer % 4 == 0) {
+                                // TODO particles
+                                /*if (this.timer % 4 == 0)
                                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 4));
-                                }
+                                */
 
                                 this.timer++;
                                 if (this.timer >= this.currentRecipe.time) {
@@ -156,7 +162,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
                 }
             }
 
-            if (this.world.getTotalWorldTime() % 10 == 0 && this.lastAura != this.container.getStoredAura()) {
+            if (this.world.getGameTime() % 10 == 0 && this.lastAura != this.container.getStoredAura()) {
                 this.lastAura = this.container.getStoredAura();
                 this.sendToClients();
             }
@@ -194,11 +200,11 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
 
     private AltarRecipe getRecipeForInput(ItemStack input) {
         for (AltarRecipe recipe : NaturesAuraAPI.ALTAR_RECIPES.values()) {
-            if (recipe.input.apply(input)) {
+            if (recipe.input.test(input)) {
                 if (recipe.catalyst == Ingredient.EMPTY)
                     return recipe;
                 for (ItemStack stack : this.catalysts)
-                    if (recipe.catalyst.apply(stack))
+                    if (recipe.catalyst.test(stack))
                         return recipe;
             }
         }
@@ -209,14 +215,14 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
-            compound.setTag("items", this.items.serializeNBT());
-            compound.setBoolean("fine", this.structureFine);
+            compound.put("items", this.items.serializeNBT());
+            compound.putBoolean("fine", this.structureFine);
             this.container.writeNBT(compound);
         }
         if (type == SaveType.TILE) {
             if (this.currentRecipe != null) {
-                compound.setString("recipe", this.currentRecipe.name.toString());
-                compound.setInteger("timer", this.timer);
+                compound.putString("recipe", this.currentRecipe.name.toString());
+                compound.putInt("timer", this.timer);
             }
         }
     }
@@ -225,14 +231,14 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickable {
     public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
-            this.items.deserializeNBT(compound.getCompoundTag("items"));
+            this.items.deserializeNBT(compound.getCompound("items"));
             this.structureFine = compound.getBoolean("fine");
             this.container.readNBT(compound);
         }
         if (type == SaveType.TILE) {
-            if (compound.hasKey("recipe")) {
+            if (compound.contains("recipe")) {
                 this.currentRecipe = NaturesAuraAPI.ALTAR_RECIPES.get(new ResourceLocation(compound.getString("recipe")));
-                this.timer = compound.getInteger("timer");
+                this.timer = compound.getInt("timer");
             }
         }
     }

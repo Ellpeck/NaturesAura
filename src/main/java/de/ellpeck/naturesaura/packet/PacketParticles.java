@@ -1,3 +1,4 @@
+/*
 package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.NaturesAura;
@@ -441,4 +442,4 @@ public class PacketParticles implements IMessage {
             return null;
         }
     }
-}
+}*/

@@ -4,7 +4,6 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityPickupStopper;
 import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.ItemEntity;
@@ -13,11 +12,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable {
     public BlockPickupStopper() {
@@ -40,14 +39,14 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
                 if (radius <= 0F)
                     return false;
                 BlockPos stopperPos = stopper.getPos();
-                if (!new AxisAlignedBB(stopperPos).grow(radius).intersects(item.getEntityBoundingBox()))
+                if (!new AxisAlignedBB(stopperPos).grow(radius).intersects(item.getBoundingBox()))
                     return false;
 
                 event.setCanceled(true);
 
-                if (item.world.getTotalWorldTime() % 3 == 0)
+               /* if (item.world.getGameTime() % 3 == 0) TODO particles
                     PacketHandler.sendToAllAround(item.world, pos, 32,
-                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 14));
+                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 14));*/
                 return true;
             });
         }

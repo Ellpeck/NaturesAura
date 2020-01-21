@@ -1,18 +1,16 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import com.google.common.primitives.Ints;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.item.FireworkRocketEntity;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -22,53 +20,57 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class TileEntityFireworkGenerator extends TileEntityImpl implements ITickable {
+public class TileEntityFireworkGenerator extends TileEntityImpl implements ITickableTileEntity {
 
     private FireworkRocketEntity trackedEntity;
     private ItemStack trackedItem;
     private int toRelease;
     private int releaseTimer;
 
+    public TileEntityFireworkGenerator(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         if (!this.world.isRemote) {
-            if (this.world.getTotalWorldTime() % 10 == 0) {
+            if (this.world.getGameTime() % 10 == 0) {
                 List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class,
                         new AxisAlignedBB(this.pos).grow(4), EntityPredicates.IS_ALIVE);
                 for (ItemEntity item : items) {
                     if (item.cannotPickup())
                         continue;
                     ItemStack stack = item.getItem();
-                    if (stack.isEmpty() || stack.getItem() != Items.FIREWORKS)
+                    if (stack.isEmpty() || stack.getItem() != Items.FIREWORK_ROCKET)
                         continue;
                     if (this.trackedEntity == null && this.releaseTimer <= 0) {
                         FireworkRocketEntity entity = new FireworkRocketEntity(this.world, item.posX, item.posY, item.posZ, stack);
                         this.trackedEntity = entity;
                         this.trackedItem = stack.copy();
-                        this.world.spawnEntity(entity);
+                        this.world.addEntity(entity);
                     }
                     stack.shrink(1);
                     if (stack.isEmpty())
-                        item.setDead();
+                        item.remove();
                     else
                         item.setItem(stack);
                 }
             }
 
-            if (this.trackedEntity != null && this.trackedEntity.isDead) {
-                if (this.trackedItem.hasTagCompound()) {
+            if (this.trackedEntity != null && !this.trackedEntity.isAlive()) {
+                if (this.trackedItem.hasTag()) {
                     float generateFactor = 0;
                     Set<Integer> usedColors = new HashSet<>();
 
-                    CompoundNBT compound = this.trackedItem.getTagCompound();
-                    CompoundNBT fireworks = compound.getCompoundTag("Fireworks");
+                    CompoundNBT compound = this.trackedItem.getTag();
+                    CompoundNBT fireworks = compound.getCompound("Fireworks");
 
-                    int flightTime = fireworks.getInteger("Flight");
-                    ListNBT explosions = fireworks.getTagList("Explosions", 10);
+                    int flightTime = fireworks.getInt("Flight");
+                    ListNBT explosions = fireworks.getList("Explosions", 10);
                     if (!explosions.isEmpty()) {
                         generateFactor += flightTime;
 
-                        for (NBTBase base : explosions) {
+                        for (INBT base : explosions) {
                             CompoundNBT explosion = (CompoundNBT) base;
                             generateFactor += 1.5F;
 
@@ -104,9 +106,10 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                         data.add(this.pos.getY());
                         data.add(this.pos.getZ());
                         data.addAll(usedColors);
-                        PacketHandler.sendToAllLoaded(this.world, this.pos, new PacketParticles(
+                        // TODO particles
+                       /* PacketHandler.sendToAllLoaded(this.world, this.pos, new PacketParticles(
                                 (float) this.trackedEntity.posX, (float) this.trackedEntity.posY, (float) this.trackedEntity.posZ,
-                                24, Ints.toArray(data)));
+                                24, Ints.toArray(data)));*/
                     }
                 }
 
@@ -122,8 +125,8 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                         this.toRelease -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, this.toRelease);
                     }
 
-                    PacketHandler.sendToAllLoaded(this.world, this.pos,
-                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 8));
+                   /* PacketHandler.sendToAllLoaded(this.world, this.pos,
+                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 8));*/
                 }
             }
         }

@@ -1,3 +1,4 @@
+/* TODO render projectile generator
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
 import de.ellpeck.naturesaura.NaturesAura;
@@ -53,3 +54,4 @@ public class RenderProjectileGenerator extends TileEntityRenderer<TileEntityProj
         }
     }
 }
+*/

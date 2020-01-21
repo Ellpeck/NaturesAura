@@ -2,41 +2,43 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.ITickable;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.util.List;
 
-public class TileEntityPotionGenerator extends TileEntityImpl implements ITickable {
+public class TileEntityPotionGenerator extends TileEntityImpl implements ITickableTileEntity {
+
+    public TileEntityPotionGenerator(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
 
     @Override
-    public void update() {
-        if (!this.world.isRemote && this.world.getTotalWorldTime() % 10 == 0) {
+    public void tick() {
+        if (!this.world.isRemote && this.world.getGameTime() % 10 == 0) {
             if (Multiblocks.POTION_GENERATOR.isComplete(this.world, this.pos)) {
                 boolean addedOne = false;
 
                 List<AreaEffectCloudEntity> clouds = this.world.getEntitiesWithinAABB(AreaEffectCloudEntity.class, new AxisAlignedBB(this.pos).grow(2));
                 for (AreaEffectCloudEntity cloud : clouds) {
-                    if (cloud.isDead)
+                    if (!cloud.isAlive())
                         continue;
 
                     if (!addedOne) {
-                        Potion type = ReflectionHelper.getPrivateValue(AreaEffectCloudEntity.class, cloud, "field_184502_e", "potion");
+                        Potion type = ObfuscationReflectionHelper.getPrivateValue(AreaEffectCloudEntity.class, cloud, "field_184502_e");
                         if (type == null)
                             continue;
 
                         for (EffectInstance effect : type.getEffects()) {
                             Effect potion = effect.getPotion();
-                            if (potion.isBadEffect() || potion.isInstant()) {
+                            if (!potion.isBeneficial() || potion.isInstant()) {
                                 continue;
                             }
 
@@ -48,9 +50,10 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
                                     toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
                                 }
 
-                            PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
+                            // TODO particles
+                           /* PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
                                     this.pos.getX(), this.pos.getY(), this.pos.getZ(), 5,
-                                    PotionUtils.getPotionColor(type), canGen ? 1 : 0));
+                                    PotionUtils.getPotionColor(type), canGen ? 1 : 0));*/
 
                             addedOne = true;
                             break;
@@ -59,7 +62,7 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
 
                     float newRadius = cloud.getRadius() - 0.25F;
                     if (newRadius < 0.5F)
-                        cloud.setDead();
+                        cloud.remove();
                     else
                         cloud.setRadius(newRadius);
                 }

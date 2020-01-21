@@ -6,14 +6,13 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ITickable;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable {
+public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickableTileEntity {
 
     private AnimalSpawnerRecipe currentRecipe;
     private double spawnX;
@@ -31,10 +30,14 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
     private int time;
     private Entity entityClient;
 
+    public TileEntityAnimalSpawner(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         if (!this.world.isRemote) {
-            if (this.world.getTotalWorldTime() % 10 != 0)
+            if (this.world.getGameTime() % 10 != 0)
                 return;
             if (!Multiblocks.ANIMAL_SPAWNER.isComplete(this.world, this.pos)) {
                 if (this.currentRecipe != null) {
@@ -53,7 +56,7 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
                 this.time += 10;
                 if (this.time >= this.currentRecipe.time) {
                     Entity entity = this.currentRecipe.makeEntity(this.world, this.spawnX, this.pos.getY() + 1, this.spawnZ);
-                    this.world.spawnEntity(entity);
+                    this.world.addEntity(entity);
 
                     this.currentRecipe = null;
                     this.time = 0;
@@ -68,13 +71,13 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
                         continue;
                     List<Ingredient> required = new ArrayList<>(Arrays.asList(recipe.ingredients));
                     for (ItemEntity item : items) {
-                        if (item.isDead || item.cannotPickup())
+                        if (!item.isAlive() || item.cannotPickup())
                             break;
                         ItemStack stack = item.getItem();
                         if (stack.isEmpty())
                             break;
                         for (Ingredient ingredient : required) {
-                            if (ingredient.apply(stack) && Helper.getIngredientAmount(ingredient) == stack.getCount()) {
+                            if (ingredient.test(stack) && Helper.getIngredientAmount(ingredient) == stack.getCount()) {
                                 required.remove(ingredient);
                                 break;
                             }
@@ -84,9 +87,10 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
                         continue;
 
                     for (ItemEntity item : items) {
-                        item.setDead();
-                        PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                                new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 19));
+                        item.remove();
+                        // TODO particles
+                        /*PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                                new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 19));*/
                     }
 
                     this.currentRecipe = recipe;
@@ -97,7 +101,7 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
                 }
             }
         } else {
-            if (this.world.getTotalWorldTime() % 5 != 0)
+            if (this.world.getGameTime() % 5 != 0)
                 return;
             if (this.currentRecipe == null) {
                 this.entityClient = null;
@@ -118,7 +122,7 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
             if (this.entityClient == null) {
                 this.entityClient = this.currentRecipe.makeEntity(this.world, this.spawnX, this.pos.getY() + 1, this.spawnZ);
             }
-            AxisAlignedBB bounds = this.entityClient.getEntityBoundingBox();
+            AxisAlignedBB bounds = this.entityClient.getBoundingBox();
             for (int i = this.world.rand.nextInt(5) + 5; i >= 0; i--)
                 NaturesAuraAPI.instance().spawnMagicParticle(
                         bounds.minX + this.world.rand.nextFloat() * (bounds.maxX - bounds.minX),
@@ -133,10 +137,10 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (this.currentRecipe != null) {
-                compound.setString("recipe", this.currentRecipe.name.toString());
-                compound.setDouble("spawn_x", this.spawnX);
-                compound.setDouble("spawn_z", this.spawnZ);
-                compound.setInteger("time", this.time);
+                compound.putString("recipe", this.currentRecipe.name.toString());
+                compound.putDouble("spawn_x", this.spawnX);
+                compound.putDouble("spawn_z", this.spawnZ);
+                compound.putInt("time", this.time);
             }
         }
     }
@@ -145,12 +149,12 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
     public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
-            if (compound.hasKey("recipe")) {
+            if (compound.contains("recipe")) {
                 ResourceLocation name = new ResourceLocation(compound.getString("recipe"));
                 this.currentRecipe = NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.get(name);
                 this.spawnX = compound.getDouble("spawn_x");
                 this.spawnZ = compound.getDouble("spawn_z");
-                this.time = compound.getInteger("time");
+                this.time = compound.getInt("time");
             } else {
                 this.currentRecipe = null;
                 this.time = 0;

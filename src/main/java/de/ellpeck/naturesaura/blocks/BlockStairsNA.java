@@ -9,7 +9,7 @@ import net.minecraft.block.StairsBlock;
 
 import java.util.function.Supplier;
 
-public class BlockStairsNA extends StairsBlock implements IModItem, ICreativeItem, IModelProvider {
+public class BlockStairsNA extends StairsBlock implements IModItem, IModelProvider {
 
     private final String baseName;
 

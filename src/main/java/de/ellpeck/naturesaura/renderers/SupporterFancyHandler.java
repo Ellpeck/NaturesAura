@@ -1,6 +1,8 @@
 package de.ellpeck.naturesaura.renderers;
 
-import com.google.gson.*;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
@@ -8,18 +10,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerModelPart;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColors;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +42,7 @@ public class SupporterFancyHandler {
             return;
         if (player.isInvisible() || !player.isWearing(PlayerModelPart.CAPE))
             return;
-        Minecraft mc = Minecraft.getMinecraft();
+        Minecraft mc = Minecraft.getInstance();
         if (player == mc.player && mc.gameSettings.thirdPersonView == 0)
             return;
         FancyInfo info = FANCY_INFOS.get(player.getName());
@@ -56,7 +54,7 @@ public class SupporterFancyHandler {
             int color;
             if (info.tier == 1) {
                 BlockPos pos = player.getPosition();
-                color = BiomeColors.getFoliageColorAtPos(player.world, pos);
+                color = BiomeColors.getFoliageColor(player.world, pos);
             } else {
                 color = info.color;
             }

@@ -91,6 +91,7 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11")
 
     compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.14.4:5.0.0.89")
+    compile fg.deobf("vazkii.patchouli:Patchouli:1.1-25.4")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

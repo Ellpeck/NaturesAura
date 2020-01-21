@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.compat;
 import de.ellpeck.naturesaura.compat.crafttweaker.CraftTweakerCompat;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.ModList;
 
 public final class Compat {
 
@@ -13,12 +13,13 @@ public final class Compat {
     public static boolean mtLib;
 
     public static void preInit() {
-        baubles = Loader.isModLoaded("baubles");
-        craftTweaker = Loader.isModLoaded(CRAFT_TWEAKER);
-        mtLib = Loader.isModLoaded("mtlib");
+        ModList mods = ModList.get();
+        baubles = mods.isLoaded("baubles");
+        craftTweaker = mods.isLoaded(CRAFT_TWEAKER);
+        mtLib = mods.isLoaded("mtlib");
 
-        if (baubles)
-            MinecraftForge.EVENT_BUS.register(new BaublesCompat());
+        /*if (baubles)
+            MinecraftForge.EVENT_BUS.register(new BaublesCompat());*/
 
         PatchouliCompat.preInit();
     }

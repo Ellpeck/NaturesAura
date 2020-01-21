@@ -1,3 +1,4 @@
+/* TODO sync aura chunks
 package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.NaturesAura;
@@ -80,4 +81,4 @@ public class PacketAuraChunk implements IMessage {
             return null;
         }
     }
-}
+}*/

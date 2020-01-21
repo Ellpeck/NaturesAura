@@ -1,3 +1,4 @@
+/* TODO crafttweaker
 package de.ellpeck.naturesaura.compat.crafttweaker;
 
 import com.blamejared.mtlib.utils.BaseMapAddition;
@@ -64,3 +65,4 @@ public final class AnimalSpawnerTweaker {
         }
     }
 }
+*/

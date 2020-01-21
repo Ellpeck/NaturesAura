@@ -1,45 +1,42 @@
 package de.ellpeck.naturesaura;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
-import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
+import net.minecraft.state.IProperty;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.AbstractChunkProvider;
-import net.minecraft.world.chunk.ServerChunkProvider;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
@@ -50,46 +47,39 @@ import java.util.function.Function;
 
 public final class Helper {
 
-    public static boolean getTileEntitiesInArea(World world, BlockPos pos, int radius, Function<TileEntity, Boolean> consumer) {
-        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getTileEntitiesInArea");
+    public static boolean getTileEntitiesInArea(IWorld world, BlockPos pos, int radius, Function<TileEntity, Boolean> consumer) {
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
                 if (isChunkLoaded(world, x, z)) {
-                    for (TileEntity tile : world.getChunk(x, z).getTileEntityMap().values()) {
-                        if (tile.getPos().distanceSq(pos) <= radius * radius)
-                            if (consumer.apply(tile)) {
-                                world.profiler.endSection();
+                    for (BlockPos tilePos : world.getChunk(x, z).getTileEntitiesPos()) {
+                        if (tilePos.distanceSq(pos) <= radius * radius)
+                            if (consumer.apply(world.getTileEntity(tilePos)))
                                 return true;
-                            }
                     }
                 }
             }
         }
-        world.profiler.endSection();
         return false;
     }
 
     public static void getAuraChunksInArea(World world, BlockPos pos, int radius, Consumer<AuraChunk> consumer) {
-        world.profiler.func_194340_a(() -> NaturesAura.MOD_ID + ":getAuraChunksInArea");
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
-                if (Helper.isChunkLoaded(world, x, z)) {
+                if (isChunkLoaded(world, x, z)) {
                     Chunk chunk = world.getChunk(x, z);
-                    if (chunk.hasCapability(NaturesAuraAPI.capAuraChunk, null)) {
-                        AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null);
+                    AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
+                    if (auraChunk != null)
                         consumer.accept(auraChunk);
-                    }
                 }
             }
         }
-        world.profiler.endSection();
     }
 
     public static List<ItemFrameEntity> getAttachedItemFrames(World world, BlockPos pos) {
         List<ItemFrameEntity> frames = world.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(pos).grow(0.25));
         for (int i = frames.size() - 1; i >= 0; i--) {
             ItemFrameEntity frame = frames.get(i);
-            BlockPos framePos = frame.getHangingPosition().offset(frame.facingDirection.getOpposite());
+            BlockPos framePos = frame.getHangingPosition().offset(frame.getHorizontalFacing());
             if (!pos.equals(framePos))
                 frames.remove(i);
         }
@@ -98,12 +88,13 @@ public final class Helper {
 
     // For some reason this method isn't public in World, but I also don't want to have to make a new BlockPos
     // or use the messy MutableBlockPos system just to see if a chunk is loaded, so this will have to do I guess
-    public static boolean isChunkLoaded(World world, int x, int z) {
+    public static boolean isChunkLoaded(IWorld world, int x, int z) {
         AbstractChunkProvider provider = world.getChunkProvider();
-        if (provider instanceof ServerChunkProvider)
-            return ((ServerChunkProvider) provider).chunkExists(x, z);
-        else
-            return !provider.provideChunk(x, z).isEmpty();
+        if (!world.isRemote()) {
+            return provider.chunkExists(x, z);
+        } else {
+            return !provider.getChunk(x, z, false).isEmpty();
+        }
     }
 
     public static int blendColors(int c1, int c2, float ratio) {
@@ -117,7 +108,7 @@ public final class Helper {
     public static boolean areItemsEqual(ItemStack first, ItemStack second, boolean nbt) {
         if (!ItemStack.areItemsEqual(first, second))
             return false;
-        return !nbt || ItemStack.areItemStackShareTagsEqual(first, second);
+        return !nbt || ItemStack.areItemStackTagsEqual(first, second);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -125,11 +116,13 @@ public final class Helper {
         if (!stack.isEmpty()) {
             GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
-            GlStateManager.pushAttrib();
+            GlStateManager.pushTextureAttributes();
+            GlStateManager.pushLightingAttributes();
             RenderHelper.enableStandardItemLighting();
-            Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
+            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
             RenderHelper.disableStandardItemLighting();
-            GlStateManager.popAttrib();
+            GlStateManager.popAttributes();
+            GlStateManager.popAttributes();
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         }
@@ -141,12 +134,12 @@ public final class Helper {
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         RenderHelper.enableGUIStandardItemLighting();
-        GlStateManager.enableDepth();
+        GlStateManager.enableDepthTest();
         GlStateManager.enableRescaleNormal();
-        GlStateManager.translate(x, y, 0);
-        GlStateManager.scale(scale, scale, scale);
-        Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
-        Minecraft.getMinecraft().getRenderItem().renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, stack, 0, 0, null);
+        GlStateManager.translatef(x, y, 0);
+        GlStateManager.scalef(scale, scale, scale);
+        Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(stack, 0, 0);
+        Minecraft.getInstance().getItemRenderer().renderItemOverlayIntoGUI(Minecraft.getInstance().fontRenderer, stack, 0, 0, null);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
     }
@@ -162,7 +155,7 @@ public final class Helper {
                     if (!ItemStack.areItemStacksEqual(remain, handStack)) {
                         if (sound)
                             player.world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                                    SoundEvents.ENTITY_ITEMFRAME_ADD_ITEM, SoundCategory.PLAYERS, 0.75F, 1F);
+                                    SoundEvents.ENTITY_ITEM_FRAME_ADD_ITEM, SoundCategory.PLAYERS, 0.75F, 1F);
                         if (!player.world.isRemote)
                             player.setHeldItem(hand, remain);
                         return true;
@@ -172,12 +165,12 @@ public final class Helper {
                 if (!handler.getStackInSlot(slot).isEmpty()) {
                     if (sound)
                         player.world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                                SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM, SoundCategory.PLAYERS, 0.75F, 1F);
+                                SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM, SoundCategory.PLAYERS, 0.75F, 1F);
                     if (!player.world.isRemote) {
                         ItemStack stack = handler.getStackInSlot(slot);
                         if (!player.addItemStackToInventory(stack)) {
                             ItemEntity item = new ItemEntity(player.world, player.posX, player.posY, player.posZ, stack);
-                            player.world.spawnEntity(item);
+                            player.world.addEntity(item);
                         }
                         handler.setStackInSlot(slot, ItemStack.EMPTY);
                     }
@@ -193,8 +186,8 @@ public final class Helper {
             private final IAuraRecharge recharge = (container, containerSlot, itemSlot, isSelected) -> {
                 if (isSelected || !needsSelected) {
                     int toDrain = 300;
-                    if (stack.getItemDamage() > 0 && container.drainAura(toDrain, true) >= toDrain) {
-                        stack.setItemDamage(stack.getItemDamage() - 1);
+                    if (stack.getDamage() > 0 && container.drainAura(toDrain, true) >= toDrain) {
+                        stack.setDamage(stack.getDamage() - 1);
                         container.drainAura(toDrain, false);
                         return true;
                     }
@@ -202,28 +195,25 @@ public final class Helper {
                 return false;
             };
 
-            @Override
-            public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing) {
-                return capability == NaturesAuraAPI.capAuraRecharge;
-            }
-
             @Nullable
             @Override
-            public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-                return capability == NaturesAuraAPI.capAuraRecharge ? (T) this.recharge : null;
+            public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
+                if (capability == NaturesAuraAPI.capAuraRecharge)
+                    return LazyOptional.of(() -> (T) this.recharge);
+                return LazyOptional.empty();
             }
         };
     }
 
     public static BlockState getStateFromString(String raw) {
         String[] split = raw.split("\\[");
-        Block block = Block.REGISTRY.getObject(new ResourceLocation(split[0]));
+        Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(split[0]));
         if (block != null) {
             BlockState state = block.getDefaultState();
             if (split.length > 1) {
                 for (String part : split[1].replace("]", "").split(",")) {
                     String[] keyValue = part.split("=");
-                    for (IProperty<?> prop : state.getProperties().keySet()) {
+                    for (IProperty<?> prop : state.getProperties()) {
                         BlockState changed = findProperty(state, prop, keyValue[0], keyValue[1]);
                         if (changed != null) {
                             state = changed;
@@ -241,32 +231,32 @@ public final class Helper {
         if (key.equals(prop.getName()))
             for (T value : prop.getAllowedValues())
                 if (prop.getName(value).equals(newValue))
-                    return state.withProperty(prop, value);
+                    return state.with(prop, value);
         return null;
     }
 
     public static <T> void registerCap(Class<T> type) {
         CapabilityManager.INSTANCE.register(type, new Capability.IStorage<T>() {
-            @Nullable
             @Override
-            public NBTBase writeNBT(Capability capability, Object instance, Direction side) {
-                return null;
+            public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
+
             }
 
+            @Nullable
             @Override
-            public void readNBT(Capability capability, Object instance, Direction side, NBTBase nbt) {
-
+            public INBT writeNBT(Capability capability, Object instance, Direction side) {
+                return null;
             }
         }, () -> null);
     }
 
     public static void addAdvancement(PlayerEntity player, ResourceLocation advancement, String criterion) {
         if (!(player instanceof ServerPlayerEntity))
-            return;
+            return;/* TODO add advancements
         ServerPlayerEntity playerMp = (ServerPlayerEntity) player;
         Advancement adv = playerMp.getServerWorld().getAdvancementManager().getAdvancement(advancement);
         if (adv != null)
-            playerMp.getAdvancements().grantCriterion(adv, criterion);
+            playerMp.getAdvancements().grantCriterion(adv, criterion);*/
     }
 
     public static int getIngredientAmount(Ingredient ingredient) {

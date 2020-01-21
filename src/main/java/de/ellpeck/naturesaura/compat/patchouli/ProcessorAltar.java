@@ -31,7 +31,7 @@ public class ProcessorAltar implements IComponentProcessor {
                 else
                     return null;
             case "name":
-                return this.recipe.output.getDisplayName();
+                return this.recipe.output.getDisplayName().getFormattedText();
             default:
                 return null;
         }

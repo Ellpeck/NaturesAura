@@ -6,11 +6,9 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.LogBlock;
 import net.minecraft.block.SaplingBlock;
-import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.BlockStoneBrick.EnumType;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -23,9 +21,9 @@ public final class Multiblocks {
                     {"    B    ", "         ", "         ", "         ", "B       B", "         ", "         ", "         ", "    B    "},
                     {"    B    ", "         ", "  M   M  ", "         ", "B   0   B", "         ", "  M   M  ", "         ", "    B    "},
                     {"         ", "   WBW   ", "   WBW   ", " WWCWCWW ", " BBW WBB ", " WWCWCWW ", "   WBW   ", "   WBW   ", "         "}},
-            'C', Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, EnumType.CHISELED),
-            'B', Blocks.STONEBRICK.getDefaultState(),
-            'W', Matcher.oreDict(Blocks.PLANKS, "plankWood"),
+            'C', Blocks.CHISELED_STONE_BRICKS,
+            'B', Blocks.STONE_BRICKS,
+            'W', Blocks.OAK_PLANKS, // TODO create a matcher that matches by tag for planks
             'M', ModBlocks.GOLD_BRICK,
             '0', ModBlocks.NATURE_ALTAR,
             ' ', Matcher.wildcard());
@@ -36,14 +34,14 @@ public final class Multiblocks {
             'W', new Matcher(ModBlocks.WOOD_STAND.getDefaultState(),
                     (world, start, offset, pos, state, c) -> world != null || state.getBlock() == ModBlocks.WOOD_STAND),
             'G', ModBlocks.GOLD_POWDER,
-            '0', new Matcher(Blocks.SAPLING.getDefaultState(),
+            '0', new Matcher(Blocks.OAK_SAPLING.getDefaultState(),
                     (world, start, offset, pos, state, c) -> {
                         if (state.getBlock() instanceof SaplingBlock || state.getBlock() instanceof LogBlock)
                             return true;
                         // try-catch to prevent blocks that need to have been placed crashing here
                         try {
                             ItemStack stack = state.getBlock().getItem(world, pos, state);
-                            return !stack.isEmpty() && NaturesAuraAPI.TREE_RITUAL_RECIPES.values().stream().anyMatch(recipe -> recipe.saplingType.apply(stack));
+                            return !stack.isEmpty() && NaturesAuraAPI.TREE_RITUAL_RECIPES.values().stream().anyMatch(recipe -> recipe.saplingType.test(stack));
                         } catch (Exception e) {
                             return false;
                         }
@@ -57,15 +55,15 @@ public final class Multiblocks {
                     {"N     N", "       ", "       ", "       ", "       ", "       ", "N     N"},
                     {"N     N", "       ", "       ", "   0   ", "       ", "       ", "N     N"},
                     {" N   N ", "NNN NNN", " NRRRN ", "  R R  ", " NRRRN ", "NNN NNN", " N   N "}},
-            'N', Blocks.NETHER_BRICK,
-            'R', Blocks.RED_NETHER_BRICK,
+            'N', Blocks.NETHER_BRICKS,
+            'R', Blocks.RED_NETHER_BRICKS,
             '0', ModBlocks.POTION_GENERATOR,
             ' ', Matcher.wildcard());
     public static final IMultiblock OFFERING_TABLE = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "offering_table"),
             new String[][]{
                     {"  RRRRR  ", " R     R ", "R  RRR  R", "R R   R R", "R R 0 R R", "R R   R R", "R  RRR  R", " R     R ", "  RRRRR  "}},
-            'R', new Matcher(Blocks.RED_FLOWER.getDefaultState(),
+            'R', new Matcher(Blocks.POPPY.getDefaultState(),
                     (world, start, offset, pos, state, c) -> NaturesAuraAPI.FLOWERS.contains(state)),
             '0', ModBlocks.OFFERING_TABLE,
             ' ', Matcher.wildcard());

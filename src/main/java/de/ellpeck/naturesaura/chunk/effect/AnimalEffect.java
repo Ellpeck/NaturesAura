@@ -6,21 +6,21 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
 import net.minecraft.item.EggItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.item.Items;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.util.Comparator;
 import java.util.List;
@@ -72,10 +72,10 @@ public class AnimalEffect implements IDrainSpotEffect {
         if (animals.size() >= 200)
             return;
 
-        if (world.getTotalWorldTime() % 200 == 0) {
+        if (world.getGameTime() % 200 == 0) {
             List<ItemEntity> items = world.getEntitiesWithinAABB(ItemEntity.class, this.bb);
             for (ItemEntity item : items) {
-                if (item.isDead)
+                if (!item.isAlive())
                     continue;
                 if (!NaturesAuraAPI.instance().isEffectPowderActive(world, item.getPosition(), NAME))
                     continue;
@@ -84,21 +84,21 @@ public class AnimalEffect implements IDrainSpotEffect {
                 if (!(stack.getItem() instanceof EggItem))
                     continue;
                 // The getAge() method is private for absolutely no reason but I want it so I don't care
-                int age = ReflectionHelper.getPrivateValue(ItemEntity.class, item, "field_70292_b", "age");
+                int age = item.getAge();
                 if (age < item.lifespan / 2)
                     continue;
 
                 if (stack.getCount() <= 1)
-                    item.setDead();
+                    item.remove();
                 else {
                     stack.shrink(1);
                     item.setItem(stack);
                 }
 
-                ChickenEntity chicken = new ChickenEntity(world);
+                ChickenEntity chicken = new ChickenEntity(EntityType.CHICKEN, world);
                 chicken.setGrowingAge(-24000);
                 chicken.setPosition(item.posX, item.posY, item.posZ);
-                world.spawnEntity(chicken);
+                world.addEntity(chicken);
 
                 BlockPos closestSpot = IAuraChunk.getHighestSpot(world, item.getPosition(), 35, pos);
                 IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 2000);
@@ -134,10 +134,10 @@ public class AnimalEffect implements IDrainSpotEffect {
     private void setInLove(AnimalEntity animal) {
         animal.setInLove(null);
         for (int j = 0; j < 7; j++)
-            animal.world.spawnParticle(EnumParticleTypes.HEART,
-                    (animal.posX + (double) (animal.world.rand.nextFloat() * animal.width * 2.0F)) - animal.width,
-                    animal.posY + 0.5D + (double) (animal.world.rand.nextFloat() * animal.height),
-                    (animal.posZ + (double) (animal.world.rand.nextFloat() * animal.width * 2.0F)) - animal.width,
+            animal.world.addParticle(ParticleTypes.HEART,
+                    (animal.posX + (double) (animal.world.rand.nextFloat() * animal.getWidth() * 2.0F)) - animal.getWidth(),
+                    animal.posY + 0.5D + (double) (animal.world.rand.nextFloat() * animal.getHeight()),
+                    (animal.posZ + (double) (animal.world.rand.nextFloat() * animal.getWidth() * 2.0F)) - animal.getWidth(),
                     animal.world.rand.nextGaussian() * 0.02D,
                     animal.world.rand.nextGaussian() * 0.02D,
                     animal.world.rand.nextGaussian() * 0.02D);

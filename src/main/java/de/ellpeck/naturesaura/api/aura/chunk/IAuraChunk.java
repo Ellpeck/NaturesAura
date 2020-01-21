@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -13,7 +14,7 @@ import java.util.function.BiConsumer;
 /**
  * A class whose instances hold information about the aura present in any given
  * {@link Chunk}. To get an instance for a chunk, use {@link
- * #getAuraChunk(World, BlockPos)}.
+ * #getAuraChunk(IWorld, BlockPos)}.
  * <p>
  * It is not intended for API users to create custom implementation of this
  * class.
@@ -32,13 +33,9 @@ public interface IAuraChunk extends INBTSerializable<CompoundNBT> {
      * @param pos   A position that the chunk contains
      * @return The {@link IAuraChunk} instance belonging to the chunk
      */
-    static IAuraChunk getAuraChunk(World world, BlockPos pos) {
-        Chunk chunk = world.getChunk(pos);
-        if (chunk.hasCapability(NaturesAuraAPI.capAuraChunk, null)) {
-            return chunk.getCapability(NaturesAuraAPI.capAuraChunk, null);
-        } else {
-            return null;
-        }
+    static IAuraChunk getAuraChunk(IWorld world, BlockPos pos) {
+        Chunk chunk = (Chunk) world.getChunk(pos);
+        return chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
     }
 
     /**
@@ -136,7 +133,7 @@ public interface IAuraChunk extends INBTSerializable<CompoundNBT> {
      *                    spot when none are found
      * @return The position of the highest drain spot
      */
-    static BlockPos getHighestSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot) {
+    static BlockPos getHighestSpot(IWorld world, BlockPos pos, int radius, BlockPos defaultSpot) {
         return NaturesAuraAPI.instance().getHighestAuraDrainSpot(world, pos, radius, defaultSpot);
     }
 

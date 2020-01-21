@@ -6,20 +6,16 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.Block;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.Heightmap;
 
 public class PlantBoostEffect implements IDrainSpotEffect {
 
@@ -45,7 +41,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
     public int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.world, pos, spot))
             return -1;
-        if (player.getDistanceSq(pos) > this.dist * this.dist)
+        if (player.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return -1;
         if (NaturesAuraAPI.instance().isEffectPowderActive(player.world, player.getPosition(), NAME))
             return 0;
@@ -64,15 +60,14 @@ public class PlantBoostEffect implements IDrainSpotEffect {
         for (int i = this.amount / 2 + world.rand.nextInt(this.amount / 2); i >= 0; i--) {
             int x = MathHelper.floor(pos.getX() + world.rand.nextGaussian() * this.dist);
             int z = MathHelper.floor(pos.getZ() + world.rand.nextGaussian() * this.dist);
-            BlockPos plantPos = new BlockPos(x, world.getHeight(x, z), z);
+            BlockPos plantPos = new BlockPos(x, world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z), z);
             if (plantPos.distanceSq(pos) <= this.dist * this.dist && world.isBlockLoaded(plantPos)) {
                 if (NaturesAuraAPI.instance().isEffectPowderActive(world, plantPos, NAME))
                     continue;
 
                 BlockState state = world.getBlockState(plantPos);
                 Block block = state.getBlock();
-                if (block instanceof IGrowable &&
-                        block != Blocks.TALLGRASS && block != Blocks.GRASS && block != Blocks.DOUBLE_PLANT) {
+                if (block instanceof IGrowable && !(block instanceof DoublePlantBlock) && !(block instanceof TallGrassBlock) && block != Blocks.GRASS) {
                     IGrowable growable = (IGrowable) block;
                     if (growable.canGrow(world, plantPos, state, false)) {
                         growable.grow(world, world.rand, plantPos, state);
@@ -80,8 +75,9 @@ public class PlantBoostEffect implements IDrainSpotEffect {
                         BlockPos closestSpot = IAuraChunk.getHighestSpot(world, plantPos, 25, pos);
                         IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 3500);
 
-                        PacketHandler.sendToAllAround(world, plantPos, 32,
-                                new PacketParticles(plantPos.getX(), plantPos.getY(), plantPos.getZ(), 6));
+                        // TODO particles
+                      /*  PacketHandler.sendToAllAround(world, plantPos, 32,
+                                new PacketParticles(plantPos.getX(), plantPos.getY(), plantPos.getZ(), 6));*/
                     }
                 }
             }

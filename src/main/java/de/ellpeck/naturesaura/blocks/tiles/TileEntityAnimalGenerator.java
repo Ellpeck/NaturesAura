@@ -1,20 +1,23 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.util.ITickable;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityAnimalGenerator extends TileEntityImpl implements ITickable {
+public class TileEntityAnimalGenerator extends TileEntityImpl implements ITickableTileEntity {
 
     private int timeRemaining;
     private int amountToRelease;
 
+    public TileEntityAnimalGenerator(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         if (!this.world.isRemote) {
-            if (this.world.getTotalWorldTime() % 10 != 0)
+            if (this.world.getGameTime() % 10 != 0)
                 return;
             if (this.timeRemaining <= 0)
                 return;
@@ -26,8 +29,8 @@ public class TileEntityAnimalGenerator extends TileEntityImpl implements ITickab
                     remain -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, remain);
                 }
 
-                PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                        new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 16));
+                /*PacketHandler.sendToAllAround(this.world, this.pos, 32, TODO particles
+                        new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 16));*/
             }
 
             this.timeRemaining -= 10;

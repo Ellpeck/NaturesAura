@@ -1,21 +1,24 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.LogBlock;
-import net.minecraft.util.ITickable;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class TileEntityOakGenerator extends TileEntityImpl implements ITickable {
+public class TileEntityOakGenerator extends TileEntityImpl implements ITickableTileEntity {
 
     public Queue<BlockPos> scheduledBigTrees = new ArrayDeque<>();
 
+    public TileEntityOakGenerator(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         if (!this.world.isRemote)
             while (!this.scheduledBigTrees.isEmpty()) {
                 BlockPos pos = this.scheduledBigTrees.remove();
@@ -28,9 +31,10 @@ public class TileEntityOakGenerator extends TileEntityImpl implements ITickable 
                             toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
                         }
 
-                    PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
+                    // TODO particles
+                   /* PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
                             this.pos.getX(), this.pos.getY(), this.pos.getZ(), 12,
-                            pos.getX(), pos.getY(), pos.getZ(), canGen ? 1 : 0));
+                            pos.getX(), pos.getY(), pos.getZ(), canGen ? 1 : 0));*/
                 }
             }
     }

@@ -7,9 +7,10 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -17,7 +18,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 
 import java.util.List;
 
-public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
+public class TileEntityGratedChute extends TileEntityImpl implements ITickableTileEntity {
 
     private final ItemStackHandlerNA items = new ItemStackHandlerNA(1, this, true) {
         @Override
@@ -33,8 +34,12 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
     public boolean isBlacklist;
     private int cooldown;
 
+    public TileEntityGratedChute(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         if (!this.world.isRemote) {
             if (this.cooldown <= 0) {
                 this.cooldown = 6;
@@ -45,13 +50,12 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
                 push:
                 if (!curr.isEmpty()) {
                     BlockState state = this.world.getBlockState(this.pos);
-                    Direction facing = state.getValue(BlockGratedChute.FACING);
+                    Direction facing = state.get(BlockGratedChute.FACING);
                     TileEntity tile = this.world.getTileEntity(this.pos.offset(facing));
-                    if (tile == null || !tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
-                            facing.getOpposite()))
+                    if (tile == null)
                         break push;
                     IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
-                            facing.getOpposite());
+                            facing.getOpposite()).orElse(null);
                     if (handler == null)
                         break push;
                     for (int i = 0; i < handler.getSlots(); i++) {
@@ -71,7 +75,7 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
                             this.pos.getX(), this.pos.getY() + 0.5, this.pos.getZ(),
                             this.pos.getX() + 1, this.pos.getY() + 2, this.pos.getZ() + 1));
                     for (ItemEntity item : items) {
-                        if (item.isDead)
+                        if (!item.isAlive())
                             continue;
                         ItemStack stack = item.getItem();
                         if (stack.isEmpty())
@@ -79,7 +83,7 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
                         ItemStack left = this.items.insertItem(0, stack, false);
                         if (!ItemStack.areItemStacksEqual(stack, left)) {
                             if (left.isEmpty())
-                                item.setDead();
+                                item.remove();
                             else
                                 item.setItem(left);
                             break pull;
@@ -87,9 +91,9 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
                     }
 
                     TileEntity tileUp = this.world.getTileEntity(this.pos.up());
-                    if (tileUp == null || !tileUp.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN))
+                    if (tileUp == null)
                         break pull;
-                    IItemHandler handlerUp = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN);
+                    IItemHandler handlerUp = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN).orElse(null);
                     if (handlerUp == null)
                         break pull;
                     for (int i = 0; i < handlerUp.getSlots(); i++) {
@@ -125,9 +129,9 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
     public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
-            compound.setInteger("cooldown", this.cooldown);
-            compound.setTag("items", this.items.serializeNBT());
-            compound.setBoolean("blacklist", this.isBlacklist);
+            compound.putInt("cooldown", this.cooldown);
+            compound.put("items", this.items.serializeNBT());
+            compound.putBoolean("blacklist", this.isBlacklist);
         }
     }
 
@@ -135,8 +139,8 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickable {
     public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
-            this.cooldown = compound.getInteger("cooldown");
-            this.items.deserializeNBT(compound.getCompoundTag("items"));
+            this.cooldown = compound.getInt("cooldown");
+            this.items.deserializeNBT(compound.getCompound("items"));
             this.isBlacklist = compound.getBoolean("blacklist");
         }
     }

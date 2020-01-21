@@ -12,20 +12,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class RangeVisualizer extends ItemImpl {
 
-    public static final ListMultimap<Integer, BlockPos> VISUALIZED_BLOCKS = ArrayListMultimap.create();
-    public static final ListMultimap<Integer, Entity> VISUALIZED_ENTITIES = ArrayListMultimap.create();
-    public static final ListMultimap<Integer, BlockPos> VISUALIZED_RAILS = ArrayListMultimap.create();
+    public static final ListMultimap<DimensionType, BlockPos> VISUALIZED_BLOCKS = ArrayListMultimap.create();
+    public static final ListMultimap<DimensionType, Entity> VISUALIZED_ENTITIES = ArrayListMultimap.create();
+    public static final ListMultimap<DimensionType, BlockPos> VISUALIZED_RAILS = ArrayListMultimap.create();
 
     public RangeVisualizer() {
         super("range_visualizer", new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
@@ -51,7 +51,7 @@ public class RangeVisualizer extends ItemImpl {
         Block block = state.getBlock();
         if (block instanceof IVisualizable) {
             if (world.isRemote)
-                visualize(context.getPlayer(), VISUALIZED_BLOCKS, world.getDimension().getType().getId(), pos);
+                visualize(context.getPlayer(), VISUALIZED_BLOCKS, world.getDimension().getType(), pos);
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.PASS;
@@ -66,7 +66,7 @@ public class RangeVisualizer extends ItemImpl {
             VISUALIZED_RAILS.clear();
     }
 
-    public static <T> void visualize(PlayerEntity player, ListMultimap<Integer, T> map, int dim, T value) {
+    public static <T> void visualize(PlayerEntity player, ListMultimap<DimensionType, T> map, DimensionType dim, T value) {
         if (map.containsEntry(dim, value)) {
             map.remove(dim, value);
             player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.end"), true);
@@ -84,7 +84,7 @@ public class RangeVisualizer extends ItemImpl {
         Entity entity = event.getTarget();
         if (entity instanceof IVisualizable) {
             if (entity.world.isRemote) {
-                int dim = entity.world.getDimension().getType().getId();
+                DimensionType dim = entity.world.getDimension().getType();
                 visualize(event.getPlayer(), VISUALIZED_ENTITIES, dim, entity);
             }
             event.getPlayer().swingArm(event.getHand());

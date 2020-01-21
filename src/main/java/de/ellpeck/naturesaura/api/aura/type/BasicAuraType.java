@@ -2,8 +2,8 @@ package de.ellpeck.naturesaura.api.aura.type;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.World;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,8 +34,8 @@ public class BasicAuraType implements IAuraType {
     }
 
     @Override
-    public boolean isPresentInWorld(World world) {
-        return this.dimensions.isEmpty() || this.dimensions.contains(world.provider.getDimensionType());
+    public boolean isPresentInWorld(IWorld world) {
+        return this.dimensions.isEmpty() || this.dimensions.contains(world.getDimension().getType());
     }
 
     @Override

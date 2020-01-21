@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.compat.crafttweaker;
 
-import crafttweaker.CraftTweakerAPI;
-import crafttweaker.IAction;
+import com.blamejared.crafttweaker.api.CraftTweakerAPI;
+import com.blamejared.crafttweaker.api.actions.IAction;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,43 +2,24 @@ package de.ellpeck.naturesaura.recipes;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.recipes.*;
+import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
+import de.ellpeck.naturesaura.api.recipes.WeightedOre;
 import de.ellpeck.naturesaura.api.recipes.ing.AmountIngredient;
 import de.ellpeck.naturesaura.api.recipes.ing.NBTIngredient;
-import de.ellpeck.naturesaura.blocks.ModBlocks;
-import de.ellpeck.naturesaura.chunk.effect.AnimalEffect;
-import de.ellpeck.naturesaura.chunk.effect.CacheRechargeEffect;
-import de.ellpeck.naturesaura.chunk.effect.OreSpawnEffect;
-import de.ellpeck.naturesaura.chunk.effect.PlantBoostEffect;
-import de.ellpeck.naturesaura.items.AuraBottle;
-import de.ellpeck.naturesaura.items.EffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.block.Block;
-import net.minecraft.block.FlowerBlock;
-import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.WallBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
-import net.minecraft.potion.Potions;
-import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.potion.PotionHelper;
-import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Arrays;
 
 public final class ModRecipes {
 
     public static void init() {
-        new TreeRitualRecipe(res("eye"),
+        // TODO recipes
+/*        new TreeRitualRecipe(res("eye"),
                 ing(new ItemStack(Blocks.SAPLING)), new ItemStack(ModItems.EYE), 250,
                 ing(Items.SPIDER_EYE),
                 ing(Items.GOLD_INGOT),
@@ -171,7 +152,7 @@ public final class ModRecipes {
         new AltarRecipe(res("nether_wart"), ing(Blocks.RED_MUSHROOM), new ItemStack(Items.NETHER_WART), conversion, 30000, 250).register();
         new AltarRecipe(res("prismarine"), ing(Items.QUARTZ), new ItemStack(Items.PRISMARINE_SHARD), conversion, 55000, 200).register();
         new AltarRecipe(res("water"), ing(Items.GLASS_BOTTLE), PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), Potions.WATER), conversion, 25000, 200).register();
-        new AltarRecipe(res("coal"),ing(new ItemStack(Items.COAL, 1, 1)), new ItemStack(Items.COAL), conversion, 30000, 250).register();
+        new AltarRecipe(res("coal"), ing(new ItemStack(Items.COAL, 1, 1)), new ItemStack(Items.COAL), conversion, 30000, 250).register();
 
         Ingredient crushing = ing(ModBlocks.CRUSHING_CATALYST);
         new AltarRecipe(res("bone"), ing(Items.BONE), new ItemStack(Items.DYE, 6, 15), crushing, 3000, 40).register();
@@ -263,7 +244,7 @@ public final class ModRecipes {
         spawner("witch", "minecraft:witch", 150000, 150, ing(Items.GLASS_BOTTLE), ing(Items.GLOWSTONE_DUST));
         spawner("wither_skeleton", "minecraft:wither_skeleton", 150000, 150, ing(Items.BONE), ing(Blocks.OBSIDIAN));
         spawner("wolf", "minecraft:wolf", 50000, 60, ing(Items.LEATHER), ing(Items.BONE));
-        spawner("zombie", "minecraft:zombie", 100000, 100, ing(Items.ROTTEN_FLESH));
+        spawner("zombie", "minecraft:zombie", 100000, 100, ing(Items.ROTTEN_FLESH));*/
 
         NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreCoal", 5000));
         NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherCoal", 5000));

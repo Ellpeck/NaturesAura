@@ -3,20 +3,16 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityPowderPlacer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 
 public class BlockPowderPlacer extends BlockContainerImpl {
+    // TODO bound box
     private static final AxisAlignedBB BOUND_BOX = new AxisAlignedBB(0F, 0F, 0F, 1F, 4 / 16F, 1F);
 
     public BlockPowderPlacer() {
-        super("powder_placer", TileEntityPowderPlacer.class, "powder_placer", ModBlocks.prop(Material.ROCK).hardnessAndResistance(2,5F).sound(SoundType.STONE));
+        super("powder_placer", TileEntityPowderPlacer.class, "powder_placer", ModBlocks.prop(Material.ROCK).hardnessAndResistance(2, 5F).sound(SoundType.STONE));
     }
-
+/*
     @Override
     public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
         return BOUND_BOX;
@@ -45,5 +41,5 @@ public class BlockPowderPlacer extends BlockContainerImpl {
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
         return BlockFaceShape.UNDEFINED;
-    }
+    }*/
 }

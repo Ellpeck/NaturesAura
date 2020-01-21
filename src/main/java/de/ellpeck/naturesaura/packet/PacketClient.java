@@ -1,3 +1,4 @@
+/* TODO packets
 package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.NaturesAura;
@@ -61,4 +62,4 @@ public class PacketClient implements IMessage {
             return null;
         }
     }
-}
+}*/

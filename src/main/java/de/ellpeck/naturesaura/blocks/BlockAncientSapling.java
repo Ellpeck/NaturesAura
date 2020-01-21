@@ -6,24 +6,18 @@ import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.event.terraingen.TerrainGen;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Random;
 
-// Make this extend SaplingBlock?
 public class BlockAncientSapling extends BushBlock implements IGrowable, IModItem, IModelProvider {
-
-    private static final AxisAlignedBB AABB = new AxisAlignedBB(
-            0.09999999403953552D, 0.0D, 0.09999999403953552D,
-            0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
+    protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
     public BlockAncientSapling() {
         super(ModBlocks.prop(Material.PLANTS).hardnessAndResistance(0.0F).sound(SoundType.PLANT));
@@ -31,17 +25,17 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
-        return AABB;
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return SHAPE;
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, BlockState state, Random rand) {
+    public void randomTick(BlockState state, World world, BlockPos pos, Random random) {
         if (!world.isRemote) {
-            super.updateTick(world, pos, state, rand);
+            super.randomTick(state, world, pos, random);
 
-            if (world.getLightFromNeighbors(pos.up()) >= 9 && rand.nextInt(7) == 0) {
-                this.grow(world, rand, pos, state);
+            if (world.getLight(pos.up()) >= 9 && random.nextInt(7) == 0) {
+                this.grow(world, random, pos, state);
             }
         }
     }
@@ -52,22 +46,12 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
     }
 
     @Override
-    public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(SaplingBlock.STAGE, meta);
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(SaplingBlock.STAGE);
     }
 
     @Override
-    public int getMetaFromState(BlockState state) {
-        return state.getValue(SaplingBlock.STAGE);
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, SaplingBlock.STAGE);
-    }
-
-    @Override
-    public boolean canGrow(World world, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
         return true;
     }
 
@@ -78,9 +62,9 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
 
     @Override
     public void grow(World world, Random rand, BlockPos pos, BlockState state) {
-        if (state.getValue(SaplingBlock.STAGE) == 0) {
-            world.setBlockState(pos, state.cycleProperty(SaplingBlock.STAGE), 4);
-        } else if (TerrainGen.saplingGrowTree(world, rand, pos)) {
+        if (state.get(SaplingBlock.STAGE) == 0) {
+            world.setBlockState(pos, state.cycle(SaplingBlock.STAGE), 4);
+        } else if (ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
             new WorldGenAncientTree(true).generate(world, rand, pos);
         }
     }

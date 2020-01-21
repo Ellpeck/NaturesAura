@@ -2,33 +2,28 @@ package de.ellpeck.naturesaura.compat.jei;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
-import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
-import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
-import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
-import de.ellpeck.naturesaura.compat.jei.altar.AltarCategory;
-import de.ellpeck.naturesaura.compat.jei.altar.AltarWrapper;
-import de.ellpeck.naturesaura.compat.jei.animal.AnimalSpawnerCategory;
-import de.ellpeck.naturesaura.compat.jei.animal.AnimalSpawnerWrapper;
-import de.ellpeck.naturesaura.compat.jei.offering.OfferingCategory;
-import de.ellpeck.naturesaura.compat.jei.offering.OfferingWrapper;
-import de.ellpeck.naturesaura.compat.jei.treeritual.TreeRitualCategory;
-import de.ellpeck.naturesaura.compat.jei.treeritual.TreeRitualWrapper;
-import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IModPlugin;
-import mezz.jei.api.IModRegistry;
-import mezz.jei.api.JEIPlugin;
-import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
-@JEIPlugin
+@JeiPlugin
 public class JEINaturesAuraPlugin implements IModPlugin {
 
-    public static final String TREE_RITUAL = NaturesAura.MOD_ID + ".tree_ritual";
-    public static final String ALTAR = NaturesAura.MOD_ID + ".altar";
-    public static final String OFFERING = NaturesAura.MOD_ID + ".offering";
-    public static final String SPAWNER = NaturesAura.MOD_ID + ".animal_spawner";
+    public static final ResourceLocation TREE_RITUAL = new ResourceLocation(NaturesAura.MOD_ID, "tree_ritual");
+    public static final ResourceLocation ALTAR = new ResourceLocation(NaturesAura.MOD_ID, "altar");
+    public static final ResourceLocation OFFERING = new ResourceLocation(NaturesAura.MOD_ID, "offering");
+    public static final ResourceLocation SPAWNER = new ResourceLocation(NaturesAura.MOD_ID, "animal_spawner");
+
+    @Override
+    public ResourceLocation getPluginUid() {
+        return new ResourceLocation(NaturesAura.MOD_ID, "jei_plugin");
+    }
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
@@ -42,22 +37,20 @@ public class JEINaturesAuraPlugin implements IModPlugin {
     }
 
     @Override
-    public void register(IModRegistry registry) {
-        registry.handleRecipes(TreeRitualRecipe.class, TreeRitualWrapper::new, TREE_RITUAL);
-        registry.handleRecipes(AltarRecipe.class, AltarWrapper::new, ALTAR);
-        registry.handleRecipes(OfferingRecipe.class, OfferingWrapper::new, OFFERING);
-        registry.handleRecipes(AnimalSpawnerRecipe.class, AnimalSpawnerWrapper::new, SPAWNER);
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.GOLD_POWDER), TREE_RITUAL);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.WOOD_STAND), TREE_RITUAL);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.NATURE_ALTAR), ALTAR);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.CONVERSION_CATALYST), ALTAR);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.OFFERING_TABLE), OFFERING);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.ANIMAL_SPAWNER), SPAWNER);
+    }
 
-        registry.addRecipes(NaturesAuraAPI.TREE_RITUAL_RECIPES.values(), TREE_RITUAL);
-        registry.addRecipes(NaturesAuraAPI.ALTAR_RECIPES.values(), ALTAR);
-        registry.addRecipes(NaturesAuraAPI.OFFERING_RECIPES.values(), OFFERING);
-        registry.addRecipes(NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.values(), SPAWNER);
-
-        registry.addRecipeCatalyst(new ItemStack(ModBlocks.GOLD_POWDER), TREE_RITUAL);
-        registry.addRecipeCatalyst(new ItemStack(ModBlocks.WOOD_STAND), TREE_RITUAL);
-        registry.addRecipeCatalyst(new ItemStack(ModBlocks.NATURE_ALTAR), ALTAR);
-        registry.addRecipeCatalyst(new ItemStack(ModBlocks.CONVERSION_CATALYST), ALTAR);
-        registry.addRecipeCatalyst(new ItemStack(ModBlocks.OFFERING_TABLE), OFFERING);
-        registry.addRecipeCatalyst(new ItemStack(ModBlocks.ANIMAL_SPAWNER), SPAWNER);
+    @Override
+    public void registerRecipes(IRecipeRegistration registration) {
+        registration.addRecipes(NaturesAuraAPI.TREE_RITUAL_RECIPES.values(), TREE_RITUAL);
+        registration.addRecipes(NaturesAuraAPI.ALTAR_RECIPES.values(), ALTAR);
+        registration.addRecipes(NaturesAuraAPI.OFFERING_RECIPES.values(), OFFERING);
+        registration.addRecipes(NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.values(), SPAWNER);
     }
 }

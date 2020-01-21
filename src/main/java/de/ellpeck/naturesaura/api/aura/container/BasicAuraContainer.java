@@ -53,10 +53,10 @@ public class BasicAuraContainer implements IAuraContainer {
     }
 
     public void writeNBT(CompoundNBT compound) {
-        compound.setInteger("aura", this.aura);
+        compound.putInt("aura", this.aura);
     }
 
     public void readNBT(CompoundNBT compound) {
-        this.aura = compound.getInteger("aura");
+        this.aura = compound.getInt("aura");
     }
 }

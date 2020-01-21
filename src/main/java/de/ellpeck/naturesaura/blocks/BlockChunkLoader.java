@@ -1,35 +1,22 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityChunkLoader;
-import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.List;
 import java.util.Random;
 
 public class BlockChunkLoader extends BlockContainerImpl implements IVisualizable {
@@ -92,7 +79,8 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
         return SHAPE;
     }
 
-    public static class ChunkLoadingCallback implements ForgeChunkManager.LoadingCallback {
+    // TODO chunk loading
+    /*public static class ChunkLoadingCallback implements ForgeChunkManager.LoadingCallback {
 
         @Override
         public void ticketsLoaded(List<Ticket> tickets, World world) {
@@ -107,5 +95,5 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
                 loader.loadChunks();
             }
         }
-    }
+    }*/
 }

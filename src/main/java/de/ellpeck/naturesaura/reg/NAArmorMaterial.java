@@ -26,41 +26,48 @@ public enum NAArmorMaterial implements IArmorMaterial {
     private final float toughness;
     private final LazyLoadBase<Ingredient> repairMaterial;
 
-    NAArmorMaterial(String nameIn, int maxDamageFactorIn, int[] damageReductionAmountsIn, int enchantabilityIn, SoundEvent equipSoundIn, float p_i48533_8_, Supplier<Ingredient> repairMaterialSupplier) {
+    NAArmorMaterial(String nameIn, int maxDamageFactorIn, int[] damageReductionAmountsIn, int enchantabilityIn, SoundEvent equipSoundIn, float toughness, Supplier<Ingredient> repairMaterialSupplier) {
         this.name = nameIn;
         this.maxDamageFactor = maxDamageFactorIn;
         this.damageReductionAmountArray = damageReductionAmountsIn;
         this.enchantability = enchantabilityIn;
         this.soundEvent = equipSoundIn;
-        this.toughness = p_i48533_8_;
+        this.toughness = toughness;
         this.repairMaterial = new LazyLoadBase<>(repairMaterialSupplier);
     }
 
+    @Override
     public int getDurability(EquipmentSlotType slotIn) {
         return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
     }
 
+    @Override
     public int getDamageReductionAmount(EquipmentSlotType slotIn) {
         return this.damageReductionAmountArray[slotIn.getIndex()];
     }
 
+    @Override
     public int getEnchantability() {
         return this.enchantability;
     }
 
+    @Override
     public SoundEvent getSoundEvent() {
         return this.soundEvent;
     }
 
+    @Override
     public Ingredient getRepairMaterial() {
         return this.repairMaterial.getValue();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public String getName() {
         return this.name;
     }
 
+    @Override
     public float getToughness() {
         return this.toughness;
     }

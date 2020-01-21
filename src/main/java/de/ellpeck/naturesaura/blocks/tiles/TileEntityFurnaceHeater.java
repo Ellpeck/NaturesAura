@@ -1,51 +1,51 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.BlockFurnaceHeater;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticleStream;
-import net.minecraft.block.FurnaceBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.FurnaceTileEntity;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 
-public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable {
+public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickableTileEntity {
 
     public boolean isActive;
 
+    public TileEntityFurnaceHeater(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
+
     @Override
-    public void update() {
-        if (!this.world.isRemote && this.world.getTotalWorldTime() % 5 == 0) {
+    public void tick() {
+        if (!this.world.isRemote && this.world.getGameTime() % 5 == 0) {
             boolean did = false;
 
-            Direction facing = this.world.getBlockState(this.pos).getValue(BlockFurnaceHeater.FACING);
+            Direction facing = this.world.getBlockState(this.pos).get(BlockFurnaceHeater.FACING);
             BlockPos tilePos = this.pos.offset(facing.getOpposite());
             TileEntity tile = this.world.getTileEntity(tilePos);
             if (tile instanceof FurnaceTileEntity) {
                 FurnaceTileEntity furnace = (FurnaceTileEntity) tile;
                 if (isReady(furnace)) {
-                    int time = furnace.getField(0);
+                    // TODO furnace heater
+                   /* int time = furnace.getField(0);
                     if (time <= 0)
                         FurnaceBlock.setState(true, this.world, furnace.getPos());
                     furnace.setField(0, 200);
                     //if set higher than 199, it'll never finish because the furnace does ++ and then ==
-                    furnace.setField(2, Math.min(199, furnace.getField(2) + 5));
+                    furnace.setField(2, Math.min(199, furnace.getField(2) + 5));*/
 
                     BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 20, this.pos);
                     IAuraChunk chunk = IAuraChunk.getAuraChunk(this.world, spot);
-                    chunk.drainAura(spot, MathHelper.ceil((200 - time) * 16.6F));
+                    //chunk.drainAura(spot, MathHelper.ceil((200 - time) * 16.6F));
                     did = true;
 
-                    if (this.world.getTotalWorldTime() % 15 == 0) {
-                        PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
+                    if (this.world.getGameTime() % 15 == 0) {
+                        // TODO particles
+                        /*PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
                                 this.pos.getX() + (float) this.world.rand.nextGaussian() * 5F,
                                 this.pos.getY() + 1 + this.world.rand.nextFloat() * 5F,
                                 this.pos.getZ() + (float) this.world.rand.nextGaussian() * 5F,
@@ -53,7 +53,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
                                 tilePos.getY() + this.world.rand.nextFloat(),
                                 tilePos.getZ() + this.world.rand.nextFloat(),
                                 this.world.rand.nextFloat() * 0.07F + 0.07F, IAuraType.forWorld(this.world).getColor(), this.world.rand.nextFloat() + 0.5F
-                        ));
+                        ));*/
                     }
                 }
             }
@@ -71,13 +71,13 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
 
         ItemStack input = furnace.getStackInSlot(0);
         if (!input.isEmpty()) {
-            ItemStack output = FurnaceRecipes.instance().getSmeltingResult(input);
-            if (output.isEmpty())
-                return false;
+            /*ItemStack output = FurnaceRecipes.instance().getSmeltingResult(input);
+            if (output.isEmpty())*/
+            return false;
 
-            ItemStack currOutput = furnace.getStackInSlot(2);
+            /*ItemStack currOutput = furnace.getStackInSlot(2);
             return currOutput.isEmpty() ||
-                    Helper.areItemsEqual(currOutput, output, true) && currOutput.getCount() + output.getCount() <= output.getMaxStackSize();
+                    Helper.areItemsEqual(currOutput, output, true) && currOutput.getCount() + output.getCount() <= output.getMaxStackSize();*/
         } else
             return false;
     }
@@ -87,7 +87,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
         super.writeNBT(compound, type);
 
         if (type == SaveType.SYNC)
-            compound.setBoolean("active", this.isActive);
+            compound.putBoolean("active", this.isActive);
     }
 
     @Override

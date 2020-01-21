@@ -1,5 +1,7 @@
+/* TODO commands
 package de.ellpeck.naturesaura.commands;
 
+import com.mojang.brigadier.Command;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import net.minecraft.command.*;
@@ -12,19 +14,19 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class CommandAura extends CommandBase {
+public class CommandAura extends Command {
     @Override
     public String getName() {
         return "naaura";
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    public String getUsage(ICommandSource sender) {
         return "command." + NaturesAura.MOD_ID + ".aura.usage";
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    public void execute(MinecraftServer server, ICommandSource sender, String[] args) throws CommandException {
         if (args.length < 2)
             throw new WrongUsageException(this.getUsage(sender));
         World world = sender.getEntityWorld();
@@ -82,3 +84,4 @@ public class CommandAura extends CommandBase {
         }
     }
 }
+*/

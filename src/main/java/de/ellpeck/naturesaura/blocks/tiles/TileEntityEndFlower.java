@@ -4,22 +4,21 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.BasicAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.EntityPredicates;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ITickable;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
-public class TileEntityEndFlower extends TileEntityImpl implements ITickable {
+public class TileEntityEndFlower extends TileEntityImpl implements ITickableTileEntity {
 
     private final BasicAuraContainer container = new BasicAuraContainer(null, 500000) {
         {
@@ -47,10 +46,14 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickable {
 
     public boolean isDrainMode;
 
+    public TileEntityEndFlower(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         if (!this.world.isRemote) {
-            if (this.world.getTotalWorldTime() % 10 != 0)
+            if (this.world.getGameTime() % 10 != 0)
                 return;
 
             if (!this.isDrainMode) {
@@ -66,10 +69,11 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickable {
                         continue;
 
                     this.isDrainMode = true;
-                    item.setDead();
+                    item.remove();
 
-                    PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 21, this.container.getAuraColor()));
+                    // TODO particles
+                  /*  PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 21, this.container.getAuraColor()));*/
                     break;
                 }
             } else {
@@ -82,13 +86,13 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickable {
                 }
 
                 if (this.container.getStoredAura() <= 0) {
-                    this.world.setBlockState(this.pos, Blocks.DEADBUSH.getDefaultState());
-                    PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 18, this.container.getAuraColor()));
+                    this.world.setBlockState(this.pos, Blocks.DEAD_BUSH.getDefaultState());
+                   /* PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 18, this.container.getAuraColor()));*/
                 }
             }
         } else {
-            if (this.isDrainMode && this.world.getTotalWorldTime() % 5 == 0)
+            if (this.isDrainMode && this.world.getGameTime() % 5 == 0)
                 NaturesAuraAPI.instance().spawnMagicParticle(
                         this.pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F,
                         this.pos.getY() + 0.25F + this.world.rand.nextFloat() * 0.5F,
@@ -110,7 +114,7 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickable {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.container.writeNBT(compound);
-            compound.setBoolean("drain_mode", this.isDrainMode);
+            compound.putBoolean("drain_mode", this.isDrainMode);
         }
     }
 

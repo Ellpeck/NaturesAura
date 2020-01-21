@@ -2,22 +2,25 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.ITickable;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileEntityMossGenerator extends TileEntityImpl implements ITickable {
+public class TileEntityMossGenerator extends TileEntityImpl implements ITickableTileEntity {
+
+    public TileEntityMossGenerator(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
 
     @Override
-    public void update() {
+    public void tick() {
         if (!this.world.isRemote) {
-            if (this.world.getTotalWorldTime() % 20 != 0)
+            if (this.world.getGameTime() % 20 != 0)
                 return;
 
             List<BlockPos> possibleOffsets = new ArrayList<>();
@@ -44,8 +47,9 @@ public class TileEntityMossGenerator extends TileEntityImpl implements ITickable
                     toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
                 }
 
-                PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                        new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), 23));
+                // TODO particles
+                /*PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                        new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), 23));*/
             }
 
             this.world.playEvent(2001, offset, Block.getStateId(state));

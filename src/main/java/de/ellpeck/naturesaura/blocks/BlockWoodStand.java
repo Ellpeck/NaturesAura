@@ -7,29 +7,27 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderWoodStand;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
-import de.ellpeck.naturesaura.reg.ModRegistry;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ToolType;
-import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.ToolType;
+import net.minecraftforge.event.world.SaplingGrowTreeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import java.util.ArrayList;
@@ -42,21 +40,20 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider 
 
     public BlockWoodStand() {
         super("wood_stand", TileEntityWoodStand.class, "wood_stand", ModBlocks.prop(Material.WOOD).hardnessAndResistance(1.5F).sound(SoundType.WOOD).harvestLevel(0).harvestTool(ToolType.AXE));
-
-        MinecraftForge.TERRAIN_GEN_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
     public void onTreeGrow(SaplingGrowTreeEvent event) {
-        World world = event.getWorld();
+        IWorld world = event.getWorld();
         BlockPos pos = event.getPos();
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             if (Multiblocks.TREE_RITUAL.isComplete(world, pos)) {
                 BlockState sapling = world.getBlockState(pos);
                 ItemStack saplingStack = sapling.getBlock().getItem(world, pos, sapling);
                 if (!saplingStack.isEmpty()) {
                     for (TreeRitualRecipe recipe : NaturesAuraAPI.TREE_RITUAL_RECIPES.values()) {
-                        if (recipe.saplingType.apply(saplingStack)) {
+                        if (recipe.saplingType.test(saplingStack)) {
                             List<Ingredient> required = new ArrayList<>(Arrays.asList(recipe.ingredients));
                             MutableObject<TileEntityWoodStand> toPick = new MutableObject<>();
 
@@ -68,7 +65,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider 
                                     if (!stack.isEmpty()) {
                                         for (int i = required.size() - 1; i >= 0; i--) {
                                             Ingredient req = required.get(i);
-                                            if (req.apply(stack)) {
+                                            if (req.test(stack)) {
                                                 required.remove(i);
 
                                                 if (toPick.getValue() == null) {
@@ -95,9 +92,11 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider 
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
-        return Helper.putStackOnTile(playerIn, hand, pos, 0, true);
+    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        return Helper.putStackOnTile(player, handIn, pos, 0, true);
     }
+
+    /*
 
     @Override
     public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
@@ -127,7 +126,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
         return BlockFaceShape.UNDEFINED;
-    }
+    }*/
 
     @Override
     @OnlyIn(Dist.CLIENT)

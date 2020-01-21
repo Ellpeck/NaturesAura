@@ -4,20 +4,19 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.items.ModItems;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
+import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -27,17 +26,21 @@ import net.minecraftforge.items.IItemHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileEntityPlacer extends TileEntityImpl implements ITickable {
+public class TileEntityPlacer extends TileEntityImpl implements ITickableTileEntity {
+
+    public TileEntityPlacer(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
 
     @Override
-    public void update() {
-        if (!this.world.isRemote && this.world.getTotalWorldTime() % 15 == 0) {
+    public void tick() {
+        if (!this.world.isRemote && this.world.getGameTime() % 15 == 0) {
             if (this.redstonePower > 0)
                 return;
             TileEntity tileUp = this.world.getTileEntity(this.pos.up());
-            if (tileUp == null || !tileUp.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN))
+            if (tileUp == null)
                 return;
-            IItemHandler handler = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN);
+            IItemHandler handler = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN).orElse(null);
             if (handler == null)
                 return;
             List<ItemFrameEntity> frames = Helper.getAttachedItemFrames(this.world, this.pos);
@@ -55,7 +58,8 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickable {
 
                         BlockPos up = pos.up();
                         BlockState state = this.world.getBlockState(up);
-                        if (state.getBlock().isReplaceable(this.world, up))
+                        // TODO maybe allow the placer to place on more than air?
+                        if (state.isAir(this.world, up))
                             validPositions.add(up);
                     }
             if (validPositions.isEmpty())
@@ -75,7 +79,8 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickable {
                 BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 10, this.pos);
                 IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 1000);
 
-                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), 9));
+                // TODO particles
+                //  PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), 9));
 
                 return;
             }
@@ -109,13 +114,13 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickable {
 
         FakePlayer fake = FakePlayerFactory.getMinecraft((ServerWorld) this.world);
         fake.inventory.mainInventory.set(fake.inventory.currentItem, stack);
-        fake.interactionManager.processRightClickBlock(fake, this.world, fake.getHeldItemMainhand(), Hand.MAIN_HAND,
-                pos, Direction.DOWN, 0.5F, 0.5F, 0.5F);
+        fake.interactionManager.processRightClick(fake, this.world, fake.getHeldItemMainhand(), Hand.MAIN_HAND);
         return fake.getHeldItemMainhand().copy();
     }
 
     private boolean handleSpecialCases(ItemStack stack, BlockPos pos) {
-        if (stack.getItem() == Items.REDSTONE)
+        // TODO placer special cases
+      /*  if (stack.getItem() == Items.REDSTONE)
             if (Blocks.REDSTONE_WIRE.canPlaceBlockAt(this.world, pos))
                 this.world.setBlockState(pos, Blocks.REDSTONE_WIRE.getDefaultState());
             else
@@ -134,10 +139,10 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickable {
             if (!state.getBlock().isAir(state, this.world, pos))
                 return false;
             this.world.setBlockState(pos, plant);
-        } else
+        } else*/
             return false;
 
-        stack.shrink(1);
-        return true;
+        /*stack.shrink(1);
+        return true;*/
     }
 }

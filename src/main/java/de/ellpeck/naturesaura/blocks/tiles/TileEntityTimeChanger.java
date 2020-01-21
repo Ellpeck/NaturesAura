@@ -7,26 +7,32 @@ import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.ItemFrameEntity;
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTimePacket;
 import net.minecraft.server.management.PlayerList;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.GameRules;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 
-public class TileEntityTimeChanger extends TileEntityImpl implements ITickable {
+public class TileEntityTimeChanger extends TileEntityImpl implements ITickableTileEntity {
 
     private long goalTime;
 
+    public TileEntityTimeChanger(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         if (!this.world.isRemote) {
             List<ItemFrameEntity> frames = Helper.getAttachedItemFrames(this.world, this.pos);
             for (ItemFrameEntity frame : frames) {
@@ -35,28 +41,28 @@ public class TileEntityTimeChanger extends TileEntityImpl implements ITickable {
                     continue;
 
                 if (this.goalTime > 0) {
-                    long current = this.world.getWorldTime();
+                    long current = this.world.getGameTime();
                     long toAdd = Math.min(75, this.goalTime - current);
                     if (toAdd <= 0) {
                         this.goalTime = 0;
                         this.sendToClients();
                         return;
                     }
-                    this.world.setWorldTime(current + toAdd);
+                    this.world.setDayTime(current + toAdd);
 
                     BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 35, this.pos);
                     IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, (int) toAdd * 20);
 
                     if (this.world instanceof ServerWorld) {
-                        PlayerList list = this.world.getMinecraftServer().getPlayerList();
+                        PlayerList list = this.world.getServer().getPlayerList();
                         list.sendPacketToAllPlayersInDimension(new SUpdateTimePacket(
-                                this.world.getTotalWorldTime(), this.world.getWorldTime(),
-                                this.world.getGameRules().getBoolean("doDaylightCycle")), this.world.provider.getDimension());
+                                this.world.getGameTime(), this.world.getDayTime(),
+                                this.world.getGameRules().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)), this.world.getDimension().getType());
                     }
                     return;
                 }
 
-                if (this.world.getTotalWorldTime() % 20 != 0)
+                if (this.world.getGameTime() % 20 != 0)
                     return;
 
                 List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class,
@@ -69,13 +75,13 @@ public class TileEntityTimeChanger extends TileEntityImpl implements ITickable {
                         continue;
 
                     int dayGoal = MathHelper.floor((frame.getRotation() / 8F) * 24000F) + 18000;
-                    long current = this.world.getWorldTime();
+                    long current = this.world.getDayTime();
                     long toMove = (24000 - current % 24000 + dayGoal) % 24000;
                     this.goalTime = current + toMove;
                     this.sendToClients();
 
                     if (stack.getCount() <= 1)
-                        item.setDead();
+                        item.remove();
                     else {
                         stack.shrink(1);
                         item.setItem(stack);
@@ -88,7 +94,7 @@ public class TileEntityTimeChanger extends TileEntityImpl implements ITickable {
                 this.sendToClients();
             }
         } else if (this.goalTime > 0 && this.world.rand.nextFloat() >= 0.25F) {
-            double angle = Math.toRadians(this.world.getTotalWorldTime() * 5F % 360);
+            double angle = Math.toRadians(this.world.getGameTime() * 5F % 360);
             double x = this.pos.getX() + 0.5 + Math.sin(angle) * 3F;
             double z = this.pos.getZ() + 0.5 + Math.cos(angle) * 3F;
             int color = this.goalTime % 24000 > 12000 ? 0xe2e2e2 : 0xffe926;
@@ -109,7 +115,7 @@ public class TileEntityTimeChanger extends TileEntityImpl implements ITickable {
     public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK)
-            compound.setLong("goal", this.goalTime);
+            compound.putLong("goal", this.goalTime);
     }
 
     @Override

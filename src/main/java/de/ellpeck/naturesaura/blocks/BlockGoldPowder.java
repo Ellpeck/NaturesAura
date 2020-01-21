@@ -4,20 +4,18 @@ import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -31,24 +29,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
     public static final EnumProperty<AttachPos> EAST = EnumProperty.create("east", AttachPos.class);
     public static final EnumProperty<AttachPos> SOUTH = EnumProperty.create("south", AttachPos.class);
     public static final EnumProperty<AttachPos> WEST = EnumProperty.create("west", AttachPos.class);
-    protected static final VoxelShape[] SHAPES = new VoxelShape[]{
-            VoxelShapes.create(0.1875D, 0.0D, 0.1875D, 0.8125D, 0.0625D, 0.8125D),
-            VoxelShapes.create(0.1875D, 0.0D, 0.1875D, 0.8125D, 0.0625D, 1.0D),
-            VoxelShapes.create(0.0D, 0.0D, 0.1875D, 0.8125D, 0.0625D, 0.8125D),
-            VoxelShapes.create(0.0D, 0.0D, 0.1875D, 0.8125D, 0.0625D, 1.0D),
-            VoxelShapes.create(0.1875D, 0.0D, 0.0D, 0.8125D, 0.0625D, 0.8125D),
-            VoxelShapes.create(0.1875D, 0.0D, 0.0D, 0.8125D, 0.0625D, 1.0D),
-            VoxelShapes.create(0.0D, 0.0D, 0.0D, 0.8125D, 0.0625D, 0.8125D),
-            VoxelShapes.create(0.0D, 0.0D, 0.0D, 0.8125D, 0.0625D, 1.0D),
-            VoxelShapes.create(0.1875D, 0.0D, 0.1875D, 1.0D, 0.0625D, 0.8125D),
-            VoxelShapes.create(0.1875D, 0.0D, 0.1875D, 1.0D, 0.0625D, 1.0D),
-            VoxelShapes.create(0.0D, 0.0D, 0.1875D, 1.0D, 0.0625D, 0.8125D),
-            VoxelShapes.create(0.0D, 0.0D, 0.1875D, 1.0D, 0.0625D, 1.0D),
-            VoxelShapes.create(0.1875D, 0.0D, 0.0D, 1.0D, 0.0625D, 0.8125D),
-            VoxelShapes.create(0.1875D, 0.0D, 0.0D, 1.0D, 0.0625D, 1.0D),
-            VoxelShapes.create(0.0D, 0.0D, 0.0D, 1.0D, 0.0625D, 0.8125D),
-            VoxelShapes.create(0.0D, 0.0D, 0.0D, 1.0D, 0.0625D, 1.0D)
-    };
+    protected static final VoxelShape[] SHAPES = new VoxelShape[]{Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.makeCuboidShape(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.makeCuboidShape(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.makeCuboidShape(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.makeCuboidShape(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.makeCuboidShape(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.makeCuboidShape(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D)};
 
     public BlockGoldPowder() {
         super("gold_powder", ModBlocks.prop(Blocks.REDSTONE_WIRE));
@@ -74,11 +55,6 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
         return SHAPES[getShapeIndex(state)];
     }
 
-    @Override
-    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
-        return SHAPES[getShapeIndex(state.getActualState(source, pos))];
-    }
-
     private static int getShapeIndex(BlockState state) {
         int i = 0;
         boolean n = state.get(NORTH) != AttachPos.NONE;
@@ -101,37 +77,40 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
         return i;
     }
 
+    // TODO weird gold powder thing
+/*
     @Override
-    public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
-        state = state.withProperty(WEST, this.getAttachPosition(worldIn, pos, Direction.WEST));
-        state = state.withProperty(EAST, this.getAttachPosition(worldIn, pos, Direction.EAST));
-        state = state.withProperty(NORTH, this.getAttachPosition(worldIn, pos, Direction.NORTH));
-        state = state.withProperty(SOUTH, this.getAttachPosition(worldIn, pos, Direction.SOUTH));
+    public BlockState getActualState(BlockState state, IWorld worldIn, BlockPos pos) {
+        state = state.with(WEST, this.getAttachPosition(worldIn, pos, Direction.WEST));
+        state = state.with(EAST, this.getAttachPosition(worldIn, pos, Direction.EAST));
+        state = state.with(NORTH, this.getAttachPosition(worldIn, pos, Direction.NORTH));
+        state = state.with(SOUTH, this.getAttachPosition(worldIn, pos, Direction.SOUTH));
         return state;
     }
 
-    private AttachPos getAttachPosition(IBlockAccess worldIn, BlockPos pos, Direction direction) {
+    private AttachPos getAttachPosition(IWorld worldIn, BlockPos pos, Direction direction) {
         BlockPos dirPos = pos.offset(direction);
         BlockState state = worldIn.getBlockState(pos.offset(direction));
 
         if (!this.canConnectTo(worldIn.getBlockState(dirPos), direction, worldIn, dirPos)
-                && (state.isNormalCube() || !this.canConnectUpwardsTo(worldIn, dirPos.down()))) {
+                && (state.isNormalCube(worldIn, pos.offset(direction)) || !this.canConnectUpwardsTo(worldIn, dirPos.down()))) {
             BlockState iblockstate1 = worldIn.getBlockState(pos.up());
-            if (!iblockstate1.isNormalCube()) {
-                boolean flag = worldIn.getBlockState(dirPos).isSideSolid(worldIn, dirPos, Direction.UP)
+            if (!iblockstate1.isNormalCube(worldIn, pos.up())) {
+                *//*boolean flag = worldIn.getBlockState(dirPos).isSideSolid(worldIn, dirPos, Direction.UP)
                         || worldIn.getBlockState(dirPos).getBlock() == Blocks.GLOWSTONE;
                 if (flag && this.canConnectUpwardsTo(worldIn, dirPos.up())) {
                     if (state.isBlockNormalCube()) {
                         return AttachPos.UP;
                     }
                     return AttachPos.SIDE;
-                }
+                }*//*
+                return AttachPos.SIDE;
             }
             return AttachPos.NONE;
         } else {
             return AttachPos.SIDE;
         }
-    }
+    }*/
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
@@ -143,28 +122,18 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
         return false;
     }
 
-    public boolean canPlaceBlockAt(IWorldReader worldIn, BlockPos pos) {
-        BlockState downState = worldIn.getBlockState(pos.down());
-        return downState.isSolid()
-                || downState.getBlockFaceShape(worldIn, pos.down(), Direction.UP) == BlockFaceShape.SOLID
-                || worldIn.getBlockState(pos.down()).getBlock() == Blocks.GLOWSTONE;
-    }
-
     @Override
-    public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos neighbor) {
-        if (!world.isRemote()) {
-            if (!this.canPlaceBlockAt(world, pos)) {
-                this.dropBlockAsItem(world, pos, state, 0);
-                world.setBlockToAir(pos);
-            }
-        }
+    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+        BlockPos blockpos = pos.down();
+        BlockState blockstate = worldIn.getBlockState(blockpos);
+        return blockstate.func_224755_d(worldIn, blockpos, Direction.UP) || blockstate.getBlock() == Blocks.HOPPER;
     }
 
-    private boolean canConnectUpwardsTo(IBlockAccess worldIn, BlockPos pos) {
+    private boolean canConnectUpwardsTo(IWorld worldIn, BlockPos pos) {
         return this.canConnectTo(worldIn.getBlockState(pos), null, worldIn, pos);
     }
 
-    private boolean canConnectTo(BlockState blockState, @Nullable Direction side, IBlockAccess world, BlockPos pos) {
+    private boolean canConnectTo(BlockState blockState, @Nullable Direction side, IWorld world, BlockPos pos) {
         Block block = blockState.getBlock();
         return block == this;
     }

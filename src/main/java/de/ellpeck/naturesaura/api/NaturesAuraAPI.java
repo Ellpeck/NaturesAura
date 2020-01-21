@@ -13,16 +13,17 @@ import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.api.recipes.*;
-import net.minecraft.block.FlowerBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FlowerBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
@@ -83,7 +84,7 @@ public final class NaturesAuraAPI {
      */
     public static final Map<ResourceLocation, IAuraType> AURA_TYPES = new HashMap<>();
     public static final BasicAuraType TYPE_OVERWORLD = new BasicAuraType(new ResourceLocation(MOD_ID, "overworld"), DimensionType.OVERWORLD, 0xbef224, 0).register();
-    public static final BasicAuraType TYPE_NETHER = new BasicAuraType(new ResourceLocation(MOD_ID, "nether"), DimensionType.NETHER, 0x871c0c, 0).register();
+    public static final BasicAuraType TYPE_NETHER = new BasicAuraType(new ResourceLocation(MOD_ID, "nether"), DimensionType.THE_NETHER, 0x871c0c, 0).register();
     public static final BasicAuraType TYPE_END = new BasicAuraType(new ResourceLocation(MOD_ID, "end"), DimensionType.THE_END, 0x302624, 0).register();
     public static final BasicAuraType TYPE_OTHER = new BasicAuraType(new ResourceLocation(MOD_ID, "other"), null, 0x2fa8a0, Integer.MIN_VALUE).register();
     /**
@@ -148,7 +149,7 @@ public final class NaturesAuraAPI {
      * is only applicable to chunks and all chunks in the world automatically
      * get assigned this capability, using it directly is not necessary for
      * addon developers. To retrieve this capability from any chunk, use the
-     * helper method {@link IAuraChunk#getAuraChunk(World, BlockPos)}.
+     * helper method {@link IAuraChunk#getAuraChunk(IWorld, BlockPos)}.
      */
     @CapabilityInject(IAuraChunk.class)
     public static Capability<IAuraChunk> capAuraChunk;
@@ -343,9 +344,9 @@ public final class NaturesAuraAPI {
         BlockPos getLowestAuraDrainSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot);
 
         /**
-         * @see IAuraChunk#getHighestSpot(World, BlockPos, int, BlockPos)
+         * @see IAuraChunk#getHighestSpot(IWorld, BlockPos, int, BlockPos)
          */
-        BlockPos getHighestAuraDrainSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot);
+        BlockPos getHighestAuraDrainSpot(IWorld world, BlockPos pos, int radius, BlockPos defaultSpot);
     }
 
 }

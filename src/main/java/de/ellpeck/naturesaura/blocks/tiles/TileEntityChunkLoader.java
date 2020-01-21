@@ -1,23 +1,19 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ITickable;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
 
-import java.util.HashSet;
-import java.util.Set;
+// TODO chunk loader
+public class TileEntityChunkLoader extends TileEntityImpl implements ITickableTileEntity {
+    public TileEntityChunkLoader(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
 
-public class TileEntityChunkLoader extends TileEntityImpl implements ITickable {
-
-    private Ticket ticket;
-
+    //private Ticket ticket;
+/*
     @Override
     public void validate() {
         super.validate();
@@ -42,13 +38,13 @@ public class TileEntityChunkLoader extends TileEntityImpl implements ITickable {
             this.loadChunks();
             this.sendToClients();
         }
-    }
+    }*/
 
     public int range() {
         return this.redstonePower * 2;
     }
 
-    public void updateTicket(Ticket ticket) {
+    /*public void updateTicket(Ticket ticket) {
         if (this.ticket != null)
             ForgeChunkManager.releaseTicket(this.ticket);
         this.ticket = ticket;
@@ -72,12 +68,12 @@ public class TileEntityChunkLoader extends TileEntityImpl implements ITickable {
         }
         for (ChunkPos pos : before)
             ForgeChunkManager.unforceChunk(this.ticket, pos);
-    }
+    }*/
 
     @Override
-    public void update() {
+    public void tick() {
         if (!this.world.isRemote) {
-            if (this.world.getTotalWorldTime() % 20 != 0)
+            if (this.world.getGameTime() % 20 != 0)
                 return;
             int toUse = MathHelper.ceil(this.range() / 2F);
             if (toUse > 0) {

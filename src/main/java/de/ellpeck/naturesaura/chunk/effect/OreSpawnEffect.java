@@ -9,20 +9,18 @@ import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.recipes.WeightedOre;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.ServerWorld;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashSet;
 import java.util.List;
@@ -53,7 +51,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
     public int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.world, pos, spot))
             return -1;
-        if (player.getDistanceSq(pos) > this.dist * this.dist)
+        if (player.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return -1;
         if (!NaturesAuraAPI.instance().isEffectPowderActive(player.world, player.getPosition(), NAME))
             return 0;
@@ -67,7 +65,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
 
     @Override
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (world.getTotalWorldTime() % 40 != 0)
+        if (world.getGameTime() % 40 != 0)
             return;
         if (!this.calcValues(world, pos, spot))
             return;
@@ -89,20 +87,21 @@ public class OreSpawnEffect implements IDrainSpotEffect {
             return;
         for (int i = 0; i < this.amount; i++) {
             Tuple<Vec3d, Integer> powder = powders.get(i % powders.size());
-            Vec3d powderPos = powder.getFirst();
-            int range = powder.getSecond();
+            Vec3d powderPos = powder.getA();
+            int range = powder.getB();
             int x = MathHelper.floor(powderPos.x + world.rand.nextGaussian() * range);
             int y = MathHelper.floor(powderPos.y + world.rand.nextGaussian() * range);
             int z = MathHelper.floor(powderPos.z + world.rand.nextGaussian() * range);
             BlockPos orePos = new BlockPos(x, y, z);
-            if (orePos.distanceSq(powderPos.x, powderPos.y, powderPos.z) <= range * range
+            if (orePos.distanceSq(powderPos.x, powderPos.y, powderPos.z, true) <= range * range
                     && orePos.distanceSq(pos) <= this.dist * this.dist && world.isBlockLoaded(orePos)) {
                 BlockState state = world.getBlockState(orePos);
                 Block block = state.getBlock();
                 if (block != requiredBlock)
                     continue;
 
-                outer:
+                // TODO place ores
+                /*outer:
                 while (true) {
                     WeightedOre ore = WeightedRandom.getRandomItem(world.rand, ores, totalWeight);
                     List<ItemStack> stacks = OreDictionary.getOres(ore.name, false);
@@ -114,7 +113,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                             continue;
 
                         FakePlayer player = FakePlayerFactory.getMinecraft((ServerWorld) world);
-                        BlockState stateToPlace = toPlace.getStateForPlacement(world, pos, EnumFacing.UP, 0, 0, 0, stack.getMetadata(), player, EnumHand.MAIN_HAND);
+                        BlockState stateToPlace = toPlace.getStateForPlacement(world, pos, Direction.UP, 0, 0, 0, stack.getDamage(), player, EnumHand.MAIN_HAND);
                         if (SPAWN_EXCEPTIONS.contains(stateToPlace))
                             continue;
 
@@ -126,7 +125,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                         IAuraChunk.getAuraChunk(world, highestSpot).drainAura(highestSpot, toDrain);
                         break outer;
                     }
-                }
+                }*/
             }
         }
     }

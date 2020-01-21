@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 
+import java.util.stream.Stream;
+
 public class AmountIngredient extends Ingredient {
 
     public final Ingredient delegate;
@@ -11,7 +13,7 @@ public class AmountIngredient extends Ingredient {
     private ItemStack[] matchingStacks;
 
     public AmountIngredient(Ingredient delegate, int amount) {
-        super(0);
+        super(Stream.empty());
         this.delegate = delegate;
         this.amount = amount;
     }
@@ -35,8 +37,8 @@ public class AmountIngredient extends Ingredient {
     }
 
     @Override
-    public boolean apply(ItemStack stack) {
-        if (!this.delegate.apply(stack))
+    public boolean test(ItemStack stack) {
+        if (!this.delegate.test(stack))
             return false;
         return stack.getCount() >= this.amount;
     }

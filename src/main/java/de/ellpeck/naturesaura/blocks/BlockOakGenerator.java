@@ -10,12 +10,13 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.SaplingGrowTreeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Random;
 
@@ -24,14 +25,14 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
     public BlockOakGenerator() {
         super("oak_generator", TileEntityOakGenerator.class, "oak_generator", ModBlocks.prop(Material.WOOD).hardnessAndResistance(2F).sound(SoundType.WOOD));
 
-        MinecraftForge.TERRAIN_GEN_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
     public void onTreeGrow(SaplingGrowTreeEvent event) {
-        World world = event.getWorld();
+        IWorld world = event.getWorld();
         BlockPos pos = event.getPos();
-        if (!world.isRemote && IAuraType.forWorld(world).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD)
+        if (!world.isRemote() && IAuraType.forWorld(world).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD)
                 && world.getBlockState(pos).getBlock() instanceof SaplingBlock) {
             Helper.getTileEntitiesInArea(world, pos, 10, tile -> {
                 if (!(tile instanceof TileEntityOakGenerator))

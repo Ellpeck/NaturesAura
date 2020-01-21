@@ -4,19 +4,16 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.packet.PacketAuraChunk;
-import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.ArrayList;
@@ -116,8 +113,8 @@ public class AuraChunk implements IAuraChunk {
     private void addDrainSpot(BlockPos pos, MutableInt spot) {
         int expX = pos.getX() >> 4;
         int expZ = pos.getZ() >> 4;
-        if (expX != this.chunk.x || expZ != this.chunk.z)
-            throw new IllegalArgumentException("Tried to add drain spot " + pos + " to chunk at " + this.chunk.x + ", " + this.chunk.z + " when it should've been added to chunk at " + expX + ", " + expZ);
+        if (expX != this.chunk.getPos().x || expZ != this.chunk.getPos().z)
+            throw new IllegalArgumentException("Tried to add drain spot " + pos + " to chunk at " + this.chunk.getPos().x + ", " + this.chunk.getPos().z + " when it should've been added to chunk at " + expX + ", " + expZ);
 
         this.drainSpots.put(pos, spot);
     }
@@ -145,24 +142,24 @@ public class AuraChunk implements IAuraChunk {
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
             BlockPos pos = entry.getKey();
             MutableInt amount = entry.getValue();
-            for (IDrainSpotEffect effect : this.effects) {
-                world.profiler.func_194340_a(() -> effect.getName().toString());
+            for (IDrainSpotEffect effect : this.effects)
                 effect.update(world, this.chunk, this, pos, amount.intValue());
-                world.profiler.endSection();
-            }
         }
 
         if (this.needsSync) {
-            PacketHandler.sendToAllLoaded(world,
+            // TODO packets
+            /*PacketHandler.sendToAllLoaded(world,
                     new BlockPos(this.chunk.x * 16, 0, this.chunk.z * 16),
-                    this.makePacket());
+                    this.makePacket());*/
             this.needsSync = false;
         }
     }
 
+/*
     public IMessage makePacket() {
         return new PacketAuraChunk(this.chunk.x, this.chunk.z, this.drainSpots);
     }
+*/
 
     public void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
@@ -176,7 +173,7 @@ public class AuraChunk implements IAuraChunk {
     public void getActiveEffectIcons(PlayerEntity player, Map<ResourceLocation, Tuple<ItemStack, Boolean>> icons) {
         for (IDrainSpotEffect effect : this.effects) {
             Tuple<ItemStack, Boolean> alreadyThere = icons.get(effect.getName());
-            if (alreadyThere != null && alreadyThere.getSecond())
+            if (alreadyThere != null && alreadyThere.getB())
                 continue;
             for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
                 BlockPos pos = entry.getKey();
@@ -197,25 +194,25 @@ public class AuraChunk implements IAuraChunk {
         ListNBT list = new ListNBT();
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
             CompoundNBT tag = new CompoundNBT();
-            tag.setLong("pos", entry.getKey().toLong());
-            tag.setInteger("amount", entry.getValue().intValue());
-            list.appendTag(tag);
+            tag.putLong("pos", entry.getKey().toLong());
+            tag.putInt("amount", entry.getValue().intValue());
+            list.add(tag);
         }
 
         CompoundNBT compound = new CompoundNBT();
-        compound.setTag("drain_spots", list);
+        compound.put("drain_spots", list);
         return compound;
     }
 
     @Override
     public void deserializeNBT(CompoundNBT compound) {
         this.drainSpots.clear();
-        ListNBT list = compound.getTagList("drain_spots", 10);
-        for (NBTBase base : list) {
+        ListNBT list = compound.getList("drain_spots", 10);
+        for (INBT base : list) {
             CompoundNBT tag = (CompoundNBT) base;
             this.addDrainSpot(
                     BlockPos.fromLong(tag.getLong("pos")),
-                    new MutableInt(tag.getInteger("amount")));
+                    new MutableInt(tag.getInt("amount")));
         }
     }
 }

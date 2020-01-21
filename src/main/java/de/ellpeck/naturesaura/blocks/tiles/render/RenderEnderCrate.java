@@ -1,10 +1,11 @@
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
-import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -25,15 +26,16 @@ public class RenderEnderCrate extends TileEntityRenderer<TileEntityEnderCrate> {
     private final FloatBuffer buffer = GLAllocation.createDirectFloatBuffer(16);
 
     @Override
-    public void render(TileEntityEnderCrate te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(TileEntityEnderCrate tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage) {
         GlStateManager.disableLighting();
         RANDOM.setSeed(31100L);
-        GlStateManager.getFloat(2982, MODELVIEW);
-        GlStateManager.getFloat(2983, PROJECTION);
+        GlStateManager.getMatrix(2982, MODELVIEW);
+        GlStateManager.getMatrix(2983, PROJECTION);
         double d0 = x * x + y * y + z * z;
         int i = this.getPasses(d0);
         float f = this.getOffset();
         boolean flag = false;
+        GameRenderer gamerenderer = Minecraft.getInstance().gameRenderer;
 
         for (int j = 0; j < i; ++j) {
             GlStateManager.pushMatrix();
@@ -49,7 +51,7 @@ public class RenderEnderCrate extends TileEntityRenderer<TileEntityEnderCrate> {
             if (j >= 1) {
                 this.bindTexture(END_PORTAL_TEXTURE);
                 flag = true;
-                Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
+                gamerenderer.setupFogColor(true);
             }
 
             if (j == 1) {
@@ -57,25 +59,25 @@ public class RenderEnderCrate extends TileEntityRenderer<TileEntityEnderCrate> {
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
             }
 
-            GlStateManager.texGen(GlStateManager.TexGen.S, 9216);
-            GlStateManager.texGen(GlStateManager.TexGen.T, 9216);
-            GlStateManager.texGen(GlStateManager.TexGen.R, 9216);
-            GlStateManager.texGen(GlStateManager.TexGen.S, 9474, this.getBuffer(1.0F, 0.0F, 0.0F, 0.0F));
-            GlStateManager.texGen(GlStateManager.TexGen.T, 9474, this.getBuffer(0.0F, 1.0F, 0.0F, 0.0F));
-            GlStateManager.texGen(GlStateManager.TexGen.R, 9474, this.getBuffer(0.0F, 0.0F, 1.0F, 0.0F));
-            GlStateManager.enableTexGenCoord(GlStateManager.TexGen.S);
-            GlStateManager.enableTexGenCoord(GlStateManager.TexGen.T);
-            GlStateManager.enableTexGenCoord(GlStateManager.TexGen.R);
+            GlStateManager.texGenMode(GlStateManager.TexGen.S, 9216);
+            GlStateManager.texGenMode(GlStateManager.TexGen.T, 9216);
+            GlStateManager.texGenMode(GlStateManager.TexGen.R, 9216);
+            GlStateManager.texGenParam(GlStateManager.TexGen.S, 9474, this.getBuffer(1.0F, 0.0F, 0.0F, 0.0F));
+            GlStateManager.texGenParam(GlStateManager.TexGen.T, 9474, this.getBuffer(0.0F, 1.0F, 0.0F, 0.0F));
+            GlStateManager.texGenParam(GlStateManager.TexGen.R, 9474, this.getBuffer(0.0F, 0.0F, 1.0F, 0.0F));
+            GlStateManager.enableTexGen(GlStateManager.TexGen.S);
+            GlStateManager.enableTexGen(GlStateManager.TexGen.T);
+            GlStateManager.enableTexGen(GlStateManager.TexGen.R);
             GlStateManager.popMatrix();
             GlStateManager.matrixMode(5890);
             GlStateManager.pushMatrix();
             GlStateManager.loadIdentity();
-            GlStateManager.translate(0.5F, 0.5F, 0.0F);
-            GlStateManager.scale(0.5F, 0.5F, 1.0F);
+            GlStateManager.translatef(0.5F, 0.5F, 0.0F);
+            GlStateManager.scalef(0.5F, 0.5F, 1.0F);
             float f2 = (float) (j + 1);
-            GlStateManager.translate(17.0F / f2, (2.0F + f2 / 1.5F) * ((float) Minecraft.getSystemTime() % 800000.0F / 800000.0F), 0.0F);
-            GlStateManager.rotate((f2 * f2 * 4321.0F + f2 * 9.0F) * 2.0F, 0.0F, 0.0F, 1.0F);
-            GlStateManager.scale(4.5F - f2 / 4.0F, 4.5F - f2 / 4.0F, 1.0F);
+            GlStateManager.translatef(17.0F / f2, (2.0F + f2 / 1.5F) * ((float) System.currentTimeMillis() % 800000.0F / 800000.0F), 0.0F);
+            GlStateManager.rotatef((f2 * f2 * 4321.0F + f2 * 9.0F) * 2.0F, 0.0F, 0.0F, 1.0F);
+            GlStateManager.scalef(4.5F - f2 / 4.0F, 4.5F - f2 / 4.0F, 1.0F);
             GlStateManager.multMatrix(PROJECTION);
             GlStateManager.multMatrix(MODELVIEW);
             Tessellator tessellator = Tessellator.getInstance();
@@ -98,13 +100,12 @@ public class RenderEnderCrate extends TileEntityRenderer<TileEntityEnderCrate> {
         }
 
         GlStateManager.disableBlend();
-        GlStateManager.disableTexGenCoord(GlStateManager.TexGen.S);
-        GlStateManager.disableTexGenCoord(GlStateManager.TexGen.T);
-        GlStateManager.disableTexGenCoord(GlStateManager.TexGen.R);
+        GlStateManager.disableTexGen(GlStateManager.TexGen.S);
+        GlStateManager.disableTexGen(GlStateManager.TexGen.T);
+        GlStateManager.disableTexGen(GlStateManager.TexGen.R);
         GlStateManager.enableLighting();
-
         if (flag) {
-            Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
+            gamerenderer.setupFogColor(false);
         }
     }
 

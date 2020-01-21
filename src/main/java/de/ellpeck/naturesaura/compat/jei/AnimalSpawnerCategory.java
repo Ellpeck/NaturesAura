@@ -1,20 +1,19 @@
-package de.ellpeck.naturesaura.compat.jei.animal;
+package de.ellpeck.naturesaura.compat.jei;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
-import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeCategory;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Arrays;
 
-public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerWrapper> {
+public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecipe> {
 
     private final IDrawable background;
 
@@ -23,8 +22,13 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerWrapp
     }
 
     @Override
-    public String getUid() {
+    public ResourceLocation getUid() {
         return JEINaturesAuraPlugin.SPAWNER;
+    }
+
+    @Override
+    public Class<? extends AnimalSpawnerRecipe> getRecipeClass() {
+        return AnimalSpawnerRecipe.class;
     }
 
     @Override
@@ -33,19 +37,23 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerWrapp
     }
 
     @Override
-    public String getModName() {
-        return NaturesAura.MOD_NAME;
-    }
-
-    @Override
     public IDrawable getBackground() {
         return this.background;
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, AnimalSpawnerWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiItemStackGroup group = recipeLayout.getItemStacks();
-        AnimalSpawnerRecipe recipe = recipeWrapper.recipe;
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
+    public void setIngredients(AnimalSpawnerRecipe animalSpawnerRecipe, IIngredients iIngredients) {
+
+    }
+
+    @Override
+    public void setRecipe(IRecipeLayout iRecipeLayout, AnimalSpawnerRecipe recipe, IIngredients iIngredients) {
+        IGuiItemStackGroup group = iRecipeLayout.getItemStacks();
         for (int i = 0; i < recipe.ingredients.length; i++) {
             group.init(i, true, i * 18, 68);
             group.set(i, Arrays.asList(recipe.ingredients[i].getMatchingStacks()));

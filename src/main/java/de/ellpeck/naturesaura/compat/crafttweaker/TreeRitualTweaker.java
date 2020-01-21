@@ -1,3 +1,4 @@
+/*
 package de.ellpeck.naturesaura.compat.crafttweaker;
 
 import com.blamejared.mtlib.helpers.InputHelper;
@@ -75,3 +76,4 @@ public final class TreeRitualTweaker {
         }
     }
 }
+*/

@@ -3,43 +3,45 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemFrameEntity;
-import net.minecraft.item.ShearsItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShearsItem;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fluids.IFluidBlock;
 
 import java.util.List;
 
-public class TileEntityFieldCreator extends TileEntityImpl implements ITickable {
+public class TileEntityFieldCreator extends TileEntityImpl implements ITickableTileEntity {
 
     public BlockPos connectionOffset;
     public boolean isMain;
     public boolean isCharged;
     private int chargeTimer;
 
+    public TileEntityFieldCreator(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
+
     @Override
-    public void update() {
-        if (this.world.isRemote || this.world.getTotalWorldTime() % 10 != 0)
+    public void tick() {
+        if (this.world.isRemote || this.world.getGameTime() % 10 != 0)
             return;
 
         BlockPos connectedPos = this.getConnectedPos();
@@ -90,7 +92,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
             chunk.drainAura(spot, 300);
             this.sendParticles();
         } else {
-            if (this.world.getTotalWorldTime() % 40 == 0)
+            if (this.world.getGameTime() % 40 == 0)
                 chunk.drainAura(spot, 100);
 
             boolean shears = this.shears() || creator.shears();
@@ -113,10 +115,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
 
                 BlockState state = this.world.getBlockState(pos);
                 Block block = state.getBlock();
-                if (!block.isAir(state, this.world, pos)
-                        && !(block instanceof BlockLiquid) && !(block instanceof IFluidBlock)
-                        && state.getBlockHardness(this.world, pos) >= 0F) {
-
+                if (!block.isAir(state, this.world, pos) && state.getBlockHardness(this.world, pos) >= 0F) {
                     FakePlayer fake = FakePlayerFactory.getMinecraft((ServerWorld) this.world);
                     if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.world, pos, state, fake))) {
                         boolean shearBlock = shears && block instanceof IShearable;
@@ -124,10 +123,11 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
                         if (shearBlock && ((IShearable) block).isShearable(ItemStack.EMPTY, this.world, pos))
                             drops = ((IShearable) block).onSheared(ItemStack.EMPTY, this.world, pos, 0);
                         else {
-                            drops = NonNullList.create();
-                            block.getDrops((NonNullList) drops, this.world, pos, state, 0);
+                            drops = state.getDrops(new LootContext.Builder((ServerWorld) this.world)
+                                    .withParameter(LootParameters.POSITION, pos)
+                                    .withParameter(LootParameters.BLOCK_STATE, state));
                         }
-                        float chance = ForgeEventFactory.fireBlockHarvesting(drops, this.world, pos, state, 0, 1, false, fake);
+                        float chance = ForgeEventFactory.fireBlockHarvesting((NonNullList<ItemStack>) drops, this.world, pos, state, 0, 1, false, fake);
                         if (chance > 0 && this.world.rand.nextFloat() <= chance) {
                             this.world.destroyBlock(pos, false);
                             for (ItemStack stack : drops)
@@ -155,7 +155,8 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
     private void sendParticles() {
         for (int j = 0; j < 2; j++) {
             BlockPos p = j == 0 ? this.pos : this.getConnectedPos();
-            PacketHandler.sendToAllAround(this.world, p, 32, new PacketParticleStream(
+            // TODO particles
+           /* PacketHandler.sendToAllAround(this.world, p, 32, new PacketParticleStream(
                     p.getX() + (float) this.world.rand.nextGaussian() * 3F,
                     p.getY() + 1 + this.world.rand.nextFloat() * 3F,
                     p.getZ() + (float) this.world.rand.nextGaussian() * 3F,
@@ -163,7 +164,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
                     p.getY() + 0.5F,
                     p.getZ() + 0.5F,
                     this.world.rand.nextFloat() * 0.07F + 0.07F, IAuraType.forWorld(this.world).getColor(), this.world.rand.nextFloat() + 0.5F
-            ));
+            ));*/
         }
     }
 
@@ -183,12 +184,12 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (this.connectionOffset != null)
-                compound.setLong("connection", this.connectionOffset.toLong());
-            compound.setBoolean("main", this.isMain);
-            compound.setBoolean("charged", this.isCharged);
+                compound.putLong("connection", this.connectionOffset.toLong());
+            compound.putBoolean("main", this.isMain);
+            compound.putBoolean("charged", this.isCharged);
 
             if (type == SaveType.TILE)
-                compound.setInteger("timer", this.chargeTimer);
+                compound.putInt("timer", this.chargeTimer);
         }
     }
 
@@ -196,7 +197,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
     public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
-            if (compound.hasKey("connection"))
+            if (compound.contains("connection"))
                 this.connectionOffset = BlockPos.fromLong(compound.getLong("connection"));
             else
                 this.connectionOffset = null;
@@ -204,7 +205,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickable 
             this.isCharged = compound.getBoolean("charged");
 
             if (type == SaveType.TILE)
-                this.chargeTimer = compound.getInteger("timer");
+                this.chargeTimer = compound.getInt("timer");
         }
     }
 }

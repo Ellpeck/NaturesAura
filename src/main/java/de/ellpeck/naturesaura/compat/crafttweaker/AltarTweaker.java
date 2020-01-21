@@ -1,28 +1,23 @@
+/* TODO crafttweaker or whatever
 package de.ellpeck.naturesaura.compat.crafttweaker;
 
-import com.blamejared.mtlib.helpers.InputHelper;
-import com.blamejared.mtlib.helpers.LogHelper;
-import com.blamejared.mtlib.utils.BaseMapAddition;
-import com.blamejared.mtlib.utils.BaseMapRemoval;
-import crafttweaker.annotations.ZenRegister;
-import crafttweaker.api.item.IIngredient;
-import crafttweaker.api.item.IItemStack;
-import crafttweaker.api.minecraft.CraftTweakerMC;
+import com.blamejared.crafttweaker.api.annotations.ZenRegister;
+import com.blamejared.crafttweaker.api.item.IIngredient;
+import com.blamejared.crafttweaker.api.item.IItemStack;
+import com.blamejared.crafttweaker.api.minecraft.CraftTweakerMC;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.compat.Compat;
 import net.minecraft.util.ResourceLocation;
-import stanhebben.zenscript.annotations.ZenClass;
-import stanhebben.zenscript.annotations.ZenMethod;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 @ZenRegister
-@ZenClass("mods." + NaturesAura.MOD_ID + ".Altar")
+@Zen("mods." + NaturesAura.MOD_ID + ".Altar")
 public final class AltarTweaker {
 
     @ZenMethod
@@ -72,3 +67,4 @@ public final class AltarTweaker {
         }
     }
 }
+*/

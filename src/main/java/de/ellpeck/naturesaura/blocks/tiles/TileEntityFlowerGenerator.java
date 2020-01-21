@@ -4,18 +4,16 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.packet.PacketParticleStream;
-import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ITickable;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.ArrayList;
@@ -23,13 +21,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickable {
+public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickableTileEntity {
 
     private final Map<BlockState, MutableInt> consumedRecently = new HashMap<>();
 
+    public TileEntityFlowerGenerator(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
+
     @Override
-    public void update() {
-        if (!this.world.isRemote && this.world.getTotalWorldTime() % 10 == 0) {
+    public void tick() {
+        if (!this.world.isRemote && this.world.getGameTime() % 10 == 0) {
             List<BlockPos> possible = new ArrayList<>();
             int range = 3;
             for (int x = -range; x <= range; x++) {
@@ -73,11 +75,12 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
             }
             curr.add(5);
 
-            this.world.setBlockToAir(pos);
+            this.world.removeBlock(pos, false);
 
+            // TODO particles
             int color = Helper.blendColors(0x5ccc30, 0xe53c16, toAdd / (float) addAmount);
             if (toAdd > 0) {
-                for (int i = this.world.rand.nextInt(5) + 5; i >= 0; i--)
+                /*for (int i = this.world.rand.nextInt(5) + 5; i >= 0; i--)
                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
                             pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F,
                             pos.getY() + 0.25F + this.world.rand.nextFloat() * 0.5F,
@@ -87,9 +90,9 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
                             this.pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F,
                             this.world.rand.nextFloat() * 0.02F + 0.1F, color, 1F
                     ));
-                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 8));
+                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 8));*/
             }
-            PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), 7, color));
+            //PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), 7, color));
         }
     }
 
@@ -109,31 +112,25 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
                 Block block = state.getBlock();
 
                 CompoundNBT tag = new CompoundNBT();
-                tag.setString("block", block.getRegistryName().toString());
-                tag.setInteger("meta", block.getMetaFromState(state));
-                tag.setInteger("amount", entry.getValue().intValue());
-                list.appendTag(tag);
+                tag.putString("block", block.getRegistryName().toString());
+                tag.putInt("amount", entry.getValue().intValue());
+                list.add(tag);
             }
-            compound.setTag("consumed_recently", list);
+            compound.put("consumed_recently", list);
         }
     }
 
     @Override
     public void readNBT(CompoundNBT compound, SaveType type) {
         super.readNBT(compound, type);
-
         if (type != SaveType.SYNC) {
             this.consumedRecently.clear();
-
-            ListNBT list = compound.getTagList("consumed_recently", 10);
-            for (NBTBase base : list) {
+            ListNBT list = compound.getList("consumed_recently", 10);
+            for (INBT base : list) {
                 CompoundNBT tag = (CompoundNBT) base;
-
                 Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tag.getString("block")));
-                if (block != null) {
-                    BlockState state = block.getStateFromMeta(tag.getInteger("meta"));
-                    this.consumedRecently.put(state, new MutableInt(tag.getInteger("amount")));
-                }
+                if (block != null)
+                    this.consumedRecently.put(block.getDefaultState(), new MutableInt(tag.getInt("amount")));
             }
 
         }

@@ -1,20 +1,20 @@
-package de.ellpeck.naturesaura.compat.jei.offering;
+package de.ellpeck.naturesaura.compat.jei;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeCategory;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Arrays;
 
-public class OfferingCategory implements IRecipeCategory<OfferingWrapper> {
+public class OfferingCategory implements IRecipeCategory<OfferingRecipe> {
 
     private final IDrawable background;
 
@@ -23,8 +23,13 @@ public class OfferingCategory implements IRecipeCategory<OfferingWrapper> {
     }
 
     @Override
-    public String getUid() {
+    public ResourceLocation getUid() {
         return JEINaturesAuraPlugin.OFFERING;
+    }
+
+    @Override
+    public Class<? extends OfferingRecipe> getRecipeClass() {
+        return OfferingRecipe.class;
     }
 
     @Override
@@ -33,19 +38,23 @@ public class OfferingCategory implements IRecipeCategory<OfferingWrapper> {
     }
 
     @Override
-    public String getModName() {
-        return NaturesAura.MOD_NAME;
-    }
-
-    @Override
     public IDrawable getBackground() {
         return this.background;
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, OfferingWrapper recipeWrapper, IIngredients ingredients) {
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
+    public void setIngredients(OfferingRecipe offeringRecipe, IIngredients iIngredients) {
+
+    }
+
+    @Override
+    public void setRecipe(IRecipeLayout recipeLayout, OfferingRecipe recipe, IIngredients ingredients) {
         IGuiItemStackGroup group = recipeLayout.getItemStacks();
-        OfferingRecipe recipe = recipeWrapper.recipe;
         group.init(0, true, 0, 14);
         group.set(0, Arrays.asList(recipe.input.getMatchingStacks()));
         group.init(1, false, 65, 14);

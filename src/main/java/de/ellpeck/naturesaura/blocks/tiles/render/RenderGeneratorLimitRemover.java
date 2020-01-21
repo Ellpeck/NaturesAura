@@ -1,14 +1,17 @@
+/* TODO this render thing
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityGeneratorLimitRemover;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.BlockModelRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -32,7 +35,7 @@ public class RenderGeneratorLimitRemover extends TileEntityRenderer<TileEntityGe
     private void renderGlint(double x, double y, double z) {
         GlStateManager.pushMatrix();
         RenderHelper.enableStandardItemLighting();
-        GlStateManager.enableAlpha();
+        GlStateManager.enableAlphaTest();
         GlStateManager.enableBlend();
         GlStateManager.alphaFunc(516, 0.003921569F);
         GlStateManager.depthMask(false);
@@ -41,25 +44,25 @@ public class RenderGeneratorLimitRemover extends TileEntityRenderer<TileEntityGe
         int k = brightness / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
         float alpha = ((float) Math.sin(Minecraft.getSystemTime() / 800D) + 1F) / 2F;
-        GlStateManager.color(alpha, alpha, alpha, alpha);
-        GlStateManager.translate(x - 0.001F, y + 1 + 0.001F, z + 1 + 0.001F);
-        GlStateManager.rotate(180F, 1, 0, 0);
-        GlStateManager.scale(1.002F, 1.002F, 1.002F);
+        GlStateManager.color4f(alpha, alpha, alpha, alpha);
+        GlStateManager.translatef(x - 0.001F, y + 1 + 0.001F, z + 1 + 0.001F);
+        GlStateManager.rotatef(180F, 1, 0, 0);
+        GlStateManager.scalef(1.002F, 1.002F, 1.002F);
         this.bindTexture(RES);
         this.model.render();
         GlStateManager.depthMask(true);
         GlStateManager.alphaFunc(516, 0.1F);
-        GlStateManager.disableAlpha();
+        GlStateManager.disableAlphaTest();
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
     }
 
-    private static class ModelLimitRemoverGlint extends ModelBase {
+    private static class ModelLimitRemoverGlint extends Model {
 
-        private final ModelRenderer box;
+        private final BlockModelRenderer box;
 
         public ModelLimitRemoverGlint() {
-            this.box = new ModelRenderer(this, 0, 0);
+            this.box = new BlockModelRenderer(this, 0, 0);
             this.box.setTextureSize(64, 64);
             this.box.addBox(0, 0, 0, 16, 16, 16);
         }
@@ -69,3 +72,4 @@ public class RenderGeneratorLimitRemover extends TileEntityRenderer<TileEntityGe
         }
     }
 }
+*/

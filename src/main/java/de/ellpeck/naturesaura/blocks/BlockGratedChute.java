@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityGratedChute;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HopperBlock;
@@ -99,7 +100,7 @@ public class BlockGratedChute extends BlockContainerImpl {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<net.minecraft.block.Block, BlockState> builder) {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 }

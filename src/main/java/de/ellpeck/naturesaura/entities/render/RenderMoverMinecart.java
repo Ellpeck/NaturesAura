@@ -1,11 +1,12 @@
+/* TODO minecart model
 package de.ellpeck.naturesaura.entities.render;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -44,3 +45,4 @@ public class RenderMoverMinecart extends MinecartRenderer<EntityMoverMinecart> {
         }
     }
 }
+*/

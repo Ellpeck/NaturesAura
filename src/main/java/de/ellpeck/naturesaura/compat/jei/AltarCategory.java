@@ -1,15 +1,14 @@
-package de.ellpeck.naturesaura.compat.jei.altar;
+package de.ellpeck.naturesaura.compat.jei;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
-import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeCategory;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -18,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class AltarCategory implements IRecipeCategory<AltarWrapper> {
+public class AltarCategory implements IRecipeCategory<AltarRecipe> {
 
     private final IDrawable background;
     private final ItemStack altar = new ItemStack(ModBlocks.NATURE_ALTAR);
@@ -28,8 +27,13 @@ public class AltarCategory implements IRecipeCategory<AltarWrapper> {
     }
 
     @Override
-    public String getUid() {
+    public ResourceLocation getUid() {
         return JEINaturesAuraPlugin.ALTAR;
+    }
+
+    @Override
+    public Class<? extends AltarRecipe> getRecipeClass() {
+        return AltarRecipe.class;
     }
 
     @Override
@@ -38,19 +42,23 @@ public class AltarCategory implements IRecipeCategory<AltarWrapper> {
     }
 
     @Override
-    public String getModName() {
-        return NaturesAura.MOD_NAME;
-    }
-
-    @Override
     public IDrawable getBackground() {
         return this.background;
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, AltarWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiItemStackGroup group = recipeLayout.getItemStacks();
-        AltarRecipe recipe = recipeWrapper.recipe;
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
+    public void setIngredients(AltarRecipe altarRecipe, IIngredients iIngredients) {
+
+    }
+
+    @Override
+    public void setRecipe(IRecipeLayout iRecipeLayout, AltarRecipe recipe, IIngredients iIngredients) {
+        IGuiItemStackGroup group = iRecipeLayout.getItemStacks();
         group.init(0, true, 0, 18);
         group.set(0, Arrays.asList(recipe.input.getMatchingStacks()));
         group.init(1, false, 56, 18);

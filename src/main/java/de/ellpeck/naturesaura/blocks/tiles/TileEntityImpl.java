@@ -4,20 +4,19 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -28,33 +27,38 @@ public class TileEntityImpl extends TileEntity {
 
     public int redstonePower;
 
-    @Override
-    public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
-        return oldState.getBlock() != newState.getBlock();
+    public TileEntityImpl(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
     }
 
+    // TODO figure out if this was still needed
+/*    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
+        return oldState.getBlock() != newState.getBlock();
+    }*/
+
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT compound) {
+    public CompoundNBT write(CompoundNBT compound) {
         this.writeNBT(compound, SaveType.TILE);
         return compound;
     }
 
     @Override
-    public void readFromNBT(CompoundNBT compound) {
+    public void read(CompoundNBT compound) {
         this.readNBT(compound, SaveType.TILE);
     }
 
     public void writeNBT(CompoundNBT compound, SaveType type) {
         if (type != SaveType.BLOCK) {
-            super.writeToNBT(compound);
-            compound.setInteger("redstone", this.redstonePower);
+            super.write(compound);
+            compound.putInt("redstone", this.redstonePower);
         }
     }
 
     public void readNBT(CompoundNBT compound, SaveType type) {
         if (type != SaveType.BLOCK) {
-            super.readFromNBT(compound);
-            this.redstonePower = compound.getInteger("redstone");
+            super.read(compound);
+            this.redstonePower = compound.getInt("redstone");
         }
     }
 
@@ -88,11 +92,11 @@ public class TileEntityImpl extends TileEntity {
     }
 
     public void sendToClients() {
-        ServerWorld world = (ServerWorld) this.getWorld();
-        PlayerChunkMapEntry entry = world.getPlayerChunkMap().getEntry(this.getPos().getX() >> 4, this.getPos().getZ() >> 4);
-        if (entry != null) {
-            entry.sendPacket(this.getUpdatePacket());
-        }
+        // TODO send this shit to the client somehow
+       /* ServerWorld world = (ServerWorld) this.getWorld();
+        Stream<ServerPlayerEntity> entities = world.getChunkProvider().chunkManager.getTrackingPlayers(new ChunkPos(this.getPos().getX() >> 4, this.getPos().getZ() >> 4), false);
+        SUpdateTileEntityPacket packet = this.getUpdatePacket();
+        entities.forEach(()-> packet.packet);*/
     }
 
     public IItemHandlerModifiable getItemHandler(Direction facing) {
@@ -103,24 +107,15 @@ public class TileEntityImpl extends TileEntity {
         return null;
     }
 
-    @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return this.getItemHandler(facing) != null;
-        } else if (capability == NaturesAuraAPI.capAuraContainer) {
-            return this.getAuraContainer(facing) != null;
-        } else {
-            return super.hasCapability(capability, facing);
-        }
-    }
-
     @Nullable
     @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return (T) this.getItemHandler(facing);
+            IItemHandler handler = this.getItemHandler(facing);
+            return handler == null ? LazyOptional.empty() : LazyOptional.of(() -> (T) handler);
         } else if (capability == NaturesAuraAPI.capAuraContainer) {
-            return (T) this.getAuraContainer(facing);
+            IAuraContainer container = this.getAuraContainer(facing);
+            return container == null ? LazyOptional.empty() : LazyOptional.of(() -> (T) container);
         } else {
             return super.getCapability(capability, facing);
         }
@@ -135,14 +130,15 @@ public class TileEntityImpl extends TileEntity {
                     ItemEntity item = new ItemEntity(this.world,
                             this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5,
                             stack);
-                    this.world.spawnEntity(item);
+                    this.world.addEntity(item);
                 }
             }
         }
     }
 
     public ItemStack getDrop(BlockState state, int fortune) {
-        Block block = state.getBlock();
+        // TODO weird drop stuff
+        /*Block block = state.getBlock();
         ItemStack stack = new ItemStack(
                 block.getItemDropped(state, this.world.rand, fortune),
                 block.quantityDropped(state, fortune, this.world.rand),
@@ -156,12 +152,13 @@ public class TileEntityImpl extends TileEntity {
             stack.getTagCompound().setTag("data", compound);
         }
 
-        return stack;
+        return stack;*/
+        return null;
     }
 
     public void loadDataOnPlace(ItemStack stack) {
-        if (stack.hasTagCompound()) {
-            CompoundNBT compound = stack.getTagCompound().getCompoundTag("data");
+        if (stack.hasTag()) {
+            CompoundNBT compound = stack.getTag().getCompound("data");
             if (compound != null)
                 this.readNBT(compound, SaveType.BLOCK);
         }
