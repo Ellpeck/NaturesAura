@@ -37,11 +37,16 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -313,5 +318,20 @@ public final class Helper {
 
     public static AxisAlignedBB aabb(Vec3d pos) {
         return new AxisAlignedBB(pos.x, pos.y, pos.z, pos.x, pos.y, pos.z);
+    }
+    
+    // This is how @ObjectHolder _SHOULD_ work...
+    public static <T extends IForgeRegistryEntry<T>> void populateObjectHolders(Class clazz, IForgeRegistry<T> registry) {
+        for (Field entry : clazz.getFields()) {
+            if (!Modifier.isStatic(entry.getModifiers()))
+                continue;
+            String location = entry.getName().toLowerCase(Locale.ROOT);
+            T value = registry.getValue(new ResourceLocation(NaturesAura.MOD_ID, location));
+            try {
+                entry.set(null, value);
+            } catch (IllegalAccessException e) {
+                NaturesAura.LOGGER.error(e);
+            }
+        }
     }
 }

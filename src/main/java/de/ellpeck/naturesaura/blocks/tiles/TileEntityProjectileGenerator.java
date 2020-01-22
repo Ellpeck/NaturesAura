@@ -1,15 +1,14 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 
 public class TileEntityProjectileGenerator extends TileEntityImpl {
 
     public Direction nextSide = Direction.NORTH;
 
-    public TileEntityProjectileGenerator(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityProjectileGenerator() {
+        super(ModTileEntities.PROJECTILE_GENERATOR);
     }
 
     @Override

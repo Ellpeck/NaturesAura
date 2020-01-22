@@ -29,8 +29,8 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
     };
     private final Queue<ItemStack> itemsToSpawn = new ArrayDeque<>();
 
-    public TileEntityOfferingTable(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityOfferingTable() {
+        super(ModTileEntities.OFFERING_TABLE);
     }
 
     @Override

@@ -7,7 +7,6 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -16,8 +15,8 @@ import java.util.List;
 
 public class TileEntityPotionGenerator extends TileEntityImpl implements ITickableTileEntity {
 
-    public TileEntityPotionGenerator(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityPotionGenerator() {
+        super(ModTileEntities.POTION_GENERATOR);
     }
 
     @Override

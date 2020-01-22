@@ -13,7 +13,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTimePacket;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -27,8 +26,8 @@ public class TileEntityTimeChanger extends TileEntityImpl implements ITickableTi
 
     private long goalTime;
 
-    public TileEntityTimeChanger(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityTimeChanger() {
+        super(ModTileEntities.TIME_CHANGER);
     }
 
     @Override

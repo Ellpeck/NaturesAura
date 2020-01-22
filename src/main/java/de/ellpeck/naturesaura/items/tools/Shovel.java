@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
@@ -30,6 +31,7 @@ public class Shovel extends ShovelItem implements IModItem, IModelProvider {
     public Shovel(String baseName, IItemTier material, float damage, float speed) {
         super(material, damage, speed, new Properties().group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
+        ModRegistry.add(this);
     }
 
     @Override

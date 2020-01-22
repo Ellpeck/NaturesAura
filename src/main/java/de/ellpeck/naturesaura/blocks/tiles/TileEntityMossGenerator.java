@@ -5,7 +5,6 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
@@ -13,8 +12,8 @@ import java.util.List;
 
 public class TileEntityMossGenerator extends TileEntityImpl implements ITickableTileEntity {
 
-    public TileEntityMossGenerator(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityMossGenerator() {
+        super(ModTileEntities.MOSS_GENERATOR);
     }
 
     @Override

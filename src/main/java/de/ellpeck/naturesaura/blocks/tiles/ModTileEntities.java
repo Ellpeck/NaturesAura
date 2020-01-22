@@ -5,7 +5,6 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ObjectHolder;
 
 @SuppressWarnings("FieldNamingConvention")
-@ObjectHolder(NaturesAura.MOD_ID)
 public final class ModTileEntities {
     public static TileEntityType<TileEntityAncientLeaves> ANCIENT_LEAVES;
     public static TileEntityType<TileEntityAnimalGenerator> ANIMAL_GENERATOR;

@@ -28,7 +28,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable 
     private static final AxisAlignedBB AABB = new AxisAlignedBB(4 / 16F, 0F, 4 / 16F, 12 / 16F, 13 / 16F, 12 / 16F);
 
     public BlockSpawnLamp() {
-        super("spawn_lamp", ModTileEntities.SPAWN_LAMP, ModBlocks.prop(Material.IRON).hardnessAndResistance(3F).lightValue(15).sound(SoundType.METAL));
+        super("spawn_lamp", TileEntitySpawnLamp::new, ModBlocks.prop(Material.IRON).hardnessAndResistance(3F).lightValue(15).sound(SoundType.METAL));
         MinecraftForge.EVENT_BUS.register(this);
     }
 

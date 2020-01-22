@@ -20,7 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class BlockProjectileGenerator extends BlockContainerImpl/* implements ITESRProvider*/ {
     public BlockProjectileGenerator() {
-        super("projectile_generator", ModTileEntities.PROJECTILE_GENERATOR, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
+        super("projectile_generator", TileEntityProjectileGenerator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

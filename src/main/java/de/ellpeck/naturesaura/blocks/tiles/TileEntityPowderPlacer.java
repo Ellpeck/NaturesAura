@@ -4,7 +4,6 @@ import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -15,8 +14,8 @@ import java.util.List;
 
 public class TileEntityPowderPlacer extends TileEntityImpl {
 
-    public TileEntityPowderPlacer(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityPowderPlacer() {
+        super(ModTileEntities.POWDER_PLACER);
     }
 
     @Override

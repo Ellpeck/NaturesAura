@@ -22,7 +22,7 @@ public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvide
 
     // TODO bounds
     public BlockNatureAltar() {
-        super("nature_altar", ModTileEntities.NATURE_ALTAR, ModBlocks.prop(Material.ROCK).hardnessAndResistance(4F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
+        super("nature_altar", TileEntityNatureAltar::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(4F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
     }
 
     @Override

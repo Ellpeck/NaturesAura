@@ -22,28 +22,29 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ModRegistry {
 
-    private static final List<IModItem> ALL_ITEMS = new ArrayList<>();
+    private static final Set<IModItem> ALL_ITEMS = new HashSet<>();
 
     public static void add(IModItem item) {
         ALL_ITEMS.add(item);
+        item.getRegistryEntry().setRegistryName(item.getBaseName());
     }
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
+        BlockImpl temp;
         event.getRegistry().registerAll(
                 new BlockAncientLog("ancient_log"),
                 new BlockAncientLog("ancient_bark"),
-                new BlockImpl("ancient_planks", ModBlocks.prop(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2F)),
-                new BlockStairsNA("ancient_stairs", ModBlocks.ANCIENT_PLANKS::getDefaultState, ModBlocks.prop(ModBlocks.ANCIENT_PLANKS)),
-                new Slab("ancient_slab", ModBlocks.prop(ModBlocks.ANCIENT_PLANKS)),
+                temp = new BlockImpl("ancient_planks", ModBlocks.prop(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2F)),
+                new BlockStairsNA("ancient_stairs", temp::getDefaultState, ModBlocks.prop(temp)),
+                new Slab("ancient_slab", ModBlocks.prop(temp)),
                 new BlockAncientLeaves(),
                 new BlockAncientSapling(),
                 new BlockNatureAltar(),
@@ -51,12 +52,12 @@ public final class ModRegistry {
                 new BlockGoldenLeaves(),
                 new BlockGoldPowder(),
                 new BlockWoodStand(),
-                new BlockImpl("infused_stone", ModBlocks.prop(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(1.75F)),
-                new BlockStairsNA("infused_stairs", ModBlocks.INFUSED_STONE::getDefaultState, ModBlocks.prop(ModBlocks.INFUSED_STONE)),
-                new Slab("infused_slab", ModBlocks.prop(ModBlocks.INFUSED_STONE)),
-                new BlockImpl("infused_brick", ModBlocks.prop(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(1.5F)),
-                new BlockStairsNA("infused_brick_stairs", ModBlocks.INFUSED_BRICK::getDefaultState, ModBlocks.prop(ModBlocks.INFUSED_BRICK)),
-                new Slab("infused_brick_slab", ModBlocks.prop(ModBlocks.INFUSED_BRICK)),
+                temp = new BlockImpl("infused_stone", ModBlocks.prop(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(1.75F)),
+                new BlockStairsNA("infused_stairs", temp::getDefaultState, ModBlocks.prop(temp)),
+                new Slab("infused_slab", ModBlocks.prop(temp)),
+                temp = new BlockImpl("infused_brick", ModBlocks.prop(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(1.5F)),
+                new BlockStairsNA("infused_brick_stairs", temp::getDefaultState, ModBlocks.prop(temp)),
+                new Slab("infused_brick_slab", ModBlocks.prop(temp)),
                 new BlockFurnaceHeater(),
                 new BlockPotionGenerator(),
                 new BlockAuraDetector(),
@@ -97,16 +98,15 @@ public final class ModRegistry {
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        for (IModItem item : ALL_ITEMS) {
-            if (item instanceof Block) {
-                if (item instanceof ICustomItemBlockProvider) {
-                    event.getRegistry().register(((ICustomItemBlockProvider) item).getItemBlock());
-                } else {
-                    event.getRegistry().register(new BlockItem((Block) item, new Item.Properties()));
-                }
+        for (IModItem block : ALL_ITEMS) {
+            if (block instanceof Block) {
+                BlockItem item = new BlockItem((Block) block, new Item.Properties().group(NaturesAura.CREATIVE_TAB));
+                item.setRegistryName(block.getBaseName());
+                event.getRegistry().register(item);
             }
         }
 
+        Item temp;
         event.getRegistry().registerAll(
                 new Pickaxe("infused_iron_pickaxe", NAItemTier.INFUSED, 8, 3.2F),
                 new Axe("infused_iron_axe", NAItemTier.INFUSED, 8.25F, 3.2F),
@@ -128,8 +128,8 @@ public final class ModRegistry {
                 new AuraCache("aura_trove", 1200000),
                 new ShockwaveCreator(),
                 new MultiblockMaker(),
-                new ItemImpl("bottle_two_the_rebottling"),
-                new AuraBottle(),
+                temp = new ItemImpl("bottle_two_the_rebottling"),
+                new AuraBottle(temp),
                 new ItemImpl("farming_stencil"),
                 new ItemImpl("sky_ingot"),
                 new Glowing("calling_spirit"),
@@ -154,8 +154,8 @@ public final class ModRegistry {
     @SubscribeEvent
     public static void registerTiles(RegistryEvent.Register<TileEntityType<?>> event) {
         for (IModItem item : ALL_ITEMS) {
-            if (item instanceof BlockContainerImpl)
-                event.getRegistry().register(((BlockContainerImpl) item).tileType.setRegistryName(item.getBaseName()));
+            if (item instanceof ModTileType)
+                event.getRegistry().register(((ModTileType) item).type);
         }
     }
 
@@ -243,7 +243,7 @@ public final class ModRegistry {
     }
 */
 
-    public static void init(FMLCommonSetupEvent event) {
+    public static void init() {
         for (IModItem item : ALL_ITEMS) {
             if (item instanceof IColorProvidingBlock) {
                 NaturesAura.proxy.addColorProvidingBlock((IColorProvidingBlock) item);

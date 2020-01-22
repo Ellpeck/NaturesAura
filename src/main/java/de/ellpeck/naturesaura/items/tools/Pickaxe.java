@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
@@ -27,6 +28,7 @@ public class Pickaxe extends PickaxeItem implements IModItem, IModelProvider {
     public Pickaxe(String baseName, IItemTier material, int damage, float speed) {
         super(material, damage, speed, new Properties().group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
+        ModRegistry.add(this);
     }
 
     @Override

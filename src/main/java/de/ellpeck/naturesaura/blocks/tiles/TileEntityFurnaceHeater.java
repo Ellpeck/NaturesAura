@@ -15,8 +15,8 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
 
     public boolean isActive;
 
-    public TileEntityFurnaceHeater(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityFurnaceHeater() {
+        super(ModTileEntities.FURNACE_HEATER);
     }
 
     @Override

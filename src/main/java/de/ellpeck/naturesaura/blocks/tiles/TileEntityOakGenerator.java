@@ -13,8 +13,8 @@ public class TileEntityOakGenerator extends TileEntityImpl implements ITickableT
 
     public Queue<BlockPos> scheduledBigTrees = new ArrayDeque<>();
 
-    public TileEntityOakGenerator(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityOakGenerator() {
+        super(ModTileEntities.OAK_GENERATOR);
     }
 
     @Override

@@ -1,11 +1,9 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import net.minecraft.tileentity.TileEntityType;
-
 public class TileEntitySpawnLamp extends TileEntityImpl {
 
-    public TileEntitySpawnLamp(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntitySpawnLamp() {
+        super(ModTileEntities.SPAWN_LAMP);
     }
 
     public int getRadius() {

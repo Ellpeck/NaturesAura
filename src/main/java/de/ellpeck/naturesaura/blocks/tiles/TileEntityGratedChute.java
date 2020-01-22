@@ -34,8 +34,8 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickableTi
     public boolean isBlacklist;
     private int cooldown;
 
-    public TileEntityGratedChute(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityGratedChute() {
+        super(ModTileEntities.GRATED_CHUTE);
     }
 
     @Override

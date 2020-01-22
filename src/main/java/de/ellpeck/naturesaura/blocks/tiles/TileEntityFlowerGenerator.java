@@ -25,8 +25,8 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
 
     private final Map<BlockState, MutableInt> consumedRecently = new HashMap<>();
 
-    public TileEntityFlowerGenerator(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityFlowerGenerator() {
+        super(ModTileEntities.FLOWER_GENERATOR);
     }
 
     @Override

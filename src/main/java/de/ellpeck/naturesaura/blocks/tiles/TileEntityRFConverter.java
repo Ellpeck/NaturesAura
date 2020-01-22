@@ -23,8 +23,8 @@ public class TileEntityRFConverter extends TileEntityImpl implements ITickableTi
     public final RFStorage storage = new RFStorage();
     private int lastEnergy;
 
-    public TileEntityRFConverter(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityRFConverter() {
+        super(ModTileEntities.RF_CONVERTER);
     }
 
     @Override

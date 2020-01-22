@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -23,6 +24,7 @@ public class Hoe extends HoeItem implements IModItem, IModelProvider {
     public Hoe(String baseName, IItemTier material, float speed) {
         super(material, speed, new Properties().group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
+        ModRegistry.add(this);
     }
 
     @Override

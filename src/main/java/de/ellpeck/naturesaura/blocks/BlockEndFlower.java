@@ -1,10 +1,10 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEndFlower;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
+import de.ellpeck.naturesaura.reg.ModTileType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.BushBlock;
@@ -33,9 +33,8 @@ public class BlockEndFlower extends BushBlock implements IModItem, IModelProvide
     public BlockEndFlower() {
         super(ModBlocks.prop(Material.PLANTS).hardnessAndResistance(0.5F).sound(SoundType.PLANT));
         MinecraftForge.EVENT_BUS.register(this);
-
         ModRegistry.add(this);
-
+        ModRegistry.add(new ModTileType<>(TileEntityEndFlower::new, this));
     }
 
     @SubscribeEvent
@@ -79,7 +78,7 @@ public class BlockEndFlower extends BushBlock implements IModItem, IModelProvide
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileEntityEndFlower(ModTileEntities.END_FLOWER);
+        return new TileEntityEndFlower();
     }
 
     @Override

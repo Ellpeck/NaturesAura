@@ -2,22 +2,17 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ItemFrameEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -28,8 +23,8 @@ import java.util.List;
 
 public class TileEntityPlacer extends TileEntityImpl implements ITickableTileEntity {
 
-    public TileEntityPlacer(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityPlacer() {
+        super(ModTileEntities.PLACER);
     }
 
     @Override
@@ -140,7 +135,7 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickableTileEnt
                 return false;
             this.world.setBlockState(pos, plant);
         } else*/
-            return false;
+        return false;
 
         /*stack.shrink(1);
         return true;*/

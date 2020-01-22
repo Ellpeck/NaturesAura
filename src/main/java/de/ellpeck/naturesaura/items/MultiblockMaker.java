@@ -6,12 +6,9 @@ import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
@@ -41,7 +38,10 @@ public class MultiblockMaker extends ItemImpl {
     public ActionResultType onItemUse(ItemUseContext context) {
         PlayerEntity player = context.getPlayer();
         if (player.isCreative()) {
-            IMultiblock multi = multiblocks().get(getMultiblock(player.getHeldItem(context.getHand())));
+            int id = getMultiblock(player.getHeldItem(context.getHand()));
+            if (id < 0)
+                return ActionResultType.PASS;
+            IMultiblock multi = multiblocks().get(id);
             if (multi == null)
                 return ActionResultType.PASS;
 
@@ -59,13 +59,16 @@ public class MultiblockMaker extends ItemImpl {
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
         ITextComponent name = super.getDisplayName(stack);
-        IMultiblock multi = multiblocks().get(getMultiblock(stack));
+        int id = getMultiblock(stack);
+        if (id < 0)
+            return name;
+        IMultiblock multi = multiblocks().get(id);
         return multi == null ? name : name.appendText(" (" + multi.getName() + ")");
     }
 
     private static int getMultiblock(ItemStack stack) {
         if (!stack.hasTag())
-            return 0;
+            return -1;
         return stack.getTag().getInt("multiblock");
     }
 

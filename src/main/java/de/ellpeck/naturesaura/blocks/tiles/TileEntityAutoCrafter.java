@@ -10,7 +10,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.NonNullList;
@@ -27,8 +26,8 @@ public class TileEntityAutoCrafter extends TileEntityImpl implements ITickableTi
         }
     }, 3, 3);
 
-    public TileEntityAutoCrafter(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityAutoCrafter() {
+        super(ModTileEntities.AUTO_CRAFTER);
     }
 
     @Override

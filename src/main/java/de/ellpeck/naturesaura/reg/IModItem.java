@@ -1,12 +1,12 @@
 package de.ellpeck.naturesaura.reg;
 
+import net.minecraftforge.registries.ForgeRegistryEntry;
+
 public interface IModItem {
 
     String getBaseName();
 
-    //void onPreInit(FMLCommonSetupEvent event);
-
-    //void onInit(FMLCommonSetupEvent event);
-
-    //void onPostInit(FMLCommonSetupEvent event);
+    default ForgeRegistryEntry getRegistryEntry() {
+        return (ForgeRegistryEntry) this;
+    }
 }

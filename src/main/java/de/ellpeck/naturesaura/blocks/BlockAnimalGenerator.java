@@ -27,7 +27,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizable {
     public BlockAnimalGenerator() {
-        super("animal_generator", ModTileEntities.ANIMAL_GENERATOR, ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
+        super("animal_generator", () -> new TileEntityAnimalGenerator(), ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

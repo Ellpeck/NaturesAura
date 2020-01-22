@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.HopperTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -17,8 +16,8 @@ import net.minecraftforge.items.IItemHandler;
 import java.util.List;
 
 public class TileEntityHopperUpgrade extends TileEntityImpl implements ITickableTileEntity {
-    public TileEntityHopperUpgrade(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityHopperUpgrade() {
+        super(ModTileEntities.HOPPER_UPGRADE);
     }
 
     @Override

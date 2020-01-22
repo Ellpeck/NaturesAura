@@ -2,15 +2,14 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.MathHelper;
 
 public class TileEntityAuraDetector extends TileEntityImpl implements ITickableTileEntity {
 
     public int redstonePower;
 
-    public TileEntityAuraDetector(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityAuraDetector() {
+        super(ModTileEntities.AURA_DETECTOR);
     }
 
     @Override

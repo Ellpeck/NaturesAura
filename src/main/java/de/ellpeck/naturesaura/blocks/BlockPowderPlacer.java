@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
+import de.ellpeck.naturesaura.blocks.tiles.TileEntityPowderPlacer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -10,7 +11,7 @@ public class BlockPowderPlacer extends BlockContainerImpl {
     private static final AxisAlignedBB BOUND_BOX = new AxisAlignedBB(0F, 0F, 0F, 1F, 4 / 16F, 1F);
 
     public BlockPowderPlacer() {
-        super("powder_placer", ModTileEntities.POWDER_PLACER, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2, 5F).sound(SoundType.STONE));
+        super("powder_placer", TileEntityPowderPlacer::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2, 5F).sound(SoundType.STONE));
     }
 /*
     @Override

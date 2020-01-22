@@ -4,37 +4,39 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
+import de.ellpeck.naturesaura.reg.ModTileType;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class BlockContainerImpl extends ContainerBlock implements IModItem, IModelProvider {
 
     private final String baseName;
-    public final TileEntityType<? extends TileEntity> tileType;
+    private final ModTileType<? extends TileEntity> tileType;
 
-    public BlockContainerImpl(String baseName, TileEntityType tileClass, Block.Properties properties) {
+    public BlockContainerImpl(String baseName, Supplier<TileEntity> tileSupplier, Block.Properties properties) {
         super(properties);
 
         this.baseName = baseName;
-        this.tileType = tileClass;
+        this.tileType = new ModTileType<>(tileSupplier, this);
 
         ModRegistry.add(this);
+        ModRegistry.add(this.tileType);
     }
 
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return this.tileType.create();
+        return this.tileType.type.create();
     }
 
     @Override

@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityChunkLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -25,7 +24,7 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
     private static final VoxelShape SHAPE = makeCuboidShape(4, 4, 4, 12, 12, 12);
 
     public BlockChunkLoader() {
-        super("chunk_loader", ModTileEntities.CHUNK_LOADER, ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
+        super("chunk_loader", TileEntityChunkLoader::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
     }
 
     /* TODO Chunk Loading

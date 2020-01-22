@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockMossGenerator extends BlockContainerImpl implements IVisualizable {
     public BlockMossGenerator() {
-        super("moss_generator", ModTileEntities.MOSS_GENERATOR, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
+        super("moss_generator", TileEntityMossGenerator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
     }
 
     @Override

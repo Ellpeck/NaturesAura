@@ -29,8 +29,7 @@ displayName="Nature's Aura" #mandatory
 authors="Ellpeck" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Nature's Aura is a Minecraft mod about collecting, using and replenishing the Aura naturally present in the world to create useful devices and unique mechanics.
-'''
+Nature's Aura is a Minecraft mod about collecting, using and replenishing the Aura naturally present in the world to create useful devices and unique mechanics.'''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.naturesaura]] #optional
     # the modid of the dependency

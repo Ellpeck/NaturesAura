@@ -9,7 +9,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -27,8 +26,8 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
     private int toRelease;
     private int releaseTimer;
 
-    public TileEntityFireworkGenerator(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityFireworkGenerator() {
+        super(ModTileEntities.FIREWORK_GENERATOR);
     }
 
     @Override

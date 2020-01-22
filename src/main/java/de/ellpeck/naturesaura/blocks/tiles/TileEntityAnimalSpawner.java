@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -30,8 +29,8 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
     private int time;
     private Entity entityClient;
 
-    public TileEntityAnimalSpawner(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityAnimalSpawner() {
+        super(ModTileEntities.ANIMAL_SPAWNER);
     }
 
     @Override

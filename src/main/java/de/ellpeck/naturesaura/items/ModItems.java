@@ -5,7 +5,6 @@ import net.minecraft.item.Item;
 import net.minecraftforge.registries.ObjectHolder;
 
 @SuppressWarnings("FieldNamingConvention")
-@ObjectHolder(NaturesAura.MOD_ID)
 public final class ModItems {
     public static Item INFUSED_PICKAXE;
     public static Item INFUSED_AXE;

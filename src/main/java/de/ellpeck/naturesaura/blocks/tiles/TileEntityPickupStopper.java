@@ -4,8 +4,8 @@ import net.minecraft.tileentity.TileEntityType;
 
 public class TileEntityPickupStopper extends TileEntityImpl {
 
-    public TileEntityPickupStopper(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityPickupStopper() {
+        super(ModTileEntities.PICKUP_STOPPER);
     }
 
     public float getRadius() {

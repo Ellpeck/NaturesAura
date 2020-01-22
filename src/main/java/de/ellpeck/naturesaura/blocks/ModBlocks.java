@@ -1,14 +1,10 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
-import net.minecraftforge.registries.ObjectHolder;
 
 @SuppressWarnings("FieldNamingConvention")
-@ObjectHolder(NaturesAura.MOD_ID)
 public final class ModBlocks {
 
     public static Block ANCIENT_LOG;

@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.render.IVisualizable;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
+import de.ellpeck.naturesaura.blocks.tiles.TileEntityFlowerGenerator;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockFlowerGenerator extends BlockContainerImpl implements IVisualizable {
 
     public BlockFlowerGenerator() {
-        super("flower_generator", ModTileEntities.FLOWER_GENERATOR, ModBlocks.prop(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2F));
+        super("flower_generator", TileEntityFlowerGenerator::new, ModBlocks.prop(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2F));
     }
 
     @Override

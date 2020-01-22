@@ -5,56 +5,53 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
-import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static net.minecraft.dispenser.DefaultDispenseItemBehavior.doDispense;
 
 public class AuraBottle extends ItemImpl implements IColorProvidingItem {
 
-    public AuraBottle() {
+    public AuraBottle(Item emptyBottle) {
         super("aura_bottle", new Properties().group(NaturesAura.CREATIVE_TAB));
         MinecraftForge.EVENT_BUS.register(this);
 
-        DispenserBlock.registerDispenseBehavior(ModItems.BOTTLE_TWO, (source, stack) -> {
-                World world = source.getWorld();
-                BlockState state = source.getBlockState();
-                Direction facing = state.get(DispenserBlock.FACING);
-                BlockPos offset = source.getBlockPos().offset(facing);
-                BlockState offsetState = world.getBlockState(offset);
+        DispenserBlock.registerDispenseBehavior(emptyBottle, (source, stack) -> {
+            World world = source.getWorld();
+            BlockState state = source.getBlockState();
+            Direction facing = state.get(DispenserBlock.FACING);
+            BlockPos offset = source.getBlockPos().offset(facing);
+            BlockState offsetState = world.getBlockState(offset);
 
-                ItemStack dispense = stack.split(1);
-                if (offsetState.getBlock().isAir(offsetState, world, offset)) {
-                    if (IAuraChunk.getAuraInArea(world, offset, 30) >= 100000) {
-                        dispense = setType(new ItemStack(AuraBottle.this), IAuraType.forWorld(world));
+            ItemStack dispense = stack.split(1);
+            if (offsetState.getBlock().isAir(offsetState, world, offset)) {
+                if (IAuraChunk.getAuraInArea(world, offset, 30) >= 100000) {
+                    dispense = setType(new ItemStack(AuraBottle.this), IAuraType.forWorld(world));
 
-                        BlockPos spot = IAuraChunk.getHighestSpot(world, offset, 30, offset);
-                        IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 20000);
-                    }
+                    BlockPos spot = IAuraChunk.getHighestSpot(world, offset, 30, offset);
+                    IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 20000);
                 }
+            }
 
-                doDispense(world, dispense, 6, facing, DispenserBlock.getDispensePosition(source));
-                return stack;
+            doDispense(world, dispense, 6, facing, DispenserBlock.getDispensePosition(source));
+            return stack;
         });
     }
 

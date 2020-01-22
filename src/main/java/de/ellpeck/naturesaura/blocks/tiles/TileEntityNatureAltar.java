@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -61,8 +60,8 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
 
     private int lastAura;
 
-    public TileEntityNatureAltar(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityNatureAltar() {
+        super(ModTileEntities.NATURE_ALTAR);
     }
 
     @Override

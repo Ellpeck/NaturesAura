@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.items;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.item.Item;
 
 public class ItemImpl extends Item implements IModItem, IModelProvider {
@@ -16,7 +17,7 @@ public class ItemImpl extends Item implements IModItem, IModelProvider {
     public ItemImpl(String baseName, Item.Properties properties) {
         super(properties);
         this.baseName = baseName;
-        this.setRegistryName(NaturesAura.createRes(this.getBaseName()));
+        ModRegistry.add(this);
     }
 
     @Override

@@ -24,7 +24,7 @@ import java.util.Random;
 
 public class BlockFieldCreator extends BlockContainerImpl {
     public BlockFieldCreator() {
-        super("field_creator", ModTileEntities.FIELD_CREATOR, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
+        super("field_creator", TileEntityFieldCreator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
     }
 
     @Override

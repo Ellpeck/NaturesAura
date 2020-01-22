@@ -2,14 +2,13 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
 // TODO chunk loader
 public class TileEntityChunkLoader extends TileEntityImpl implements ITickableTileEntity {
-    public TileEntityChunkLoader(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityChunkLoader() {
+        super(ModTileEntities.CHUNK_LOADER);
     }
 
     //private Ticket ticket;

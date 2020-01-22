@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 
 public class TileEntityAnimalGenerator extends TileEntityImpl implements ITickableTileEntity {
@@ -10,8 +9,8 @@ public class TileEntityAnimalGenerator extends TileEntityImpl implements ITickab
     private int timeRemaining;
     private int amountToRelease;
 
-    public TileEntityAnimalGenerator(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityAnimalGenerator() {
+        super(ModTileEntities.ANIMAL_GENERATOR);
     }
 
     @Override

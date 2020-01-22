@@ -7,7 +7,6 @@ import de.ellpeck.naturesaura.blocks.BlockEnderCrate;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -67,8 +66,8 @@ public class TileEntityEnderCrate extends TileEntityImpl {
     };
     public String name;
 
-    public TileEntityEnderCrate(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityEnderCrate() {
+        super(ModTileEntities.ENDER_CRATE);
     }
 
     @Override

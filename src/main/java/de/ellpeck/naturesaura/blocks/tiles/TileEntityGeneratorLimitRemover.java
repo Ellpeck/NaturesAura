@@ -7,8 +7,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class TileEntityGeneratorLimitRemover extends TileEntityImpl {
 
-    public TileEntityGeneratorLimitRemover(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityGeneratorLimitRemover() {
+        super(ModTileEntities.GENERATOR_LIMIT_REMOVER);
     }
 
     @Override

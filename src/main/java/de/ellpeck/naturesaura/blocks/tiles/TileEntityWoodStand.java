@@ -13,7 +13,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -39,8 +38,8 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
     private BlockPos ritualPos;
     private int timer;
 
-    public TileEntityWoodStand(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityWoodStand() {
+        super(ModTileEntities.WOOD_STAND);
     }
 
     public void setRitual(BlockPos pos, TreeRitualRecipe recipe) {

@@ -11,7 +11,6 @@ import net.minecraft.item.ShearsItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -35,8 +34,8 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
     public boolean isCharged;
     private int chargeTimer;
 
-    public TileEntityFieldCreator(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityFieldCreator() {
+        super(ModTileEntities.FIELD_CREATOR);
     }
 
     @Override

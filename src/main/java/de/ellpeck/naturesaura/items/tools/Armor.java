@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -32,8 +33,8 @@ public class Armor extends ArmorItem implements IModItem, IModelProvider {
     public Armor(String baseName, IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn) {
         super(materialIn, equipmentSlotIn, new Properties().group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
-
         MinecraftForge.EVENT_BUS.register(this);
+        ModRegistry.add(this);
     }
 
     @SubscribeEvent

@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -46,8 +45,8 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
 
     public boolean isDrainMode;
 
-    public TileEntityEndFlower(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityEndFlower() {
+        super(ModTileEntities.END_FLOWER);
     }
 
     @Override
