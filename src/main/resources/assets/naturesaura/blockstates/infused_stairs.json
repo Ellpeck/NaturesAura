@@ -8,12 +8,6 @@
         }
     },
     "variants": {
-        "": {
-            "model": "minecraft:block/stairs"
-        },
-        "inventory": {
-            "model": "minecraft:block/stairs"
-        },
         "facing=east,half=bottom,shape=straight": {
             "model": "minecraft:block/stairs"
         },

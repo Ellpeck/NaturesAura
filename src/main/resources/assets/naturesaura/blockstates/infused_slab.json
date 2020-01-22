@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "minecraft:block/half_slab",
+        "model": "minecraft:block/slab",
         "textures": {
             "bottom": "naturesaura:blocks/infused_stone",
             "top": "naturesaura:blocks/infused_stone",
@@ -18,7 +18,10 @@
         ],
         "type=bottom": [{}],
         "type=double": {
-            "model": "naturesaura:block/infused_stone"
+            "model": "minecraft:block/cube_all",
+            "textures": {
+                "all": "naturesaura:blocks/infused_stone"
+            }
         }
     }
 }

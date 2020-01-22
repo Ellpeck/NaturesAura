@@ -1,5 +1,6 @@
 {
     "__comment": "Model contributed by PolarizedIons <3",
+    "parent": "minecraft:block/block",
     "elements": [
         {
             "name": "Base",

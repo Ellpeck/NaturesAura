@@ -4,6 +4,7 @@
         "model": "naturesaura:block/spawn_lamp",
         "textures": {
             "0": "naturesaura:blocks/spawn_lamp",
+            "-1": "naturesaura:blocks/spawn_lamp",
             "particle": "#0"
         },
         "transform": "forge:default-block"

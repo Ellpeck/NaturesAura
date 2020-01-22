@@ -1,6 +1,7 @@
 {
     "parent": "naturesaura:block/spawn_lamp",
     "textures": {
-        "0": "naturesaura:blocks/spawn_lamp"
+        "0": "naturesaura:blocks/spawn_lamp",
+        "-1": "naturesaura:blocks/spawn_lamp"
     }
 }

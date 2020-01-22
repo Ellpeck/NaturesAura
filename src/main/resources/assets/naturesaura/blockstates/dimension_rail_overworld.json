@@ -8,20 +8,28 @@
         "transform": "forge:default-block"
     },
     "variants": {
-        "": [{}],
-        "inventory": [
-            {
-                "model": "builtin/generated",
-                "textures": {
-                    "layer0": "naturesaura:blocks/dimension_rail_overworld"
-                },
-                "transform": "forge:default-item"
-            }
-        ],
         "shape": {
             "north_south": {},
             "east_west": {
                 "y": 90
+            },
+            "ascending_east": {
+                "y": 90
+            },
+            "ascending_west": {
+                "y": 90
+            },
+            "ascending_south": {},
+            "ascending_north": {},
+            "south_east": {},
+            "south_west": {
+                "y": 90
+            },
+            "north_east": {
+                "y": 270
+            },
+            "north_west": {
+                "y": 180
             }
         }
     }

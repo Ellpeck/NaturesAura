@@ -3,12 +3,11 @@
     "defaults": {
         "model": "minecraft:block/leaves",
         "textures": {
-            "all": "minecraft:blocks/leaves_oak"
+            "all": "minecraft:block/oak_leaves"
         },
         "transform": "forge:default-block"
     },
     "variants": {
-        "": [{}],
         "persistent": {
             "true": {},
             "false": {}

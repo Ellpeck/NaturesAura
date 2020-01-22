@@ -8,15 +8,6 @@
         "transform": "forge:default-block"
     },
     "variants": {
-        "": [{}],
-        "inventory": [
-            {
-                "model": "builtin/generated",
-                "textures": {
-                    "layer0": "naturesaura:blocks/end_flower"
-                },
-                "transform": "forge:default-item"
-            }
-        ]
+        "": [{}]
     }
 }

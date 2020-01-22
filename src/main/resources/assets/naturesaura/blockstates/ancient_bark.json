@@ -9,7 +9,6 @@
         "transform": "forge:default-block"
     },
     "variants": {
-        "": [{}],
         "axis": {
             "y": {},
             "z": {
@@ -18,8 +17,7 @@
             "x": {
                 "x": 90,
                 "y": 90
-            },
-            "none": {}
+            }
         }
     }
 }

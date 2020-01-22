@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "minecraft:block/half_slab",
+        "model": "minecraft:block/slab",
         "textures": {
             "bottom": "naturesaura:blocks/ancient_planks",
             "top": "naturesaura:blocks/ancient_planks",
@@ -18,7 +18,10 @@
         ],
         "type=bottom": [{}],
         "type=double": {
-            "model": "naturesaura:block/ancient_planks"
+            "model": "minecraft:block/cube_all",
+            "textures": {
+                "all": "naturesaura:blocks/ancient_planks"
+            }
         }
     }
 }

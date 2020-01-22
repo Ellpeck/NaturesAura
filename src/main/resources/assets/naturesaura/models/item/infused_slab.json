@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:block/half_slab",
+    "parent": "minecraft:block/slab",
     "textures": {
         "bottom": "naturesaura:blocks/infused_stone",
         "top": "naturesaura:blocks/infused_stone",

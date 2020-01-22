@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:block/half_slab",
+    "parent": "minecraft:block/slab",
     "textures": {
         "bottom": "naturesaura:blocks/ancient_planks",
         "top": "naturesaura:blocks/ancient_planks",

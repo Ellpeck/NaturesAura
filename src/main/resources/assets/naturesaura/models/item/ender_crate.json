@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:blocks/cube",
+    "parent": "minecraft:block/cube",
     "textures": {
         "up": "naturesaura:blocks/ender_crate_top",
         "down": "naturesaura:blocks/ender_crate_bottom",
