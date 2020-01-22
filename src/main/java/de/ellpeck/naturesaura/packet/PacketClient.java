@@ -1,65 +1,55 @@
-/* TODO packets
 package de.ellpeck.naturesaura.packet;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.items.RangeVisualizer;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class PacketClient implements IMessage {
+import java.util.function.Supplier;
+
+public class PacketClient implements IPacket {
 
     private int type;
     private int[] data;
 
-    public PacketClient(int type, int... data) {
-        this.type = type;
-        this.data = data;
+    public static PacketClient fromBytes(PacketBuffer buf) {
+        PacketClient client = new PacketClient();
+        client.type = buf.readByte();
+        client.data = new int[buf.readByte()];
+        for (int i = 0; i < client.data.length; i++)
+            client.data[i] = buf.readInt();
+
+        return client;
     }
 
-    public PacketClient() {
-
-    }
-
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        this.type = buf.readByte();
-        this.data = new int[buf.readByte()];
-        for (int i = 0; i < this.data.length; i++)
-            this.data[i] = buf.readInt();
-    }
-
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeByte(this.type);
-        buf.writeByte(this.data.length);
-        for (int i : this.data)
+    public static void toBytes(PacketClient packet, PacketBuffer buf) {
+        buf.writeByte(packet.type);
+        buf.writeByte(packet.data.length);
+        for (int i : packet.data)
             buf.writeInt(i);
     }
 
-    public static class Handler implements IMessageHandler<PacketClient, IMessage> {
+    public static class Handler {
 
-        @Override
         @OnlyIn(Dist.CLIENT)
-        public IMessage onMessage(PacketClient message, MessageContext ctx) {
-            NaturesAura.proxy.scheduleTask(() -> {
-                Minecraft mc = Minecraft.getMinecraft();
+        public static void onMessage(PacketClient message, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                Minecraft mc = Minecraft.getInstance();
                 if (mc.world != null) {
                     switch (message.type) {
                         case 0: // dimension rail visualization
                             int goalDim = message.data[0];
                             BlockPos goalPos = new BlockPos(message.data[1], message.data[2], message.data[3]);
-                            RangeVisualizer.visualize(mc.player, RangeVisualizer.VISUALIZED_RAILS, goalDim, goalPos);
+                            RangeVisualizer.visualize(mc.player, RangeVisualizer.VISUALIZED_RAILS, DimensionType.getById(goalDim), goalPos);
                     }
                 }
             });
 
-            return null;
+            ctx.get().setPacketHandled(true);
         }
     }
-}*/
+}

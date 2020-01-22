@@ -1,27 +1,48 @@
 package de.ellpeck.naturesaura.packet;
 
-// TODO packets
+import de.ellpeck.naturesaura.NaturesAura;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
+
 public final class PacketHandler {
 
-    /*private static SimpleNetworkWrapper network;*/
+    private static String version = "1";
+    private static SimpleChannel network;
 
     public static void init() {
-        /*network = new SimpleNetworkWrapper(NaturesAura.MOD_ID);
-        network.registerMessage(PacketParticleStream.Handler.class, PacketParticleStream.class, 0, Dist.CLIENT);
-        network.registerMessage(PacketParticles.Handler.class, PacketParticles.class, 1, Dist.CLIENT);
-        network.registerMessage(PacketAuraChunk.Handler.class, PacketAuraChunk.class, 2, Dist.CLIENT);
-        network.registerMessage(PacketClient.Handler.class, PacketClient.class, 3, Dist.CLIENT);*/
+        network = NetworkRegistry.newSimpleChannel(
+                NaturesAura.createRes("network"),
+                () -> version,
+                version::equals,
+                version::equals);
+        network.registerMessage(0, PacketParticleStream.class, PacketParticleStream::toBytes, PacketParticleStream::fromBytes, PacketParticleStream.Handler::onMessage);
+        network.registerMessage(1, PacketParticles.class, PacketParticles::toBytes, PacketParticles::fromBytes, PacketParticles.Handler::onMessage);
+        network.registerMessage(2, PacketAuraChunk.class, PacketAuraChunk::toBytes, PacketAuraChunk::fromBytes, PacketAuraChunk.Handler::onMessage);
+        network.registerMessage(3, PacketClient.class, PacketClient::toBytes, PacketClient::fromBytes, PacketClient.Handler::onMessage);
     }
 
-    /*public static void sendToAllLoaded(World world, BlockPos pos, IMessage message) {
-        network.sendToAllTracking(message, new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 0));
+    @Deprecated
+    public static void sendToAllLoaded(World world, BlockPos pos, IPacket message) {
+        sendToAllLoaded(message);
     }
 
-    public static void sendToAllAround(World world, BlockPos pos, int range, IMessage message) {
-        network.sendToAllAround(message, new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), range));
+    public static void sendToAllLoaded(IPacket message) {
+        network.send(PacketDistributor.ALL.noArg(), message);
     }
 
-    public static void sendTo(PlayerEntity player, IMessage message) {
-        network.sendTo(message, (ServerPlayerEntity) player);
-    }*/
+    public static void sendToAllAround(IWorld world, BlockPos pos, int range, IPacket message) {
+        network.send(PacketDistributor.NEAR.with(
+                () -> new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, world.getDimension().getType())),
+                message);
+    }
+
+    public static void sendTo(PlayerEntity player, IPacket message) {
+        network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), message);
+    }
 }

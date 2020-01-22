@@ -1,25 +1,24 @@
-/*
+
 package de.ellpeck.naturesaura.packet;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColors;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class PacketParticles implements IMessage {
+import java.util.function.Supplier;
+
+public class PacketParticles implements IPacket {
 
     private float posX;
     private float posY;
@@ -27,58 +26,48 @@ public class PacketParticles implements IMessage {
     private int type;
     private int[] data;
 
-    public PacketParticles(float posX, float posY, float posZ, int type, int... data) {
-        this.posX = posX;
-        this.posY = posY;
-        this.posZ = posZ;
-        this.type = type;
-        this.data = data;
-    }
+    public static PacketParticles fromBytes(PacketBuffer buf) {
+        PacketParticles packet = new PacketParticles();
 
-    public PacketParticles() {
+        packet.posX = buf.readFloat();
+        packet.posY = buf.readFloat();
+        packet.posZ = buf.readFloat();
+        packet.type = buf.readByte();
 
-    }
-
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        this.posX = buf.readFloat();
-        this.posY = buf.readFloat();
-        this.posZ = buf.readFloat();
-        this.type = buf.readByte();
-
-        this.data = new int[buf.readByte()];
-        for (int i = 0; i < this.data.length; i++) {
-            this.data[i] = buf.readInt();
+        packet.data = new int[buf.readByte()];
+        for (int i = 0; i < packet.data.length; i++) {
+            packet.data[i] = buf.readInt();
         }
+
+        return packet;
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeFloat(this.posX);
-        buf.writeFloat(this.posY);
-        buf.writeFloat(this.posZ);
-        buf.writeByte(this.type);
+    public static void toBytes(PacketParticles packet, PacketBuffer buf) {
+        buf.writeFloat(packet.posX);
+        buf.writeFloat(packet.posY);
+        buf.writeFloat(packet.posZ);
+        buf.writeByte(packet.type);
 
-        buf.writeByte(this.data.length);
-        for (int i : this.data) {
+        buf.writeByte(packet.data.length);
+        for (int i : packet.data) {
             buf.writeInt(i);
         }
     }
 
-    public static class Handler implements IMessageHandler<PacketParticles, IMessage> {
+    public static class Handler {
 
-        @Override
         @OnlyIn(Dist.CLIENT)
-        public IMessage onMessage(PacketParticles message, MessageContext ctx) {
-            NaturesAura.proxy.scheduleTask(() -> {
-                World world = Minecraft.getMinecraft().world;
+        public static void onMessage(PacketParticles message, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                World world = Minecraft.getInstance().world;
                 if (world != null) {
                     switch (message.type) {
                         case 0: // Tree ritual: Gold powder
                             BlockPos pos = new BlockPos(message.posX, message.posY, message.posZ);
                             Multiblocks.TREE_RITUAL.forEach(pos, 'G', (dustPos, matcher) -> {
                                 BlockState state = world.getBlockState(dustPos);
-                                AxisAlignedBB box = state.getBoundingBox(world, dustPos);
+                                //AxisAlignedBB box = state.getBoundingBox(world, dustPos); // TODO
+                                AxisAlignedBB box = state.getShape(world, dustPos).getBoundingBox();
                                 NaturesAuraAPI.instance().spawnMagicParticle(
                                         dustPos.getX() + box.minX + (box.maxX - box.minX) * world.rand.nextFloat(),
                                         dustPos.getY() + 0.1F,
@@ -226,7 +215,7 @@ public class PacketParticles implements IMessage {
                                         message.posX + 0.5F,
                                         message.posY + 0.5F,
                                         message.posZ + 0.5F,
-                                        0.6F, BiomeColors.getFoliageColorAtPos(world, new BlockPos(sapX, sapY, sapZ)), 1.5F);
+                                        0.6F, BiomeColors.getFoliageColor(world, new BlockPos(sapX, sapY, sapZ)), 1.5F);
                             if (releaseAura)
                                 for (int i = world.rand.nextInt(10) + 10; i >= 0; i--)
                                     NaturesAuraAPI.instance().spawnMagicParticle(
@@ -430,7 +419,7 @@ public class PacketParticles implements IMessage {
                                         world.rand.nextGaussian() * 0.01F,
                                         0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 40, 0F, false, true);
                             for (int i = world.rand.nextInt(10) + 10; i >= 0; i--)
-                                world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK,
+                                world.addParticle(ParticleTypes.FIREWORK,
                                         message.posX, message.posY, message.posZ,
                                         world.rand.nextGaussian() * 0.03F,
                                         world.rand.nextGaussian() * 0.03F,
@@ -438,8 +427,7 @@ public class PacketParticles implements IMessage {
                     }
                 }
             });
-
-            return null;
+            ctx.get().setPacketHandled(true);
         }
     }
-}*/
+}
