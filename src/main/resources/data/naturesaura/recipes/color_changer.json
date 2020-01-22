@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
     "pattern": [
         "RYB",
         "ITI",
@@ -10,16 +10,13 @@
             "item": "naturesaura:infused_iron"
         },
         "R": {
-            "type": "forge:ore_dict",
-            "ore": "dyeRed"
+            "tag": "forge:dyes/red"
         },
         "Y": {
-            "type": "forge:ore_dict",
-            "ore": "dyeYellow"
+            "tag": "forge:dyes/yellow"
         },
         "B": {
-            "type": "forge:ore_dict",
-            "ore": "dyeBlue"
+            "tag": "forge:dyes/blue"
         },
         "T": {
             "item": "naturesaura:token_euphoria"

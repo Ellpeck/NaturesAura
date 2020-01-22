@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
     "pattern": [
         "SIS",
         "FST",
@@ -7,12 +7,10 @@
     ],
     "key": {
         "S": {
-            "type": "forge:ore_dict",
-            "ore": "stone"
+            "tag": "forge:stone"
         },
         "W": {
-            "type": "forge:ore_dict",
-            "ore": "logWood"
+            "tag": "minecraft:logs"
         },
         "I": {
             "item": "naturesaura:infused_iron"

@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
     "pattern": [
         " Y ",
         "DED",
@@ -13,7 +13,7 @@
             "item": "minecraft:ender_eye"
         },
         "D": {
-            "type": "minecraft:item_nbt",
+            "type": "forge:nbt",
             "item": "naturesaura:aura_bottle",
             "nbt": {
                 "stored_type": "naturesaura:end"

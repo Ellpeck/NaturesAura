@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
     "pattern": [
         "RIR",
         "IEI",
@@ -13,8 +13,7 @@
             "item": "naturesaura:infused_iron"
         },
         "R": {
-            "type": "forge:ore_dict",
-            "ore": "ingotIron"
+            "tag": "forge:ingots/iron"
         },
         "E": {
             "item": "minecraft:ender_pearl"

@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
     "pattern": [
         "SFS",
         "GIG",
@@ -7,7 +7,7 @@
     ],
     "key": {
         "F": {
-            "item": "minecraft:fireworks"
+            "item": "minecraft:firework_rocket"
         },
         "G": {
             "item": "minecraft:gunpowder"

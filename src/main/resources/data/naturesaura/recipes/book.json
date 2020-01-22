@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shapeless",
+    "type": "minecraft:crafting_shapeless",
     "ingredients": [
         {
             "item": "minecraft:paper"
@@ -11,8 +11,7 @@
             "item": "minecraft:leather"
         },
         {
-            "type": "forge:ore_dict",
-            "ore": "treeSapling"
+            "tag": "minecraft:saplings"
         }
     ],
     "result": {

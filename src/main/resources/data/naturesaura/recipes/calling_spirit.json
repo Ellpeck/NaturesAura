@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
     "pattern": [
         " O ",
         "GDG",
@@ -10,14 +10,14 @@
             "item": "naturesaura:infused_iron"
         },
         "O": {
-            "type": "minecraft:item_nbt",
+            "type": "forge:nbt",
             "item": "naturesaura:aura_bottle",
             "nbt": {
                 "stored_type": "naturesaura:overworld"
             }
         },
         "N": {
-            "type": "minecraft:item_nbt",
+            "type": "forge:nbt",
             "item": "naturesaura:aura_bottle",
             "nbt": {
                 "stored_type": "naturesaura:nether"

@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
     "pattern": [
         "RWR",
         "ITI",
@@ -27,7 +27,7 @@
     },
     "conditions": [
         {
-            "type": "minecraft:item_exists",
+            "type": "forge:item_exists",
             "item": "naturesaura:rf_converter"
         }
     ]

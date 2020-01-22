@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
     "pattern": [
         "ONO",
         "PEP",
@@ -16,7 +16,7 @@
             "item": "minecraft:obsidian"
         },
         "N": {
-            "type": "minecraft:item_nbt",
+            "type": "forge:nbt",
             "item": "naturesaura:aura_bottle",
             "nbt": {
                 "stored_type": "naturesaura:end"
@@ -28,7 +28,7 @@
     },
     "conditions": [
         {
-            "type": "minecraft:item_exists",
+            "type": "forge:item_exists",
             "item": "naturesaura:chunk_loader"
         }
     ]

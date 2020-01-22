@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
     "pattern": [
         "ILI",
         "SGE",
@@ -7,8 +7,7 @@
     ],
     "key": {
         "I": {
-            "type": "forge:ore_dict",
-            "ore": "ingotIron"
+            "tag": "forge:ingots/iron"
         },
         "L": {
             "item": "minecraft:glass"
@@ -20,7 +19,7 @@
             "item": "minecraft:glowstone"
         },
         "E": {
-            "type": "minecraft:item_nbt",
+            "type": "forge:nbt",
             "item": "naturesaura:aura_bottle",
             "nbt": {
                 "stored_type": "naturesaura:end"

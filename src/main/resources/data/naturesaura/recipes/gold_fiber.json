@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
     "pattern": [
         "LNL",
         "NGN",
@@ -7,16 +7,13 @@
     ],
     "key": {
         "N": {
-            "type": "forge:ore_dict",
-            "ore": "nuggetGold"
+            "tag": "forge:nuggets/gold"
         },
         "G": {
-            "item": "minecraft:tallgrass",
-            "data": 1
+            "item": "minecraft:tall_grass"
         },
         "L": {
-            "type": "forge:ore_dict",
-            "ore": "treeLeaves"
+            "tag": "minecraft:leaves"
         }
     },
     "result": {

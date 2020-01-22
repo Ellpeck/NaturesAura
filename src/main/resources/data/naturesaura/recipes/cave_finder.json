@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
     "pattern": [
         " ST",
         "SRS",
@@ -10,8 +10,7 @@
             "item": "naturesaura:ancient_stick"
         },
         "S": {
-            "type": "forge:ore_dict",
-            "ore": "stone"
+            "tag": "forge:stone"
         },
         "T": {
             "item": "naturesaura:token_terror"

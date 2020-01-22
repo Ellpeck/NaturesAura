@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
     "pattern": [
         "PBP",
         "IFI",
@@ -7,15 +7,13 @@
     ],
     "key": {
         "P": {
-            "type": "forge:ore_dict",
-            "ore": "plankWood"
+            "tag": "minecraft:planks"
         },
         "I": {
             "item": "naturesaura:infused_iron"
         },
         "F": {
-            "item": "minecraft:double_plant",
-            "data": 5
+            "item": "minecraft:peony"
         },
         "B": {
             "item": "naturesaura:token_joy"

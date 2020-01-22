@@ -1,5 +1,5 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
     "pattern": [
         "IHI",
         "ICI",
@@ -7,8 +7,7 @@
     ],
     "key": {
         "C": {
-            "type": "forge:ore_dict",
-            "ore": "chestWood"
+            "tag": "forge:chests/wooden"
         },
         "I": {
             "item": "naturesaura:infused_iron"
