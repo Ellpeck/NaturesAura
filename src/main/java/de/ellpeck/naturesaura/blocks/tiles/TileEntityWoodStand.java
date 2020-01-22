@@ -3,6 +3,9 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticleStream;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
@@ -61,20 +64,19 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
                             Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'W', (pos, matcher) -> {
                                 TileEntity tile = this.world.getTileEntity(pos);
                                 if (tile instanceof TileEntityWoodStand && !((TileEntityWoodStand) tile).items.getStackInSlot(0).isEmpty()) {
-                                    // TODO particles
-                                  /*  PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
+                                    PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
                                             (float) pos.getX() + 0.2F + this.world.rand.nextFloat() * 0.6F,
                                             (float) pos.getY() + 0.85F,
                                             (float) pos.getZ() + 0.2F + this.world.rand.nextFloat() * 0.6F,
                                             this.ritualPos.getX() + 0.5F, this.ritualPos.getY() + this.world.rand.nextFloat() * 3F + 2F, this.ritualPos.getZ() + 0.5F,
                                             this.world.rand.nextFloat() * 0.04F + 0.04F, 0x89cc37, this.world.rand.nextFloat() * 1F + 1F
-                                    ));*/
+                                    ));
                                 }
                                 return true;
                             });
 
-                       /* PacketHandler.sendToAllAround(this.world, this.ritualPos, 32,
-                                new PacketParticles(this.ritualPos.getX(), this.ritualPos.getY(), this.ritualPos.getZ(), 0));*/
+                        PacketHandler.sendToAllAround(this.world, this.ritualPos, 32,
+                                new PacketParticles(this.ritualPos.getX(), this.ritualPos.getY(), this.ritualPos.getZ(), 0));
 
                         if (this.timer >= this.recipe.time) {
                             this.recurseTreeDestruction(this.ritualPos, this.ritualPos);
@@ -88,8 +90,8 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
                                     this.recipe.result.copy());
                             this.world.addEntity(item);
 
-                            /*PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                                    new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 3));*/
+                            PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                                    new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 3));
                             this.world.playSound(null, this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5,
                                     SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 0.65F, 1F);
 
@@ -102,8 +104,8 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
                                 if (tile instanceof TileEntityWoodStand) {
                                     TileEntityWoodStand stand = (TileEntityWoodStand) tile;
                                     if (!stand.items.getStackInSlot(0).isEmpty()) {
-                                     /*   PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                                                new PacketParticles(stand.pos.getX(), stand.pos.getY(), stand.pos.getZ(), 1));*/
+                                        PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                                                new PacketParticles(stand.pos.getX(), stand.pos.getY(), stand.pos.getZ(), 1));
                                         this.world.playSound(null, stand.pos.getX() + 0.5, stand.pos.getY() + 0.5, stand.pos.getZ() + 0.5,
                                                 SoundEvents.BLOCK_WOOD_STEP, SoundCategory.BLOCKS, 0.5F, 1F);
 
@@ -139,7 +141,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
                     BlockState state = this.world.getBlockState(offset);
                     if (state.getBlock() instanceof LogBlock || state.getBlock() instanceof LeavesBlock) {
                         this.world.setBlockState(offset, Blocks.AIR.getDefaultState());
-                        //PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), 2));
+                        PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), 2));
 
                         this.recurseTreeDestruction(offset, start);
                     }

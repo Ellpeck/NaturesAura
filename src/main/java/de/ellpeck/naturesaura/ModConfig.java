@@ -84,7 +84,7 @@ public final class ModConfig {
         //@Comment("If debug information about Aura around the player should be displayed in the F3 debug menu if the player is in creative mode")
         public boolean debugText = true;
         //@Comment("If, when the F3 debug menu is open and the player is in creative mode, every Aura spot should be highlighted in the world for debug purposes")
-        public boolean debugWorld = false;
+        public boolean debugWorld = true;
     }
 
     public static void initOrReload(boolean reload) {

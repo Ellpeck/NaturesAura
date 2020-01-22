@@ -4,6 +4,8 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.BasicAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -70,9 +72,8 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
                     this.isDrainMode = true;
                     item.remove();
 
-                    // TODO particles
-                  /*  PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 21, this.container.getAuraColor()));*/
+                    PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 21, this.container.getAuraColor()));
                     break;
                 }
             } else {

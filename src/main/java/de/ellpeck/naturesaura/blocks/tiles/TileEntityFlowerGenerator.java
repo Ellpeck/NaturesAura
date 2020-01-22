@@ -4,13 +4,15 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticleStream;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -77,10 +79,9 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
 
             this.world.removeBlock(pos, false);
 
-            // TODO particles
             int color = Helper.blendColors(0x5ccc30, 0xe53c16, toAdd / (float) addAmount);
             if (toAdd > 0) {
-                /*for (int i = this.world.rand.nextInt(5) + 5; i >= 0; i--)
+                for (int i = this.world.rand.nextInt(5) + 5; i >= 0; i--)
                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
                             pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F,
                             pos.getY() + 0.25F + this.world.rand.nextFloat() * 0.5F,
@@ -90,9 +91,9 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
                             this.pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F,
                             this.world.rand.nextFloat() * 0.02F + 0.1F, color, 1F
                     ));
-                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 8));*/
+                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 8));
             }
-            //PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), 7, color));
+            PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), 7, color));
         }
     }
 

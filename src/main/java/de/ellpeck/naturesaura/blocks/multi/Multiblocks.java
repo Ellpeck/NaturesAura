@@ -10,6 +10,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.LogBlock;
 import net.minecraft.block.SaplingBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ResourceLocation;
 
 public final class Multiblocks {
@@ -23,7 +24,7 @@ public final class Multiblocks {
                     {"         ", "   WBW   ", "   WBW   ", " WWCWCWW ", " BBW WBB ", " WWCWCWW ", "   WBW   ", "   WBW   ", "         "}},
             'C', Blocks.CHISELED_STONE_BRICKS,
             'B', Blocks.STONE_BRICKS,
-            'W', Blocks.OAK_PLANKS, // TODO create a matcher that matches by tag for planks
+            'W', Matcher.tag(Blocks.OAK_PLANKS, BlockTags.PLANKS),
             'M', ModBlocks.GOLD_BRICK,
             '0', ModBlocks.NATURE_ALTAR,
             ' ', Matcher.wildcard());

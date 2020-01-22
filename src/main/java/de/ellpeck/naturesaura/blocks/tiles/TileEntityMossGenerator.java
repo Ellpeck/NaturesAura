@@ -2,6 +2,8 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -46,9 +48,8 @@ public class TileEntityMossGenerator extends TileEntityImpl implements ITickable
                     toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
                 }
 
-                // TODO particles
-                /*PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                        new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), 23));*/
+                PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                        new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), 23));
             }
 
             this.world.playEvent(2001, offset, Block.getStateId(state));

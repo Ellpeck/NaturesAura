@@ -5,6 +5,8 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntitySpawnLamp;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.MobEntity;
@@ -55,9 +57,8 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable 
                 BlockPos spot = IAuraChunk.getHighestSpot(world, lampPos, 32, lampPos);
                 IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 200);
 
-                // TODO particles
-                /*PacketHandler.sendToAllAround(world, lampPos, 32,
-                        new PacketParticles(lampPos.getX(), lampPos.getY(), lampPos.getZ(), 15));*/
+                PacketHandler.sendToAllAround(world, lampPos, 32,
+                        new PacketParticles(lampPos.getX(), lampPos.getY(), lampPos.getZ(), 15));
             }
 
             event.setResult(Event.Result.DENY);

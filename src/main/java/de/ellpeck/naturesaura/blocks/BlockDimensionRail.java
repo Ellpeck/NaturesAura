@@ -2,6 +2,9 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.packet.PacketClient;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
@@ -60,7 +63,7 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
         if (stack.getItem() == ModItems.RANGE_VISUALIZER) {
             if (!worldIn.isRemote) {
                 BlockPos goalPos = this.getGoalCoords(worldIn, pos);
-                // TODO PacketHandler.sendTo(player, new PacketClient(0, this.goalDim, goalPos.getX(), goalPos.getY(), goalPos.getZ()));
+                PacketHandler.sendTo(player, new PacketClient(0, this.goalDim, goalPos.getX(), goalPos.getY(), goalPos.getZ()));
             }
             return true;
         }
@@ -77,7 +80,7 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
             return;
 
         AxisAlignedBB box = cart.getCollisionBoundingBox();
-        // TODO PacketHandler.sendToAllAround(world, pos, 32, new PacketParticles((float) box.minX, (float) box.minY, (float) box.minZ, 25, (int) ((box.maxX - box.minX) * 100F), (int) ((box.maxY - box.minY) * 100F), (int) ((box.maxZ - box.minZ) * 100F)));
+        PacketHandler.sendToAllAround(world, pos, 32, new PacketParticles((float) box.minX, (float) box.minY, (float) box.minZ, 25, (int) ((box.maxX - box.minX) * 100F), (int) ((box.maxY - box.minY) * 100F), (int) ((box.maxZ - box.minZ) * 100F)));
         world.playSound(null, pos, SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 1F, 1F);
 
         BlockPos goalCoords = this.getGoalCoords(world, pos);
@@ -117,7 +120,6 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
     public IProperty<RailShape> getShapeProperty() {
         return SHAPE;
     }
-
 
     public boolean isFlexibleRail(BlockState state, IBlockReader world, BlockPos pos) {
         return false;

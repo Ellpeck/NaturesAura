@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.api.multiblock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 
@@ -28,31 +29,8 @@ public class Matcher {
         return new Matcher(Blocks.AIR.getDefaultState(), null);
     }
 
-    public static Matcher oreDict(Block defaultBlock, String name) {
-        return new Matcher(defaultBlock.getDefaultState(),
-                (world, start, offset, pos, state, otherC) -> state.getBlock() == defaultBlock);
-        /* TODO return new Matcher(defaultBlock.getDefaultState(), new ICheck() {
-            private List<BlockState> states;
-
-            @Override
-            public boolean matches(World world, BlockPos start, BlockPos offset, BlockPos pos, BlockState state, char c) {
-                if (this.states == null) {
-                    this.states = new ArrayList<>();
-                    for (ItemStack stack : OreDictionary.getOres(name)) {
-                        Block block = Block.getBlockFromItem(stack.getItem());
-                        if (block != null && block != Blocks.AIR) {
-                            int damage = stack.getItemDamage();
-                            if (damage == OreDictionary.WILDCARD_VALUE)
-                                this.states.addAll(block.getBlockState().getValidStates());
-                            else
-                                this.states.add(block.getStateFromMeta(damage));
-                        }
-                    }
-                }
-
-                return this.states.isEmpty() || this.states.contains(state);
-            }
-        });*/
+    public static Matcher tag(Block defaultBlock, Tag tag) {
+        return new Matcher(defaultBlock.getDefaultState(), (world, start, offset, pos, state, c) -> state.getBlock().getTags().contains(tag.getId()));
     }
 
     public interface ICheck {

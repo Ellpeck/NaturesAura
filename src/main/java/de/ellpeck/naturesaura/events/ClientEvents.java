@@ -16,6 +16,7 @@ import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.items.AuraCache;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.items.RangeVisualizer;
+import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -54,6 +55,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.opengl.GL11;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,9 +67,12 @@ public class ClientEvents {
     public static final ResourceLocation BOOK_GUI = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/book.png");
     private static final ItemStack ITEM_FRAME = new ItemStack(Items.ITEM_FRAME);
     private static final Map<ResourceLocation, Tuple<ItemStack, Boolean>> SHOWING_EFFECTS = new HashMap<>();
+    public static final List<PacketAuraChunk> PENDING_AURA_CHUNKS = new ArrayList<>();
     private static ItemStack heldCache = ItemStack.EMPTY;
     private static ItemStack heldEye = ItemStack.EMPTY;
     private static ItemStack heldOcular = ItemStack.EMPTY;
+    private float height;
+    private float previousHeight;
 
     @SubscribeEvent
     public void onDebugRender(RenderGameOverlayEvent.Text event) {
@@ -97,13 +102,12 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onRenderLast(RenderWorldLastEvent event) {
-        Minecraft mc = Minecraft.getInstance();
         ParticleHandler.renderParticles(event.getPartialTicks());
     }
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
+        if (event.phase != TickEvent.Phase.END) {
             heldCache = ItemStack.EMPTY;
             heldEye = ItemStack.EMPTY;
             heldOcular = ItemStack.EMPTY;
@@ -112,55 +116,64 @@ public class ClientEvents {
             if (mc.world == null) {
                 ParticleHandler.clearParticles();
                 RangeVisualizer.clear();
-            } else if (!mc.isGamePaused()) {
-                if (mc.world.getGameTime() % 20 == 0) {
-                    int amount = MathHelper.floor(190 * ModConfig.client.excessParticleAmount);
-                    for (int i = 0; i < amount; i++) {
-                        int x = MathHelper.floor(mc.player.posX) + mc.world.rand.nextInt(64) - 32;
-                        int z = MathHelper.floor(mc.player.posZ) + mc.world.rand.nextInt(64) - 32;
-                        BlockPos pos = new BlockPos(x, mc.world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z) - 1, z);
-                        BlockState state = mc.world.getBlockState(pos);
-                        Block block = state.getBlock();
-                        if (block instanceof IGrowable || block instanceof IPlantable || block instanceof LeavesBlock) {
-                            int excess = IAuraChunk.triangulateAuraInArea(mc.world, pos, 45) - IAuraChunk.DEFAULT_AURA;
-                            if (excess > 0) {
-                                int chance = Math.max(10, 50 - excess / 25000);
-                                if (mc.world.rand.nextInt(chance) <= 0)
-                                    NaturesAuraAPI.instance().spawnMagicParticle(
-                                            pos.getX() + mc.world.rand.nextFloat(),
-                                            pos.getY() + 0.5F,
-                                            pos.getZ() + mc.world.rand.nextFloat(),
-                                            mc.world.rand.nextGaussian() * 0.01F,
-                                            mc.world.rand.nextFloat() * 0.025F,
-                                            mc.world.rand.nextGaussian() * 0.01F,
-                                            BiomeColors.getFoliageColor(mc.world, pos),
-                                            Math.min(2F, 1F + mc.world.rand.nextFloat() * (excess / 30000F)),
-                                            Math.min(300, 100 + mc.world.rand.nextInt(excess / 3000 + 1)),
-                                            0F, false, true);
+                PENDING_AURA_CHUNKS.clear();
+            } else {
+                PENDING_AURA_CHUNKS.removeIf(next -> next.tryHandle(mc.world));
+
+                if (mc.player != null) {
+                    this.previousHeight = this.height;
+                    this.height += (mc.player.getEyeHeight() - this.height) * 0.5F;
+                }
+
+                if (!mc.isGamePaused()) {
+                    if (mc.world.getGameTime() % 20 == 0) {
+                        int amount = MathHelper.floor(190 * ModConfig.client.excessParticleAmount);
+                        for (int i = 0; i < amount; i++) {
+                            int x = MathHelper.floor(mc.player.posX) + mc.world.rand.nextInt(64) - 32;
+                            int z = MathHelper.floor(mc.player.posZ) + mc.world.rand.nextInt(64) - 32;
+                            BlockPos pos = new BlockPos(x, mc.world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z) - 1, z);
+                            BlockState state = mc.world.getBlockState(pos);
+                            Block block = state.getBlock();
+                            if (block instanceof IGrowable || block instanceof IPlantable || block instanceof LeavesBlock) {
+                                int excess = IAuraChunk.triangulateAuraInArea(mc.world, pos, 45) - IAuraChunk.DEFAULT_AURA;
+                                if (excess > 0) {
+                                    int chance = Math.max(10, 50 - excess / 25000);
+                                    if (mc.world.rand.nextInt(chance) <= 0)
+                                        NaturesAuraAPI.instance().spawnMagicParticle(
+                                                pos.getX() + mc.world.rand.nextFloat(),
+                                                pos.getY() + 0.5F,
+                                                pos.getZ() + mc.world.rand.nextFloat(),
+                                                mc.world.rand.nextGaussian() * 0.01F,
+                                                mc.world.rand.nextFloat() * 0.025F,
+                                                mc.world.rand.nextGaussian() * 0.01F,
+                                                BiomeColors.getFoliageColor(mc.world, pos),
+                                                Math.min(2F, 1F + mc.world.rand.nextFloat() * (excess / 30000F)),
+                                                Math.min(300, 100 + mc.world.rand.nextInt(excess / 3000 + 1)),
+                                                0F, false, true);
+                                }
                             }
                         }
                     }
-                }
 
-                if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER) && mc.world.getGameTime() % 5 == 0) {
-                    NaturesAuraAPI.IInternalHooks inst = NaturesAuraAPI.instance();
-                    inst.setParticleSpawnRange(512);
-                    inst.setParticleDepth(false);
-                    for (BlockPos pos : RangeVisualizer.VISUALIZED_RAILS.get(mc.world.getDimension().getType())) {
-                        NaturesAuraAPI.instance().spawnMagicParticle(
-                                pos.getX() + mc.world.rand.nextFloat(),
-                                pos.getY() + mc.world.rand.nextFloat(),
-                                pos.getZ() + mc.world.rand.nextFloat(),
-                                0F, 0F, 0F, 0xe0faff, mc.world.rand.nextFloat() * 5 + 1, 100, 0F, false, true);
+                    if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER) && mc.world.getGameTime() % 5 == 0) {
+                        NaturesAuraAPI.IInternalHooks inst = NaturesAuraAPI.instance();
+                        inst.setParticleSpawnRange(512);
+                        inst.setParticleDepth(false);
+                        for (BlockPos pos : RangeVisualizer.VISUALIZED_RAILS.get(mc.world.getDimension().getType())) {
+                            NaturesAuraAPI.instance().spawnMagicParticle(
+                                    pos.getX() + mc.world.rand.nextFloat(),
+                                    pos.getY() + mc.world.rand.nextFloat(),
+                                    pos.getZ() + mc.world.rand.nextFloat(),
+                                    0F, 0F, 0F, 0xe0faff, mc.world.rand.nextFloat() * 5 + 1, 100, 0F, false, true);
+                        }
+                        inst.setParticleDepth(true);
+                        inst.setParticleSpawnRange(32);
                     }
-                    inst.setParticleDepth(true);
-                    inst.setParticleSpawnRange(32);
-                }
 
-                ParticleHandler.updateParticles();
+                    ParticleHandler.updateParticles();
 
-                if (Compat.baubles) {
-                    // TODO baubles
+                    if (Compat.baubles) {
+                        // TODO baubles
                     /*IItemHandler baubles = BaublesApi.getBaublesHandler(mc.player);
                     for (int i = 0; i < baubles.getSlots(); i++) {
                         ItemStack slot = baubles.getStackInSlot(i);
@@ -173,24 +186,25 @@ public class ClientEvents {
                                 heldOcular = slot;
                         }
                     }*/
-                }
-
-                for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
-                    ItemStack slot = mc.player.inventory.getStackInSlot(i);
-                    if (!slot.isEmpty()) {
-                        if (slot.getItem() instanceof AuraCache)
-                            heldCache = slot;
-                        else if (slot.getItem() == ModItems.EYE && i <= 8)
-                            heldEye = slot;
-                        else if (slot.getItem() == ModItems.EYE_IMPROVED)
-                            heldOcular = slot;
                     }
-                }
 
-                if (!heldOcular.isEmpty() && mc.world.getGameTime() % 20 == 0) {
-                    SHOWING_EFFECTS.clear();
-                    Helper.getAuraChunksInArea(mc.world, mc.player.getPosition(), 100,
-                            chunk -> chunk.getActiveEffectIcons(mc.player, SHOWING_EFFECTS));
+                    for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
+                        ItemStack slot = mc.player.inventory.getStackInSlot(i);
+                        if (!slot.isEmpty()) {
+                            if (slot.getItem() instanceof AuraCache)
+                                heldCache = slot;
+                            else if (slot.getItem() == ModItems.EYE && i <= 8)
+                                heldEye = slot;
+                            else if (slot.getItem() == ModItems.EYE_IMPROVED)
+                                heldOcular = slot;
+                        }
+                    }
+
+                    if (!heldOcular.isEmpty() && mc.world.getGameTime() % 20 == 0) {
+                        SHOWING_EFFECTS.clear();
+                        Helper.getAuraChunksInArea(mc.world, mc.player.getPosition(), 100,
+                                chunk -> chunk.getActiveEffectIcons(mc.player, SHOWING_EFFECTS));
+                    }
                 }
             }
         }
@@ -203,7 +217,7 @@ public class ClientEvents {
         float partial = event.getPartialTicks();
         GL11.glTranslated(
                 -mc.player.prevPosX - (mc.player.posX - mc.player.prevPosX) * partial,
-                -mc.player.prevPosY - (mc.player.posY - mc.player.prevPosY) * partial,
+                -mc.player.prevPosY - (mc.player.posY - mc.player.prevPosY) * partial - (double) MathHelper.lerp(partial, this.previousHeight, this.height),
                 -mc.player.prevPosZ - (mc.player.posZ - mc.player.prevPosZ) * partial);
 
         if (mc.gameSettings.showDebugInfo && mc.player.isCreative() && ModConfig.client.debugWorld) {
@@ -271,7 +285,8 @@ public class ClientEvents {
         GL11.glPopMatrix();
     }
 
-    private void renderVisualize(IVisualizable visualize, World world, BlockPos pos) {
+    private void renderVisualize(IVisualizable visualize, World
+            world, BlockPos pos) {
         AxisAlignedBB box = visualize.getVisualizationBounds(world, pos);
         if (box == null)
             return;
@@ -306,7 +321,7 @@ public class ClientEvents {
                     float scale = 0.75F;
                     GlStateManager.scalef(scale, scale, scale);
                     String s = heldCache.getDisplayName().getFormattedText();
-                    mc.fontRenderer.drawString(s, (x + 80) / scale - mc.fontRenderer.getStringWidth(s), (y - 7) / scale, color);
+                    mc.fontRenderer.drawStringWithShadow(s, (x + 80) / scale - mc.fontRenderer.getStringWidth(s), (y - 7) / scale, color);
 
                     GlStateManager.color3f(1F, 1F, 1F);
                     GlStateManager.popMatrix();
@@ -357,13 +372,13 @@ public class ClientEvents {
 
                         int color = heldOcular.isEmpty() ? 0x53a008 : 0xa05308;
                         if (totalPercentage > (heldOcular.isEmpty() ? 1F : 1.5F))
-                            mc.fontRenderer.drawString("+", startX + plusOffX, startY - 0.5F, color);
+                            mc.fontRenderer.drawStringWithShadow("+", startX + plusOffX, startY - 0.5F, color);
                         if (totalPercentage < (heldOcular.isEmpty() ? 0F : -0.5F))
-                            mc.fontRenderer.drawString("-", startX + plusOffX, startY - 0.5F + (heldOcular.isEmpty() ? 44 : 70), color);
+                            mc.fontRenderer.drawStringWithShadow("-", startX + plusOffX, startY - 0.5F + (heldOcular.isEmpty() ? 44 : 70), color);
 
                         GlStateManager.pushMatrix();
                         GlStateManager.scalef(textScale, textScale, textScale);
-                        mc.fontRenderer.drawString(text, textX / textScale, textY / textScale, 0x53a008);
+                        mc.fontRenderer.drawStringWithShadow(text, textX / textScale, textY / textScale, 0x53a008);
                         GlStateManager.popMatrix();
 
                         if (!heldOcular.isEmpty()) {
@@ -398,7 +413,7 @@ public class ClientEvents {
                                 BlockState state = mc.world.getBlockState(pos);
                                 ItemStack blockStack = state.getBlock().getPickBlock(state, mc.objectMouseOver, mc.world, pos, mc.player);
                                 this.drawContainerInfo(container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
-                                        mc, res, 35, blockStack.getDisplayName().toString(), null);
+                                        mc, res, 35, blockStack.getDisplayName().getFormattedText(), null);
 
                                 if (tile instanceof TileEntityNatureAltar) {
                                     ItemStack tileStack = ((TileEntityNatureAltar) tile).getItemHandler(null).getStackInSlot(0);
@@ -406,7 +421,7 @@ public class ClientEvents {
                                         IAuraContainer stackCont = tileStack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
                                         if (stackCont != null) {
                                             this.drawContainerInfo(stackCont.getStoredAura(), stackCont.getMaxAura(), stackCont.getAuraColor(),
-                                                    mc, res, 55, tileStack.getDisplayName().toString(), null);
+                                                    mc, res, 55, tileStack.getDisplayName().getFormattedText(), null);
                                         }
                                     }
                                 }
@@ -422,7 +437,7 @@ public class ClientEvents {
                                 int x = res.getScaledWidth() / 2;
                                 int y = res.getScaledHeight() / 2;
                                 if (stack.isEmpty())
-                                    mc.fontRenderer.drawString(
+                                    mc.fontRenderer.drawStringWithShadow(
                                             TextFormatting.GRAY.toString() + TextFormatting.ITALIC + I18n.format("info.naturesaura.empty"),
                                             x + 5, y - 11, 0xFFFFFF);
                                 else
@@ -445,7 +460,9 @@ public class ClientEvents {
         }
     }
 
-    private void drawContainerInfo(int stored, int max, int color, Minecraft mc, MainWindow res, int yOffset, String name, String textBelow) {
+    private void drawContainerInfo(int stored, int max,
+                                   int color, Minecraft mc, MainWindow res, int yOffset, String name, String
+                                           textBelow) {
         GlStateManager.color3f((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F);
 
         int x = res.getScaledWidth() / 2 - 40;
@@ -458,9 +475,9 @@ public class ClientEvents {
         if (width > 0)
             AbstractGui.blit(x, y, 0, 6, width, 6, 256, 256);
 
-        mc.fontRenderer.drawString(name, x + 40 - mc.fontRenderer.getStringWidth(name) / 2F, y - 9, color);
+        mc.fontRenderer.drawStringWithShadow(name, x + 40 - mc.fontRenderer.getStringWidth(name) / 2F, y - 9, color);
 
         if (textBelow != null)
-            mc.fontRenderer.drawString(textBelow, x + 40 - mc.fontRenderer.getStringWidth(textBelow) / 2F, y + 7, color);
+            mc.fontRenderer.drawStringWithShadow(textBelow, x + 40 - mc.fontRenderer.getStringWidth(textBelow) / 2F, y + 7, color);
     }
 }

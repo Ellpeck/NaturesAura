@@ -3,6 +3,8 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityPickupStopper;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.ItemEntity;
@@ -43,9 +45,9 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
 
                 event.setCanceled(true);
 
-               /* if (item.world.getGameTime() % 3 == 0) TODO particles
+                if (item.world.getGameTime() % 3 == 0)
                     PacketHandler.sendToAllAround(item.world, pos, 32,
-                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 14));*/
+                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 14));
                 return true;
             });
         }

@@ -11,10 +11,18 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class PacketClient implements IPacket {
-
+public class PacketClient {
     private int type;
     private int[] data;
+
+    public PacketClient(int type, int... data) {
+        this.type = type;
+        this.data = data;
+    }
+
+    private PacketClient() {
+
+    }
 
     public static PacketClient fromBytes(PacketBuffer buf) {
         PacketClient client = new PacketClient();
@@ -33,23 +41,19 @@ public class PacketClient implements IPacket {
             buf.writeInt(i);
     }
 
-    public static class Handler {
-
-        @OnlyIn(Dist.CLIENT)
-        public static void onMessage(PacketClient message, Supplier<NetworkEvent.Context> ctx) {
-            ctx.get().enqueueWork(() -> {
-                Minecraft mc = Minecraft.getInstance();
-                if (mc.world != null) {
-                    switch (message.type) {
-                        case 0: // dimension rail visualization
-                            int goalDim = message.data[0];
-                            BlockPos goalPos = new BlockPos(message.data[1], message.data[2], message.data[3]);
-                            RangeVisualizer.visualize(mc.player, RangeVisualizer.VISUALIZED_RAILS, DimensionType.getById(goalDim), goalPos);
-                    }
+    @OnlyIn(Dist.CLIENT)
+    public static void onMessage(PacketClient message, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.world != null) {
+                switch (message.type) {
+                    case 0: // dimension rail visualization
+                        int goalDim = message.data[0];
+                        BlockPos goalPos = new BlockPos(message.data[1], message.data[2], message.data[3]);
+                        RangeVisualizer.visualize(mc.player, RangeVisualizer.VISUALIZED_RAILS, DimensionType.getById(goalDim), goalPos);
                 }
-            });
-
-            ctx.get().setPacketHandled(true);
-        }
+            }
+        });
+        ctx.get().setPacketHandled(true);
     }
 }

@@ -1,7 +1,10 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.BlockFurnaceHeater;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.FurnaceTileEntity;
@@ -44,8 +47,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
                     did = true;
 
                     if (this.world.getGameTime() % 15 == 0) {
-                        // TODO particles
-                        /*PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
+                        PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
                                 this.pos.getX() + (float) this.world.rand.nextGaussian() * 5F,
                                 this.pos.getY() + 1 + this.world.rand.nextFloat() * 5F,
                                 this.pos.getZ() + (float) this.world.rand.nextGaussian() * 5F,
@@ -53,7 +55,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
                                 tilePos.getY() + this.world.rand.nextFloat(),
                                 tilePos.getZ() + this.world.rand.nextFloat(),
                                 this.world.rand.nextFloat() * 0.07F + 0.07F, IAuraType.forWorld(this.world).getColor(), this.world.rand.nextFloat() + 0.5F
-                        ));*/
+                        ));
                     }
                 }
             }

@@ -2,10 +2,13 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -49,10 +52,9 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
                                     toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
                                 }
 
-                            // TODO particles
-                           /* PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
+                            PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
                                     this.pos.getX(), this.pos.getY(), this.pos.getZ(), 5,
-                                    PotionUtils.getPotionColor(type), canGen ? 1 : 0));*/
+                                    PotionUtils.getPotionColor(type), canGen ? 1 : 0));
 
                             addedOne = true;
                             break;

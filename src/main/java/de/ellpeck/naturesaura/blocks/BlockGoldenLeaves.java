@@ -98,10 +98,9 @@ public class BlockGoldenLeaves extends LeavesBlock implements
     }
     */
 
-
     @Override
-    public void tick(BlockState state, World worldIn, BlockPos pos, Random random) {
-        super.tick(state, worldIn, pos, random);
+    public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random) {
+        super.randomTick(state, worldIn, pos, random);
         if (!worldIn.isRemote) {
             int stage = state.get(STAGE);
             if (stage < HIGHEST_STAGE) {
@@ -118,8 +117,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements
 
     public static boolean convert(World world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
-        if (state.getBlock().isFoliage(state, world, pos) &&
-                !(state.getBlock() instanceof BlockAncientLeaves || state.getBlock() instanceof BlockGoldenLeaves)) {
+        if ((state.getBlock().isFoliage(state, world, pos) || state.getBlock() instanceof LeavesBlock) && !(state.getBlock() instanceof BlockAncientLeaves || state.getBlock() instanceof BlockGoldenLeaves)) {
             if (!world.isRemote) {
                 world.setBlockState(pos, ModBlocks.GOLDEN_LEAVES.getDefaultState()
                         .with(DISTANCE, state.has(DISTANCE) ? state.get(DISTANCE) : 1)

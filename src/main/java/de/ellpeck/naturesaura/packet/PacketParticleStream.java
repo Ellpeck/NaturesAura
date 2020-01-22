@@ -1,8 +1,6 @@
 package de.ellpeck.naturesaura.packet;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -10,7 +8,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class PacketParticleStream implements IPacket {
+public class PacketParticleStream {
 
     private float startX;
     private float startY;
@@ -36,8 +34,7 @@ public class PacketParticleStream implements IPacket {
         this.scale = scale;
     }
 
-    public PacketParticleStream() {
-
+    private PacketParticleStream() {
     }
 
     public static PacketParticleStream fromBytes(PacketBuffer buf) {
@@ -68,16 +65,13 @@ public class PacketParticleStream implements IPacket {
         buf.writeFloat(packet.scale);
     }
 
-    public static class Handler {
+    @OnlyIn(Dist.CLIENT)
+    public static void onMessage(PacketParticleStream message, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> NaturesAuraAPI.instance().spawnParticleStream(
+                message.startX, message.startY, message.startZ,
+                message.endX, message.endY, message.endZ,
+                message.speed, message.color, message.scale));
 
-        @OnlyIn(Dist.CLIENT)
-        public static void onMessage(PacketParticleStream message, Supplier<NetworkEvent.Context> ctx) {
-            ctx.get().enqueueWork(() -> NaturesAuraAPI.instance().spawnParticleStream(
-                    message.startX, message.startY, message.startZ,
-                    message.endX, message.endY, message.endZ,
-                    message.speed, message.color, message.scale));
-
-            ctx.get().setPacketHandled(true);
-        }
+        ctx.get().setPacketHandled(true);
     }
 }

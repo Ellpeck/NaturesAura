@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
-import net.minecraft.client.Minecraft;
+import de.ellpeck.naturesaura.events.ClientEvents;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -16,11 +16,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class PacketAuraChunk implements IPacket {
+public class PacketAuraChunk {
 
     private int chunkX;
     private int chunkZ;
     private Map<BlockPos, MutableInt> drainSpots;
+
+    public PacketAuraChunk(int chunkX, int chunkZ, Map<BlockPos, MutableInt> drainSpots) {
+        this.chunkX = chunkX;
+        this.chunkZ = chunkZ;
+        this.drainSpots = drainSpots;
+    }
+
+    private PacketAuraChunk() {
+    }
 
     public static PacketAuraChunk fromBytes(PacketBuffer buf) {
         PacketAuraChunk packet = new PacketAuraChunk();
@@ -50,22 +59,20 @@ public class PacketAuraChunk implements IPacket {
         }
     }
 
-    public static class Handler {
+    public boolean tryHandle(World world) {
+        Chunk chunk = world.getChunk(this.chunkX, this.chunkZ);
+        if (chunk.isEmpty())
+            return false;
+        AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk).orElse(null);
+        if (auraChunk == null)
+            return false;
+        auraChunk.setSpots(this.drainSpots);
+        return true;
+    }
 
-        @OnlyIn(Dist.CLIENT)
-        public static void onMessage(PacketAuraChunk message, Supplier<NetworkEvent.Context> ctx) {
-            ctx.get().enqueueWork(() -> {
-                World world = Minecraft.getInstance().world;
-                if (world != null) {
-                    Chunk chunk = world.getChunk(message.chunkX, message.chunkZ);
-
-                    if (chunk.getCapability(NaturesAuraAPI.capAuraChunk).isPresent()) {
-                        AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk).orElse(null);
-                        auraChunk.setSpots(message.drainSpots);
-                    }
-                }
-            });
-            ctx.get().setPacketHandled(true);
-        }
+    @OnlyIn(Dist.CLIENT)
+    public static void onMessage(PacketAuraChunk message, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> ClientEvents.PENDING_AURA_CHUNKS.add(message));
+        ctx.get().setPacketHandled(true);
     }
 }

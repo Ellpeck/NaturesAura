@@ -1,6 +1,8 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.LogBlock;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -31,10 +33,9 @@ public class TileEntityOakGenerator extends TileEntityImpl implements ITickableT
                             toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
                         }
 
-                    // TODO particles
-                   /* PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
+                    PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
                             this.pos.getX(), this.pos.getY(), this.pos.getZ(), 12,
-                            pos.getX(), pos.getY(), pos.getZ(), canGen ? 1 : 0));*/
+                            pos.getX(), pos.getY(), pos.getZ(), canGen ? 1 : 0));
                 }
             }
     }

@@ -1,6 +1,9 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import com.google.common.primitives.Ints;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.item.FireworkRocketEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -105,10 +108,9 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                         data.add(this.pos.getY());
                         data.add(this.pos.getZ());
                         data.addAll(usedColors);
-                        // TODO particles
-                       /* PacketHandler.sendToAllLoaded(this.world, this.pos, new PacketParticles(
+                        PacketHandler.sendToAllLoaded(this.world, this.pos, new PacketParticles(
                                 (float) this.trackedEntity.posX, (float) this.trackedEntity.posY, (float) this.trackedEntity.posZ,
-                                24, Ints.toArray(data)));*/
+                                24, Ints.toArray(data)));
                     }
                 }
 

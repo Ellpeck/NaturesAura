@@ -88,7 +88,7 @@ public final class Helper {
         List<ItemFrameEntity> frames = world.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(pos).grow(0.25));
         for (int i = frames.size() - 1; i >= 0; i--) {
             ItemFrameEntity frame = frames.get(i);
-            BlockPos framePos = frame.getHangingPosition().offset(frame.getHorizontalFacing());
+            BlockPos framePos = frame.getHangingPosition().offset(frame.getHorizontalFacing().getOpposite());
             if (!pos.equals(framePos))
                 frames.remove(i);
         }

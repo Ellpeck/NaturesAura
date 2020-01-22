@@ -1,6 +1,8 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.math.BlockPos;
 
@@ -28,8 +30,8 @@ public class TileEntityAnimalGenerator extends TileEntityImpl implements ITickab
                     remain -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, remain);
                 }
 
-                /*PacketHandler.sendToAllAround(this.world, this.pos, 32, TODO particles
-                        new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 16));*/
+                PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                        new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 16));
             }
 
             this.timeRemaining -= 10;

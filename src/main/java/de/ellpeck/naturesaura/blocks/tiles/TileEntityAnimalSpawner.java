@@ -6,6 +6,8 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -87,9 +89,8 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
 
                     for (ItemEntity item : items) {
                         item.remove();
-                        // TODO particles
-                        /*PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                                new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 19));*/
+                        PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                                new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 19));
                     }
 
                     this.currentRecipe = recipe;

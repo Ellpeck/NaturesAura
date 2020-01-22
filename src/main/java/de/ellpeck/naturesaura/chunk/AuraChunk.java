@@ -4,6 +4,8 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.packet.PacketAuraChunk;
+import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -12,6 +14,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -113,8 +116,9 @@ public class AuraChunk implements IAuraChunk {
     private void addDrainSpot(BlockPos pos, MutableInt spot) {
         int expX = pos.getX() >> 4;
         int expZ = pos.getZ() >> 4;
-        if (expX != this.chunk.getPos().x || expZ != this.chunk.getPos().z)
-            throw new IllegalArgumentException("Tried to add drain spot " + pos + " to chunk at " + this.chunk.getPos().x + ", " + this.chunk.getPos().z + " when it should've been added to chunk at " + expX + ", " + expZ);
+        ChunkPos myPos = this.chunk.getPos();
+        if (expX != myPos.x || expZ != myPos.z)
+            throw new IllegalArgumentException("Tried to add drain spot " + pos + " to chunk at " + myPos.x + ", " + myPos.z + " when it should've been added to chunk at " + expX + ", " + expZ);
 
         this.drainSpots.put(pos, spot);
     }
@@ -147,19 +151,18 @@ public class AuraChunk implements IAuraChunk {
         }
 
         if (this.needsSync) {
-            // TODO packets
-            /*PacketHandler.sendToAllLoaded(world,
-                    new BlockPos(this.chunk.x * 16, 0, this.chunk.z * 16),
-                    this.makePacket());*/
+            ChunkPos pos = this.chunk.getPos();
+            PacketHandler.sendToAllLoaded(world,
+                    new BlockPos(pos.x * 16, 0, pos.z * 16),
+                    this.makePacket());
             this.needsSync = false;
         }
     }
 
-/*
-    public IMessage makePacket() {
-        return new PacketAuraChunk(this.chunk.x, this.chunk.z, this.drainSpots);
+    public PacketAuraChunk makePacket() {
+        ChunkPos pos = this.chunk.getPos();
+        return new PacketAuraChunk(pos.x, pos.z, this.drainSpots);
     }
-*/
 
     public void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {

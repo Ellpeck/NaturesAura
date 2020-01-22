@@ -7,6 +7,9 @@ import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticleStream;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -100,15 +103,14 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
                         chunk.drainAura(spot, toStore);
                         this.container.storeAura(toStore, false);
 
-                        // TODO particles
-                        /*if (this.world.getGameTime() % 3 == 0)
+                        if (this.world.getGameTime() % 3 == 0)
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
                                     this.pos.getX() + (float) rand.nextGaussian() * 10F,
                                     this.pos.getY() + rand.nextFloat() * 10F,
                                     this.pos.getZ() + (float) rand.nextGaussian() * 10F,
                                     this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F,
                                     rand.nextFloat() * 0.1F + 0.1F, 0x89cc37, rand.nextFloat() * 1F + 1F
-                            ));*/
+                            ));
                     }
                 }
 
@@ -121,10 +123,8 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
                         if (stored > 0) {
                             this.container.drainAura(stored, false);
 
-                            // TODO particles
-                            /*if (this.world.getGameTime() % 4 == 0)
+                            if (this.world.getGameTime() % 4 == 0)
                                 PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 4));
-                            */
                         }
                     }
                 } else {
@@ -141,10 +141,8 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
                             if (this.container.getStoredAura() >= req) {
                                 this.container.drainAura(req, false);
 
-                                // TODO particles
-                                /*if (this.timer % 4 == 0)
+                                if (this.timer % 4 == 0)
                                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 4));
-                                */
 
                                 this.timer++;
                                 if (this.timer >= this.currentRecipe.time) {

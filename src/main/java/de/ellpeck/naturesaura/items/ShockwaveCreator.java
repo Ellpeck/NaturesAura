@@ -5,6 +5,8 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.items.tools.Armor;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -105,7 +107,7 @@ public class ShockwaveCreator extends ItemImpl implements ITrinketItem {
             if (worldIn instanceof ServerWorld)
                 ((ServerWorld) worldIn).spawnParticle(ParticleTypes.POOF, living.posX, living.posY + 0.01F, living.posZ, 15, 0D, 0D, 0D, 0.15D);
 
-            // TODO PacketHandler.sendToAllAround(worldIn, pos, 32, new PacketParticles((float) living.posX, (float) living.posY, (float) living.posZ, 11));
+            PacketHandler.sendToAllAround(worldIn, pos, 32, new PacketParticles((float) living.posX, (float) living.posY, (float) living.posZ, 11));
         }
     }
 

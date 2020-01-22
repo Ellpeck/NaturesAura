@@ -6,6 +6,8 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -75,9 +77,8 @@ public class PlantBoostEffect implements IDrainSpotEffect {
                         BlockPos closestSpot = IAuraChunk.getHighestSpot(world, plantPos, 25, pos);
                         IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 3500);
 
-                        // TODO particles
-                      /*  PacketHandler.sendToAllAround(world, plantPos, 32,
-                                new PacketParticles(plantPos.getX(), plantPos.getY(), plantPos.getZ(), 6));*/
+                        PacketHandler.sendToAllAround(world, plantPos, 32,
+                                new PacketParticles(plantPos.getX(), plantPos.getY(), plantPos.getZ(), 6));
                     }
                 }
             }

@@ -3,6 +3,9 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemFrameEntity;
@@ -154,8 +157,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
     private void sendParticles() {
         for (int j = 0; j < 2; j++) {
             BlockPos p = j == 0 ? this.pos : this.getConnectedPos();
-            // TODO particles
-           /* PacketHandler.sendToAllAround(this.world, p, 32, new PacketParticleStream(
+            PacketHandler.sendToAllAround(this.world, p, 32, new PacketParticleStream(
                     p.getX() + (float) this.world.rand.nextGaussian() * 3F,
                     p.getY() + 1 + this.world.rand.nextFloat() * 3F,
                     p.getZ() + (float) this.world.rand.nextGaussian() * 3F,
@@ -163,7 +165,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
                     p.getY() + 0.5F,
                     p.getZ() + 0.5F,
                     this.world.rand.nextFloat() * 0.07F + 0.07F, IAuraType.forWorld(this.world).getColor(), this.world.rand.nextFloat() + 0.5F
-            ));*/
+            ));
         }
     }
 

@@ -2,6 +2,8 @@ package de.ellpeck.naturesaura.entities;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -48,13 +50,12 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
         BlockPos pos = this.getPosition();
 
         if (!this.spotOffsets.isEmpty() && this.world.getGameTime() % 10 == 0)
-            // TODO particles
-            /*PacketHandler.sendToAllAround(this.world, pos, 32, new PacketParticles(
+            PacketHandler.sendToAllAround(this.world, pos, 32, new PacketParticles(
                     (float) this.posX, (float) this.posY, (float) this.posZ, 22,
-                    MathHelper.floor(this.motionX * 100F), MathHelper.floor(this.motionY * 100F), MathHelper.floor(this.motionZ * 100F)));*/
+                    MathHelper.floor(this.getMotion().getX() * 100F), MathHelper.floor(this.getMotion().getY() * 100F), MathHelper.floor(this.getMotion().getZ() * 100F)));
 
-            if (pos.distanceSq(this.lastPosition) < 8 * 8)
-                return;
+        if (pos.distanceSq(this.lastPosition) < 8 * 8)
+            return;
 
         this.moveAura(this.world, this.lastPosition, this.world, pos);
         this.lastPosition = pos;

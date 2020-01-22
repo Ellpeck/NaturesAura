@@ -3,6 +3,8 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -82,9 +84,8 @@ public class TileEntityRFConverter extends TileEntityImpl implements ITickableTi
             BlockPos pos = IAuraChunk.getHighestSpot(this.world, this.pos, 45, this.pos);
             IAuraChunk.getAuraChunk(this.world, pos).drainAura(pos, amountToUse);
 
-            // TODO particles
-            /*PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                    new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 20));*/
+            PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                    new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 20));
         }
     }
 

@@ -1,6 +1,8 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.HopperBlock;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -60,9 +62,8 @@ public class TileEntityHopperUpgrade extends TileEntityImpl implements ITickable
                     BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 25, this.pos);
                     IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 500);
 
-                    // TODO particles
-                   /* PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 10));*/
+                    PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 10));
                 }
             }
         }

@@ -40,7 +40,7 @@ public class TileEntityTimeChanger extends TileEntityImpl implements ITickableTi
                     continue;
 
                 if (this.goalTime > 0) {
-                    long current = this.world.getGameTime();
+                    long current = this.world.getDayTime();
                     long toAdd = Math.min(75, this.goalTime - current);
                     if (toAdd <= 0) {
                         this.goalTime = 0;
@@ -93,7 +93,7 @@ public class TileEntityTimeChanger extends TileEntityImpl implements ITickableTi
                 this.sendToClients();
             }
         } else if (this.goalTime > 0 && this.world.rand.nextFloat() >= 0.25F) {
-            double angle = Math.toRadians(this.world.getGameTime() * 5F % 360);
+            double angle = Math.toRadians(this.world.getDayTime() * 5F % 360);
             double x = this.pos.getX() + 0.5 + Math.sin(angle) * 3F;
             double z = this.pos.getZ() + 0.5 + Math.cos(angle) * 3F;
             int color = this.goalTime % 24000 > 12000 ? 0xe2e2e2 : 0xffe926;

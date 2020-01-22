@@ -4,6 +4,8 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -74,10 +76,9 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
 
                     // TODO weather effects
                     //this.world.addWeatherEffect(new LightningBoltEntity(this.world, this.pos.getX(), this.pos.getY(), this.pos.getZ(), true));
-                    // TODO particles
-                    /* PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
+                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
                             (float) item.posX, (float) item.posY, (float) item.posZ, 13,
-                            this.pos.getX(), this.pos.getY(), this.pos.getZ()));*/
+                            this.pos.getX(), this.pos.getY(), this.pos.getZ()));
 
                     break;
                 }
