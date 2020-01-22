@@ -1,16 +1,16 @@
-/* TODO packets
 package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class PacketParticleStream implements IMessage {
+import java.util.function.Supplier;
+
+public class PacketParticleStream implements IPacket {
 
     private float startX;
     private float startY;
@@ -40,43 +40,44 @@ public class PacketParticleStream implements IMessage {
 
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        this.startX = buf.readFloat();
-        this.startY = buf.readFloat();
-        this.startZ = buf.readFloat();
-        this.endX = buf.readFloat();
-        this.endY = buf.readFloat();
-        this.endZ = buf.readFloat();
-        this.speed = buf.readFloat();
-        this.color = buf.readInt();
-        this.scale = buf.readFloat();
+    public static PacketParticleStream fromBytes(PacketBuffer buf) {
+        PacketParticleStream packet = new PacketParticleStream();
+
+        packet.startX = buf.readFloat();
+        packet.startY = buf.readFloat();
+        packet.startZ = buf.readFloat();
+        packet.endX = buf.readFloat();
+        packet.endY = buf.readFloat();
+        packet.endZ = buf.readFloat();
+        packet.speed = buf.readFloat();
+        packet.color = buf.readInt();
+        packet.scale = buf.readFloat();
+
+        return packet;
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeFloat(this.startX);
-        buf.writeFloat(this.startY);
-        buf.writeFloat(this.startZ);
-        buf.writeFloat(this.endX);
-        buf.writeFloat(this.endY);
-        buf.writeFloat(this.endZ);
-        buf.writeFloat(this.speed);
-        buf.writeInt(this.color);
-        buf.writeFloat(this.scale);
+    public static void toBytes(PacketParticleStream packet, PacketBuffer buf) {
+        buf.writeFloat(packet.startX);
+        buf.writeFloat(packet.startY);
+        buf.writeFloat(packet.startZ);
+        buf.writeFloat(packet.endX);
+        buf.writeFloat(packet.endY);
+        buf.writeFloat(packet.endZ);
+        buf.writeFloat(packet.speed);
+        buf.writeInt(packet.color);
+        buf.writeFloat(packet.scale);
     }
 
-    public static class Handler implements IMessageHandler<PacketParticleStream, IMessage> {
+    public static class Handler {
 
-        @Override
         @OnlyIn(Dist.CLIENT)
-        public IMessage onMessage(PacketParticleStream message, MessageContext ctx) {
-            NaturesAura.proxy.scheduleTask(() -> NaturesAuraAPI.instance().spawnParticleStream(
+        public static void onMessage(PacketParticleStream message, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> NaturesAuraAPI.instance().spawnParticleStream(
                     message.startX, message.startY, message.startZ,
                     message.endX, message.endY, message.endZ,
                     message.speed, message.color, message.scale));
 
-            return null;
+            ctx.get().setPacketHandled(true);
         }
     }
-}*/
+}
