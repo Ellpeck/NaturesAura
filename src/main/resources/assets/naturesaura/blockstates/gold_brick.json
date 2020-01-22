@@ -1,14 +1,13 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "minecraft:cube_all",
+        "model": "minecraft:block/cube_all",
         "textures": {
             "all": "naturesaura:blocks/gold_brick"
         },
         "transform": "forge:default-block"
     },
     "variants": {
-        "normal": [{}],
-        "inventory": [{}]
+        "": [{}]
     }
 }

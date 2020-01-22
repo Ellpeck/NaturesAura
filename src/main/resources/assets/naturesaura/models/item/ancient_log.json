@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:block/cube_column",
+    "textures": {
+        "end": "naturesaura:blocks/ancient_log_top",
+        "side": "naturesaura:blocks/ancient_log"
+    }
+}

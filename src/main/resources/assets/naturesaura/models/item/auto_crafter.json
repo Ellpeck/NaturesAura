@@ -1,0 +1,11 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "up": "naturesaura:blocks/auto_crafter_top",
+        "north": "naturesaura:blocks/auto_crafter",
+        "east": "naturesaura:blocks/auto_crafter",
+        "west": "naturesaura:blocks/auto_crafter",
+        "down": "naturesaura:blocks/auto_crafter_bottom",
+        "south": "naturesaura:blocks/auto_crafter"
+    }
+}

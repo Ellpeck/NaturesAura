@@ -26,8 +26,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -55,8 +56,9 @@ public final class Helper {
     public static boolean getTileEntitiesInArea(IWorld world, BlockPos pos, int radius, Function<TileEntity, Boolean> consumer) {
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
-                if (isChunkLoaded(world, x, z)) {
-                    for (BlockPos tilePos : world.getChunk(x, z).getTileEntitiesPos()) {
+                Chunk chunk = getOptionalChunk(world, x, z);
+                if (chunk != null) {
+                    for (BlockPos tilePos : chunk.getTileEntitiesPos()) {
                         if (tilePos.distanceSq(pos) <= radius * radius)
                             if (consumer.apply(world.getTileEntity(tilePos)))
                                 return true;
@@ -70,8 +72,8 @@ public final class Helper {
     public static void getAuraChunksInArea(World world, BlockPos pos, int radius, Consumer<AuraChunk> consumer) {
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
-                if (isChunkLoaded(world, x, z)) {
-                    Chunk chunk = world.getChunk(x, z);
+                Chunk chunk = getOptionalChunk(world, x, z);
+                if (chunk != null) {
                     AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
                     if (auraChunk != null)
                         consumer.accept(auraChunk);
@@ -91,15 +93,9 @@ public final class Helper {
         return frames;
     }
 
-    // For some reason this method isn't public in World, but I also don't want to have to make a new BlockPos
-    // or use the messy MutableBlockPos system just to see if a chunk is loaded, so this will have to do I guess
-    public static boolean isChunkLoaded(IWorld world, int x, int z) {
-        AbstractChunkProvider provider = world.getChunkProvider();
-        if (!world.isRemote()) {
-            return provider.chunkExists(x, z);
-        } else {
-            return !provider.getChunk(x, z, false).isEmpty();
-        }
+    public static Chunk getOptionalChunk(IWorld world, int x, int z) {
+        IChunk chunk = world.getChunk(x, z, ChunkStatus.EMPTY, false);
+        return chunk instanceof Chunk ? (Chunk) chunk : null;
     }
 
     public static int blendColors(int c1, int c2, float ratio) {
@@ -319,7 +315,7 @@ public final class Helper {
     public static AxisAlignedBB aabb(Vec3d pos) {
         return new AxisAlignedBB(pos.x, pos.y, pos.z, pos.x, pos.y, pos.z);
     }
-    
+
     // This is how @ObjectHolder _SHOULD_ work...
     public static <T extends IForgeRegistryEntry<T>> void populateObjectHolders(Class clazz, IForgeRegistry<T> registry) {
         for (Field entry : clazz.getFields()) {

@@ -3,14 +3,7 @@ package de.ellpeck.naturesaura.proxy;
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
-
-import java.util.function.Supplier;
 
 public class ServerProxy implements IProxy {
 
@@ -30,11 +23,6 @@ public class ServerProxy implements IProxy {
     }
 
     @Override
-    public void registerRenderer(ItemStack stack, ModelResourceLocation location) {
-
-    }
-
-    @Override
     public void addColorProvidingItem(IColorProvidingItem item) {
 
     }
@@ -46,11 +34,6 @@ public class ServerProxy implements IProxy {
 
     @Override
     public void registerTESR(ITESRProvider provider) {
-
-    }
-
-    @Override
-    public <T extends Entity> void registerEntityRenderer(Class<T> entityClass, Supplier<IRenderFactory<T>> renderFactory) {
 
     }
 
@@ -67,10 +50,5 @@ public class ServerProxy implements IProxy {
     @Override
     public void setParticleSpawnRange(int range) {
 
-    }
-
-    @Override
-    public void scheduleTask(Runnable runnable) {
-        ServerLifecycleHooks.getCurrentServer().runAsync(runnable);
     }
 }

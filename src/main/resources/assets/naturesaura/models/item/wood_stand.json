@@ -1,0 +1,7 @@
+{
+    "parent": "naturesaura:block/wood_stand",
+    "textures": {
+        "texture": "minecraft:blocks/log_oak",
+        "top": "minecraft:blocks/log_oak_top"
+    }
+}

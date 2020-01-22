@@ -1,14 +1,14 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "minecraft:rail_flat",
+        "model": "minecraft:block/rail_flat",
         "textures": {
             "rail": "naturesaura:blocks/dimension_rail_overworld"
         },
         "transform": "forge:default-block"
     },
     "variants": {
-        "normal": [{}],
+        "": [{}],
         "inventory": [
             {
                 "model": "builtin/generated",

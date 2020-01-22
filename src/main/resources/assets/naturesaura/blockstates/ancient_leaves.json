@@ -1,22 +1,26 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "minecraft:leaves",
+        "model": "minecraft:block/leaves",
         "textures": {
             "all": "naturesaura:blocks/ancient_leaves"
         },
         "transform": "forge:default-block"
     },
     "variants": {
-        "normal": [{}],
-        "inventory": [{}],
-        "decayable": {
+        "": [{}],
+        "persistent": {
             "true": {},
             "false": {}
         },
-        "check_decay": {
-            "true": {},
-            "false": {}
+        "distance": {
+            "1": {},
+            "2": {},
+            "3": {},
+            "4": {},
+            "5": {},
+            "6": {},
+            "7": {}
         }
     }
 }

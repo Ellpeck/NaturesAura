@@ -1,0 +1,11 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "up": "naturesaura:blocks/pickup_stopper_top",
+        "down": "naturesaura:blocks/pickup_stopper_top",
+        "north": "naturesaura:blocks/pickup_stopper",
+        "east": "naturesaura:blocks/pickup_stopper",
+        "south": "naturesaura:blocks/pickup_stopper",
+        "west": "naturesaura:blocks/pickup_stopper"
+    }
+}

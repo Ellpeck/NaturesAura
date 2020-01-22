@@ -1,0 +1,7 @@
+{
+    "parent": "naturesaura:block/nature_altar",
+    "textures": {
+        "texture": "naturesaura:blocks/nature_altar",
+        "top": "naturesaura:blocks/nature_altar_top"
+    }
+}

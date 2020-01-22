@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "minecraft:cube_column",
+        "model": "minecraft:block/cube_column",
         "textures": {
             "end": "naturesaura:blocks/ancient_log",
             "side": "naturesaura:blocks/ancient_log"
@@ -9,8 +9,7 @@
         "transform": "forge:default-block"
     },
     "variants": {
-        "normal": [{}],
-        "inventory": [{}],
+        "": [{}],
         "axis": {
             "y": {},
             "z": {

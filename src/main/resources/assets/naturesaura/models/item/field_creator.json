@@ -1,0 +1,7 @@
+{
+    "parent": "naturesaura:block/field_creator",
+    "textures": {
+        "texture": "naturesaura:blocks/field_creator",
+        "center": "naturesaura:blocks/field_creator_center"
+    }
+}

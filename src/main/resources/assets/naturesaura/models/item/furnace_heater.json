@@ -1,0 +1,6 @@
+{
+    "parent": "naturesaura:block/furnace_heater",
+    "textures": {
+        "texture": "naturesaura:blocks/furnace_heater"
+    }
+}

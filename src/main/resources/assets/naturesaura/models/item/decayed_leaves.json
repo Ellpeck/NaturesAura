@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:model/leaves",
+    "textures": {
+        "all": "naturesaura:blocks/decayed_leaves"
+    }
+}

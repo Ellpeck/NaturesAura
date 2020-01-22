@@ -1,0 +1,11 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "up": "naturesaura:blocks/moss_generator_top",
+        "down": "naturesaura:blocks/moss_generator_top",
+        "north": "naturesaura:blocks/moss_generator",
+        "east": "naturesaura:blocks/moss_generator",
+        "south": "naturesaura:blocks/moss_generator",
+        "west": "naturesaura:blocks/moss_generator"
+    }
+}

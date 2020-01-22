@@ -1,0 +1,11 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "up": "naturesaura:blocks/firework_generator_top",
+        "down": "naturesaura:blocks/firework_generator",
+        "north": "naturesaura:blocks/firework_generator",
+        "east": "naturesaura:blocks/firework_generator",
+        "south": "naturesaura:blocks/firework_generator",
+        "west": "naturesaura:blocks/firework_generator"
+    }
+}

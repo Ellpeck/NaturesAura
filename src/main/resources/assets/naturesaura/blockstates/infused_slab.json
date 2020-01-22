@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "minecraft:half_slab",
+        "model": "minecraft:block/half_slab",
         "textures": {
             "bottom": "naturesaura:blocks/infused_stone",
             "top": "naturesaura:blocks/infused_stone",
@@ -10,13 +10,15 @@
         "transform": "forge:default-block"
     },
     "variants": {
-        "half=top": [
+        "type=top": [
             {
                 "x": 180,
                 "uvlock": true
             }
         ],
-        "half=bottom": [{}],
-        "inventory": [{}]
+        "type=bottom": [{}],
+        "type=double": {
+            "model": "naturesaura:block/infused_stone"
+        }
     }
 }

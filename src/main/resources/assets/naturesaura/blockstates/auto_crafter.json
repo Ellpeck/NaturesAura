@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "minecraft:cube",
+        "model": "minecraft:block/cube",
         "textures": {
             "particle": "naturesaura:blocks/auto_crafter",
             "up": "naturesaura:blocks/auto_crafter_top",
@@ -14,8 +14,7 @@
         "transform": "forge:default-block"
     },
     "variants": {
-        "normal": [{}],
-        "inventory": [{}],
+        "": [{}],
         "facing": {
             "north": {},
             "south": {

@@ -1,0 +1,11 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "up": "naturesaura:blocks/generator_limit_remover_top",
+        "down": "naturesaura:blocks/infused_stone",
+        "north": "naturesaura:blocks/generator_limit_remover",
+        "east": "naturesaura:blocks/generator_limit_remover",
+        "south": "naturesaura:blocks/generator_limit_remover",
+        "west": "naturesaura:blocks/generator_limit_remover"
+    }
+}

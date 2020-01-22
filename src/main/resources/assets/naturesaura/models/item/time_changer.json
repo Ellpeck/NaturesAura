@@ -1,0 +1,11 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "up": "naturesaura:blocks/time_changer_top",
+        "down": "naturesaura:blocks/time_changer_bottom",
+        "north": "naturesaura:blocks/time_changer",
+        "east": "naturesaura:blocks/time_changer",
+        "south": "naturesaura:blocks/time_changer",
+        "west": "naturesaura:blocks/time_changer"
+    }
+}

@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "naturesaura:offering_table",
+        "model": "naturesaura:block/offering_table",
         "textures": {
             "0": "naturesaura:blocks/stripped_oak_log",
             "1": "naturesaura:blocks/stripped_oak_log_top",
@@ -11,7 +11,6 @@
         "transform": "forge:default-block"
     },
     "variants": {
-        "normal": [{}],
-        "inventory": [{}]
+        "": [{}]
     }
 }

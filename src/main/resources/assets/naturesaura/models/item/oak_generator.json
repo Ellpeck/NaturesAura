@@ -1,0 +1,11 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "up": "naturesaura:blocks/oak_generator_top",
+        "down": "naturesaura:blocks/oak_generator_bottom",
+        "north": "naturesaura:blocks/oak_generator",
+        "east": "naturesaura:blocks/oak_generator",
+        "south": "naturesaura:blocks/oak_generator",
+        "west": "naturesaura:blocks/oak_generator"
+    }
+}

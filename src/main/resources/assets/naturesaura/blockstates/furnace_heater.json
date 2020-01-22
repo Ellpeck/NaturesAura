@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "naturesaura:furnace_heater",
+        "model": "naturesaura:block/furnace_heater",
         "textures": {
             "texture": "naturesaura:blocks/furnace_heater",
             "particle": "#texture"
@@ -9,8 +9,7 @@
         "transform": "forge:default-block"
     },
     "variants": {
-        "normal": [{}],
-        "inventory": [{}],
+        "": [{}],
         "facing": {
             "down": {
                 "x": 180

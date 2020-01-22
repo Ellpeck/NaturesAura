@@ -1,0 +1,7 @@
+{
+    "parent": "naturesaura:block/powder_placer",
+    "textures": {
+        "texture": "naturesaura:blocks/powder_placer",
+        "top": "naturesaura:blocks/powder_placer_top"
+    }
+}

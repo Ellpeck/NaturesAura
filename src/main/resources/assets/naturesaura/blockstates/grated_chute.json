@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "naturesaura:grated_chute_down",
+        "model": "naturesaura:block/grated_chute_down",
         "textures": {
             "particle": "naturesaura:blocks/grated_chute_outside",
             "top": "naturesaura:blocks/grated_chute_top",
@@ -11,8 +11,7 @@
         "transform": "forge:default-block"
     },
     "variants": {
-        "normal": [{}],
-        "inventory": [{}],
+        "": [{}],
         "facing=down": {
             "model": "naturesaura:grated_chute_down"
         },
