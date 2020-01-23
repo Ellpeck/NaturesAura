@@ -3,7 +3,11 @@ package de.ellpeck.naturesaura.proxy;
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
+import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+
+import java.util.function.Supplier;
 
 public interface IProxy {
     void preInit(FMLCommonSetupEvent event);
@@ -23,4 +27,7 @@ public interface IProxy {
     void setParticleDepth(boolean depth);
 
     void setParticleSpawnRange(int range);
+
+    <T extends Entity> void registerEntityRenderer(Class<T> entityClass, Supplier<IRenderFactory<T>> renderFactory);
+
 }

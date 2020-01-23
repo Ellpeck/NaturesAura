@@ -36,7 +36,7 @@ public class Shovel extends ShovelItem implements IModItem, IModelProvider {
 
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
-        if (this == ModItems.INFUSED_SHOVEL) {
+        if (this == ModItems.INFUSED_IRON_SHOVEL) {
             PlayerEntity player = context.getPlayer();
             World world = context.getWorld();
             BlockPos pos = context.getPos();
@@ -85,7 +85,7 @@ public class Shovel extends ShovelItem implements IModItem, IModelProvider {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (this == ModItems.INFUSED_SHOVEL)
+        if (this == ModItems.INFUSED_IRON_SHOVEL)
             return Helper.makeRechargeProvider(stack, true);
         else return null;
     }

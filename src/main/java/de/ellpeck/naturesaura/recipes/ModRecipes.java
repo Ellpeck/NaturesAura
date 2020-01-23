@@ -157,7 +157,7 @@ public final class ModRecipes {
                 ing(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON),
                 Ingredient.EMPTY, 15000, 80).register();
         new AltarRecipe(res("infused_iron_block"),
-                ing(Blocks.IRON_BLOCK), new ItemStack(ModBlocks.INFUSED_IRON),
+                ing(Blocks.IRON_BLOCK), new ItemStack(ModBlocks.INFUSED_IRON_BLOCK),
                 Ingredient.EMPTY, 135000, 700).register();
         new AltarRecipe(res("infused_stone"),
                 ing(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE),

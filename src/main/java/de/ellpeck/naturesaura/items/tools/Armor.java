@@ -63,7 +63,7 @@ public class Armor extends ArmorItem implements IModItem, IModelProvider {
     public static boolean isFullSetEquipped(LivingEntity entity, int setIndex) {
         if (sets == null) {
             sets = new ArrayList<>();
-            sets.add(new Item[]{ModItems.INFUSED_SHOES, ModItems.INFUSED_PANTS, ModItems.INFUSED_CHEST, ModItems.INFUSED_HELMET});
+            sets.add(new Item[]{ModItems.INFUSED_IRON_SHOES, ModItems.INFUSED_IRON_PANTS, ModItems.INFUSED_IRON_CHEST, ModItems.INFUSED_IRON_HELMET});
         }
 
         Item[] set = sets.get(setIndex);

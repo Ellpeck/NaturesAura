@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAncientLeaves;
 import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.BlockState;
@@ -16,7 +15,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -27,6 +25,7 @@ public class BlockAncientLeaves extends LeavesBlock implements
     public BlockAncientLeaves() {
         super(ModBlocks.prop(Material.LEAVES, MaterialColor.PINK));
         ModRegistry.add(this);
+        ModRegistry.add(new ModTileType<>(TileEntityAncientLeaves::new, this));
     }
 
     @Override
@@ -34,32 +33,10 @@ public class BlockAncientLeaves extends LeavesBlock implements
         return "ancient_leaves";
     }
 
-    public void onInit(FMLCommonSetupEvent event) {
-        //GameRegistry.registerTileEntity(TileEntityAncientLeaves.class, new ResourceLocation(NaturesAura.MOD_ID, "ancient_leaves"));
-    }
-
-    /*  Appears to be handled already somewhere by super
-    @Override
-    public void beginLeaveDecay(BlockState state, IWorldReader world, BlockPos pos) {
-        if (!state.get(DISTANCE).intValue() && state.getValue(DECAYABLE)) {
-            world.getChunk(pos).setBlockState(pos, state.with(CHECK_DECAY, true), false);
-        }
-    }
-    */
-
-
-    /*  // Appears to auto remove TE during setting of the state by the world
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
-        super.breakBlock(worldIn, pos, state);
-        worldIn.removeTileEntity(pos);
-    }
-     */
-
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return ModTileEntities.ANCIENT_LEAVES.create();
+        return new TileEntityAncientLeaves();
     }
 
     @Override

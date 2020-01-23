@@ -3,24 +3,30 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityProjectileGenerator;
+import de.ellpeck.naturesaura.blocks.tiles.render.RenderProjectileGenerator;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class BlockProjectileGenerator extends BlockContainerImpl/* implements ITESRProvider*/ {
+public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider {
     public BlockProjectileGenerator() {
         super("projectile_generator", TileEntityProjectileGenerator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
 
@@ -64,9 +70,9 @@ public class BlockProjectileGenerator extends BlockContainerImpl/* implements IT
         event.setCanceled(true);
     }
 
-/*    @Override
+    @Override
     @OnlyIn(Dist.CLIENT)
     public Tuple<Class, TileEntityRenderer> getTESR() {
         return new Tuple<>(TileEntityProjectileGenerator.class, new RenderProjectileGenerator());
-    }*/
+    }
 }

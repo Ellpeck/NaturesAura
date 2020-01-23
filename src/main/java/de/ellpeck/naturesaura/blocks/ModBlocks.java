@@ -35,7 +35,7 @@ public final class ModBlocks {
     public static Block HOPPER_UPGRADE;
     public static Block FIELD_CREATOR;
     public static Block OAK_GENERATOR;
-    public static Block INFUSED_IRON;
+    public static Block INFUSED_IRON_BLOCK;
     public static Block OFFERING_TABLE;
     public static Block PICKUP_STOPPER;
     public static Block SPAWN_LAMP;

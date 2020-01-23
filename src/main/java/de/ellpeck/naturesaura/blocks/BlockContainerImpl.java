@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
@@ -97,13 +98,13 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem, IMod
             ((TileEntityImpl) tile).loadDataOnPlace(stack);
     }
 
-    /*@Override TODO weird redstone stuff
-    public void onBlockAdded(World worldIn, BlockPos pos, BlockState state) {
+    @Override
+    public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         this.updateRedstoneState(worldIn, pos);
     }
 
     @Override
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         this.updateRedstoneState(worldIn, pos);
     }
 
@@ -114,15 +115,15 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem, IMod
                 TileEntityImpl impl = (TileEntityImpl) tile;
                 int newPower = world.getRedstonePowerFromNeighbors(pos);
                 if (impl.redstonePower != newPower)
-                    world.scheduleUpdate(pos, this, this.tickRate(world));
+                    world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world));
             }
         }
     }
 
     @Override
-    public int tickRate(World worldIn) {
+    public int tickRate(IWorldReader worldIn) {
         return 4;
-    }*/
+    }
 
     @Override
     public void tick(BlockState state, World worldIn, BlockPos pos, Random random) {

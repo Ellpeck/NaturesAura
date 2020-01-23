@@ -3,7 +3,11 @@ package de.ellpeck.naturesaura.proxy;
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
+import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+
+import java.util.function.Supplier;
 
 public class ServerProxy implements IProxy {
 
@@ -49,6 +53,11 @@ public class ServerProxy implements IProxy {
 
     @Override
     public void setParticleSpawnRange(int range) {
+
+    }
+
+    @Override
+    public <T extends Entity> void registerEntityRenderer(Class<T> entityClass, Supplier<IRenderFactory<T>> renderFactory) {
 
     }
 }

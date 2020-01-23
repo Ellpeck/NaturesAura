@@ -8,6 +8,8 @@ import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
 import de.ellpeck.naturesaura.entities.ModEntities;
+import de.ellpeck.naturesaura.entities.render.RenderEffectInhibitor;
+import de.ellpeck.naturesaura.entities.render.RenderMoverMinecart;
 import de.ellpeck.naturesaura.items.*;
 import de.ellpeck.naturesaura.items.tools.*;
 import de.ellpeck.naturesaura.misc.BlockLootProvider;
@@ -184,13 +186,18 @@ public final class ModRegistry {
     public static void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
         event.getRegistry().registerAll(
                 EntityType.Builder.create(EntityMoverMinecart::new, EntityClassification.MISC)
+                        .size(1, 1).setShouldReceiveVelocityUpdates(true)
                         .setTrackingRange(64).setUpdateInterval(3).immuneToFire().build(NaturesAura.MOD_ID + ":mover_minecart")
                         .setRegistryName("mover_cart"),
                 EntityType.Builder.create(EntityEffectInhibitor::new, EntityClassification.MISC)
+                        .size(1, 1).setShouldReceiveVelocityUpdates(true)
                         .setTrackingRange(64).setUpdateInterval(20).immuneToFire().build(NaturesAura.MOD_ID + ":effect_inhibitor")
                         .setRegistryName("effect_inhibitor")
         );
         Helper.populateObjectHolders(ModEntities.class, event.getRegistry());
+
+        NaturesAura.proxy.registerEntityRenderer(EntityMoverMinecart.class, () -> RenderMoverMinecart::new);
+        NaturesAura.proxy.registerEntityRenderer(EntityEffectInhibitor.class, () -> RenderEffectInhibitor::new);
     }
 
     @SubscribeEvent

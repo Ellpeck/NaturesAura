@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.LongNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -23,6 +24,7 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -102,7 +104,7 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
     public void killMinecart(DamageSource source) {
         this.remove();
         if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS))
-            this.entityDropItem(new ItemStack(ModItems.MOVER_MINECART), 0);
+            this.entityDropItem(new ItemStack(ModItems.MOVER_CART), 0);
     }
 
     @Override
@@ -154,12 +156,12 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
 
     @Override
     public ItemStack getCartItem() {
-        return new ItemStack(ModItems.MOVER_MINECART);
+        return new ItemStack(ModItems.MOVER_CART);
     }
 
     @Override
     public ItemStack getPickedResult(RayTraceResult target) {
-        return new ItemStack(ModItems.MOVER_MINECART);
+        return new ItemStack(ModItems.MOVER_CART);
     }
 
     @Override
@@ -173,4 +175,8 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
         this.setMotion(motion.x * 0.99F, 0, motion.z * 0.99F);
     }
 
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 }

@@ -323,10 +323,13 @@ public final class Helper {
         for (Field entry : clazz.getFields()) {
             if (!Modifier.isStatic(entry.getModifiers()))
                 continue;
-            String location = entry.getName().toLowerCase(Locale.ROOT);
-            T value = registry.getValue(new ResourceLocation(NaturesAura.MOD_ID, location));
+            ResourceLocation location = new ResourceLocation(NaturesAura.MOD_ID, entry.getName().toLowerCase(Locale.ROOT));
+            if (!registry.containsKey(location)) {
+                NaturesAura.LOGGER.fatal("Couldn't find entry named " + location + " in registry " + registry.getRegistryName());
+                continue;
+            }
             try {
-                entry.set(null, value);
+                entry.set(null, registry.getValue(location));
             } catch (IllegalAccessException e) {
                 NaturesAura.LOGGER.error(e);
             }

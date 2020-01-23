@@ -11,7 +11,6 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -29,10 +28,9 @@ public class EffectPowder extends ItemImpl implements IColorProvidingItem {
     public ActionResultType onItemUse(ItemUseContext context) {
         World world = context.getWorld();
         if (!world.isRemote) {
-            BlockPos pos = context.getPos();
             Vec3d hit = context.getHitVec();
             ItemStack stack = context.getPlayer().getHeldItem(context.getHand());
-            EntityEffectInhibitor.place(world, stack, pos.getX() + hit.x, pos.getY() + hit.y + 1, pos.getZ() + hit.z);
+            EntityEffectInhibitor.place(world, stack, hit.x, hit.y + 1, hit.z);
             stack.setCount(0);
         }
         return ActionResultType.SUCCESS;
@@ -51,7 +49,7 @@ public class EffectPowder extends ItemImpl implements IColorProvidingItem {
 
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
-        return new TranslationTextComponent(this.getTranslationKey(stack) + "." + getEffect(stack) + ".name");
+        return new TranslationTextComponent(this.getTranslationKey(stack) + "." + getEffect(stack));
     }
 
     public static ResourceLocation getEffect(ItemStack stack) {

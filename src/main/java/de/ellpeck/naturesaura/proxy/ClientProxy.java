@@ -15,13 +15,17 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class ClientProxy implements IProxy {
 
@@ -86,4 +90,10 @@ public class ClientProxy implements IProxy {
     public void setParticleSpawnRange(int range) {
         ParticleHandler.range = range;
     }
+
+    @Override
+    public <T extends Entity> void registerEntityRenderer(Class<T> entityClass, Supplier<IRenderFactory<T>> renderFactory) {
+        RenderingRegistry.registerEntityRenderingHandler(entityClass, renderFactory.get());
+    }
+
 }

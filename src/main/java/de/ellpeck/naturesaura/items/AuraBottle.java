@@ -58,7 +58,7 @@ public class AuraBottle extends ItemImpl implements IColorProvidingItem {
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent.RightClickItem event) {
         ItemStack held = event.getItemStack();
-        if (held.isEmpty() || held.getItem() != ModItems.BOTTLE_TWO)
+        if (held.isEmpty() || held.getItem() != ModItems.BOTTLE_TWO_THE_REBOTTLING)
             return;
         PlayerEntity player = event.getPlayer();
         RayTraceResult ray = rayTrace(player.world, player, RayTraceContext.FluidMode.NONE);
@@ -96,7 +96,7 @@ public class AuraBottle extends ItemImpl implements IColorProvidingItem {
 
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
-        return new TranslationTextComponent(stack.getTranslationKey() + "." + getType(stack).getName() + ".name");
+        return new TranslationTextComponent(stack.getTranslationKey() + "." + getType(stack).getName());
     }
 
     public static IAuraType getType(ItemStack stack) {

@@ -38,7 +38,7 @@ public class Pickaxe extends PickaxeItem implements IModItem, IModelProvider {
 
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
-        if (this == ModItems.INFUSED_PICKAXE) {
+        if (this == ModItems.INFUSED_IRON_PICKAXE) {
             PlayerEntity player = context.getPlayer();
             World world = context.getWorld();
             BlockPos pos = context.getPos();
@@ -59,7 +59,7 @@ public class Pickaxe extends PickaxeItem implements IModItem, IModelProvider {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (this == ModItems.INFUSED_PICKAXE)
+        if (this == ModItems.INFUSED_IRON_PICKAXE)
             return Helper.makeRechargeProvider(stack, true);
         else return null;
     }

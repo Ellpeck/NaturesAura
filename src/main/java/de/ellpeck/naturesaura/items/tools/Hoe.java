@@ -31,7 +31,7 @@ public class Hoe extends HoeItem implements IModItem, IModelProvider {
     public ActionResultType onItemUse(ItemUseContext context) {
         World world = context.getWorld();
         ActionResultType result = super.onItemUse(context);
-        if (!world.isRemote && result == ActionResultType.SUCCESS && this == ModItems.INFUSED_HOE) {
+        if (!world.isRemote && result == ActionResultType.SUCCESS && this == ModItems.INFUSED_IRON_HOE) {
             ItemStack seed = ItemStack.EMPTY;
             Random random = world.getRandom();
             BlockPos pos = context.getPos();
@@ -64,7 +64,7 @@ public class Hoe extends HoeItem implements IModItem, IModelProvider {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (this == ModItems.INFUSED_HOE)
+        if (this == ModItems.INFUSED_IRON_HOE)
             return Helper.makeRechargeProvider(stack, true);
         else return null;
     }

@@ -2,13 +2,19 @@ package de.ellpeck.naturesaura.compat.jei;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import de.ellpeck.naturesaura.items.AuraBottle;
+import de.ellpeck.naturesaura.items.EffectPowder;
+import de.ellpeck.naturesaura.items.ModItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -34,6 +40,21 @@ public class JEINaturesAuraPlugin implements IModPlugin {
                 new OfferingCategory(helper),
                 new AnimalSpawnerCategory(helper)
         );
+    }
+
+    @Override
+    public void registerItemSubtypes(ISubtypeRegistration registration) {
+        registration.registerSubtypeInterpreter(ModItems.EFFECT_POWDER, stack -> EffectPowder.getEffect(stack).toString());
+        registration.registerSubtypeInterpreter(ModItems.AURA_BOTTLE, stack -> AuraBottle.getType(stack).getName().toString());
+
+        ISubtypeInterpreter auraInterpreter = stack -> {
+            IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
+            if (container != null)
+                return String.valueOf(container.getStoredAura());
+            return ISubtypeInterpreter.NONE;
+        };
+        registration.registerSubtypeInterpreter(ModItems.AURA_CACHE, auraInterpreter);
+        registration.registerSubtypeInterpreter(ModItems.AURA_TROVE, auraInterpreter);
     }
 
     @Override

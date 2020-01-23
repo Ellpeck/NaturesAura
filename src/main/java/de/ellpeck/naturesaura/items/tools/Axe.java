@@ -32,7 +32,7 @@ public class Axe extends AxeItem implements IModItem, IModelProvider {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if (this == ModItems.INFUSED_AXE && state.getMaterial() == Material.LEAVES) {
+        if (this == ModItems.INFUSED_IRON_AXE && state.getMaterial() == Material.LEAVES) {
             return this.efficiency;
         } else {
             return super.getDestroySpeed(stack, state);
@@ -42,7 +42,7 @@ public class Axe extends AxeItem implements IModItem, IModelProvider {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (this == ModItems.INFUSED_AXE)
+        if (this == ModItems.INFUSED_IRON_AXE)
             return Helper.makeRechargeProvider(stack, true);
         else return null;
     }

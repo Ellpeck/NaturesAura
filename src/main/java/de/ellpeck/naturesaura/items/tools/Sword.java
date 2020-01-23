@@ -33,7 +33,7 @@ public class Sword extends SwordItem implements IModItem, IModelProvider {
 
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (this == ModItems.INFUSED_SWORD)
+        if (this == ModItems.INFUSED_IRON_SWORD)
             target.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 60, 2));
         return super.hitEntity(stack, target, attacker);
     }
@@ -41,7 +41,7 @@ public class Sword extends SwordItem implements IModItem, IModelProvider {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (this == ModItems.INFUSED_SWORD)
+        if (this == ModItems.INFUSED_IRON_SWORD)
             return Helper.makeRechargeProvider(stack, true);
         else return null;
     }

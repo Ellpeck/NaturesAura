@@ -27,6 +27,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.List;
 
@@ -83,14 +84,14 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     private void addToPowderList() {
-        if (!this.isAddedToWorld())
+        if (!this.isAddedToWorld() || this.getInhibitedEffect() == null)
             return;
         List<Tuple<Vec3d, Integer>> powders = this.getPowderList();
         powders.add(new Tuple<>(this.getPositionVector(), this.getAmount()));
     }
 
     private void removeFromPowderList() {
-        if (!this.isAddedToWorld())
+        if (!this.isAddedToWorld() || this.getInhibitedEffect() == null)
             return;
         List<Tuple<Vec3d, Integer>> powders = this.getPowderList();
         Vec3d pos = this.getPositionVector();
@@ -145,7 +146,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
 
     @Override
     public IPacket<?> createSpawnPacket() {
-        return null;
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
@@ -169,7 +170,10 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     public ResourceLocation getInhibitedEffect() {
-        return new ResourceLocation(this.dataManager.get(INHIBITED_EFFECT));
+        String effect = this.dataManager.get(INHIBITED_EFFECT);
+        if (effect == null || effect.isEmpty())
+            return null;
+        return new ResourceLocation(effect);
     }
 
     public void setColor(int color) {

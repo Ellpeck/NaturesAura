@@ -25,7 +25,7 @@ public class MoverMinecart extends ItemImpl {
         BlockPos pos = context.getPos();
         if (AbstractRailBlock.isRail(world.getBlockState(pos))) {
             if (!world.isRemote) {
-                AbstractMinecartEntity cart = new EntityMoverMinecart(ModEntities.MOVER_MINECART, world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                AbstractMinecartEntity cart = new EntityMoverMinecart(ModEntities.MOVER_CART, world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 world.addEntity(cart);
             }
             context.getPlayer().getHeldItem(context.getHand()).shrink(1);

@@ -79,14 +79,14 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
         if (!this.canUseHere(world.getDimension().getType()))
             return;
 
-        AxisAlignedBB box = cart.getCollisionBoundingBox();
+        AxisAlignedBB box = cart.getBoundingBox();
         PacketHandler.sendToAllAround(world, pos, 32, new PacketParticles((float) box.minX, (float) box.minY, (float) box.minZ, 25, (int) ((box.maxX - box.minX) * 100F), (int) ((box.maxY - box.minY) * 100F), (int) ((box.maxZ - box.minZ) * 100F)));
         world.playSound(null, pos, SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 1F, 1F);
 
         BlockPos goalCoords = this.getGoalCoords(world, pos);
 
         cart.changeDimension(DimensionType.getById(this.goalDim));
-        // (newWorld, entity, yaw) -> entity.moveToBlockPosAndAngles(goalCoords, yaw, entity.rotationPitch)
+        cart.moveToBlockPosAndAngles(goalCoords, cart.rotationYaw, cart.rotationPitch);
 
         BlockPos spot = IAuraChunk.getHighestSpot(world, pos, 35, pos);
         IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 50000);
