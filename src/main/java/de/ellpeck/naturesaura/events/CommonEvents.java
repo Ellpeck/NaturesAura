@@ -22,7 +22,6 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Optional;
 
 public class CommonEvents {
 
@@ -48,10 +47,10 @@ public class CommonEvents {
                     ChunkManager manager = ((ServerChunkProvider) event.world.getChunkProvider()).chunkManager;
                     Iterable<ChunkHolder> chunks = (Iterable<ChunkHolder>) GET_LOADED_CHUNKS_METHOD.invoke(manager);
                     for (ChunkHolder holder : chunks) {
-                        Optional<Chunk> chunkQuestionmark = holder.func_219296_a().getNow(ChunkHolder.UNLOADED_CHUNK).left();
-                        if (!chunkQuestionmark.isPresent())
+                        Chunk chunk = holder.func_219298_c();
+                        if (chunk == null)
                             continue;
-                        AuraChunk auraChunk = (AuraChunk) chunkQuestionmark.get().getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
+                        AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
                         if (auraChunk != null)
                             auraChunk.update();
                     }

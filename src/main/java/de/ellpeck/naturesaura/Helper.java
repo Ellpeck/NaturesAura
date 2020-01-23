@@ -25,9 +25,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -94,7 +96,12 @@ public final class Helper {
     }
 
     public static Chunk getLoadedChunk(IWorld world, int x, int z) {
-        return world.getChunkProvider().getChunk(x, z, false);
+        // DO NOT EDIT PLEASE FOR THE LOVE OF GOD
+        // This is very finicky and easily causes the game to hang for some reason
+        AbstractChunkProvider provider = world.getChunkProvider();
+        if (provider.isChunkLoaded(new ChunkPos(x, z)))
+            return provider.getChunk(x, z, false);
+        return null;
     }
 
     public static int blendColors(int c1, int c2, float ratio) {

@@ -143,8 +143,6 @@ public class AuraChunk implements IAuraChunk {
     public void update() {
         World world = this.chunk.getWorld();
 
-        if (this.drainSpots.size() > 0)
-            System.out.println("Updating with " + this.drainSpots.size());
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
             BlockPos pos = entry.getKey();
             MutableInt amount = entry.getValue();
