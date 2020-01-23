@@ -29,8 +29,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.chunk.IChunk;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -58,7 +56,7 @@ public final class Helper {
     public static boolean getTileEntitiesInArea(IWorld world, BlockPos pos, int radius, Function<TileEntity, Boolean> consumer) {
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
-                Chunk chunk = getOptionalChunk(world, x, z);
+                Chunk chunk = getLoadedChunk(world, x, z);
                 if (chunk != null) {
                     for (BlockPos tilePos : chunk.getTileEntitiesPos()) {
                         if (tilePos.distanceSq(pos) <= radius * radius)
@@ -74,7 +72,7 @@ public final class Helper {
     public static void getAuraChunksInArea(World world, BlockPos pos, int radius, Consumer<AuraChunk> consumer) {
         for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
             for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
-                Chunk chunk = getOptionalChunk(world, x, z);
+                Chunk chunk = getLoadedChunk(world, x, z);
                 if (chunk != null) {
                     AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
                     if (auraChunk != null)
@@ -95,9 +93,8 @@ public final class Helper {
         return frames;
     }
 
-    public static Chunk getOptionalChunk(IWorld world, int x, int z) {
-        IChunk chunk = world.getChunk(x, z, ChunkStatus.EMPTY, false);
-        return chunk instanceof Chunk ? (Chunk) chunk : null;
+    public static Chunk getLoadedChunk(IWorld world, int x, int z) {
+        return world.getChunkProvider().getChunk(x, z, false);
     }
 
     public static int blendColors(int c1, int c2, float ratio) {

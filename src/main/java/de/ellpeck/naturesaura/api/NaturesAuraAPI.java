@@ -319,32 +319,32 @@ public final class NaturesAuraAPI {
         boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name);
 
         /**
-         * @see IAuraChunk#getSpotsInArea(World, BlockPos, int, BiConsumer)
+         * @see IAuraChunk#getSpotsInArea(IWorld, BlockPos, int, BiConsumer)
          */
         void getAuraSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer);
 
         /**
-         * @see IAuraChunk#getSpotAmountInArea(World, BlockPos, int)
+         * @see IAuraChunk#getSpotAmountInArea(IWorld, BlockPos, int)
          */
         int getSpotAmountInArea(World world, BlockPos pos, int radius);
 
         /**
-         * @see IAuraChunk#getAuraInArea(World, BlockPos, int)
+         * @see IAuraChunk#getAuraInArea(IWorld, BlockPos, int)
          */
         int getAuraInArea(World world, BlockPos pos, int radius);
 
         /**
-         * @see IAuraChunk#triangulateAuraInArea(World, BlockPos, int)
+         * @see IAuraChunk#triangulateAuraInArea(IWorld, BlockPos, int)
          */
         int triangulateAuraInArea(World world, BlockPos pos, int radius);
 
         /**
-         * @see IAuraChunk#getLowestSpot(World, BlockPos, int, BlockPos)
+         * @see IAuraChunk#getLowestSpot(IWorld, BlockPos, int, BlockPos)
          */
         BlockPos getLowestAuraDrainSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot);
 
         /**
-         * @see IAuraChunk#getHighestSpot(World, BlockPos, int, BlockPos)
+         * @see IAuraChunk#getHighestSpot(IWorld, BlockPos, int, BlockPos)
          */
         BlockPos getHighestAuraDrainSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot);
     }
