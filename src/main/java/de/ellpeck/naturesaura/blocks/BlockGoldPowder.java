@@ -22,7 +22,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-// TODO
 public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
 
     public static final EnumProperty<AttachPos> NORTH = EnumProperty.create("north", AttachPos.class);

@@ -131,24 +131,14 @@ public class TileEntityImpl extends TileEntity {
         }
     }
 
-    public ItemStack getDrop(BlockState state, int fortune) {
-        // TODO weird drop stuff
-        /*Block block = state.getBlock();
-        ItemStack stack = new ItemStack(
-                block.getItemDropped(state, this.world.rand, fortune),
-                block.quantityDropped(state, fortune, this.world.rand),
-                block.damageDropped(state));
-
+    public void modifyDrop(ItemStack regularItem) {
         CompoundNBT compound = new CompoundNBT();
         this.writeNBT(compound, SaveType.BLOCK);
-
         if (!compound.isEmpty()) {
-            stack.setTagCompound(new CompoundNBT());
-            stack.getTagCompound().setTag("data", compound);
+            if (!regularItem.hasTag())
+                regularItem.setTag(new CompoundNBT());
+            regularItem.getTag().put("data", compound);
         }
-
-        return stack;*/
-        return null;
     }
 
     public void loadDataOnPlace(ItemStack stack) {

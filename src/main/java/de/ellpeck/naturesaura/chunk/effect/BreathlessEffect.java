@@ -42,12 +42,12 @@ public class BreathlessEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public ActiveType isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.world, pos, spot))
-            return -1;
+            return ActiveType.INACTIVE;
         if (!this.bb.contains(player.getPositionVector()))
-            return -1;
-        return 1;
+            return ActiveType.INACTIVE;
+        return ActiveType.ACTIVE;
     }
 
     @Override

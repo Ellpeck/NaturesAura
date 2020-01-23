@@ -66,12 +66,6 @@ public final class NaturesAura {
     }
 
     public void setup(FMLCommonSetupEvent event) {
-        Helper.populateObjectHolders(ModBlocks.class, ForgeRegistries.BLOCKS);
-        Helper.populateObjectHolders(ModTileEntities.class, ForgeRegistries.TILE_ENTITIES);
-        Helper.populateObjectHolders(ModEntities.class, ForgeRegistries.ENTITIES);
-        Helper.populateObjectHolders(ModItems.class, ForgeRegistries.ITEMS);
-        Helper.populateObjectHolders(ModPotions.class, ForgeRegistries.POTIONS);
-
         this.preInit(event);
         this.init(event);
         this.postInit(event);

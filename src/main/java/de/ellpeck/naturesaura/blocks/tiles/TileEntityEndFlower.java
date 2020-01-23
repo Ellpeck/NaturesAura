@@ -87,8 +87,8 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
 
                 if (this.container.getStoredAura() <= 0) {
                     this.world.setBlockState(this.pos, Blocks.DEAD_BUSH.getDefaultState());
-                   /* PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 18, this.container.getAuraColor()));*/
+                    PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 18, this.container.getAuraColor()));
                 }
             }
         } else {

@@ -6,15 +6,16 @@ import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -74,9 +75,8 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
                     for (int i = 0; i < recipeCount; i++)
                         this.itemsToSpawn.add(recipe.output.copy());
 
-                    // TODO weather effects
-                    //this.world.addWeatherEffect(new LightningBoltEntity(this.world, this.pos.getX(), this.pos.getY(), this.pos.getZ(), true));
-                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
+                    ((ServerWorld) this.world).addLightningBolt(new LightningBoltEntity(this.world, this.pos.getX(), this.pos.getY(), this.pos.getZ(), true));
+                    PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
                             (float) item.posX, (float) item.posY, (float) item.posZ, 13,
                             this.pos.getX(), this.pos.getY(), this.pos.getZ()));
 

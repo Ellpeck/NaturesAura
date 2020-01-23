@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.chunk;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
+import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect.ActiveType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -181,13 +182,13 @@ public class AuraChunk implements IAuraChunk {
             for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
                 BlockPos pos = entry.getKey();
                 MutableInt amount = entry.getValue();
-                int state = effect.isActiveHere(player, this.chunk, this, pos, amount.intValue());
-                if (state < 0)
+                ActiveType state = effect.isActiveHere(player, this.chunk, this, pos, amount.intValue());
+                if (state == ActiveType.INACTIVE)
                     continue;
                 ItemStack stack = effect.getDisplayIcon();
                 if (stack.isEmpty())
                     continue;
-                icons.put(effect.getName(), new Tuple<>(stack, state == 0));
+                icons.put(effect.getName(), new Tuple<>(stack, state == ActiveType.INHIBITED));
             }
         }
     }

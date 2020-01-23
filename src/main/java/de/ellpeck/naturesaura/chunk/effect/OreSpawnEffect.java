@@ -48,14 +48,14 @@ public class OreSpawnEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public ActiveType isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.world, pos, spot))
-            return -1;
+            return ActiveType.INACTIVE;
         if (player.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
-            return -1;
+            return ActiveType.INACTIVE;
         if (!NaturesAuraAPI.instance().isEffectPowderActive(player.world, player.getPosition(), NAME))
-            return 0;
-        return 1;
+            return ActiveType.INHIBITED;
+        return ActiveType.ACTIVE;
     }
 
     @Override

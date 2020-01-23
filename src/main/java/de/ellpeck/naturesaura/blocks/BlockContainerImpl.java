@@ -12,9 +12,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -49,31 +53,36 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem, IMod
         return BlockRenderType.MODEL;
     }
 
-/* TODO this   @Override
-    public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
-        if (!worldIn.isRemote) {
+    @Override
+    public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
+        super.onPlayerDestroy(worldIn, pos, state);
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        List<ItemStack> drops = super.getDrops(state, builder);
+
+        TileEntity tile = builder.get(LootParameters.BLOCK_ENTITY);
+        if (tile instanceof TileEntityImpl) {
+            for (ItemStack stack : drops) {
+                if (stack.getItem() != this.asItem())
+                    continue;
+                ((TileEntityImpl) tile).modifyDrop(stack);
+                break;
+            }
+        }
+        return drops;
+    }
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (state.getBlock() != newState.getBlock()) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityImpl)
                 ((TileEntityImpl) tile).dropInventory();
         }
-        super.breakBlock(worldIn, pos, state);
-    }*/
-/*
- TODO drop stuff
-    @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        TileEntity tile = builder.getWorld().getTileEntity(builder.get(LootParameters.POSITION));
-
-        if (tile instanceof TileEntityImpl)
-            drops.add(((TileEntityImpl) tile).getDrop(state, fortune));
-        else
-            super.getDrops(drops, world, pos, state, fortune);
-    }*/
-
-   /* @Override
-    public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest) {
-        return willHarvest || super.removedByPlayer(state, world, pos, player, false);
-    }*/
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
+    }
 
     @Override
     public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {

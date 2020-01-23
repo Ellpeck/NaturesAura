@@ -123,13 +123,9 @@ public final class Helper {
         if (!stack.isEmpty()) {
             GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
-            GlStateManager.pushTextureAttributes();
-            GlStateManager.pushLightingAttributes();
             RenderHelper.enableStandardItemLighting();
             Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
             RenderHelper.disableStandardItemLighting();
-            GlStateManager.popAttributes();
-            GlStateManager.popAttributes();
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         }

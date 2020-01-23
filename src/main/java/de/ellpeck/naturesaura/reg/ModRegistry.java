@@ -1,16 +1,24 @@
 package de.ellpeck.naturesaura.reg;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.*;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
+import de.ellpeck.naturesaura.entities.ModEntities;
 import de.ellpeck.naturesaura.items.*;
 import de.ellpeck.naturesaura.items.tools.*;
+import de.ellpeck.naturesaura.misc.BlockLootProvider;
+import de.ellpeck.naturesaura.misc.BlockTagProvider;
+import de.ellpeck.naturesaura.misc.ItemTagProvider;
+import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -22,6 +30,7 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +38,7 @@ import java.util.Set;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ModRegistry {
 
-    private static final Set<IModItem> ALL_ITEMS = new HashSet<>();
+    public static final Set<IModItem> ALL_ITEMS = new HashSet<>();
 
     public static void add(IModItem item) {
         ALL_ITEMS.add(item);
@@ -94,6 +103,8 @@ public final class ModRegistry {
             event.getRegistry().register(new BlockRFConverter());
         if (ModConfig.enabledFeatures.chunkLoader)
             event.getRegistry().register(new BlockChunkLoader());
+
+        Helper.populateObjectHolders(ModBlocks.class, event.getRegistry());
     }
 
     @SubscribeEvent
@@ -149,6 +160,7 @@ public final class ModRegistry {
                 new EnderAccess(),
                 new CaveFinder()
         );
+        Helper.populateObjectHolders(ModItems.class, event.getRegistry());
     }
 
     @SubscribeEvent
@@ -157,6 +169,7 @@ public final class ModRegistry {
             if (item instanceof ModTileType)
                 event.getRegistry().register(((ModTileType) item).type);
         }
+        Helper.populateObjectHolders(ModTileEntities.class, event.getRegistry());
     }
 
     @SubscribeEvent
@@ -164,6 +177,7 @@ public final class ModRegistry {
         event.getRegistry().registerAll(
                 new PotionBreathless()
         );
+        Helper.populateObjectHolders(ModPotions.class, event.getRegistry());
     }
 
     @SubscribeEvent
@@ -176,84 +190,25 @@ public final class ModRegistry {
                         .setTrackingRange(64).setUpdateInterval(20).immuneToFire().build(NaturesAura.MOD_ID + ":effect_inhibitor")
                         .setRegistryName("effect_inhibitor")
         );
-    }
-/*
-    private static void registerPotion(Effect potion, String name) {
-        potion.setRegistryName("potion." + NaturesAura.MOD_ID + "." + name + ".name");
-
-        potion.setRegistryName(NaturesAura.MOD_ID, name);
-        ForgeRegistries.POTIONS.register(potion);
+        Helper.populateObjectHolders(ModEntities.class, event.getRegistry());
     }
 
-    private static void registerItem(Item item, String name, ItemGroup tab) {
-        item.setRegistryName(NaturesAura.MOD_ID, name);
-        ForgeRegistries.ITEMS.register(item);
-
-        item.setCreativeTab(tab);
+    @SubscribeEvent
+    public static void gatherData(GatherDataEvent event) {
+        DataGenerator generator = event.getGenerator();
+        generator.addProvider(new BlockLootProvider(generator));
+        generator.addProvider(new BlockTagProvider(generator));
+        generator.addProvider(new ItemTagProvider(generator));
     }
-
-    private static void registerBlock(Block block, String name, BlockItem item, ItemGroup tab) {
-        block.setTranslationKey(NaturesAura.MOD_ID + "." + name);
-
-        block.setRegistryName(NaturesAura.MOD_ID, name);
-        ForgeRegistries.BLOCKS.register(block);
-
-        if (item != null) {
-            item.setRegistryName(block.getRegistryName());
-            ForgeRegistries.ITEMS.register(item);
-        }
-
-        block.setCreativeTab(tab);
-    }
-
-    private static ItemGroup getTab(IModItem item) {
-        if (item instanceof ICreativeItem) {
-            return ((ICreativeItem) item).getGroupToAdd();
-        }
-        return null;
-    }
-
-    public static void preInit(FMLCommonSetupEvent event) {
-        for (IModItem item : ALL_ITEMS) {
-            if (item instanceof Item) {
-                registerItem((Item) item, item.getBaseName(), getTab(item));
-            } else if (item instanceof Block) {
-                Block block = (Block) item;
-
-                BlockItem itemBlock;
-                if (item instanceof ICustomItemBlockProvider) {
-                    itemBlock = ((ICustomItemBlockProvider) item).getItemBlock();
-                } else {
-                    itemBlock = new BlockItem(block);
-                }
-
-                registerBlock(block, item.getBaseName(), itemBlock, getTab(item));
-            } else if (item instanceof Effect) {
-                registerPotion((Effect) item, item.getBaseName());
-            }
-
-            if (item instanceof IModelProvider) {
-                Map<ItemStack, ModelResourceLocation> models = ((IModelProvider) item).getModelLocations();
-                for (ItemStack stack : models.keySet())
-                    NaturesAura.proxy.registerRenderer(stack, models.get(stack));
-            }
-
-            item.onPreInit(event);
-        }
-    }
-*/
 
     public static void init() {
         for (IModItem item : ALL_ITEMS) {
-            if (item instanceof IColorProvidingBlock) {
+            if (item instanceof IColorProvidingBlock)
                 NaturesAura.proxy.addColorProvidingBlock((IColorProvidingBlock) item);
-            }
-            if (item instanceof IColorProvidingItem) {
+            if (item instanceof IColorProvidingItem)
                 NaturesAura.proxy.addColorProvidingItem((IColorProvidingItem) item);
-            }
-            if (item instanceof ITESRProvider) {
+            if (item instanceof ITESRProvider)
                 NaturesAura.proxy.registerTESR((ITESRProvider) item);
-            }
         }
     }
 }

@@ -17,9 +17,12 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -36,11 +39,16 @@ import java.util.List;
 
 public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider {
 
-    private static final AxisAlignedBB BOUND_BOX = new AxisAlignedBB(3 / 16F, 0F, 3 / 16F, 13 / 16F, 13 / 16F, 13 / 16F);
+    private static final VoxelShape SHAPE = VoxelShapes.create(3 / 16F, 0F, 3 / 16F, 13 / 16F, 13 / 16F, 13 / 16F);
 
     public BlockWoodStand() {
         super("wood_stand", TileEntityWoodStand::new, ModBlocks.prop(Material.WOOD).hardnessAndResistance(1.5F).sound(SoundType.WOOD).harvestLevel(0).harvestTool(ToolType.AXE));
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return SHAPE;
     }
 
     @SubscribeEvent
@@ -95,38 +103,6 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider 
     public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         return Helper.putStackOnTile(player, handIn, pos, 0, true);
     }
-
-    /*
-
-    @Override
-    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
-        return BOUND_BOX;
-    }
-
-    @Override
-    public boolean isFullCube(BlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(BlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isNormalCube(BlockState state, IBlockAccess world, BlockPos pos) {
-        return false;
-    }
-
-    @Override
-    public boolean isSideSolid(BlockState baseState, IBlockAccess world, BlockPos pos, Direction side) {
-        return false;
-    }
-
-    @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
-        return BlockFaceShape.UNDEFINED;
-    }*/
 
     @Override
     @OnlyIn(Dist.CLIENT)

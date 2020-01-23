@@ -4,7 +4,6 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.BlockEnderCrate;
-import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -86,14 +85,12 @@ public class TileEntityEnderCrate extends TileEntityImpl {
     }
 
     @Override
-    public ItemStack getDrop(BlockState state, int fortune) {
-        ItemStack drop = super.getDrop(state, fortune);
+    public void modifyDrop(ItemStack regularItem) {
         if (this.name != null) {
-            if (!drop.hasTag())
-                drop.setTag(new CompoundNBT());
-            drop.getTag().putString(NaturesAura.MOD_ID + ":ender_name", this.name);
+            if (!regularItem.hasTag())
+                regularItem.setTag(new CompoundNBT());
+            regularItem.getTag().putString(NaturesAura.MOD_ID + ":ender_name", this.name);
         }
-        return drop;
     }
 
     @Override

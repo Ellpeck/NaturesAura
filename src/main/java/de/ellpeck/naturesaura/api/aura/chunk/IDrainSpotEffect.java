@@ -16,11 +16,15 @@ public interface IDrainSpotEffect {
 
     ResourceLocation getName();
 
-    default int isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        return -1;
+    default ActiveType isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        return ActiveType.INACTIVE;
     }
 
     default ItemStack getDisplayIcon() {
         return ItemStack.EMPTY;
+    }
+
+    public enum ActiveType {
+        INACTIVE, INHIBITED, ACTIVE
     }
 }

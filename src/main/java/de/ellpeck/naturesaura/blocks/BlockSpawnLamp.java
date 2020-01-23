@@ -3,10 +3,10 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntitySpawnLamp;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.MobEntity;
@@ -15,6 +15,10 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,8 +30,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable {
 
-    // TODO bounding box
-    private static final AxisAlignedBB AABB = new AxisAlignedBB(4 / 16F, 0F, 4 / 16F, 12 / 16F, 13 / 16F, 12 / 16F);
+    private static final VoxelShape SHAPE = VoxelShapes.create(4 / 16F, 0F, 4 / 16F, 12 / 16F, 13 / 16F, 12 / 16F);
 
     public BlockSpawnLamp() {
         super("spawn_lamp", TileEntitySpawnLamp::new, ModBlocks.prop(Material.IRON).hardnessAndResistance(3F).lightValue(15).sound(SoundType.METAL));
@@ -66,41 +69,16 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable 
         });
     }
 
-/*    @Override
-    public AxisAlignedBB getBoundingBox(BlockState state, IWorld source, BlockPos pos) {
-        return AABB;
-    }*/
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return SHAPE;
+    }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
-
-/*    @Override
-    public boolean isFullCube(BlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(BlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isNormalCube(BlockState state, IBlockAccess world, BlockPos pos) {
-        return false;
-    }
-
-    @Override
-    public boolean isSideSolid(BlockState baseState, IBlockAccess world, BlockPos pos, Direction side) {
-        return false;
-    }
-
-    @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
-        return BlockFaceShape.UNDEFINED;
-    }*/
 
     @Override
     @OnlyIn(Dist.CLIENT)

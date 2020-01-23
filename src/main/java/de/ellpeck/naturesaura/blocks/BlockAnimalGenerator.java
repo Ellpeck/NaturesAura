@@ -3,8 +3,9 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAnimalGenerator;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.INPC;
@@ -71,13 +72,11 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
             gen.setGenerationValues(time, amount);
 
             BlockPos genPos = gen.getPos();
-            /* TODO
             PacketHandler.sendToAllAround(entity.world, pos, 32, new PacketParticles(
                     (float) entity.posX, (float) entity.posY, (float) entity.posZ, 17,
                     child ? 1 : 0,
                     (int) (entity.getEyeHeight() * 10F),
                     genPos.getX(), genPos.getY(), genPos.getZ()));
-            */
 
             return true;
         });
