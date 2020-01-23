@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.entities;
 
 import com.google.common.collect.ListMultimap;
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
@@ -112,7 +111,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
         super.tick();
         if (this.world.isRemote) {
             if (this.world.getGameTime() % 5 == 0) {
-                NaturesAura.proxy.spawnMagicParticle(
+                NaturesAuraAPI.instance().spawnMagicParticle(
                         this.posX + this.world.rand.nextGaussian() * 0.1F,
                         this.posY,
                         this.posZ + this.world.rand.nextGaussian() * 0.1F,

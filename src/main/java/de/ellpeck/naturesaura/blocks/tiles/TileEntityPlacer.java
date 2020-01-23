@@ -9,12 +9,16 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -110,7 +114,8 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickableTileEnt
 
         FakePlayer fake = FakePlayerFactory.getMinecraft((ServerWorld) this.world);
         fake.inventory.mainInventory.set(fake.inventory.currentItem, stack);
-        fake.interactionManager.processRightClick(fake, this.world, fake.getHeldItemMainhand(), Hand.MAIN_HAND);
+        BlockRayTraceResult ray = new BlockRayTraceResult(new Vec3d(pos).add(0.5F, 0.5F, 0.5F), Direction.UP, pos, false);
+        ForgeHooks.onPlaceItemIntoWorld(new ItemUseContext(fake, Hand.MAIN_HAND, ray));
         return fake.getHeldItemMainhand().copy();
     }
 

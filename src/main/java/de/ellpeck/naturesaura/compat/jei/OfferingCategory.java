@@ -1,8 +1,9 @@
 package de.ellpeck.naturesaura.compat.jei;
 
+import com.google.common.collect.ImmutableList;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
-import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
@@ -10,6 +11,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Arrays;
@@ -49,7 +51,10 @@ public class OfferingCategory implements IRecipeCategory<OfferingRecipe> {
 
     @Override
     public void setIngredients(OfferingRecipe offeringRecipe, IIngredients iIngredients) {
-
+        iIngredients.setInputs(VanillaTypes.ITEM, ImmutableList.<ItemStack>builder()
+                .add(offeringRecipe.input.getMatchingStacks())
+                .add(offeringRecipe.startItem.getMatchingStacks()).build());
+        iIngredients.setOutput(VanillaTypes.ITEM, offeringRecipe.output);
     }
 
     @Override

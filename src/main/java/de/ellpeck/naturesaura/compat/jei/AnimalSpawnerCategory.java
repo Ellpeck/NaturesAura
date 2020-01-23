@@ -1,7 +1,9 @@
 package de.ellpeck.naturesaura.compat.jei;
 
+import com.google.common.collect.ImmutableList;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
@@ -9,7 +11,12 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.SpawnEggItem;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
 
@@ -48,7 +55,13 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
 
     @Override
     public void setIngredients(AnimalSpawnerRecipe animalSpawnerRecipe, IIngredients iIngredients) {
+        ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
+        for (Ingredient ing : animalSpawnerRecipe.ingredients)
+            builder.add(ing.getMatchingStacks());
+        iIngredients.setInputs(VanillaTypes.ITEM, builder.build());
 
+        EntityType entry = ForgeRegistries.ENTITIES.getValue(animalSpawnerRecipe.entity);
+        iIngredients.setOutput(VanillaTypes.ITEM, new ItemStack(SpawnEggItem.getEgg(entry)));
     }
 
     @Override

@@ -1,8 +1,9 @@
 package de.ellpeck.naturesaura.compat.jei;
 
+import com.google.common.collect.ImmutableList;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
-import de.ellpeck.naturesaura.compat.jei.JEINaturesAuraPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
@@ -10,6 +11,8 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Arrays;
@@ -49,7 +52,12 @@ public class TreeRitualCategory implements IRecipeCategory<TreeRitualRecipe> {
 
     @Override
     public void setIngredients(TreeRitualRecipe treeRitualRecipe, IIngredients iIngredients) {
-
+        ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
+        for (Ingredient ing : treeRitualRecipe.ingredients)
+            builder.add(ing.getMatchingStacks());
+        builder.add(treeRitualRecipe.saplingType.getMatchingStacks());
+        iIngredients.setInputs(VanillaTypes.ITEM, builder.build());
+        iIngredients.setOutput(VanillaTypes.ITEM, treeRitualRecipe.result);
     }
 
     @Override

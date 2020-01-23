@@ -84,7 +84,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
         Vec3d dir = new Vec3d(endX - startX, endY - startY, endZ - startZ);
         double length = dir.length();
         if (length > 0) {
-            dir.normalize();
+            dir = dir.normalize();
             this.spawnMagicParticle(startX, startY, startZ,
                     dir.x * speed, dir.y * speed, dir.z * speed,
                     color, scale, (int) (length / speed), 0F, false, false);

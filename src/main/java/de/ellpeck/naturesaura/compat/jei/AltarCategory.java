@@ -1,8 +1,10 @@
 package de.ellpeck.naturesaura.compat.jei;
 
+import com.google.common.collect.ImmutableList;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
@@ -53,7 +55,12 @@ public class AltarCategory implements IRecipeCategory<AltarRecipe> {
 
     @Override
     public void setIngredients(AltarRecipe altarRecipe, IIngredients iIngredients) {
-
+        ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
+        builder.add(altarRecipe.input.getMatchingStacks());
+        if (altarRecipe.catalyst != Ingredient.EMPTY)
+            builder.add(altarRecipe.catalyst.getMatchingStacks());
+        iIngredients.setInputs(VanillaTypes.ITEM, builder.build());
+        iIngredients.setOutput(VanillaTypes.ITEM, altarRecipe.output);
     }
 
     @Override

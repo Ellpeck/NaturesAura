@@ -10,22 +10,19 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShearsItem;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.List;
@@ -97,7 +94,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
             if (this.world.getGameTime() % 40 == 0)
                 chunk.drainAura(spot, 100);
 
-            boolean shears = this.shears() || creator.shears();
+            ItemStack tool = this.getToolUsed(creator);
             Vec3d dist = new Vec3d(
                     this.pos.getX() - connectedPos.getX(),
                     this.pos.getY() - connectedPos.getY(),
@@ -105,7 +102,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
             );
             double length = dist.length();
             Vec3d normal = new Vec3d(dist.x / length, dist.y / length, dist.z / length);
-            for (int i = MathHelper.floor(length); i > 0; i--) {
+            for (float i = MathHelper.floor(length); i > 0; i -= 0.5F) {
                 Vec3d scaled = normal.scale(i);
                 BlockPos pos = connectedPos.add(
                         MathHelper.floor(scaled.x + 0.5F),
@@ -120,38 +117,38 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
                 if (!block.isAir(state, this.world, pos) && state.getBlockHardness(this.world, pos) >= 0F) {
                     FakePlayer fake = FakePlayerFactory.getMinecraft((ServerWorld) this.world);
                     if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.world, pos, state, fake))) {
-                        boolean shearBlock = shears && block instanceof IShearable;
-                        List<ItemStack> drops;
-                        if (shearBlock && ((IShearable) block).isShearable(ItemStack.EMPTY, this.world, pos))
-                            drops = ((IShearable) block).onSheared(ItemStack.EMPTY, this.world, pos, 0);
-                        else {
-                            drops = state.getDrops(new LootContext.Builder((ServerWorld) this.world)
-                                    .withParameter(LootParameters.POSITION, pos)
-                                    .withParameter(LootParameters.BLOCK_STATE, state));
-                        }
-                        float chance = ForgeEventFactory.fireBlockHarvesting((NonNullList<ItemStack>) drops, this.world, pos, state, 0, 1, false, fake);
-                        if (chance > 0 && this.world.rand.nextFloat() <= chance) {
-                            this.world.destroyBlock(pos, false);
-                            for (ItemStack stack : drops)
-                                Block.spawnAsEntity(this.world, pos, stack);
-
-                            chunk.drainAura(spot, shearBlock ? 1000 : 300);
-                            this.sendParticles();
-                        }
+                        List<ItemStack> drops = state.getDrops(new LootContext.Builder((ServerWorld) this.world)
+                                .withParameter(LootParameters.POSITION, pos)
+                                .withParameter(LootParameters.BLOCK_STATE, state)
+                                .withParameter(LootParameters.TOOL, tool == null ? new ItemStack(Items.DIAMOND_PICKAXE) : tool)
+                                .withNullableParameter(LootParameters.BLOCK_ENTITY, this.world.getTileEntity(pos)));
+                        this.world.destroyBlock(pos, false);
+                        for (ItemStack stack : drops)
+                            Block.spawnAsEntity(this.world, pos, stack);
+                        chunk.drainAura(spot, tool != null ? 1000 : 300);
+                        this.sendParticles();
                     }
                 }
             }
         }
     }
 
-    public boolean shears() {
+    private ItemStack getToolUsed(TileEntityFieldCreator other) {
+        ItemStack myTool = this.getMyTool();
+        ItemStack otherTool = other.getMyTool();
+        if (myTool != null && otherTool != null)
+            return this.world.rand.nextBoolean() ? myTool : otherTool;
+        return myTool;
+    }
+
+    private ItemStack getMyTool() {
         List<ItemFrameEntity> frames = Helper.getAttachedItemFrames(this.world, this.pos);
         for (ItemFrameEntity frame : frames) {
             ItemStack stack = frame.getDisplayedItem();
-            if (!stack.isEmpty() && stack.getItem() instanceof ShearsItem)
-                return true;
+            if (!stack.isEmpty())
+                return stack;
         }
-        return false;
+        return null;
     }
 
     private void sendParticles() {
