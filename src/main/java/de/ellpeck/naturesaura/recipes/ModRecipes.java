@@ -30,6 +30,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
@@ -267,22 +268,17 @@ public final class ModRecipes {
         spawner("wolf", "minecraft:wolf", 50000, 60, ing(Items.LEATHER), ing(Items.BONE));
         spawner("zombie", "minecraft:zombie", 100000, 100, ing(Items.ROTTEN_FLESH));
 
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreCoal", 5000));
-        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherCoal", 5000));
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreIron", 3000));
-        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherIron", 3000));
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreGold", 500));
-        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherGold", 500));
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreDiamond", 50));
-        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherDiamond", 50));
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreLapis", 250));
-        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherLapis", 250));
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreRedstone", 200));
-        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherRedstone", 200));
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreEmerald", 30));
-        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreQuartz", 3000));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_COAL, 5000));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_IRON, 3000));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_GOLD, 500));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_DIAMOND, 50));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_LAPIS, 250));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_REDSTONE, 200));
+        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_EMERALD, 30));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre(Tags.Blocks.ORES_QUARTZ, 3000));
 
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreCopper", 2000));
+        // TODO figure out how to deal with foreign ore tags
+        /*NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreCopper", 2000));
         NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherCopper", 2000));
         NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("oreTin", 1800));
         NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreNetherTin", 1800));
@@ -325,7 +321,7 @@ public final class ModRecipes {
         NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre("orePoorSilver", 1000));
 
         NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreCobalt", 50));
-        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreArdite", 50));
+        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreArdite", 50));*/
 
         NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("egg"), 2500);
         NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("snowball"), 3500);

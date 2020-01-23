@@ -59,8 +59,7 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickableTileEnt
 
                         BlockPos up = pos.up();
                         BlockState state = this.world.getBlockState(up);
-                        // TODO maybe allow the placer to place on more than air?
-                        if (state.isAir(this.world, up))
+                        if (state.getMaterial().isReplaceable())
                             validPositions.add(up);
                     }
             if (validPositions.isEmpty())
@@ -106,44 +105,12 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickableTileEnt
     }
 
     private ItemStack tryPlace(ItemStack stack, BlockPos pos) {
-        if (this.handleSpecialCases(stack, pos))
-            return stack;
-
         if (!(this.world instanceof ServerWorld))
             return stack;
-
         FakePlayer fake = FakePlayerFactory.getMinecraft((ServerWorld) this.world);
         fake.inventory.mainInventory.set(fake.inventory.currentItem, stack);
         BlockRayTraceResult ray = new BlockRayTraceResult(new Vec3d(pos).add(0.5F, 0.5F, 0.5F), Direction.UP, pos, false);
         ForgeHooks.onPlaceItemIntoWorld(new ItemUseContext(fake, Hand.MAIN_HAND, ray));
         return fake.getHeldItemMainhand().copy();
-    }
-
-    private boolean handleSpecialCases(ItemStack stack, BlockPos pos) {
-        // TODO placer special cases
-      /*  if (stack.getItem() == Items.REDSTONE)
-            if (Blocks.REDSTONE_WIRE.canPlaceBlockAt(this.world, pos))
-                this.world.setBlockState(pos, Blocks.REDSTONE_WIRE.getDefaultState());
-            else
-                return false;
-        else if (stack.getItem() == Item.getItemFromBlock(ModBlocks.GOLD_POWDER))
-            if (ModBlocks.GOLD_POWDER.canPlaceBlockAt(this.world, pos))
-                this.world.setBlockState(pos, ModBlocks.GOLD_POWDER.getDefaultState());
-            else
-                return false;
-        else if (stack.getItem() instanceof IPlantable) {
-            IPlantable plantable = (IPlantable) stack.getItem();
-            BlockState plant = plantable.getPlant(this.world, pos);
-            if (!plant.getBlock().canPlaceBlockAt(this.world, pos))
-                return false;
-            BlockState state = this.world.getBlockState(pos);
-            if (!state.getBlock().isAir(state, this.world, pos))
-                return false;
-            this.world.setBlockState(pos, plant);
-        } else*/
-        return false;
-
-        /*stack.shrink(1);
-        return true;*/
     }
 }

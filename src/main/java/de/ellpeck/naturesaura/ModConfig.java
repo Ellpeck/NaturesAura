@@ -5,6 +5,9 @@ import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.recipes.WeightedOre;
 import de.ellpeck.naturesaura.chunk.effect.OreSpawnEffect;
+import net.minecraft.block.Block;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
 
@@ -121,7 +124,8 @@ public final class ModConfig {
             try {
                 for (String s : general.additionalOres) {
                     String[] split = s.split(":");
-                    WeightedOre ore = new WeightedOre(split[0], Integer.parseInt(split[1]));
+                    Tag<Block> tag = BlockTags.getCollection().get(new ResourceLocation(split[0]));
+                    WeightedOre ore = new WeightedOre(tag, Integer.parseInt(split[1]));
                     String dimension = split[2];
                     if ("nether".equalsIgnoreCase(dimension))
                         NaturesAuraAPI.NETHER_ORES.add(ore);

@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -255,11 +256,11 @@ public final class Helper {
 
     public static void addAdvancement(PlayerEntity player, ResourceLocation advancement, String criterion) {
         if (!(player instanceof ServerPlayerEntity))
-            return;/* TODO add advancements
+            return;
         ServerPlayerEntity playerMp = (ServerPlayerEntity) player;
-        Advancement adv = playerMp.getServerWorld().getAdvancementManager().getAdvancement(advancement);
+        Advancement adv = playerMp.getServerWorld().getServer().getAdvancementManager().getAdvancement(advancement);
         if (adv != null)
-            playerMp.getAdvancements().grantCriterion(adv, criterion);*/
+            playerMp.getAdvancements().grantCriterion(adv, criterion);
     }
 
     public static int getIngredientAmount(Ingredient ingredient) {

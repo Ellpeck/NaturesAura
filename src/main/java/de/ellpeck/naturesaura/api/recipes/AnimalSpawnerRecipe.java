@@ -39,7 +39,7 @@ public class AnimalSpawnerRecipe {
             MobEntity living = (MobEntity) entity;
             living.rotationYawHead = entity.rotationYaw;
             living.renderYawOffset = entity.rotationYaw;
-            living.onInitialSpawn(world, world.getDifficultyForLocation(living.getPosition()), SpawnReason.SPAWNER, null, null); // TODO test if null is okay here
+            living.onInitialSpawn(world, world.getDifficultyForLocation(living.getPosition()), SpawnReason.SPAWNER, null, null);
         }
         return entity;
     }

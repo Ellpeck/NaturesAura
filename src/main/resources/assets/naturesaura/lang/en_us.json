@@ -165,7 +165,7 @@
     "advancement.naturesaura.range_visualizer": "I Spy With my Little Eye",
     "advancement.naturesaura.range_visualizer.desc": "Create a Mystical Magnifier to see the range of your devices",
     "command.naturesaura.aura.usage": "/naaura store|drain <amount> [range] OR /naaura reset <range>",
-    "potion.naturesaura.breathless": "Breathless",
+    "effect.naturesaura.breathless": "Breathless",
     "entity.naturesaura.effect_inhibitor": "Effect Powder",
     "entity.naturesaura.mover_cart": "Aura Attraction Cart"
 }

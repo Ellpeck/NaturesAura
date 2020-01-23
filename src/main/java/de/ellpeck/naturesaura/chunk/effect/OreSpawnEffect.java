@@ -11,17 +11,18 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
-import net.minecraft.util.WeightedRandom;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.*;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.FakePlayerFactory;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -96,24 +97,21 @@ public class OreSpawnEffect implements IDrainSpotEffect {
             if (orePos.distanceSq(powderPos.x, powderPos.y, powderPos.z, true) <= range * range
                     && orePos.distanceSq(pos) <= this.dist * this.dist && world.isBlockLoaded(orePos)) {
                 BlockState state = world.getBlockState(orePos);
-                Block block = state.getBlock();
-                if (block != requiredBlock)
+                if (state.getBlock() != requiredBlock)
                     continue;
 
-                // TODO place ores
-                /*outer:
+                outer:
                 while (true) {
                     WeightedOre ore = WeightedRandom.getRandomItem(world.rand, ores, totalWeight);
-                    List<ItemStack> stacks = OreDictionary.getOres(ore.name, false);
-                    for (ItemStack stack : stacks) {
-                        if (stack.isEmpty())
-                            continue;
-                        Block toPlace = Block.getBlockFromItem(stack.getItem());
-                        if (toPlace == Blocks.AIR)
+                    for (Block toPlace : ore.tag.getAllElements()) {
+                        if (toPlace == null || toPlace == Blocks.AIR)
                             continue;
 
                         FakePlayer player = FakePlayerFactory.getMinecraft((ServerWorld) world);
-                        BlockState stateToPlace = toPlace.getStateForPlacement(world, pos, Direction.UP, 0, 0, 0, stack.getDamage(), player, EnumHand.MAIN_HAND);
+                        player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                        BlockRayTraceResult ray = new BlockRayTraceResult(new Vec3d(pos).add(0.5F, 0.5F, 0.5F), Direction.UP, pos, false);
+                        BlockItemUseContext context = new BlockItemUseContext(new ItemUseContext(player, Hand.MAIN_HAND, ray));
+                        BlockState stateToPlace = toPlace.getStateForPlacement(context);
                         if (SPAWN_EXCEPTIONS.contains(stateToPlace))
                             continue;
 
@@ -125,7 +123,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                         IAuraChunk.getAuraChunk(world, highestSpot).drainAura(highestSpot, toDrain);
                         break outer;
                     }
-                }*/
+                }
             }
         }
     }

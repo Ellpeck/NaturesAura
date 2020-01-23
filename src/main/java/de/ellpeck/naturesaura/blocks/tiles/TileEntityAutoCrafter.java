@@ -11,6 +11,7 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.EntityPredicates;
@@ -76,8 +77,7 @@ public class TileEntityAutoCrafter extends TileEntityImpl implements ITickableTi
                 this.crafting.setInventorySlotContents(i, stack.copy());
             }
 
-            // TODO get recipes from the recipe registry??
-            IRecipe recipe = /*CraftingManager.findMatchingRecipe(this.crafting, this.world);*/null;
+            IRecipe recipe = this.world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, this.crafting, this.world).orElse(null);
             if (recipe == null)
                 return;
 
@@ -109,7 +109,7 @@ public class TileEntityAutoCrafter extends TileEntityImpl implements ITickableTi
                     this.world.addEntity(remItem);
                 }
 
-               PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                PacketHandler.sendToAllAround(this.world, this.pos, 32,
                         new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 19));
             }
         }
