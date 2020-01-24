@@ -36,6 +36,8 @@ public class PlayerLayerTrinkets extends LayerRenderer<AbstractClientPlayerEntit
 
         this.alreadyRendered.clear();
         GlStateManager.pushMatrix();
+        GlStateManager.pushLightingAttributes();
+        GlStateManager.pushTextureAttributes();
         GlStateManager.color4f(1F, 1F, 1F, 1F);
         this.render(player, RenderType.BODY, main, second);
         float yaw = player.prevRotationYawHead + (player.rotationYawHead - player.prevRotationYawHead) * partialTicks;
@@ -45,6 +47,8 @@ public class PlayerLayerTrinkets extends LayerRenderer<AbstractClientPlayerEntit
         GlStateManager.rotatef(yaw - 270, 0, 1, 0);
         GlStateManager.rotatef(pitch, 0, 0, 1);
         this.render(player, RenderType.HEAD, main, second);
+        GlStateManager.popAttributes();
+        GlStateManager.popAttributes();
         GlStateManager.popMatrix();
 
     }

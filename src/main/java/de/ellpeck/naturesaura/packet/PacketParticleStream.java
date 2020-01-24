@@ -65,7 +65,6 @@ public class PacketParticleStream {
         buf.writeFloat(packet.scale);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static void onMessage(PacketParticleStream message, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> NaturesAuraAPI.instance().spawnParticleStream(
                 message.startX, message.startY, message.startZ,

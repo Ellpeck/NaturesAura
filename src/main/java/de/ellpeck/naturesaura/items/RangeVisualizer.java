@@ -29,7 +29,7 @@ public class RangeVisualizer extends ItemImpl {
 
     public RangeVisualizer() {
         super("range_visualizer", new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
-        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
     @Override
@@ -76,20 +76,23 @@ public class RangeVisualizer extends ItemImpl {
         }
     }
 
-    @SubscribeEvent
-    public void onInteract(PlayerInteractEvent.EntityInteractSpecific event) {
-        ItemStack stack = event.getItemStack();
-        if (stack.isEmpty() || stack.getItem() != this)
-            return;
-        Entity entity = event.getTarget();
-        if (entity instanceof IVisualizable) {
-            if (entity.world.isRemote) {
-                DimensionType dim = entity.world.getDimension().getType();
-                visualize(event.getPlayer(), VISUALIZED_ENTITIES, dim, entity);
+    public class EventHandler {
+
+        @SubscribeEvent
+        public void onInteract(PlayerInteractEvent.EntityInteractSpecific event) {
+            ItemStack stack = event.getItemStack();
+            if (stack.isEmpty() || stack.getItem() != RangeVisualizer.this)
+                return;
+            Entity entity = event.getTarget();
+            if (entity instanceof IVisualizable) {
+                if (entity.world.isRemote) {
+                    DimensionType dim = entity.world.getDimension().getType();
+                    visualize(event.getPlayer(), VISUALIZED_ENTITIES, dim, entity);
+                }
+                event.getPlayer().swingArm(event.getHand());
+                event.setCancellationResult(ActionResultType.SUCCESS);
+                event.setCanceled(true);
             }
-            event.getPlayer().swingArm(event.getHand());
-            event.setCancellationResult(ActionResultType.SUCCESS);
-            event.setCanceled(true);
         }
     }
 }

@@ -27,14 +27,6 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
         super("chunk_loader", TileEntityChunkLoader::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
     }
 
-    /* TODO Chunk Loading
-    @Override
-    public void onInit(FMLInitializationEvent event) {
-        super.onInit(event);
-        ForgeChunkManager.setForcedChunkLoadingCallback(NaturesAura.instance, new ChunkLoadingCallback());
-    }
-     */
-
     @Override
     @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
@@ -78,22 +70,5 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
-
-    // TODO chunk loading
-    /*public static class ChunkLoadingCallback implements ForgeChunkManager.LoadingCallback {
-
-        @Override
-        public void ticketsLoaded(List<Ticket> tickets, World world) {
-            for (Ticket ticket : tickets) {
-                CompoundNBT data = ticket.getModData();
-                BlockPos pos = BlockPos.fromLong(data.getLong("pos"));
-                TileEntity tile = world.getTileEntity(pos);
-                if (!(tile instanceof TileEntityChunkLoader))
-                    continue;
-                TileEntityChunkLoader loader = (TileEntityChunkLoader) tile;
-                loader.updateTicket(ticket);
-                loader.loadChunks();
-            }
-        }
-    }*/
+    
 }

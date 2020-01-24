@@ -1,73 +1,84 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.server.ServerWorld;
 
-// TODO chunk loader
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class TileEntityChunkLoader extends TileEntityImpl implements ITickableTileEntity {
+
+    private final List<ChunkPos> forcedChunks = new ArrayList<>();
+
     public TileEntityChunkLoader() {
         super(ModTileEntities.CHUNK_LOADER);
     }
 
-    //private Ticket ticket;
-/*
     @Override
     public void validate() {
         super.validate();
-        if (!this.world.isRemote && this.ticket == null) {
-            Ticket ticket = ForgeChunkManager.requestTicket(NaturesAura.instance, this.world, Type.NORMAL);
-            this.updateTicket(ticket);
-            ticket.getModData().setLong("pos", this.pos.toLong());
-        }
+        this.loadChunks(false);
     }
 
     @Override
-    public void invalidate() {
-        super.invalidate();
-        if (!this.world.isRemote)
-            this.updateTicket(null);
+    public void remove() {
+        super.remove();
+        this.loadChunks(true);
     }
 
     @Override
     public void onRedstonePowerChange(int newPower) {
         super.onRedstonePowerChange(newPower);
         if (!this.world.isRemote) {
-            this.loadChunks();
+            this.loadChunks(false);
             this.sendToClients();
         }
-    }*/
+    }
 
     public int range() {
         return this.redstonePower * 2;
     }
 
-    /*public void updateTicket(Ticket ticket) {
-        if (this.ticket != null)
-            ForgeChunkManager.releaseTicket(this.ticket);
-        this.ticket = ticket;
-    }
-
-    public void loadChunks() {
-        if (this.ticket == null)
+    private void loadChunks(boolean unload) {
+        if (this.world.isRemote)
             return;
-        Set<ChunkPos> before = new HashSet<>(this.ticket.getChunkList());
-        int range = this.range();
-        if (range > 0) {
-            for (int x = (this.pos.getX() - range) >> 4; x <= (this.pos.getX() + range) >> 4; x++) {
-                for (int z = (this.pos.getZ() - range) >> 4; z <= (this.pos.getZ() + range) >> 4; z++) {
-                    ChunkPos pos = new ChunkPos(x, z);
-                    if (!before.contains(pos))
-                        ForgeChunkManager.forceChunk(this.ticket, pos);
-                    else
-                        before.remove(pos);
+        ServerWorld world = (ServerWorld) this.world;
+
+        List<ChunkPos> shouldBeForced = new ArrayList<>();
+        if (!unload) {
+            int range = this.range();
+            if (range > 0) {
+                for (int x = (this.pos.getX() - range) >> 4; x <= (this.pos.getX() + range) >> 4; x++) {
+                    for (int z = (this.pos.getZ() - range) >> 4; z <= (this.pos.getZ() + range) >> 4; z++) {
+                        ChunkPos pos = new ChunkPos(x, z);
+                        // Only force chunks that we're already forcing or that nobody else is forcing
+                        if (this.forcedChunks.contains(pos) || !world.getForcedChunks().contains(pos.asLong()))
+                            shouldBeForced.add(pos);
+                    }
                 }
             }
         }
-        for (ChunkPos pos : before)
-            ForgeChunkManager.unforceChunk(this.ticket, pos);
-    }*/
+
+        // Unforce all of the chunks that shouldn't be forced anymore
+        for (ChunkPos pos : this.forcedChunks) {
+            if (!shouldBeForced.contains(pos))
+                world.forceChunk(pos.x, pos.z, false);
+        }
+        this.forcedChunks.clear();
+
+        // Force all chunks that should be forced
+        for (ChunkPos pos : shouldBeForced) {
+            world.forceChunk(pos.x, pos.z, true);
+            this.forcedChunks.add(pos);
+        }
+    }
 
     @Override
     public void tick() {
@@ -79,6 +90,23 @@ public class TileEntityChunkLoader extends TileEntityImpl implements ITickableTi
                 BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 35, this.pos);
                 IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, toUse);
             }
+        }
+    }
+
+    @Override
+    public void writeNBT(CompoundNBT compound, SaveType type) {
+        super.writeNBT(compound, type);
+        if (type == SaveType.TILE)
+            compound.putLongArray("forced_chunks", this.forcedChunks.stream().map(ChunkPos::asLong).collect(Collectors.toList()));
+    }
+
+    @Override
+    public void readNBT(CompoundNBT compound, SaveType type) {
+        super.readNBT(compound, type);
+
+        if (type == SaveType.TILE) {
+            this.forcedChunks.clear();
+            Arrays.stream(compound.getLongArray("forced_chunks")).mapToObj(ChunkPos::new).forEach(this.forcedChunks::add);
         }
     }
 }

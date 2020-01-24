@@ -31,7 +31,7 @@ public class AuraBottle extends ItemImpl implements IColorProvidingItem {
 
     public AuraBottle(Item emptyBottle) {
         super("aura_bottle", new Properties().group(NaturesAura.CREATIVE_TAB));
-        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
 
         DispenserBlock.registerDispenseBehavior(emptyBottle, (source, stack) -> {
             World world = source.getWorld();
@@ -53,34 +53,6 @@ public class AuraBottle extends ItemImpl implements IColorProvidingItem {
             doDispense(world, dispense, 6, facing, DispenserBlock.getDispensePosition(source));
             return stack;
         });
-    }
-
-    @SubscribeEvent
-    public void onRightClick(PlayerInteractEvent.RightClickItem event) {
-        ItemStack held = event.getItemStack();
-        if (held.isEmpty() || held.getItem() != ModItems.BOTTLE_TWO_THE_REBOTTLING)
-            return;
-        PlayerEntity player = event.getPlayer();
-        RayTraceResult ray = rayTrace(player.world, player, RayTraceContext.FluidMode.NONE);
-        if (ray.getType() == RayTraceResult.Type.BLOCK)
-            return;
-        BlockPos pos = player.getPosition();
-        if (IAuraChunk.getAuraInArea(player.world, pos, 30) < 100000)
-            return;
-
-        if (!player.world.isRemote) {
-            held.shrink(1);
-
-            player.inventory.addItemStackToInventory(
-                    setType(new ItemStack(this), IAuraType.forWorld(player.world)));
-
-            BlockPos spot = IAuraChunk.getHighestSpot(player.world, pos, 30, pos);
-            IAuraChunk.getAuraChunk(player.world, spot).drainAura(spot, 20000);
-
-            player.world.playSound(null, player.posX, player.posY, player.posZ,
-                    SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.PLAYERS, 1F, 1F);
-        }
-        player.swingArm(event.getHand());
     }
 
     @Override
@@ -117,5 +89,37 @@ public class AuraBottle extends ItemImpl implements IColorProvidingItem {
     @OnlyIn(Dist.CLIENT)
     public IItemColor getItemColor() {
         return (stack, tintIndex) -> tintIndex > 0 ? getType(stack).getColor() : 0xFFFFFF;
+    }
+
+    private class EventHandler {
+
+        @SubscribeEvent
+        public void onRightClick(PlayerInteractEvent.RightClickItem event) {
+            ItemStack held = event.getItemStack();
+            if (held.isEmpty() || held.getItem() != ModItems.BOTTLE_TWO_THE_REBOTTLING)
+                return;
+            PlayerEntity player = event.getPlayer();
+            RayTraceResult ray = rayTrace(player.world, player, RayTraceContext.FluidMode.NONE);
+            if (ray.getType() == RayTraceResult.Type.BLOCK)
+                return;
+            BlockPos pos = player.getPosition();
+            if (IAuraChunk.getAuraInArea(player.world, pos, 30) < 100000)
+                return;
+
+            if (!player.world.isRemote) {
+                held.shrink(1);
+
+                player.inventory.addItemStackToInventory(
+                        setType(new ItemStack(AuraBottle.this), IAuraType.forWorld(player.world)));
+
+                BlockPos spot = IAuraChunk.getHighestSpot(player.world, pos, 30, pos);
+                IAuraChunk.getAuraChunk(player.world, spot).drainAura(spot, 20000);
+
+                player.world.playSound(null, player.posX, player.posY, player.posZ,
+                        SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.PLAYERS, 1F, 1F);
+            }
+            player.swingArm(event.getHand());
+        }
+
     }
 }

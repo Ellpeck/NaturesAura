@@ -45,7 +45,7 @@ public class SupporterFancyHandler {
         Minecraft mc = Minecraft.getInstance();
         if (player == mc.player && mc.gameSettings.thirdPersonView == 0)
             return;
-        FancyInfo info = FANCY_INFOS.get(player.getName());
+        FancyInfo info = FANCY_INFOS.get(player.getGameProfile().getName());
         if (info == null)
             return;
 

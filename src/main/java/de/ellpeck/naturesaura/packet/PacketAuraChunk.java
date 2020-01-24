@@ -70,7 +70,6 @@ public class PacketAuraChunk {
         return true;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static void onMessage(PacketAuraChunk message, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> ClientEvents.PENDING_AURA_CHUNKS.add(message));
         ctx.get().setPacketHandled(true);

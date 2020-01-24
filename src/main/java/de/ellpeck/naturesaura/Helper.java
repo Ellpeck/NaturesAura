@@ -63,7 +63,7 @@ public final class Helper {
                 if (chunk != null) {
                     for (BlockPos tilePos : chunk.getTileEntitiesPos()) {
                         if (tilePos.distanceSq(pos) <= radius * radius)
-                            if (consumer.apply(world.getTileEntity(tilePos)))
+                            if (consumer.apply(chunk.getTileEntity(tilePos)))
                                 return true;
                     }
                 }

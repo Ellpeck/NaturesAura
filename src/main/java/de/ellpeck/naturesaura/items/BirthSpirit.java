@@ -12,25 +12,27 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class BirthSpirit extends Glowing {
     public BirthSpirit() {
         super("birth_spirit");
-        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
-    @SubscribeEvent
-    public void onBabyBorn(BabyEntitySpawnEvent event) {
-        LivingEntity parent = event.getParentA();
-        if (!parent.world.isRemote && event.getCausedByPlayer() != null) {
-            BlockPos pos = parent.getPosition();
-            int aura = IAuraChunk.getAuraInArea(parent.world, pos, 30);
-            if (aura < 1200000)
-                return;
+    private static class EventHandler {
+        @SubscribeEvent
+        public void onBabyBorn(BabyEntitySpawnEvent event) {
+            LivingEntity parent = event.getParentA();
+            if (!parent.world.isRemote && event.getCausedByPlayer() != null) {
+                BlockPos pos = parent.getPosition();
+                int aura = IAuraChunk.getAuraInArea(parent.world, pos, 30);
+                if (aura < 1200000)
+                    return;
 
-            int amount = parent.world.rand.nextInt(3) + 1;
-            ItemEntity item = new ItemEntity(parent.world, parent.posX, parent.posY, parent.posZ,
-                    new ItemStack(ModItems.BIRTH_SPIRIT, amount));
-            parent.world.addEntity(item);
+                int amount = parent.world.rand.nextInt(3) + 1;
+                ItemEntity item = new ItemEntity(parent.world, parent.posX, parent.posY, parent.posZ,
+                        new ItemStack(ModItems.BIRTH_SPIRIT, amount));
+                parent.world.addEntity(item);
 
-            BlockPos spot = IAuraChunk.getHighestSpot(parent.world, pos, 30, pos);
-            IAuraChunk.getAuraChunk(parent.world, spot).drainAura(spot, 800 * amount);
+                BlockPos spot = IAuraChunk.getHighestSpot(parent.world, pos, 30, pos);
+                IAuraChunk.getAuraChunk(parent.world, spot).drainAura(spot, 800 * amount);
+            }
         }
     }
 }

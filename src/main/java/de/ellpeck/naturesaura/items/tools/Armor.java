@@ -33,20 +33,8 @@ public class Armor extends ArmorItem implements IModItem, IModelProvider {
     public Armor(String baseName, IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn) {
         super(materialIn, equipmentSlotIn, new Properties().group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
-        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
         ModRegistry.add(this);
-    }
-
-    @SubscribeEvent
-    public void onAttack(LivingAttackEvent event) {
-        LivingEntity entity = event.getEntityLiving();
-        if (!entity.world.isRemote) {
-            if (!isFullSetEquipped(entity, 0))
-                return;
-            Entity source = event.getSource().getTrueSource();
-            if (source instanceof LivingEntity)
-                ((LivingEntity) source).addPotionEffect(new EffectInstance(Effects.WITHER, 40));
-        }
     }
 
     @Override
@@ -74,5 +62,20 @@ public class Armor extends ArmorItem implements IModItem, IModelProvider {
                 return false;
         }
         return true;
+    }
+
+    private static class EventHandler {
+
+        @SubscribeEvent
+        public void onAttack(LivingAttackEvent event) {
+            LivingEntity entity = event.getEntityLiving();
+            if (!entity.world.isRemote) {
+                if (!isFullSetEquipped(entity, 0))
+                    return;
+                Entity source = event.getSource().getTrueSource();
+                if (source instanceof LivingEntity)
+                    ((LivingEntity) source).addPotionEffect(new EffectInstance(Effects.WITHER, 40));
+            }
+        }
     }
 }
