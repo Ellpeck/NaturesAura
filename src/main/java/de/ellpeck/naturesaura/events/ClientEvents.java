@@ -77,7 +77,7 @@ public class ClientEvents {
     @SubscribeEvent
     public void onDebugRender(RenderGameOverlayEvent.Text event) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.gameSettings.showDebugInfo && ModConfig.client.debugText) {
+        if (mc.gameSettings.showDebugInfo && ModConfig.instance.debugText.get()) {
             String prefix = TextFormatting.GREEN + "[" + NaturesAura.MOD_NAME + "]" + TextFormatting.RESET + " ";
             List<String> left = event.getLeft();
             left.add("");
@@ -127,7 +127,7 @@ public class ClientEvents {
 
                 if (!mc.isGamePaused()) {
                     if (mc.world.getGameTime() % 20 == 0) {
-                        int amount = MathHelper.floor(190 * ModConfig.client.excessParticleAmount);
+                        int amount = MathHelper.floor(190 * ModConfig.instance.excessParticleAmount.get());
                         for (int i = 0; i < amount; i++) {
                             int x = MathHelper.floor(mc.player.posX) + mc.world.rand.nextInt(64) - 32;
                             int z = MathHelper.floor(mc.player.posZ) + mc.world.rand.nextInt(64) - 32;
@@ -220,7 +220,7 @@ public class ClientEvents {
                 -mc.player.prevPosY - (mc.player.posY - mc.player.prevPosY) * partial - (double) MathHelper.lerp(partial, this.previousHeight, this.height),
                 -mc.player.prevPosZ - (mc.player.posZ - mc.player.prevPosZ) * partial);
 
-        if (mc.gameSettings.showDebugInfo && mc.player.isCreative() && ModConfig.client.debugWorld) {
+        if (mc.gameSettings.showDebugInfo && mc.player.isCreative() && ModConfig.instance.debugWorld.get()) {
             Map<BlockPos, Integer> spots = new HashMap<>();
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -331,7 +331,7 @@ public class ClientEvents {
                     GlStateManager.pushMatrix();
                     mc.getTextureManager().bindTexture(OVERLAYS);
 
-                    int conf = ModConfig.client.auraBarLocation;
+                    int conf = ModConfig.instance.auraBarLocation.get();
                     if (!mc.gameSettings.showDebugInfo && (conf != 2 || !(mc.currentScreen instanceof ChatScreen))) {
                         GlStateManager.color3f(83 / 255F, 160 / 255F, 8 / 255F);
 

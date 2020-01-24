@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.reg;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
@@ -9,7 +8,7 @@ import net.minecraft.util.LazyLoadBase;
 import java.util.function.Supplier;
 
 public enum NAItemTier implements IItemTier {
-    INFUSED(3, 300, 6.25F, 2.25F, 16, () -> Ingredient.fromItems(ModItems.INFUSED_IRON));
+    INFUSED(2, 250, 6.0F, 2.0F, 14, () -> Ingredient.fromItems(ModItems.INFUSED_IRON));
 
     private final int harvestLevel;
     private final int maxUses;
@@ -27,26 +26,32 @@ public enum NAItemTier implements IItemTier {
         this.repairMaterial = new LazyLoadBase<>(repairMaterialIn);
     }
 
+    @Override
     public int getMaxUses() {
         return this.maxUses;
     }
 
+    @Override
     public float getEfficiency() {
         return this.efficiency;
     }
 
+    @Override
     public float getAttackDamage() {
         return this.attackDamage;
     }
 
+    @Override
     public int getHarvestLevel() {
         return this.harvestLevel;
     }
 
+    @Override
     public int getEnchantability() {
         return this.enchantability;
     }
 
+    @Override
     public Ingredient getRepairMaterial() {
         return this.repairMaterial.getValue();
     }

@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -34,6 +35,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
@@ -108,7 +110,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
                 TileEntityEnderCrate crate = (TileEntityEnderCrate) tile;
                 if (crate.canOpen()) {
                     crate.drainAura(10000);
-                    // TODO playerIn.openGui(NaturesAura.MOD_ID, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                    NetworkHooks.openGui((ServerPlayerEntity) player, crate, pos);
                 }
             }
         }

@@ -30,8 +30,8 @@ public final class PatchouliCompat {
     private static final ResourceLocation BOOK = new ResourceLocation(NaturesAura.MOD_ID, "book");
 
     public static void preInit() {
-        PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":rf_converter", ModConfig.enabledFeatures.rfConverter);
-        PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":chunk_loader", ModConfig.enabledFeatures.chunkLoader);
+        PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":rf_converter", ModConfig.instance.rfConverter.get());
+        PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":chunk_loader", ModConfig.instance.chunkLoader.get());
     }
 
     public static void preInitClient() {

@@ -15,6 +15,7 @@ import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.api.recipes.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowerBlock;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
@@ -129,7 +130,7 @@ public final class NaturesAuraAPI {
      * A map of all of the entities' registry names to the amounts of aura they
      * each generate in the projectile generator
      */
-    public static final Map<ResourceLocation, Integer> PROJECTILE_GENERATIONS = new HashMap<>();
+    public static final Map<EntityType, Integer> PROJECTILE_GENERATIONS = new HashMap<>();
 
     /**
      * The capability for any item or block that stores Aura in the form of an

@@ -70,7 +70,7 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
 
     @Override
     public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
-        return ModConfig.enabledFeatures.cacheRechargeEffect;
+        return ModConfig.instance.cacheRechargeEffect.get();
     }
 
     @Override

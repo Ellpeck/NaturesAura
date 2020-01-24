@@ -130,7 +130,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
 
     @Override
     public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
-        return ModConfig.enabledFeatures.oreEffect &&
+        return ModConfig.instance.oreEffect.get() &&
                 (type.isSimilar(NaturesAuraAPI.TYPE_OVERWORLD) || type.isSimilar(NaturesAuraAPI.TYPE_NETHER));
     }
 

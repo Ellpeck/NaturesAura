@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.compat;
 
 import de.ellpeck.naturesaura.compat.crafttweaker.CraftTweakerCompat;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModList;
 
 public final class Compat {

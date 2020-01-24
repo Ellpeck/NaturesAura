@@ -4,15 +4,25 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.BlockEnderCrate;
+import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
+import de.ellpeck.naturesaura.gui.ModContainers;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public class TileEntityEnderCrate extends TileEntityImpl {
+public class TileEntityEnderCrate extends TileEntityImpl implements INamedContainerProvider {
 
     private final IItemHandlerModifiable wrappedEnderStorage = new IItemHandlerModifiable() {
         @Override
@@ -126,5 +136,16 @@ public class TileEntityEnderCrate extends TileEntityImpl {
             BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 35, this.pos);
             IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, amount);
         }
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".ender_crate", TextFormatting.ITALIC + this.name + TextFormatting.RESET);
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int window, PlayerInventory inv, PlayerEntity player) {
+        return new ContainerEnderCrate(ModContainers.ENDER_CRATE, window, player, this.getItemHandler(null));
     }
 }

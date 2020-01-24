@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -24,11 +25,11 @@ import java.util.Random;
 public class BlockGoldenLeaves extends LeavesBlock implements
         IModItem, IModelProvider, IColorProvidingBlock, IColorProvidingItem {
 
-    private static final int HIGHEST_STAGE = 3;
-    private static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, HIGHEST_STAGE);
+    public static final int HIGHEST_STAGE = 3;
+    public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, HIGHEST_STAGE);
 
     public BlockGoldenLeaves() {
-        super(ModBlocks.prop(Material.LEAVES, MaterialColor.GOLD));
+        super(ModBlocks.prop(Material.LEAVES, MaterialColor.GOLD).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT));
         ModRegistry.add(this);
     }
 
@@ -48,15 +49,6 @@ public class BlockGoldenLeaves extends LeavesBlock implements
                     0F, 0F, 0F,
                     0xF2FF00, 0.5F + rand.nextFloat(), 50, 0F, false, true);
     }
-
-    /*  Replaced by json loot tables
-    @Override
-    public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-        NonNullList<ItemStack> drops = NonNullList.create();
-        this.getDrops(drops, world, pos, world.getBlockState(pos), fortune);
-        return drops;
-    }
-     */
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
@@ -84,20 +76,6 @@ public class BlockGoldenLeaves extends LeavesBlock implements
         return (stack, tintIndex) -> 0xF2FF00;
     }
 
-    /*  Replaced by json loot tables
-    @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, BlockState state, int fortune) {
-        Random rand = world instanceof World ? ((World) world).rand : RANDOM;
-        if (state.getValue(STAGE) < HIGHEST_STAGE) {
-            if (rand.nextFloat() >= 0.75F) {
-                drops.add(new ItemStack(ModItems.GOLD_FIBER));
-            }
-        } else if (rand.nextFloat() >= 0.25F) {
-            drops.add(new ItemStack(ModItems.GOLD_LEAF));
-        }
-    }
-    */
-
     @Override
     public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random) {
         super.randomTick(state, worldIn, pos, random);
@@ -113,6 +91,11 @@ public class BlockGoldenLeaves extends LeavesBlock implements
                     convert(worldIn, offset);
             }
         }
+    }
+
+    @Override
+    public boolean ticksRandomly(BlockState state) {
+        return true;
     }
 
     public static boolean convert(World world, BlockPos pos) {

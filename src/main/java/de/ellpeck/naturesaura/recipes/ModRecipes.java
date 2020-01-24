@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerBlock;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
@@ -323,14 +324,16 @@ public final class ModRecipes {
         NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreCobalt", 50));
         NaturesAuraAPI.NETHER_ORES.add(new WeightedOre("oreArdite", 50));*/
 
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("egg"), 2500);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("snowball"), 3500);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("small_fireball"), 15000);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("ender_pearl"), 30000);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("xp_bottle"), 75000);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("arrow"), 10000);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("shulker_bullet"), 250000);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(new ResourceLocation("llama_spit"), 80000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.EGG, 2500);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SNOWBALL, 3500);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SMALL_FIREBALL, 15000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.ENDER_PEARL, 30000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.EXPERIENCE_BOTTLE, 75000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.ARROW, 10000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SPECTRAL_ARROW, 15000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SHULKER_BULLET, 250000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.LLAMA_SPIT, 80000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.TRIDENT, 3000000);
     }
 
     private static void spawner(String name, String entity, int aura, int time, Ingredient... ings) {

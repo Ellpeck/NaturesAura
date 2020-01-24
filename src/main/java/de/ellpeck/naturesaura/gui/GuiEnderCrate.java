@@ -1,30 +1,22 @@
 package de.ellpeck.naturesaura.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.IItemHandler;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiEnderCrate extends ContainerScreen {
+public class GuiEnderCrate extends ContainerScreen<ContainerEnderCrate> {
     private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
     private final PlayerEntity player;
-    private final String nameKey;
-    private final String name;
 
-    public GuiEnderCrate(ContainerType<?> type, int id, PlayerEntity player, IItemHandler handler, String nameKey, String name) {
-        super(new ContainerEnderCrate(type, id, player, handler), player.inventory, new StringTextComponent(""));
-        this.player = player;
-        this.nameKey = nameKey;
-        this.name = name;
+    public GuiEnderCrate(ContainerEnderCrate container, PlayerInventory inv, ITextComponent title) {
+        super(container, inv, title);
+        this.player = inv.player;
         this.ySize = 114 + 3 * 18;
     }
 
@@ -37,8 +29,7 @@ public class GuiEnderCrate extends ContainerScreen {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String display = I18n.format("info." + NaturesAura.MOD_ID + "." + this.nameKey, TextFormatting.ITALIC + this.name + TextFormatting.RESET);
-        this.font.drawString(display, 8, 6, 4210752);
+        this.font.drawString(this.title.getFormattedText(), 8, 6, 4210752);
         this.font.drawString(this.player.inventory.getDisplayName().getFormattedText(), 8, this.ySize - 96 + 2, 4210752);
     }
 

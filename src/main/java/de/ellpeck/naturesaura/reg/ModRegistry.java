@@ -3,13 +3,17 @@ package de.ellpeck.naturesaura.reg;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.*;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
+import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
 import de.ellpeck.naturesaura.entities.ModEntities;
 import de.ellpeck.naturesaura.entities.render.RenderEffectInhibitor;
 import de.ellpeck.naturesaura.entities.render.RenderMoverMinecart;
+import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
+import de.ellpeck.naturesaura.gui.ModContainers;
 import de.ellpeck.naturesaura.items.*;
 import de.ellpeck.naturesaura.items.tools.*;
 import de.ellpeck.naturesaura.misc.BlockLootProvider;
@@ -24,15 +28,19 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Effect;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.items.IItemHandler;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -101,9 +109,9 @@ public final class ModRegistry {
                 new BlockDimensionRail("end", DimensionType.THE_END, DimensionType.OVERWORLD)
         );
 
-        if (ModConfig.enabledFeatures.rfConverter)
+        if (ModConfig.instance.rfConverter.get())
             event.getRegistry().register(new BlockRFConverter());
-        if (ModConfig.enabledFeatures.chunkLoader)
+        if (ModConfig.instance.chunkLoader.get())
             event.getRegistry().register(new BlockChunkLoader());
 
         Helper.populateObjectHolders(ModBlocks.class, event.getRegistry());
@@ -121,11 +129,11 @@ public final class ModRegistry {
 
         Item temp;
         event.getRegistry().registerAll(
-                new Pickaxe("infused_iron_pickaxe", NAItemTier.INFUSED, 8, 3.2F),
-                new Axe("infused_iron_axe", NAItemTier.INFUSED, 8.25F, 3.2F),
-                new Shovel("infused_iron_shovel", NAItemTier.INFUSED, 8.25F, 3.2F),
-                new Hoe("infused_iron_hoe", NAItemTier.INFUSED, 3.2F),
-                new Sword("infused_iron_sword", NAItemTier.INFUSED, 3, 3), // TODO dmg and speed values need to be changed
+                new Pickaxe("infused_iron_pickaxe", NAItemTier.INFUSED, 1, -2.8F),
+                new Axe("infused_iron_axe", NAItemTier.INFUSED, 6.0F, -3.1F),
+                new Shovel("infused_iron_shovel", NAItemTier.INFUSED, 1.5F, -3.0F),
+                new Hoe("infused_iron_hoe", NAItemTier.INFUSED, -1.0F),
+                new Sword("infused_iron_sword", NAItemTier.INFUSED, 3, -2.4F),
                 new Armor("infused_iron_helmet", NAArmorMaterial.INFUSED, EquipmentSlotType.HEAD),
                 new Armor("infused_iron_chest", NAArmorMaterial.INFUSED, EquipmentSlotType.CHEST),
                 new Armor("infused_iron_pants", NAArmorMaterial.INFUSED, EquipmentSlotType.LEGS),
@@ -180,6 +188,23 @@ public final class ModRegistry {
                 new PotionBreathless()
         );
         Helper.populateObjectHolders(ModPotions.class, event.getRegistry());
+    }
+
+    @SubscribeEvent
+    public static void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
+        event.getRegistry().registerAll(
+                IForgeContainerType.create((windowId, inv, data) -> {
+                    TileEntity tile = inv.player.world.getTileEntity(data.readBlockPos());
+                    if (tile instanceof TileEntityEnderCrate)
+                        return new ContainerEnderCrate(ModContainers.ENDER_CRATE, windowId, inv.player, ((TileEntityEnderCrate) tile).getItemHandler(null));
+                    return null;
+                }).setRegistryName("ender_crate"),
+                IForgeContainerType.create((windowId, inv, data) -> {
+                    IItemHandler handler = IWorldData.getOverworldData(inv.player.world).getEnderStorage(data.readString());
+                    return new ContainerEnderCrate(ModContainers.ENDER_ACCESS, windowId, inv.player, handler);
+                }).setRegistryName("ender_access")
+        );
+        Helper.populateObjectHolders(ModContainers.class, event.getRegistry());
     }
 
     @SubscribeEvent

@@ -145,7 +145,7 @@ public class AnimalEffect implements IDrainSpotEffect {
 
     @Override
     public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
-        return ModConfig.enabledFeatures.animalEffect;
+        return ModConfig.instance.animalEffect.get();
     }
 
     @Override

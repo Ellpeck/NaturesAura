@@ -78,7 +78,7 @@ public class TileEntityRFConverter extends TileEntityImpl implements ITickableTi
             if (aura <= IAuraChunk.DEFAULT_AURA)
                 return;
             int amountToGen = Math.min(Math.min(10000, aura / 1000), emptyPart);
-            int amountToUse = MathHelper.ceil(amountToGen / ModConfig.general.auraToRFRatio);
+            int amountToUse = MathHelper.ceil(amountToGen / ModConfig.instance.auraToRFRatio.get());
 
             this.storage.setEnergy(this.storage.getEnergyStored() + amountToGen);
             BlockPos pos = IAuraChunk.getHighestSpot(this.world, this.pos, 45, this.pos);

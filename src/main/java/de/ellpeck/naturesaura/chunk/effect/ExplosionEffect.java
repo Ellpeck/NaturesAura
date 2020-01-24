@@ -72,7 +72,7 @@ public class ExplosionEffect implements IDrainSpotEffect {
 
     @Override
     public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
-        return ModConfig.enabledFeatures.explosionEffect;
+        return ModConfig.instance.explosionEffect.get();
     }
 
     @Override

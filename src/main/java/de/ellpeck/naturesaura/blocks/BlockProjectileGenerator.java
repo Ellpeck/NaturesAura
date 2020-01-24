@@ -12,7 +12,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.Tuple;
@@ -24,7 +23,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider {
     public BlockProjectileGenerator() {
@@ -51,8 +49,7 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
         TileEntityProjectileGenerator generator = (TileEntityProjectileGenerator) tile;
         if (generator.nextSide != blockRay.getFace())
             return;
-        ResourceLocation name = ForgeRegistries.ENTITIES.getKey(entity.getType());
-        Integer amount = NaturesAuraAPI.PROJECTILE_GENERATIONS.get(name);
+        Integer amount = NaturesAuraAPI.PROJECTILE_GENERATIONS.get(entity.getType());
         if (amount == null || amount <= 0)
             return;
 

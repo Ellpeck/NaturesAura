@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.settings.ParticleStatus;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -29,14 +30,14 @@ public final class ParticleHandler {
     public static void spawnParticle(Supplier<Particle> particle, double x, double y, double z) {
         if (Minecraft.getInstance().player.getDistanceSq(x, y, z) <= range * range) {
             Minecraft mc = Minecraft.getInstance();
-            if (ModConfig.client.respectVanillaParticleSettings) {
-                int setting = mc.gameSettings.particles.func_216832_b();
-                if (setting != 0 &&
-                        (setting != 1 || mc.world.rand.nextInt(3) != 0) &&
-                        (setting != 2 || mc.world.rand.nextInt(10) != 0))
+            if (ModConfig.instance.respectVanillaParticleSettings.get()) {
+                ParticleStatus setting = mc.gameSettings.particles;
+                if (setting != ParticleStatus.ALL &&
+                        (setting != ParticleStatus.DECREASED || mc.world.rand.nextInt(3) != 0) &&
+                        (setting != ParticleStatus.MINIMAL || mc.world.rand.nextInt(10) != 0))
                     return;
             }
-            double setting = ModConfig.client.particleAmount;
+            double setting = ModConfig.instance.particleAmount.get();
             if (setting < 1 && mc.world.rand.nextDouble() > setting)
                 return;
 

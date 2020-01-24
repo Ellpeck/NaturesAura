@@ -167,7 +167,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
     }
 
     public boolean isCloseEnough(BlockPos pos) {
-        int range = ModConfig.general.fieldCreatorRange + 1;
+        int range = ModConfig.instance.fieldCreatorRange.get() + 1;
         return this.pos.distanceSq(pos) <= range * range;
     }
 

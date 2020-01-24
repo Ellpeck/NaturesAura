@@ -86,7 +86,7 @@ public final class Multiblocks {
             'L', ModBlocks.ANCIENT_LOG,
             '0', ModBlocks.AUTO_CRAFTER,
             ' ', Matcher.wildcard());
-    public static final IMultiblock RF_CONVERTER = ModConfig.enabledFeatures.rfConverter ? NaturesAuraAPI.instance().createMultiblock(
+    public static final IMultiblock RF_CONVERTER = ModConfig.instance.rfConverter.get() ? NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "rf_converter"),
             new String[][]{
                     {"       ", "       ", "       ", "   R   ", "       ", "       ", "       "},

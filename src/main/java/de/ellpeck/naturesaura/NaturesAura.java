@@ -7,10 +7,8 @@ import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.chunk.effect.DrainSpotEffects;
 import de.ellpeck.naturesaura.compat.Compat;
-import de.ellpeck.naturesaura.entities.ModEntities;
 import de.ellpeck.naturesaura.events.CommonEvents;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -23,14 +21,14 @@ import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,9 +45,11 @@ public final class NaturesAura {
 
     public NaturesAura() {
         instance = this;
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        eventBus.addListener(this::setup);
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        ModConfig.instance = new ModConfig(builder);
+        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, builder.build());
     }
 
     public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
@@ -66,12 +66,14 @@ public final class NaturesAura {
     }
 
     public void setup(FMLCommonSetupEvent event) {
+        ModConfig.instance.apply();
+
         this.preInit(event);
         this.init(event);
         this.postInit(event);
     }
 
-    public void preInit(FMLCommonSetupEvent event) {
+    private void preInit(FMLCommonSetupEvent event) {
         NaturesAuraAPI.setInstance(new InternalHooks());
         Helper.registerCap(IAuraContainer.class);
         Helper.registerCap(IAuraRecharge.class);
@@ -91,8 +93,7 @@ public final class NaturesAura {
         proxy.preInit(event);
     }
 
-    public void init(FMLCommonSetupEvent event) {
-        ModConfig.initOrReload(false);
+    private void init(FMLCommonSetupEvent event) {
         ModRecipes.init();
         ModRegistry.init();
         DrainSpotEffects.init();
@@ -100,13 +101,9 @@ public final class NaturesAura {
         proxy.init(event);
     }
 
-    public void postInit(FMLCommonSetupEvent event) {
+    private void postInit(FMLCommonSetupEvent event) {
         Compat.postInit();
         proxy.postInit(event);
-
-        if (ModConfig.enabledFeatures.removeDragonBreathContainerItem) {
-            // TODO Items.DRAGON_BREATH.setContainerItem(null);
-        }
     }
 
     public void serverStarting(FMLServerStartingEvent event) {

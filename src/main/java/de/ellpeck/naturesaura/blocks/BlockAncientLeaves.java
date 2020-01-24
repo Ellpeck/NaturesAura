@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityAncientLeaves;
 import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -23,7 +24,7 @@ public class BlockAncientLeaves extends LeavesBlock implements
         IModItem, IModelProvider, IColorProvidingBlock, IColorProvidingItem {
 
     public BlockAncientLeaves() {
-        super(ModBlocks.prop(Material.LEAVES, MaterialColor.PINK));
+        super(ModBlocks.prop(Material.LEAVES, MaterialColor.PINK).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT));
         ModRegistry.add(this);
         ModRegistry.add(new ModTileType<>(TileEntityAncientLeaves::new, this));
     }
@@ -37,6 +38,11 @@ public class BlockAncientLeaves extends LeavesBlock implements
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileEntityAncientLeaves();
+    }
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
     }
 
     @Override

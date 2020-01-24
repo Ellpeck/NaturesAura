@@ -2,6 +2,8 @@ package de.ellpeck.naturesaura.proxy;
 
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.ClientEvents;
+import de.ellpeck.naturesaura.gui.GuiEnderCrate;
+import de.ellpeck.naturesaura.gui.ModContainers;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import de.ellpeck.naturesaura.particles.ParticleMagic;
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
@@ -11,6 +13,7 @@ import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
@@ -33,6 +36,8 @@ public class ClientProxy implements IProxy {
     public void preInit(FMLCommonSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
         Compat.preInitClient();
+        ScreenManager.registerFactory(ModContainers.ENDER_CRATE, GuiEnderCrate::new);
+        ScreenManager.registerFactory(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
     }
 
     @Override

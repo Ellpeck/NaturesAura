@@ -36,7 +36,7 @@ public class Hoe extends HoeItem implements IModItem, IModelProvider {
             Random random = world.getRandom();
             BlockPos pos = context.getPos();
             if (random.nextInt(5) == 0) {
-                seed = new ItemStack(Items.WHEAT_SEEDS); // TODO Change this to spawn random seed dropped by tall grass
+                seed = new ItemStack(Items.WHEAT_SEEDS);
             } else if (random.nextInt(10) == 0) {
                 int rand = random.nextInt(3);
                 if (rand == 0) {

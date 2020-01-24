@@ -2,17 +2,29 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "main",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "naturesaura:golden_leaves"
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "naturesaura:golden_leaves",
+              "properties": {
+                "stage": "3"
+              }
+            }
+          ],
+          "name": "naturesaura:gold_leaf"
         }
       ],
       "conditions": [
         {
-          "condition": "minecraft:survives_explosion"
+          "condition": "minecraft:random_chance",
+          "chance": 0.75
         }
       ]
     }

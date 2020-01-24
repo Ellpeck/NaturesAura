@@ -68,7 +68,7 @@ public class BreathlessEffect implements IDrainSpotEffect {
 
     @Override
     public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
-        return ModConfig.enabledFeatures.breathlessEffect;
+        return ModConfig.instance.breathlessEffect.get();
     }
 
     @Override

@@ -10,7 +10,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerEnderCrate extends Container {
 
-    public ContainerEnderCrate(ContainerType<?> type, int id, PlayerEntity player, IItemHandler handler) {
+    public ContainerEnderCrate(ContainerType<ContainerEnderCrate> type, int id, PlayerEntity player, IItemHandler handler) {
         super(type, id);
         int i = (3 - 4) * 18;
         for (int j = 0; j < 3; ++j)

@@ -6,12 +6,8 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.chunk.AuraChunkProvider;
-import de.ellpeck.naturesaura.misc.BlockLootProvider;
-import de.ellpeck.naturesaura.misc.BlockTagProvider;
-import de.ellpeck.naturesaura.misc.ItemTagProvider;
 import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -23,7 +19,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -90,13 +85,4 @@ public class CommonEvents {
                 PacketHandler.sendTo(event.getPlayer(), auraChunk.makePacket());
         }
     }
-
-    // TODO config
-   /* @SubscribeEvent
-    public void onConfigChanged(OnConfigChangedEvent event) {
-        if (NaturesAura.MOD_ID.equals(event.getModID())) {
-            ConfigManager.sync(NaturesAura.MOD_ID, Config.Type.INSTANCE);
-            ModConfig.initOrReload(true);
-        }
-    }*/
 }

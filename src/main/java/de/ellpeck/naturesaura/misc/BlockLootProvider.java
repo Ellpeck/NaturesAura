@@ -2,21 +2,21 @@ package de.ellpeck.naturesaura.misc;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import de.ellpeck.naturesaura.blocks.BlockGoldenLeaves;
+import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.blocks.Slab;
+import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.block.SlabBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
-import net.minecraft.state.properties.SlabType;
+import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.BlockStateProperty;
-import net.minecraft.world.storage.loot.conditions.SurvivesExplosion;
-import net.minecraft.world.storage.loot.functions.ExplosionDecay;
-import net.minecraft.world.storage.loot.functions.SetCount;
+import net.minecraft.world.storage.loot.conditions.RandomChance;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -38,11 +38,16 @@ public class BlockLootProvider implements IDataProvider {
                 continue;
             Block block = (Block) item;
             if (block instanceof Slab) {
-                this.lootFunctions.put(block, BlockLootProvider::genSlab);
+                this.lootFunctions.put(block, LootTableHooks::genSlab);
             } else {
-                this.lootFunctions.put(block, BlockLootProvider::genRegular);
+                this.lootFunctions.put(block, LootTableHooks::genRegular);
             }
         }
+
+        this.lootFunctions.put(ModBlocks.ANCIENT_LEAVES, b -> LootTableHooks.genLeaves(b, ModBlocks.ANCIENT_SAPLING));
+        this.lootFunctions.put(ModBlocks.DECAYED_LEAVES, LootTableHooks::genSilkOnly);
+        this.lootFunctions.put(ModBlocks.GOLDEN_LEAVES, b -> LootTable.builder().addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(LootTableHooks.survivesExplosion(b, ItemLootEntry.builder(ModItems.GOLD_LEAF)).acceptCondition(BlockStateProperty.builder(b).with(BlockGoldenLeaves.STAGE, BlockGoldenLeaves.HIGHEST_STAGE))).acceptCondition(RandomChance.builder(0.75F))));
+
     }
 
     @Override
@@ -56,27 +61,36 @@ public class BlockLootProvider implements IDataProvider {
         }
     }
 
-    private static Path getPath(Path root, ResourceLocation id) {
-        return root.resolve("data/" + id.getNamespace() + "/loot_tables/blocks/" + id.getPath() + ".json");
-    }
-
-    private static LootTable.Builder genSlab(Block b) {
-        LootEntry.Builder<?> entry = ItemLootEntry.builder(b)
-                .acceptFunction(SetCount.func_215932_a(ConstantRange.of(2)).acceptCondition(BlockStateProperty.builder(b).with(SlabBlock.TYPE, SlabType.DOUBLE)))
-                .acceptFunction(ExplosionDecay.func_215863_b());
-        return LootTable.builder().addLootPool(LootPool.builder().name("main").rolls(ConstantRange.of(1)).addEntry(entry));
-    }
-
-    private static LootTable.Builder genRegular(Block b) {
-        LootEntry.Builder<?> entry = ItemLootEntry.builder(b);
-        LootPool.Builder pool = LootPool.builder().name("main").rolls(ConstantRange.of(1)).addEntry(entry)
-                .acceptCondition(SurvivesExplosion.builder());
-        return LootTable.builder().addLootPool(pool);
+    private static Path getPath(Path root, ResourceLocation res) {
+        return root.resolve("data/" + res.getNamespace() + "/loot_tables/blocks/" + res.getPath() + ".json");
     }
 
     @Nonnull
     @Override
     public String getName() {
         return "Nature's Aura Loot";
+    }
+
+    // What a mess
+    private static class LootTableHooks extends BlockLootTables {
+        public static LootTable.Builder genLeaves(Block block, Block drop) {
+            return func_218540_a(block, drop, 0.05F, 0.0625F, 0.083333336F, 0.1F);
+        }
+
+        public static LootTable.Builder genSlab(Block block) {
+            return func_218513_d(block);
+        }
+
+        public static LootTable.Builder genRegular(Block block) {
+            return func_218546_a(block);
+        }
+
+        public static LootTable.Builder genSilkOnly(Block block) {
+            return func_218561_b(block);
+        }
+
+        public static <T> T survivesExplosion(Block block, ILootConditionConsumer<T> then) {
+            return func_218560_a(block, then);
+        }
     }
 }
