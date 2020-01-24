@@ -12,6 +12,7 @@ import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -27,11 +28,18 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class BlockDimensionRail extends AbstractRailBlock implements IModItem, IModelProvider {
 
@@ -85,11 +93,21 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
 
         BlockPos goalCoords = this.getGoalCoords(world, pos);
 
+        // TODO wait for Forge to have re-implemented ITeleporter
+        if (true)
+            return;
+
         cart.changeDimension(DimensionType.getById(this.goalDim));
         cart.moveToBlockPosAndAngles(goalCoords, cart.rotationYaw, cart.rotationPitch);
 
         BlockPos spot = IAuraChunk.getHighestSpot(world, pos, 35, pos);
         IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 50000);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+        tooltip.add(new StringTextComponent("CURRENTLY UNIMPLEMENTED - Waiting for a Forge change").setStyle(new Style().setColor(TextFormatting.RED)));
     }
 
     private BlockPos getGoalCoords(World world, BlockPos pos) {
