@@ -104,8 +104,6 @@ public class ShockwaveCreator extends ItemImpl implements ITrinketItem {
                 SoundType type = downState.getBlock().getSoundType(downState, worldIn, down, null);
                 worldIn.playSound(null, pos, type.getBreakSound(), SoundCategory.BLOCKS, type.getVolume() * 0.5F, type.getPitch() * 0.8F);
             }
-            if (worldIn instanceof ServerWorld)
-                ((ServerWorld) worldIn).spawnParticle(ParticleTypes.POOF, living.posX, living.posY + 0.01F, living.posZ, 15, 0D, 0D, 0D, 0.15D);
 
             PacketHandler.sendToAllAround(worldIn, pos, 32, new PacketParticles((float) living.posX, (float) living.posY, (float) living.posZ, 11));
         }
