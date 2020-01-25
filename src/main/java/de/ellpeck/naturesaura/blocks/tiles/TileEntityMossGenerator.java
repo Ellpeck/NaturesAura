@@ -2,6 +2,8 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
@@ -23,6 +25,7 @@ public class TileEntityMossGenerator extends TileEntityImpl implements ITickable
         if (!this.world.isRemote) {
             if (this.world.getGameTime() % 20 != 0)
                 return;
+            WorldData data = (WorldData) IWorldData.getWorldData(this.world);
 
             List<BlockPos> possibleOffsets = new ArrayList<>();
             int range = 2;
@@ -30,9 +33,15 @@ public class TileEntityMossGenerator extends TileEntityImpl implements ITickable
                 for (int y = -range; y <= range; y++)
                     for (int z = -range; z <= range; z++) {
                         BlockPos offset = this.pos.add(x, y, z);
+                        boolean isRecent = data.recentlyConvertedMossStones.contains(offset);
                         BlockState state = this.world.getBlockState(offset);
-                        if (NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.inverse().containsKey(state))
+                        if (NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.inverse().containsKey(state)) {
+                            if (isRecent)
+                                continue;
                             possibleOffsets.add(offset);
+                        } else if (isRecent) {
+                            data.recentlyConvertedMossStones.remove(offset);
+                        }
                     }
 
             if (possibleOffsets.isEmpty())

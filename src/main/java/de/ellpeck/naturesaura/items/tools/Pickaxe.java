@@ -3,7 +3,9 @@ package de.ellpeck.naturesaura.items.tools;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
@@ -14,7 +16,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -46,10 +50,16 @@ public class Pickaxe extends PickaxeItem implements IModItem, IModelProvider {
             BlockState state = world.getBlockState(pos);
             BlockState result = NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.get(state);
             if (result != null) {
-                if (!world.isRemote)
+                if (!world.isRemote) {
                     world.setBlockState(pos, result);
+
+                    WorldData data = (WorldData) IWorldData.getWorldData(world);
+                    data.recentlyConvertedMossStones.add(pos);
+                    if (data.recentlyConvertedMossStones.size() > 512)
+                        data.recentlyConvertedMossStones.remove(0);
+                }
                 world.playSound(player, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                stack.damageItem(15, player, playerEntity -> {});
+                stack.damageItem(15, player, playerEntity -> playerEntity.sendBreakAnimation(context.getHand()));
                 return ActionResultType.SUCCESS;
             }
         }

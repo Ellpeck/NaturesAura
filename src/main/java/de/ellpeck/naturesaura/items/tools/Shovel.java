@@ -70,7 +70,7 @@ public class Shovel extends ShovelItem implements IModItem, IModelProvider {
 
             if (damage > 0) {
                 world.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                stack.damageItem(damage, player, playerEntity -> {});
+                stack.damageItem(damage, player, playerEntity -> playerEntity.sendBreakAnimation(context.getHand()));
                 return ActionResultType.SUCCESS;
             }
         }

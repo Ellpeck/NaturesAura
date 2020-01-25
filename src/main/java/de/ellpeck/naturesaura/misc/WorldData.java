@@ -11,21 +11,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.LongNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class WorldData implements IWorldData {
     private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();
     public final ListMultimap<ResourceLocation, Tuple<Vec3d, Integer>> effectPowders = ArrayListMultimap.create();
+    public final List<BlockPos> recentlyConvertedMossStones = new ArrayList<>();
 
     @Nullable
     @Override
@@ -48,18 +51,26 @@ public class WorldData implements IWorldData {
         }
         compound.put("storages", storages);
 
+        ListNBT moss = new ListNBT();
+        for (BlockPos pos : this.recentlyConvertedMossStones)
+            moss.add(new LongNBT(pos.toLong()));
+        compound.put("converted_moss", moss);
+
         return compound;
     }
 
     @Override
     public void deserializeNBT(CompoundNBT compound) {
         this.enderStorages.clear();
-        ListNBT storages = compound.getList("storages", 10);
-        for (INBT base : storages) {
+        for (INBT base : compound.getList("storages", 10)) {
             CompoundNBT storageComp = (CompoundNBT) base;
             ItemStackHandlerNA storage = this.getEnderStorage(storageComp.getString("name"));
             storage.deserializeNBT(storageComp);
         }
+
+        this.recentlyConvertedMossStones.clear();
+        for (INBT base : compound.getList("converted_moss", Constants.NBT.TAG_LONG))
+            this.recentlyConvertedMossStones.add(BlockPos.fromLong(((LongNBT) base).getLong()));
     }
 
     @Override
