@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.packet;
 import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -16,7 +17,7 @@ public final class PacketHandler {
     private static SimpleChannel network;
 
     public static void init() {
-        network = NetworkRegistry.newSimpleChannel(NaturesAura.createRes("network"), () -> VERSION, VERSION::equals, VERSION::equals);
+        network = NetworkRegistry.newSimpleChannel(new ResourceLocation(NaturesAura.MOD_ID, "network"), () -> VERSION, VERSION::equals, VERSION::equals);
         network.registerMessage(0, PacketParticleStream.class, PacketParticleStream::toBytes, PacketParticleStream::fromBytes, PacketParticleStream::onMessage);
         network.registerMessage(1, PacketParticles.class, PacketParticles::toBytes, PacketParticles::fromBytes, PacketParticles::onMessage);
         network.registerMessage(2, PacketAuraChunk.class, PacketAuraChunk::toBytes, PacketAuraChunk::fromBytes, PacketAuraChunk::onMessage);

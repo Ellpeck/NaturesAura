@@ -61,10 +61,6 @@ public final class NaturesAura {
         }
     };
 
-    public static ResourceLocation createRes(String resource) {
-        return new ResourceLocation(MOD_ID, resource);
-    }
-
     public void setup(FMLCommonSetupEvent event) {
         ModConfig.instance.apply();
 

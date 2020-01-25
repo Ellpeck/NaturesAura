@@ -223,9 +223,8 @@ public final class ModRecipes {
             if (block instanceof FlowerBlock)
                 NaturesAuraAPI.FLOWERS.addAll(block.getStateContainer().getValidStates());
 
-        spawner("cow", "minecraft:cow", 50000, 60, ing(Items.BEEF), ing(Items.LEATHER));
         for (DyeColor color : DyeColor.values())
-            new AnimalSpawnerRecipe(res("sheep_" + color.getName()), new ResourceLocation("minecraft:sheep"),
+            new AnimalSpawnerRecipe(res("sheep_" + color.getName()), EntityType.SHEEP,
                     500, 60, ing(ModItems.BIRTH_SPIRIT), ing(Items.MUTTON),
                     ing(Helper.getWool(color))) {
                 @Override
@@ -235,39 +234,40 @@ public final class ModRecipes {
                     return sheep;
                 }
             }.register();
-        spawner("chicken", "minecraft:chicken", 30000, 40, ing(Items.FEATHER), ing(Items.EGG));
-        spawner("pig", "minecraft:pig", 50000, 60, ing(Items.PORKCHOP));
-        spawner("blaze", "minecraft:blaze", 150000, 120, ing(Items.BLAZE_ROD), ing(Items.BLAZE_POWDER));
-        spawner("ghast", "minecraft:ghast", 120000, 150, ing(Items.GUNPOWDER), ing(Items.GHAST_TEAR));
-        spawner("ocelot", "minecraft:ocelot", 80000, 60, ing(Items.COD), ing(ItemTags.WOOL));
-        spawner("mule", "minecraft:mule", 100000, 100, ing(Items.LEATHER), ing(Blocks.CHEST), ing(Items.APPLE));
-        spawner("bat", "minecraft:bat", 30000, 40, ing(Items.FEATHER));
-        spawner("endermite", "minecraft:endermite", 30000, 40, ing(Items.ENDER_PEARL), ing(Blocks.STONE));
-        spawner("parrot", "minecraft:parrot", 50000, 60, ing(Items.FEATHER), ing(Items.COOKIE));
-        spawner("slime", "minecraft:slime", 30000, 40, ing(Items.SLIME_BALL));
-        spawner("spider", "minecraft:spider", 100000, 120, ing(Items.STRING), ing(Items.SPIDER_EYE));
-        spawner("skeleton", "minecraft:skeleton", 100000, 120, ing(Items.BONE), ing(Items.ARROW));
-        spawner("enderman", "minecraft:enderman", 120000, 120, ing(Items.ENDER_PEARL));
-        spawner("silverfish", "minecraft:silverfish", 30000, 40, ing(Blocks.STONE));
-        spawner("squid", "minecraft:squid", 50000, 40, ing(Items.INK_SAC));
-        spawner("stray", "minecraft:stray", 100000, 120, ing(Items.BONE), ing(Blocks.ICE));
-        spawner("shulker", "minecraft:shulker", 150000, 100, ing(Items.SHULKER_SHELL));
-        spawner("husk", "minecraft:husk", 100000, 120, ing(Items.ROTTEN_FLESH), ing(Blocks.SAND));
-        spawner("llama", "minecraft:llama", 60000, 80, ing(ItemTags.WOOL));
-        spawner("rabbit", "minecraft:rabbit", 30000, 40, ing(Items.RABBIT_HIDE));
-        spawner("magma_cube", "minecraft:magma_cube", 100000, 100, ing(Items.MAGMA_CREAM));
-        spawner("zombie_pigman", "minecraft:zombie_pigman", 120000, 150, ing(Items.ROTTEN_FLESH), ing(Items.GOLD_NUGGET));
-        spawner("polar_bear", "minecraft:polar_bear", 50000, 60, ing(Items.COD), ing(Blocks.ICE));
-        spawner("mooshroom", "minecraft:mooshroom", 40000, 60, ing(Items.LEATHER), ing(Blocks.RED_MUSHROOM));
-        spawner("guardian", "minecraft:guardian", 150000, 150, ing(Items.PRISMARINE_SHARD), ing(Items.PRISMARINE_CRYSTALS));
-        spawner("horse", "minecraft:horse", 100000, 100, ing(Items.LEATHER));
-        spawner("donkey", "minecraft:donkey", 100000, 100, ing(Items.LEATHER), ing(Blocks.CHEST));
-        spawner("cave_spider", "minecraft:cave_spider", 100000, 120, ing(Items.STRING), ing(Items.FERMENTED_SPIDER_EYE));
-        spawner("creeper", "minecraft:creeper", 100000, 120, ing(Items.GUNPOWDER));
-        spawner("witch", "minecraft:witch", 150000, 150, ing(Items.GLASS_BOTTLE), ing(Items.GLOWSTONE_DUST));
-        spawner("wither_skeleton", "minecraft:wither_skeleton", 150000, 150, ing(Items.BONE), ing(Blocks.OBSIDIAN));
-        spawner("wolf", "minecraft:wolf", 50000, 60, ing(Items.LEATHER), ing(Items.BONE));
-        spawner("zombie", "minecraft:zombie", 100000, 100, ing(Items.ROTTEN_FLESH));
+        spawner("cow", EntityType.COW, 50000, 60, ing(Items.BEEF), ing(Items.LEATHER));
+        spawner("chicken", EntityType.CHICKEN, 30000, 40, ing(Items.FEATHER), ing(Items.EGG));
+        spawner("pig", EntityType.PIG, 50000, 60, ing(Items.PORKCHOP));
+        spawner("blaze", EntityType.BLAZE, 150000, 120, ing(Items.BLAZE_ROD), ing(Items.BLAZE_POWDER));
+        spawner("ghast", EntityType.GHAST, 120000, 150, ing(Items.GUNPOWDER), ing(Items.GHAST_TEAR));
+        spawner("ocelot", EntityType.OCELOT, 80000, 60, ing(Items.COD), ing(ItemTags.WOOL));
+        spawner("mule", EntityType.MULE, 100000, 100, ing(Items.LEATHER), ing(Blocks.CHEST), ing(Items.APPLE));
+        spawner("bat", EntityType.BAT, 30000, 40, ing(Items.FEATHER));
+        spawner("endermite", EntityType.ENDERMITE, 30000, 40, ing(Items.ENDER_PEARL), ing(Blocks.STONE));
+        spawner("parrot", EntityType.PARROT, 50000, 60, ing(Items.FEATHER), ing(Items.COOKIE));
+        spawner("slime", EntityType.SLIME, 30000, 40, ing(Items.SLIME_BALL));
+        spawner("spider", EntityType.SPIDER, 100000, 120, ing(Items.STRING), ing(Items.SPIDER_EYE));
+        spawner("skeleton", EntityType.SKELETON, 100000, 120, ing(Items.BONE), ing(Items.ARROW));
+        spawner("enderman", EntityType.ENDERMAN, 120000, 120, ing(Items.ENDER_PEARL));
+        spawner("silverfish", EntityType.SILVERFISH, 30000, 40, ing(Blocks.STONE));
+        spawner("squid", EntityType.SQUID, 50000, 40, ing(Items.INK_SAC));
+        spawner("stray", EntityType.STRAY, 100000, 120, ing(Items.BONE), ing(Blocks.ICE));
+        spawner("shulker", EntityType.SHULKER, 150000, 100, ing(Items.SHULKER_SHELL));
+        spawner("husk", EntityType.HUSK, 100000, 120, ing(Items.ROTTEN_FLESH), ing(Blocks.SAND));
+        spawner("llama", EntityType.LLAMA, 60000, 80, ing(ItemTags.WOOL));
+        spawner("rabbit", EntityType.RABBIT, 30000, 40, ing(Items.RABBIT_HIDE));
+        spawner("magma_cube", EntityType.MAGMA_CUBE, 100000, 100, ing(Items.MAGMA_CREAM));
+        spawner("zombie_pigman", EntityType.ZOMBIE_PIGMAN, 120000, 150, ing(Items.ROTTEN_FLESH), ing(Items.GOLD_NUGGET));
+        spawner("polar_bear", EntityType.POLAR_BEAR, 50000, 60, ing(Items.COD), ing(Blocks.ICE));
+        spawner("mooshroom", EntityType.MOOSHROOM, 40000, 60, ing(Items.LEATHER), ing(Blocks.RED_MUSHROOM));
+        spawner("guardian", EntityType.GUARDIAN, 150000, 150, ing(Items.PRISMARINE_SHARD), ing(Items.PRISMARINE_CRYSTALS));
+        spawner("horse", EntityType.HORSE, 100000, 100, ing(Items.LEATHER));
+        spawner("donkey", EntityType.DONKEY, 100000, 100, ing(Items.LEATHER), ing(Blocks.CHEST));
+        spawner("cave_spider", EntityType.CAVE_SPIDER, 100000, 120, ing(Items.STRING), ing(Items.FERMENTED_SPIDER_EYE));
+        spawner("creeper", EntityType.CREEPER, 100000, 120, ing(Items.GUNPOWDER));
+        spawner("witch", EntityType.WITCH, 150000, 150, ing(Items.GLASS_BOTTLE), ing(Items.GLOWSTONE_DUST));
+        spawner("wither_skeleton", EntityType.WITHER_SKELETON, 150000, 150, ing(Items.BONE), ing(Blocks.OBSIDIAN));
+        spawner("wolf", EntityType.WOLF, 50000, 60, ing(Items.LEATHER), ing(Items.BONE));
+        spawner("zombie", EntityType.ZOMBIE, 100000, 100, ing(Items.ROTTEN_FLESH));
 
         NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_COAL, 5000));
         NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_IRON, 3000));
@@ -336,11 +336,11 @@ public final class ModRecipes {
         NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.TRIDENT, 3000000);
     }
 
-    private static void spawner(String name, String entity, int aura, int time, Ingredient... ings) {
+    private static void spawner(String name, EntityType entity, int aura, int time, Ingredient... ings) {
         Ingredient[] actualIngs = new Ingredient[ings.length + 1];
         actualIngs[0] = ing(ModItems.BIRTH_SPIRIT);
         System.arraycopy(ings, 0, actualIngs, 1, ings.length);
-        new AnimalSpawnerRecipe(res(name), new ResourceLocation(entity), aura, time, actualIngs).register();
+        new AnimalSpawnerRecipe(res(name), entity, aura, time, actualIngs).register();
     }
 
     private static Ingredient ing(Block... blocks) {

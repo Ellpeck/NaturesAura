@@ -126,8 +126,8 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                         this.toRelease -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, this.toRelease);
                     }
 
-                   /* PacketHandler.sendToAllLoaded(this.world, this.pos,
-                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 8));*/
+                    PacketHandler.sendToAllLoaded(this.world, this.pos,
+                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 8));
                 }
             }
         }

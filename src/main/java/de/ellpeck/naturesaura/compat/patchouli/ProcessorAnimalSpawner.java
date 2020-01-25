@@ -2,11 +2,8 @@ package de.ellpeck.naturesaura.compat.patchouli;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
-import net.minecraftforge.registries.ForgeRegistries;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariableProvider;
 import vazkii.patchouli.api.PatchouliAPI;
@@ -31,14 +28,13 @@ public class ProcessorAnimalSpawner implements IComponentProcessor {
             else
                 return null;
         } else {
-            EntityType entry = ForgeRegistries.ENTITIES.getValue(this.recipe.entity);
             switch (key) {
                 case "name":
-                    return I18n.format("entity." + entry.getName() + ".name");
+                    return this.recipe.entity.getName().getFormattedText();
                 case "entity":
-                    return this.recipe.entity.toString();
+                    return this.recipe.entity.getRegistryName().toString();
                 case "egg":
-                    ItemStack egg = new ItemStack(SpawnEggItem.getEgg(entry));
+                    ItemStack egg = new ItemStack(SpawnEggItem.getEgg(this.recipe.entity));
                     return PatchouliAPI.instance.serializeItemStack(egg);
                 default:
                     return null;

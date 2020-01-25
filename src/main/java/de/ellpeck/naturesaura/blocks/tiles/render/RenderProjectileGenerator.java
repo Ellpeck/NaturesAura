@@ -1,8 +1,10 @@
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
+import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityProjectileGenerator;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
@@ -19,6 +21,10 @@ public class RenderProjectileGenerator extends TileEntityRenderer<TileEntityProj
     @Override
     public void render(TileEntityProjectileGenerator te, double x, double y, double z, float partialTicks, int destroyStage) {
         GlStateManager.pushMatrix();
+        GlStateManager.enableAlphaTest();
+        GlStateManager.enableBlend();
+        GlStateManager.alphaFunc(516, 0.003921569F);
+        GlStateManager.depthMask(false);
         GlStateManager.translated(x, y, z);
         if (te.nextSide == Direction.NORTH) {
             GlStateManager.rotatef(270, 0, 1, 0);
@@ -33,7 +39,15 @@ public class RenderProjectileGenerator extends TileEntityRenderer<TileEntityProj
             GlStateManager.translatef(-0.001F, 0, 0);
         }
         this.bindTexture(RES);
+        int brightness = 15 << 20 | 15 << 4;
+        int j = brightness % 65536;
+        int k = brightness / 65536;
+        GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
         this.model.render();
+        GlStateManager.depthMask(true);
+        GlStateManager.alphaFunc(516, 0.1F);
+        GlStateManager.disableAlphaTest();
+        GlStateManager.disableBlend();
         GlStateManager.popMatrix();
     }
 

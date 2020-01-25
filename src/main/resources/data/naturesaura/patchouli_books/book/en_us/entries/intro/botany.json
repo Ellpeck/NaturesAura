@@ -1,6 +1,6 @@
 {
     "name": "Magical Botany",
-    "icon": "minecraft:sapling",
+    "icon": "minecraft:oak_sapling",
     "category": "intro",
     "pages": [
         {

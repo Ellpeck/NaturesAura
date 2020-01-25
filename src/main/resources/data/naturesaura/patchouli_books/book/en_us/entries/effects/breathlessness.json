@@ -1,6 +1,6 @@
 {
     "name": "Breathlessness",
-    "icon": "minecraft:wool",
+    "icon": "minecraft:white_wool",
     "category": "effects",
     "advancement": "naturesaura:negative_imbalance",
     "pages": [
