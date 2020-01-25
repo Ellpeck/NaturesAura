@@ -79,7 +79,7 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickableTileEnt
                 BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 10, this.pos);
                 IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 1000);
 
-                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), 9));
+                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), PacketParticles.Type.PLACER_PLACING));
 
                 return;
             }

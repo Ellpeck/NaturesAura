@@ -57,7 +57,7 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
         IAuraChunk.getAuraChunk(entity.world, spot).storeAura(spot, amount);
 
         PacketHandler.sendToAllAround(entity.world, pos, 32,
-                new PacketParticles((float) entity.posX, (float) entity.posY, (float) entity.posZ, 26, pos.getX(), pos.getY(), pos.getZ()));
+                new PacketParticles((float) entity.posX, (float) entity.posY, (float) entity.posZ, PacketParticles.Type.PROJECTILE_GEN, pos.getX(), pos.getY(), pos.getZ()));
         entity.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ENDER_EYE_LAUNCH, SoundCategory.BLOCKS, 0.8F, 1F);
 
         generator.nextSide = generator.nextSide.rotateY();

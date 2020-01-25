@@ -34,7 +34,7 @@ public class TileEntityOakGenerator extends TileEntityImpl implements ITickableT
                         }
 
                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
-                            this.pos.getX(), this.pos.getY(), this.pos.getZ(), 12,
+                            this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.OAK_GENERATOR,
                             pos.getX(), pos.getY(), pos.getZ(), canGen ? 1 : 0));
                 }
             }

@@ -44,7 +44,7 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
                                 continue;
                             }
 
-                            int toAdd = ((effect.getAmplifier() * 7 + 1) * (effect.getDuration() / 25)) * 100;
+                            int toAdd = (effect.getAmplifier() * 7 + 1) * (effect.getDuration() / 25) * 100;
                             boolean canGen = this.canGenerateRightNow(30, toAdd);
                             if (canGen)
                                 while (toAdd > 0) {
@@ -53,7 +53,7 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
                                 }
 
                             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
-                                    this.pos.getX(), this.pos.getY(), this.pos.getZ(), 5,
+                                    this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.POTION_GEN,
                                     PotionUtils.getPotionColor(type), canGen ? 1 : 0));
 
                             addedOne = true;

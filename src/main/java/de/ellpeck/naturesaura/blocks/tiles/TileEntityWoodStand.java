@@ -76,7 +76,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
                             });
 
                         PacketHandler.sendToAllAround(this.world, this.ritualPos, 32,
-                                new PacketParticles(this.ritualPos.getX(), this.ritualPos.getY(), this.ritualPos.getZ(), 0));
+                                new PacketParticles(this.ritualPos.getX(), this.ritualPos.getY(), this.ritualPos.getZ(), PacketParticles.Type.TR_GOLD_POWDER));
 
                         if (this.timer >= this.recipe.time) {
                             this.recurseTreeDestruction(this.ritualPos, this.ritualPos);
@@ -91,7 +91,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
                             this.world.addEntity(item);
 
                             PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                                    new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 3));
+                                    new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, PacketParticles.Type.TR_SPAWN_RESULT));
                             this.world.playSound(null, this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5,
                                     SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 0.65F, 1F);
 
@@ -105,7 +105,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
                                     TileEntityWoodStand stand = (TileEntityWoodStand) tile;
                                     if (!stand.items.getStackInSlot(0).isEmpty()) {
                                         PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                                                new PacketParticles(stand.pos.getX(), stand.pos.getY(), stand.pos.getZ(), 1));
+                                                new PacketParticles(stand.pos.getX(), stand.pos.getY(), stand.pos.getZ(), PacketParticles.Type.TR_CONSUME_ITEM));
                                         this.world.playSound(null, stand.pos.getX() + 0.5, stand.pos.getY() + 0.5, stand.pos.getZ() + 0.5,
                                                 SoundEvents.BLOCK_WOOD_STEP, SoundCategory.BLOCKS, 0.5F, 1F);
 
@@ -141,7 +141,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
                     BlockState state = this.world.getBlockState(offset);
                     if (state.getBlock() instanceof LogBlock || state.getBlock() instanceof LeavesBlock) {
                         this.world.setBlockState(offset, Blocks.AIR.getDefaultState());
-                        PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), 2));
+                        PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), PacketParticles.Type.TR_DISAPPEAR));
 
                         this.recurseTreeDestruction(offset, start);
                     }

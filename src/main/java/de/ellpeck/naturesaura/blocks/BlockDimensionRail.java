@@ -88,7 +88,7 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
             return;
 
         AxisAlignedBB box = cart.getBoundingBox();
-        PacketHandler.sendToAllAround(world, pos, 32, new PacketParticles((float) box.minX, (float) box.minY, (float) box.minZ, 25, (int) ((box.maxX - box.minX) * 100F), (int) ((box.maxY - box.minY) * 100F), (int) ((box.maxZ - box.minZ) * 100F)));
+        PacketHandler.sendToAllAround(world, pos, 32, new PacketParticles((float) box.minX, (float) box.minY, (float) box.minZ, PacketParticles.Type.DIMENSION_RAIL, (int) ((box.maxX - box.minX) * 100F), (int) ((box.maxY - box.minY) * 100F), (int) ((box.maxZ - box.minZ) * 100F)));
         world.playSound(null, pos, SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 1F, 1F);
 
         BlockPos goalCoords = this.getGoalCoords(world, pos);

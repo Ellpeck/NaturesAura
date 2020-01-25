@@ -91,9 +91,9 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
                             this.pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F,
                             this.world.rand.nextFloat() * 0.02F + 0.1F, color, 1F
                     ));
-                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 8));
+                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.FLOWER_GEN_AURA_CREATION));
             }
-            PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), 7, color));
+            PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), PacketParticles.Type.FLOWER_GEN_CONSUME, color));
         }
     }
 

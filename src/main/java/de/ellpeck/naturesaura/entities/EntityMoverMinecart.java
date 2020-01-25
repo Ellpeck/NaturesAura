@@ -53,7 +53,7 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
 
         if (!this.spotOffsets.isEmpty() && this.world.getGameTime() % 10 == 0)
             PacketHandler.sendToAllAround(this.world, pos, 32, new PacketParticles(
-                    (float) this.posX, (float) this.posY, (float) this.posZ, 22,
+                    (float) this.posX, (float) this.posY, (float) this.posZ, PacketParticles.Type.MOVER_CART,
                     MathHelper.floor(this.getMotion().getX() * 100F), MathHelper.floor(this.getMotion().getY() * 100F), MathHelper.floor(this.getMotion().getZ() * 100F)));
 
         if (pos.distanceSq(this.lastPosition) < 8 * 8)

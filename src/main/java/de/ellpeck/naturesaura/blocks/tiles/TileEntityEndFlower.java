@@ -73,7 +73,7 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
                     item.remove();
 
                     PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 21, this.container.getAuraColor()));
+                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, PacketParticles.Type.END_FLOWER_CONSUME, this.container.getAuraColor()));
                     break;
                 }
             } else {
@@ -88,7 +88,7 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
                 if (this.container.getStoredAura() <= 0) {
                     this.world.setBlockState(this.pos, Blocks.DEAD_BUSH.getDefaultState());
                     PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 18, this.container.getAuraColor()));
+                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.END_FLOWER_DECAY, this.container.getAuraColor()));
                 }
             }
         } else {

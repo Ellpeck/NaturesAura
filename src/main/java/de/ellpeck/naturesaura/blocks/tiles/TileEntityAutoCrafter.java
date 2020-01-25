@@ -110,7 +110,7 @@ public class TileEntityAutoCrafter extends TileEntityImpl implements ITickableTi
                 }
 
                 PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                        new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 19));
+                        new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, PacketParticles.Type.ANIMAL_SPAWNER));
             }
         }
     }

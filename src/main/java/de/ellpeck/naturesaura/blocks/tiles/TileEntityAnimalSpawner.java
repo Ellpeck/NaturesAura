@@ -90,7 +90,7 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
                     for (ItemEntity item : items) {
                         item.remove();
                         PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                                new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 19));
+                                new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, PacketParticles.Type.ANIMAL_SPAWNER));
                     }
 
                     this.currentRecipe = recipe;

@@ -47,7 +47,7 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
 
                 if (item.world.getGameTime() % 3 == 0)
                     PacketHandler.sendToAllAround(item.world, pos, 32,
-                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, 14));
+                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, PacketParticles.Type.PICKUP_STOPPER));
                 return true;
             });
         }

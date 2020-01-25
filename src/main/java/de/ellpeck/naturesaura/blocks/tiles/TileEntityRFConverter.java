@@ -85,7 +85,7 @@ public class TileEntityRFConverter extends TileEntityImpl implements ITickableTi
             IAuraChunk.getAuraChunk(this.world, pos).drainAura(pos, amountToUse);
 
             PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                    new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 20));
+                    new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.RF_CONVERTER));
         }
     }
 

@@ -19,7 +19,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
@@ -28,7 +27,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -105,7 +103,7 @@ public class ShockwaveCreator extends ItemImpl implements ITrinketItem {
                 worldIn.playSound(null, pos, type.getBreakSound(), SoundCategory.BLOCKS, type.getVolume() * 0.5F, type.getPitch() * 0.8F);
             }
 
-            PacketHandler.sendToAllAround(worldIn, pos, 32, new PacketParticles((float) living.posX, (float) living.posY, (float) living.posZ, 11));
+            PacketHandler.sendToAllAround(worldIn, pos, 32, new PacketParticles((float) living.posX, (float) living.posY, (float) living.posZ, PacketParticles.Type.SHOCKWAVE_CREATOR));
         }
     }
 

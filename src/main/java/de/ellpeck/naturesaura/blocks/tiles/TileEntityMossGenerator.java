@@ -49,7 +49,7 @@ public class TileEntityMossGenerator extends TileEntityImpl implements ITickable
                 }
 
                 PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                        new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), 23));
+                        new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), PacketParticles.Type.MOSS_GENERATOR));
             }
 
             this.world.playEvent(2001, offset, Block.getStateId(state));

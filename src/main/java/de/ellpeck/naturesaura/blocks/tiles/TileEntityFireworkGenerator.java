@@ -110,7 +110,7 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                         data.addAll(usedColors);
                         PacketHandler.sendToAllLoaded(this.world, this.pos, new PacketParticles(
                                 (float) this.trackedEntity.posX, (float) this.trackedEntity.posY, (float) this.trackedEntity.posZ,
-                                24, Ints.toArray(data)));
+                                PacketParticles.Type.FIREWORK_GEN, Ints.toArray(data)));
                     }
                 }
 
@@ -127,7 +127,7 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                     }
 
                     PacketHandler.sendToAllLoaded(this.world, this.pos,
-                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 8));
+                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.FLOWER_GEN_AURA_CREATION));
                 }
             }
         }

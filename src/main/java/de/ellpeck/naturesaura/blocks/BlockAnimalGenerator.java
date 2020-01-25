@@ -73,7 +73,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
 
             BlockPos genPos = gen.getPos();
             PacketHandler.sendToAllAround(entity.world, pos, 32, new PacketParticles(
-                    (float) entity.posX, (float) entity.posY, (float) entity.posZ, 17,
+                    (float) entity.posX, (float) entity.posY, (float) entity.posZ, PacketParticles.Type.ANIMAL_GEN_CONSUME,
                     child ? 1 : 0,
                     (int) (entity.getEyeHeight() * 10F),
                     genPos.getX(), genPos.getY(), genPos.getZ()));

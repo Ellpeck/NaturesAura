@@ -78,7 +78,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
                         IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 3500);
 
                         PacketHandler.sendToAllAround(world, plantPos, 32,
-                                new PacketParticles(plantPos.getX(), plantPos.getY(), plantPos.getZ(), 6));
+                                new PacketParticles(plantPos.getX(), plantPos.getY(), plantPos.getZ(), PacketParticles.Type.PLANT_BOOST));
                     }
                 }
             }

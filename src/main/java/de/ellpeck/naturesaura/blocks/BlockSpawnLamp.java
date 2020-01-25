@@ -61,7 +61,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable 
                 IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 200);
 
                 PacketHandler.sendToAllAround(world, lampPos, 32,
-                        new PacketParticles(lampPos.getX(), lampPos.getY(), lampPos.getZ(), 15));
+                        new PacketParticles(lampPos.getX(), lampPos.getY(), lampPos.getZ(), PacketParticles.Type.SPAWN_LAMP));
             }
 
             event.setResult(Event.Result.DENY);

@@ -124,7 +124,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
                             this.container.drainAura(stored, false);
 
                             if (this.world.getGameTime() % 4 == 0)
-                                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 4));
+                                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.ALTAR_CONVERSION));
                         }
                     }
                 } else {
@@ -142,7 +142,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
                                 this.container.drainAura(req, false);
 
                                 if (this.timer % 4 == 0)
-                                    PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 4));
+                                    PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.ALTAR_CONVERSION));
 
                                 this.timer++;
                                 if (this.timer >= this.currentRecipe.time) {

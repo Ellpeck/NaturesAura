@@ -31,7 +31,7 @@ public class TileEntityAnimalGenerator extends TileEntityImpl implements ITickab
                 }
 
                 PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                        new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 16));
+                        new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.ANIMAL_GEN_CREATE));
             }
 
             this.timeRemaining -= 10;
