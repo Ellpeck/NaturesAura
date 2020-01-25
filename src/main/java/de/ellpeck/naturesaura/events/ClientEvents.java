@@ -13,6 +13,7 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityGratedChute;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityRFConverter;
 import de.ellpeck.naturesaura.compat.Compat;
+import de.ellpeck.naturesaura.enchant.ModEnchantment;
 import de.ellpeck.naturesaura.items.AuraCache;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.items.RangeVisualizer;
@@ -27,6 +28,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -37,6 +40,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColors;
@@ -50,6 +55,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.opengl.GL11;
@@ -73,6 +79,23 @@ public class ClientEvents {
     private static ItemStack heldOcular = ItemStack.EMPTY;
     private float height;
     private float previousHeight;
+
+    @SubscribeEvent
+    public void onTooltip(ItemTooltipEvent event) {
+        ItemStack stack = event.getItemStack();
+        List<ITextComponent> tooltip = event.getToolTip();
+        for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(stack).entrySet()) {
+            Enchantment enchantment = entry.getKey();
+            if (!(enchantment instanceof ModEnchantment))
+                continue;
+            String info = I18n.format(enchantment.getName() + ".desc");
+            List<String> split = Minecraft.getInstance().fontRenderer.listFormattedStringToWidth(info, 250);
+            ITextComponent name = enchantment.getDisplayName(entry.getValue());
+            int addIndex = tooltip.indexOf(name) + 1;
+            for (int i = split.size() - 1; i >= 0; i--)
+                tooltip.add(addIndex, new StringTextComponent(TextFormatting.DARK_GRAY + split.get(i)));
+        }
+    }
 
     @SubscribeEvent
     public void onDebugRender(RenderGameOverlayEvent.Text event) {

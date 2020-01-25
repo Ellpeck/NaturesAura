@@ -7,6 +7,8 @@ import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.*;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
+import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
+import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
 import de.ellpeck.naturesaura.entities.ModEntities;
@@ -25,6 +27,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -205,6 +208,14 @@ public final class ModRegistry {
                 }).setRegistryName("ender_access")
         );
         Helper.populateObjectHolders(ModContainers.class, event.getRegistry());
+    }
+
+    @SubscribeEvent
+    public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
+        event.getRegistry().registerAll(
+                new AuraMendingEnchantment()
+        );
+        Helper.populateObjectHolders(ModEnchantments.class, event.getRegistry());
     }
 
     @SubscribeEvent

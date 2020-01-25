@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.items;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
@@ -7,20 +8,21 @@ import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.ItemAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.item.ItemGroup;
+import de.ellpeck.naturesaura.enchant.ModEnchantments;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
@@ -46,11 +48,15 @@ public class AuraCache extends ItemImpl implements ITrinketItem {
                 }
                 for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
                     ItemStack stack = player.inventory.getStackInSlot(i);
-                    if (stack.getCapability(NaturesAuraAPI.capAuraRecharge).isPresent()) {
-                        IAuraRecharge recharge = stack.getCapability(NaturesAuraAPI.capAuraRecharge).orElse(null);
-                        if (recharge.rechargeFromContainer(container, itemSlot, i, player.inventory.currentItem == i)) {
+                    IAuraRecharge recharge = stack.getCapability(NaturesAuraAPI.capAuraRecharge).orElse(null);
+                    if (recharge != null) {
+                        if (recharge.rechargeFromContainer(container, itemSlot, i, player.inventory.currentItem == i))
                             break;
-                        }
+                    } else if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.AURA_MENDING, stack) > 0) {
+                        int mainSize = player.inventory.mainInventory.size();
+                        boolean isArmor = i >= mainSize && i < mainSize + player.inventory.armorInventory.size();
+                        if ((isArmor || player.inventory.currentItem == i) && Helper.rechargeAuraItem(stack, container, 1000))
+                            break;
                     }
                 }
             }

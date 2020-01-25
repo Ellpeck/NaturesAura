@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
@@ -189,12 +190,7 @@ public final class Helper {
         return new ICapabilityProvider() {
             private final IAuraRecharge recharge = (container, containerSlot, itemSlot, isSelected) -> {
                 if (isSelected || !needsSelected) {
-                    int toDrain = 300;
-                    if (stack.getDamage() > 0 && container.drainAura(toDrain, true) >= toDrain) {
-                        stack.setDamage(stack.getDamage() - 1);
-                        container.drainAura(toDrain, false);
-                        return true;
-                    }
+                    return rechargeAuraItem(stack, container, 300);
                 }
                 return false;
             };
@@ -207,6 +203,15 @@ public final class Helper {
                 return LazyOptional.empty();
             }
         };
+    }
+
+    public static boolean rechargeAuraItem(ItemStack stack, IAuraContainer container, int toDrain) {
+        if (stack.getDamage() > 0 && container.drainAura(toDrain, true) >= toDrain) {
+            stack.setDamage(stack.getDamage() - 1);
+            container.drainAura(toDrain, false);
+            return true;
+        }
+        return false;
     }
 
     public static BlockState getStateFromString(String raw) {
