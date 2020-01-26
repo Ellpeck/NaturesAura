@@ -26,4 +26,9 @@ public class TileEntityProjectileGenerator extends TileEntityImpl {
             this.nextSide = Direction.byHorizontalIndex(compound.getInt("next_side"));
         }
     }
+
+    @Override
+    public boolean wantsLimitRemover() {
+        return true;
+    }
 }
