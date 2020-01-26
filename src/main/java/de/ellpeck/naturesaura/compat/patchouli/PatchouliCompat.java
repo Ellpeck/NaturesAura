@@ -4,8 +4,9 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
-import de.ellpeck.naturesaura.compat.Compat;
+import de.ellpeck.naturesaura.compat.ICompat;
 import de.ellpeck.naturesaura.events.ClientEvents;
+import de.ellpeck.naturesaura.misc.ItemTagProvider;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler.FancyInfo;
 import net.minecraft.client.gui.AbstractGui;
@@ -25,17 +26,29 @@ import java.time.Month;
 import java.util.Collections;
 import java.util.Map;
 
-public final class PatchouliCompat {
+public class PatchouliCompat implements ICompat {
 
     private static final ResourceLocation BOOK = new ResourceLocation(NaturesAura.MOD_ID, "book");
 
-    public static void preInit() {
+    @Override
+    public void preInit() {
         PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":rf_converter", ModConfig.instance.rfConverter.get());
         PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":chunk_loader", ModConfig.instance.chunkLoader.get());
     }
 
-    public static void preInitClient() {
-        MinecraftForge.EVENT_BUS.register(new PatchouliCompat());
+    @Override
+    public void preInitClient() {
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @Override
+    public void addItemTags(ItemTagProvider provider) {
+
+    }
+
+    @Override
+    public void postInit() {
+
     }
 
     @SubscribeEvent
@@ -107,7 +120,7 @@ public final class PatchouliCompat {
         ResourceLocation res = new ResourceLocation(name);
         T recipe = recipes.get(res);
         if (recipe == null)
-            recipe = recipes.get(new ResourceLocation(Compat.CRAFT_TWEAKER, res.getPath()));
+            recipe = recipes.get(new ResourceLocation("crafttweaker", res.getPath()));
         return recipe;
     }
 }

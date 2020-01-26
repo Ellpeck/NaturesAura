@@ -6,7 +6,6 @@ import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.blocks.multi.Multiblock;
-import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.misc.WorldData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -15,7 +14,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -39,38 +37,16 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     private boolean auraPlayerInteraction(PlayerEntity player, int amount, boolean extract, boolean simulate) {
         if (extract && player.isCreative())
             return true;
-
-        if (Compat.baubles) { // Baubles dont exist for 1.14 yet
-            /*
-            IItemHandler baubles = BaublesApi.getBaublesHandler(player);
-            for (int i = 0; i < baubles.getSlots(); i++) {
-                ItemStack stack = baubles.getStackInSlot(i);
-                if (!stack.isEmpty() && stack.hasCapability(NaturesAuraAPI.capAuraContainer, null)) {
-                    IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer, null);
-                    if (extract)
-                        amount -= container.drainAura(amount, simulate);
-                    else
-                        amount -= container.storeAura(amount, simulate);
-                    if (amount <= 0)
-                        return true;
-                }
+        ItemStack stack = Helper.getEquippedItem(s -> s.getCapability(NaturesAuraAPI.capAuraContainer).isPresent(), player);
+        if (!stack.isEmpty()) {
+            IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
+            if (extract) {
+                amount -= container.drainAura(amount, simulate);
+            } else {
+                amount -= container.storeAura(amount, simulate);
             }
-            */
+            return amount <= 0;
         }
-
-        for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-            ItemStack stack = player.inventory.getStackInSlot(i);
-            if (!stack.isEmpty() && stack.getCapability(NaturesAuraAPI.capAuraContainer).isPresent()) {
-                IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
-                if (extract)
-                    amount -= container.drainAura(amount, simulate);
-                else
-                    amount -= container.storeAura(amount, simulate);
-                if (amount <= 0)
-                    return true;
-            }
-        }
-
         return false;
     }
 

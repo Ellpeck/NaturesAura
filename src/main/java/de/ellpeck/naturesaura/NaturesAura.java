@@ -5,14 +5,12 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
-import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.chunk.effect.DrainSpotEffects;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.CommonEvents;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.proxy.ClientProxy;
 import de.ellpeck.naturesaura.proxy.IProxy;
 import de.ellpeck.naturesaura.proxy.ServerProxy;
@@ -20,7 +18,6 @@ import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
@@ -62,8 +59,6 @@ public final class NaturesAura {
     };
 
     public void setup(FMLCommonSetupEvent event) {
-        ModConfig.instance.apply();
-
         this.preInit(event);
         this.init(event);
         this.postInit(event);
@@ -76,10 +71,6 @@ public final class NaturesAura {
         Helper.registerCap(IAuraChunk.class);
         Helper.registerCap(IWorldData.class);
 
-        new ModBlocks();
-        new ModItems();
-        new ModPotions();
-
         Compat.preInit();
         PacketHandler.init();
         new Multiblocks();
@@ -90,6 +81,8 @@ public final class NaturesAura {
     }
 
     private void init(FMLCommonSetupEvent event) {
+        ModConfig.instance.apply();
+
         ModRecipes.init();
         ModRegistry.init();
         DrainSpotEffects.init();

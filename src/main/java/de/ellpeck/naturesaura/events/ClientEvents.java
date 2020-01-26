@@ -12,11 +12,10 @@ import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityGratedChute;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityRFConverter;
-import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.enchant.ModEnchantment;
 import de.ellpeck.naturesaura.items.ItemAuraCache;
-import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
+import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import net.minecraft.block.Block;
@@ -195,33 +194,9 @@ public class ClientEvents {
 
                     ParticleHandler.updateParticles();
 
-                    if (Compat.baubles) {
-                        // TODO baubles
-                    /*IItemHandler baubles = BaublesApi.getBaublesHandler(mc.player);
-                    for (int i = 0; i < baubles.getSlots(); i++) {
-                        ItemStack slot = baubles.getStackInSlot(i);
-                        if (!slot.isEmpty()) {
-                            if (slot.getItem() instanceof AuraCache)
-                                heldCache = slot;
-                            else if (slot.getItem() == ModItems.EYE)
-                                heldEye = slot;
-                            else if (slot.getItem() == ModItems.EYE_IMPROVED)
-                                heldOcular = slot;
-                        }
-                    }*/
-                    }
-
-                    for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
-                        ItemStack slot = mc.player.inventory.getStackInSlot(i);
-                        if (!slot.isEmpty()) {
-                            if (slot.getItem() instanceof ItemAuraCache)
-                                heldCache = slot;
-                            else if (slot.getItem() == ModItems.EYE && i <= 8)
-                                heldEye = slot;
-                            else if (slot.getItem() == ModItems.EYE_IMPROVED)
-                                heldOcular = slot;
-                        }
-                    }
+                    heldCache = Helper.getEquippedItem(s -> s.getItem() instanceof ItemAuraCache, mc.player);
+                    heldEye = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE, mc.player);
+                    heldOcular = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE_IMPROVED, mc.player);
 
                     if (!heldOcular.isEmpty() && mc.world.getGameTime() % 20 == 0) {
                         SHOWING_EFFECTS.clear();

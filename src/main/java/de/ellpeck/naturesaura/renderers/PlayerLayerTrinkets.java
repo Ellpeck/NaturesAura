@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.renderers;
 import com.mojang.blaze3d.platform.GlStateManager;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.api.render.ITrinketItem.RenderType;
+import de.ellpeck.naturesaura.compat.Compat;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -13,6 +14,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.items.IItemHandler;
+import top.theillusivec4.curios.api.CuriosAPI;
+import top.theillusivec4.curios.api.capability.ICurioItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -58,12 +62,16 @@ public class PlayerLayerTrinkets extends LayerRenderer<AbstractClientPlayerEntit
             this.renderStack(player.inventory.getStackInSlot(i), player, type, main, second);
         }
 
-        /*if (Compat.baubles) { TODO baubles
-            IItemHandler baubles = BaublesApi.getBaublesHandler(player);
-            for (int i = 0; i < baubles.getSlots(); i++) {
-                this.renderStack(baubles.getStackInSlot(i), player, type, main, second);
+        if (Compat.hasCompat("curios")) {
+            ICurioItemHandler handler = CuriosAPI.getCuriosHandler(player).orElse(null);
+            if (handler != null) {
+                for (IItemHandler items : handler.getCurioMap().values()) {
+                    for (int i = 0; i < items.getSlots(); i++) {
+                        this.renderStack(items.getStackInSlot(i), player, type, main, second);
+                    }
+                }
             }
-        }*/
+        }
     }
 
     private void renderStack(ItemStack stack, PlayerEntity player, RenderType type, ItemStack main, ItemStack second) {

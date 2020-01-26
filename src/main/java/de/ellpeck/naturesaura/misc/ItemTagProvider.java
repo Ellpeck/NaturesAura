@@ -1,10 +1,13 @@
 package de.ellpeck.naturesaura.misc;
 
+import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
+import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
 import net.minecraftforge.common.Tags;
 
 public class ItemTagProvider extends ItemTagsProvider {
@@ -22,5 +25,12 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.copy(BlockTags.SLABS, ItemTags.SLABS);
 
         this.getBuilder(Tags.Items.RODS_WOODEN).add(ModItems.ANCIENT_STICK);
+
+        Compat.addItemTags(this);
+    }
+
+    @Override
+    public Tag.Builder<Item> getBuilder(Tag<Item> tagIn) {
+        return super.getBuilder(tagIn);
     }
 }

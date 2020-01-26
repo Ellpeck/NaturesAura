@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.compat.Compat;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -44,7 +45,9 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lwjgl.opengl.GL11;
+import top.theillusivec4.curios.api.CuriosAPI;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,8 +55,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public final class Helper {
 
@@ -377,5 +382,19 @@ public final class Helper {
             default:
                 return Blocks.WHITE_WOOL;
         }
+    }
+
+    public static ItemStack getEquippedItem(Predicate<ItemStack> predicate, PlayerEntity player) {
+        if (Compat.hasCompat("curios")) {
+            Optional<ItemStack> stack = CuriosAPI.getCurioEquipped(predicate, player).map(ImmutableTriple::getRight);
+            if (stack.isPresent())
+                return stack.get();
+        }
+        for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+            ItemStack slot = player.inventory.getStackInSlot(i);
+            if (!slot.isEmpty() && predicate.test(slot))
+                return slot;
+        }
+        return ItemStack.EMPTY;
     }
 }

@@ -86,6 +86,9 @@ repositories {
     maven {
         url = "https://maven.blamejared.com"
     }
+    maven {
+        url = "https://maven.theillusivec4.top/"
+    }
 }
 
 dependencies {
@@ -96,6 +99,9 @@ dependencies {
 
     compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.14.4:5.0.0.89")
     compile fg.deobf("vazkii.patchouli:Patchouli:1.1-23.115")
+
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.14.4-1.0.6.1")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.14.4-1.0.6.1:api")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
