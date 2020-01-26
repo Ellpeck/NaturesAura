@@ -13,9 +13,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class GoldFiber extends ItemImpl implements IColorProvidingItem {
+public class ItemGoldFiber extends ItemImpl implements IColorProvidingItem {
 
-    public GoldFiber() {
+    public ItemGoldFiber() {
         super("gold_fiber", new Properties().group(NaturesAura.CREATIVE_TAB));
     }
 

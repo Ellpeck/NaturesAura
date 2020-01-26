@@ -29,8 +29,8 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EnderAccess extends ItemImpl {
-    public EnderAccess() {
+public class ItemEnderAccess extends ItemImpl {
+    public ItemEnderAccess() {
         super("ender_access", new Properties().group(NaturesAura.CREATIVE_TAB));
     }
 

@@ -25,11 +25,11 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
-public class Pickaxe extends PickaxeItem implements IModItem, IModelProvider {
+public class ItemPickaxe extends PickaxeItem implements IModItem, IModelProvider {
 
     private final String baseName;
 
-    public Pickaxe(String baseName, IItemTier material, int damage, float speed) {
+    public ItemPickaxe(String baseName, IItemTier material, int damage, float speed) {
         super(material, damage, speed, new Properties().group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
         ModRegistry.add(this);

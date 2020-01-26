@@ -14,9 +14,9 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityRFConverter;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.enchant.ModEnchantment;
-import de.ellpeck.naturesaura.items.AuraCache;
+import de.ellpeck.naturesaura.items.ItemAuraCache;
 import de.ellpeck.naturesaura.items.ModItems;
-import de.ellpeck.naturesaura.items.RangeVisualizer;
+import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import net.minecraft.block.Block;
@@ -138,7 +138,7 @@ public class ClientEvents {
             Minecraft mc = Minecraft.getInstance();
             if (mc.world == null) {
                 ParticleHandler.clearParticles();
-                RangeVisualizer.clear();
+                ItemRangeVisualizer.clear();
                 PENDING_AURA_CHUNKS.clear();
             } else {
                 PENDING_AURA_CHUNKS.removeIf(next -> next.tryHandle(mc.world));
@@ -182,7 +182,7 @@ public class ClientEvents {
                         NaturesAuraAPI.IInternalHooks inst = NaturesAuraAPI.instance();
                         inst.setParticleSpawnRange(512);
                         inst.setParticleDepth(false);
-                        for (BlockPos pos : RangeVisualizer.VISUALIZED_RAILS.get(mc.world.getDimension().getType())) {
+                        for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_RAILS.get(mc.world.getDimension().getType())) {
                             NaturesAuraAPI.instance().spawnMagicParticle(
                                     pos.getX() + mc.world.rand.nextFloat(),
                                     pos.getY() + mc.world.rand.nextFloat(),
@@ -214,7 +214,7 @@ public class ClientEvents {
                     for (int i = 0; i < mc.player.inventory.getSizeInventory(); i++) {
                         ItemStack slot = mc.player.inventory.getStackInSlot(i);
                         if (!slot.isEmpty()) {
-                            if (slot.getItem() instanceof AuraCache)
+                            if (slot.getItem() instanceof ItemAuraCache)
                                 heldCache = slot;
                             else if (slot.getItem() == ModItems.EYE && i <= 8)
                                 heldEye = slot;
@@ -285,7 +285,7 @@ public class ClientEvents {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBegin(GL11.GL_QUADS);
-            for (BlockPos pos : RangeVisualizer.VISUALIZED_BLOCKS.get(dim)) {
+            for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_BLOCKS.get(dim)) {
                 if (!mc.world.isBlockLoaded(pos))
                     continue;
                 BlockState state = mc.world.getBlockState(pos);
@@ -294,7 +294,7 @@ public class ClientEvents {
                     continue;
                 this.renderVisualize((IVisualizable) block, mc.world, pos);
             }
-            for (Entity entity : RangeVisualizer.VISUALIZED_ENTITIES.get(dim)) {
+            for (Entity entity : ItemRangeVisualizer.VISUALIZED_ENTITIES.get(dim)) {
                 if (!entity.isAlive() || !(entity instanceof IVisualizable))
                     continue;
                 this.renderVisualize((IVisualizable) entity, mc.world, entity.getPosition());

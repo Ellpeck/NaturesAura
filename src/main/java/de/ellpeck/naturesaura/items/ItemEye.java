@@ -10,9 +10,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class Eye extends ItemImpl implements ITrinketItem {
+public class ItemEye extends ItemImpl implements ITrinketItem {
 
-    public Eye(String name) {
+    public ItemEye(String name) {
         super(name, new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
     }
 

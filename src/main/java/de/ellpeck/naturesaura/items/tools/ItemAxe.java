@@ -16,10 +16,10 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
-public class Axe extends AxeItem implements IModItem, IModelProvider {
+public class ItemAxe extends AxeItem implements IModItem, IModelProvider {
     private final String baseName;
 
-    public Axe(String baseName, IItemTier material, float damage, float speed) {
+    public ItemAxe(String baseName, IItemTier material, float damage, float speed) {
         super(material, damage, speed, new Properties().group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
         ModRegistry.add(this);

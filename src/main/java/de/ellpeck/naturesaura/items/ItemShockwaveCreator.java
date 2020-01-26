@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
-import de.ellpeck.naturesaura.items.tools.Armor;
+import de.ellpeck.naturesaura.items.tools.ItemArmor;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.BlockState;
@@ -32,11 +32,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
-public class ShockwaveCreator extends ItemImpl implements ITrinketItem {
+public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
 
     private static final ResourceLocation RES_WORN = new ResourceLocation(NaturesAura.MOD_ID, "textures/items/shockwave_creator_player.png");
 
-    public ShockwaveCreator() {
+    public ItemShockwaveCreator() {
         super("shockwave_creator", new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
     }
 
@@ -75,7 +75,7 @@ public class ShockwaveCreator extends ItemImpl implements ITrinketItem {
                 source = DamageSource.causePlayerDamage((PlayerEntity) living);
             else
                 source = DamageSource.MAGIC;
-            boolean infusedSet = Armor.isFullSetEquipped(living, 0);
+            boolean infusedSet = ItemArmor.isFullSetEquipped(living, 0);
 
             int range = 5;
             List<LivingEntity> mobs = worldIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(

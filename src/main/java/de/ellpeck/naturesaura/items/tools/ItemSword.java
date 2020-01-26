@@ -17,10 +17,10 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
-public class Sword extends SwordItem implements IModItem, IModelProvider {
+public class ItemSword extends SwordItem implements IModItem, IModelProvider {
     private final String baseName;
 
-    public Sword(String baseName, IItemTier material, int damage, float speed) {
+    public ItemSword(String baseName, IItemTier material, int damage, float speed) {
         super(material, damage, speed, new Properties().group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
         ModRegistry.add(this);

@@ -12,9 +12,9 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
-public class MoverMinecart extends ItemImpl {
+public class ItemMoverMinecart extends ItemImpl {
 
-    public MoverMinecart() {
+    public ItemMoverMinecart() {
         super("mover_cart", new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
     }
 

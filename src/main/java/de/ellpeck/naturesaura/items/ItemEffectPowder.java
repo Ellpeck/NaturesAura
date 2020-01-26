@@ -18,9 +18,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EffectPowder extends ItemImpl implements IColorProvidingItem {
+public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
 
-    public EffectPowder() {
+    public ItemEffectPowder() {
         super("effect_powder", new Properties().group(NaturesAura.CREATIVE_TAB));
     }
 

@@ -17,11 +17,11 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class Hoe extends HoeItem implements IModItem, IModelProvider {
+public class ItemHoe extends HoeItem implements IModItem, IModelProvider {
 
     private final String baseName;
 
-    public Hoe(String baseName, IItemTier material, float speed) {
+    public ItemHoe(String baseName, IItemTier material, float speed) {
         super(material, speed, new Properties().group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
         ModRegistry.add(this);

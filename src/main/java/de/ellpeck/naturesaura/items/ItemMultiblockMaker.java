@@ -15,11 +15,11 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiblockMaker extends ItemImpl {
+public class ItemMultiblockMaker extends ItemImpl {
 
     private static List<IMultiblock> multiblocks;
 
-    public MultiblockMaker() {
+    public ItemMultiblockMaker() {
         super("multiblock_maker", new Properties().group(NaturesAura.CREATIVE_TAB));
     }
 

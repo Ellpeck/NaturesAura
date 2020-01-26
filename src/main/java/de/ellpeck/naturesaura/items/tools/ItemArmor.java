@@ -25,12 +25,12 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Armor extends ArmorItem implements IModItem, IModelProvider {
+public class ItemArmor extends ArmorItem implements IModItem, IModelProvider {
 
     private static List<Item[]> sets;
     private final String baseName;
 
-    public Armor(String baseName, IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn) {
+    public ItemArmor(String baseName, IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn) {
         super(materialIn, equipmentSlotIn, new Properties().group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
         MinecraftForge.EVENT_BUS.register(new EventHandler());

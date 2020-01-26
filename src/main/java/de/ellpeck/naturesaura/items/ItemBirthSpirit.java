@@ -9,8 +9,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class BirthSpirit extends Glowing {
-    public BirthSpirit() {
+public class ItemBirthSpirit extends ItemGlowing {
+    public ItemBirthSpirit() {
         super("birth_spirit");
         MinecraftForge.EVENT_BUS.register(new EventHandler());
     }

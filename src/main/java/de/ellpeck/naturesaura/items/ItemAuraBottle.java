@@ -27,9 +27,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static net.minecraft.dispenser.DefaultDispenseItemBehavior.doDispense;
 
-public class AuraBottle extends ItemImpl implements IColorProvidingItem {
+public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
 
-    public AuraBottle(Item emptyBottle) {
+    public ItemAuraBottle(Item emptyBottle) {
         super("aura_bottle", new Properties().group(NaturesAura.CREATIVE_TAB));
         MinecraftForge.EVENT_BUS.register(new EventHandler());
 
@@ -43,7 +43,7 @@ public class AuraBottle extends ItemImpl implements IColorProvidingItem {
             ItemStack dispense = stack.split(1);
             if (offsetState.getBlock().isAir(offsetState, world, offset)) {
                 if (IAuraChunk.getAuraInArea(world, offset, 30) >= 100000) {
-                    dispense = setType(new ItemStack(AuraBottle.this), IAuraType.forWorld(world));
+                    dispense = setType(new ItemStack(ItemAuraBottle.this), IAuraType.forWorld(world));
 
                     BlockPos spot = IAuraChunk.getHighestSpot(world, offset, 30, offset);
                     IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 20000);
@@ -110,7 +110,7 @@ public class AuraBottle extends ItemImpl implements IColorProvidingItem {
                 held.shrink(1);
 
                 player.inventory.addItemStackToInventory(
-                        setType(new ItemStack(AuraBottle.this), IAuraType.forWorld(player.world)));
+                        setType(new ItemStack(ItemAuraBottle.this), IAuraType.forWorld(player.world)));
 
                 BlockPos spot = IAuraChunk.getHighestSpot(player.world, pos, 30, pos);
                 IAuraChunk.getAuraChunk(player.world, spot).drainAura(spot, 20000);

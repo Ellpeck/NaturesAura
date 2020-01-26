@@ -7,7 +7,7 @@ import net.minecraft.util.LazyLoadBase;
 
 import java.util.function.Supplier;
 
-public enum NAItemTier implements IItemTier {
+public enum ModItemTier implements IItemTier {
     INFUSED(2, 250, 6.0F, 2.0F, 14, () -> Ingredient.fromItems(ModItems.INFUSED_IRON));
 
     private final int harvestLevel;
@@ -17,7 +17,7 @@ public enum NAItemTier implements IItemTier {
     private final int enchantability;
     private final LazyLoadBase<Ingredient> repairMaterial;
 
-    NAItemTier(int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn, int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
+    ModItemTier(int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn, int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
         this.harvestLevel = harvestLevelIn;
         this.maxUses = maxUsesIn;
         this.efficiency = efficiencyIn;

@@ -14,8 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
-public class CaveFinder extends ItemImpl {
-    public CaveFinder() {
+public class ItemCaveFinder extends ItemImpl {
+    public ItemCaveFinder() {
         super("cave_finder", new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
     }
 

@@ -21,13 +21,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class RangeVisualizer extends ItemImpl {
+public class ItemRangeVisualizer extends ItemImpl {
 
     public static final ListMultimap<DimensionType, BlockPos> VISUALIZED_BLOCKS = ArrayListMultimap.create();
     public static final ListMultimap<DimensionType, Entity> VISUALIZED_ENTITIES = ArrayListMultimap.create();
     public static final ListMultimap<DimensionType, BlockPos> VISUALIZED_RAILS = ArrayListMultimap.create();
 
-    public RangeVisualizer() {
+    public ItemRangeVisualizer() {
         super("range_visualizer", new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
         MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
@@ -81,7 +81,7 @@ public class RangeVisualizer extends ItemImpl {
         @SubscribeEvent
         public void onInteract(PlayerInteractEvent.EntityInteractSpecific event) {
             ItemStack stack = event.getItemStack();
-            if (stack.isEmpty() || stack.getItem() != RangeVisualizer.this)
+            if (stack.isEmpty() || stack.getItem() != ItemRangeVisualizer.this)
                 return;
             Entity entity = event.getTarget();
             if (entity instanceof IVisualizable) {

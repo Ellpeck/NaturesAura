@@ -6,8 +6,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 // Name (Glowing) ambiguous?
-public class Glowing extends ItemImpl {
-    public Glowing(String baseName) {
+public class ItemGlowing extends ItemImpl {
+    public ItemGlowing(String baseName) {
         super(baseName, new Properties().group(NaturesAura.CREATIVE_TAB));
     }
 

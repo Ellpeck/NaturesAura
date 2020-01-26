@@ -28,11 +28,11 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AuraCache extends ItemImpl implements ITrinketItem {
+public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
     private final int capacity;
 
-    public AuraCache(String name, int capacity) {
+    public ItemAuraCache(String name, int capacity) {
         super(name, new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
         this.capacity = capacity;
     }
@@ -94,7 +94,7 @@ public class AuraCache extends ItemImpl implements ITrinketItem {
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         return new ICapabilityProvider() {
-            private final ItemAuraContainer container = new ItemAuraContainer(stack, null, AuraCache.this.capacity);
+            private final ItemAuraContainer container = new ItemAuraContainer(stack, null, ItemAuraCache.this.capacity);
 
             @Nonnull
             @Override

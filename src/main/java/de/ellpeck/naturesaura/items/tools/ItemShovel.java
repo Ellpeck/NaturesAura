@@ -25,10 +25,10 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
-public class Shovel extends ShovelItem implements IModItem, IModelProvider {
+public class ItemShovel extends ShovelItem implements IModItem, IModelProvider {
     private final String baseName;
 
-    public Shovel(String baseName, IItemTier material, float damage, float speed) {
+    public ItemShovel(String baseName, IItemTier material, float damage, float speed) {
         super(material, damage, speed, new Properties().group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
         ModRegistry.add(this);

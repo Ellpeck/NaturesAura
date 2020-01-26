@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.packet;
 
-import de.ellpeck.naturesaura.items.RangeVisualizer;
+import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
@@ -51,7 +51,7 @@ public class PacketClient {
                         case 0: // dimension rail visualization
                             int goalDim = message.data[0];
                             BlockPos goalPos = new BlockPos(message.data[1], message.data[2], message.data[3]);
-                            RangeVisualizer.visualize(mc.player, RangeVisualizer.VISUALIZED_RAILS, DimensionType.getById(goalDim), goalPos);
+                            ItemRangeVisualizer.visualize(mc.player, ItemRangeVisualizer.VISUALIZED_RAILS, DimensionType.getById(goalDim), goalPos);
                     }
                 }
             }

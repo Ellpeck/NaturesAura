@@ -4,8 +4,8 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
-import de.ellpeck.naturesaura.items.AuraBottle;
-import de.ellpeck.naturesaura.items.EffectPowder;
+import de.ellpeck.naturesaura.items.ItemAuraBottle;
+import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -44,8 +44,8 @@ public class JEINaturesAuraPlugin implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(ModItems.EFFECT_POWDER, stack -> EffectPowder.getEffect(stack).toString());
-        registration.registerSubtypeInterpreter(ModItems.AURA_BOTTLE, stack -> AuraBottle.getType(stack).getName().toString());
+        registration.registerSubtypeInterpreter(ModItems.EFFECT_POWDER, stack -> ItemEffectPowder.getEffect(stack).toString());
+        registration.registerSubtypeInterpreter(ModItems.AURA_BOTTLE, stack -> ItemAuraBottle.getType(stack).getName().toString());
 
         ISubtypeInterpreter auraInterpreter = stack -> {
             IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);

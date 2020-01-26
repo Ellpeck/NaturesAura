@@ -5,7 +5,7 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
-import de.ellpeck.naturesaura.items.EffectPowder;
+import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.misc.WorldData;
 import net.minecraft.entity.Entity;
@@ -44,7 +44,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     public static void place(World world, ItemStack stack, double posX, double posY, double posZ) {
-        ResourceLocation effect = EffectPowder.getEffect(stack);
+        ResourceLocation effect = ItemEffectPowder.getEffect(stack);
         EntityEffectInhibitor entity = new EntityEffectInhibitor(ModEntities.EFFECT_INHIBITOR, world);
         entity.setInhibitedEffect(effect);
         entity.setColor(NaturesAuraAPI.EFFECT_POWDERS.get(effect));
@@ -159,7 +159,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     public ItemStack getDrop() {
-        return EffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, this.getAmount()), this.getInhibitedEffect());
+        return ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, this.getAmount()), this.getInhibitedEffect());
     }
 
     public void setInhibitedEffect(ResourceLocation effect) {
