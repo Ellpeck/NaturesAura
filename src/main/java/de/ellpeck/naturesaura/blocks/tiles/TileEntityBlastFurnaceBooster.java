@@ -1,15 +1,17 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.BlastFurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.math.BlockPos;
 
 public class TileEntityBlastFurnaceBooster extends TileEntityImpl implements ITickableTileEntity {
-
-    private int waitTime;
 
     public TileEntityBlastFurnaceBooster() {
         super(ModTileEntities.BLAST_FURNACE_BOOSTER);
@@ -19,10 +21,6 @@ public class TileEntityBlastFurnaceBooster extends TileEntityImpl implements ITi
     public void tick() {
         if (this.world.isRemote)
             return;
-        if (this.waitTime > 0) {
-            this.waitTime--;
-            return;
-        }
 
         TileEntity below = this.world.getTileEntity(this.pos.down());
         if (!(below instanceof BlastFurnaceTileEntity))
@@ -34,22 +32,30 @@ public class TileEntityBlastFurnaceBooster extends TileEntityImpl implements ITi
 
         IIntArray data = TileEntityFurnaceHeater.getFurnaceData(tile);
         int doneDiff = data.get(3) - data.get(2);
-        if (doneDiff > 1) {
-            this.waitTime = doneDiff - 2;
+        if (doneDiff > 1)
+            return;
+
+        if (this.world.rand.nextFloat() > 0.45F) {
+            PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                    new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.BLAST_FURNACE_BOOSTER, 0));
             return;
         }
-
-        if (this.world.rand.nextFloat() > 0.35F)
-            return;
 
         ItemStack output = tile.getStackInSlot(2);
         if (output.getCount() >= output.getMaxStackSize())
             return;
+
         if (output.isEmpty()) {
             ItemStack result = recipe.getRecipeOutput();
             tile.setInventorySlotContents(2, result.copy());
         } else {
             output.grow(1);
         }
+
+        BlockPos pos = IAuraChunk.getHighestSpot(this.world, this.pos, 30, this.pos);
+        IAuraChunk.getAuraChunk(this.world, pos).drainAura(pos, 6500);
+
+        PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.BLAST_FURNACE_BOOSTER, 1));
     }
 }

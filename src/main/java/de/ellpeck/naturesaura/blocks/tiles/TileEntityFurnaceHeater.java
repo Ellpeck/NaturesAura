@@ -46,14 +46,13 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
                     if (burnTime <= 0)
                         this.world.setBlockState(tilePos, this.world.getBlockState(tilePos).with(AbstractFurnaceBlock.LIT, true));
 
-                    int totalCookTime = data.get(3);
-                    data.set(0, totalCookTime);
+                    data.set(0, 200);
                     //if set higher than 199, it'll never finish because the furnace does ++ and then ==
-                    data.set(2, Math.min(totalCookTime - 1, data.get(2) + 5));
+                    data.set(2, Math.min(data.get(3) - 1, data.get(2) + 5));
 
                     BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 20, this.pos);
                     IAuraChunk chunk = IAuraChunk.getAuraChunk(this.world, spot);
-                    chunk.drainAura(spot, MathHelper.ceil((totalCookTime - burnTime) * 16.6F));
+                    chunk.drainAura(spot, MathHelper.ceil((200 - burnTime) * 16.6F));
                     did = true;
 
                     if (this.world.getGameTime() % 15 == 0) {

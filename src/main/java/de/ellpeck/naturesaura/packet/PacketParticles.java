@@ -2,6 +2,7 @@
 package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import net.minecraft.block.BlockState;
@@ -425,6 +426,30 @@ public class PacketParticles {
                         world.rand.nextGaussian() * 0.03F,
                         world.rand.nextGaussian() * 0.03F,
                         world.rand.nextGaussian() * 0.03F);
+        }),
+        BLAST_FURNACE_BOOSTER((message, world) -> {
+            boolean worked = message.data[0] > 0;
+            for (int i = world.rand.nextInt(10) + 5; i >= 0; i--)
+                world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE,
+                        message.posX + 5 / 16F + world.rand.nextInt(6) / 16F,
+                        message.posY + 0.6F,
+                        message.posZ + 5 / 16F + world.rand.nextInt(6) / 16F,
+                        world.rand.nextGaussian() * 0.005F,
+                        world.rand.nextFloat() * 0.02F + 0.01F,
+                        world.rand.nextGaussian() * 0.005F);
+
+            if (worked) {
+                BlockPos pos = new BlockPos(message.posX, message.posY, message.posZ);
+                int color = IAuraChunk.getAuraChunk(world, pos).getType().getColor();
+                for (int i = world.rand.nextInt(10) + 10; i >= 0; i--)
+                    NaturesAuraAPI.instance().spawnParticleStream(
+                            message.posX + (float) world.rand.nextGaussian() * 5,
+                            message.posY + world.rand.nextFloat() * 5,
+                            message.posZ + (float) world.rand.nextGaussian() * 5,
+                            message.posX + 0.5F, message.posY + 0.5F, message.posZ + 0.5F,
+                            0.25F, color, 0.5F + world.rand.nextFloat()
+                    );
+            }
         });
 
         public final BiConsumer<PacketParticles, World> action;
