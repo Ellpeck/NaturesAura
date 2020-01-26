@@ -41,14 +41,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
             if (tile instanceof AbstractFurnaceTileEntity) {
                 AbstractFurnaceTileEntity furnace = (AbstractFurnaceTileEntity) tile;
                 if (this.isReady(furnace)) {
-                    IIntArray data;
-                    try {
-                        data = (IIntArray) FURNACE_DATA_FIELD.get(furnace);
-                    } catch (IllegalAccessException e) {
-                        NaturesAura.LOGGER.fatal("Couldn't reflect furnace field", e);
-                        return;
-                    }
-
+                    IIntArray data = getFurnaceData(furnace);
                     int burnTime = data.get(0);
                     if (burnTime <= 0)
                         this.world.setBlockState(tilePos, this.world.getBlockState(tilePos).with(AbstractFurnaceBlock.LIT, true));
@@ -84,6 +77,15 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
         }
     }
 
+    public static IIntArray getFurnaceData(AbstractFurnaceTileEntity tile) {
+        try {
+            return (IIntArray) FURNACE_DATA_FIELD.get(tile);
+        } catch (IllegalAccessException e) {
+            NaturesAura.LOGGER.fatal("Couldn't reflect furnace field", e);
+            return null;
+        }
+    }
+
     private boolean isReady(AbstractFurnaceTileEntity furnace) {
         if (!furnace.getStackInSlot(1).isEmpty())
             return false;
@@ -100,7 +102,7 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
             return false;
     }
 
-    private static IRecipeType<? extends AbstractCookingRecipe> getRecipeType(AbstractFurnaceTileEntity furnace) {
+    public static IRecipeType<? extends AbstractCookingRecipe> getRecipeType(AbstractFurnaceTileEntity furnace) {
         if (furnace instanceof BlastFurnaceTileEntity) {
             return IRecipeType.BLASTING;
         } else if (furnace instanceof SmokerTileEntity) {

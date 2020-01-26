@@ -34,4 +34,5 @@ public final class ModTileEntities {
     public static TileEntityType<TileEntitySpawnLamp> SPAWN_LAMP;
     public static TileEntityType<TileEntityTimeChanger> TIME_CHANGER;
     public static TileEntityType<TileEntityWoodStand> WOOD_STAND;
+    public static TileEntityType<TileEntityBlastFurnaceBooster> BLAST_FURNACE_BOOSTER;
 }

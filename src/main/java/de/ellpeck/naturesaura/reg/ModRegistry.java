@@ -109,7 +109,8 @@ public final class ModRegistry {
                 new BlockProjectileGenerator(),
                 new BlockDimensionRail("overworld", DimensionType.OVERWORLD, DimensionType.THE_NETHER, DimensionType.THE_END),
                 new BlockDimensionRail("nether", DimensionType.THE_NETHER, DimensionType.OVERWORLD),
-                new BlockDimensionRail("end", DimensionType.THE_END, DimensionType.OVERWORLD)
+                new BlockDimensionRail("end", DimensionType.THE_END, DimensionType.OVERWORLD),
+                new BlockBlastFurnaceBooster()
         );
 
         if (ModConfig.instance.rfConverter.get())
