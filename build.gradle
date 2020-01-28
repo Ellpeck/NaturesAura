@@ -92,16 +92,16 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.116'
+    minecraft 'net.minecraftforge:forge:1.15.2-31.0.1'
 
-    compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11")
+    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2")
 
-    compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.14.4:5.0.1.162")
-    compile fg.deobf("vazkii.patchouli:Patchouli:1.1-25.126")
+    //compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.14.4:5.0.1.162")
+    compile fg.deobf("vazkii.patchouli:Patchouli:1.1-25.4")
 
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.14.4-1.0.6.1")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.14.4-1.0.6.1:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0-beta2")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0-beta2:api")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
