@@ -13,6 +13,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Random;
@@ -31,7 +32,7 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
     }
 
     @Override
-    public void randomTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         if (!world.isRemote) {
             super.randomTick(state, world, pos, random);
 
@@ -62,7 +63,7 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
     }
 
     @Override
-    public void grow(World world, Random rand, BlockPos pos, BlockState state) {
+    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
         if (state.get(SaplingBlock.STAGE) == 0) {
             world.setBlockState(pos, state.cycle(SaplingBlock.STAGE), 4);
         } else if (ForgeEventFactory.saplingGrowTree(world, rand, pos)) {

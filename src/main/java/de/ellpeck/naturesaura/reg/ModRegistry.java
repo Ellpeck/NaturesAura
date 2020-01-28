@@ -233,8 +233,8 @@ public final class ModRegistry {
         );
         Helper.populateObjectHolders(ModEntities.class, event.getRegistry());
 
-        NaturesAura.proxy.registerEntityRenderer(EntityMoverMinecart.class, () -> RenderMoverMinecart::new);
-        NaturesAura.proxy.registerEntityRenderer(EntityEffectInhibitor.class, () -> RenderEffectInhibitor::new);
+        NaturesAura.proxy.registerEntityRenderer(ModEntities.MOVER_CART, () -> RenderMoverMinecart::new);
+        NaturesAura.proxy.registerEntityRenderer(ModEntities.EFFECT_INHIBITOR, () -> RenderEffectInhibitor::new);
     }
 
     @SubscribeEvent

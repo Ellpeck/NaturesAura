@@ -1,8 +1,6 @@
 package de.ellpeck.naturesaura.compat.jei;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GLX;
-import com.mojang.blaze3d.platform.GlStateManager;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
 import mezz.jei.api.constants.VanillaTypes;
@@ -13,7 +11,6 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -82,9 +79,9 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
     public void draw(AnimalSpawnerRecipe recipe, double mouseX, double mouseY) {
         Minecraft minecraft = Minecraft.getInstance();
         Entity entity = this.entityCache.get(recipe.entity);
-        if(entity == null){
-            entity = recipe.makeEntity(minecraft.world,0,0,0);
-            this.entityCache.put(recipe.entity,entity);
+        if (entity == null) {
+            entity = recipe.makeEntity(minecraft.world, 0, 0, 0);
+            this.entityCache.put(recipe.entity, entity);
         }
 
         float size = Math.max(1F, Math.max(recipe.entity.getWidth(), recipe.entity.getHeight()));
@@ -96,7 +93,8 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
     }
 
     private static void renderEntity(Entity entity, float x, float y, float rotation, float renderScale, float offset) {
-        GlStateManager.enableColorMaterial();
+        // TODO Render entity
+        /*GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
         GlStateManager.color3f(1F, 1F, 1F);
         GlStateManager.translatef(x, y, 50.0F);
@@ -112,6 +110,6 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
         GlStateManager.disableRescaleNormal();
         GlStateManager.activeTexture(GLX.GL_TEXTURE1);
         GlStateManager.disableTexture();
-        GlStateManager.activeTexture(GLX.GL_TEXTURE0);
+        GlStateManager.activeTexture(GLX.GL_TEXTURE0);*/
     }
 }

@@ -63,7 +63,7 @@ public class TileEntityHopperUpgrade extends TileEntityImpl implements ITickable
                     IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 500);
 
                     PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, PacketParticles.Type.HOPPER_UPGRADE));
+                            new PacketParticles((float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.HOPPER_UPGRADE));
                 }
             }
         }

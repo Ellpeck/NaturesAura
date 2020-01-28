@@ -23,7 +23,10 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WorldData implements IWorldData {
     private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();
@@ -53,7 +56,7 @@ public class WorldData implements IWorldData {
 
         ListNBT moss = new ListNBT();
         for (BlockPos pos : this.recentlyConvertedMossStones)
-            moss.add(new LongNBT(pos.toLong()));
+            moss.add(LongNBT.valueOf(pos.toLong()));
         compound.put("converted_moss", moss);
 
         return compound;

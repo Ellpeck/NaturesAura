@@ -91,7 +91,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
                             this.world.addEntity(item);
 
                             PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                                    new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, PacketParticles.Type.TR_SPAWN_RESULT));
+                                    new PacketParticles((float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.TR_SPAWN_RESULT));
                             this.world.playSound(null, this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5,
                                     SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 0.65F, 1F);
 

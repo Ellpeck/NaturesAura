@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
@@ -13,7 +14,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -127,34 +127,35 @@ public final class Helper {
 
     @OnlyIn(Dist.CLIENT)
     public static void renderItemInWorld(ItemStack stack) {
-        if (!stack.isEmpty()) {
-            GlStateManager.pushMatrix();
-            GlStateManager.disableLighting();
+        // TODO rendering items in world
+       /* if (!stack.isEmpty()) {
+            RenderSystem.pushMatrix();
+            RenderSystem.disableLighting();
             RenderHelper.enableStandardItemLighting();
             Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
             RenderHelper.disableStandardItemLighting();
-            GlStateManager.enableLighting();
-            GlStateManager.popMatrix();
-        }
+            RenderSystem.enableLighting();
+            RenderSystem.popMatrix();
+        }*/
     }
 
     @OnlyIn(Dist.CLIENT)
     public static void renderItemInGui(ItemStack stack, int x, int y, float scale) {
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        RenderHelper.enableGUIStandardItemLighting();
+        RenderHelper.setupGuiFlatDiffuseLighting();
         GlStateManager.enableDepthTest();
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.translatef(x, y, 0);
-        GlStateManager.scalef(scale, scale, scale);
+        RenderSystem.enableRescaleNormal();
+        RenderSystem.translatef(x, y, 0);
+        RenderSystem.scalef(scale, scale, scale);
         Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(stack, 0, 0);
         Minecraft.getInstance().getItemRenderer().renderItemOverlayIntoGUI(Minecraft.getInstance().fontRenderer, stack, 0, 0, null);
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
 
-    public static boolean putStackOnTile(PlayerEntity player, Hand hand, BlockPos pos, int slot, boolean sound) {
+    public static ActionResultType putStackOnTile(PlayerEntity player, Hand hand, BlockPos pos, int slot, boolean sound) {
         TileEntity tile = player.world.getTileEntity(pos);
         if (tile instanceof TileEntityImpl) {
             IItemHandlerModifiable handler = ((TileEntityImpl) tile).getItemHandler(null);
@@ -168,7 +169,7 @@ public final class Helper {
                                     SoundEvents.ENTITY_ITEM_FRAME_ADD_ITEM, SoundCategory.PLAYERS, 0.75F, 1F);
                         if (!player.world.isRemote)
                             player.setHeldItem(hand, remain);
-                        return true;
+                        return ActionResultType.SUCCESS;
                     }
                 }
 
@@ -179,16 +180,16 @@ public final class Helper {
                     if (!player.world.isRemote) {
                         ItemStack stack = handler.getStackInSlot(slot);
                         if (!player.addItemStackToInventory(stack)) {
-                            ItemEntity item = new ItemEntity(player.world, player.posX, player.posY, player.posZ, stack);
+                            ItemEntity item = new ItemEntity(player.world, player.getPosX(), player.getPosY(), player.getPosZ(), stack);
                             player.world.addEntity(item);
                         }
                         handler.setStackInSlot(slot, ItemStack.EMPTY);
                     }
-                    return true;
+                    return ActionResultType.SUCCESS;
                 }
             }
         }
-        return false;
+        return ActionResultType.FAIL;
     }
 
     public static ICapabilityProvider makeRechargeProvider(ItemStack stack, boolean needsSelected) {

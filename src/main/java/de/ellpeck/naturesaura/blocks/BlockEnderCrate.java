@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderEnderCrate;
 import de.ellpeck.naturesaura.items.ModItems;
@@ -11,6 +12,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +22,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
@@ -41,6 +45,7 @@ import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider {
 
@@ -103,7 +108,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityEnderCrate) {
@@ -114,7 +119,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
                 }
             }
         }
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
     @Override
@@ -140,8 +145,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public Tuple<Class, TileEntityRenderer> getTESR() {
-        return new Tuple<>(TileEntityEnderCrate.class, new RenderEnderCrate());
+    public Tuple<TileEntityType, Function<TileEntityRendererDispatcher, TileEntityRenderer<? extends TileEntity>>> getTESR() {
+        return new Tuple<>(ModTileEntities.ENDER_CRATE, RenderEnderCrate::new);
     }
 }

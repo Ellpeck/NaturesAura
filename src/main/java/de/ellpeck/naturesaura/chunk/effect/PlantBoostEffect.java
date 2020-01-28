@@ -18,6 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.server.ServerWorld;
 
 public class PlantBoostEffect implements IDrainSpotEffect {
 
@@ -72,7 +73,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
                 if (block instanceof IGrowable && !(block instanceof DoublePlantBlock) && !(block instanceof TallGrassBlock) && block != Blocks.GRASS) {
                     IGrowable growable = (IGrowable) block;
                     if (growable.canGrow(world, plantPos, state, false)) {
-                        growable.grow(world, world.rand, plantPos, state);
+                        growable.grow((ServerWorld) world, world.rand, plantPos, state);
 
                         BlockPos closestSpot = IAuraChunk.getHighestSpot(world, plantPos, 25, pos);
                         IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 3500);

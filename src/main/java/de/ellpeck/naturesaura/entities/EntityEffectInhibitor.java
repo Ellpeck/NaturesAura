@@ -74,7 +74,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
 
     @Override
     public void setPosition(double x, double y, double z) {
-        boolean should = x != this.posX || y != this.posY || z != this.posZ;
+        boolean should = x != this.getPosX() || y != this.getPosY() || z != this.getPosZ();
         if (should)
             this.removeFromPowderList();
         super.setPosition(x, y, z);
@@ -112,9 +112,9 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
         if (this.world.isRemote) {
             if (this.world.getGameTime() % 5 == 0) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        this.posX + this.world.rand.nextGaussian() * 0.1F,
-                        this.posY,
-                        this.posZ + this.world.rand.nextGaussian() * 0.1F,
+                        this.getPosX() + this.world.rand.nextGaussian() * 0.1F,
+                        this.getPosY(),
+                        this.getPosZ() + this.world.rand.nextGaussian() * 0.1F,
                         this.world.rand.nextGaussian() * 0.005F,
                         this.world.rand.nextFloat() * 0.03F,
                         this.world.rand.nextGaussian() * 0.005F,

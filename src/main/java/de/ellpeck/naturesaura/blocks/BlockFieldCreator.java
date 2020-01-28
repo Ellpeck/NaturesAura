@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityFieldCreator;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -10,7 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -28,13 +27,13 @@ public class BlockFieldCreator extends BlockContainerImpl {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult p_225533_6_) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityFieldCreator) {
             if (!worldIn.isRemote) {
                 String key = NaturesAura.MOD_ID + ":field_creator_pos";
                 CompoundNBT compound = player.getPersistentData();
-                if (!player.isSneaking() && compound.contains(key)) {
+                if (!player.isShiftKeyDown() && compound.contains(key)) {
                     BlockPos stored = BlockPos.fromLong(compound.getLong(key));
                     TileEntityFieldCreator creator = (TileEntityFieldCreator) tile;
                     if (!pos.equals(stored)) {
@@ -63,9 +62,9 @@ public class BlockFieldCreator extends BlockContainerImpl {
                     player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".stored_pos"), true);
                 }
             }
-            return true;
+            return ActionResultType.SUCCESS;
         } else
-            return false;
+            return ActionResultType.FAIL;
     }
 
     @Override
@@ -91,18 +90,7 @@ public class BlockFieldCreator extends BlockContainerImpl {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
-    @Override
     public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return false;
-    }
-
-    @Override
-    public boolean isSolid(BlockState state) {
         return false;
     }
 }

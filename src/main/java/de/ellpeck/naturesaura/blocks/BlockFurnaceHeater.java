@@ -83,11 +83,6 @@ public class BlockFurnaceHeater extends BlockContainerImpl {
     }
 
     @Override
-    public boolean isSolid(BlockState state) {
-        return false;
-    }
-
-    @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }

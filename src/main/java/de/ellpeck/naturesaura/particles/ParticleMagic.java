@@ -1,11 +1,15 @@
 package de.ellpeck.naturesaura.particles;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -31,9 +35,9 @@ public class ParticleMagic extends Particle {
         this.motionY = motionY;
         this.motionZ = motionZ;
 
-        float r = (((color >> 16) & 255) / 255F) * (1F - this.rand.nextFloat() * 0.25F);
-        float g = (((color >> 8) & 255) / 255F) * (1F - this.rand.nextFloat() * 0.25F);
-        float b = ((color & 255) / 255F) * (1F - this.rand.nextFloat() * 0.25F);
+        float r = (color >> 16 & 255) / 255F * (1F - this.rand.nextFloat() * 0.25F);
+        float g = (color >> 8 & 255) / 255F * (1F - this.rand.nextFloat() * 0.25F);
+        float b = (color & 255) / 255F * (1F - this.rand.nextFloat() * 0.25F);
         this.setColor(r, g, b);
 
         this.particleAlpha = 1F;
@@ -64,28 +68,29 @@ public class ParticleMagic extends Particle {
     }
 
     @Override
-    public void renderParticle(BufferBuilder buffer, ActiveRenderInfo entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        double x = this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX;
-        double y = this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY;
-        double z = this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ;
-        float sc = 0.1F * this.particleScale;
+    public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
+        Vec3d vec3d = renderInfo.getProjectedView();
+        float f = (float) (MathHelper.lerp(partialTicks, this.prevPosX, this.posX) - vec3d.getX());
+        float f1 = (float) (MathHelper.lerp(partialTicks, this.prevPosY, this.posY) - vec3d.getY());
+        float f2 = (float) (MathHelper.lerp(partialTicks, this.prevPosZ, this.posZ) - vec3d.getZ());
+        Quaternion quaternion = renderInfo.getRotation();
+        Vector3f vector3f1 = new Vector3f(-1.0F, -1.0F, 0.0F);
+        vector3f1.transform(quaternion);
+        Vector3f[] avector3f = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
+        float f4 = 0.1F * this.particleScale;
 
-        int brightness = this.getBrightnessForRender(partialTicks);
-        int sky = brightness >> 16 & 0xFFFF;
-        int block = brightness & 0xFFFF;
+        for (int i = 0; i < 4; ++i) {
+            Vector3f vector3f = avector3f[i];
+            vector3f.transform(quaternion);
+            vector3f.mul(f4);
+            vector3f.add(f, f1, f2);
+        }
 
-        buffer.pos(x + (-rotationX * sc - rotationXY * sc), y + -rotationZ * sc, z + (-rotationYZ * sc - rotationXZ * sc))
-                .tex(0, 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
-                .lightmap(sky, block).endVertex();
-        buffer.pos(x + (-rotationX * sc + rotationXY * sc), y + (rotationZ * sc), z + (-rotationYZ * sc + rotationXZ * sc))
-                .tex(1, 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
-                .lightmap(sky, block).endVertex();
-        buffer.pos(x + (rotationX * sc + rotationXY * sc), y + (rotationZ * sc), z + (rotationYZ * sc + rotationXZ * sc))
-                .tex(1, 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
-                .lightmap(sky, block).endVertex();
-        buffer.pos(x + (rotationX * sc - rotationXY * sc), y + (-rotationZ * sc), z + (rotationYZ * sc - rotationXZ * sc))
-                .tex(0, 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
-                .lightmap(sky, block).endVertex();
+        int j = this.getBrightnessForRender(partialTicks);
+        buffer.pos(avector3f[0].getX(), avector3f[0].getY(), avector3f[0].getZ()).tex(0, 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        buffer.pos(avector3f[1].getX(), avector3f[1].getY(), avector3f[1].getZ()).tex(1, 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        buffer.pos(avector3f[2].getX(), avector3f[2].getY(), avector3f[2].getZ()).tex(1, 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        buffer.pos(avector3f[3].getX(), avector3f[3].getY(), avector3f[3].getZ()).tex(0, 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
     }
 
     @Override

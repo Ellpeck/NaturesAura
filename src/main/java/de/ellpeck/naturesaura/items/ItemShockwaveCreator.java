@@ -51,9 +51,9 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                 return;
 
             compound.putBoolean("air", true);
-            compound.putDouble("x", living.posX);
-            compound.putDouble("y", living.posY);
-            compound.putDouble("z", living.posZ);
+            compound.putDouble("x", living.getPosX());
+            compound.putDouble("y", living.getPosY());
+            compound.putDouble("z", living.getPosZ());
         } else {
             if (!stack.hasTag())
                 return;
@@ -63,7 +63,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
 
             compound.putBoolean("air", false);
 
-            if (!living.isSneaking())
+            if (!living.isShiftKeyDown())
                 return;
             if (living.getDistanceSq(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z")) > 0.75F)
                 return;
@@ -79,8 +79,8 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
 
             int range = 5;
             List<LivingEntity> mobs = worldIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(
-                    living.posX - range, living.posY - 0.5, living.posZ - range,
-                    living.posX + range, living.posY + 0.5, living.posZ + range));
+                    living.getPosX() - range, living.getPosY() - 0.5, living.getPosZ() - range,
+                    living.getPosX() + range, living.getPosY() + 0.5, living.getPosZ() + range));
             for (LivingEntity mob : mobs) {
                 if (!mob.isAlive() || mob == living)
                     continue;
@@ -103,7 +103,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                 worldIn.playSound(null, pos, type.getBreakSound(), SoundCategory.BLOCKS, type.getVolume() * 0.5F, type.getPitch() * 0.8F);
             }
 
-            PacketHandler.sendToAllAround(worldIn, pos, 32, new PacketParticles((float) living.posX, (float) living.posY, (float) living.posZ, PacketParticles.Type.SHOCKWAVE_CREATOR));
+            PacketHandler.sendToAllAround(worldIn, pos, 32, new PacketParticles((float) living.getPosX(), (float) living.getPosY(), (float) living.getPosZ(), PacketParticles.Type.SHOCKWAVE_CREATOR));
         }
     }
 

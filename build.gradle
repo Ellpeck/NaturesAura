@@ -20,7 +20,7 @@ archivesBaseName = 'NaturesAura'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190719-1.14.3'
+    mappings channel: 'snapshot', version: '20200128-1.15.1'
 
     runs {
         client {
@@ -97,7 +97,7 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2")
 
-    //compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.14.4:5.0.1.162")
+    compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.15.1:6.0.0.4")
     compile fg.deobf("vazkii.patchouli:Patchouli:1.1-25.4")
 
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0-beta2")

@@ -8,6 +8,7 @@ import de.ellpeck.naturesaura.blocks.Slab;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
@@ -46,7 +47,7 @@ public class BlockLootProvider implements IDataProvider {
 
         this.lootFunctions.put(ModBlocks.ANCIENT_LEAVES, b -> LootTableHooks.genLeaves(b, ModBlocks.ANCIENT_SAPLING));
         this.lootFunctions.put(ModBlocks.DECAYED_LEAVES, LootTableHooks::genSilkOnly);
-        this.lootFunctions.put(ModBlocks.GOLDEN_LEAVES, b -> LootTable.builder().addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(LootTableHooks.survivesExplosion(b, ItemLootEntry.builder(ModItems.GOLD_LEAF)).acceptCondition(BlockStateProperty.builder(b).with(BlockGoldenLeaves.STAGE, BlockGoldenLeaves.HIGHEST_STAGE))).acceptCondition(RandomChance.builder(0.75F))));
+        this.lootFunctions.put(ModBlocks.GOLDEN_LEAVES, b -> LootTable.builder().addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(LootTableHooks.survivesExplosion(b, ItemLootEntry.builder(ModItems.GOLD_LEAF)).acceptCondition(BlockStateProperty.builder(b).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(BlockGoldenLeaves.STAGE, BlockGoldenLeaves.HIGHEST_STAGE)))).acceptCondition(RandomChance.builder(0.75F))));
 
     }
 
@@ -74,23 +75,23 @@ public class BlockLootProvider implements IDataProvider {
     // What a mess
     private static class LootTableHooks extends BlockLootTables {
         public static LootTable.Builder genLeaves(Block block, Block drop) {
-            return func_218540_a(block, drop, 0.05F, 0.0625F, 0.083333336F, 0.1F);
+            return droppingWithChancesAndSticks(block, drop, 0.05F, 0.0625F, 0.083333336F, 0.1F);
         }
 
         public static LootTable.Builder genSlab(Block block) {
-            return func_218513_d(block);
+            return droppingSlab(block);
         }
 
         public static LootTable.Builder genRegular(Block block) {
-            return func_218546_a(block);
+            return dropping(block);
         }
 
         public static LootTable.Builder genSilkOnly(Block block) {
-            return func_218561_b(block);
+            return onlyWithSilkTouch(block);
         }
 
         public static <T> T survivesExplosion(Block block, ILootConditionConsumer<T> then) {
-            return func_218560_a(block, then);
+            return withSurvivesExplosion(block, then);
         }
     }
 }

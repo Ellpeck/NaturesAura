@@ -28,8 +28,8 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
 
     @SubscribeEvent
     public void onPickup(EntityItemPickupEvent event) {
-        PlayerEntity player = event.getEntityPlayer();
-        if (player != null && !player.isSneaking()) {
+        PlayerEntity player = event.getPlayer();
+        if (player != null && !player.isShiftKeyDown()) {
             ItemEntity item = event.getItem();
             BlockPos pos = item.getPosition();
             Helper.getTileEntitiesInArea(item.world, pos, 8, tile -> {
@@ -47,7 +47,7 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
 
                 if (item.world.getGameTime() % 3 == 0)
                     PacketHandler.sendToAllAround(item.world, pos, 32,
-                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, PacketParticles.Type.PICKUP_STOPPER));
+                            new PacketParticles((float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.PICKUP_STOPPER));
                 return true;
             });
         }

@@ -35,7 +35,7 @@ public class ItemRangeVisualizer extends ItemImpl {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
-        if (playerIn.isSneaking()) {
+        if (playerIn.isShiftKeyDown()) {
             clear();
             playerIn.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.end_all"), true);
             return new ActionResult<>(ActionResultType.SUCCESS, stack);

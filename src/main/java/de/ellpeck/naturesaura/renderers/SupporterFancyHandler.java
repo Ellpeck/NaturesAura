@@ -54,15 +54,15 @@ public class SupporterFancyHandler {
             int color;
             if (info.tier == 1) {
                 BlockPos pos = player.getPosition();
-                color = BiomeColors.getFoliageColor(player.world, pos);
+                color = BiomeColors.func_228361_b_(player.world, pos);
             } else {
                 color = info.color;
             }
 
             NaturesAuraAPI.instance().spawnMagicParticle(
-                    player.posX + rand.nextGaussian() * 0.15F,
-                    player.posY + rand.nextFloat() * 1.8F,
-                    player.posZ + rand.nextGaussian() * 0.15F,
+                    player.getPosX() + rand.nextGaussian() * 0.15F,
+                    player.getPosY() + rand.nextFloat() * 1.8F,
+                    player.getPosZ() + rand.nextGaussian() * 0.15F,
                     rand.nextGaussian() * 0.01F,
                     rand.nextFloat() * 0.01F,
                     rand.nextGaussian() * 0.01F,

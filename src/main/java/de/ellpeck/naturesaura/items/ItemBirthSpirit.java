@@ -26,7 +26,7 @@ public class ItemBirthSpirit extends ItemGlowing {
                     return;
 
                 int amount = parent.world.rand.nextInt(3) + 1;
-                ItemEntity item = new ItemEntity(parent.world, parent.posX, parent.posY, parent.posZ,
+                ItemEntity item = new ItemEntity(parent.world, parent.getPosX(), parent.getPosY(), parent.getPosZ(),
                         new ItemStack(ModItems.BIRTH_SPIRIT, amount));
                 parent.world.addEntity(item);
 

@@ -1,19 +1,13 @@
 package de.ellpeck.naturesaura.entities.render;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
-import de.ellpeck.naturesaura.items.ItemEffectPowder;
-import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +20,13 @@ public class RenderEffectInhibitor extends EntityRenderer<EntityEffectInhibitor>
         super(renderManager);
     }
 
-    @Nullable
+    @Override
+    public ResourceLocation getEntityTexture(EntityEffectInhibitor entity) {
+        return null;
+    }
+
+    // TODO Render entities
+/*    @Nullable
     @Override
     protected ResourceLocation getEntityTexture(EntityEffectInhibitor entity) {
         return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
@@ -44,5 +44,5 @@ public class RenderEffectInhibitor extends EntityRenderer<EntityEffectInhibitor>
         Helper.renderItemInWorld(this.items.computeIfAbsent(effect,
                 res -> ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER), effect)));
         GlStateManager.popMatrix();
-    }
+    }*/
 }

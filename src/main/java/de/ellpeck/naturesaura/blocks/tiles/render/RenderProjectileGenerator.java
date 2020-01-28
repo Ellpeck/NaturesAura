@@ -1,14 +1,11 @@
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
-import com.mojang.blaze3d.platform.GLX;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityProjectileGenerator;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.model.RendererModel;
-import net.minecraft.client.renderer.model.Model;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.util.Direction;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -16,9 +13,19 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class RenderProjectileGenerator extends TileEntityRenderer<TileEntityProjectileGenerator> {
     private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/projectile_generator_overlay.png");
-    private final ModelOverlay model = new ModelOverlay();
+    //private final ModelOverlay model = new ModelOverlay();
+
+    public RenderProjectileGenerator(TileEntityRendererDispatcher rendererDispatcherIn) {
+        super(rendererDispatcherIn);
+    }
 
     @Override
+    public void render(TileEntityProjectileGenerator tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+
+    }
+
+    // TODO TESR
+    /*@Override
     public void render(TileEntityProjectileGenerator te, double x, double y, double z, float partialTicks, int destroyStage) {
         GlStateManager.pushMatrix();
         GlStateManager.enableAlphaTest();
@@ -64,5 +71,5 @@ public class RenderProjectileGenerator extends TileEntityRenderer<TileEntityProj
         public void render() {
             this.box.render(1 / 16F);
         }
-    }
+    }*/
 }

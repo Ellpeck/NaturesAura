@@ -10,7 +10,7 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.IHopper;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -22,8 +22,6 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
@@ -87,18 +85,18 @@ public class BlockGratedChute extends BlockContainerImpl {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (!player.isSneaking())
-            return false;
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if (!player.isShiftKeyDown())
+            return ActionResultType.FAIL;
         TileEntity tile = worldIn.getTileEntity(pos);
         if (!(tile instanceof TileEntityGratedChute))
-            return false;
+            return ActionResultType.FAIL;
         if (!worldIn.isRemote) {
             TileEntityGratedChute chute = (TileEntityGratedChute) tile;
             chute.isBlacklist = !chute.isBlacklist;
             chute.sendToClients();
         }
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
     @Nullable
@@ -128,15 +126,9 @@ public class BlockGratedChute extends BlockContainerImpl {
             ItemStack stack = handler.getStackInSlot(0);
             if (stack.isEmpty())
                 return 0;
-            return MathHelper.ceil((stack.getCount() / (float) stack.getMaxStackSize()) * 15);
+            return MathHelper.ceil(stack.getCount() / (float) stack.getMaxStackSize() * 15);
         } else
             return 0;
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
     @Override

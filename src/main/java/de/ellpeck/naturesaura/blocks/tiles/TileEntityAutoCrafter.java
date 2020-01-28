@@ -104,13 +104,13 @@ public class TileEntityAutoCrafter extends TileEntityImpl implements ITickableTi
 
                 ItemStack remain = remainingItems.get(i);
                 if (!remain.isEmpty()) {
-                    ItemEntity remItem = new ItemEntity(this.world, item.posX, item.posY, item.posZ, remain.copy());
+                    ItemEntity remItem = new ItemEntity(this.world, item.getPosX(), item.getPosY(), item.getPosZ(), remain.copy());
                     remItem.setMotion(0, 0, 0);
                     this.world.addEntity(remItem);
                 }
 
                 PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                        new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, PacketParticles.Type.ANIMAL_SPAWNER));
+                        new PacketParticles((float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.ANIMAL_SPAWNER));
             }
         }
     }

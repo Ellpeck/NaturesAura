@@ -44,7 +44,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
                 DyeColor color = (DyeColor) state.get(prop);
                 if (firstColor == null || color == firstColor) {
                     DyeColor stored = getStoredColor(stack);
-                    if (player.isSneaking()) {
+                    if (player.isShiftKeyDown()) {
                         if (stored != color) {
                             world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                                     SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 0.65F, 1F);
@@ -81,8 +81,8 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
-        if (playerIn.isSneaking() && getStoredColor(stack) != null) {
-            worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundCategory.PLAYERS, 0.65F, 1F);
+        if (playerIn.isShiftKeyDown() && getStoredColor(stack) != null) {
+            worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundCategory.PLAYERS, 0.65F, 1F);
             if (!worldIn.isRemote) {
                 setFillMode(stack, !isFillMode(stack));
             }
@@ -91,7 +91,6 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
             return new ActionResult<>(ActionResultType.PASS, stack);
         }
     }
-
 
     private static DyeColor getStoredColor(ItemStack stack) {
         if (!stack.hasTag()) {

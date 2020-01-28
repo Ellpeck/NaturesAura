@@ -73,7 +73,7 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
                     item.remove();
 
                     PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                            new PacketParticles((float) item.posX, (float) item.posY, (float) item.posZ, PacketParticles.Type.END_FLOWER_CONSUME, this.container.getAuraColor()));
+                            new PacketParticles((float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.END_FLOWER_CONSUME, this.container.getAuraColor()));
                     break;
                 }
             } else {

@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.events;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
@@ -124,7 +125,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onRenderLast(RenderWorldLastEvent event) {
-        ParticleHandler.renderParticles(event.getPartialTicks());
+        ParticleHandler.renderParticles(event.getMatrixStack(), event.getPartialTicks());
     }
 
     @SubscribeEvent
@@ -151,8 +152,8 @@ public class ClientEvents {
                     if (mc.world.getGameTime() % 20 == 0) {
                         int amount = MathHelper.floor(190 * ModConfig.instance.excessParticleAmount.get());
                         for (int i = 0; i < amount; i++) {
-                            int x = MathHelper.floor(mc.player.posX) + mc.world.rand.nextInt(64) - 32;
-                            int z = MathHelper.floor(mc.player.posZ) + mc.world.rand.nextInt(64) - 32;
+                            int x = MathHelper.floor(mc.player.getPosX()) + mc.world.rand.nextInt(64) - 32;
+                            int z = MathHelper.floor(mc.player.getPosZ()) + mc.world.rand.nextInt(64) - 32;
                             BlockPos pos = new BlockPos(x, mc.world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z) - 1, z);
                             BlockState state = mc.world.getBlockState(pos);
                             Block block = state.getBlock();
@@ -168,7 +169,7 @@ public class ClientEvents {
                                                 mc.world.rand.nextGaussian() * 0.01F,
                                                 mc.world.rand.nextFloat() * 0.025F,
                                                 mc.world.rand.nextGaussian() * 0.01F,
-                                                BiomeColors.getFoliageColor(mc.world, pos),
+                                                BiomeColors.func_228361_b_(mc.world, pos),
                                                 Math.min(2F, 1F + mc.world.rand.nextFloat() * (excess / 30000F)),
                                                 Math.min(300, 100 + mc.world.rand.nextInt(excess / 3000 + 1)),
                                                 0F, false, true);
@@ -214,9 +215,9 @@ public class ClientEvents {
         GL11.glPushMatrix();
         float partial = event.getPartialTicks();
         GL11.glTranslated(
-                -mc.player.prevPosX - (mc.player.posX - mc.player.prevPosX) * partial,
-                -mc.player.prevPosY - (mc.player.posY - mc.player.prevPosY) * partial - (double) MathHelper.lerp(partial, this.previousHeight, this.height),
-                -mc.player.prevPosZ - (mc.player.posZ - mc.player.prevPosZ) * partial);
+                -mc.player.prevPosX - (mc.player.getPosX() - mc.player.prevPosX) * partial,
+                -mc.player.prevPosY - (mc.player.getPosY() - mc.player.prevPosY) * partial - (double) MathHelper.lerp(partial, this.previousHeight, this.height),
+                -mc.player.prevPosZ - (mc.player.getPosZ() - mc.player.prevPosZ) * partial);
 
         if (mc.gameSettings.showDebugInfo && mc.player.isCreative() && ModConfig.instance.debugWorld.get()) {
             Map<BlockPos, Integer> spots = new HashMap<>();
@@ -229,7 +230,7 @@ public class ClientEvents {
             IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 64, (pos, spot) -> {
                 spots.put(pos, spot);
 
-                GlStateManager.color4f(spot > 0 ? 0F : 1F, spot > 0 ? 1F : 0F, 0F, 0.35F);
+                RenderSystem.color4f(spot > 0 ? 0F : 1F, spot > 0 ? 1F : 0F, 0F, 0.35F);
                 Helper.renderWeirdBox(pos.getX(), pos.getY(), pos.getZ(), 1, 1, 1);
             });
             GL11.glEnd();
@@ -237,15 +238,15 @@ public class ClientEvents {
 
             float scale = 0.03F;
             NumberFormat format = NumberFormat.getInstance();
-            GlStateManager.scalef(scale, scale, scale);
+            RenderSystem.scalef(scale, scale, scale);
             for (Map.Entry<BlockPos, Integer> spot : spots.entrySet()) {
                 BlockPos pos = spot.getKey();
-                GlStateManager.pushMatrix();
-                GlStateManager.translated((pos.getX() + 0.1) / scale, (pos.getY() + 1) / scale, (pos.getZ() + 0.1) / scale);
-                GlStateManager.rotatef(90F, 1F, 0F, 0F);
-                GlStateManager.scalef(0.65F, 0.65F, 0.65F);
+                RenderSystem.pushMatrix();
+                RenderSystem.translated((pos.getX() + 0.1) / scale, (pos.getY() + 1) / scale, (pos.getZ() + 0.1) / scale);
+                RenderSystem.rotatef(90F, 1F, 0F, 0F);
+                RenderSystem.scalef(0.65F, 0.65F, 0.65F);
                 mc.fontRenderer.drawString(format.format(spot.getValue()), 0, 0, 0);
-                GlStateManager.popMatrix();
+                RenderSystem.popMatrix();
             }
 
             GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -290,7 +291,7 @@ public class ClientEvents {
             return;
         box = box.grow(0.05F);
         int color = visualize.getVisualizationColor(world, pos);
-        GlStateManager.color4f(((color >> 16) & 255) / 255F, ((color >> 8) & 255) / 255F, (color & 255) / 255F, 0.5F);
+        RenderSystem.color4f(((color >> 16) & 255) / 255F, ((color >> 8) & 255) / 255F, (color & 255) / 255F, 0.5F);
         Helper.renderWeirdBox(box.minX, box.minY, box.minZ, box.maxX - box.minX, box.maxY - box.minY, box.maxZ - box.minZ);
     }
 
@@ -306,10 +307,10 @@ public class ClientEvents {
                     int x = res.getScaledWidth() / 2 - 173 - (mc.player.getHeldItemOffhand().isEmpty() ? 0 : 29);
                     int y = res.getScaledHeight() - 8;
 
-                    GlStateManager.pushMatrix();
+                    RenderSystem.pushMatrix();
 
                     int color = container.getAuraColor();
-                    GlStateManager.color3f((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F);
+                    RenderSystem.color4f((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 1);
                     mc.getTextureManager().bindTexture(OVERLAYS);
                     if (width < 80)
                         AbstractGui.blit(x + width, y, width, 0, 80 - width, 6, 256, 256);
@@ -317,21 +318,21 @@ public class ClientEvents {
                         AbstractGui.blit(x, y, 0, 6, width, 6, 256, 256);
 
                     float scale = 0.75F;
-                    GlStateManager.scalef(scale, scale, scale);
+                    RenderSystem.scalef(scale, scale, scale);
                     String s = heldCache.getDisplayName().getFormattedText();
                     mc.fontRenderer.drawStringWithShadow(s, (x + 80) / scale - mc.fontRenderer.getStringWidth(s), (y - 7) / scale, color);
 
-                    GlStateManager.color3f(1F, 1F, 1F);
-                    GlStateManager.popMatrix();
+                    RenderSystem.color4f(1F, 1F, 1F, 1);
+                    RenderSystem.popMatrix();
                 }
 
                 if (!heldEye.isEmpty() || !heldOcular.isEmpty()) {
-                    GlStateManager.pushMatrix();
+                    RenderSystem.pushMatrix();
                     mc.getTextureManager().bindTexture(OVERLAYS);
 
                     int conf = ModConfig.instance.auraBarLocation.get();
                     if (!mc.gameSettings.showDebugInfo && (conf != 2 || !(mc.currentScreen instanceof ChatScreen))) {
-                        GlStateManager.color3f(83 / 255F, 160 / 255F, 8 / 255F);
+                        RenderSystem.color4f(83 / 255F, 160 / 255F, 8 / 255F, 1);
 
                         int totalAmount = IAuraChunk.triangulateAuraInArea(mc.world, mc.player.getPosition(), 35);
                         float totalPercentage = totalAmount / (IAuraChunk.DEFAULT_AURA * 2F);
@@ -352,7 +353,7 @@ public class ClientEvents {
                             AbstractGui.blit(startX, y + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
 
                         if (!heldOcular.isEmpty()) {
-                            GlStateManager.color3f(160 / 255F, 83 / 255F, 8 / 255F);
+                            RenderSystem.color4f(160 / 255F, 83 / 255F, 8 / 255F, 1);
 
                             int topHeight = MathHelper.ceil(MathHelper.clamp((totalPercentage - 1F) * 2F, 0F, 1F) * 25);
                             if (topHeight > 0) {
@@ -374,15 +375,15 @@ public class ClientEvents {
                         if (totalPercentage < (heldOcular.isEmpty() ? 0F : -0.5F))
                             mc.fontRenderer.drawStringWithShadow("-", startX + plusOffX, startY - 0.5F + (heldOcular.isEmpty() ? 44 : 70), color);
 
-                        GlStateManager.pushMatrix();
-                        GlStateManager.scalef(textScale, textScale, textScale);
+                        RenderSystem.pushMatrix();
+                        RenderSystem.scalef(textScale, textScale, textScale);
                         mc.fontRenderer.drawStringWithShadow(text, textX / textScale, textY / textScale, 0x53a008);
-                        GlStateManager.popMatrix();
+                        RenderSystem.popMatrix();
 
                         if (!heldOcular.isEmpty()) {
                             float scale = 0.75F;
-                            GlStateManager.pushMatrix();
-                            GlStateManager.scalef(scale, scale, scale);
+                            RenderSystem.pushMatrix();
+                            RenderSystem.scalef(scale, scale, scale);
                             int stackX = conf % 2 == 0 ? 10 : res.getScaledWidth() - 22;
                             int stackY = conf < 2 ? 15 : res.getScaledHeight() - 55;
                             for (Tuple<ItemStack, Boolean> effect : SHOWING_EFFECTS.values()) {
@@ -398,7 +399,7 @@ public class ClientEvents {
                                 }
                                 stackY += 8;
                             }
-                            GlStateManager.popMatrix();
+                            RenderSystem.popMatrix();
                         }
                     }
 
@@ -451,17 +452,15 @@ public class ClientEvents {
                         }
                     }
 
-                    GlStateManager.color3f(1F, 1F, 1F);
-                    GlStateManager.popMatrix();
+                    RenderSystem.color4f(1F, 1F, 1F, 1);
+                    RenderSystem.popMatrix();
                 }
             }
         }
     }
 
-    private void drawContainerInfo(int stored, int max,
-                                   int color, Minecraft mc, MainWindow res, int yOffset, String name, String
-                                           textBelow) {
-        GlStateManager.color3f((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F);
+    private void drawContainerInfo(int stored, int max, int color, Minecraft mc, MainWindow res, int yOffset, String name, String textBelow) {
+        RenderSystem.color3f((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F);
 
         int x = res.getScaledWidth() / 2 - 40;
         int y = res.getScaledHeight() / 2 + yOffset;

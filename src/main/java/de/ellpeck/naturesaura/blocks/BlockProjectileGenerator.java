@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityProjectileGenerator;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderProjectileGenerator;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -10,19 +11,21 @@ import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.function.Function;
 
 public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider {
     public BlockProjectileGenerator() {
@@ -59,7 +62,7 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
         IAuraChunk.getAuraChunk(entity.world, spot).storeAura(spot, amount);
 
         PacketHandler.sendToAllAround(entity.world, pos, 32,
-                new PacketParticles((float) entity.posX, (float) entity.posY, (float) entity.posZ, PacketParticles.Type.PROJECTILE_GEN, pos.getX(), pos.getY(), pos.getZ()));
+                new PacketParticles((float) entity.getPosX(), (float) entity.getPosY(), (float) entity.getPosZ(), PacketParticles.Type.PROJECTILE_GEN, pos.getX(), pos.getY(), pos.getZ()));
         entity.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ENDER_EYE_LAUNCH, SoundCategory.BLOCKS, 0.8F, 1F);
 
         generator.nextSide = generator.nextSide.rotateY();
@@ -70,8 +73,8 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public Tuple<Class, TileEntityRenderer> getTESR() {
-        return new Tuple<>(TileEntityProjectileGenerator.class, new RenderProjectileGenerator());
+    public Tuple<TileEntityType, Function<TileEntityRendererDispatcher, TileEntityRenderer<? extends TileEntity>>> getTESR() {
+        return new Tuple<>(ModTileEntities.PROJECTILE_GENERATOR, RenderProjectileGenerator::new);
     }
+
 }

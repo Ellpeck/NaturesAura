@@ -1,25 +1,29 @@
 package de.ellpeck.naturesaura.entities.render;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
-import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
-import net.minecraft.client.renderer.entity.model.RendererModel;
-import net.minecraft.client.renderer.model.Model;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderMoverMinecart extends MinecartRenderer<EntityMoverMinecart> {
 
     private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/mover_cart.png");
-    private final ModelMoverMinecart model = new ModelMoverMinecart();
+    //private final ModelMoverMinecart model = new ModelMoverMinecart();
 
     public RenderMoverMinecart(EntityRendererManager renderManagerIn) {
         super(renderManagerIn);
     }
 
     @Override
+    public void render(EntityMoverMinecart entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+    }
+
+    // TODO Entity rendering
+    /*@Override
     protected void renderCartContents(EntityMoverMinecart cart, float partialTicks, BlockState state) {
         GlStateManager.pushMatrix();
         GlStateManager.translatef(0, 22 / 16F, 0);
@@ -42,5 +46,5 @@ public class RenderMoverMinecart extends MinecartRenderer<EntityMoverMinecart> {
         public void render() {
             this.box.render(1 / 16F);
         }
-    }
+    }*/
 }

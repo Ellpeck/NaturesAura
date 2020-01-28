@@ -115,7 +115,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
                 BlockPos spot = IAuraChunk.getHighestSpot(player.world, pos, 30, pos);
                 IAuraChunk.getAuraChunk(player.world, spot).drainAura(spot, 20000);
 
-                player.world.playSound(null, player.posX, player.posY, player.posZ,
+                player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(),
                         SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.PLAYERS, 1F, 1F);
             }
             player.swingArm(event.getHand());

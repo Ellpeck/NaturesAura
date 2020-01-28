@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
@@ -28,6 +29,6 @@ public interface IProxy {
 
     void setParticleSpawnRange(int range);
 
-    <T extends Entity> void registerEntityRenderer(Class<T> entityClass, Supplier<IRenderFactory<T>> renderFactory);
+    <T extends Entity> void registerEntityRenderer(EntityType<T> entityClass, Supplier<IRenderFactory<T>> renderFactory);
 
 }

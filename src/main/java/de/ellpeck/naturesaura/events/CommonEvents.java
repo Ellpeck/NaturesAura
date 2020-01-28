@@ -47,7 +47,7 @@ public class CommonEvents {
                     ChunkManager manager = ((ServerChunkProvider) event.world.getChunkProvider()).chunkManager;
                     Iterable<ChunkHolder> chunks = (Iterable<ChunkHolder>) GET_LOADED_CHUNKS_METHOD.invoke(manager);
                     for (ChunkHolder holder : chunks) {
-                        Chunk chunk = holder.func_219298_c();
+                        Chunk chunk = holder.getChunkIfComplete();
                         if (chunk == null)
                             continue;
                         AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);

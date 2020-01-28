@@ -49,7 +49,7 @@ public class ItemShovel extends ShovelItem implements IModItem, IModelProvider {
                     damage = 5;
                 }
             } else {
-                int range = player.isSneaking() ? 0 : 1;
+                int range = player.isShiftKeyDown() ? 0 : 1;
                 for (int x = -range; x <= range; x++) {
                     for (int y = -range; y <= range; y++) {
                         BlockPos actualPos = pos.add(x, 0, y);

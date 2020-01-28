@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.compat.patchouli;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
@@ -17,7 +18,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 import vazkii.patchouli.api.BookDrawScreenEvent;
 import vazkii.patchouli.api.PatchouliAPI;
 
@@ -79,7 +80,7 @@ public class PatchouliCompat implements ICompat {
             int y = event.gui.height / 2 + 180 / 2;
 
             RenderHelper.disableStandardItemLighting();
-            GlStateManager.color4f(1, 1, 1, 1);
+            RenderSystem.color4f(1, 1, 1, 1);
             event.gui.getMinecraft().getTextureManager().bindTexture(ClientEvents.BOOK_GUI);
 
             AbstractGui.blit(x, y, 496, 44, 16, 18, 512, 256);
@@ -89,7 +90,7 @@ public class PatchouliCompat implements ICompat {
                 float r = ((info.color >> 16) & 255) / 255F;
                 float g = ((info.color >> 8) & 255) / 255F;
                 float b = (info.color & 255) / 255F;
-                GlStateManager.color3f(r, g, b);
+                RenderSystem.color3f(r, g, b);
                 AbstractGui.blit(x, y, 496 - 32, 44, 16, 18, 512, 256);
             }
 

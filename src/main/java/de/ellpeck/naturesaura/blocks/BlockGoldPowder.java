@@ -11,7 +11,6 @@ import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.RedstoneSide;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -21,8 +20,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
 
@@ -96,9 +93,9 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
         BlockPos blockpos1 = pos.up();
         BlockState blockstate1 = worldIn.getBlockState(blockpos1);
         if (!blockstate1.isNormalCube(worldIn, blockpos1)) {
-            boolean flag = blockstate.func_224755_d(worldIn, blockpos, Direction.UP) || blockstate.getBlock() == Blocks.HOPPER;
+            boolean flag = blockstate.isSolidSide(worldIn, blockpos, Direction.UP) || blockstate.getBlock() == Blocks.HOPPER;
             if (flag && this.canConnectTo(worldIn.getBlockState(blockpos.up()))) {
-                if (blockstate.func_224756_o(worldIn, blockpos)) {
+                if (blockstate.isCollisionShapeOpaque(worldIn, blockpos)) {
                     return RedstoneSide.UP;
                 }
 
@@ -118,7 +115,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
     public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
         BlockPos blockpos = pos.down();
         BlockState blockstate = worldIn.getBlockState(blockpos);
-        return blockstate.func_224755_d(worldIn, blockpos, Direction.UP) || blockstate.getBlock() == Blocks.HOPPER;
+        return blockstate.isSolidSide(worldIn, blockpos, Direction.UP) || blockstate.getBlock() == Blocks.HOPPER;
     }
 
     @Override
@@ -183,7 +180,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
 
     @Override
     public void updateDiagonalNeighbors(BlockState state, IWorld worldIn, BlockPos pos, int flags) {
-        try (BlockPos.PooledMutableBlockPos pool = BlockPos.PooledMutableBlockPos.retain()) {
+        try (BlockPos.PooledMutable pool = BlockPos.PooledMutable.retain()) {
             for (Direction direction : Direction.Plane.HORIZONTAL) {
                 RedstoneSide redstoneside = state.get(RedstoneWireBlock.FACING_PROPERTY_MAP.get(direction));
                 if (redstoneside != RedstoneSide.NONE && worldIn.getBlockState(pool.setPos(pos).move(direction)).getBlock() != this) {
@@ -216,11 +213,5 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
                 worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
             }
         }
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
     }
 }

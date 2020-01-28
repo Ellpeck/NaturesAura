@@ -46,7 +46,7 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                     if (stack.isEmpty() || stack.getItem() != Items.FIREWORK_ROCKET)
                         continue;
                     if (this.trackedEntity == null && this.releaseTimer <= 0) {
-                        FireworkRocketEntity entity = new FireworkRocketEntity(this.world, item.posX, item.posY, item.posZ, stack);
+                        FireworkRocketEntity entity = new FireworkRocketEntity(this.world, item.getPosX(), item.getPosY(), item.getPosZ(), stack);
                         this.trackedEntity = entity;
                         this.trackedItem = stack.copy();
                         this.world.addEntity(entity);
@@ -109,7 +109,7 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                         data.add(this.pos.getZ());
                         data.addAll(usedColors);
                         PacketHandler.sendToAllLoaded(this.world, this.pos, new PacketParticles(
-                                (float) this.trackedEntity.posX, (float) this.trackedEntity.posY, (float) this.trackedEntity.posZ,
+                                (float) this.trackedEntity.getPosX(), (float) this.trackedEntity.getPosY(), (float) this.trackedEntity.getPosZ(),
                                 PacketParticles.Type.FIREWORK_GEN, Ints.toArray(data)));
                     }
                 }

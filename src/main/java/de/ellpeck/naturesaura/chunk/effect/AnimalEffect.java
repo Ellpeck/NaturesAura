@@ -97,7 +97,7 @@ public class AnimalEffect implements IDrainSpotEffect {
 
                 ChickenEntity chicken = new ChickenEntity(EntityType.CHICKEN, world);
                 chicken.setGrowingAge(-24000);
-                chicken.setPosition(item.posX, item.posY, item.posZ);
+                chicken.setPosition(item.getPosX(), item.getPosY(), item.getPosZ());
                 world.addEntity(chicken);
 
                 BlockPos closestSpot = IAuraChunk.getHighestSpot(world, item.getPosition(), 35, pos);
@@ -135,9 +135,9 @@ public class AnimalEffect implements IDrainSpotEffect {
         animal.setInLove(null);
         for (int j = 0; j < 7; j++)
             animal.world.addParticle(ParticleTypes.HEART,
-                    (animal.posX + (double) (animal.world.rand.nextFloat() * animal.getWidth() * 2.0F)) - animal.getWidth(),
-                    animal.posY + 0.5D + (double) (animal.world.rand.nextFloat() * animal.getHeight()),
-                    (animal.posZ + (double) (animal.world.rand.nextFloat() * animal.getWidth() * 2.0F)) - animal.getWidth(),
+                    animal.getPosX() + (double) (animal.world.rand.nextFloat() * animal.getWidth() * 2.0F) - animal.getWidth(),
+                    animal.getPosY() + 0.5D + (double) (animal.world.rand.nextFloat() * animal.getHeight()),
+                    animal.getPosZ() + (double) (animal.world.rand.nextFloat() * animal.getWidth() * 2.0F) - animal.getWidth(),
                     animal.world.rand.nextGaussian() * 0.02D,
                     animal.world.rand.nextGaussian() * 0.02D,
                     animal.world.rand.nextGaussian() * 0.02D);

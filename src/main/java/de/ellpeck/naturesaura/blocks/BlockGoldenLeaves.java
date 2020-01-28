@@ -17,6 +17,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColors;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -62,7 +63,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements
         return (state, worldIn, pos, tintIndex) -> {
             int color = 0xF2FF00;
             if (state != null && worldIn != null && pos != null) {
-                int foliage = BiomeColors.getFoliageColor(worldIn, pos);
+                int foliage = BiomeColors.func_228361_b_(worldIn, pos);
                 return Helper.blendColors(color, foliage, state.get(STAGE) / (float) HIGHEST_STAGE);
             } else {
                 return color;
@@ -77,7 +78,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements
     }
 
     @Override
-    public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
         super.randomTick(state, worldIn, pos, random);
         if (!worldIn.isRemote) {
             int stage = state.get(STAGE);

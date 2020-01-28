@@ -77,7 +77,7 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
 
                     ((ServerWorld) this.world).addLightningBolt(new LightningBoltEntity(this.world, this.pos.getX(), this.pos.getY(), this.pos.getZ(), true));
                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
-                            (float) item.posX, (float) item.posY, (float) item.posZ, PacketParticles.Type.OFFERING_TABLE,
+                            (float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.OFFERING_TABLE,
                             this.pos.getX(), this.pos.getY(), this.pos.getZ()));
 
                     break;

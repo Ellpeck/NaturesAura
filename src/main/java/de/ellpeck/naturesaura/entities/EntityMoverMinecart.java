@@ -53,7 +53,7 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
 
         if (!this.spotOffsets.isEmpty() && this.world.getGameTime() % 10 == 0)
             PacketHandler.sendToAllAround(this.world, pos, 32, new PacketParticles(
-                    (float) this.posX, (float) this.posY, (float) this.posZ, PacketParticles.Type.MOVER_CART,
+                    (float) this.getPosX(), (float) this.getPosY(), (float) this.getPosZ(), PacketParticles.Type.MOVER_CART,
                     MathHelper.floor(this.getMotion().getX() * 100F), MathHelper.floor(this.getMotion().getY() * 100F), MathHelper.floor(this.getMotion().getZ() * 100F)));
 
         if (pos.distanceSq(this.lastPosition) < 8 * 8)
@@ -115,7 +115,7 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
 
         ListNBT list = new ListNBT();
         for (BlockPos offset : this.spotOffsets)
-            list.add(new LongNBT(offset.toLong()));
+            list.add(LongNBT.valueOf(offset.toLong()));
         compound.put("offsets", list);
         return compound;
     }
