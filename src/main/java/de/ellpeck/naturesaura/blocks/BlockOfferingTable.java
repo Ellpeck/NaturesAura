@@ -11,7 +11,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -25,8 +24,9 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
-public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvider {
+public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvider<TileEntityOfferingTable> {
 
     private static final VoxelShape SHAPE = VoxelShapes.create(2 / 16F, 0F, 2 / 16F, 14 / 16F, 1F, 14 / 16F);
 
@@ -45,7 +45,7 @@ public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvi
     }
 
     @Override
-    public Tuple<TileEntityType, Function<TileEntityRendererDispatcher, TileEntityRenderer<? extends TileEntity>>> getTESR() {
-        return new Tuple<>(ModTileEntities.OFFERING_TABLE, RenderOfferingTable::new);
+    public Tuple<TileEntityType<TileEntityOfferingTable>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntityOfferingTable>>>> getTESR() {
+        return new Tuple<>(ModTileEntities.OFFERING_TABLE, () -> RenderOfferingTable::new);
     }
 }

@@ -11,19 +11,23 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.gen.IWorldGenerationReader;
 import net.minecraft.world.gen.feature.AbstractTreeFeature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.TreeFeatureConfig;
 
 import java.util.Random;
 import java.util.Set;
 
-public class WorldGenAncientTree extends AbstractTreeFeature<NoFeatureConfig> {
+// TODO figure out if this still works like it should
+public class WorldGenAncientTree extends AbstractTreeFeature<TreeFeatureConfig> {
 
-    public WorldGenAncientTree(boolean notify) {
-        super(NoFeatureConfig::deserialize, notify);
+    // what the heck even is this
+    public static final TreeFeatureConfig CONFIG = new TreeFeatureConfig.Builder(null, null, null).build();
+
+    public WorldGenAncientTree() {
+        super(d -> CONFIG);
     }
 
     @Override
-    protected boolean place(Set changedBlocks, IWorldGenerationReader world, Random rand, BlockPos pos, MutableBoundingBox box) {
+    protected boolean func_225557_a_(IWorldGenerationReader world, Random rand, BlockPos pos, Set<BlockPos> cb1, Set<BlockPos> cb2, MutableBoundingBox box, TreeFeatureConfig config) {
         int height = rand.nextInt(3) + 5;
         BlockPos trunkTop = pos.up(height);
 
@@ -41,7 +45,7 @@ public class WorldGenAncientTree extends AbstractTreeFeature<NoFeatureConfig> {
                 if (goal.distanceSq(pos) >= 10 * 10)
                     break;
             }
-            this.makeBranch(changedBlocks, world, pos.up(rand.nextInt(1)), goal, ModBlocks.ANCIENT_BARK.getDefaultState(), false);
+            this.makeBranch(cb1, world, pos.up(rand.nextInt(1)), goal, ModBlocks.ANCIENT_BARK.getDefaultState(), false);
         }
 
         //Trunk
@@ -51,12 +55,12 @@ public class WorldGenAncientTree extends AbstractTreeFeature<NoFeatureConfig> {
                     BlockPos goal = pos.add(x, i, z);
                     if (func_214587_a(world, goal)) {
                         this.setBlockState(world, goal, ModBlocks.ANCIENT_LOG.getDefaultState().with(LogBlock.AXIS, Axis.Y));
-                        changedBlocks.add(goal);
+                        cb1.add(goal);
                     }
                 }
             }
         }
-        this.makeLeaves(changedBlocks, world, trunkTop.up(rand.nextInt(2) - 1), ModBlocks.ANCIENT_LEAVES.getDefaultState(), rand.nextInt(2) + 3, rand);
+        this.makeLeaves(cb2, world, trunkTop.up(rand.nextInt(2) - 1), ModBlocks.ANCIENT_LEAVES.getDefaultState(), rand.nextInt(2) + 3, rand);
 
         //Branches
         int branchAmount = rand.nextInt(3) + 4;
@@ -67,8 +71,8 @@ public class WorldGenAncientTree extends AbstractTreeFeature<NoFeatureConfig> {
             float z = (float) Math.cos(angle) * length;
 
             BlockPos goal = trunkTop.add(x, rand.nextInt(3) + 1, z);
-            this.makeBranch(changedBlocks, world, trunkTop, goal, ModBlocks.ANCIENT_LOG.getDefaultState(), true);
-            this.makeLeaves(changedBlocks, world, goal, ModBlocks.ANCIENT_LEAVES.getDefaultState(), rand.nextInt(2) + 2, rand);
+            this.makeBranch(cb1, world, trunkTop, goal, ModBlocks.ANCIENT_LOG.getDefaultState(), true);
+            this.makeLeaves(cb2, world, goal, ModBlocks.ANCIENT_LEAVES.getDefaultState(), rand.nextInt(2) + 2, rand);
         }
 
         return true;
@@ -82,7 +86,7 @@ public class WorldGenAncientTree extends AbstractTreeFeature<NoFeatureConfig> {
         float stepZ = (float) pos.getZ() / (float) length;
 
         for (int i = 0; i <= length; i++) {
-            BlockPos goal = first.add((0.5F + i * stepX), (0.5F + i * stepY), (0.5F + i * stepZ));
+            BlockPos goal = first.add(0.5F + i * stepX, 0.5F + i * stepY, 0.5F + i * stepZ);
             if (func_214587_a(world, goal)) {
                 if (hasAxis) {
                     Axis axis = this.getLogAxis(first, goal);

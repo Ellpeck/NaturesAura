@@ -9,10 +9,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
-public interface ITESRProvider {
+public interface ITESRProvider<T extends TileEntity> {
 
     @OnlyIn(Dist.CLIENT)
-    Tuple<TileEntityType, Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntity>>> getTESR();
+    Tuple<TileEntityType<T>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super T>>>> getTESR();
 
 }

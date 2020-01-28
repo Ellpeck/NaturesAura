@@ -39,8 +39,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
-public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider {
+public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<TileEntityWoodStand> {
 
     private static final VoxelShape SHAPE = VoxelShapes.create(3 / 16F, 0F, 3 / 16F, 13 / 16F, 13 / 16F, 13 / 16F);
 
@@ -108,7 +109,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider 
     }
 
     @Override
-    public Tuple<TileEntityType, Function<TileEntityRendererDispatcher, TileEntityRenderer<? extends TileEntity>>> getTESR() {
-        return new Tuple<>(ModTileEntities.WOOD_STAND, RenderWoodStand::new);
+    public Tuple<TileEntityType<TileEntityWoodStand>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntityWoodStand>>>> getTESR() {
+        return new Tuple<>(ModTileEntities.WOOD_STAND, () -> RenderWoodStand::new);
     }
 }

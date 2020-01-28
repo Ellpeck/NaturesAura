@@ -10,7 +10,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -25,8 +24,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
-public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvider {
+public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvider<TileEntityNatureAltar> {
 
     private static final VoxelShape SHAPE = VoxelShapes.create(0, 0, 0, 1, 12 / 16F, 1);
 
@@ -45,7 +45,7 @@ public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvide
     }
 
     @Override
-    public Tuple<TileEntityType, Function<TileEntityRendererDispatcher, TileEntityRenderer<? extends TileEntity>>> getTESR() {
-        return new Tuple<>(ModTileEntities.NATURE_ALTAR, RenderNatureAltar::new);
+    public Tuple<TileEntityType<TileEntityNatureAltar>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntityNatureAltar>>>> getTESR() {
+        return new Tuple<>(ModTileEntities.NATURE_ALTAR, () -> RenderNatureAltar::new);
     }
 }

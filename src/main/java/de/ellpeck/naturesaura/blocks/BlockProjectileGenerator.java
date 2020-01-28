@@ -26,8 +26,9 @@ import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
-public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider {
+public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider<TileEntityProjectileGenerator> {
     public BlockProjectileGenerator() {
         super("projectile_generator", TileEntityProjectileGenerator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
 
@@ -73,8 +74,7 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
     }
 
     @Override
-    public Tuple<TileEntityType, Function<TileEntityRendererDispatcher, TileEntityRenderer<? extends TileEntity>>> getTESR() {
-        return new Tuple<>(ModTileEntities.PROJECTILE_GENERATOR, RenderProjectileGenerator::new);
+    public Tuple<TileEntityType<TileEntityProjectileGenerator>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntityProjectileGenerator>>>> getTESR() {
+        return new Tuple<>(ModTileEntities.PROJECTILE_GENERATOR, () -> RenderProjectileGenerator::new);
     }
-
 }

@@ -79,8 +79,8 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void registerTESR(ITESRProvider provider) {
-        Tuple<TileEntityType, Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntity>>> tesr = provider.getTESR();
-        ClientRegistry.bindTileEntityRenderer(tesr.getA(), tesr.getB());
+        Tuple<TileEntityType<TileEntity>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntity>>>> tesr = provider.getTESR();
+        ClientRegistry.bindTileEntityRenderer(tesr.getA(), tesr.getB().get());
     }
 
     @Override

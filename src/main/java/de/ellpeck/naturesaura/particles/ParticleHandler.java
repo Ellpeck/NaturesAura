@@ -68,6 +68,10 @@ public final class ParticleHandler {
     }
 
     public static void renderParticles(MatrixStack stack, float partialTicks) {
+        // TODO Render particles
+        if(true)
+            return;
+
         Minecraft mc = Minecraft.getInstance();
         ClientPlayerEntity player = mc.player;
 

@@ -8,23 +8,20 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Tuple;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
-public class BlockGeneratorLimitRemover extends BlockContainerImpl implements ITESRProvider {
+public class BlockGeneratorLimitRemover extends BlockContainerImpl implements ITESRProvider<TileEntityGeneratorLimitRemover> {
 
     public BlockGeneratorLimitRemover() {
         super("generator_limit_remover", TileEntityGeneratorLimitRemover::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public Tuple<TileEntityType, Function<TileEntityRendererDispatcher, TileEntityRenderer<? extends TileEntity>>> getTESR() {
-        return new Tuple<>(ModTileEntities.GENERATOR_LIMIT_REMOVER, RenderGeneratorLimitRemover::new);
+    public Tuple<TileEntityType<TileEntityGeneratorLimitRemover>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntityGeneratorLimitRemover>>>> getTESR() {
+        return new Tuple<>(ModTileEntities.GENERATOR_LIMIT_REMOVER, () -> RenderGeneratorLimitRemover::new);
     }
 }
