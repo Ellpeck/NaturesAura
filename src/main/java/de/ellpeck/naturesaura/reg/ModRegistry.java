@@ -18,15 +18,11 @@ import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
 import de.ellpeck.naturesaura.items.*;
 import de.ellpeck.naturesaura.items.tools.*;
-import de.ellpeck.naturesaura.misc.BlockLootProvider;
-import de.ellpeck.naturesaura.misc.BlockTagProvider;
-import de.ellpeck.naturesaura.misc.ItemTagProvider;
 import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -42,7 +38,6 @@ import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.HashSet;
@@ -65,8 +60,8 @@ public final class ModRegistry {
                 new BlockAncientLog("ancient_log"),
                 new BlockAncientLog("ancient_bark"),
                 temp = new BlockImpl("ancient_planks", ModBlocks.prop(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2F)),
-                new BlockStairsNA("ancient_stairs", temp::getDefaultState, ModBlocks.prop(temp)),
-                new Slab("ancient_slab", ModBlocks.prop(temp)),
+                new BlockStairsNA("ancient_stairs", "ancient_planks", temp::getDefaultState, ModBlocks.prop(temp)),
+                new Slab("ancient_slab", "ancient_planks", ModBlocks.prop(temp)),
                 new BlockAncientLeaves(),
                 new BlockAncientSapling(),
                 new BlockNatureAltar(),
@@ -75,11 +70,11 @@ public final class ModRegistry {
                 new BlockGoldPowder(),
                 new BlockWoodStand(),
                 temp = new BlockImpl("infused_stone", ModBlocks.prop(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(1.75F)),
-                new BlockStairsNA("infused_stairs", temp::getDefaultState, ModBlocks.prop(temp)),
-                new Slab("infused_slab", ModBlocks.prop(temp)),
+                new BlockStairsNA("infused_stairs", "infused_stone", temp::getDefaultState, ModBlocks.prop(temp)),
+                new Slab("infused_slab", "infused_stone", ModBlocks.prop(temp)),
                 temp = new BlockImpl("infused_brick", ModBlocks.prop(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(1.5F)),
-                new BlockStairsNA("infused_brick_stairs", temp::getDefaultState, ModBlocks.prop(temp)),
-                new Slab("infused_brick_slab", ModBlocks.prop(temp)),
+                new BlockStairsNA("infused_brick_stairs", "infused_brick", temp::getDefaultState, ModBlocks.prop(temp)),
+                new Slab("infused_brick_slab", "infused_brick", ModBlocks.prop(temp)),
                 new BlockFurnaceHeater(),
                 new BlockPotionGenerator(),
                 new BlockAuraDetector(),
@@ -235,14 +230,6 @@ public final class ModRegistry {
 
         NaturesAura.proxy.registerEntityRenderer(ModEntities.MOVER_CART, () -> RenderMoverMinecart::new);
         NaturesAura.proxy.registerEntityRenderer(ModEntities.EFFECT_INHIBITOR, () -> RenderEffectInhibitor::new);
-    }
-
-    @SubscribeEvent
-    public static void gatherData(GatherDataEvent event) {
-        DataGenerator generator = event.getGenerator();
-        generator.addProvider(new BlockLootProvider(generator));
-        generator.addProvider(new BlockTagProvider(generator));
-        generator.addProvider(new ItemTagProvider(generator));
     }
 
     public static void init() {

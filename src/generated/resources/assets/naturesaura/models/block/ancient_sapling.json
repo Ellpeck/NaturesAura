@@ -1,0 +1,6 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "naturesaura:block/ancient_sapling"
+  }
+}

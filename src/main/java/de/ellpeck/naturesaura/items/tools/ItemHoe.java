@@ -2,9 +2,10 @@ package de.ellpeck.naturesaura.items.tools;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
-import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.*;
@@ -17,7 +18,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class ItemHoe extends HoeItem implements IModItem, IModelProvider {
+public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
 
     private final String baseName;
 
@@ -68,4 +69,10 @@ public class ItemHoe extends HoeItem implements IModItem, IModelProvider {
             return Helper.makeRechargeProvider(stack, true);
         else return null;
     }
+
+    @Override
+    public void generateCustomItemModel(ItemModelGenerator generator) {
+        generator.withExistingParent(this.getBaseName(), "item/handheld").texture("layer0", "item/" + this.getBaseName());
+    }
+
 }

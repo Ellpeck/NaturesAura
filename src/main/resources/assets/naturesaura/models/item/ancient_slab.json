@@ -1,8 +1,0 @@
-{
-    "parent": "minecraft:block/slab",
-    "textures": {
-        "bottom": "naturesaura:blocks/ancient_planks",
-        "top": "naturesaura:blocks/ancient_planks",
-        "side": "naturesaura:blocks/ancient_planks"
-    }
-}

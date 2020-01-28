@@ -7,6 +7,8 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderWoodStand;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -41,7 +43,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<TileEntityWoodStand> {
+public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<TileEntityWoodStand>, ICustomBlockState {
 
     private static final VoxelShape SHAPE = VoxelShapes.create(3 / 16F, 0F, 3 / 16F, 13 / 16F, 13 / 16F, 13 / 16F);
 
@@ -111,5 +113,10 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
     @Override
     public Tuple<TileEntityType<TileEntityWoodStand>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntityWoodStand>>>> getTESR() {
         return new Tuple<>(ModTileEntities.WOOD_STAND, () -> RenderWoodStand::new);
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
     }
 }

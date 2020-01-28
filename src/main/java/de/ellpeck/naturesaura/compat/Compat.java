@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.compat.crafttweaker.CraftTweakerCompat;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
-import de.ellpeck.naturesaura.misc.ItemTagProvider;
+import de.ellpeck.naturesaura.data.ItemTagProvider;
 import net.minecraftforge.fml.ModList;
 
 import java.util.HashMap;

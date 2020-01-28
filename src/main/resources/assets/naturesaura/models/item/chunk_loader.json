@@ -1,6 +1,0 @@
-{
-    "parent": "naturesaura:block/chunk_loader",
-    "textures": {
-        "texture": "naturesaura:blocks/chunk_loader"
-    }
-}

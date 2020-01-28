@@ -1,35 +1,22 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "naturesaura:block/grated_chute_down",
-        "textures": {
-            "particle": "naturesaura:blocks/grated_chute_outside",
-            "top": "naturesaura:blocks/grated_chute_top",
-            "side": "naturesaura:blocks/grated_chute_outside",
-            "inside": "naturesaura:blocks/grated_chute_inside"
-        },
-        "transform": "forge:default-block"
-    },
     "variants": {
-        "facing": {
-            "down": {
-                "model": "naturesaura:block/grated_chute_down"
-            },
-            "north": {
-                "model": "naturesaura:block/grated_chute_side"
-            },
-            "south": {
-                "model": "naturesaura:block/grated_chute_side",
-                "y": 180
-            },
-            "west": {
-                "model": "naturesaura:block/grated_chute_side",
-                "y": 270
-            },
-            "east": {
-                "model": "naturesaura:block/grated_chute_side",
-                "y": 90
-            }
+        "facing=down": {
+            "model": "naturesaura:block/grated_chute_down"
+        },
+        "facing=north": {
+            "model": "naturesaura:block/grated_chute_side"
+        },
+        "facing=south": {
+            "model": "naturesaura:block/grated_chute_side",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "naturesaura:block/grated_chute_side",
+            "y": 270
+        },
+        "facing=east": {
+            "model": "naturesaura:block/grated_chute_side",
+            "y": 90
         }
     }
 }

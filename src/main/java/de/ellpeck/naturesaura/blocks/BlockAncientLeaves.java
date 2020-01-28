@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAncientLeaves;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -21,11 +22,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockAncientLeaves extends LeavesBlock implements
-        IModItem, IModelProvider, IColorProvidingBlock, IColorProvidingItem {
+public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorProvidingBlock, IColorProvidingItem, ICustomBlockState {
 
     public BlockAncientLeaves() {
-        super(ModBlocks.prop(Material.LEAVES, MaterialColor.PINK).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT));
+        super(ModBlocks.prop(Material.LEAVES, MaterialColor.PINK).hardnessAndResistance(0.2F).tickRandomly().notSolid().sound(SoundType.PLANT));
         ModRegistry.add(this);
         ModRegistry.add(new ModTileType<>(TileEntityAncientLeaves::new, this));
     }
@@ -89,5 +89,10 @@ public class BlockAncientLeaves extends LeavesBlock implements
                 }
             }
         }
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
     }
 }

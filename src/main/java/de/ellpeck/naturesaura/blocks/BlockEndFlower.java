@@ -1,10 +1,9 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEndFlower;
-import de.ellpeck.naturesaura.reg.IModItem;
-import de.ellpeck.naturesaura.reg.IModelProvider;
-import de.ellpeck.naturesaura.reg.ModRegistry;
-import de.ellpeck.naturesaura.reg.ModTileType;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.data.ItemModelGenerator;
+import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
@@ -31,7 +30,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockEndFlower extends BushBlock implements IModItem, IModelProvider {
+public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockState, ICustomItemModel {
 
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 
@@ -112,5 +111,15 @@ public class BlockEndFlower extends BushBlock implements IModItem, IModelProvide
         if (tile instanceof TileEntityEndFlower && ((TileEntityEndFlower) tile).isDrainMode)
             return NonNullList.create();
         return super.getDrops(state, builder);
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().cross(this.getBaseName(), generator.modLoc("block/" + this.getBaseName())));
+    }
+
+    @Override
+    public void generateCustomItemModel(ItemModelGenerator generator) {
+        generator.withExistingParent(this.getBaseName(), "item/generated").texture("layer0", "block/" + this.getBaseName());
     }
 }

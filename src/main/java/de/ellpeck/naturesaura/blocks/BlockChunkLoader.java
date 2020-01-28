@@ -3,6 +3,8 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityChunkLoader;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -19,7 +21,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
-public class BlockChunkLoader extends BlockContainerImpl implements IVisualizable {
+public class BlockChunkLoader extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     private static final VoxelShape SHAPE = makeCuboidShape(4, 4, 4, 12, 12, 12);
 
@@ -70,5 +72,9 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
-    
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
+    }
 }

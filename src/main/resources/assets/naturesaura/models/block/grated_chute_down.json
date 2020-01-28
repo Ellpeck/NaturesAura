@@ -1,6 +1,12 @@
 {
     "parent": "minecraft:block/block",
     "ambientocclusion": false,
+    "textures": {
+        "particle": "naturesaura:block/grated_chute_outside",
+        "top": "naturesaura:block/grated_chute_top",
+        "side": "naturesaura:block/grated_chute_outside",
+        "inside": "naturesaura:block/grated_chute_inside"
+    },
     "elements": [
         {
             "from": [0, 10, 0],

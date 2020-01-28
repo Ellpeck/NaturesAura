@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=top": {
+      "model": "naturesaura:block/ancient_slab_top"
+    },
+    "type=bottom": {
+      "model": "naturesaura:block/ancient_slab"
+    },
+    "type=double": {
+      "model": "naturesaura:block/ancient_slab_double"
+    }
+  }
+}

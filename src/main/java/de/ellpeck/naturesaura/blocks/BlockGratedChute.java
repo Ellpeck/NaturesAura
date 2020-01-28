@@ -1,6 +1,10 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityGratedChute;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.data.ItemModelGenerator;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,7 +30,7 @@ import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
 
-public class BlockGratedChute extends BlockContainerImpl {
+public class BlockGratedChute extends BlockContainerImpl implements ICustomBlockState, ICustomItemModel {
 
     public static final DirectionProperty FACING = HopperBlock.FACING;
     private static final VoxelShape INPUT_SHAPE = Block.makeCuboidShape(0.0D, 10.0D, 0.0D, 16.0D, 16.0D, 16.0D);
@@ -134,5 +138,15 @@ public class BlockGratedChute extends BlockContainerImpl {
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        // noop
+    }
+
+    @Override
+    public void generateCustomItemModel(ItemModelGenerator generator) {
+        generator.withExistingParent(this.getBaseName(), generator.modLoc("block/" + this.getBaseName() + "_down"));
     }
 }

@@ -1,6 +1,8 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityBlastFurnaceBooster;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -14,7 +16,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 
-public class BlockBlastFurnaceBooster extends BlockContainerImpl {
+public class BlockBlastFurnaceBooster extends BlockContainerImpl implements ICustomBlockState {
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     private static final VoxelShape SHAPE = VoxelShapes.create(1 / 16F, 0, 1 / 16F, 15 / 16F, 1, 15 / 16F);
 
@@ -37,4 +39,8 @@ public class BlockBlastFurnaceBooster extends BlockContainerImpl {
         return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
     }
 
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
+    }
 }

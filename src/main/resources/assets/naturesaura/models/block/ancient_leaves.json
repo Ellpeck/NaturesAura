@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:block/leaves",
+    "textures": {
+        "all": "naturesaura:block/ancient_leaves"
+    }
+}

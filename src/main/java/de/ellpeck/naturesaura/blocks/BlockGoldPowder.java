@@ -1,6 +1,10 @@
 package de.ellpeck.naturesaura.blocks;
 
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -21,7 +25,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
+public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, ICustomBlockState, ICustomItemModel {
 
     public static final EnumProperty<RedstoneSide> NORTH = BlockStateProperties.REDSTONE_NORTH;
     public static final EnumProperty<RedstoneSide> EAST = BlockStateProperties.REDSTONE_EAST;
@@ -213,5 +217,15 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock {
                 worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
             }
         }
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        // noop
+    }
+
+    @Override
+    public void generateCustomItemModel(ItemModelGenerator generator) {
+        generator.withExistingParent(this.getBaseName(), "item/generated").texture("layer0", "item/" + this.getBaseName());
     }
 }

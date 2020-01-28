@@ -7,7 +7,7 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.compat.ICompat;
 import de.ellpeck.naturesaura.events.ClientEvents;
-import de.ellpeck.naturesaura.misc.ItemTagProvider;
+import de.ellpeck.naturesaura.data.ItemTagProvider;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler.FancyInfo;
 import net.minecraft.client.gui.AbstractGui;

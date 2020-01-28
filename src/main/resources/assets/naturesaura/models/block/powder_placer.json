@@ -1,5 +1,10 @@
 {
     "parent": "minecraft:block/block",
+    "textures": {
+        "texture": "naturesaura:block/powder_placer",
+        "top": "naturesaura:block/powder_placer_top",
+        "particle": "#top"
+    },
     "elements": [
         {
             "from": [0, 0, 0],

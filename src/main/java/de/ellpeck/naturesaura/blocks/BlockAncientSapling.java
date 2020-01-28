@@ -1,8 +1,11 @@
 package de.ellpeck.naturesaura.blocks;
 
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.gen.WorldGenAncientTree;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
-import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -17,7 +20,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Random;
 
-public class BlockAncientSapling extends BushBlock implements IGrowable, IModItem, IModelProvider {
+public class BlockAncientSapling extends BushBlock implements IGrowable, IModItem, ICustomBlockState, ICustomItemModel {
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
     public BlockAncientSapling() {
@@ -68,5 +71,15 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
         } else if (ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
             new WorldGenAncientTree().place(world, world.getChunkProvider().getChunkGenerator(), rand, pos, WorldGenAncientTree.CONFIG);
         }
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().cross(this.getBaseName(), generator.modLoc("block/" + this.getBaseName())));
+    }
+
+    @Override
+    public void generateCustomItemModel(ItemModelGenerator generator) {
+        generator.withExistingParent(this.getBaseName(), "item/generated").texture("layer0", "block/" + this.getBaseName());
     }
 }

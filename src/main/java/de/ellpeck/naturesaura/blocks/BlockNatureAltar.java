@@ -4,6 +4,8 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderNatureAltar;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -26,7 +28,7 @@ import net.minecraftforge.common.ToolType;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvider<TileEntityNatureAltar> {
+public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvider<TileEntityNatureAltar>, ICustomBlockState {
 
     private static final VoxelShape SHAPE = VoxelShapes.create(0, 0, 0, 1, 12 / 16F, 1);
 
@@ -47,5 +49,10 @@ public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvide
     @Override
     public Tuple<TileEntityType<TileEntityNatureAltar>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntityNatureAltar>>>> getTESR() {
         return new Tuple<>(ModTileEntities.NATURE_ALTAR, () -> RenderNatureAltar::new);
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
     }
 }

@@ -1,7 +1,0 @@
-{
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "naturesaura:items/aura_bottle",
-        "layer1": "naturesaura:items/aura_bottle_overlay"
-    }
-}

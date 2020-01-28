@@ -1,5 +1,9 @@
 {
     "parent": "minecraft:block/block",
+    "textures": {
+        "texture": "naturesaura:block/chunk_loader",
+        "particle": "#texture"
+    },
     "elements": [
         {
             "from": [4, 4, 4],

@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,14 +24,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
-public class BlockGoldenLeaves extends LeavesBlock implements
-        IModItem, IModelProvider, IColorProvidingBlock, IColorProvidingItem {
+public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorProvidingBlock, IColorProvidingItem, ICustomBlockState {
 
     public static final int HIGHEST_STAGE = 3;
     public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, HIGHEST_STAGE);
 
     public BlockGoldenLeaves() {
-        super(ModBlocks.prop(Material.LEAVES, MaterialColor.GOLD).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT));
+        super(ModBlocks.prop(Material.LEAVES, MaterialColor.GOLD).hardnessAndResistance(0.2F).tickRandomly().notSolid().sound(SoundType.PLANT));
         ModRegistry.add(this);
     }
 
@@ -110,5 +110,10 @@ public class BlockGoldenLeaves extends LeavesBlock implements
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
     }
 }

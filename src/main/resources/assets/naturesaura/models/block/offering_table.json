@@ -1,6 +1,12 @@
 {
     "parent": "minecraft:block/block",
     "credit": "Made by bl4ckscor3",
+    "textures": {
+        "0": "naturesaura:block/stripped_oak_log",
+        "1": "naturesaura:block/stripped_oak_log_top",
+        "2": "naturesaura:block/infused_stone",
+        "particle": "#0"
+    },
     "elements": [
         {
             "name": "top",

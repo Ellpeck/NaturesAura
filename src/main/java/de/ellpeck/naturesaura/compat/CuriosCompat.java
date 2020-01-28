@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.compat;
 import com.google.common.collect.ImmutableMap;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.items.ModItems;
-import de.ellpeck.naturesaura.misc.ItemTagProvider;
+import de.ellpeck.naturesaura.data.ItemTagProvider;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

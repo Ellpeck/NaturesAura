@@ -2,6 +2,8 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityFurnaceHeater;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -23,7 +25,7 @@ import net.minecraftforge.common.ToolType;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockFurnaceHeater extends BlockContainerImpl {
+public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlockState {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     private static final VoxelShape[] SHAPES = new VoxelShape[]{
@@ -92,4 +94,9 @@ public class BlockFurnaceHeater extends BlockContainerImpl {
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         return this.getDefaultState().with(FACING, context.getFace());
     }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
+ }
 }

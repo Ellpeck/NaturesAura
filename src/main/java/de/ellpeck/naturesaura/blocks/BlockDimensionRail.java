@@ -6,7 +6,6 @@ import de.ellpeck.naturesaura.packet.PacketClient;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.IModItem;
-import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.Block;
@@ -42,7 +41,7 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockDimensionRail extends AbstractRailBlock implements IModItem, IModelProvider {
+public class BlockDimensionRail extends AbstractRailBlock implements IModItem {
 
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE;
 

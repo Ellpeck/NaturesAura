@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "naturesaura:item/infused_iron_axe"
+  }
+}

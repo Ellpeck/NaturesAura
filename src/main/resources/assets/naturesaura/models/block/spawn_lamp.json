@@ -1,6 +1,11 @@
 {
     "__comment": "Model contributed by PolarizedIons <3",
     "parent": "minecraft:block/block",
+    "textures": {
+        "0": "naturesaura:block/spawn_lamp",
+        "-1": "naturesaura:block/spawn_lamp",
+        "particle": "#0"
+    },
     "elements": [
         {
             "name": "Base",

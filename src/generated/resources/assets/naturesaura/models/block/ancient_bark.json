@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "side": "naturesaura:block/ancient_bark",
+    "end": "naturesaura:block/ancient_bark_top"
+  }
+}

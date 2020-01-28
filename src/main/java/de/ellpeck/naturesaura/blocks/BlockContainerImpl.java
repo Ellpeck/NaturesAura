@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import de.ellpeck.naturesaura.reg.IModItem;
-import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import de.ellpeck.naturesaura.reg.ModTileType;
 import net.minecraft.block.*;
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
-public class BlockContainerImpl extends ContainerBlock implements IModItem, IModelProvider {
+public class BlockContainerImpl extends ContainerBlock implements IModItem {
 
     private final String baseName;
     private final ModTileType<? extends TileEntity> tileType;

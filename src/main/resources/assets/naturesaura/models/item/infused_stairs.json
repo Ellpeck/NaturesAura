@@ -1,8 +1,0 @@
-{
-    "parent": "minecraft:block/stairs",
-    "textures": {
-        "bottom": "naturesaura:blocks/infused_stone",
-        "top": "naturesaura:blocks/infused_stone",
-        "side": "naturesaura:blocks/infused_stone"
-    }
-}

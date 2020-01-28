@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "side": "naturesaura:block/ancient_planks",
+    "bottom": "naturesaura:block/ancient_planks",
+    "top": "naturesaura:block/ancient_planks"
+  }
+}

@@ -1,8 +1,0 @@
-{
-    "parent": "minecraft:block/slab",
-    "textures": {
-        "bottom": "naturesaura:blocks/infused_stone",
-        "top": "naturesaura:blocks/infused_stone",
-        "side": "naturesaura:blocks/infused_stone"
-    }
-}

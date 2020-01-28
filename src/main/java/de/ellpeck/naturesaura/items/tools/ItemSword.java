@@ -2,9 +2,10 @@ package de.ellpeck.naturesaura.items.tools;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
-import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.IItemTier;
@@ -17,7 +18,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
-public class ItemSword extends SwordItem implements IModItem, IModelProvider {
+public class ItemSword extends SwordItem implements IModItem, ICustomItemModel {
     private final String baseName;
 
     public ItemSword(String baseName, IItemTier material, int damage, float speed) {
@@ -45,4 +46,10 @@ public class ItemSword extends SwordItem implements IModItem, IModelProvider {
             return Helper.makeRechargeProvider(stack, true);
         else return null;
     }
+
+    @Override
+    public void generateCustomItemModel(ItemModelGenerator generator) {
+        generator.withExistingParent(this.getBaseName(), "item/handheld").texture("layer0", "item/" + this.getBaseName());
+    }
+
 }

@@ -1,5 +1,9 @@
 {
     "parent": "minecraft:block/block",
+    "textures": {
+        "texture": "naturesaura:block/furnace_heater",
+        "particle": "#texture"
+    },
     "elements": [
         {
             "from": [2, 0, 2],

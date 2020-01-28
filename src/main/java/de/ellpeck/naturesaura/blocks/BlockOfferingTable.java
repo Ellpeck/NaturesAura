@@ -4,6 +4,8 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityOfferingTable;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderOfferingTable;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -26,7 +28,7 @@ import net.minecraft.world.World;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvider<TileEntityOfferingTable> {
+public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvider<TileEntityOfferingTable>, ICustomBlockState {
 
     private static final VoxelShape SHAPE = VoxelShapes.create(2 / 16F, 0F, 2 / 16F, 14 / 16F, 1F, 14 / 16F);
 
@@ -47,5 +49,10 @@ public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvi
     @Override
     public Tuple<TileEntityType<TileEntityOfferingTable>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntityOfferingTable>>>> getTESR() {
         return new Tuple<>(ModTileEntities.OFFERING_TABLE, () -> RenderOfferingTable::new);
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
     }
 }

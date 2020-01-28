@@ -28,7 +28,7 @@
                 ]
             },
             "apply": {
-                "model": "minecraft:block/redstone_dust_dot"
+                "model": "block/redstone_dust_dot"
             }
         },
         {
@@ -46,7 +46,7 @@
                 ]
             },
             "apply": {
-                "model": "minecraft:block/redstone_dust_side0"
+                "model": "block/redstone_dust_side0"
             }
         },
         {
@@ -64,7 +64,7 @@
                 ]
             },
             "apply": {
-                "model": "minecraft:block/redstone_dust_side_alt0"
+                "model": "block/redstone_dust_side_alt0"
             }
         },
         {
@@ -82,7 +82,7 @@
                 ]
             },
             "apply": {
-                "model": "minecraft:block/redstone_dust_side_alt1",
+                "model": "block/redstone_dust_side_alt1",
                 "y": 270
             }
         },
@@ -101,7 +101,7 @@
                 ]
             },
             "apply": {
-                "model": "minecraft:block/redstone_dust_side1",
+                "model": "block/redstone_dust_side1",
                 "y": 270
             }
         },
@@ -110,7 +110,7 @@
                 "north": "up"
             },
             "apply": {
-                "model": "minecraft:block/redstone_dust_up"
+                "model": "block/redstone_dust_up"
             }
         },
         {
@@ -118,7 +118,7 @@
                 "east": "up"
             },
             "apply": {
-                "model": "minecraft:block/redstone_dust_up",
+                "model": "block/redstone_dust_up",
                 "y": 90
             }
         },
@@ -127,7 +127,7 @@
                 "south": "up"
             },
             "apply": {
-                "model": "minecraft:block/redstone_dust_up",
+                "model": "block/redstone_dust_up",
                 "y": 180
             }
         },
@@ -136,7 +136,7 @@
                 "west": "up"
             },
             "apply": {
-                "model": "minecraft:block/redstone_dust_up",
+                "model": "block/redstone_dust_up",
                 "y": 270
             }
         }

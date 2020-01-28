@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.compat.crafttweaker;
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.actions.IAction;
 import de.ellpeck.naturesaura.compat.ICompat;
-import de.ellpeck.naturesaura.misc.ItemTagProvider;
+import de.ellpeck.naturesaura.data.ItemTagProvider;
 
 import java.util.ArrayList;
 import java.util.List;

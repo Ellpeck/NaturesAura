@@ -2,10 +2,10 @@
 	"credit": "Made with Blockbench",
 	"parent": "minecraft:block/block",
 	"textures": {
-		"0": "naturesaura:blocks/blast_furnace_booster_side",
-		"1": "naturesaura:blocks/blast_furnace_booster_top",
-		"2": "naturesaura:blocks/blast_furnace_booster_top_side",
-		"particle": "naturesaura:blocks/blast_furnace_booster_side"
+		"0": "naturesaura:block/blast_furnace_booster_side",
+		"1": "naturesaura:block/blast_furnace_booster_top",
+		"2": "naturesaura:block/blast_furnace_booster_top_side",
+		"particle": "naturesaura:block/blast_furnace_booster_side"
 	},
 	"elements": [
 		{

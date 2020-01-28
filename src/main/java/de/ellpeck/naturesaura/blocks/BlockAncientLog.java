@@ -1,14 +1,15 @@
 package de.ellpeck.naturesaura.blocks;
 
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.IModItem;
-import de.ellpeck.naturesaura.reg.IModelProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.LogBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 
-public class BlockAncientLog extends LogBlock implements IModItem, IModelProvider {
+public class BlockAncientLog extends LogBlock implements IModItem, ICustomBlockState {
 
     private final String baseName;
 
@@ -21,5 +22,10 @@ public class BlockAncientLog extends LogBlock implements IModItem, IModelProvide
     @Override
     public String getBaseName() {
         return this.baseName;
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.logBlock(this);
     }
 }

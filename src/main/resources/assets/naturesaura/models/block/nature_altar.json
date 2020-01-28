@@ -1,5 +1,10 @@
 {
     "parent": "minecraft:block/block",
+    "textures": {
+        "texture": "naturesaura:block/nature_altar",
+        "top": "naturesaura:block/nature_altar_top",
+        "particle": "#top"
+    },
     "elements": [
         {
             "from": [0, 0, 0],
