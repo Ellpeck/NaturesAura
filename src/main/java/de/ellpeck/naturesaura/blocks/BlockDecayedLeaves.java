@@ -2,20 +2,23 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.ICustomRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
-public class BlockDecayedLeaves extends BlockImpl implements ICustomBlockState {
+public class BlockDecayedLeaves extends BlockImpl implements ICustomBlockState, ICustomRenderType {
 
     public BlockDecayedLeaves() {
-        super("decayed_leaves", ModBlocks.prop(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT).variableOpacity().notSolid().tickRandomly());
+        super("decayed_leaves", ModBlocks.prop(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT).notSolid().tickRandomly());
     }
 
     @Override
@@ -33,5 +36,10 @@ public class BlockDecayedLeaves extends BlockImpl implements ICustomBlockState {
     @Override
     public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos) {
         return 1;
+    }
+
+    @Override
+    public Supplier<RenderType> getRenderType() {
+        return RenderType::cutoutMipped;
     }
 }

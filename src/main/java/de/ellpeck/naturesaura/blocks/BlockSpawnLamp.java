@@ -8,9 +8,11 @@ import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.ICustomRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -29,7 +31,9 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
+import java.util.function.Supplier;
+
+public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable, ICustomBlockState, ICustomRenderType {
 
     private static final VoxelShape SHAPE = VoxelShapes.create(4 / 16F, 0F, 4 / 16F, 12 / 16F, 13 / 16F, 12 / 16F);
 
@@ -96,5 +100,10 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
+    }
+
+    @Override
+    public Supplier<RenderType> getRenderType() {
+        return RenderType::cutoutMipped;
     }
 }

@@ -5,7 +5,9 @@ import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderEnderCrate;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.BlockState;
@@ -48,7 +50,7 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider<TileEntityEnderCrate> {
+public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider<TileEntityEnderCrate>, ICustomBlockState {
 
     // This is terrible but I can't see a better solution right now so oh well
     private static final ThreadLocal<WeakReference<World>> CACHED_WORLD = new ThreadLocal<>();
@@ -148,5 +150,13 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     @Override
     public Tuple<TileEntityType<TileEntityEnderCrate>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntityEnderCrate>>>> getTESR() {
         return new Tuple<>(ModTileEntities.ENDER_CRATE, () -> RenderEnderCrate::new);
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().cubeBottomTop(this.getBaseName(),
+                generator.modLoc("block/" + this.getBaseName()),
+                generator.modLoc("block/" + this.getBaseName() + "_bottom"),
+                generator.modLoc("block/" + this.getBaseName() + "_top")));
     }
 }

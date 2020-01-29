@@ -4,8 +4,10 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAnimalGenerator;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.INPC;
@@ -26,9 +28,9 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizable {
+public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
     public BlockAnimalGenerator() {
-        super("animal_generator", () -> new TileEntityAnimalGenerator(), ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
+        super("animal_generator", TileEntityAnimalGenerator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -106,5 +108,13 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
     @OnlyIn(Dist.CLIENT)
     public int getVisualizationColor(World world, BlockPos pos) {
         return 0x11377a;
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().cubeBottomTop(this.getBaseName(),
+                generator.modLoc("block/" + this.getBaseName()),
+                generator.modLoc("block/" + this.getBaseName() + "_bottom"),
+                generator.modLoc("block/" + this.getBaseName() + "_top")));
     }
 }

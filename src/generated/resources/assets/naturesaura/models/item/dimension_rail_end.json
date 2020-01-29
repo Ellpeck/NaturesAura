@@ -1,3 +1,6 @@
 {
-  "parent": "naturesaura:block/dimension_rail_end"
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "naturesaura:block/dimension_rail_end"
+  }
 }

@@ -2,7 +2,9 @@ package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
+import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,7 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
+public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, ICustomItemModel {
 
     public ItemColorChanger() {
         super("color_changer", new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
@@ -40,6 +42,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
     private static boolean changeOrCopyColor(PlayerEntity player, ItemStack stack, World world, BlockPos pos, DyeColor firstColor) {
         BlockState state = world.getBlockState(pos);
         for (IProperty prop : state.getProperties()) {
+            // TODO Fix this since it's now not state-based anymore
             if (prop.getValueClass() == DyeColor.class) {
                 DyeColor color = (DyeColor) state.get(prop);
                 if (firstColor == null || color == firstColor) {
@@ -129,5 +132,10 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem {
             }
             return 0xFFFFFF;
         };
+    }
+
+    @Override
+    public void generateCustomItemModel(ItemModelGenerator generator) {
+        // noop
     }
 }

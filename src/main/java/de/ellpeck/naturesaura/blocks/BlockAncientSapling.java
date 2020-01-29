@@ -3,12 +3,10 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.gen.WorldGenAncientTree;
-import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import de.ellpeck.naturesaura.reg.ICustomItemModel;
-import de.ellpeck.naturesaura.reg.IModItem;
-import de.ellpeck.naturesaura.reg.ModRegistry;
+import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -19,8 +17,9 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
-public class BlockAncientSapling extends BushBlock implements IGrowable, IModItem, ICustomBlockState, ICustomItemModel {
+public class BlockAncientSapling extends BushBlock implements IGrowable, IModItem, ICustomBlockState, ICustomItemModel, ICustomRenderType {
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
     public BlockAncientSapling() {
@@ -81,5 +80,10 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
     @Override
     public void generateCustomItemModel(ItemModelGenerator generator) {
         generator.withExistingParent(this.getBaseName(), "item/generated").texture("layer0", "block/" + this.getBaseName());
+    }
+
+    @Override
+    public Supplier<RenderType> getRenderType() {
+        return RenderType::cutoutMipped;
     }
 }

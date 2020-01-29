@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "naturesaura:block/blast_furnace_booster"
+    },
+    "facing=south": {
+      "model": "naturesaura:block/blast_furnace_booster",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "naturesaura:block/blast_furnace_booster",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "naturesaura:block/blast_furnace_booster",
+      "y": 90
     }
   }
 }

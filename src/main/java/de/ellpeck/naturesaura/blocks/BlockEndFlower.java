@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,8 +30,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Supplier;
 
-public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockState, ICustomItemModel {
+public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockState, ICustomItemModel, ICustomRenderType {
 
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 
@@ -121,5 +123,10 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
     @Override
     public void generateCustomItemModel(ItemModelGenerator generator) {
         generator.withExistingParent(this.getBaseName(), "item/generated").texture("layer0", "block/" + this.getBaseName());
+    }
+
+    @Override
+    public Supplier<RenderType> getRenderType() {
+        return RenderType::cutout;
     }
 }

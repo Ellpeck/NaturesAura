@@ -41,6 +41,6 @@ public class BlockBlastFurnaceBooster extends BlockContainerImpl implements ICus
 
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
-        generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
+        generator.horizontalBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
     }
 }

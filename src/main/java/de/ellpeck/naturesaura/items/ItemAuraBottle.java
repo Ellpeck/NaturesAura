@@ -4,7 +4,9 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
+import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -27,7 +29,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static net.minecraft.dispenser.DefaultDispenseItemBehavior.doDispense;
 
-public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
+public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICustomItemModel {
 
     public ItemAuraBottle(Item emptyBottle) {
         super("aura_bottle", new Properties().group(NaturesAura.CREATIVE_TAB));
@@ -89,6 +91,13 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem {
     @OnlyIn(Dist.CLIENT)
     public IItemColor getItemColor() {
         return (stack, tintIndex) -> tintIndex > 0 ? getType(stack).getColor() : 0xFFFFFF;
+    }
+
+    @Override
+    public void generateCustomItemModel(ItemModelGenerator generator) {
+        generator.withExistingParent(this.getBaseName(), "item/generated")
+                .texture("layer0", "item/" + this.getBaseName())
+                .texture("layer1", "item/" + this.getBaseName() + "_overlay");
     }
 
     private class EventHandler {

@@ -5,9 +5,11 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityFieldCreator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.ICustomRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -22,8 +24,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
-public class BlockFieldCreator extends BlockContainerImpl implements ICustomBlockState {
+public class BlockFieldCreator extends BlockContainerImpl implements ICustomBlockState, ICustomRenderType {
     public BlockFieldCreator() {
         super("field_creator", TileEntityFieldCreator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
     }
@@ -99,5 +102,10 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
+    }
+
+    @Override
+    public Supplier<RenderType> getRenderType() {
+        return RenderType::cutoutMipped;
     }
 }

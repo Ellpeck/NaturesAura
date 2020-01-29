@@ -1,16 +1,18 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketClient;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import de.ellpeck.naturesaura.reg.IModItem;
-import de.ellpeck.naturesaura.reg.ModRegistry;
+import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,8 +42,9 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Supplier;
 
-public class BlockDimensionRail extends AbstractRailBlock implements IModItem {
+public class BlockDimensionRail extends AbstractRailBlock implements IModItem, ICustomRenderType, ICustomBlockState, ICustomItemModel {
 
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE;
 
@@ -139,6 +142,7 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem {
         return SHAPE;
     }
 
+    @Override
     public boolean isFlexibleRail(BlockState state, IBlockReader world, BlockPos pos) {
         return false;
     }
@@ -156,5 +160,20 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem {
     @Override
     public String getBaseName() {
         return "dimension_rail_" + this.name;
+    }
+
+    @Override
+    public Supplier<RenderType> getRenderType() {
+        return RenderType::cutoutMipped;
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        // noop
+    }
+
+    @Override
+    public void generateCustomItemModel(ItemModelGenerator generator) {
+        generator.withExistingParent(this.getBaseName(), "item/generated").texture("layer0", "block/" + this.getBaseName());
     }
 }

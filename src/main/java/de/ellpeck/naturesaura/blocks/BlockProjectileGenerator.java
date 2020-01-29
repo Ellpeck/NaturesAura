@@ -5,8 +5,10 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityProjectileGenerator;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderProjectileGenerator;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -28,7 +30,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider<TileEntityProjectileGenerator> {
+public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider<TileEntityProjectileGenerator>, ICustomBlockState {
     public BlockProjectileGenerator() {
         super("projectile_generator", TileEntityProjectileGenerator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
 
@@ -76,5 +78,13 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
     @Override
     public Tuple<TileEntityType<TileEntityProjectileGenerator>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntityProjectileGenerator>>>> getTESR() {
         return new Tuple<>(ModTileEntities.PROJECTILE_GENERATOR, () -> RenderProjectileGenerator::new);
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().cubeBottomTop(this.getBaseName(),
+                generator.modLoc("block/" + this.getBaseName()),
+                generator.modLoc("block/" + this.getBaseName() + "_top"),
+                generator.modLoc("block/" + this.getBaseName() + "_top")));
     }
 }

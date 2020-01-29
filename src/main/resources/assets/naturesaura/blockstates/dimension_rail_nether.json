@@ -1,0 +1,40 @@
+{
+    "variants": {
+        "shape=north_south": {
+            "model": "naturesaura:block/dimension_rail_nether"
+        },
+        "shape=east_west": {
+            "model": "naturesaura:block/dimension_rail_nether",
+            "y": 90
+        },
+        "shape=ascending_east": {
+            "model": "naturesaura:block/dimension_rail_nether_raised_ne",
+            "y": 90
+        },
+        "shape=ascending_west": {
+            "model": "naturesaura:block/dimension_rail_nether_raised_sw",
+            "y": 90
+        },
+        "shape=ascending_north": {
+            "model": "naturesaura:block/dimension_rail_nether_raised_ne"
+        },
+        "shape=ascending_south": {
+            "model": "naturesaura:block/dimension_rail_nether_raised_sw"
+        },
+        "shape=south_east": {
+            "model": "naturesaura:block/dimension_rail_end"
+        },
+        "shape=south_west": {
+            "model": "naturesaura:block/dimension_rail_end",
+            "y": 90
+        },
+        "shape=north_west": {
+            "model": "naturesaura:block/dimension_rail_end",
+            "y": 180
+        },
+        "shape=north_east": {
+            "model": "naturesaura:block/dimension_rail_end",
+            "y": 270
+        }
+    }
+}

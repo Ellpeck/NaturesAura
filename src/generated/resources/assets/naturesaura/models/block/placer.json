@@ -1,6 +1,8 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cube_bottom_top",
   "textures": {
-    "all": "naturesaura:block/placer"
+    "side": "naturesaura:block/placer",
+    "bottom": "naturesaura:block/placer_top",
+    "top": "naturesaura:block/placer_top"
   }
 }

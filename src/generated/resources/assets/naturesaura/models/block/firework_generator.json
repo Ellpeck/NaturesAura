@@ -1,6 +1,8 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cube_bottom_top",
   "textures": {
-    "all": "naturesaura:block/firework_generator"
+    "side": "naturesaura:block/firework_generator",
+    "bottom": "naturesaura:block/firework_generator_top",
+    "top": "naturesaura:block/firework_generator_top"
   }
 }

@@ -6,6 +6,8 @@ import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityOakGenerator;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.SaplingBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -21,7 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Random;
 
-public class BlockOakGenerator extends BlockContainerImpl implements IVisualizable {
+public class BlockOakGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockOakGenerator() {
         super("oak_generator", TileEntityOakGenerator::new, ModBlocks.prop(Material.WOOD).hardnessAndResistance(2F).sound(SoundType.WOOD));
@@ -66,5 +68,14 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
     @OnlyIn(Dist.CLIENT)
     public int getVisualizationColor(World world, BlockPos pos) {
         return 0x2e7a11;
+    }
+
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().cubeBottomTop(this.getBaseName(),
+                generator.modLoc("block/" + this.getBaseName()),
+                generator.modLoc("block/" + this.getBaseName() + "_bottom"),
+                generator.modLoc("block/" + this.getBaseName() + "_top")));
     }
 }

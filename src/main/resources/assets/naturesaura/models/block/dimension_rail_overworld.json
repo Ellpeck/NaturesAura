@@ -1,0 +1,6 @@
+{
+    "parent": "block/rail_flat",
+    "textures": {
+        "rail": "naturesaura:block/dimension_rail_overworld"
+    }
+}

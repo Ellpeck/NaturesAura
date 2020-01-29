@@ -3,8 +3,10 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityPickupStopper;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.ItemEntity;
@@ -19,7 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable {
+public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
     public BlockPickupStopper() {
         super("pickup_stopper", TileEntityPickupStopper::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
 
@@ -69,5 +71,13 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
     @OnlyIn(Dist.CLIENT)
     public int getVisualizationColor(World world, BlockPos pos) {
         return 0xf4aa42;
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().cubeBottomTop(this.getBaseName(),
+                generator.modLoc("block/" + this.getBaseName()),
+                generator.modLoc("block/" + this.getBaseName() + "_top"),
+                generator.modLoc("block/" + this.getBaseName() + "_top")));
     }
 }

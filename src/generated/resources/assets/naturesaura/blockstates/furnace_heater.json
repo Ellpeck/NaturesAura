@@ -1,7 +1,30 @@
 {
   "variants": {
-    "": {
+    "facing=down": {
+      "model": "naturesaura:block/furnace_heater",
+      "x": 180
+    },
+    "facing=up": {
       "model": "naturesaura:block/furnace_heater"
+    },
+    "facing=north": {
+      "model": "naturesaura:block/furnace_heater",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "naturesaura:block/furnace_heater",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "naturesaura:block/furnace_heater",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "naturesaura:block/furnace_heater",
+      "x": 90,
+      "y": 90
     }
   }
 }

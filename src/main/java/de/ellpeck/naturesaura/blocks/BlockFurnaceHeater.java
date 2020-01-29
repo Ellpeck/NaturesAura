@@ -97,6 +97,6 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
 
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
-        generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
- }
+        generator.directionalBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
+    }
 }

@@ -1,6 +1,8 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cube_bottom_top",
   "textures": {
-    "all": "naturesaura:block/potion_generator"
+    "side": "naturesaura:block/potion_generator",
+    "bottom": "naturesaura:block/potion_generator_bottom",
+    "top": "naturesaura:block/potion_generator_top"
   }
 }

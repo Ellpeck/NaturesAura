@@ -1,6 +1,8 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cube_bottom_top",
   "textures": {
-    "all": "naturesaura:block/auto_crafter"
+    "side": "naturesaura:block/auto_crafter",
+    "bottom": "naturesaura:block/auto_crafter_bottom",
+    "top": "naturesaura:block/auto_crafter_top"
   }
 }

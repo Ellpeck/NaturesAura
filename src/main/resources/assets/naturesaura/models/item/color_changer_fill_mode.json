@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "naturesaura:item/color_changer_fill_mode",
+        "layer1": "naturesaura:item/color_changer_fill_mode_overlay"
+    }
+}
