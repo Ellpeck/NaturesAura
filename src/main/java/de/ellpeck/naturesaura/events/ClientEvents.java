@@ -75,8 +75,6 @@ public class ClientEvents {
     private static ItemStack heldCache = ItemStack.EMPTY;
     private static ItemStack heldEye = ItemStack.EMPTY;
     private static ItemStack heldOcular = ItemStack.EMPTY;
-    private float height;
-    private float previousHeight;
 
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
@@ -123,7 +121,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onRenderLast(RenderWorldLastEvent event) {
-        ParticleHandler.renderParticles(event.getMatrixStack(), event.getPartialTicks());
+        ParticleHandler.renderParticles(event.getMatrixStack(), Minecraft.getInstance().getRenderPartialTicks());
     }
 
     @SubscribeEvent
@@ -140,11 +138,6 @@ public class ClientEvents {
                 PENDING_AURA_CHUNKS.clear();
             } else {
                 PENDING_AURA_CHUNKS.removeIf(next -> next.tryHandle(mc.world));
-
-                if (mc.player != null) {
-                    this.previousHeight = this.height;
-                    this.height += (mc.player.getEyeHeight() - this.height) * 0.5F;
-                }
 
                 if (!mc.isGamePaused()) {
                     if (mc.world.getGameTime() % 20 == 0) {
@@ -240,7 +233,7 @@ public class ClientEvents {
             for (Map.Entry<BlockPos, Integer> spot : spots.entrySet()) {
                 BlockPos pos = spot.getKey();
                 RenderSystem.pushMatrix();
-                RenderSystem.translated((pos.getX() + 0.1) / scale, (pos.getY() + 1) / scale, (pos.getZ() + 0.1) / scale);
+                RenderSystem.translated((pos.getX() + 0.1) / scale, (pos.getY() + 1.001) / scale, (pos.getZ() + 0.1) / scale);
                 RenderSystem.rotatef(90F, 1F, 0F, 0F);
                 RenderSystem.scalef(0.65F, 0.65F, 0.65F);
                 mc.fontRenderer.drawString(format.format(spot.getValue()), 0, 0, 0);
@@ -289,7 +282,7 @@ public class ClientEvents {
             return;
         box = box.grow(0.05F);
         int color = visualize.getVisualizationColor(world, pos);
-        RenderSystem.color4f(((color >> 16) & 255) / 255F, ((color >> 8) & 255) / 255F, (color & 255) / 255F, 0.5F);
+        RenderSystem.color4f((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 0.5F);
         Helper.renderWeirdBox(box.minX, box.minY, box.minZ, box.maxX - box.minX, box.maxY - box.minY, box.maxZ - box.minZ);
     }
 

@@ -2,9 +2,15 @@ package de.ellpeck.naturesaura.blocks.tiles.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class RenderWoodStand extends TileEntityRenderer<TileEntityWoodStand> {
 
@@ -14,28 +20,22 @@ public class RenderWoodStand extends TileEntityRenderer<TileEntityWoodStand> {
 
     @Override
     public void render(TileEntityWoodStand tileEntityWoodStand, float v, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
-
-    }
-
-    // TODO TESR
-    /*@Override
-    public void render(TileEntityWoodStand tile, double x, double y, double z, float partialTicks, int destroyStage) {
-        ItemStack stack = tile.items.getStackInSlot(0);
+        ItemStack stack = tileEntityWoodStand.items.getStackInSlot(0);
         if (!stack.isEmpty()) {
-            GlStateManager.pushMatrix();
+            matrixStack.push();
             Item item = stack.getItem();
-            if (item instanceof BlockItem && ((BlockItem) item).getBlock().getRenderLayer() == BlockRenderLayer.SOLID) {
-                GlStateManager.translated(x + 0.5F, y + 0.9735F, z + 0.5F);
+            if (item instanceof BlockItem) {
+                matrixStack.translate(0.5F, 0.9735F, 0.5F);
                 float scale = 0.65F;
-                GlStateManager.scalef(scale, scale, scale);
+                matrixStack.scale(scale, scale, scale);
             } else {
-                GlStateManager.translated(x + 0.5F, y + 0.825F, z + 0.5F);
+                matrixStack.translate(0.5F, 0.825F, 0.5F);
                 float scale = 0.4F;
-                GlStateManager.scalef(scale, scale, scale);
-                GlStateManager.rotatef(90F, 1F, 0F, 0F);
+                matrixStack.scale(scale, scale, scale);
+                matrixStack.rotate(Vector3f.XP.rotationDegrees(90));
             }
-            Helper.renderItemInWorld(stack);
-            GlStateManager.popMatrix();
+            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, i, i1, matrixStack, iRenderTypeBuffer);
+            matrixStack.pop();
         }
-    }*/
+    }
 }

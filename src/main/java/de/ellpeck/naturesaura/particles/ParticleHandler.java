@@ -9,11 +9,10 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.ParticleStatus;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -74,17 +73,21 @@ public final class ParticleHandler {
 
         if (player != null) {
             ActiveRenderInfo info = mc.gameRenderer.getActiveRenderInfo();
+            LightTexture lightmap = mc.gameRenderer.getLightTexture();
 
             RenderSystem.pushMatrix();
             RenderSystem.multMatrix(stack.getLast().getPositionMatrix());
+            lightmap.enableLightmap();
 
             RenderSystem.enableAlphaTest();
-            GlStateManager.enableBlend();
+            RenderSystem.enableBlend();
             RenderSystem.alphaFunc(516, 0.003921569F);
-            GlStateManager.disableCull();
+            RenderSystem.disableCull();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+            RenderSystem.enableFog();
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-            GlStateManager.depthMask(false);
+            RenderSystem.depthMask(false);
 
             mc.getTextureManager().bindTexture(ParticleMagic.TEXTURE);
             Tessellator tessy = Tessellator.getInstance();
@@ -95,19 +98,21 @@ public final class ParticleHandler {
                 particle.renderParticle(buffer, info, partialTicks);
             tessy.draw();
 
-            GlStateManager.disableDepthTest();
+            RenderSystem.disableDepthTest();
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
             for (Particle particle : PARTICLES_NO_DEPTH)
                 particle.renderParticle(buffer, info, partialTicks);
             tessy.draw();
-            GlStateManager.enableDepthTest();
+            RenderSystem.enableDepthTest();
 
-            GlStateManager.enableCull();
-            GlStateManager.depthMask(true);
+            RenderSystem.enableCull();
+            RenderSystem.depthMask(true);
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            GlStateManager.disableBlend();
+            RenderSystem.disableBlend();
             RenderSystem.alphaFunc(516, 0.1F);
+            RenderSystem.disableFog();
 
+            lightmap.disableLightmap();
             RenderSystem.popMatrix();
         }
     }

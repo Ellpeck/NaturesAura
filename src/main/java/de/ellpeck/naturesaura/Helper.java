@@ -63,8 +63,8 @@ import java.util.function.Predicate;
 public final class Helper {
 
     public static boolean getTileEntitiesInArea(IWorld world, BlockPos pos, int radius, Function<TileEntity, Boolean> consumer) {
-        for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
-            for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
+        for (int x = pos.getX() - radius >> 4; x <= pos.getX() + radius >> 4; x++) {
+            for (int z = pos.getZ() - radius >> 4; z <= pos.getZ() + radius >> 4; z++) {
                 Chunk chunk = getLoadedChunk(world, x, z);
                 if (chunk != null) {
                     for (BlockPos tilePos : chunk.getTileEntitiesPos()) {
@@ -79,8 +79,8 @@ public final class Helper {
     }
 
     public static void getAuraChunksInArea(World world, BlockPos pos, int radius, Consumer<AuraChunk> consumer) {
-        for (int x = (pos.getX() - radius) >> 4; x <= (pos.getX() + radius) >> 4; x++) {
-            for (int z = (pos.getZ() - radius) >> 4; z <= (pos.getZ() + radius) >> 4; z++) {
+        for (int x = pos.getX() - radius >> 4; x <= pos.getX() + radius >> 4; x++) {
+            for (int z = pos.getZ() - radius >> 4; z <= pos.getZ() + radius >> 4; z++) {
                 Chunk chunk = getLoadedChunk(world, x, z);
                 if (chunk != null) {
                     AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
@@ -116,27 +116,13 @@ public final class Helper {
         int r = (int) ((c1 >> 16 & 0xFF) * ratio + (c2 >> 16 & 0xFF) * (1 - ratio));
         int g = (int) ((c1 >> 8 & 0xFF) * ratio + (c2 >> 8 & 0xFF) * (1 - ratio));
         int b = (int) ((c1 & 0xFF) * ratio + (c2 & 0xFF) * (1 - ratio));
-        return ((a & 255) << 24) | ((r & 255) << 16) | ((g & 255) << 8) | (b & 255);
+        return (a & 255) << 24 | (r & 255) << 16 | (g & 255) << 8 | b & 255;
     }
 
     public static boolean areItemsEqual(ItemStack first, ItemStack second, boolean nbt) {
         if (!ItemStack.areItemsEqual(first, second))
             return false;
         return !nbt || ItemStack.areItemStackTagsEqual(first, second);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static void renderItemInWorld(ItemStack stack) {
-        // TODO rendering items in world
-       /* if (!stack.isEmpty()) {
-            RenderSystem.pushMatrix();
-            RenderSystem.disableLighting();
-            RenderHelper.enableStandardItemLighting();
-            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
-            RenderHelper.disableStandardItemLighting();
-            RenderSystem.enableLighting();
-            RenderSystem.popMatrix();
-        }*/
     }
 
     @OnlyIn(Dist.CLIENT)

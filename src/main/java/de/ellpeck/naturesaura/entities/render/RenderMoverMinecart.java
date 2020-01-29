@@ -1,17 +1,24 @@
 package de.ellpeck.naturesaura.entities.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
+import net.minecraft.client.renderer.model.Model;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderMoverMinecart extends MinecartRenderer<EntityMoverMinecart> {
 
     private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/mover_cart.png");
-    //private final ModelMoverMinecart model = new ModelMoverMinecart();
+    private final ModelMoverMinecart model = new ModelMoverMinecart();
 
     public RenderMoverMinecart(EntityRendererManager renderManagerIn) {
         super(renderManagerIn);
@@ -22,29 +29,30 @@ public class RenderMoverMinecart extends MinecartRenderer<EntityMoverMinecart> {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
-    // TODO Entity rendering
-    /*@Override
-    protected void renderCartContents(EntityMoverMinecart cart, float partialTicks, BlockState state) {
-        GlStateManager.pushMatrix();
-        GlStateManager.translatef(0, 22 / 16F, 0);
-        GlStateManager.rotatef(180, 1, 0, 0);
-        this.bindTexture(RES);
-        this.model.render();
-        GlStateManager.popMatrix();
+    @Override
+    protected void renderBlockState(EntityMoverMinecart entityIn, float partialTicks, BlockState stateIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        matrixStackIn.push();
+        matrixStackIn.translate(0, 22 / 16F, 0);
+        matrixStackIn.translate(0, 0, 1);
+        matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
+        this.model.render(matrixStackIn, bufferIn.getBuffer(this.model.getRenderType(RES)), packedLightIn, OverlayTexture.DEFAULT_LIGHT, 1, 1, 1, 1);
+        matrixStackIn.pop();
     }
 
     private static class ModelMoverMinecart extends Model {
 
-        private final RendererModel box;
+        private final ModelRenderer box;
 
         public ModelMoverMinecart() {
-            this.box = new RendererModel(this, 0, 0);
+            super(RenderType::entityCutout);
+            this.box = new ModelRenderer(this, 0, 0);
             this.box.setTextureSize(64, 64);
             this.box.addBox(0, 0, 0, 16, 24, 16);
         }
 
-        public void render() {
-            this.box.render(1 / 16F);
+        @Override
+        public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+            this.box.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         }
-    }*/
+    }
 }

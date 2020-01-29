@@ -33,7 +33,7 @@ public class PlayerLayerTrinkets extends LayerRenderer<AbstractClientPlayerEntit
         super(entityRendererIn);
     }
 
-    // TODO Test this
+    // TODO Fix this
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, AbstractClientPlayerEntity player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (player.getActivePotionEffect(Effects.INVISIBILITY) != null)

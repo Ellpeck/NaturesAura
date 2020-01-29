@@ -1,26 +1,25 @@
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Matrix4f;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.nio.FloatBuffer;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderEnderCrate extends TileEntityRenderer<TileEntityEnderCrate> {
-    private static final ResourceLocation END_SKY_TEXTURE = new ResourceLocation("textures/environment/end_sky.png");
-    private static final ResourceLocation END_PORTAL_TEXTURE = new ResourceLocation("textures/entity/end_portal.png");
     private static final Random RANDOM = new Random(31100L);
-    private static final FloatBuffer MODELVIEW = GLAllocation.createDirectFloatBuffer(16);
-    private static final FloatBuffer PROJECTION = GLAllocation.createDirectFloatBuffer(16);
-    private final FloatBuffer buffer = GLAllocation.createDirectFloatBuffer(16);
+    private static final List<RenderType> RENDER_TYPES = IntStream.range(0, 16).mapToObj(i -> RenderType.endPortal(i + 1)).collect(ImmutableList.toImmutableList());
 
     public RenderEnderCrate(TileEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);
@@ -28,93 +27,31 @@ public class RenderEnderCrate extends TileEntityRenderer<TileEntityEnderCrate> {
 
     @Override
     public void render(TileEntityEnderCrate tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-
-    }
-
-    // TODO TESR
-    /*@Override
-    public void render(TileEntityEnderCrate tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage) {
-        GlStateManager.disableLighting();
         RANDOM.setSeed(31100L);
-        GlStateManager.getMatrix(2982, MODELVIEW);
-        GlStateManager.getMatrix(2983, PROJECTION);
-        double d0 = x * x + y * y + z * z;
+        double d0 = tileEntityIn.getPos().distanceSq(this.renderDispatcher.renderInfo.getProjectedView(), true);
         int i = this.getPasses(d0);
         float f = this.getOffset();
-        boolean flag = false;
-        GameRenderer gamerenderer = Minecraft.getInstance().gameRenderer;
+        Matrix4f matrix4f = matrixStackIn.getLast().getPositionMatrix();
+        this.renderCube(f, 0.15F, matrix4f, bufferIn.getBuffer(RENDER_TYPES.get(0)));
 
-        for (int j = 0; j < i; ++j) {
-            GlStateManager.pushMatrix();
-            float f1 = 2.0F / (float) (18 - j);
-
-            if (j == 0) {
-                this.bindTexture(END_SKY_TEXTURE);
-                f1 = 0.15F;
-                GlStateManager.enableBlend();
-                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            }
-
-            if (j >= 1) {
-                this.bindTexture(END_PORTAL_TEXTURE);
-                flag = true;
-                gamerenderer.setupFogColor(true);
-            }
-
-            if (j == 1) {
-                GlStateManager.enableBlend();
-                GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-            }
-
-            GlStateManager.texGenMode(GlStateManager.TexGen.S, 9216);
-            GlStateManager.texGenMode(GlStateManager.TexGen.T, 9216);
-            GlStateManager.texGenMode(GlStateManager.TexGen.R, 9216);
-            GlStateManager.texGenParam(GlStateManager.TexGen.S, 9474, this.getBuffer(1.0F, 0.0F, 0.0F, 0.0F));
-            GlStateManager.texGenParam(GlStateManager.TexGen.T, 9474, this.getBuffer(0.0F, 1.0F, 0.0F, 0.0F));
-            GlStateManager.texGenParam(GlStateManager.TexGen.R, 9474, this.getBuffer(0.0F, 0.0F, 1.0F, 0.0F));
-            GlStateManager.enableTexGen(GlStateManager.TexGen.S);
-            GlStateManager.enableTexGen(GlStateManager.TexGen.T);
-            GlStateManager.enableTexGen(GlStateManager.TexGen.R);
-            GlStateManager.popMatrix();
-            GlStateManager.matrixMode(5890);
-            GlStateManager.pushMatrix();
-            GlStateManager.loadIdentity();
-            GlStateManager.translatef(0.5F, 0.5F, 0.0F);
-            GlStateManager.scalef(0.5F, 0.5F, 1.0F);
-            float f2 = (float) (j + 1);
-            GlStateManager.translatef(17.0F / f2, (2.0F + f2 / 1.5F) * ((float) System.currentTimeMillis() % 800000.0F / 800000.0F), 0.0F);
-            GlStateManager.rotatef((f2 * f2 * 4321.0F + f2 * 9.0F) * 2.0F, 0.0F, 0.0F, 1.0F);
-            GlStateManager.scalef(4.5F - f2 / 4.0F, 4.5F - f2 / 4.0F, 1.0F);
-            GlStateManager.multMatrix(PROJECTION);
-            GlStateManager.multMatrix(MODELVIEW);
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder bufferbuilder = tessellator.getBuffer();
-            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-            float f3 = (RANDOM.nextFloat() * 0.5F + 0.1F) * f1;
-            float f4 = (RANDOM.nextFloat() * 0.5F + 0.4F) * f1;
-            float f5 = (RANDOM.nextFloat() * 0.5F + 0.5F) * f1;
-
-            float indent = 1.95F / 16F;
-            bufferbuilder.pos(x + indent, y + (double) f, z - indent + 1.0D).color(f3, f4, f5, 1.0F).endVertex();
-            bufferbuilder.pos(x - indent + 1.0D, y + (double) f, z - indent + 1.0D).color(f3, f4, f5, 1.0F).endVertex();
-            bufferbuilder.pos(x - indent + 1.0D, y + (double) f, z + indent).color(f3, f4, f5, 1.0F).endVertex();
-            bufferbuilder.pos(x + indent, y + (double) f, z + indent).color(f3, f4, f5, 1.0F).endVertex();
-
-            tessellator.draw();
-            GlStateManager.popMatrix();
-            GlStateManager.matrixMode(5888);
-            this.bindTexture(END_SKY_TEXTURE);
+        for (int j = 1; j < i; ++j) {
+            this.renderCube(f, 2.0F / (float) (18 - j), matrix4f, bufferIn.getBuffer(RENDER_TYPES.get(j)));
         }
+    }
 
-        GlStateManager.disableBlend();
-        GlStateManager.disableTexGen(GlStateManager.TexGen.S);
-        GlStateManager.disableTexGen(GlStateManager.TexGen.T);
-        GlStateManager.disableTexGen(GlStateManager.TexGen.R);
-        GlStateManager.enableLighting();
-        if (flag) {
-            gamerenderer.setupFogColor(false);
-        }
-    }*/
+    private void renderCube(float g, float h, Matrix4f mat, IVertexBuilder builder) {
+        float f = (RANDOM.nextFloat() * 0.5F + 0.1F) * h;
+        float f1 = (RANDOM.nextFloat() * 0.5F + 0.4F) * h;
+        float f2 = (RANDOM.nextFloat() * 0.5F + 0.5F) * h;
+        this.renderFace(mat, builder, g, g, f, f1, f2);
+    }
+
+    private void renderFace(Matrix4f mat, IVertexBuilder builder, float h, float i, float n, float o, float p) {
+        builder.pos(mat, (float) 0.0, h, (float) 1.0).color(n, o, p, 1.0F).endVertex();
+        builder.pos(mat, (float) 1.0, h, (float) 1.0).color(n, o, p, 1.0F).endVertex();
+        builder.pos(mat, (float) 1.0, i, (float) 0.0).color(n, o, p, 1.0F).endVertex();
+        builder.pos(mat, (float) 0.0, i, (float) 0.0).color(n, o, p, 1.0F).endVertex();
+    }
 
     protected int getPasses(double dist) {
         int i;
@@ -144,12 +81,5 @@ public class RenderEnderCrate extends TileEntityRenderer<TileEntityEnderCrate> {
 
     protected float getOffset() {
         return 1.001F;
-    }
-
-    private FloatBuffer getBuffer(float a, float b, float c, float d) {
-        this.buffer.clear();
-        this.buffer.put(a).put(b).put(c).put(d);
-        this.buffer.flip();
-        return this.buffer;
     }
 }

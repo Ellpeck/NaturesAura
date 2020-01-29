@@ -24,7 +24,7 @@ public class ItemEye extends ItemImpl implements ITrinketItem {
             GlStateManager.translatef(0.1F, 0.225F, armor ? -0.195F : -0.1475F);
             GlStateManager.scalef(0.15F, 0.15F, 0.15F);
             GlStateManager.rotatef(180F, 1F, 0F, 0F);
-            Helper.renderItemInWorld(stack);
+            //Helper.renderItemInWorld(stack);
         }
     }
 }
