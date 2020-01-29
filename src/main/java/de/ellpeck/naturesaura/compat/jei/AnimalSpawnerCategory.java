@@ -1,6 +1,8 @@
 package de.ellpeck.naturesaura.compat.jei;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
 import mezz.jei.api.constants.VanillaTypes;
@@ -11,9 +13,14 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.crafting.Ingredient;
@@ -85,31 +92,48 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
         }
 
         float size = Math.max(1F, Math.max(recipe.entity.getWidth(), recipe.entity.getHeight()));
-        float rot = (minecraft.world.getGameTime() + minecraft.getRenderPartialTicks()) % 360F;
-        renderEntity(entity, 35, 28, rot, 100F / size * 0.4F, size * 0.5F);
+        renderEntity(35, 55, 100F / size * 0.4F, 40, size * 0.5F, (LivingEntity) entity);
 
         String name = recipe.entity.getName().getFormattedText();
         minecraft.fontRenderer.drawStringWithShadow(name, 36 - minecraft.fontRenderer.getStringWidth(name) / 2F, 55, 0xFFFFFF);
     }
 
-    private static void renderEntity(Entity entity, float x, float y, float rotation, float renderScale, float offset) {
-        // TODO Render entity
-        /*GlStateManager.enableColorMaterial();
-        GlStateManager.pushMatrix();
-        GlStateManager.color3f(1F, 1F, 1F);
-        GlStateManager.translatef(x, y, 50.0F);
-        GlStateManager.scalef(-renderScale, renderScale, renderScale);
-        GlStateManager.translatef(0F, offset, 0F);
-        GlStateManager.rotatef(180.0F, 0.0F, 0.0F, 1.0F);
-        GlStateManager.rotatef(rotation, 0.0F, 1.0F, 0.0F);
-        RenderHelper.enableStandardItemLighting();
-        Minecraft.getInstance().getRenderManager().playerViewY = 180.0F;
-        Minecraft.getInstance().getRenderManager().renderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
-        GlStateManager.popMatrix();
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.activeTexture(GLX.GL_TEXTURE1);
-        GlStateManager.disableTexture();
-        GlStateManager.activeTexture(GLX.GL_TEXTURE0);*/
+    private static void renderEntity(int x, int y, float scale, float yaw, float pitch, LivingEntity entity) {
+        float f = (float) Math.atan(yaw / 40.0F);
+        float f1 = (float) Math.atan(pitch / 40.0F);
+        RenderSystem.pushMatrix();
+        RenderSystem.translatef((float) x, (float) y, 1050.0F);
+        RenderSystem.scalef(1.0F, 1.0F, -1.0F);
+        MatrixStack matrixstack = new MatrixStack();
+        matrixstack.translate(0.0D, 0.0D, 1000.0D);
+        matrixstack.scale(scale, scale, scale);
+        Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
+        Quaternion quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
+        quaternion.multiply(quaternion1);
+        matrixstack.rotate(quaternion);
+        float f2 = entity.renderYawOffset;
+        float f3 = entity.rotationYaw;
+        float f4 = entity.rotationPitch;
+        float f5 = entity.prevRotationYawHead;
+        float f6 = entity.rotationYawHead;
+        entity.renderYawOffset = 180.0F + f * 20.0F;
+        entity.rotationYaw = 180.0F + f * 40.0F;
+        entity.rotationPitch = -f1 * 20.0F;
+        entity.rotationYawHead = entity.rotationYaw;
+        entity.prevRotationYawHead = entity.rotationYaw;
+        EntityRendererManager entityrenderermanager = Minecraft.getInstance().getRenderManager();
+        quaternion1.conjugate();
+        entityrenderermanager.setCameraOrientation(quaternion1);
+        entityrenderermanager.setRenderShadow(false);
+        IRenderTypeBuffer.Impl buff = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+        entityrenderermanager.renderEntityStatic(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, buff, 15728880);
+        buff.finish();
+        entityrenderermanager.setRenderShadow(true);
+        entity.renderYawOffset = f2;
+        entity.rotationYaw = f3;
+        entity.rotationPitch = f4;
+        entity.prevRotationYawHead = f5;
+        entity.rotationYawHead = f6;
+        RenderSystem.popMatrix();
     }
 }

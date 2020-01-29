@@ -1,9 +1,13 @@
 package de.ellpeck.naturesaura.items;
 
-import de.ellpeck.naturesaura.Helper;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
-import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -18,13 +22,13 @@ public class ItemEye extends ItemImpl implements ITrinketItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(ItemStack stack, PlayerEntity player, RenderType type, boolean isHolding) {
+    public void render(ItemStack stack, PlayerEntity player, RenderType type, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight, boolean isHolding) {
         if (type == RenderType.BODY && !isHolding) {
             boolean armor = !player.inventory.armorInventory.get(EquipmentSlotType.CHEST.getIndex()).isEmpty();
-            GlStateManager.translatef(0.1F, 0.225F, armor ? -0.195F : -0.1475F);
-            GlStateManager.scalef(0.15F, 0.15F, 0.15F);
-            GlStateManager.rotatef(180F, 1F, 0F, 0F);
-            //Helper.renderItemInWorld(stack);
+            matrices.translate(0.1F, 0.225F, armor ? -0.195F : -0.1475F);
+            matrices.scale(0.3F, 0.3F, 0.3F);
+            matrices.rotate(Vector3f.XP.rotationDegrees(180));
+            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, packedLight, OverlayTexture.DEFAULT_LIGHT, matrices, buffer);
         }
     }
 }

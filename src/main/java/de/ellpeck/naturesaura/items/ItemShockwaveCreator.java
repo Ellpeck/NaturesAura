@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.items;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
@@ -11,8 +11,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +24,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -33,8 +34,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.List;
 
 public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
-
-    private static final ResourceLocation RES_WORN = new ResourceLocation(NaturesAura.MOD_ID, "textures/items/shockwave_creator_player.png");
 
     public ItemShockwaveCreator() {
         super("shockwave_creator", new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
@@ -109,24 +108,13 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(ItemStack stack, PlayerEntity player, RenderType type, boolean isHolding) {
+    public void render(ItemStack stack, PlayerEntity player, RenderType type, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight, boolean isHolding) {
         if (type == RenderType.BODY && !isHolding) {
             boolean armor = !player.inventory.armorInventory.get(EquipmentSlotType.CHEST.getIndex()).isEmpty();
-            GlStateManager.translatef(-0.1675F, -0.05F, armor ? -0.195F : -0.1475F);
-            GlStateManager.scalef(0.021F, 0.021F, 0.021F);
-
-            GlStateManager.pushMatrix();
-            GlStateManager.disableLighting();
-            GlStateManager.pushTextureAttributes();
-            GlStateManager.pushLightingAttributes();
-            RenderHelper.enableStandardItemLighting();
-            Minecraft.getInstance().getTextureManager().bindTexture(RES_WORN);
-            Screen.blit(0, 0, 0, 0, 16, 16, 16, 16);
-            RenderHelper.disableStandardItemLighting();
-            GlStateManager.popAttributes();
-            GlStateManager.popAttributes();
-            GlStateManager.enableLighting();
-            GlStateManager.popMatrix();
+            matrices.translate(0, 0.125F, armor ? -0.195F : -0.1475F);
+            matrices.scale(0.3F, 0.3F, 0.3F);
+            matrices.rotate(Vector3f.XP.rotationDegrees(180));
+            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, packedLight, OverlayTexture.DEFAULT_LIGHT, matrices, buffer);
         }
     }
 }

@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.items;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
@@ -9,6 +9,11 @@ import de.ellpeck.naturesaura.api.aura.container.ItemAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -110,14 +115,14 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(ItemStack stack, PlayerEntity player, RenderType type, boolean isHolding) {
+    public void render(ItemStack stack, PlayerEntity player, RenderType type, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight, boolean isHolding) {
         if (type == RenderType.BODY && !isHolding) {
             boolean chest = !player.inventory.armorInventory.get(EquipmentSlotType.CHEST.getIndex()).isEmpty();
             boolean legs = !player.inventory.armorInventory.get(EquipmentSlotType.LEGS.getIndex()).isEmpty();
-            GlStateManager.translatef(-0.15F, 0.65F, chest ? -0.195F : legs ? -0.165F : -0.1475F);
-            GlStateManager.scalef(0.25F, 0.25F, 0.25F);
-            GlStateManager.rotatef(180F, 1F, 0F, 0F);
-            //Helper.renderItemInWorld(stack);
+            matrices.translate(-0.15F, 0.65F, chest ? -0.195F : legs ? -0.165F : -0.1475F);
+            matrices.scale(0.5F, 0.5F, 0.5F);
+            matrices.rotate(Vector3f.XP.rotationDegrees(180F));
+            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, packedLight, OverlayTexture.DEFAULT_LIGHT, matrices, buffer);
         }
     }
 }
