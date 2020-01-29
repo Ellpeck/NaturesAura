@@ -61,8 +61,10 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
         if (!generator.canGenerateRightNow(35, amount))
             return;
 
-        BlockPos spot = IAuraChunk.getLowestSpot(entity.world, pos, 35, pos);
-        IAuraChunk.getAuraChunk(entity.world, spot).storeAura(spot, amount);
+        while (amount > 0) {
+            BlockPos spot = IAuraChunk.getLowestSpot(entity.world, pos, 35, pos);
+            amount -= IAuraChunk.getAuraChunk(entity.world, spot).storeAura(spot, amount);
+        }
 
         PacketHandler.sendToAllAround(entity.world, pos, 32,
                 new PacketParticles((float) entity.getPosX(), (float) entity.getPosY(), (float) entity.getPosZ(), PacketParticles.Type.PROJECTILE_GEN, pos.getX(), pos.getY(), pos.getZ()));
