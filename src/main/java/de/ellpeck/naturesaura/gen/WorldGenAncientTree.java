@@ -16,7 +16,6 @@ import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import java.util.Random;
 import java.util.Set;
 
-// TODO figure out if this still works like it should
 public class WorldGenAncientTree extends AbstractTreeFeature<TreeFeatureConfig> {
 
     // what the heck even is this
@@ -31,6 +30,7 @@ public class WorldGenAncientTree extends AbstractTreeFeature<TreeFeatureConfig> 
         int height = rand.nextInt(3) + 5;
         BlockPos trunkTop = pos.up(height);
 
+        this.setBlockState(world, pos, Blocks.AIR.getDefaultState());
         //Roots
         int rootsAmount = rand.nextInt(4) + 5;
         for (int i = 0; i < rootsAmount; i++) {
@@ -40,7 +40,7 @@ public class WorldGenAncientTree extends AbstractTreeFeature<TreeFeatureConfig> 
             float z = (float) Math.cos(angle) * length;
 
             BlockPos goal = pos.add(x, 0, z);
-            while (!world.hasBlockState(goal, state -> state.getMaterial().isReplaceable())) {
+            while (world.hasBlockState(goal, state -> state.getMaterial().isReplaceable())) {
                 goal = goal.down();
                 if (goal.distanceSq(pos) >= 10 * 10)
                     break;
