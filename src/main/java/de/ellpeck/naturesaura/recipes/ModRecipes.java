@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.recipes;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.recipes.*;
@@ -14,6 +13,7 @@ import de.ellpeck.naturesaura.chunk.effect.PlantBoostEffect;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.misc.ColoredBlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerBlock;
@@ -226,7 +226,7 @@ public final class ModRecipes {
         for (DyeColor color : DyeColor.values())
             new AnimalSpawnerRecipe(res("sheep_" + color.getName()), EntityType.SHEEP,
                     500, 60, ing(ModItems.BIRTH_SPIRIT), ing(Items.MUTTON),
-                    ing(Helper.getWool(color))) {
+                    ing(ColoredBlockHelper.WOOL.get(color.getId()))) {
                 @Override
                 public Entity makeEntity(World world, double x, double y, double z) {
                     SheepEntity sheep = (SheepEntity) super.makeEntity(world, x, y, z);

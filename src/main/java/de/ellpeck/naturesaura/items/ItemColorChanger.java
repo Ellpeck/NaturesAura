@@ -3,20 +3,22 @@ package de.ellpeck.naturesaura.items;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
+import de.ellpeck.naturesaura.misc.ColoredBlockHelper;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.state.IProperty;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.List;
 
 public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, ICustomItemModel {
 
@@ -40,40 +42,38 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
     }
 
     private static boolean changeOrCopyColor(PlayerEntity player, ItemStack stack, World world, BlockPos pos, DyeColor firstColor) {
-        BlockState state = world.getBlockState(pos);
-        for (IProperty prop : state.getProperties()) {
-            // TODO Fix this since it's now not state-based anymore
-            if (prop.getValueClass() == DyeColor.class) {
-                DyeColor color = (DyeColor) state.get(prop);
-                if (firstColor == null || color == firstColor) {
-                    DyeColor stored = getStoredColor(stack);
-                    if (player.isShiftKeyDown()) {
-                        if (stored != color) {
+        Block block = world.getBlockState(pos).getBlock();
+        List<Block> blocks = ColoredBlockHelper.getBlocksContaining(block);
+        if (blocks == null)
+            return false;
+        DyeColor color = DyeColor.byId(blocks.indexOf(block));
+        if (firstColor == null || color == firstColor) {
+            DyeColor stored = getStoredColor(stack);
+            if (player.isShiftKeyDown()) {
+                if (stored != color) {
+                    world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                            SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 0.65F, 1F);
+                    if (!world.isRemote)
+                        storeColor(stack, color);
+                    return true;
+                }
+            } else {
+                if (stored != null && stored != color) {
+                    if (NaturesAuraAPI.instance().extractAuraFromPlayer(player, 1000, world.isRemote)) {
+                        if (firstColor == null) {
                             world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                                    SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 0.65F, 1F);
-                            if (!world.isRemote)
-                                storeColor(stack, color);
-                            return true;
+                                    SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 0.65F, 1F);
                         }
-                    } else {
-                        if (stored != null && stored != color) {
-                            if (NaturesAuraAPI.instance().extractAuraFromPlayer(player, 1000, world.isRemote)) {
-                                if (firstColor == null) {
-                                    world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                                            SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 0.65F, 1F);
-                                }
-                                if (!world.isRemote) {
-                                    world.setBlockState(pos, state.with(prop, stored));
+                        if (!world.isRemote) {
+                            world.setBlockState(pos, blocks.get(stored.getId()).getDefaultState());
 
-                                    if (isFillMode(stack)) {
-                                        for (Direction off : Direction.values()) {
-                                            changeOrCopyColor(player, stack, world, pos.offset(off), color);
-                                        }
-                                    }
+                            if (isFillMode(stack)) {
+                                for (Direction off : Direction.values()) {
+                                    changeOrCopyColor(player, stack, world, pos.offset(off), color);
                                 }
-                                return true;
                             }
                         }
+                        return true;
                     }
                 }
             }
