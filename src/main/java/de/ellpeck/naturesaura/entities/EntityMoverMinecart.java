@@ -24,6 +24,7 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -134,8 +135,8 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
 
     @Nullable
     @Override
-    public Entity changeDimension(DimensionType destination) {
-        Entity entity = super.changeDimension(destination);
+    public Entity changeDimension(DimensionType destination, ITeleporter teleporter) {
+        Entity entity = super.changeDimension(destination, teleporter);
         if (entity instanceof EntityMoverMinecart) {
             BlockPos pos = entity.getPosition();
             this.moveAura(this.world, this.lastPosition, entity.world, pos);
