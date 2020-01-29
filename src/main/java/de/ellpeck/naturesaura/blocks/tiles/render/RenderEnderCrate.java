@@ -47,10 +47,10 @@ public class RenderEnderCrate extends TileEntityRenderer<TileEntityEnderCrate> {
     }
 
     private void renderFace(Matrix4f mat, IVertexBuilder builder, float h, float i, float n, float o, float p) {
-        builder.pos(mat, (float) 0.0, h, (float) 1.0).color(n, o, p, 1.0F).endVertex();
-        builder.pos(mat, (float) 1.0, h, (float) 1.0).color(n, o, p, 1.0F).endVertex();
-        builder.pos(mat, (float) 1.0, i, (float) 0.0).color(n, o, p, 1.0F).endVertex();
-        builder.pos(mat, (float) 0.0, i, (float) 0.0).color(n, o, p, 1.0F).endVertex();
+        builder.pos(mat, 2 / 16F, h, 14 / 16F).color(n, o, p, 1.0F).endVertex();
+        builder.pos(mat, 14 / 16F, h, 14 / 16F).color(n, o, p, 1.0F).endVertex();
+        builder.pos(mat, 14 / 16F, i, 2 / 16F).color(n, o, p, 1.0F).endVertex();
+        builder.pos(mat, 2 / 16F, i, 2 / 16F).color(n, o, p, 1.0F).endVertex();
     }
 
     protected int getPasses(double dist) {
