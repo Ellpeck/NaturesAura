@@ -27,6 +27,7 @@ import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -36,10 +37,7 @@ import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -212,12 +210,12 @@ public class ClientEvents {
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event) {
         Minecraft mc = Minecraft.getInstance();
-        GL11.glPushMatrix();
-        float partial = event.getPartialTicks();
-        GL11.glTranslated(
-                -mc.player.prevPosX - (mc.player.getPosX() - mc.player.prevPosX) * partial,
-                -mc.player.prevPosY - (mc.player.getPosY() - mc.player.prevPosY) * partial - (double) MathHelper.lerp(partial, this.previousHeight, this.height),
-                -mc.player.prevPosZ - (mc.player.getPosZ() - mc.player.prevPosZ) * partial);
+        RenderSystem.pushMatrix();
+        RenderSystem.multMatrix(event.getMatrixStack().getLast().getPositionMatrix());
+
+        ActiveRenderInfo info = mc.gameRenderer.getActiveRenderInfo();
+        Vec3d view = info.getProjectedView();
+        GL11.glTranslated(-view.getX(), -view.getY(), -view.getZ());
 
         if (mc.gameSettings.showDebugInfo && mc.player.isCreative() && ModConfig.instance.debugWorld.get()) {
             Map<BlockPos, Integer> spots = new HashMap<>();

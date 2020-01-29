@@ -10,6 +10,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.ParticleStatus;
 import net.minecraft.util.math.MathHelper;
@@ -68,20 +69,11 @@ public final class ParticleHandler {
     }
 
     public static void renderParticles(MatrixStack stack, float partialTicks) {
-        // TODO Render particles
-        if(true)
-            return;
-
         Minecraft mc = Minecraft.getInstance();
         ClientPlayerEntity player = mc.player;
 
         if (player != null) {
             ActiveRenderInfo info = mc.gameRenderer.getActiveRenderInfo();
-            float f = MathHelper.cos(info.getYaw() * ((float) Math.PI / 180F));
-            float f1 = MathHelper.sin(info.getYaw() * ((float) Math.PI / 180F));
-            float f2 = -f1 * MathHelper.sin(info.getPitch() * ((float) Math.PI / 180F));
-            float f3 = f * MathHelper.sin(info.getPitch() * ((float) Math.PI / 180F));
-            float f4 = MathHelper.cos(info.getPitch() * ((float) Math.PI / 180F));
 
             RenderSystem.pushMatrix();
             RenderSystem.multMatrix(stack.getLast().getPositionMatrix());
@@ -90,7 +82,7 @@ public final class ParticleHandler {
             GlStateManager.enableBlend();
             RenderSystem.alphaFunc(516, 0.003921569F);
             GlStateManager.disableCull();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA.param, GlStateManager.DestFactor.ONE.param);
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 
             GlStateManager.depthMask(false);
 
@@ -98,13 +90,13 @@ public final class ParticleHandler {
             Tessellator tessy = Tessellator.getInstance();
             BufferBuilder buffer = tessy.getBuffer();
 
-            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
             for (Particle particle : PARTICLES)
                 particle.renderParticle(buffer, info, partialTicks);
             tessy.draw();
 
             GlStateManager.disableDepthTest();
-            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
             for (Particle particle : PARTICLES_NO_DEPTH)
                 particle.renderParticle(buffer, info, partialTicks);
             tessy.draw();
@@ -112,7 +104,7 @@ public final class ParticleHandler {
 
             GlStateManager.enableCull();
             GlStateManager.depthMask(true);
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA.param, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.param);
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             GlStateManager.disableBlend();
             RenderSystem.alphaFunc(516, 0.1F);
 
