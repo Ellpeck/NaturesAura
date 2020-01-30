@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "OOO",
+        "OEO",
+        "OOO"
+    ],
+    "key": {
+        "E": {
+            "type": "forge:nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:nether"
+            }
+        },
+        "O": {
+            "item": "minecraft:bone_meal"
+        }
+    },
+    "result": {
+        "item": "naturesaura:crimson_meal",
+        "count": 8
+    }
+}

@@ -120,11 +120,6 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void onRenderLast(RenderWorldLastEvent event) {
-        ParticleHandler.renderParticles(event.getMatrixStack(), Minecraft.getInstance().getRenderPartialTicks());
-    }
-
-    @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) {
             heldCache = ItemStack.EMPTY;
@@ -203,6 +198,8 @@ public class ClientEvents {
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event) {
         Minecraft mc = Minecraft.getInstance();
+        ParticleHandler.renderParticles(event.getMatrixStack(), mc.getRenderPartialTicks());
+
         RenderSystem.pushMatrix();
         RenderSystem.multMatrix(event.getMatrixStack().getLast().getPositionMatrix());
 
