@@ -123,7 +123,7 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
                 World overworld = server.getWorld(goalDimType);
                 BlockPos spawn = overworld.getSpawnPoint();
                 BlockPos ret = new BlockPos(spawn.getX(), 0, spawn.getZ());
-                return ret.up(overworld.getHeight(Heightmap.Type.WORLD_SURFACE_WG, spawn.getX(), spawn.getZ()));
+                return ret.up(overworld.getHeight(Heightmap.Type.WORLD_SURFACE, spawn.getX(), spawn.getZ()));
             }
         }
     }

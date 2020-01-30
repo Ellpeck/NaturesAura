@@ -61,7 +61,7 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
         for (int i = 0; i < 6; i++) {
             int x = dragon.world.rand.nextInt(256) - 128;
             int z = dragon.world.rand.nextInt(256) - 128;
-            BlockPos pos = new BlockPos(x, dragon.world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, x, z), z);
+            BlockPos pos = new BlockPos(x, dragon.world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z), z);
             if (!dragon.world.isBlockLoaded(pos))
                 continue;
             if (dragon.world.getBlockState(pos.down()).getBlock() != Blocks.END_STONE)
