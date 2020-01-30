@@ -44,4 +44,5 @@ public final class ModItems {
     public static Item TOKEN_GRIEF;
     public static Item ENDER_ACCESS;
     public static Item CAVE_FINDER;
+    public static Item CRIMSON_MEAL;
 }

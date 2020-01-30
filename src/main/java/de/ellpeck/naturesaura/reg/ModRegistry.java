@@ -21,6 +21,7 @@ import de.ellpeck.naturesaura.items.tools.*;
 import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -105,7 +106,8 @@ public final class ModRegistry {
                 new BlockDimensionRail("overworld", DimensionType.OVERWORLD, DimensionType.THE_NETHER, DimensionType.THE_END),
                 new BlockDimensionRail("nether", DimensionType.THE_NETHER, DimensionType.OVERWORLD),
                 new BlockDimensionRail("end", DimensionType.THE_END, DimensionType.OVERWORLD),
-                new BlockBlastFurnaceBooster()
+                new BlockBlastFurnaceBooster(),
+                new BlockImpl("nether_wart_mushroom", ModBlocks.prop(Blocks.RED_MUSHROOM_BLOCK))
         );
 
         if (ModConfig.instance.rfConverter.get())
@@ -167,7 +169,8 @@ public final class ModRegistry {
                 new ItemImpl("token_rage"),
                 new ItemImpl("token_grief"),
                 new ItemEnderAccess(),
-                new ItemCaveFinder()
+                new ItemCaveFinder(),
+                new ItemCrimsonMeal()
         );
         Helper.populateObjectHolders(ModItems.class, event.getRegistry());
     }
