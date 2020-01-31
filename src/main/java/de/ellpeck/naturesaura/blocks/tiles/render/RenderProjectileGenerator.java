@@ -30,15 +30,15 @@ public class RenderProjectileGenerator extends TileEntityRenderer<TileEntityProj
         stack.push();
         if (te.nextSide == Direction.NORTH) {
             stack.rotate(Vector3f.YP.rotationDegrees(270));
-            stack.translate(-0.001F, 0, -1);
+            stack.translate(-0.002F, 0, -1);
         } else if (te.nextSide == Direction.EAST) {
             stack.rotate(Vector3f.YP.rotationDegrees(180));
-            stack.translate(-1.001F, 0, -1);
+            stack.translate(-1.002F, 0, -1);
         } else if (te.nextSide == Direction.SOUTH) {
             stack.rotate(Vector3f.YP.rotationDegrees(90));
-            stack.translate(-1.001F, 0, 0);
+            stack.translate(-1.002F, 0, 0);
         } else {
-            stack.translate(-0.001F, 0, 0);
+            stack.translate(-0.002F, 0, 0);
         }
         int brightness = 15 << 20 | 15 << 4;
         this.model.render(stack, buffer.getBuffer(this.model.getRenderType(RES)), brightness, combinedOverlayIn, 1, 1, 1, 1);
