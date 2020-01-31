@@ -172,7 +172,7 @@ public final class ModRecipes {
         new AltarRecipe(res("nether_wart"), ing(Blocks.RED_MUSHROOM), new ItemStack(Items.NETHER_WART), conversion, 30000, 250).register();
         new AltarRecipe(res("prismarine"), ing(Items.QUARTZ), new ItemStack(Items.PRISMARINE_SHARD), conversion, 55000, 200).register();
         new AltarRecipe(res("water"), ing(Items.GLASS_BOTTLE), PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER), conversion, 25000, 200).register();
-        new AltarRecipe(res("coal"), ing(ItemTags.COALS), new ItemStack(Items.COAL), conversion, 30000, 250).register();
+        new AltarRecipe(res("coal"), ing(Items.CHARCOAL), new ItemStack(Items.COAL), conversion, 30000, 250).register();
 
         Ingredient crushing = ing(ModBlocks.CRUSHING_CATALYST);
         new AltarRecipe(res("bone"), ing(Items.BONE), new ItemStack(Items.BONE_MEAL, 6), crushing, 3000, 40).register();
