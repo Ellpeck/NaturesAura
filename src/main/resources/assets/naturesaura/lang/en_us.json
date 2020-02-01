@@ -172,5 +172,6 @@
     "entity.naturesaura.effect_inhibitor": "Effect Powder",
     "entity.naturesaura.mover_cart": "Aura Attraction Cart",
     "enchantment.naturesaura.aura_mending": "Nature's Mend",
-    "enchantment.naturesaura.aura_mending.desc": "Nature's Aura Enchantment"
+    "enchantment.naturesaura.aura_mending.desc": "Nature's Aura Enchantment",
+    "naturesaura:aura_mending.enchant.desc": "Heals the Player Using Aura"
 }
