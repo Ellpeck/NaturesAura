@@ -107,7 +107,8 @@ public final class ModRegistry {
                 new BlockDimensionRail("nether", DimensionType.THE_NETHER, DimensionType.OVERWORLD),
                 new BlockDimensionRail("end", DimensionType.THE_END, DimensionType.OVERWORLD),
                 new BlockBlastFurnaceBooster(),
-                new BlockImpl("nether_wart_mushroom", ModBlocks.prop(Blocks.RED_MUSHROOM_BLOCK))
+                new BlockImpl("nether_wart_mushroom", ModBlocks.prop(Blocks.RED_MUSHROOM_BLOCK)),
+                new BlockAnimalContainer()
         );
 
         if (ModConfig.instance.rfConverter.get())

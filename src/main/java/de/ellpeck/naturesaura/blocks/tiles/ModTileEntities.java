@@ -1,8 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.registries.ObjectHolder;
 
 @SuppressWarnings("FieldNamingConvention")
 public final class ModTileEntities {
@@ -35,4 +33,5 @@ public final class ModTileEntities {
     public static TileEntityType<TileEntityTimeChanger> TIME_CHANGER;
     public static TileEntityType<TileEntityWoodStand> WOOD_STAND;
     public static TileEntityType<TileEntityBlastFurnaceBooster> BLAST_FURNACE_BOOSTER;
+    public static TileEntityType<TileEntityAnimalContainer> ANIMAL_CONTAINER;
 }

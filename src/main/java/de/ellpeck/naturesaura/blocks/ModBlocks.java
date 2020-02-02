@@ -59,6 +59,7 @@ public final class ModBlocks {
     public static Block DIMENSION_RAIL_END;
     public static Block BLAST_FURNACE_BOOSTER;
     public static Block NETHER_WART_MUSHROOM;
+    public static Block ANIMAL_CONTAINER;
 
     public static Block.Properties prop(Material material, MaterialColor color) {
         return Block.Properties.create(material, color);
