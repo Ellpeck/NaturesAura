@@ -56,6 +56,10 @@ public class ParticleMagic extends Particle {
         } else {
             this.motionY -= 0.04D * (double) this.particleGravity;
             this.move(this.motionX, this.motionY, this.motionZ);
+            if (Math.abs(this.posY - this.prevPosY) <= 0.01F) {
+                this.motionX *= 0.7F;
+                this.motionZ *= 0.7F;
+            }
 
             float lifeRatio = (float) this.age / (float) this.maxAge;
             if (this.fade && lifeRatio > 0.75F)
