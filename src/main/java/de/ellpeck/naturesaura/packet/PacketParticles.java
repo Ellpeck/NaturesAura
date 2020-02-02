@@ -459,6 +459,18 @@ public class PacketParticles {
                         message.posZ + world.rand.nextGaussian() * 0.15F,
                         0, 0, 0, 0x42e9f5, 1 + world.rand.nextFloat() * 2, 40, 0, false, true
                 );
+        }),
+        SNOW_CREATOR((message, world) -> {
+            BlockPos pos = new BlockPos(message.posX, message.posY, message.posZ);
+            int color = IAuraChunk.getAuraChunk(world, pos).getType().getColor();
+            for (int i = world.rand.nextInt(3) + 1; i > 0; i--)
+                NaturesAuraAPI.instance().spawnParticleStream(
+                        message.posX + (float) world.rand.nextGaussian() * 5,
+                        message.posY + world.rand.nextFloat() * 5,
+                        message.posZ + (float) world.rand.nextGaussian() * 5,
+                        message.posX + 0.5F, message.posY + 0.5F, message.posZ + 0.5F,
+                        0.25F, color, 0.5F + world.rand.nextFloat()
+                );
         });
 
         public final BiConsumer<PacketParticles, World> action;

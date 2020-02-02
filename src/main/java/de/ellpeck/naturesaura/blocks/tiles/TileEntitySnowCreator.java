@@ -2,15 +2,24 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.Heightmap;
 
 public class TileEntitySnowCreator extends TileEntityImpl implements ITickableTileEntity {
+
+    private int snowmanCount;
+
     public TileEntitySnowCreator() {
         super(ModTileEntities.SNOW_CREATOR);
     }
@@ -35,21 +44,34 @@ public class TileEntitySnowCreator extends TileEntityImpl implements ITickableTi
             if (this.world.getGameTime() % 10 != 0)
                 return;
 
-            BlockPos pos = this.pos.add(MathHelper.nextInt(this.world.rand, -range, range), 0, MathHelper.nextInt(this.world.rand, -range, range));
-            pos = this.world.getHeight(Heightmap.Type.MOTION_BLOCKING, pos);
-            BlockPos down = pos.down();
+            for (int i = 0; i < 10; i++) {
+                BlockPos pos = this.pos.add(MathHelper.nextInt(this.world.rand, -range, range), 0, MathHelper.nextInt(this.world.rand, -range, range));
+                pos = this.world.getHeight(Heightmap.Type.MOTION_BLOCKING, pos);
+                BlockPos down = pos.down();
 
-            Fluid fluid = this.world.getFluidState(down).getFluid();
-            if (fluid == Fluids.WATER) {
-                this.world.setBlockState(down, Blocks.ICE.getDefaultState());
-            } else if (Blocks.SNOW.getDefaultState().isValidPosition(this.world, pos)) {
-                this.world.setBlockState(pos, Blocks.SNOW.getDefaultState());
-            } else {
-                return;
+                Fluid fluid = this.world.getFluidState(down).getFluid();
+                if (fluid == Fluids.WATER) {
+                    this.world.setBlockState(down, Blocks.ICE.getDefaultState());
+                } else if (Blocks.SNOW.getDefaultState().isValidPosition(this.world, pos)) {
+                    this.world.setBlockState(pos, Blocks.SNOW.getDefaultState());
+
+                    if (this.snowmanCount < range / 2 && this.world.rand.nextFloat() >= 0.995F) {
+                        this.snowmanCount++;
+                        Entity golem = new SnowGolemEntity(EntityType.SNOW_GOLEM, this.world);
+                        golem.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
+                        this.world.addEntity(golem);
+                    }
+                } else {
+                    continue;
+                }
+
+                BlockPos auraPos = IAuraChunk.getHighestSpot(this.world, this.pos, 30, this.pos);
+                IAuraChunk.getAuraChunk(this.world, auraPos).drainAura(auraPos, 300);
+
+                PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                        new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.SNOW_CREATOR));
+                break;
             }
-
-            BlockPos auraPos = IAuraChunk.getHighestSpot(this.world, this.pos, 30, this.pos);
-            IAuraChunk.getAuraChunk(this.world, auraPos).drainAura(auraPos, 300);
         } else {
             if (this.world.getGameTime() % 30 != 0)
                 return;
@@ -65,5 +87,19 @@ public class TileEntitySnowCreator extends TileEntityImpl implements ITickableTi
                 );
             }
         }
+    }
+
+    @Override
+    public void writeNBT(CompoundNBT compound, SaveType type) {
+        super.writeNBT(compound, type);
+        if (type == SaveType.TILE)
+            compound.putInt("snowman_count", this.snowmanCount);
+    }
+
+    @Override
+    public void readNBT(CompoundNBT compound, SaveType type) {
+        super.readNBT(compound, type);
+        if (type == SaveType.TILE)
+            this.snowmanCount = compound.getInt("snowman_count");
     }
 }
