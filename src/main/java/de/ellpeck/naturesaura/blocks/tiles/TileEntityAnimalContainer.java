@@ -1,5 +1,7 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -40,6 +42,12 @@ public class TileEntityAnimalContainer extends TileEntityImpl implements ITickab
             Vec3d distance = pos.subtract(this.pos.getX(), pos.getY(), this.pos.getZ());
             distance = distance.normalize().scale(-0.15F);
             animal.setMotion(distance);
+
+            if (this.world.rand.nextBoolean()) {
+                Vec3d eye = animal.getEyePosition(1).add(animal.getLookVec());
+                PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                        new PacketParticles((float) eye.getX(), (float) eye.getY(), (float) eye.getZ(), PacketParticles.Type.ANIMAL_CONTAINER));
+            }
         }
     }
 }
