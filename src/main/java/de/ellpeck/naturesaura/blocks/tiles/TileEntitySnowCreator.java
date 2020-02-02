@@ -75,7 +75,7 @@ public class TileEntitySnowCreator extends TileEntityImpl implements ITickableTi
         } else {
             if (this.world.getGameTime() % 30 != 0)
                 return;
-            for (int i = range * 5; i >= 0; i--) {
+            for (int i = range * 4; i >= 0; i--) {
                 BlockPos randomPos = this.pos.add(
                         MathHelper.nextInt(this.world.rand, -range, range),
                         MathHelper.nextInt(this.world.rand, range / 2, range),
