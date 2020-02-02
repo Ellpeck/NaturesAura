@@ -239,7 +239,7 @@ public final class ModRecipes {
         spawner("pig", EntityType.PIG, 50000, 60, ing(Items.PORKCHOP));
         spawner("blaze", EntityType.BLAZE, 150000, 120, ing(Items.BLAZE_ROD), ing(Items.BLAZE_POWDER));
         spawner("ghast", EntityType.GHAST, 120000, 150, ing(Items.GUNPOWDER), ing(Items.GHAST_TEAR));
-        spawner("ocelot", EntityType.OCELOT, 80000, 60, ing(Items.COD), ing(ItemTags.WOOL));
+        spawner("ocelot", EntityType.OCELOT, 80000, 60, ing(ItemTags.FISHES), ing(ItemTags.WOOL));
         spawner("mule", EntityType.MULE, 100000, 100, ing(Items.LEATHER), ing(Blocks.CHEST), ing(Items.APPLE));
         spawner("bat", EntityType.BAT, 30000, 40, ing(Items.FEATHER));
         spawner("endermite", EntityType.ENDERMITE, 30000, 40, ing(Items.ENDER_PEARL), ing(Blocks.STONE));
@@ -268,6 +268,13 @@ public final class ModRecipes {
         spawner("wither_skeleton", EntityType.WITHER_SKELETON, 150000, 150, ing(Items.BONE), ing(Blocks.OBSIDIAN));
         spawner("wolf", EntityType.WOLF, 50000, 60, ing(Items.LEATHER), ing(Items.BONE));
         spawner("zombie", EntityType.ZOMBIE, 100000, 100, ing(Items.ROTTEN_FLESH));
+        spawner("bee", EntityType.BEE, 50000, 100, ing(Items.HONEYCOMB), ing(Items.HONEY_BLOCK));
+        spawner("dolphin", EntityType.DOLPHIN, 100000, 150, ing(ItemTags.FISHES), ing(Items.MAP));
+        spawner("fox", EntityType.FOX, 30000, 100, ing(Items.SWEET_BERRIES), ing(Items.FEATHER));
+        spawner("panda", EntityType.PANDA, 100000, 100, ing(Items.BAMBOO), ing(Blocks.BAMBOO_SAPLING));
+        spawner("turtle", EntityType.TURTLE, 100000, 150, ing(Items.SCUTE), ing(Items.SEAGRASS));
+        spawner("phantom", EntityType.PHANTOM, 200000, 200, ing(Items.PHANTOM_MEMBRANE));
+        spawner("cat", EntityType.CAT, 50000, 100, ing(Items.STRING), ing(ItemTags.WOOL));
 
         NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_COAL, 5000));
         NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_IRON, 3000));
