@@ -52,7 +52,7 @@ public class TileEntitySnowCreator extends TileEntityImpl implements ITickableTi
                 Fluid fluid = this.world.getFluidState(down).getFluid();
                 if (fluid == Fluids.WATER) {
                     this.world.setBlockState(down, Blocks.ICE.getDefaultState());
-                } else if (Blocks.SNOW.getDefaultState().isValidPosition(this.world, pos)) {
+                } else if (Blocks.SNOW.getDefaultState().isValidPosition(this.world, pos) && this.world.getBlockState(pos).getBlock() != Blocks.SNOW) {
                     this.world.setBlockState(pos, Blocks.SNOW.getDefaultState());
 
                     if (this.snowmanCount < range / 2 && this.world.rand.nextFloat() >= 0.995F) {
