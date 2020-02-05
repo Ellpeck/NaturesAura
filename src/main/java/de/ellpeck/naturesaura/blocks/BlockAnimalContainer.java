@@ -25,6 +25,11 @@ public class BlockAnimalContainer extends BlockContainerImpl implements IVisuali
     }
 
     @Override
+    protected boolean hasWaterlogging() {
+        return true;
+    }
+
+    @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }

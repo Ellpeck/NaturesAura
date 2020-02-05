@@ -21,12 +21,13 @@ public class BlockAutoCrafter extends BlockContainerImpl implements ICustomBlock
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        super.fillStateContainer(builder);
         builder.add(FACING);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING, context.getPlayer().getHorizontalFacing());
+        return super.getStateForPlacement(context).with(FACING, context.getPlayer().getHorizontalFacing());
     }
 
     @Override

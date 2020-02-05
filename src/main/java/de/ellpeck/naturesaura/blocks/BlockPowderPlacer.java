@@ -21,6 +21,11 @@ public class BlockPowderPlacer extends BlockContainerImpl implements ICustomBloc
     }
 
     @Override
+    protected boolean hasWaterlogging() {
+        return true;
+    }
+
+    @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }

@@ -42,6 +42,11 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    @Override
+    protected boolean hasWaterlogging() {
+        return true;
+    }
+
     @SubscribeEvent
     public void onSpawn(LivingSpawnEvent.CheckSpawn event) {
         if (event.getSpawner() != null)

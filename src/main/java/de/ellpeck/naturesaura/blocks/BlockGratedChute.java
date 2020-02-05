@@ -53,6 +53,11 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     }
 
     @Override
+    protected boolean hasWaterlogging() {
+        return true;
+    }
+
+    @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         switch (state.get(FACING)) {
             case DOWN:
@@ -109,7 +114,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
         Direction newFacing = context.getFace().getOpposite();
         if (newFacing == Direction.UP)
             newFacing = Direction.DOWN;
-        return this.getDefaultState().with(FACING, newFacing);
+        return super.getStateForPlacement(context).with(FACING, newFacing);
     }
 
     @Override
@@ -137,6 +142,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        super.fillStateContainer(builder);
         builder.add(FACING);
     }
 

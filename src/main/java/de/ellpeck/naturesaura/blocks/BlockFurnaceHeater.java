@@ -42,6 +42,11 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
     }
 
     @Override
+    protected boolean hasWaterlogging() {
+        return true;
+    }
+
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         TileEntity tile = worldIn.getTileEntity(pos);
@@ -86,13 +91,14 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        super.fillStateContainer(builder);
         builder.add(FACING);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING, context.getFace());
+        return super.getStateForPlacement(context).with(FACING, context.getFace());
     }
 
     @Override

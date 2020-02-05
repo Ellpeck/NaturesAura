@@ -25,18 +25,24 @@ public class BlockBlastFurnaceBooster extends BlockContainerImpl implements ICus
     }
 
     @Override
+    protected boolean hasWaterlogging() {
+        return true;
+    }
+
+    @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        super.fillStateContainer(builder);
         builder.add(FACING);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+        return super.getStateForPlacement(context).with(FACING, context.getPlacementHorizontalFacing().getOpposite());
     }
 
     @Override

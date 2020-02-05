@@ -30,6 +30,11 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
     }
 
     @Override
+    protected boolean hasWaterlogging() {
+        return true;
+    }
+
+    @Override
     @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);

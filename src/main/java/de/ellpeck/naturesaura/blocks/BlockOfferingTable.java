@@ -37,6 +37,11 @@ public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvi
     }
 
     @Override
+    protected boolean hasWaterlogging() {
+        return true;
+    }
+
+    @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         return Helper.putStackOnTile(player, handIn, pos, 0, true);
     }

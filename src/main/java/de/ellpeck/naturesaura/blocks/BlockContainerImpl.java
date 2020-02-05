@@ -7,8 +7,15 @@ import de.ellpeck.naturesaura.reg.ModTileType;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.IFluidState;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
@@ -17,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
+import net.minecraft.world.storage.loot.conditions.BlockStateProperty;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -36,6 +44,41 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem {
 
         ModRegistry.add(this);
         ModRegistry.add(this.tileType);
+
+        if(this.hasWaterlogging())
+            this.setDefaultState(this.stateContainer.getBaseState().with(BlockStateProperties.WATERLOGGED, false));
+    }
+
+    protected boolean hasWaterlogging() {
+        return false;
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        if (this.hasWaterlogging())
+            builder.add(BlockStateProperties.WATERLOGGED);
+    }
+
+    @Override
+    public IFluidState getFluidState(BlockState state) {
+        return this.hasWaterlogging() && state.get(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (this.hasWaterlogging() && stateIn.get(BlockStateProperties.WATERLOGGED))
+            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+    }
+
+    @Override
+    @Nullable
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        if (this.hasWaterlogging()) {
+            IFluidState state = context.getWorld().getFluidState(context.getPos());
+            return this.getDefaultState().with(BlockStateProperties.WATERLOGGED, state.isTagged(FluidTags.WATER) && state.getLevel() == 8);
+        }
+        return super.getStateForPlacement(context);
     }
 
     @Nullable

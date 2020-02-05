@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 
 public class BlockFieldCreator extends BlockContainerImpl implements ICustomBlockState, ICustomRenderType {
     public BlockFieldCreator() {
-        super("field_creator", TileEntityFieldCreator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
+        super("field_creator", TileEntityFieldCreator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).notSolid().sound(SoundType.STONE));
     }
 
     @Override
