@@ -141,7 +141,6 @@ publishing {
             artifact deobfJar {
                 classifier 'deobf'
             }
-            artifact 'build/libs/**.jar'
         }
     }
     repositories {
