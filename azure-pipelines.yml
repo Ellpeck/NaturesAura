@@ -23,8 +23,8 @@ steps:
   inputs:
     workingDirectory: ''
     gradleWrapperFile: 'gradlew'
-    options: '--no-daemon'
-    gradleOptions: '-Xmx3072m -Dsun.zip.disableMemoryMapping="true"'
+    options: '--no-daemon --build-cache'
+    gradleOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
