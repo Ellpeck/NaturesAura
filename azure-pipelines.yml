@@ -9,7 +9,15 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
+
 steps:
+- task: Cache@2
+  inputs:
+    key: 'gradle | "$(Agent.OS)"'
+    path: '$(GRADLE_USER_HOME)'
+    restoreKeys: 'gradle'
 - task: Gradle@2
   inputs:
     workingDirectory: ''
