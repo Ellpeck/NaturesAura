@@ -11,7 +11,6 @@ pool:
 
 variables:
   GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
-  sun.zip.disableMemoryMapping: true
 
 steps:
 - task: Cache@2
@@ -24,7 +23,7 @@ steps:
     workingDirectory: ''
     gradleWrapperFile: 'gradlew'
     options: '--no-daemon'
-    gradleOptions: '-Xmx3072m'
+    gradleOptions: '-Xmx3072m -Dsun.zip.disableMemoryMapping="false"'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
