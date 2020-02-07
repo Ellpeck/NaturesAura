@@ -11,6 +11,7 @@ pool:
 
 variables:
   GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
+  BUILD_NUMBER: $(BuildID)
 
 steps:
 - task: Cache@2
@@ -29,4 +30,4 @@ steps:
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
-    tasks: 'build'
+    tasks: 'clean build publish'
