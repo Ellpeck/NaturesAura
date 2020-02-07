@@ -172,7 +172,8 @@ public final class ModRegistry {
                 new ItemImpl("token_grief"),
                 new ItemEnderAccess(),
                 new ItemCaveFinder(),
-                new ItemCrimsonMeal()
+                new ItemCrimsonMeal(),
+                new ItemDeathRing()
         );
         Helper.populateObjectHolders(ModItems.class, event.getRegistry());
     }

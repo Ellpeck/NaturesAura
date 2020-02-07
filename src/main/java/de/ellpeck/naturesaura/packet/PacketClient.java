@@ -1,8 +1,13 @@
 package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
+import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -52,6 +57,13 @@ public class PacketClient {
                             int goalDim = message.data[0];
                             BlockPos goalPos = new BlockPos(message.data[1], message.data[2], message.data[3]);
                             ItemRangeVisualizer.visualize(mc.player, ItemRangeVisualizer.VISUALIZED_RAILS, DimensionType.getById(goalDim), goalPos);
+                        case 1:
+                            Entity entity = mc.world.getEntityByID(message.data[0]);
+                            mc.particles.emitParticleAtEntity(entity, ParticleTypes.TOTEM_OF_UNDYING, 30);
+                            mc.world.playSound(entity.getPosX(), entity.getPosY(), entity.getPosZ(), SoundEvents.ITEM_TOTEM_USE, entity.getSoundCategory(), 1.0F, 1.0F, false);
+                            if (entity == mc.player) {
+                                mc.gameRenderer.displayItemActivation(new ItemStack(ModItems.DEATH_RING));
+                            }
                     }
                 }
             }

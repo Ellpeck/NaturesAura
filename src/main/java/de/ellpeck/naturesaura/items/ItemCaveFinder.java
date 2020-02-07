@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 
 public class ItemCaveFinder extends ItemImpl {
     public ItemCaveFinder() {
-        super("cave_finder", new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
+        super("cave_finder", new Properties().maxStackSize(1));
     }
 
     @Override

@@ -20,7 +20,7 @@ public class ItemMultiblockMaker extends ItemImpl {
     private static List<IMultiblock> multiblocks;
 
     public ItemMultiblockMaker() {
-        super("multiblock_maker", new Properties().group(NaturesAura.CREATIVE_TAB));
+        super("multiblock_maker");
     }
 
     private static int getMultiblock(ItemStack stack) {

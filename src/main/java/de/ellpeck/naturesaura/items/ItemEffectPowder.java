@@ -21,7 +21,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
 
     public ItemEffectPowder() {
-        super("effect_powder", new Properties().group(NaturesAura.CREATIVE_TAB));
+        super("effect_powder");
     }
 
     public static ResourceLocation getEffect(ItemStack stack) {

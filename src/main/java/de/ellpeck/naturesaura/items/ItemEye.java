@@ -17,7 +17,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ItemEye extends ItemImpl implements ITrinketItem {
 
     public ItemEye(String name) {
-        super(name, new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
+        super(name, new Properties().maxStackSize(1));
     }
 
     @Override

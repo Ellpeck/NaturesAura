@@ -5,10 +5,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-// Name (Glowing) ambiguous?
 public class ItemGlowing extends ItemImpl {
     public ItemGlowing(String baseName) {
-        super(baseName, new Properties().group(NaturesAura.CREATIVE_TAB));
+        super(baseName);
     }
 
     @Override

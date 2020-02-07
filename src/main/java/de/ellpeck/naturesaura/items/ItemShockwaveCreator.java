@@ -36,7 +36,7 @@ import java.util.List;
 public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
 
     public ItemShockwaveCreator() {
-        super("shockwave_creator", new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
+        super("shockwave_creator", new Properties().maxStackSize(1));
     }
 
     @Override

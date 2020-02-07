@@ -31,7 +31,7 @@ import java.util.List;
 
 public class ItemEnderAccess extends ItemImpl {
     public ItemEnderAccess() {
-        super("ender_access", new Properties().group(NaturesAura.CREATIVE_TAB));
+        super("ender_access");
     }
 
     @Override

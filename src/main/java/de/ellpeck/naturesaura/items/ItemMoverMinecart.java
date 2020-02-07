@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 public class ItemMoverMinecart extends ItemImpl {
 
     public ItemMoverMinecart() {
-        super("mover_cart", new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
+        super("mover_cart", new Properties().maxStackSize(1));
     }
 
     @Nonnull

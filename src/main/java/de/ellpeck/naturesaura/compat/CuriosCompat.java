@@ -37,6 +37,7 @@ public class CuriosCompat implements ICompat {
             .put(ModItems.AURA_CACHE, CurioTags.BELT)
             .put(ModItems.AURA_TROVE, CurioTags.BELT)
             .put(ModItems.SHOCKWAVE_CREATOR, CurioTags.NECKLACE)
+            .put(ModItems.DEATH_RING, CurioTags.RING)
             .build();
 
     @Override

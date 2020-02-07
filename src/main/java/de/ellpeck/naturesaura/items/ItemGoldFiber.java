@@ -11,7 +11,7 @@ import net.minecraft.util.ActionResultType;
 public class ItemGoldFiber extends ItemImpl implements IColorProvidingItem {
 
     public ItemGoldFiber() {
-        super("gold_fiber", new Properties().group(NaturesAura.CREATIVE_TAB));
+        super("gold_fiber");
     }
 
     @Override

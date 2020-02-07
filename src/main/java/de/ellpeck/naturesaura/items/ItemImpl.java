@@ -10,11 +10,11 @@ public class ItemImpl extends Item implements IModItem {
     private final String baseName;
 
     public ItemImpl(String baseName) {
-        this(baseName, new Properties().group(NaturesAura.CREATIVE_TAB));
+        this(baseName, new Properties());
     }
 
     public ItemImpl(String baseName, Item.Properties properties) {
-        super(properties);
+        super(properties.group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
         ModRegistry.add(this);
     }

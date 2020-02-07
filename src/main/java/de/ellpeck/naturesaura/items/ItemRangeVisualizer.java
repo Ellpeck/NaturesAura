@@ -28,7 +28,7 @@ public class ItemRangeVisualizer extends ItemImpl {
     public static final ListMultimap<DimensionType, BlockPos> VISUALIZED_RAILS = ArrayListMultimap.create();
 
     public ItemRangeVisualizer() {
-        super("range_visualizer", new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
+        super("range_visualizer", new Properties().maxStackSize(1));
         MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 

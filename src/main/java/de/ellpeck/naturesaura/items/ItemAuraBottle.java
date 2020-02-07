@@ -32,7 +32,7 @@ import static net.minecraft.dispenser.DefaultDispenseItemBehavior.doDispense;
 public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICustomItemModel {
 
     public ItemAuraBottle(Item emptyBottle) {
-        super("aura_bottle", new Properties().group(NaturesAura.CREATIVE_TAB));
+        super("aura_bottle");
         MinecraftForge.EVENT_BUS.register(new EventHandler());
 
         DispenserBlock.registerDispenseBehavior(emptyBottle, (source, stack) -> {

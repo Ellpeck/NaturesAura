@@ -38,7 +38,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     private final int capacity;
 
     public ItemAuraCache(String name, int capacity) {
-        super(name, new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
+        super(name, new Properties().maxStackSize(1));
         this.capacity = capacity;
     }
 

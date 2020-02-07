@@ -45,4 +45,5 @@ public final class ModItems {
     public static Item ENDER_ACCESS;
     public static Item CAVE_FINDER;
     public static Item CRIMSON_MEAL;
+    public static Item DEATH_RING;
 }

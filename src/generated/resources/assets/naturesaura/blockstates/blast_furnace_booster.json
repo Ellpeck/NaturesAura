@@ -1,17 +1,32 @@
 {
   "variants": {
-    "facing=north": {
+    "facing=north,waterlogged=false": {
       "model": "naturesaura:block/blast_furnace_booster"
     },
-    "facing=south": {
+    "facing=south,waterlogged=false": {
       "model": "naturesaura:block/blast_furnace_booster",
       "y": 180
     },
-    "facing=west": {
+    "facing=west,waterlogged=false": {
       "model": "naturesaura:block/blast_furnace_booster",
       "y": 270
     },
-    "facing=east": {
+    "facing=east,waterlogged=false": {
+      "model": "naturesaura:block/blast_furnace_booster",
+      "y": 90
+    },
+    "facing=north,waterlogged=true": {
+      "model": "naturesaura:block/blast_furnace_booster"
+    },
+    "facing=south,waterlogged=true": {
+      "model": "naturesaura:block/blast_furnace_booster",
+      "y": 180
+    },
+    "facing=west,waterlogged=true": {
+      "model": "naturesaura:block/blast_furnace_booster",
+      "y": 270
+    },
+    "facing=east,waterlogged=true": {
       "model": "naturesaura:block/blast_furnace_booster",
       "y": 90
     }

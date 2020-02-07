@@ -23,7 +23,7 @@ import java.util.List;
 public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, ICustomItemModel {
 
     public ItemColorChanger() {
-        super("color_changer", new Properties().maxStackSize(1).group(NaturesAura.CREATIVE_TAB));
+        super("color_changer", new Properties().maxStackSize(1));
 
         this.addPropertyOverride(new ResourceLocation(NaturesAura.MOD_ID, "fill_mode"),
                 (stack, worldIn, entityIn) -> isFillMode(stack) ? 1F : 0F);
