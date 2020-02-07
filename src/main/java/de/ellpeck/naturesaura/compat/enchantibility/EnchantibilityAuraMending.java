@@ -1,3 +1,4 @@
+/* TODO Enchantability
 package de.ellpeck.naturesaura.compat.enchantibility;
 
 import de.ellpeck.naturesaura.NaturesAura;
@@ -34,3 +35,4 @@ public class EnchantibilityAuraMending extends AbstractEnchantEffect {
         return RES;
     }
 }
+*/
