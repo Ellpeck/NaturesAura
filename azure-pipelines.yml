@@ -12,7 +12,6 @@ pool:
 variables:
   GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
   BUILD_NUMBER: $(Build.BuildId)
-  ACCESS_TOKEN: $(System.AccessToken)
 
 steps:
 - task: Cache@2

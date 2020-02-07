@@ -147,9 +147,8 @@ publishing {
         maven {
             url 'https://pkgs.dev.azure.com/Ellpeck/NaturesAura/_packaging/NaturesAura/maven/v1'
             name 'NaturesAura'
-            credentials {
-                username "Azure DevOps Services"
-                password System.getenv("ACCESS_TOKEN")
+            authentication {
+                basic(BasicAuthentication)
             }
         }
     }
