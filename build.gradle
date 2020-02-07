@@ -1,20 +1,17 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url = 'https://plugins.gradle.org/m2/' }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath 'net.linguica.gradle:maven-settings-plugin:0.5'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply plugin: 'net.linguica.maven-settings'
 
 version = '20.1'
 group = 'de.ellpeck.naturesaura' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -150,8 +147,9 @@ publishing {
         maven {
             url 'https://pkgs.dev.azure.com/Ellpeck/NaturesAura/_packaging/NaturesAura/maven/v1'
             name 'NaturesAura'
-            authentication {
-                basic(BasicAuthentication)
+            credentials {
+                username "Azure DevOps Services"
+                password System.getenv('ACCESS_TOKEN')
             }
         }
     }

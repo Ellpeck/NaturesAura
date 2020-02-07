@@ -20,6 +20,8 @@ steps:
     path: '$(GRADLE_USER_HOME)'
     restoreKeys: 'gradle'
 - task: Gradle@2
+  env:
+    ACCESS_TOKEN: $(System.AccessToken)
   inputs:
     workingDirectory: ''
     gradleWrapperFile: 'gradlew'
