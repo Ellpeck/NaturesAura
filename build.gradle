@@ -149,7 +149,7 @@ publishing {
             name 'NaturesAura'
             credentials {
                 username "Azure DevOps Services"
-                password System.getenv("Azure DevOps Services_ENV_ACCESS_TOKEN")
+                password System.getenv("ACCESS_TOKEN")
             }
         }
     }
