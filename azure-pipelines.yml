@@ -11,6 +11,7 @@ pool:
 
 variables:
   GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
+  sun.zip.disableMemoryMapping: true
 
 steps:
 - task: Cache@2
