@@ -141,6 +141,12 @@ publishing {
             artifact deobfJar {
                 classifier 'deobf'
             }
+
+            pom.withXml {
+                def node = asNode()
+                if(node.dependencies.size() > 0)
+                    node.remove(node.dependencies)
+            }
         }
     }
     repositories {
