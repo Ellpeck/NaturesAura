@@ -7,8 +7,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkEvent;
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -59,6 +57,11 @@ public class PacketAuraChunk {
         }
     }
 
+    public static void onMessage(PacketAuraChunk message, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> ClientEvents.PENDING_AURA_CHUNKS.add(message));
+        ctx.get().setPacketHandled(true);
+    }
+
     public boolean tryHandle(World world) {
         Chunk chunk = world.getChunk(this.chunkX, this.chunkZ);
         if (chunk.isEmpty())
@@ -68,10 +71,5 @@ public class PacketAuraChunk {
             return false;
         auraChunk.setSpots(this.drainSpots);
         return true;
-    }
-
-    public static void onMessage(PacketAuraChunk message, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> ClientEvents.PENDING_AURA_CHUNKS.add(message));
-        ctx.get().setPacketHandled(true);
     }
 }

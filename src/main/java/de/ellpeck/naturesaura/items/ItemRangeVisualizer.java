@@ -32,6 +32,25 @@ public class ItemRangeVisualizer extends ItemImpl {
         MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
+    public static void clear() {
+        if (!VISUALIZED_BLOCKS.isEmpty())
+            VISUALIZED_BLOCKS.clear();
+        if (!VISUALIZED_ENTITIES.isEmpty())
+            VISUALIZED_ENTITIES.clear();
+        if (!VISUALIZED_RAILS.isEmpty())
+            VISUALIZED_RAILS.clear();
+    }
+
+    public static <T> void visualize(PlayerEntity player, ListMultimap<DimensionType, T> map, DimensionType dim, T value) {
+        if (map.containsEntry(dim, value)) {
+            map.remove(dim, value);
+            player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.end"), true);
+        } else {
+            map.put(dim, value);
+            player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.start"), true);
+        }
+    }
+
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
@@ -55,25 +74,6 @@ public class ItemRangeVisualizer extends ItemImpl {
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.PASS;
-    }
-
-    public static void clear() {
-        if (!VISUALIZED_BLOCKS.isEmpty())
-            VISUALIZED_BLOCKS.clear();
-        if (!VISUALIZED_ENTITIES.isEmpty())
-            VISUALIZED_ENTITIES.clear();
-        if (!VISUALIZED_RAILS.isEmpty())
-            VISUALIZED_RAILS.clear();
-    }
-
-    public static <T> void visualize(PlayerEntity player, ListMultimap<DimensionType, T> map, DimensionType dim, T value) {
-        if (map.containsEntry(dim, value)) {
-            map.remove(dim, value);
-            player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.end"), true);
-        } else {
-            map.put(dim, value);
-            player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.start"), true);
-        }
     }
 
     public class EventHandler {

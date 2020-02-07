@@ -34,6 +34,19 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
         ModRegistry.add(this);
     }
 
+    public static boolean convert(World world, BlockPos pos) {
+        BlockState state = world.getBlockState(pos);
+        if ((state.getBlock().isFoliage(state, world, pos) || state.getBlock() instanceof LeavesBlock) && !(state.getBlock() instanceof BlockAncientLeaves || state.getBlock() instanceof BlockGoldenLeaves)) {
+            if (!world.isRemote) {
+                world.setBlockState(pos, ModBlocks.GOLDEN_LEAVES.getDefaultState()
+                        .with(DISTANCE, state.has(DISTANCE) ? state.get(DISTANCE) : 1)
+                        .with(PERSISTENT, state.has(PERSISTENT) ? state.get(PERSISTENT) : false));
+            }
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String getBaseName() {
         return "golden_leaves";
@@ -97,19 +110,6 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
     @Override
     public boolean ticksRandomly(BlockState state) {
         return true;
-    }
-
-    public static boolean convert(World world, BlockPos pos) {
-        BlockState state = world.getBlockState(pos);
-        if ((state.getBlock().isFoliage(state, world, pos) || state.getBlock() instanceof LeavesBlock) && !(state.getBlock() instanceof BlockAncientLeaves || state.getBlock() instanceof BlockGoldenLeaves)) {
-            if (!world.isRemote) {
-                world.setBlockState(pos, ModBlocks.GOLDEN_LEAVES.getDefaultState()
-                        .with(DISTANCE, state.has(DISTANCE) ? state.get(DISTANCE) : 1)
-                        .with(PERSISTENT, state.has(PERSISTENT) ? state.get(PERSISTENT) : false));
-            }
-            return true;
-        }
-        return false;
     }
 
     @Override

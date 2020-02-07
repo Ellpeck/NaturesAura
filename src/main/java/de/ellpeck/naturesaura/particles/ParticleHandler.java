@@ -24,10 +24,10 @@ import java.util.function.Supplier;
 @OnlyIn(Dist.CLIENT)
 public final class ParticleHandler {
 
-    public static boolean depthEnabled = true;
-    public static int range = 32;
     private static final List<Particle> PARTICLES = new ArrayList<>();
     private static final List<Particle> PARTICLES_NO_DEPTH = new ArrayList<>();
+    public static boolean depthEnabled = true;
+    public static int range = 32;
 
     public static void spawnParticle(Supplier<Particle> particle, double x, double y, double z) {
         if (Minecraft.getInstance().player.getDistanceSq(x, y, z) <= range * range) {

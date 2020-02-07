@@ -53,6 +53,10 @@ public class BlockLootProvider implements IDataProvider {
         this.lootFunctions.put(ModBlocks.NETHER_WART_MUSHROOM, b -> LootTableHooks.genSilkOr(b, ItemLootEntry.builder(Items.NETHER_WART).acceptFunction(SetCount.builder(RandomValueRange.of(1, 2)))));
     }
 
+    private static Path getPath(Path root, ResourceLocation res) {
+        return root.resolve("data/" + res.getNamespace() + "/loot_tables/blocks/" + res.getPath() + ".json");
+    }
+
     @Override
     public void act(DirectoryCache cache) throws IOException {
         for (Map.Entry<Block, Function<Block, LootTable.Builder>> function : this.lootFunctions.entrySet()) {
@@ -62,10 +66,6 @@ public class BlockLootProvider implements IDataProvider {
             Path path = getPath(this.generator.getOutputFolder(), block.getRegistryName());
             IDataProvider.save(GSON, cache, LootTableManager.toJson(table), path);
         }
-    }
-
-    private static Path getPath(Path root, ResourceLocation res) {
-        return root.resolve("data/" + res.getNamespace() + "/loot_tables/blocks/" + res.getPath() + ".json");
     }
 
     @Nonnull

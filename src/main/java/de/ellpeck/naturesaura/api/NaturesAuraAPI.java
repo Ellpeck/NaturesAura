@@ -41,12 +41,9 @@ import java.util.function.Supplier;
  * internal mod functions not exposed to the API.
  */
 public final class NaturesAuraAPI {
-    private static IInternalHooks instance = new StubHooks();
-
     public static final String MOD_ID = "naturesaura";
     public static final String API_ID = MOD_ID + "api";
     public static final String VERSION = "9";
-
     /**
      * The list of all {@link AltarRecipe} instances which are the recipes used
      * by the Natural Altar. Newly created recipes can be easily added using
@@ -131,7 +128,6 @@ public final class NaturesAuraAPI {
      * each generate in the projectile generator
      */
     public static final Map<EntityType, Integer> PROJECTILE_GENERATIONS = new HashMap<>();
-
     /**
      * The capability for any item or block that stores Aura in the form of an
      * {@link IAuraContainer}
@@ -161,6 +157,7 @@ public final class NaturesAuraAPI {
      */
     @CapabilityInject(IWorldData.class)
     public static Capability<IWorldData> capWorldData;
+    private static IInternalHooks instance = new StubHooks();
 
     /**
      * This method returns the active {@link IInternalHooks} instance which can

@@ -36,6 +36,13 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
         super(ModTileEntities.OFFERING_TABLE);
     }
 
+    private static OfferingRecipe getRecipe(ItemStack input) {
+        for (OfferingRecipe recipe : NaturesAuraAPI.OFFERING_RECIPES.values())
+            if (recipe.input.test(input))
+                return recipe;
+        return null;
+    }
+
     @Override
     public void tick() {
         if (!this.world.isRemote) {
@@ -90,13 +97,6 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
                             this.itemsToSpawn.remove()));
             }
         }
-    }
-
-    private static OfferingRecipe getRecipe(ItemStack input) {
-        for (OfferingRecipe recipe : NaturesAuraAPI.OFFERING_RECIPES.values())
-            if (recipe.input.test(input))
-                return recipe;
-        return null;
     }
 
     @Override

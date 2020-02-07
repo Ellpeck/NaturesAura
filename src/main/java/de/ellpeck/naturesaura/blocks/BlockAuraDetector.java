@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAuraDetector;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;

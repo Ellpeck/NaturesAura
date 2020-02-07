@@ -6,8 +6,8 @@ import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.compat.ICompat;
-import de.ellpeck.naturesaura.events.ClientEvents;
 import de.ellpeck.naturesaura.data.ItemTagProvider;
+import de.ellpeck.naturesaura.events.ClientEvents;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler.FancyInfo;
 import net.minecraft.client.gui.AbstractGui;
@@ -30,6 +30,29 @@ import java.util.Map;
 public class PatchouliCompat implements ICompat {
 
     private static final ResourceLocation BOOK = new ResourceLocation(NaturesAura.MOD_ID, "book");
+
+    public static void addPatchouliMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
+        for (int i = 1; i < rawMatchers.length; i += 2) {
+            if (rawMatchers[i] instanceof Matcher) {
+                Matcher matcher = (Matcher) rawMatchers[i];
+                Matcher.ICheck check = matcher.getCheck();
+                if (check == null)
+                    rawMatchers[i] = PatchouliAPI.instance.anyMatcher();
+                else
+                    rawMatchers[i] = PatchouliAPI.instance.predicateMatcher(matcher.getDefaultState(),
+                            state -> check.matches(null, null, null, null, state, (char) 0));
+            }
+        }
+        PatchouliAPI.instance.registerMultiblock(name, PatchouliAPI.instance.makeMultiblock(pattern, rawMatchers));
+    }
+
+    public static <T> T getRecipe(Map<ResourceLocation, T> recipes, String name) {
+        ResourceLocation res = new ResourceLocation(name);
+        T recipe = recipes.get(res);
+        if (recipe == null)
+            recipe = recipes.get(new ResourceLocation("crafttweaker", res.getPath()));
+        return recipe;
+    }
 
     @Override
     public void preInit() {
@@ -100,28 +123,5 @@ public class PatchouliCompat implements ICompat {
                         event.mouseX, event.mouseY, event.gui.width, event.gui.height, 0, event.gui.getMinecraft().fontRenderer);
 
         }
-    }
-
-    public static void addPatchouliMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
-        for (int i = 1; i < rawMatchers.length; i += 2) {
-            if (rawMatchers[i] instanceof Matcher) {
-                Matcher matcher = (Matcher) rawMatchers[i];
-                Matcher.ICheck check = matcher.getCheck();
-                if (check == null)
-                    rawMatchers[i] = PatchouliAPI.instance.anyMatcher();
-                else
-                    rawMatchers[i] = PatchouliAPI.instance.predicateMatcher(matcher.getDefaultState(),
-                            state -> check.matches(null, null, null, null, state, (char) 0));
-            }
-        }
-        PatchouliAPI.instance.registerMultiblock(name, PatchouliAPI.instance.makeMultiblock(pattern, rawMatchers));
-    }
-
-    public static <T> T getRecipe(Map<ResourceLocation, T> recipes, String name) {
-        ResourceLocation res = new ResourceLocation(name);
-        T recipe = recipes.get(res);
-        if (recipe == null)
-            recipe = recipes.get(new ResourceLocation("crafttweaker", res.getPath()));
-        return recipe;
     }
 }

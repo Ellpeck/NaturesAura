@@ -8,11 +8,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface ITrinketItem {
+    @OnlyIn(Dist.CLIENT)
+    void render(ItemStack stack, PlayerEntity player, RenderType type, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight, boolean isHolding);
+
     enum RenderType {
         HEAD, BODY
     }
-
-    @OnlyIn(Dist.CLIENT)
-    void render(ItemStack stack, PlayerEntity player, RenderType type, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight, boolean isHolding);
 
 }

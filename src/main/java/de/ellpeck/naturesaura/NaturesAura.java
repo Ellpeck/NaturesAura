@@ -37,8 +37,14 @@ public final class NaturesAura {
     public static final String VERSION = "@VERSION@";
 
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-
+    public static final ItemGroup CREATIVE_TAB = new ItemGroup(MOD_ID) {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModItems.GOLD_LEAF);
+        }
+    };
     public static NaturesAura instance;
+    public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
     public NaturesAura() {
         instance = this;
@@ -48,15 +54,6 @@ public final class NaturesAura {
         ModConfig.instance = new ModConfig(builder);
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, builder.build());
     }
-
-    public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
-
-    public static final ItemGroup CREATIVE_TAB = new ItemGroup(MOD_ID) {
-        @Override
-        public ItemStack createIcon() {
-            return new ItemStack(ModItems.GOLD_LEAF);
-        }
-    };
 
     public void setup(FMLCommonSetupEvent event) {
         this.preInit(event);

@@ -36,17 +36,6 @@ public class ItemArmor extends ArmorItem implements IModItem {
         ModRegistry.add(this);
     }
 
-    @Override
-    public String getBaseName() {
-        return this.baseName;
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        return Helper.makeRechargeProvider(stack, false);
-    }
-
     public static boolean isFullSetEquipped(LivingEntity entity, int setIndex) {
         if (sets == null) {
             sets = new ArrayList<>();
@@ -61,6 +50,17 @@ public class ItemArmor extends ArmorItem implements IModItem {
                 return false;
         }
         return true;
+    }
+
+    @Override
+    public String getBaseName() {
+        return this.baseName;
+    }
+
+    @Nullable
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+        return Helper.makeRechargeProvider(stack, false);
     }
 
     private static class EventHandler {

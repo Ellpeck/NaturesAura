@@ -30,6 +30,25 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
         super(ModTileEntities.FURNACE_HEATER);
     }
 
+    public static IIntArray getFurnaceData(AbstractFurnaceTileEntity tile) {
+        try {
+            return (IIntArray) FURNACE_DATA_FIELD.get(tile);
+        } catch (IllegalAccessException e) {
+            NaturesAura.LOGGER.fatal("Couldn't reflect furnace field", e);
+            return null;
+        }
+    }
+
+    public static IRecipeType<? extends AbstractCookingRecipe> getRecipeType(AbstractFurnaceTileEntity furnace) {
+        if (furnace instanceof BlastFurnaceTileEntity) {
+            return IRecipeType.BLASTING;
+        } else if (furnace instanceof SmokerTileEntity) {
+            return IRecipeType.SMOKING;
+        } else {
+            return IRecipeType.SMELTING;
+        }
+    }
+
     @Override
     public void tick() {
         if (!this.world.isRemote && this.world.getGameTime() % 5 == 0) {
@@ -76,15 +95,6 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
         }
     }
 
-    public static IIntArray getFurnaceData(AbstractFurnaceTileEntity tile) {
-        try {
-            return (IIntArray) FURNACE_DATA_FIELD.get(tile);
-        } catch (IllegalAccessException e) {
-            NaturesAura.LOGGER.fatal("Couldn't reflect furnace field", e);
-            return null;
-        }
-    }
-
     private boolean isReady(AbstractFurnaceTileEntity furnace) {
         if (!furnace.getStackInSlot(1).isEmpty())
             return false;
@@ -99,16 +109,6 @@ public class TileEntityFurnaceHeater extends TileEntityImpl implements ITickable
             return currOutput.isEmpty() || Helper.areItemsEqual(currOutput, output, true) && currOutput.getCount() + output.getCount() <= output.getMaxStackSize();
         } else
             return false;
-    }
-
-    public static IRecipeType<? extends AbstractCookingRecipe> getRecipeType(AbstractFurnaceTileEntity furnace) {
-        if (furnace instanceof BlastFurnaceTileEntity) {
-            return IRecipeType.BLASTING;
-        } else if (furnace instanceof SmokerTileEntity) {
-            return IRecipeType.SMOKING;
-        } else {
-            return IRecipeType.SMELTING;
-        }
     }
 
     @Override

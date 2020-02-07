@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

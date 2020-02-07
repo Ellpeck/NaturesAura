@@ -12,8 +12,8 @@ import java.util.function.Supplier;
 
 public class BlockStairsNA extends StairsBlock implements IModItem, ICustomBlockState {
 
-    private final String baseName;
     public final String textureName;
+    private final String baseName;
 
     public BlockStairsNA(String baseName, String textureName, Supplier<BlockState> modelState, Block.Properties properties) {
         super(modelState, properties.variableOpacity());

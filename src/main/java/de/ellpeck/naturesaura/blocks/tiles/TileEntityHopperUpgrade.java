@@ -22,6 +22,14 @@ public class TileEntityHopperUpgrade extends TileEntityImpl implements ITickable
         super(ModTileEntities.HOPPER_UPGRADE);
     }
 
+    private static boolean isValidHopper(TileEntity tile) {
+        if (tile instanceof HopperTileEntity)
+            return tile.getWorld().getBlockState(tile.getPos()).get(HopperBlock.ENABLED);
+        if (tile instanceof TileEntityGratedChute)
+            return ((TileEntityGratedChute) tile).redstonePower <= 0;
+        return false;
+    }
+
     @Override
     public void tick() {
         if (!this.world.isRemote && this.world.getGameTime() % 10 == 0) {
@@ -67,13 +75,5 @@ public class TileEntityHopperUpgrade extends TileEntityImpl implements ITickable
                 }
             }
         }
-    }
-
-    private static boolean isValidHopper(TileEntity tile) {
-        if (tile instanceof HopperTileEntity)
-            return tile.getWorld().getBlockState(tile.getPos()).get(HopperBlock.ENABLED);
-        if (tile instanceof TileEntityGratedChute)
-            return ((TileEntityGratedChute) tile).redstonePower <= 0;
-        return false;
     }
 }

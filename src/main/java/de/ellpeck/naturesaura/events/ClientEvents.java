@@ -69,9 +69,9 @@ public class ClientEvents {
 
     public static final ResourceLocation OVERLAYS = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/overlays.png");
     public static final ResourceLocation BOOK_GUI = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/book.png");
+    public static final List<PacketAuraChunk> PENDING_AURA_CHUNKS = new ArrayList<>();
     private static final ItemStack ITEM_FRAME = new ItemStack(Items.ITEM_FRAME);
     private static final Map<ResourceLocation, Tuple<ItemStack, Boolean>> SHOWING_EFFECTS = new HashMap<>();
-    public static final List<PacketAuraChunk> PENDING_AURA_CHUNKS = new ArrayList<>();
     private static ItemStack heldCache = ItemStack.EMPTY;
     private static ItemStack heldEye = ItemStack.EMPTY;
     private static ItemStack heldOcular = ItemStack.EMPTY;

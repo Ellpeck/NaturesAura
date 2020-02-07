@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.Map;
 
 public class WorldData implements IWorldData {
-    private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();
     public final ListMultimap<ResourceLocation, Tuple<Vec3d, Integer>> effectPowders = ArrayListMultimap.create();
     public final List<BlockPos> recentlyConvertedMossStones = new ArrayList<>();
+    private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();
 
     @Nullable
     @Override

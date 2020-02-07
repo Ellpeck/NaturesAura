@@ -23,6 +23,20 @@ public class ItemMultiblockMaker extends ItemImpl {
         super("multiblock_maker", new Properties().group(NaturesAura.CREATIVE_TAB));
     }
 
+    private static int getMultiblock(ItemStack stack) {
+        if (!stack.hasTag())
+            return -1;
+        return stack.getTag().getInt("multiblock");
+    }
+
+    private static List<IMultiblock> multiblocks() {
+        if (multiblocks == null) {
+            multiblocks = new ArrayList<>();
+            multiblocks.addAll(NaturesAuraAPI.MULTIBLOCKS.values());
+        }
+        return multiblocks;
+    }
+
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
@@ -64,19 +78,5 @@ public class ItemMultiblockMaker extends ItemImpl {
             return name;
         IMultiblock multi = multiblocks().get(id);
         return multi == null ? name : name.appendText(" (" + multi.getName() + ")");
-    }
-
-    private static int getMultiblock(ItemStack stack) {
-        if (!stack.hasTag())
-            return -1;
-        return stack.getTag().getInt("multiblock");
-    }
-
-    private static List<IMultiblock> multiblocks() {
-        if (multiblocks == null) {
-            multiblocks = new ArrayList<>();
-            multiblocks.addAll(NaturesAuraAPI.MULTIBLOCKS.values());
-        }
-        return multiblocks;
     }
 }

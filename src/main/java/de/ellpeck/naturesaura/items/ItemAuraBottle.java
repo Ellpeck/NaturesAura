@@ -57,6 +57,20 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
         });
     }
 
+    public static IAuraType getType(ItemStack stack) {
+        if (!stack.hasTag())
+            return NaturesAuraAPI.TYPE_OTHER;
+        String type = stack.getTag().getString("stored_type");
+        if (type.isEmpty())
+            return NaturesAuraAPI.TYPE_OTHER;
+        return NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(type));
+    }
+
+    public static ItemStack setType(ItemStack stack, IAuraType type) {
+        stack.getOrCreateTag().putString("stored_type", type.getName().toString());
+        return stack;
+    }
+
     @Override
     public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> items) {
         if (this.isInGroup(tab)) {
@@ -71,20 +85,6 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
         return new TranslationTextComponent(stack.getTranslationKey() + "." + getType(stack).getName());
-    }
-
-    public static IAuraType getType(ItemStack stack) {
-        if (!stack.hasTag())
-            return NaturesAuraAPI.TYPE_OTHER;
-        String type = stack.getTag().getString("stored_type");
-        if (type.isEmpty())
-            return NaturesAuraAPI.TYPE_OTHER;
-        return NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(type));
-    }
-
-    public static ItemStack setType(ItemStack stack, IAuraType type) {
-        stack.getOrCreateTag().putString("stored_type", type.getName().toString());
-        return stack;
     }
 
     @Override

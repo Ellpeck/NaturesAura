@@ -2,8 +2,6 @@ package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;

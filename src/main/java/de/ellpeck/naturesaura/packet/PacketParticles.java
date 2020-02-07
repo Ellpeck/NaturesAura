@@ -1,4 +1,3 @@
-
 package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
@@ -63,6 +62,20 @@ public class PacketParticles {
         for (int i : packet.data) {
             buf.writeInt(i);
         }
+    }
+
+    // lambda causes classloading issues on a server here
+    @SuppressWarnings("Convert2Lambda")
+    public static void onMessage(PacketParticles message, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(new Runnable() {
+            @Override
+            public void run() {
+                World world = Minecraft.getInstance().world;
+                if (world != null)
+                    message.type.action.accept(message, world);
+            }
+        });
+        ctx.get().setPacketHandled(true);
     }
 
     public enum Type {
@@ -478,19 +491,5 @@ public class PacketParticles {
         Type(BiConsumer<PacketParticles, World> action) {
             this.action = action;
         }
-    }
-
-    // lambda causes classloading issues on a server here
-    @SuppressWarnings("Convert2Lambda")
-    public static void onMessage(PacketParticles message, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(new Runnable() {
-            @Override
-            public void run() {
-                World world = Minecraft.getInstance().world;
-                if (world != null)
-                    message.type.action.accept(message, world);
-            }
-        });
-        ctx.get().setPacketHandled(true);
     }
 }

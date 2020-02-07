@@ -9,8 +9,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class Slab extends SlabBlock implements IModItem, ICustomBlockState {
 
-    private final String baseName;
     public final String textureName;
+    private final String baseName;
 
     public Slab(String baseName, String textureName, Properties properties) {
         super(properties);

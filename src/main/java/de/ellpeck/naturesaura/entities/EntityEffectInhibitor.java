@@ -162,12 +162,6 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
         return ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, this.getAmount()), this.getInhibitedEffect());
     }
 
-    public void setInhibitedEffect(ResourceLocation effect) {
-        this.removeFromPowderList();
-        this.dataManager.set(INHIBITED_EFFECT, effect.toString());
-        this.addToPowderList();
-    }
-
     public ResourceLocation getInhibitedEffect() {
         String effect = this.dataManager.get(INHIBITED_EFFECT);
         if (effect == null || effect.isEmpty())
@@ -175,22 +169,28 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
         return new ResourceLocation(effect);
     }
 
-    public void setColor(int color) {
-        this.dataManager.set(COLOR, color);
+    public void setInhibitedEffect(ResourceLocation effect) {
+        this.removeFromPowderList();
+        this.dataManager.set(INHIBITED_EFFECT, effect.toString());
+        this.addToPowderList();
     }
 
     public int getColor() {
         return this.dataManager.get(COLOR);
     }
 
-    public void setAmount(int amount) {
-        this.removeFromPowderList();
-        this.dataManager.set(AMOUNT, amount);
-        this.addToPowderList();
+    public void setColor(int color) {
+        this.dataManager.set(COLOR, color);
     }
 
     public int getAmount() {
         return this.dataManager.get(AMOUNT);
+    }
+
+    public void setAmount(int amount) {
+        this.removeFromPowderList();
+        this.dataManager.set(AMOUNT, amount);
+        this.addToPowderList();
     }
 
     @Override

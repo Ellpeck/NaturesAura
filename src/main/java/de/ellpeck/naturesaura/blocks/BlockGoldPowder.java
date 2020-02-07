@@ -42,21 +42,6 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
         this.setDefaultState(this.stateContainer.getBaseState().with(NORTH, RedstoneSide.NONE).with(EAST, RedstoneSide.NONE).with(SOUTH, RedstoneSide.NONE).with(WEST, RedstoneSide.NONE));
     }
 
-    @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(NORTH, EAST, SOUTH, WEST);
-    }
-
-    @Override
-    public IBlockColor getBlockColor() {
-        return (state, worldIn, pos, tintIndex) -> 0xf4cb42;
-    }
-
-    @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return SHAPES[getShapeIndex(state)];
-    }
-
     private static int getShapeIndex(BlockState state) {
         int i = 0;
         boolean n = state.get(NORTH) != RedstoneSide.NONE;
@@ -77,6 +62,21 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
             i |= 1 << Direction.WEST.getHorizontalIndex();
         }
         return i;
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(NORTH, EAST, SOUTH, WEST);
+    }
+
+    @Override
+    public IBlockColor getBlockColor() {
+        return (state, worldIn, pos, tintIndex) -> 0xf4cb42;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return SHAPES[getShapeIndex(state)];
     }
 
     @Override

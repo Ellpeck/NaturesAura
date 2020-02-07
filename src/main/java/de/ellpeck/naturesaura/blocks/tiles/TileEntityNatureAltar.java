@@ -30,6 +30,8 @@ import java.util.Random;
 
 public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTileEntity {
 
+    private final BasicAuraContainer container = new BasicAuraContainer(NaturesAuraAPI.TYPE_OVERWORLD, 500000);
+    private final ItemStack[] catalysts = new ItemStack[4];
     public final ItemStackHandler items = new ItemStackHandlerNA(1, this, true) {
         @Override
         public int getSlotLimit(int slot) {
@@ -50,12 +52,8 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
                 return TileEntityNatureAltar.this.getRecipeForInput(stack) == null;
         }
     };
-
     @OnlyIn(Dist.CLIENT)
     public int bobTimer;
-
-    private final BasicAuraContainer container = new BasicAuraContainer(NaturesAuraAPI.TYPE_OVERWORLD, 500000);
-    private final ItemStack[] catalysts = new ItemStack[4];
     public boolean structureFine;
 
     private AltarRecipe currentRecipe;

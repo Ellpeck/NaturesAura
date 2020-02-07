@@ -17,20 +17,20 @@ public class Matcher {
         this.check = check;
     }
 
-    public BlockState getDefaultState() {
-        return this.defaultState;
-    }
-
-    public ICheck getCheck() {
-        return this.check;
-    }
-
     public static Matcher wildcard() {
         return new Matcher(Blocks.AIR.getDefaultState(), null);
     }
 
     public static Matcher tag(Block defaultBlock, Tag tag) {
         return new Matcher(defaultBlock.getDefaultState(), (world, start, offset, pos, state, c) -> state.getBlock().getTags().contains(tag.getId()));
+    }
+
+    public BlockState getDefaultState() {
+        return this.defaultState;
+    }
+
+    public ICheck getCheck() {
+        return this.check;
     }
 
     public interface ICheck {

@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 public class TileEntityEnderCrate extends TileEntityImpl implements INamedContainerProvider {
 
+    public String name;
     private final IItemHandlerModifiable wrappedEnderStorage = new IItemHandlerModifiable() {
         @Override
         public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
@@ -73,7 +74,6 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
             return IWorldData.getOverworldData(TileEntityEnderCrate.this.world).getEnderStorage(TileEntityEnderCrate.this.name);
         }
     };
-    public String name;
 
     public TileEntityEnderCrate() {
         super(ModTileEntities.ENDER_CRATE);

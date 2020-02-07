@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -20,6 +19,7 @@ import java.util.List;
 
 public class TileEntityGratedChute extends TileEntityImpl implements ITickableTileEntity {
 
+    public boolean isBlacklist;
     private final ItemStackHandlerNA items = new ItemStackHandlerNA(1, this, true) {
         @Override
         protected boolean canExtract(ItemStack stack, int slot, int amount) {
@@ -31,7 +31,6 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickableTi
             return TileEntityGratedChute.this.isBlacklist != TileEntityGratedChute.this.isItemInFrame(stack);
         }
     };
-    public boolean isBlacklist;
     private int cooldown;
 
     public TileEntityGratedChute() {

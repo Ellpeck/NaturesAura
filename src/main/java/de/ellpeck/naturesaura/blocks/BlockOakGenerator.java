@@ -4,7 +4,6 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityOakGenerator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
@@ -69,7 +68,6 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
     public int getVisualizationColor(World world, BlockPos pos) {
         return 0x2e7a11;
     }
-
 
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {

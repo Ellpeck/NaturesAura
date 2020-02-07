@@ -34,8 +34,8 @@ import java.util.List;
 public class EntityMoverMinecart extends AbstractMinecartEntity {
 
     private final List<BlockPos> spotOffsets = new ArrayList<>();
-    private BlockPos lastPosition = BlockPos.ZERO;
     public boolean isActive;
+    private BlockPos lastPosition = BlockPos.ZERO;
 
     public EntityMoverMinecart(EntityType<?> type, World world) {
         super(type, world);

@@ -31,16 +31,6 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
                 (stack, worldIn, entityIn) -> getStoredColor(stack) != null ? 1F : 0F);
     }
 
-    @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        ItemStack stack = context.getPlayer().getHeldItem(context.getHand());
-        if (changeOrCopyColor(context.getPlayer(), stack, context.getWorld(), context.getPos(), null)) {
-            return ActionResultType.SUCCESS;
-        } else {
-            return ActionResultType.PASS;
-        }
-    }
-
     private static boolean changeOrCopyColor(PlayerEntity player, ItemStack stack, World world, BlockPos pos, DyeColor firstColor) {
         Block block = world.getBlockState(pos).getBlock();
         List<Block> blocks = ColoredBlockHelper.getBlocksContaining(block);
@@ -81,20 +71,6 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
         return false;
     }
 
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack stack = playerIn.getHeldItem(handIn);
-        if (playerIn.isShiftKeyDown() && getStoredColor(stack) != null) {
-            worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundCategory.PLAYERS, 0.65F, 1F);
-            if (!worldIn.isRemote) {
-                setFillMode(stack, !isFillMode(stack));
-            }
-            return new ActionResult<>(ActionResultType.SUCCESS, stack);
-        } else {
-            return new ActionResult<>(ActionResultType.PASS, stack);
-        }
-    }
-
     private static DyeColor getStoredColor(ItemStack stack) {
         if (!stack.hasTag()) {
             return null;
@@ -118,6 +94,30 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
 
     private static void setFillMode(ItemStack stack, boolean fill) {
         stack.getOrCreateTag().putBoolean("fill", fill);
+    }
+
+    @Override
+    public ActionResultType onItemUse(ItemUseContext context) {
+        ItemStack stack = context.getPlayer().getHeldItem(context.getHand());
+        if (changeOrCopyColor(context.getPlayer(), stack, context.getWorld(), context.getPos(), null)) {
+            return ActionResultType.SUCCESS;
+        } else {
+            return ActionResultType.PASS;
+        }
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack stack = playerIn.getHeldItem(handIn);
+        if (playerIn.isShiftKeyDown() && getStoredColor(stack) != null) {
+            worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundCategory.PLAYERS, 0.65F, 1F);
+            if (!worldIn.isRemote) {
+                setFillMode(stack, !isFillMode(stack));
+            }
+            return new ActionResult<>(ActionResultType.SUCCESS, stack);
+        } else {
+            return new ActionResult<>(ActionResultType.PASS, stack);
+        }
     }
 
     @Override

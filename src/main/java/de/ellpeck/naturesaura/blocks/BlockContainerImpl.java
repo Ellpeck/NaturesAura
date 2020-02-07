@@ -24,7 +24,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraft.world.storage.loot.conditions.BlockStateProperty;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -45,7 +44,7 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem {
         ModRegistry.add(this);
         ModRegistry.add(this.tileType);
 
-        if(this.hasWaterlogging())
+        if (this.hasWaterlogging())
             this.setDefaultState(this.stateContainer.getBaseState().with(BlockStateProperties.WATERLOGGED, false));
     }
 

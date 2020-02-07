@@ -3,7 +3,6 @@ package de.ellpeck.naturesaura.api.aura.type;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 
 public interface IAuraType {
 

@@ -24,6 +24,20 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
         super("effect_powder", new Properties().group(NaturesAura.CREATIVE_TAB));
     }
 
+    public static ResourceLocation getEffect(ItemStack stack) {
+        if (!stack.hasTag())
+            return null;
+        String effect = stack.getTag().getString("effect");
+        if (effect.isEmpty())
+            return null;
+        return new ResourceLocation(effect);
+    }
+
+    public static ItemStack setEffect(ItemStack stack, ResourceLocation effect) {
+        stack.getOrCreateTag().putString("effect", effect.toString());
+        return stack;
+    }
+
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
         World world = context.getWorld();
@@ -50,20 +64,6 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
         return new TranslationTextComponent(this.getTranslationKey(stack) + "." + getEffect(stack));
-    }
-
-    public static ResourceLocation getEffect(ItemStack stack) {
-        if (!stack.hasTag())
-            return null;
-        String effect = stack.getTag().getString("effect");
-        if (effect.isEmpty())
-            return null;
-        return new ResourceLocation(effect);
-    }
-
-    public static ItemStack setEffect(ItemStack stack, ResourceLocation effect) {
-        stack.getOrCreateTag().putString("effect", effect.toString());
-        return stack;
     }
 
     @Override
