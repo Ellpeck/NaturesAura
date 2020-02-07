@@ -6,7 +6,7 @@ To add this project as a dependency (for using the [API](https://github.com/Ellp
 ```
 repositories {
     maven {
-        url = "https://maven.chaosfield.at"
+        url 'https://pkgs.dev.azure.com/Ellpeck/NaturesAura/_packaging/NaturesAura/maven/v1'
     }
 }
 
@@ -14,4 +14,4 @@ dependencies {
     compile "de.ellpeck.naturesaura:NaturesAura:VERSION"
 }
 ```
-Replace VERSION with the version you want to use. You can find a list of versions by going to the [maven artifact](https://maven.chaosfield.at/de/ellpeck/naturesaura/NaturesAura/).
+Replace VERSION with the version you want to use. You can find a list of versions by going to the [maven artifact](https://dev.azure.com/Ellpeck/NaturesAura/_packaging).
