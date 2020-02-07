@@ -145,7 +145,8 @@ publishing {
     }
     repositories {
         maven {
-            url 'https://pkgs.dev.azure.com/Ellpeck/_packaging/NaturesAura'
+            url 'https://pkgs.dev.azure.com/Ellpeck/NaturesAura/_packaging/NaturesAura/maven/v1'
+            name 'NaturesAura'
             credentials {
                 username "Azure DevOps Services"
                 password System.getenv("Azure DevOps Services_ENV_ACCESS_TOKEN")
