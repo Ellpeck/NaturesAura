@@ -7,15 +7,23 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
+
+variables:
+  GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
 
 steps:
+- task: Cache@2
+  inputs:
+    key: 'gradle | "$(Agent.OS)"'
+    path: '$(GRADLE_USER_HOME)'
+    restoreKeys: 'gradle'
 - task: Gradle@2
   inputs:
     workingDirectory: ''
     gradleWrapperFile: 'gradlew'
     options: '--no-daemon'
-    gradleOptions: '-Xmx3072m'
+    gradleOptions: '-Xmx3072m -Dsun.zip.disableMemoryMapping="true"'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
