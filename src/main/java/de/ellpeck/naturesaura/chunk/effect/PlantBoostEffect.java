@@ -70,7 +70,8 @@ public class PlantBoostEffect implements IDrainSpotEffect {
 
                 BlockState state = world.getBlockState(plantPos);
                 Block block = state.getBlock();
-                if (block instanceof IGrowable && !(block instanceof DoublePlantBlock) && !(block instanceof TallGrassBlock) && block != Blocks.GRASS) {
+                if (block instanceof IGrowable && !(block instanceof DoublePlantBlock) && !(block instanceof TallGrassBlock) && block != Blocks.GRASS_BLOCK) {
+                    System.out.println(block);
                     IGrowable growable = (IGrowable) block;
                     if (growable.canGrow(world, plantPos, state, false)) {
                         growable.grow((ServerWorld) world, world.rand, plantPos, state);
