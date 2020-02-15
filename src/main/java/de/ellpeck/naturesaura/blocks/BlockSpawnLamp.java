@@ -1,9 +1,10 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntitySpawnLamp;
+import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.SoundType;
@@ -44,17 +45,15 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable 
             return;
         World world = event.getWorld();
         BlockPos pos = new BlockPos(event.getX(), event.getY(), event.getZ());
-        Helper.getTileEntitiesInArea(world, pos, 48, tile -> {
-            if (!(tile instanceof TileEntitySpawnLamp))
-                return false;
-            TileEntitySpawnLamp lamp = (TileEntitySpawnLamp) tile;
+        WorldData data = (WorldData) IWorldData.getWorldData(world);
+        for (TileEntitySpawnLamp lamp : data.spawnLamps) {
             int range = lamp.getRadius();
             if (range <= 0)
-                return false;
+                continue;
 
             BlockPos lampPos = lamp.getPos();
             if (!new AxisAlignedBB(lampPos).grow(range).contains(new Vec3d(pos)))
-                return false;
+                continue;
 
             EntityLiving entity = (EntityLiving) event.getEntityLiving();
             if (entity.getCanSpawnHere() && entity.isNotColliding()) {
@@ -66,8 +65,8 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable 
             }
 
             event.setResult(Event.Result.DENY);
-            return true;
-        });
+            break;
+        }
     }
 
     @Override
