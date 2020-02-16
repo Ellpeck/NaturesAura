@@ -1,12 +1,21 @@
 pipeline {
   agent any
   stages {
+    stage('Clean') {
+      steps {
+        sh './gradlew clean --no-daemon'
+      }
+    }
+
     stage('Build') {
       steps {
-        withGradle() {
-          sh './gradlew clean build'
-        }
+        sh './gradlew build --no-daemon'
+      }
+    }
 
+    stage('Upload Artifacts') {
+      steps {
+        archiveArtifacts 'build/libs/**.jar'
       }
     }
 
