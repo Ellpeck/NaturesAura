@@ -26,4 +26,7 @@ pipeline {
     }
 
   }
+  environment {
+    local_maven = '/var/www/maven'
+  }
 }
