@@ -14,4 +14,4 @@ dependencies {
     compile "de.ellpeck.naturesaura:NaturesAura:VERSION"
 }
 ```
-Replace VERSION with the version you want to use. You can find a list of versions by going to the [maven artifact](https://dev.azure.com/Ellpeck/NaturesAura/_packaging).
+Replace VERSION with the version you want to use. You can find a list of versions by going to the [maven artifact](https://maven.ellpeck.de/de/ellpeck/naturesaura/NaturesAura/).
