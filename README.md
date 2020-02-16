@@ -6,7 +6,7 @@ To add this project as a dependency (for using the [API](https://github.com/Ellp
 ```
 repositories {
     maven {
-        url 'https://pkgs.dev.azure.com/Ellpeck/Public/_packaging/All/maven/v1'
+        url = "https://maven.ellpeck.de"
     }
 }
 
