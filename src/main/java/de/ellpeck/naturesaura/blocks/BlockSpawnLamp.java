@@ -44,6 +44,8 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable 
             return;
         IWorld world = event.getWorld();
         BlockPos pos = new BlockPos(event.getX(), event.getY(), event.getZ());
+        if (!(world instanceof World))
+            return;
         WorldData data = (WorldData) IWorldData.getWorldData((World) world);
         for (TileEntitySpawnLamp lamp : data.spawnLamps) {
             int range = lamp.getRadius();
