@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.tiles.ItemStackHandlerNA;
+import de.ellpeck.naturesaura.blocks.tiles.TileEntitySpawnLamp;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -29,6 +30,7 @@ public class WorldData implements IWorldData {
     private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();
     public final ListMultimap<ResourceLocation, Tuple<Vec3d, Integer>> effectPowders = ArrayListMultimap.create();
     public final List<BlockPos> recentlyConvertedMossStones = new ArrayList<>();
+    public final Set<TileEntitySpawnLamp> spawnLamps = new HashSet<>();
 
     @Nullable
     @Override
