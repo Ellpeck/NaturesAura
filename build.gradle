@@ -155,11 +155,7 @@ publishing {
     }
     repositories {
         maven {
-            url 'https://pkgs.dev.azure.com/Ellpeck/Public/_packaging/All/maven/v1'
-            credentials {
-                username "Azure DevOps Services"
-                password System.getenv('ACCESS_TOKEN')
-            }
+            url "file://" + System.getenv("local_maven")
         }
     }
 }
