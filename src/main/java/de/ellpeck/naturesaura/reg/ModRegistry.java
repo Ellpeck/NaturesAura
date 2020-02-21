@@ -109,7 +109,8 @@ public final class ModRegistry {
                 new BlockBlastFurnaceBooster(),
                 new BlockImpl("nether_wart_mushroom", ModBlocks.prop(Blocks.RED_MUSHROOM_BLOCK)),
                 new BlockAnimalContainer(),
-                new BlockSnowCreator()
+                new BlockSnowCreator(),
+                new BlockItemDistributor()
         );
 
         if (ModConfig.instance.rfConverter.get())

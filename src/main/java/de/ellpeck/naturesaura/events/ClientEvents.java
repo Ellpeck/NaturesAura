@@ -11,6 +11,7 @@ import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityGratedChute;
+import de.ellpeck.naturesaura.blocks.tiles.TileEntityItemDistributor;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityRFConverter;
 import de.ellpeck.naturesaura.enchant.ModEnchantment;
@@ -19,15 +20,13 @@ import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.LeavesBlock;
+import net.minecraft.block.*;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -71,6 +70,7 @@ public class ClientEvents {
     public static final ResourceLocation BOOK_GUI = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/book.png");
     public static final List<PacketAuraChunk> PENDING_AURA_CHUNKS = new ArrayList<>();
     private static final ItemStack ITEM_FRAME = new ItemStack(Items.ITEM_FRAME);
+    private static final ItemStack DISPENSER = new ItemStack(Blocks.DISPENSER);
     private static final Map<ResourceLocation, Tuple<ItemStack, Boolean>> SHOWING_EFFECTS = new HashMap<>();
     private static ItemStack heldCache = ItemStack.EMPTY;
     private static ItemStack heldEye = ItemStack.EMPTY;
@@ -396,6 +396,8 @@ public class ClientEvents {
                         if (pos != null) {
                             TileEntity tile = mc.world.getTileEntity(pos);
                             IAuraContainer container;
+                            int x = res.getScaledWidth() / 2;
+                            int y = res.getScaledHeight() / 2;
                             if (tile != null && (container = tile.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null)) != null) {
                                 BlockState state = mc.world.getBlockState(pos);
                                 ItemStack blockStack = state.getBlock().getPickBlock(state, mc.objectMouseOver, mc.world, pos, mc.player);
@@ -421,8 +423,6 @@ public class ClientEvents {
                                 TileEntityGratedChute chute = (TileEntityGratedChute) tile;
                                 ItemStack stack = chute.getItemHandler(null).getStackInSlot(0);
 
-                                int x = res.getScaledWidth() / 2;
-                                int y = res.getScaledHeight() / 2;
                                 if (stack.isEmpty())
                                     mc.fontRenderer.drawStringWithShadow(
                                             TextFormatting.GRAY.toString() + TextFormatting.ITALIC + I18n.format("info.naturesaura.empty"),
@@ -433,6 +433,14 @@ public class ClientEvents {
                                 Helper.renderItemInGui(ITEM_FRAME, x - 24, y - 24, 1F);
                                 mc.getTextureManager().bindTexture(OVERLAYS);
                                 int u = chute.isBlacklist ? 240 : 224;
+                                GlStateManager.disableDepthTest();
+                                AbstractGui.blit(x - 18, y - 18, u, 0, 16, 16, 256, 256);
+                                GlStateManager.enableDepthTest();
+                            } else if (tile instanceof TileEntityItemDistributor) {
+                                TileEntityItemDistributor distributor = (TileEntityItemDistributor) tile;
+                                Helper.renderItemInGui(DISPENSER, x - 24, y - 24, 1F);
+                                mc.getTextureManager().bindTexture(OVERLAYS);
+                                int u = !distributor.isRandomMode ? 240 : 224;
                                 GlStateManager.disableDepthTest();
                                 AbstractGui.blit(x - 18, y - 18, u, 0, 16, 16, 256, 256);
                                 GlStateManager.enableDepthTest();

@@ -61,6 +61,7 @@ public final class ModBlocks {
     public static Block NETHER_WART_MUSHROOM;
     public static Block ANIMAL_CONTAINER;
     public static Block SNOW_CREATOR;
+    public static Block ITEM_DISTRIBUTOR;
 
     public static Block.Properties prop(Material material, MaterialColor color) {
         return Block.Properties.create(material, color);

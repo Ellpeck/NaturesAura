@@ -35,4 +35,5 @@ public final class ModTileEntities {
     public static TileEntityType<TileEntityBlastFurnaceBooster> BLAST_FURNACE_BOOSTER;
     public static TileEntityType<TileEntityAnimalContainer> ANIMAL_CONTAINER;
     public static TileEntityType<TileEntitySnowCreator> SNOW_CREATOR;
+    public static TileEntityType<TileEntityItemDistributor> ITEM_DISTRIBUTOR;
 }
