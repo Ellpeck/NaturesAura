@@ -1,6 +1,8 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityItemDistributor;
+import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
-public class BlockItemDistributor extends BlockContainerImpl {
+public class BlockItemDistributor extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockItemDistributor() {
         super("item_distributor", TileEntityItemDistributor::new, ModBlocks.prop(Blocks.FURNACE));
@@ -30,5 +32,13 @@ public class BlockItemDistributor extends BlockContainerImpl {
             distributor.sendToClients();
         }
         return ActionResultType.SUCCESS;
+    }
+
+    @Override
+    public void generateCustomBlockState(BlockStateGenerator generator) {
+        generator.simpleBlock(this, generator.models().cubeBottomTop(this.getBaseName(),
+                generator.modLoc("block/" + this.getBaseName()),
+                generator.modLoc("block/" + this.getBaseName() + "_bottom"),
+                generator.modLoc("block/" + this.getBaseName() + "_top")));
     }
 }

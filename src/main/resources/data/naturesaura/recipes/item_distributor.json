@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "SSS",
+        "I I",
+        "SSS"
+    ],
+    "key": {
+        "S": {
+            "item": "naturesaura:infused_stone"
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        }
+    },
+    "result": {
+        "item": "naturesaura:item_distributor"
+    }
+}
