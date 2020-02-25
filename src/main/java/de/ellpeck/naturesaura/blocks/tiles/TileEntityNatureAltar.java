@@ -30,7 +30,12 @@ import java.util.Random;
 
 public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTileEntity {
 
-    private final BasicAuraContainer container = new BasicAuraContainer(NaturesAuraAPI.TYPE_OVERWORLD, 500000);
+    private final BasicAuraContainer container = new BasicAuraContainer(null, 500000) {
+        @Override
+        public int getAuraColor() {
+            return IAuraType.forWorld(TileEntityNatureAltar.this.world).getColor();
+        }
+    };
     private final ItemStack[] catalysts = new ItemStack[4];
     public final ItemStackHandler items = new ItemStackHandlerNA(1, this, true) {
         @Override
@@ -54,12 +59,13 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
     };
     @OnlyIn(Dist.CLIENT)
     public int bobTimer;
-    public boolean structureFine;
+    public StructureState structureState = StructureState.INVALID;
 
     private AltarRecipe currentRecipe;
     private int timer;
 
     private int lastAura;
+    private boolean firstTick = true;
 
     public TileEntityNatureAltar() {
         super(ModTileEntities.NATURE_ALTAR);
@@ -82,17 +88,19 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
         }
 
         if (!this.world.isRemote) {
-            if (this.world.getGameTime() % 40 == 0) {
-                boolean fine = Multiblocks.ALTAR.isComplete(this.world, this.pos);
-                if (fine != this.structureFine) {
-                    this.structureFine = fine;
+            if (this.world.getGameTime() % 40 == 0 || this.firstTick) {
+                StructureState newState = this.getNewState();
+                if (newState != this.structureState) {
+                    this.structureState = newState;
                     this.sendToClients();
                 }
+                this.firstTick = false;
             }
 
-            if (this.structureFine) {
+            if (this.structureState != StructureState.INVALID) {
                 int space = this.container.storeAura(300, true);
-                if (space > 0 && this.container.isAcceptableType(IAuraType.forWorld(this.world))) {
+                IAuraType expectedType = this.structureState == StructureState.NETHER ? NaturesAuraAPI.TYPE_NETHER : NaturesAuraAPI.TYPE_OVERWORLD;
+                if (space > 0 && expectedType.isPresentInWorld(this.world)) {
                     int toStore = Math.min(IAuraChunk.getAuraInArea(this.world, this.pos, 20), space);
                     if (toStore > 0) {
                         BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 20, this.pos);
@@ -107,7 +115,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
                                     this.pos.getY() + rand.nextFloat() * 10F,
                                     this.pos.getZ() + (float) rand.nextGaussian() * 10F,
                                     this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F,
-                                    rand.nextFloat() * 0.1F + 0.1F, 0x89cc37, rand.nextFloat() * 1F + 1F
+                                    rand.nextFloat() * 0.1F + 0.1F, this.container.getAuraColor(), rand.nextFloat() * 1F + 1F
                             ));
                     }
                 }
@@ -122,7 +130,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
                             this.container.drainAura(stored, false);
 
                             if (this.world.getGameTime() % 4 == 0)
-                                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.ALTAR_CONVERSION));
+                                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.ALTAR_CONVERSION, this.container.getAuraColor()));
                         }
                     }
                 } else {
@@ -140,7 +148,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
                                 this.container.drainAura(req, false);
 
                                 if (this.timer % 4 == 0)
-                                    PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.ALTAR_CONVERSION));
+                                    PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.ALTAR_CONVERSION, this.container.getAuraColor()));
 
                                 this.timer++;
                                 if (this.timer >= this.currentRecipe.time) {
@@ -162,7 +170,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
                 this.sendToClients();
             }
         } else {
-            if (this.structureFine) {
+            if (this.structureState != StructureState.INVALID) {
                 if (rand.nextFloat() >= 0.7F) {
                     int fourths = this.container.getMaxAura() / 4;
                     if (this.container.getStoredAura() > 0) {
@@ -195,7 +203,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
 
     private AltarRecipe getRecipeForInput(ItemStack input) {
         for (AltarRecipe recipe : NaturesAuraAPI.ALTAR_RECIPES.values()) {
-            if (recipe.input.test(input)) {
+            if (recipe.input.test(input) && (recipe.requiredType == null || recipe.requiredType.isPresentInWorld(this.world))) {
                 if (recipe.catalyst == Ingredient.EMPTY)
                     return recipe;
                 for (ItemStack stack : this.catalysts)
@@ -206,12 +214,20 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
         return null;
     }
 
+    private StructureState getNewState() {
+        if (Multiblocks.ALTAR.isComplete(this.world, this.pos))
+            return StructureState.OVERWORLD;
+        if (Multiblocks.NETHER_ALTAR.isComplete(this.world, this.pos))
+            return StructureState.NETHER;
+        return StructureState.INVALID;
+    }
+
     @Override
     public void writeNBT(CompoundNBT compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             compound.put("items", this.items.serializeNBT());
-            compound.putBoolean("fine", this.structureFine);
+            compound.putString("state", this.structureState.name());
             this.container.writeNBT(compound);
         }
         if (type == SaveType.TILE) {
@@ -227,7 +243,8 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.items.deserializeNBT(compound.getCompound("items"));
-            this.structureFine = compound.getBoolean("fine");
+            if (compound.contains("state"))
+                this.structureState = StructureState.valueOf(compound.getString("state"));
             this.container.readNBT(compound);
         }
         if (type == SaveType.TILE) {
@@ -246,5 +263,11 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
     @Override
     public IItemHandlerModifiable getItemHandler(Direction facing) {
         return this.items;
+    }
+
+    public enum StructureState {
+        INVALID,
+        NETHER,
+        OVERWORLD
     }
 }

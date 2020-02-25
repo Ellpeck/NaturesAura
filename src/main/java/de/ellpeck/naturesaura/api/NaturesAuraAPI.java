@@ -81,7 +81,7 @@ public final class NaturesAuraAPI {
      * easily registered using {@link BasicAuraType#register()}.
      */
     public static final Map<ResourceLocation, IAuraType> AURA_TYPES = new HashMap<>();
-    public static final BasicAuraType TYPE_OVERWORLD = new BasicAuraType(new ResourceLocation(MOD_ID, "overworld"), DimensionType.OVERWORLD, 0xbef224, 0).register();
+    public static final BasicAuraType TYPE_OVERWORLD = new BasicAuraType(new ResourceLocation(MOD_ID, "overworld"), DimensionType.OVERWORLD, 0x89cc37, 0).register();
     public static final BasicAuraType TYPE_NETHER = new BasicAuraType(new ResourceLocation(MOD_ID, "nether"), DimensionType.THE_NETHER, 0x871c0c, 0).register();
     public static final BasicAuraType TYPE_END = new BasicAuraType(new ResourceLocation(MOD_ID, "end"), DimensionType.THE_END, 0x302624, 0).register();
     public static final BasicAuraType TYPE_OTHER = new BasicAuraType(new ResourceLocation(MOD_ID, "other"), null, 0x2fa8a0, Integer.MIN_VALUE).register();

@@ -120,13 +120,14 @@ public class PacketParticles {
             }
         }),
         ALTAR_CONVERSION((message, world) -> {
+            int color = message.data[0];
             for (int i = world.rand.nextInt(5) + 2; i >= 0; i--) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
                         message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
                         message.posY + 0.9F + 0.25F * world.rand.nextFloat(),
                         message.posZ + 0.25F + world.rand.nextFloat() * 0.5F,
                         world.rand.nextGaussian() * 0.02F, world.rand.nextFloat() * 0.02F, world.rand.nextGaussian() * 0.02F,
-                        0x00FF00, world.rand.nextFloat() * 1.5F + 0.75F, 20, 0F, false, true);
+                        color, world.rand.nextFloat() * 1.5F + 0.75F, 20, 0F, false, true);
             }
         }),
         POTION_GEN((message, world) -> {

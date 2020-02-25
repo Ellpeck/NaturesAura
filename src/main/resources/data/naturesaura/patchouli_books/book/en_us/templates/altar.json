@@ -4,13 +4,13 @@
         {
             "type": "item",
             "item": "#input",
-            "x": 24,
+            "x": 14,
             "y": 26
         },
         {
             "type": "item",
             "item": "#output",
-            "x": 76,
+            "x": 82,
             "y": 26,
             "link_recipe": true
         },
@@ -18,24 +18,30 @@
             "group": "catalyst",
             "type": "item",
             "item": "#catalyst",
-            "x": 50,
-            "y": 28
+            "x": 36,
+            "y": 26
+        },
+        {
+            "type": "item",
+            "item": "#type",
+            "x": 58,
+            "y": 26
         },
         {
             "group": "altar",
             "type": "item",
             "item": "naturesaura:nature_altar",
-            "x": 50,
+            "x": 36,
             "y": 26
         },
         {
             "type": "image",
             "image": "naturesaura:textures/gui/patchouli/elements.png",
-            "x": 20,
+            "x": 10,
             "y": 13,
             "u": 0,
             "v": 0,
-            "width": 75,
+            "width": 91,
             "height": 44
         },
         {

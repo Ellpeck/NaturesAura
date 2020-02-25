@@ -42,6 +42,7 @@ public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvide
 
     public BlockNatureAltar() {
         super("nature_altar", TileEntityNatureAltar::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(4F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
+        this.setDefaultState(this.getDefaultState().with(NETHER, false));
     }
 
     @Override

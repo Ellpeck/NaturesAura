@@ -157,29 +157,29 @@ public final class ModRecipes {
 
         new AltarRecipe(res("infused_iron"),
                 ing(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON),
-                Ingredient.EMPTY, 15000, 80).register();
+                NaturesAuraAPI.TYPE_OVERWORLD, Ingredient.EMPTY, 15000, 80).register();
         new AltarRecipe(res("infused_iron_block"),
                 ing(Blocks.IRON_BLOCK), new ItemStack(ModBlocks.INFUSED_IRON_BLOCK),
-                Ingredient.EMPTY, 135000, 700).register();
+                NaturesAuraAPI.TYPE_OVERWORLD, Ingredient.EMPTY, 135000, 700).register();
         new AltarRecipe(res("infused_stone"),
                 ing(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE),
-                Ingredient.EMPTY, 7500, 40).register();
+                NaturesAuraAPI.TYPE_OVERWORLD, Ingredient.EMPTY, 7500, 40).register();
 
         Ingredient conversion = ing(ModBlocks.CONVERSION_CATALYST);
-        new AltarRecipe(res("breath"), nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_END)), new ItemStack(Items.DRAGON_BREATH), conversion, 20000, 80).register();
-        new AltarRecipe(res("leather"), ing(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER), conversion, 10000, 50).register();
-        new AltarRecipe(res("soul_sand"), ing(Blocks.SAND), new ItemStack(Blocks.SOUL_SAND), conversion, 5000, 100).register();
-        new AltarRecipe(res("nether_wart"), ing(Blocks.RED_MUSHROOM), new ItemStack(Items.NETHER_WART), conversion, 30000, 250).register();
-        new AltarRecipe(res("prismarine"), ing(Items.QUARTZ), new ItemStack(Items.PRISMARINE_SHARD), conversion, 55000, 200).register();
-        new AltarRecipe(res("water"), ing(Items.GLASS_BOTTLE), PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER), conversion, 25000, 200).register();
-        new AltarRecipe(res("coal"), ing(Items.CHARCOAL), new ItemStack(Items.COAL), conversion, 30000, 250).register();
+        new AltarRecipe(res("breath"), nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_END)), new ItemStack(Items.DRAGON_BREATH), NaturesAuraAPI.TYPE_NETHER, conversion, 20000, 80).register();
+        new AltarRecipe(res("leather"), ing(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER), NaturesAuraAPI.TYPE_OVERWORLD, conversion, 10000, 50).register();
+        new AltarRecipe(res("soul_sand"), ing(Blocks.SAND), new ItemStack(Blocks.SOUL_SAND), NaturesAuraAPI.TYPE_NETHER, conversion, 5000, 100).register();
+        new AltarRecipe(res("nether_wart"), ing(Blocks.RED_MUSHROOM), new ItemStack(Items.NETHER_WART), NaturesAuraAPI.TYPE_NETHER, conversion, 30000, 250).register();
+        new AltarRecipe(res("prismarine"), ing(Items.QUARTZ), new ItemStack(Items.PRISMARINE_SHARD), NaturesAuraAPI.TYPE_NETHER, conversion, 55000, 200).register();
+        new AltarRecipe(res("water"), ing(Items.GLASS_BOTTLE), PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER), NaturesAuraAPI.TYPE_OVERWORLD, conversion, 25000, 200).register();
+        new AltarRecipe(res("coal"), ing(Items.CHARCOAL), new ItemStack(Items.COAL), NaturesAuraAPI.TYPE_OVERWORLD, conversion, 30000, 250).register();
 
         Ingredient crushing = ing(ModBlocks.CRUSHING_CATALYST);
-        new AltarRecipe(res("bone"), ing(Items.BONE), new ItemStack(Items.BONE_MEAL, 6), crushing, 3000, 40).register();
-        new AltarRecipe(res("sugar"), ing(Items.SUGAR_CANE), new ItemStack(Items.SUGAR, 3), crushing, 3000, 40).register();
-        new AltarRecipe(res("blaze"), ing(Items.BLAZE_ROD), new ItemStack(Items.BLAZE_POWDER, 4), crushing, 5000, 60).register();
-        new AltarRecipe(res("glowstone"), ing(Blocks.GLOWSTONE), new ItemStack(Items.GLOWSTONE_DUST, 4), crushing, 3000, 40).register();
-        new AltarRecipe(res("sand"), ing(Blocks.COBBLESTONE), new ItemStack(Blocks.SAND), crushing, 3000, 40).register();
+        new AltarRecipe(res("bone"), ing(Items.BONE), new ItemStack(Items.BONE_MEAL, 6), NaturesAuraAPI.TYPE_OVERWORLD, crushing, 3000, 40).register();
+        new AltarRecipe(res("sugar"), ing(Items.SUGAR_CANE), new ItemStack(Items.SUGAR, 3), NaturesAuraAPI.TYPE_OVERWORLD, crushing, 3000, 40).register();
+        new AltarRecipe(res("blaze"), ing(Items.BLAZE_ROD), new ItemStack(Items.BLAZE_POWDER, 4), NaturesAuraAPI.TYPE_NETHER, crushing, 5000, 60).register();
+        new AltarRecipe(res("glowstone"), ing(Blocks.GLOWSTONE), new ItemStack(Items.GLOWSTONE_DUST, 4), NaturesAuraAPI.TYPE_NETHER, crushing, 3000, 40).register();
+        new AltarRecipe(res("sand"), ing(Blocks.COBBLESTONE), new ItemStack(Blocks.SAND), NaturesAuraAPI.TYPE_OVERWORLD, crushing, 3000, 40).register();
 
         new OfferingRecipe(res("sky_ingot"),
                 amountIng(new ItemStack(ModItems.INFUSED_IRON, 3)),

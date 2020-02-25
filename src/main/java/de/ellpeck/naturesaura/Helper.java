@@ -173,7 +173,7 @@ public final class Helper {
                 }
             }
         }
-        return ActionResultType.FAIL;
+        return ActionResultType.CONSUME;
     }
 
     public static ICapabilityProvider makeRechargeProvider(ItemStack stack, boolean needsSelected) {
