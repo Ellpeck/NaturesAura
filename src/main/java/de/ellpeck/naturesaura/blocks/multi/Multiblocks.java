@@ -15,17 +15,27 @@ import net.minecraft.util.ResourceLocation;
 
 public final class Multiblocks {
 
+    private static final String[][] ALTAR_PATTERN = new String[][]{
+            {"    M    ", "         ", "         ", "         ", "M       M", "         ", "         ", "         ", "    M    "},
+            {"    B    ", "         ", "         ", "         ", "B       B", "         ", "         ", "         ", "    B    "},
+            {"    B    ", "         ", "  M   M  ", "         ", "B   0   B", "         ", "  M   M  ", "         ", "    B    "},
+            {"         ", "   WBW   ", "   WBW   ", " WWCWCWW ", " BBW WBB ", " WWCWCWW ", "   WBW   ", "   WBW   ", "         "}};
     public static final IMultiblock ALTAR = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "altar"),
-            new String[][]{
-                    {"    M    ", "         ", "         ", "         ", "M       M", "         ", "         ", "         ", "    M    "},
-                    {"    B    ", "         ", "         ", "         ", "B       B", "         ", "         ", "         ", "    B    "},
-                    {"    B    ", "         ", "  M   M  ", "         ", "B   0   B", "         ", "  M   M  ", "         ", "    B    "},
-                    {"         ", "   WBW   ", "   WBW   ", " WWCWCWW ", " BBW WBB ", " WWCWCWW ", "   WBW   ", "   WBW   ", "         "}},
+            ALTAR_PATTERN,
             'C', Blocks.CHISELED_STONE_BRICKS,
             'B', Blocks.STONE_BRICKS,
             'W', Matcher.tag(Blocks.OAK_PLANKS, BlockTags.PLANKS),
             'M', ModBlocks.GOLD_BRICK,
+            '0', ModBlocks.NATURE_ALTAR,
+            ' ', Matcher.wildcard());
+    public static final IMultiblock NETHER_ALTAR = NaturesAuraAPI.instance().createMultiblock(
+            new ResourceLocation(NaturesAura.MOD_ID, "nether_altar"),
+            ALTAR_PATTERN,
+            'C', Blocks.RED_NETHER_BRICKS,
+            'B', Blocks.NETHER_BRICKS,
+            'W', Blocks.NETHER_WART_BLOCK,
+            'M', ModBlocks.GOLD_NETHER_BRICK,
             '0', ModBlocks.NATURE_ALTAR,
             ' ', Matcher.wildcard());
     public static final IMultiblock TREE_RITUAL = NaturesAuraAPI.instance().createMultiblock(

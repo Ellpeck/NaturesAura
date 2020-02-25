@@ -45,6 +45,7 @@ public final class ModBlocks {
     public static Block ANIMAL_SPAWNER;
     public static Block AUTO_CRAFTER;
     public static Block GOLD_BRICK;
+    public static Block GOLD_NETHER_BRICK;
     public static Block RF_CONVERTER;
     public static Block MOSS_GENERATOR;
     public static Block TIME_CHANGER;
