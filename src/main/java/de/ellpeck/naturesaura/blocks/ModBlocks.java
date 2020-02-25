@@ -63,6 +63,7 @@ public final class ModBlocks {
     public static Block SNOW_CREATOR;
     public static Block ITEM_DISTRIBUTOR;
     public static Block AURA_BLOOM;
+    public static Block AURA_CACTUS;
 
     public static Block.Properties prop(Material material, MaterialColor color) {
         return Block.Properties.create(material, color);

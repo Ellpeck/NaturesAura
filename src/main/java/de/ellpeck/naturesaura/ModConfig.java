@@ -121,7 +121,7 @@ public final class ModConfig {
                 .translation("config." + NaturesAura.MOD_ID + ".oreEffect")
                 .define("oreEffect", true);
         this.auraBlooms = builder
-                .comment("If Aura Blooms should generate in the world")
+                .comment("If Aura Blooms and Aura Cacti should generate in the world")
                 .translation("config." + NaturesAura.MOD_ID + ".auraBlooms")
                 .define("auraBlooms", true);
         builder.pop();

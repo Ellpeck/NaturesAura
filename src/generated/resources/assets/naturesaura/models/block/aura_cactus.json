@@ -1,0 +1,6 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "naturesaura:block/aura_cactus"
+  }
+}

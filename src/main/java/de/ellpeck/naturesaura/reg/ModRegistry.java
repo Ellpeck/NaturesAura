@@ -6,6 +6,8 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.*;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
+import de.ellpeck.naturesaura.blocks.tiles.TileEntityAuraBloom;
+import de.ellpeck.naturesaura.blocks.tiles.TileEntityAuraBloom.TileEntityAuraCactus;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
@@ -123,7 +125,9 @@ public final class ModRegistry {
                 new BlockAnimalContainer(),
                 new BlockSnowCreator(),
                 new BlockItemDistributor(),
-                temp = new BlockAuraBloom(),
+                temp = new BlockAuraBloom("aura_bloom", TileEntityAuraBloom::new),
+                createFlowerPot(temp),
+                temp = new BlockAuraBloom("aura_cactus", TileEntityAuraCactus::new),
                 createFlowerPot(temp)
         );
 
@@ -256,7 +260,8 @@ public final class ModRegistry {
     @SubscribeEvent
     public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
         event.getRegistry().registerAll(
-                new WorldGenAuraBloom().setRegistryName("aura_bloom"),
+                new WorldGenAuraBloom(ModBlocks.AURA_BLOOM).setRegistryName("aura_bloom"),
+                new WorldGenAuraBloom(ModBlocks.AURA_CACTUS).setRegistryName("aura_cactus"),
                 new WorldGenAncientTree().setRegistryName("ancient_tree"),
                 new WorldGenNetherWartMushroom().setRegistryName("nether_wart_mushroom")
         );
@@ -274,8 +279,11 @@ public final class ModRegistry {
         }
 
         for (Biome biome : ForgeRegistries.BIOMES) {
-            if (ModConfig.instance.auraBlooms.get())
+            if (ModConfig.instance.auraBlooms.get()) {
                 biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.AURA_BLOOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(Placement.NOPE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+                if (biome.getCategory() == Biome.Category.DESERT)
+                    biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.AURA_CACTUS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(Placement.NOPE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+            }
         }
     }
 

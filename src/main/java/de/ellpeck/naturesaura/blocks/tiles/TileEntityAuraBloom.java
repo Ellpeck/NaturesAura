@@ -3,13 +3,18 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 
 public class TileEntityAuraBloom extends TileEntityImpl implements ITickableTileEntity {
 
     public boolean justGenerated;
 
     public TileEntityAuraBloom() {
-        super(ModTileEntities.AURA_BLOOM);
+        this(ModTileEntities.AURA_BLOOM);
+    }
+
+    protected TileEntityAuraBloom(TileEntityType<TileEntityAuraBloom> type) {
+        super(type);
     }
 
     // Doing this in validate() creates a loading deadlock for some reason...
@@ -18,7 +23,7 @@ public class TileEntityAuraBloom extends TileEntityImpl implements ITickableTile
         if (this.world.isRemote || !this.justGenerated)
             return;
         IAuraChunk chunk = IAuraChunk.getAuraChunk(this.world, this.pos);
-        chunk.storeAura(this.pos, 200000);
+        chunk.storeAura(this.pos, 150000);
         this.justGenerated = false;
     }
 
@@ -34,5 +39,11 @@ public class TileEntityAuraBloom extends TileEntityImpl implements ITickableTile
         super.readNBT(compound, type);
         if (type == SaveType.TILE)
             this.justGenerated = compound.getBoolean("just_generated");
+    }
+
+    public static class TileEntityAuraCactus extends TileEntityAuraBloom {
+        public TileEntityAuraCactus() {
+            super(ModTileEntities.AURA_CACTUS);
+        }
     }
 }

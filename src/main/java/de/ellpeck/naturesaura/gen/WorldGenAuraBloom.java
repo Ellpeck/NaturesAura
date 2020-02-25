@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.gen;
 
-import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAuraBloom;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -17,8 +17,12 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import java.util.Random;
 
 public class WorldGenAuraBloom extends Feature<NoFeatureConfig> {
-    public WorldGenAuraBloom() {
+
+    private final Block block;
+
+    public WorldGenAuraBloom(Block block) {
         super(d -> IFeatureConfig.NO_FEATURE_CONFIG);
+        this.block = block;
     }
 
     @Override
@@ -33,8 +37,8 @@ public class WorldGenAuraBloom extends Feature<NoFeatureConfig> {
             int offX = startX + MathHelper.nextInt(rand, -5, 5);
             int offZ = startZ + MathHelper.nextInt(rand, -5, 5);
             BlockPos placePos = new BlockPos(offX, worldIn.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, offX, offZ), offZ);
-            BlockState state = ModBlocks.AURA_BLOOM.getDefaultState();
-            if (ModBlocks.AURA_BLOOM.isValidPosition(state, worldIn, placePos)) {
+            BlockState state = this.block.getDefaultState();
+            if (this.block.isValidPosition(state, worldIn, placePos)) {
                 worldIn.setBlockState(placePos, state, 3);
 
                 TileEntity tile = worldIn.getTileEntity(placePos);
