@@ -100,7 +100,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
             if (this.structureState != StructureState.INVALID) {
                 int space = this.container.storeAura(300, true);
                 IAuraType expectedType = this.structureState == StructureState.NETHER ? NaturesAuraAPI.TYPE_NETHER : NaturesAuraAPI.TYPE_OVERWORLD;
-                if (space > 0 && expectedType.isPresentInWorld(this.world)) {
+                if (space > 0 && IAuraType.forWorld(this.world).isSimilar(expectedType)) {
                     int toStore = Math.min(IAuraChunk.getAuraInArea(this.world, this.pos, 20), space);
                     if (toStore > 0) {
                         BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 20, this.pos);
@@ -202,8 +202,9 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
     }
 
     private AltarRecipe getRecipeForInput(ItemStack input) {
+        IAuraType type = IAuraType.forWorld(this.world);
         for (AltarRecipe recipe : NaturesAuraAPI.ALTAR_RECIPES.values()) {
-            if (recipe.input.test(input) && (recipe.requiredType == null || recipe.requiredType.isPresentInWorld(this.world))) {
+            if (recipe.input.test(input) && (recipe.requiredType == null || type.isSimilar(recipe.requiredType))) {
                 if (recipe.catalyst == Ingredient.EMPTY)
                     return recipe;
                 for (ItemStack stack : this.catalysts)
