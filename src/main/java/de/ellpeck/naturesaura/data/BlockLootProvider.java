@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import de.ellpeck.naturesaura.blocks.BlockFlowerPot;
 import de.ellpeck.naturesaura.blocks.BlockGoldenLeaves;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.blocks.Slab;
@@ -10,6 +11,7 @@ import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.block.Block;
+import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
@@ -42,6 +44,8 @@ public class BlockLootProvider implements IDataProvider {
             Block block = (Block) item;
             if (block instanceof Slab) {
                 this.lootFunctions.put(block, LootTableHooks::genSlab);
+            } else if (block instanceof BlockFlowerPot) {
+                this.lootFunctions.put(block, LootTableHooks::genFlowerPot);
             } else {
                 this.lootFunctions.put(block, LootTableHooks::genRegular);
             }
@@ -94,6 +98,10 @@ public class BlockLootProvider implements IDataProvider {
 
         public static LootTable.Builder genSilkOr(Block block, LootEntry.Builder<?> builder) {
             return droppingWithSilkTouch(block, builder);
+        }
+
+        public static LootTable.Builder genFlowerPot(Block block) {
+            return droppingAndFlowerPot(((FlowerPotBlock) block).func_220276_d());
         }
 
         public static <T> T survivesExplosion(Block block, ILootConditionConsumer<T> then) {

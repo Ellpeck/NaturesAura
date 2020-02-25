@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.items;
 
-import de.ellpeck.naturesaura.gen.WorldGenNetherWartMushroom;
+import de.ellpeck.naturesaura.gen.ModFeatures;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherWartBlock;
@@ -27,7 +27,7 @@ public class ItemCrimsonMeal extends ItemImpl {
                 if (world.rand.nextInt(5) == 0) {
                     int age = state.get(NetherWartBlock.AGE);
                     if (age >= 3) {
-                        new WorldGenNetherWartMushroom().place(world, ((ServerWorld) world).getChunkProvider().getChunkGenerator(), world.rand, pos, IFeatureConfig.NO_FEATURE_CONFIG);
+                        ModFeatures.NETHER_WART_MUSHROOM.place(world, ((ServerWorld) world).getChunkProvider().getChunkGenerator(), world.rand, pos, IFeatureConfig.NO_FEATURE_CONFIG);
                     } else {
                         world.setBlockState(pos, state.with(NetherWartBlock.AGE, age + 1));
                     }

@@ -38,6 +38,7 @@ public final class ModConfig {
     public ForgeConfigSpec.ConfigValue<Boolean> breathlessEffect;
     public ForgeConfigSpec.ConfigValue<Boolean> animalEffect;
     public ForgeConfigSpec.ConfigValue<Boolean> oreEffect;
+    public ForgeConfigSpec.ConfigValue<Boolean> auraBlooms;
 
     public ForgeConfigSpec.ConfigValue<Double> particleAmount;
     public ForgeConfigSpec.ConfigValue<Boolean> respectVanillaParticleSettings;
@@ -119,6 +120,10 @@ public final class ModConfig {
                 .comment("If the Aura Imbalance effect of ores spawning in the area if Aura levels are too high should occur")
                 .translation("config." + NaturesAura.MOD_ID + ".oreEffect")
                 .define("oreEffect", true);
+        this.auraBlooms = builder
+                .comment("If Aura Blooms should generate in the world")
+                .translation("config." + NaturesAura.MOD_ID + ".auraBlooms")
+                .define("auraBlooms", true);
         builder.pop();
 
         builder.push("client");

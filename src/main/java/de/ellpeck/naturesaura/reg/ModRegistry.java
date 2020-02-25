@@ -14,6 +14,10 @@ import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
 import de.ellpeck.naturesaura.entities.ModEntities;
 import de.ellpeck.naturesaura.entities.render.RenderEffectInhibitor;
 import de.ellpeck.naturesaura.entities.render.RenderMoverMinecart;
+import de.ellpeck.naturesaura.gen.ModFeatures;
+import de.ellpeck.naturesaura.gen.WorldGenAncientTree;
+import de.ellpeck.naturesaura.gen.WorldGenAuraBloom;
+import de.ellpeck.naturesaura.gen.WorldGenNetherWartMushroom;
 import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
 import de.ellpeck.naturesaura.items.*;
@@ -22,6 +26,7 @@ import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -34,12 +39,19 @@ import net.minecraft.item.Item;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -56,7 +68,7 @@ public final class ModRegistry {
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        BlockImpl temp;
+        Block temp;
         event.getRegistry().registerAll(
                 new BlockAncientLog("ancient_log"),
                 new BlockAncientLog("ancient_bark"),
@@ -110,7 +122,9 @@ public final class ModRegistry {
                 new BlockImpl("nether_wart_mushroom", ModBlocks.prop(Blocks.RED_MUSHROOM_BLOCK)),
                 new BlockAnimalContainer(),
                 new BlockSnowCreator(),
-                new BlockItemDistributor()
+                new BlockItemDistributor(),
+                temp = new BlockAuraBloom(),
+                createFlowerPot(temp)
         );
 
         if (ModConfig.instance.rfConverter.get())
@@ -124,7 +138,7 @@ public final class ModRegistry {
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
         for (IModItem block : ALL_ITEMS) {
-            if (block instanceof Block) {
+            if (block instanceof Block && !(block instanceof INoItemBlock)) {
                 BlockItem item = new BlockItem((Block) block, new Item.Properties().group(NaturesAura.CREATIVE_TAB));
                 item.setRegistryName(block.getBaseName());
                 event.getRegistry().register(item);
@@ -239,6 +253,16 @@ public final class ModRegistry {
         NaturesAura.proxy.registerEntityRenderer(ModEntities.EFFECT_INHIBITOR, () -> RenderEffectInhibitor::new);
     }
 
+    @SubscribeEvent
+    public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
+        event.getRegistry().registerAll(
+                new WorldGenAuraBloom().setRegistryName("aura_bloom"),
+                new WorldGenAncientTree().setRegistryName("ancient_tree"),
+                new WorldGenNetherWartMushroom().setRegistryName("nether_wart_mushroom")
+        );
+        Helper.populateObjectHolders(ModFeatures.class, event.getRegistry());
+    }
+
     public static void init() {
         for (IModItem item : ALL_ITEMS) {
             if (item instanceof IColorProvidingBlock)
@@ -248,5 +272,17 @@ public final class ModRegistry {
             if (item instanceof ITESRProvider)
                 NaturesAura.proxy.registerTESR((ITESRProvider) item);
         }
+
+        for (Biome biome : ForgeRegistries.BIOMES) {
+            if (ModConfig.instance.auraBlooms.get())
+                biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.AURA_BLOOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(Placement.NOPE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+        }
+    }
+
+    public static Block createFlowerPot(Block block) {
+        Block.Properties props = Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0F);
+        Block potted = new BlockFlowerPot(() -> (FlowerPotBlock) Blocks.FLOWER_POT, block::getBlock, props);
+        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(block.getRegistryName(), () -> potted);
+        return potted;
     }
 }
