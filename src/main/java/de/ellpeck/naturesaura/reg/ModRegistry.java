@@ -130,7 +130,9 @@ public final class ModRegistry {
                 createFlowerPot(temp),
                 temp = new BlockAuraBloom("aura_cactus", TileEntityAuraCactus::new),
                 createFlowerPot(temp),
-                new BlockImpl("tainted_gold_block", ModBlocks.prop(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(3F)));
+                new BlockImpl("tainted_gold_block", ModBlocks.prop(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(3F)),
+                new BlockNetherGrass()
+        );
 
         if (ModConfig.instance.rfConverter.get())
             event.getRegistry().register(new BlockRFConverter());

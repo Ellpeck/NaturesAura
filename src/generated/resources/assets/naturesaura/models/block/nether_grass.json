@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "naturesaura:block/nether_grass",
+    "bottom": "block/netherrack",
+    "top": "naturesaura:block/nether_grass_top"
+  }
+}

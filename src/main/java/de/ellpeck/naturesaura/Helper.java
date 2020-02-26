@@ -127,15 +127,12 @@ public final class Helper {
     public static void renderItemInGui(ItemStack stack, int x, int y, float scale) {
         RenderSystem.pushMatrix();
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        RenderHelper.setupGuiFlatDiffuseLighting();
         GlStateManager.enableDepthTest();
         RenderSystem.enableRescaleNormal();
         RenderSystem.translatef(x, y, 0);
         RenderSystem.scalef(scale, scale, scale);
         Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(stack, 0, 0);
         Minecraft.getInstance().getItemRenderer().renderItemOverlayIntoGUI(Minecraft.getInstance().fontRenderer, stack, 0, 0, null);
-        RenderHelper.disableStandardItemLighting();
         RenderSystem.popMatrix();
     }
 

@@ -72,6 +72,8 @@ public class GrassDieEffect implements IDrainSpotEffect {
                     newState = Blocks.COARSE_DIRT.getDefaultState();
                 } else if (block instanceof BushBlock) {
                     newState = Blocks.AIR.getDefaultState();
+                } else if (block == ModBlocks.NETHER_GRASS) {
+                    newState = Blocks.NETHERRACK.getDefaultState();
                 }
                 if (newState != null)
                     world.setBlockState(grassPos, newState);
@@ -81,7 +83,7 @@ public class GrassDieEffect implements IDrainSpotEffect {
 
     @Override
     public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
-        return ModConfig.instance.grassDieEffect.get() && type.isSimilar(NaturesAuraAPI.TYPE_OVERWORLD);
+        return ModConfig.instance.grassDieEffect.get() && (type.isSimilar(NaturesAuraAPI.TYPE_OVERWORLD) || type.isSimilar(NaturesAuraAPI.TYPE_NETHER));
     }
 
     @Override

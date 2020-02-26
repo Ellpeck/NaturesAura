@@ -39,6 +39,7 @@ public final class ModConfig {
     public ForgeConfigSpec.ConfigValue<Boolean> animalEffect;
     public ForgeConfigSpec.ConfigValue<Boolean> oreEffect;
     public ForgeConfigSpec.ConfigValue<Boolean> auraBlooms;
+    public ForgeConfigSpec.ConfigValue<Boolean> netherGrassEffect;
 
     public ForgeConfigSpec.ConfigValue<Double> particleAmount;
     public ForgeConfigSpec.ConfigValue<Boolean> respectVanillaParticleSettings;
@@ -124,6 +125,10 @@ public final class ModConfig {
                 .comment("If Aura Blooms and Aura Cacti should generate in the world")
                 .translation("config." + NaturesAura.MOD_ID + ".auraBlooms")
                 .define("auraBlooms", true);
+        this.netherGrassEffect = builder
+                .comment("If the Aura Imbalance effect of grass growing on netherrack if the Aura levels are high enough should occur")
+                .translation("config." + NaturesAura.MOD_ID + ".netherGrassEffect")
+                .define("netherGrassEffect", true);
         builder.pop();
 
         builder.push("client");

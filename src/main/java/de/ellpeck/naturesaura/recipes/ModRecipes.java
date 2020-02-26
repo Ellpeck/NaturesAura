@@ -6,10 +6,7 @@ import de.ellpeck.naturesaura.api.recipes.*;
 import de.ellpeck.naturesaura.api.recipes.ing.AmountIngredient;
 import de.ellpeck.naturesaura.api.recipes.ing.NBTIngredient;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
-import de.ellpeck.naturesaura.chunk.effect.AnimalEffect;
-import de.ellpeck.naturesaura.chunk.effect.CacheRechargeEffect;
-import de.ellpeck.naturesaura.chunk.effect.OreSpawnEffect;
-import de.ellpeck.naturesaura.chunk.effect.PlantBoostEffect;
+import de.ellpeck.naturesaura.chunk.effect.*;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
@@ -122,6 +119,13 @@ public final class ModRecipes {
                 ing(ModBlocks.GOLD_POWDER),
                 ing(Blocks.DIAMOND_ORE),
                 ing(Blocks.REDSTONE_ORE)).register();
+        new TreeRitualRecipe(res("nether_grass_powder"),
+                ing(Blocks.OAK_SAPLING),
+                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 4), NetherGrassEffect.NAME), 400,
+                ing(ModBlocks.GOLD_POWDER),
+                ing(ModBlocks.GOLD_POWDER),
+                ing(Blocks.NETHERRACK),
+                ing(Blocks.GRASS)).register();
         new TreeRitualRecipe(res("token_joy"),
                 ing(Blocks.OAK_SAPLING), new ItemStack(ModItems.TOKEN_JOY, 2), 200,
                 nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)),
