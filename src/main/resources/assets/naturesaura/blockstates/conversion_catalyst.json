@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "nether=false": {
+            "model": "naturesaura:block/conversion_catalyst"
+        },
+        "nether=true": {
+            "model": "naturesaura:block/conversion_catalyst_nether"
+        }
+    }
+}

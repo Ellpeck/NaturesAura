@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "nether=false": {
+            "model": "naturesaura:block/crushing_catalyst"
+        },
+        "nether=true": {
+            "model": "naturesaura:block/crushing_catalyst_nether"
+        }
+    }
+}
