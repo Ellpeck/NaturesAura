@@ -121,7 +121,7 @@ public final class ModRecipes {
                 ing(Blocks.REDSTONE_ORE)).register();
         new TreeRitualRecipe(res("nether_grass_powder"),
                 ing(Blocks.OAK_SAPLING),
-                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 4), NetherGrassEffect.NAME), 400,
+                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 24), NetherGrassEffect.NAME), 400,
                 ing(ModBlocks.GOLD_POWDER),
                 ing(ModBlocks.GOLD_POWDER),
                 ing(Blocks.NETHERRACK),
