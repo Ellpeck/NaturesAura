@@ -26,7 +26,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -320,7 +319,8 @@ public class ClientEvents {
 
                     int conf = ModConfig.instance.auraBarLocation.get();
                     if (!mc.gameSettings.showDebugInfo && (conf != 2 || !(mc.currentScreen instanceof ChatScreen))) {
-                        RenderSystem.color4f(83 / 255F, 160 / 255F, 8 / 255F, 1);
+                        int color = IAuraType.forWorld(mc.world).getColor();
+                        RenderSystem.color4f((color >> 16 & 0xFF) / 255F, (color >> 8 & 0xFF) / 255F, (color & 0xFF) / 255F, 1);
 
                         int totalAmount = IAuraChunk.triangulateAuraInArea(mc.world, mc.player.getPosition(), 35);
                         float totalPercentage = totalAmount / (IAuraChunk.DEFAULT_AURA * 2F);
@@ -341,8 +341,6 @@ public class ClientEvents {
                             AbstractGui.blit(startX, y + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
 
                         if (!heldOcular.isEmpty()) {
-                            RenderSystem.color4f(160 / 255F, 83 / 255F, 8 / 255F, 1);
-
                             int topHeight = MathHelper.ceil(MathHelper.clamp((totalPercentage - 1F) * 2F, 0F, 1F) * 25);
                             if (topHeight > 0) {
                                 if (topHeight < 25)
@@ -357,7 +355,6 @@ public class ClientEvents {
                             }
                         }
 
-                        int color = heldOcular.isEmpty() ? 0x53a008 : 0xa05308;
                         if (totalPercentage > (heldOcular.isEmpty() ? 1F : 1.5F))
                             mc.fontRenderer.drawStringWithShadow("+", startX + plusOffX, startY - 0.5F, color);
                         if (totalPercentage < (heldOcular.isEmpty() ? 0F : -0.5F))
@@ -365,7 +362,7 @@ public class ClientEvents {
 
                         RenderSystem.pushMatrix();
                         RenderSystem.scalef(textScale, textScale, textScale);
-                        mc.fontRenderer.drawStringWithShadow(text, textX / textScale, textY / textScale, 0x53a008);
+                        mc.fontRenderer.drawStringWithShadow(text, textX / textScale, textY / textScale, color);
                         RenderSystem.popMatrix();
 
                         if (!heldOcular.isEmpty()) {
