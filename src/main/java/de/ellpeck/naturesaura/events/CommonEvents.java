@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.chunk.AuraChunkProvider;
+import de.ellpeck.naturesaura.commands.CommandAura;
 import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.util.ResourceLocation;
@@ -19,6 +20,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -84,5 +86,10 @@ public class CommonEvents {
             if (auraChunk != null)
                 PacketHandler.sendTo(event.getPlayer(), auraChunk.makePacket());
         }
+    }
+
+    @SubscribeEvent
+    public void onServerAboutToStartEvent(FMLServerStartingEvent event) {
+        CommandAura.register(event.getCommandDispatcher());
     }
 }
