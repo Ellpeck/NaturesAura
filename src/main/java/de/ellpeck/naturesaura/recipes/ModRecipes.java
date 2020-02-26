@@ -73,7 +73,7 @@ public final class ModRecipes {
                 ing(Blocks.OAK_SAPLING), new ItemStack(ModBlocks.FURNACE_HEATER), 600,
                 ing(ModBlocks.INFUSED_STONE),
                 ing(ModBlocks.INFUSED_STONE),
-                ing(ModItems.INFUSED_IRON),
+                ing(ModItems.TAINTED_GOLD),
                 ing(ModItems.INFUSED_IRON),
                 ing(Items.FIRE_CHARGE),
                 ing(Items.FLINT),
@@ -161,6 +161,12 @@ public final class ModRecipes {
         new AltarRecipe(res("infused_iron_block"),
                 ing(Blocks.IRON_BLOCK), new ItemStack(ModBlocks.INFUSED_IRON_BLOCK),
                 NaturesAuraAPI.TYPE_OVERWORLD, Ingredient.EMPTY, 135000, 700).register();
+        new AltarRecipe(res("tainted_gold"),
+                ing(Items.GOLD_INGOT), new ItemStack(ModItems.TAINTED_GOLD),
+                NaturesAuraAPI.TYPE_NETHER, Ingredient.EMPTY, 15000, 80).register();
+        new AltarRecipe(res("tainted_gold_block"),
+                ing(Blocks.GOLD_BLOCK), new ItemStack(ModBlocks.TAINTED_GOLD_BLOCK),
+                NaturesAuraAPI.TYPE_NETHER, Ingredient.EMPTY, 135000, 700).register();
         new AltarRecipe(res("infused_stone"),
                 ing(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE),
                 NaturesAuraAPI.TYPE_OVERWORLD, Ingredient.EMPTY, 7500, 40).register();
@@ -183,6 +189,10 @@ public final class ModRecipes {
 
         new OfferingRecipe(res("sky_ingot"),
                 amountIng(new ItemStack(ModItems.INFUSED_IRON, 3)),
+                ing(ModItems.CALLING_SPIRIT),
+                new ItemStack(ModItems.SKY_INGOT)).register();
+        new OfferingRecipe(res("sky_ingot_from_gold"),
+                ing(ModItems.TAINTED_GOLD),
                 ing(ModItems.CALLING_SPIRIT),
                 new ItemStack(ModItems.SKY_INGOT)).register();
         new OfferingRecipe(res("clock_hand"),

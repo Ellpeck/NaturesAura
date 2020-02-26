@@ -46,4 +46,5 @@ public final class ModItems {
     public static Item CAVE_FINDER;
     public static Item CRIMSON_MEAL;
     public static Item DEATH_RING;
+    public static Item TAINTED_GOLD;
 }

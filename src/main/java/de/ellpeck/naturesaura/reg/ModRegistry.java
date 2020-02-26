@@ -129,8 +129,8 @@ public final class ModRegistry {
                 temp = new BlockAuraBloom("aura_bloom", TileEntityAuraBloom::new),
                 createFlowerPot(temp),
                 temp = new BlockAuraBloom("aura_cactus", TileEntityAuraCactus::new),
-                createFlowerPot(temp)
-        );
+                createFlowerPot(temp),
+                new BlockImpl("tainted_gold_block", ModBlocks.prop(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(3F)));
 
         if (ModConfig.instance.rfConverter.get())
             event.getRegistry().register(new BlockRFConverter());
@@ -193,7 +193,8 @@ public final class ModRegistry {
                 new ItemEnderAccess(),
                 new ItemCaveFinder(),
                 new ItemCrimsonMeal(),
-                new ItemDeathRing()
+                new ItemDeathRing(),
+                new ItemImpl("tainted_gold")
         );
         Helper.populateObjectHolders(ModItems.class, event.getRegistry());
     }

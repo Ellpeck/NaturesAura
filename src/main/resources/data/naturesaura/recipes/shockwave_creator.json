@@ -19,7 +19,7 @@
             "item": "naturesaura:infused_stone"
         },
         "S": {
-            "item": "minecraft:redstone"
+            "item": "naturesaura:tainted_gold"
         }
     },
     "result": {

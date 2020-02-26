@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:tainted_gold"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.tainted_gold"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.tainted_gold.desc"
+        }
+    },
+    "parent": "naturesaura:altar",
+    "criteria": {
+        "materials": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "naturesaura:tainted_gold"
+                    }
+                ]
+            }
+        }
+    }
+}

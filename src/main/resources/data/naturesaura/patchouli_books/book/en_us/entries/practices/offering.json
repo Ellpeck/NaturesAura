@@ -2,7 +2,7 @@
     "name": "Offering to the Gods",
     "icon": "naturesaura:offering_table",
     "category": "practices",
-    "advancement": "naturesaura:aura_bottle_nether",
+    "advancement": "naturesaura:tainted_gold",
     "pages": [
         {
             "type": "text",
@@ -31,6 +31,11 @@
             "type": "naturesaura:offering",
             "text": "Asking for $(item)Ingots of the Sky$(), a powerful metal infused with divine energy.",
             "recipe": "naturesaura:sky_ingot"
+        },
+        {
+            "type": "naturesaura:offering",
+            "text": "Asking for $(item)Ingots of the Sky$() using $(item)Tainted Gold$() results in a higher yield.",
+            "recipe": "naturesaura:sky_ingot_from_gold"
         },
         {
             "type": "naturesaura:offering",

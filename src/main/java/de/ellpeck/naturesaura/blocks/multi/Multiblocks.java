@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
+import de.ellpeck.naturesaura.blocks.BlockNatureAltar;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LogBlock;
@@ -36,7 +37,7 @@ public final class Multiblocks {
             'B', Blocks.NETHER_BRICKS,
             'W', Blocks.NETHER_WART_BLOCK,
             'M', ModBlocks.GOLD_NETHER_BRICK,
-            '0', ModBlocks.NATURE_ALTAR,
+            '0', ModBlocks.NATURE_ALTAR.getDefaultState().with(BlockNatureAltar.NETHER, true),
             ' ', Matcher.wildcard());
     public static final IMultiblock TREE_RITUAL = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "tree_ritual"),
