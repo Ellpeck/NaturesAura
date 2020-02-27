@@ -94,6 +94,19 @@ public class PatchouliCompat implements ICompat {
                 GuiUtils.drawHoveringText(
                         Collections.singletonList(TextFormatting.GOLD + "It's the author Ellpeck's birthday!"),
                         event.mouseX, event.mouseY, event.gui.width, event.gui.height, 0, event.gui.getMinecraft().fontRenderer);
+        } else if (now.getMonth() == Month.JUNE) {
+            int x = event.gui.width / 2 + 272 / 2;
+            int y = event.gui.height / 2 - 180 / 2 + 16;
+
+            RenderHelper.disableStandardItemLighting();
+            GlStateManager.color4f(1, 1, 1, 1);
+            event.gui.getMinecraft().getTextureManager().bindTexture(ClientEvents.BOOK_GUI);
+            AbstractGui.blit(x, y, 424, 0, 45, 26, 512, 256);
+
+            if (event.mouseX >= x && event.mouseY >= y && event.mouseX < x + 45 && event.mouseY < y + 26)
+                GuiUtils.drawHoveringText(
+                        Collections.singletonList("§6Happy §4P§6r§ei§2d§9e§5!"),
+                        event.mouseX, event.mouseY, event.gui.width, event.gui.height, 0, event.gui.getMinecraft().fontRenderer);
         }
 
         String name = event.gui.getMinecraft().player.getName().getFormattedText();
