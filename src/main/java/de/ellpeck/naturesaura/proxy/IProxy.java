@@ -29,6 +29,8 @@ public interface IProxy {
 
     void setParticleSpawnRange(int range);
 
+    void setParticleCulling(boolean cull);
+
     <T extends Entity> void registerEntityRenderer(EntityType<T> entityClass, Supplier<IRenderFactory<T>> renderFactory);
 
 }

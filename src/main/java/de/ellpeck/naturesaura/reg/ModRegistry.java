@@ -196,7 +196,8 @@ public final class ModRegistry {
                 new ItemCaveFinder(),
                 new ItemCrimsonMeal(),
                 new ItemDeathRing(),
-                new ItemImpl("tainted_gold")
+                new ItemImpl("tainted_gold"),
+                new ItemLootFinder()
         );
         Helper.populateObjectHolders(ModItems.class, event.getRegistry());
     }

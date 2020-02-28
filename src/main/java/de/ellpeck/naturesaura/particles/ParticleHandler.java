@@ -28,20 +28,23 @@ public final class ParticleHandler {
     private static final List<Particle> PARTICLES_NO_DEPTH = new ArrayList<>();
     public static boolean depthEnabled = true;
     public static int range = 32;
+    public static boolean culling = true;
 
     public static void spawnParticle(Supplier<Particle> particle, double x, double y, double z) {
         if (Minecraft.getInstance().player.getDistanceSq(x, y, z) <= range * range) {
-            Minecraft mc = Minecraft.getInstance();
-            if (ModConfig.instance.respectVanillaParticleSettings.get()) {
-                ParticleStatus setting = mc.gameSettings.particles;
-                if (setting != ParticleStatus.ALL &&
-                        (setting != ParticleStatus.DECREASED || mc.world.rand.nextInt(3) != 0) &&
-                        (setting != ParticleStatus.MINIMAL || mc.world.rand.nextInt(10) != 0))
+            if (culling) {
+                Minecraft mc = Minecraft.getInstance();
+                if (ModConfig.instance.respectVanillaParticleSettings.get()) {
+                    ParticleStatus setting = mc.gameSettings.particles;
+                    if (setting != ParticleStatus.ALL &&
+                            (setting != ParticleStatus.DECREASED || mc.world.rand.nextInt(3) != 0) &&
+                            (setting != ParticleStatus.MINIMAL || mc.world.rand.nextInt(10) != 0))
+                        return;
+                }
+                double setting = ModConfig.instance.particleAmount.get();
+                if (setting < 1 && mc.world.rand.nextDouble() > setting)
                     return;
             }
-            double setting = ModConfig.instance.particleAmount.get();
-            if (setting < 1 && mc.world.rand.nextDouble() > setting)
-                return;
 
             if (depthEnabled)
                 PARTICLES.add(particle.get());
@@ -56,6 +59,7 @@ public final class ParticleHandler {
 
         depthEnabled = true;
         range = 32;
+        culling = true;
     }
 
     private static void updateList(List<Particle> particles) {

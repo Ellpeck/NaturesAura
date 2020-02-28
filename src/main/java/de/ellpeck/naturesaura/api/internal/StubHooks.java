@@ -47,6 +47,11 @@ public class StubHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
+    public void setParticleCulling(boolean cull) {
+
+    }
+
+    @Override
     public IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
         return new StubMultiblock();
     }

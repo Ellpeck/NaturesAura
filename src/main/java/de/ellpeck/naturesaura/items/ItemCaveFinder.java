@@ -27,6 +27,7 @@ public class ItemCaveFinder extends ItemImpl {
         if (worldIn.isRemote) {
             inst.setParticleDepth(false);
             inst.setParticleSpawnRange(64);
+            inst.setParticleCulling(false);
             BlockPos pos = playerIn.getPosition();
             int range = 30;
             for (int x = -range; x <= range; x++)
@@ -53,6 +54,7 @@ public class ItemCaveFinder extends ItemImpl {
                     }
             inst.setParticleDepth(true);
             inst.setParticleSpawnRange(32);
+            inst.setParticleCulling(true);
 
             playerIn.swingArm(handIn);
         }

@@ -274,6 +274,8 @@ public final class NaturesAuraAPI {
          */
         void setParticleSpawnRange(int range);
 
+        void setParticleCulling(boolean cull);
+
         /**
          * This method is used to create a custom multiblock from within the
          * API. The multiblock will automatically be registered both to Nature's

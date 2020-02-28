@@ -58,6 +58,11 @@ public class ServerProxy implements IProxy {
     }
 
     @Override
+    public void setParticleCulling(boolean cull) {
+
+    }
+
+    @Override
     public <T extends Entity> void registerEntityRenderer(EntityType<T> entityClass, Supplier<IRenderFactory<T>> renderFactory) {
 
     }

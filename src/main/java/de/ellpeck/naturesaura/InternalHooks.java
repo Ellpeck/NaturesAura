@@ -78,6 +78,11 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
+    public void setParticleCulling(boolean cull) {
+        NaturesAura.proxy.setParticleCulling(cull);
+    }
+
+    @Override
     public IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
         return new Multiblock(name, pattern, rawMatchers);
     }

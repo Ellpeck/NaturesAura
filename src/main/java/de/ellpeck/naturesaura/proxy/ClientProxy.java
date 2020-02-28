@@ -104,6 +104,11 @@ public class ClientProxy implements IProxy {
     }
 
     @Override
+    public void setParticleCulling(boolean cull) {
+        ParticleHandler.culling = cull;
+    }
+
+    @Override
     public <T extends Entity> void registerEntityRenderer(EntityType<T> entityClass, Supplier<IRenderFactory<T>> renderFactory) {
         RenderingRegistry.registerEntityRenderingHandler(entityClass, renderFactory.get());
     }
