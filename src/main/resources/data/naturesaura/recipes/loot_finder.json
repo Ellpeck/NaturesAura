@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " DT",
+        "GRD",
+        "RG "
+    ],
+    "key": {
+        "R": {
+            "item": "naturesaura:ancient_stick"
+        },
+        "D": {
+            "item": "minecraft:diamond"
+        },
+        "G": {
+            "item": "minecraft:gold_ingot"
+        },
+        "T": {
+            "item": "naturesaura:token_euphoria"
+        }
+    },
+    "result": {
+        "item": "naturesaura:loot_finder"
+    }
+}
