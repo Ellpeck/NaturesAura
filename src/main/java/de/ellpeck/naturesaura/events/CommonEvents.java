@@ -1,5 +1,7 @@
 package de.ellpeck.naturesaura.events;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
@@ -9,7 +11,9 @@ import de.ellpeck.naturesaura.chunk.AuraChunkProvider;
 import de.ellpeck.naturesaura.commands.CommandAura;
 import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.server.ChunkHolder;
@@ -24,10 +28,13 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.UUID;
 
 public class CommonEvents {
 
     private static final Method GET_LOADED_CHUNKS_METHOD = ObfuscationReflectionHelper.findMethod(ChunkManager.class, "func_223491_f");
+    private static final ListMultimap<UUID, ChunkPos> PENDING_AURA_CHUNKS = ArrayListMultimap.create();
 
     @SubscribeEvent
     public void onChunkCapsAttach(AttachCapabilitiesEvent<Chunk> event) {
@@ -67,6 +74,11 @@ public class CommonEvents {
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (!event.player.world.isRemote && event.phase == TickEvent.Phase.END) {
+            if (event.player.world.getGameTime() % 10 == 0) {
+                List<ChunkPos> pending = PENDING_AURA_CHUNKS.get(event.player.getUniqueID());
+                pending.removeIf(p -> this.handleChunkWatchDeferred(event.player, p));
+            }
+
             if (event.player.world.getGameTime() % 200 != 0)
                 return;
 
@@ -80,12 +92,18 @@ public class CommonEvents {
 
     @SubscribeEvent
     public void onChunkWatch(ChunkWatchEvent.Watch event) {
-        Chunk chunk = event.getWorld().getChunk(event.getPos().x, event.getPos().z);
-        if (!chunk.getWorld().isRemote) {
-            AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
-            if (auraChunk != null)
-                PacketHandler.sendTo(event.getPlayer(), auraChunk.makePacket());
-        }
+        PENDING_AURA_CHUNKS.put(event.getPlayer().getUniqueID(), event.getPos());
+    }
+
+    private boolean handleChunkWatchDeferred(PlayerEntity player, ChunkPos pos) {
+        Chunk chunk = Helper.getLoadedChunk(player.world, pos.x, pos.z);
+        if (chunk == null)
+            return false;
+        AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
+        if (auraChunk == null)
+            return false;
+        PacketHandler.sendTo(player, auraChunk.makePacket());
+        return true;
     }
 
     @SubscribeEvent
