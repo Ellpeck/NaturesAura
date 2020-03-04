@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.util.Comparator;
 import java.util.List;
@@ -83,8 +84,8 @@ public class AnimalEffect implements IDrainSpotEffect {
                 ItemStack stack = item.getItem();
                 if (!(stack.getItem() instanceof EggItem))
                     continue;
-                // The getAge() method is private for absolutely no reason but I want it so I don't care
-                int age = item.getAge();
+                // The getAge() method is client-side only for absolutely no reason but I want it so I don't care
+                int age = ObfuscationReflectionHelper.getPrivateValue(ItemEntity.class, item, "field_70292_b");
                 if (age < item.lifespan / 2)
                     continue;
 
