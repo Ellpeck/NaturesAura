@@ -160,6 +160,10 @@ public final class ModConfig {
     }
 
     public void apply() {
+        if (!this.grassDieEffect.get() && !this.explosionEffect.get() && !this.breathlessEffect.get()) {
+            throw new IllegalStateException("Nature's Aura has detected that all negative Aura Imbalance effects are disabled in the config file. This is disallowed behavior. Please enable at least one negative effect.");
+        }
+
         try {
             for (String s : this.additionalBotanistPickaxeConversions.get()) {
                 String[] split = s.split("->");
