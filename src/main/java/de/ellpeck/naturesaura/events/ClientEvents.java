@@ -53,6 +53,7 @@ import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.opengl.GL11;
 
@@ -77,6 +78,8 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
+        if (ModList.get().isLoaded("enchdesc"))
+            return;
         ItemStack stack = event.getItemStack();
         List<ITextComponent> tooltip = event.getToolTip();
         for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(stack).entrySet()) {
