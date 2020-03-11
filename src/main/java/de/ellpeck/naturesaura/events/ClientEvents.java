@@ -294,7 +294,9 @@ public class ClientEvents {
                 if (!heldCache.isEmpty()) {
                     IAuraContainer container = heldCache.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
                     int width = MathHelper.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
-                    int x = res.getScaledWidth() / 2 - 173 - (mc.player.getHeldItemOffhand().isEmpty() ? 0 : 29);
+
+                    int conf = ModConfig.instance.cacheBarLocation.get();
+                    int x = res.getScaledWidth() / 2 + (conf == 0 ? -173 - (mc.player.getHeldItemOffhand().isEmpty() ? 0 : 29) : 93);
                     int y = res.getScaledHeight() - 8;
 
                     RenderSystem.pushMatrix();
@@ -310,7 +312,7 @@ public class ClientEvents {
                     float scale = 0.75F;
                     RenderSystem.scalef(scale, scale, scale);
                     String s = heldCache.getDisplayName().getFormattedText();
-                    mc.fontRenderer.drawStringWithShadow(s, (x + 80) / scale - mc.fontRenderer.getStringWidth(s), (y - 7) / scale, color);
+                    mc.fontRenderer.drawStringWithShadow(s, conf == 1 ? x / scale : (x + 80) / scale - mc.fontRenderer.getStringWidth(s), (y - 7) / scale, color);
 
                     RenderSystem.color4f(1F, 1F, 1F, 1);
                     RenderSystem.popMatrix();

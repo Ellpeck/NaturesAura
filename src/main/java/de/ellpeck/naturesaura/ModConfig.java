@@ -45,6 +45,7 @@ public final class ModConfig {
     public ForgeConfigSpec.ConfigValue<Boolean> respectVanillaParticleSettings;
     public ForgeConfigSpec.ConfigValue<Double> excessParticleAmount;
     public ForgeConfigSpec.ConfigValue<Integer> auraBarLocation;
+    public ForgeConfigSpec.ConfigValue<Integer> cacheBarLocation;
     public ForgeConfigSpec.ConfigValue<Boolean> debugText;
     public ForgeConfigSpec.ConfigValue<Boolean> debugWorld;
 
@@ -148,6 +149,10 @@ public final class ModConfig {
                 .comment("The location of the aura bar, where 0 is top left, 1 is top right, 2 is bottom left and 3 is bottom right")
                 .translation("config." + NaturesAura.MOD_ID + ".auraBarLocation")
                 .defineInRange("auraBarLocation", 0, 0, 3);
+        this.cacheBarLocation = builder
+                .comment("The location of the aura cache bar, where 0 is to the left of the hotbar and 1 is to the right of the hotbar")
+                .translation("config." + NaturesAura.MOD_ID + ".cacheBarLocation")
+                .defineInRange("cacheBarLocation", 0, 0, 1);
         this.debugText = builder
                 .comment("If debug information about Aura around the player should be displayed in the F3 debug menu if the player is in creative mode")
                 .translation("config." + NaturesAura.MOD_ID + ".debugText")
