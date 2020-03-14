@@ -97,11 +97,11 @@ public final class ParticleHandler {
             Tessellator tessy = Tessellator.getInstance();
             BufferBuilder buffer = tessy.getBuffer();
 
+            RenderSystem.enableDepthTest();
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
             for (Particle particle : PARTICLES)
                 particle.renderParticle(buffer, info, partialTicks);
             tessy.draw();
-
             RenderSystem.disableDepthTest();
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
             for (Particle particle : PARTICLES_NO_DEPTH)
