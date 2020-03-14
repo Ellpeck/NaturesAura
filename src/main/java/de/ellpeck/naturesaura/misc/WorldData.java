@@ -90,4 +90,10 @@ public class WorldData implements IWorldData {
         }
         return false;
     }
+
+    public void addMossStone(BlockPos pos) {
+        this.recentlyConvertedMossStones.add(pos);
+        if (this.recentlyConvertedMossStones.size() > 512)
+            this.recentlyConvertedMossStones.remove(0);
+    }
 }

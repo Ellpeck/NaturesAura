@@ -55,9 +55,7 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
                     world.setBlockState(pos, result);
 
                     WorldData data = (WorldData) IWorldData.getWorldData(world);
-                    data.recentlyConvertedMossStones.add(pos);
-                    if (data.recentlyConvertedMossStones.size() > 512)
-                        data.recentlyConvertedMossStones.remove(0);
+                    data.addMossStone(pos);
                 }
                 world.playSound(player, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 stack.damageItem(15, player, playerEntity -> playerEntity.sendBreakAnimation(context.getHand()));

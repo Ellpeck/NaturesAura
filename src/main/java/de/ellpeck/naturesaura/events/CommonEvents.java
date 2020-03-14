@@ -6,12 +6,14 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.chunk.AuraChunkProvider;
 import de.ellpeck.naturesaura.commands.CommandAura;
 import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -21,6 +23,7 @@ import net.minecraft.world.server.ChunkManager;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -45,6 +48,18 @@ public class CommonEvents {
     @SubscribeEvent
     public void onWorldCapsAttach(AttachCapabilitiesEvent<World> event) {
         event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "data"), new WorldData());
+    }
+
+    @SubscribeEvent
+    public void onItemUse(PlayerInteractEvent.RightClickBlock event) {
+        PlayerEntity player = event.getPlayer();
+        if (player.world.isRemote)
+            return;
+        ItemStack held = event.getItemStack();
+        if (!held.isEmpty() && held.getItem().getRegistryName().getPath().contains("chisel")) {
+            WorldData data = (WorldData) IWorldData.getWorldData(player.world);
+            data.addMossStone(event.getPos());
+        }
     }
 
     @SubscribeEvent
