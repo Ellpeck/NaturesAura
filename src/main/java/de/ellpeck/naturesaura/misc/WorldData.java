@@ -93,7 +93,7 @@ public class WorldData implements IWorldData {
 
     public void addMossStone(BlockPos pos) {
         this.recentlyConvertedMossStones.add(pos);
-        if (this.recentlyConvertedMossStones.size() > 512)
+        if (this.recentlyConvertedMossStones.size() > 2048)
             this.recentlyConvertedMossStones.remove(0);
     }
 }

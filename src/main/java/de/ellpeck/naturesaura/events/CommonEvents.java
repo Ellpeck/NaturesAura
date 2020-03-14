@@ -12,6 +12,7 @@ import de.ellpeck.naturesaura.chunk.AuraChunkProvider;
 import de.ellpeck.naturesaura.commands.CommandAura;
 import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -57,8 +58,11 @@ public class CommonEvents {
             return;
         ItemStack held = event.getItemStack();
         if (!held.isEmpty() && held.getItem().getRegistryName().getPath().contains("chisel")) {
-            WorldData data = (WorldData) IWorldData.getWorldData(player.world);
-            data.addMossStone(event.getPos());
+            BlockState state = player.world.getBlockState(event.getPos());
+            if (NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.containsKey(state)) {
+                WorldData data = (WorldData) IWorldData.getWorldData(player.world);
+                data.addMossStone(event.getPos());
+            }
         }
     }
 
