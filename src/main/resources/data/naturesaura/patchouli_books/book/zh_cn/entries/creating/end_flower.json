@@ -1,0 +1,18 @@
+{
+    "name": "湮灭玫瑰",
+    "icon": "naturesaura:end_flower",
+    "category": "creating",
+    "advancement": "naturesaura:end_flower",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(thing)末影龙$()是凶猛的怪物. 它是最强的$(thing)末界$()守护者, 但它可以被击败. 击杀末影龙获得的不仅是荣耀和其后裔的证明, 也有叫$(item)湮灭玫瑰$()的东西可以入手. 龙死亡时, 玫瑰会在末地长出，这些玫瑰可以被植物学家收获并在任何维度放置."
+        },
+        {
+            "type": "spotlight",
+            "item": "naturesaura:end_flower",
+            "text": "这种玫瑰蕴含大量的$(#419600)灵气$()，提取这些灵气是用一种有趣的方式: 在靠近它的地方丢一个$(item)末影之眼$()会使得玫瑰变成$(#419600)灵气$()释放到环境中. 这个过程一旦开始就无法停止，此时玫瑰也无法被采集.",
+            "link_recipe": true
+        }
+    ]
+}

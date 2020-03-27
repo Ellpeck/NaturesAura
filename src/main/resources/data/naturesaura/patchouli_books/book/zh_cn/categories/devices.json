@@ -1,0 +1,6 @@
+{
+    "name": "设备",
+    "description": "有的设备不是直接控制$(#419600)灵气$()的力量 , 而是利用灵气制造的物品来实现其他设备做不到的事情. 这个分类描述了这样的设备.",
+    "icon": "naturesaura:textures/gui/patchouli/categories/devices.png",
+    "sortnum": 30
+}
