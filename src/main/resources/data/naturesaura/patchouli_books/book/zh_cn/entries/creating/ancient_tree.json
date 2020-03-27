@@ -1,0 +1,22 @@
+{
+    "name": "上古树",
+    "icon": "naturesaura:ancient_leaves",
+    "category": "creating",
+    "advancement": "naturesaura:wood_stand",
+    "pages": [
+        {
+            "type": "text",
+            "text": "加强周遭$(#419600)灵气$()的一个基本方法是种植$(item)上古树$(). 一旦$(item)上古树苗$()被种下了, 它会像一般的树一样生长, 但是它的叶片会缓慢地回复周围的$(aura)到正常水平.$(br)但是树本身会不太好过: 当$(#419600)灵气$()耗尽,它的叶片就会开始腐败 , 使得树变得光秃."
+        },
+        {
+            "type": "naturesaura:tree_ritual",
+            "text": "使用$(l:practices/tree_ritual)森林仪式$()来制作$(item)上古树苗$()",
+            "recipe": "naturesaura:ancient_sapling"
+        },
+        {
+            "type": "crafting",
+            "recipe": "naturesaura:ancient_planks",
+            "recipe2": "naturesaura:ancient_stick"
+        }
+    ]
+}

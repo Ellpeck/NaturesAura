@@ -1,0 +1,25 @@
+{
+    "name": "烟火凝望",
+    "icon": "naturesaura:firework_generator",
+    "category": "creating",
+    "advancement": "naturesaura:offering",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(item)烟花$()看起来很漂亮, 造价昂贵的尤其如此. $(item)烟火凝望$()对此持不同意见: 消耗$(thing)丢在$()它地面附加的烟花, 它会把烟花发射到天上. 一旦爆炸, 其爆炸的威力和火花就会被吸收, 根据烟火的复杂程度,"
+        },
+        {
+            "type": "text",
+            "text": "$(#419600)灵气$()的产生或多或少. 为了复杂度, 提高原材料的$(thing)价值$()是重中之重, 但是$(thing)烟火之星$()的数量也很重要,$(thing)色彩$()和变换亦会影响每一发产生的$(#419600)灵气$()."
+        },
+        {
+            "type": "text",
+            "text": "此外当烟花已经被$(item)烟火凝望$()发射到空中, 或正在吸收烟花的能量时, 丢下的额外的烟花会被吸收, 但是没有$(#419600)灵气$()产生. 这就意味着最好是设置一个$(thing)定时器$()来实现自动化."
+        },
+        {
+            "type": "crafting",
+            "recipe": "naturesaura:firework_generator",
+            "text": "制造 $(item)烟火凝望$()"
+        }
+    ]
+}

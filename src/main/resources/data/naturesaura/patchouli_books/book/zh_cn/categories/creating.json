@@ -1,0 +1,6 @@
+{
+    "name": "灵气制造",
+    "description": "世界上$(#419600)灵气$()的存量或许是个问题, 因为貌似它在用尽之后不会回复. 不过现在这已经不是问题了: 这个分类中解释了如何用各种技术制造$(#419600)灵气$().",
+    "icon": "naturesaura:textures/gui/patchouli/categories/creating.png",
+    "sortnum": 18
+}

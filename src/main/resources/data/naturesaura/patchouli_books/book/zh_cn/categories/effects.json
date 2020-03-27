@@ -1,0 +1,6 @@
+{
+    "name": "灵气失衡",
+    "description": "消耗世界中的$(#419600)灵气$()或者释放出额外的灵气就会导致$(thing)灵气失衡$() - 这会产生正面或者负面的效果. 在此分类记载有这些效果.",
+    "icon": "naturesaura:textures/gui/patchouli/categories/effects.png",
+    "sortnum": 20
+}
