@@ -8,7 +8,6 @@ import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.api.internal.StubHooks;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
@@ -157,15 +156,13 @@ public final class NaturesAuraAPI {
      */
     @CapabilityInject(IWorldData.class)
     public static Capability<IWorldData> capWorldData;
-    private static IInternalHooks instance = new StubHooks();
+    private static IInternalHooks instance;
 
     /**
      * This method returns the active {@link IInternalHooks} instance which can
-     * be used to hook into the mod's internal functionalities. This is
-     * instantiated as {@link StubHooks} by default which has no functionality,
-     * but, in the mod's preInit phase, this will be overriden to a proper
-     * implementation. If you want to use this instance, use it after Nature's
-     * Aura's preInit phase.
+     * be used to hook into the mod's internal functionalities.This will be
+     * overriden to a proper implementation. If you want to use this instance,
+     * use it after Nature's Aura's preInit phase.
      *
      * @return The active {@link IInternalHooks} instance
      */
@@ -177,7 +174,7 @@ public final class NaturesAuraAPI {
      * This is an internal function. Do not use.
      */
     public static void setInstance(IInternalHooks inst) {
-        if (instance instanceof StubHooks)
+        if (instance == null)
             instance = inst;
         else
             throw new IllegalStateException();
