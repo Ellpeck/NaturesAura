@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.api.internal;
 
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
@@ -48,6 +49,8 @@ public class StubHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
+        NaturesAura.LOGGER.info("WHAT?? ");
+        Thread.dumpStack();
         return new StubMultiblock();
     }
 

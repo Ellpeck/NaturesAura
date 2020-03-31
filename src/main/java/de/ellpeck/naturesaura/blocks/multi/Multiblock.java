@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks.multi;
 
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
@@ -27,6 +28,7 @@ public class Multiblock implements IMultiblock {
     private final char[][][] rawPattern;
 
     public Multiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
+        NaturesAura.LOGGER.info("We're initializing a multiblock with name " + name + " now...");
         this.name = name;
 
         int width = -1;
@@ -103,6 +105,7 @@ public class Multiblock implements IMultiblock {
                 }
 
         PatchouliCompat.addPatchouliMultiblock(name, pattern, rawMatchers);
+        NaturesAura.LOGGER.info("We're done with this one");
         NaturesAuraAPI.MULTIBLOCKS.put(this.name, this);
     }
 
