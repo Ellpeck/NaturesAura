@@ -4,6 +4,7 @@ import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.actions.IAction;
 import de.ellpeck.naturesaura.compat.ICompat;
 import de.ellpeck.naturesaura.data.ItemTagProvider;
+import net.minecraftforge.fml.DeferredWorkQueue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +26,11 @@ public class CraftTweakerCompat implements ICompat {
 
     @Override
     public void postInit() {
-        for (Supplier<IAction> action : SCHEDULED_ACTIONS)
-            CraftTweakerAPI.apply(action.get());
-        SCHEDULED_ACTIONS.clear();
+        DeferredWorkQueue.runLater(() -> {
+            for (Supplier<IAction> action : SCHEDULED_ACTIONS)
+                CraftTweakerAPI.apply(action.get());
+            SCHEDULED_ACTIONS.clear();
+        });
     }
 
     @Override
