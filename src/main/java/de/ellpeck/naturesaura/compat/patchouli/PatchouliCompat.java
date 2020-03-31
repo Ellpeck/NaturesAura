@@ -18,6 +18,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 import vazkii.patchouli.api.BookDrawScreenEvent;
 import vazkii.patchouli.api.PatchouliAPI;
@@ -43,7 +44,7 @@ public class PatchouliCompat implements ICompat {
                             state -> check.matches(null, null, null, null, state, (char) 0));
             }
         }
-        PatchouliAPI.instance.registerMultiblock(name, PatchouliAPI.instance.makeMultiblock(pattern, rawMatchers));
+        DeferredWorkQueue.runLater(() -> PatchouliAPI.instance.registerMultiblock(name, PatchouliAPI.instance.makeMultiblock(pattern, rawMatchers)));
     }
 
     public static <T> T getRecipe(Map<ResourceLocation, T> recipes, String name) {
