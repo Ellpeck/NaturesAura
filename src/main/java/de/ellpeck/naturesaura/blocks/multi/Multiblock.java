@@ -28,7 +28,6 @@ public class Multiblock implements IMultiblock {
     private final char[][][] rawPattern;
 
     public Multiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
-        NaturesAura.LOGGER.info("We're initializing a multiblock with name " + name + " now...");
         this.name = name;
 
         int width = -1;
@@ -105,7 +104,6 @@ public class Multiblock implements IMultiblock {
                 }
 
         PatchouliCompat.addPatchouliMultiblock(name, pattern, rawMatchers);
-        NaturesAura.LOGGER.info("We're done with this one");
         NaturesAuraAPI.MULTIBLOCKS.put(this.name, this);
     }
 

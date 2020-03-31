@@ -49,8 +49,6 @@ public class StubHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
-        NaturesAura.LOGGER.info("WHAT?? ");
-        Thread.dumpStack();
         return new StubMultiblock();
     }
 

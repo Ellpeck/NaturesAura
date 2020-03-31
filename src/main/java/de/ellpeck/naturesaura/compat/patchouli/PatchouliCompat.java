@@ -19,6 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import vazkii.patchouli.api.BookDrawScreenEvent;
+import vazkii.patchouli.api.IMultiblock;
 import vazkii.patchouli.api.PatchouliAPI;
 
 import java.time.LocalDateTime;
@@ -113,7 +114,10 @@ public class PatchouliCompat implements ICompat {
                             state -> check.matches(null, null, null, null, state, (char) 0));
             }
         }
-        PatchouliAPI.instance.registerMultiblock(name, PatchouliAPI.instance.makeMultiblock(pattern, rawMatchers));
+        NaturesAura.LOGGER.info("The patchouli API is " + PatchouliAPI.instance);
+        IMultiblock out = PatchouliAPI.instance.registerMultiblock(name, PatchouliAPI.instance.makeMultiblock(pattern, rawMatchers));
+        NaturesAura.LOGGER.info(out);
+        Thread.dumpStack();
     }
 
     public static <T> T getRecipe(Map<ResourceLocation, T> recipes, String name) {
