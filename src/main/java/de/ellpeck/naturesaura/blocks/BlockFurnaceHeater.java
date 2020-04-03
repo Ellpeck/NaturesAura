@@ -29,11 +29,11 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     private static final VoxelShape[] SHAPES = new VoxelShape[]{
-            Block.makeCuboidShape(2, 12, 2, 14, 1, 14),     // Down
+            Block.makeCuboidShape(2, 12, 2, 14, 16, 14),    // Down
             Block.makeCuboidShape(2, 0, 2, 14, 4, 14),      // Up
-            Block.makeCuboidShape(2, 2, 12, 14, 14, 1F),    // North
+            Block.makeCuboidShape(2, 2, 12, 14, 14, 16),    // North
             Block.makeCuboidShape(2, 2, 0, 14, 14, 4),      // South
-            Block.makeCuboidShape(12, 2, 2, 1, 14, 14),     // West
+            Block.makeCuboidShape(12, 2, 2, 16, 14, 14),    // West
             Block.makeCuboidShape(0, 2, 2, 4, 14, 14)       // East
     };
 
