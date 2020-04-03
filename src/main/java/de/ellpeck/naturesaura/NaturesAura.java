@@ -20,6 +20,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -79,9 +80,9 @@ public final class NaturesAura {
     private void init(FMLCommonSetupEvent event) {
         ModConfig.instance.apply();
 
-        ModRecipes.init();
         ModRegistry.init();
         DrainSpotEffects.init();
+        DeferredWorkQueue.runLater(ModRecipes::init);
 
         proxy.init(event);
     }
