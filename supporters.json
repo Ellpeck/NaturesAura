@@ -1,7 +1,7 @@
 {
     "Ellpeck": {
         "tier": 2,
-        "color": 65280
+        "color": "00ff00"
     },
     "DJAscendance": {
         "tier": 1
@@ -17,6 +17,6 @@
     },
     "Owlwix": {
         "tier": 2,
-        "color": 16776960
+        "color": "ffff00"
     }
 }
