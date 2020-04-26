@@ -14,6 +14,7 @@ import de.ellpeck.naturesaura.misc.ColoredBlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerBlock;
+import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.SheepEntity;
@@ -24,6 +25,8 @@ import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
+import net.minecraft.profiler.IProfiler;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
@@ -33,9 +36,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
 
-public final class ModRecipes {
+public class ModRecipes extends ReloadListener<Object> {
 
-    public static void init() {
+    private void init() {
         new TreeRitualRecipe(res("eye"),
                 ing(new ItemStack(Blocks.OAK_SAPLING)), new ItemStack(ModItems.EYE), 250,
                 ing(Items.SPIDER_EYE),
@@ -390,5 +393,16 @@ public final class ModRecipes {
 
     private static ResourceLocation res(String name) {
         return new ResourceLocation(NaturesAura.MOD_ID, name);
+    }
+
+    @Override
+    protected Object prepare(IResourceManager resourceManagerIn, IProfiler profilerIn) {
+        return null;
+    }
+
+    @Override
+    protected void apply(Object splashList, IResourceManager resourceManagerIn, IProfiler profilerIn) {
+        NaturesAura.LOGGER.info("Loading recipes");
+        this.init();
     }
 }

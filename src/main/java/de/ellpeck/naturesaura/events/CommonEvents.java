@@ -12,9 +12,13 @@ import de.ellpeck.naturesaura.chunk.AuraChunkProvider;
 import de.ellpeck.naturesaura.commands.CommandAura;
 import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.profiler.IProfiler;
+import net.minecraft.resources.IFutureReloadListener;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -28,12 +32,15 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 public class CommonEvents {
 
@@ -126,7 +133,12 @@ public class CommonEvents {
     }
 
     @SubscribeEvent
-    public void onServerAboutToStartEvent(FMLServerStartingEvent event) {
+    public void onServerStarting(FMLServerStartingEvent event) {
         CommandAura.register(event.getCommandDispatcher());
+    }
+
+    @SubscribeEvent
+    public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
+        event.getServer().getResourceManager().addReloadListener(new ModRecipes());
     }
 }

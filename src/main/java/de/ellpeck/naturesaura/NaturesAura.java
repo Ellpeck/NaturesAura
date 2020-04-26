@@ -82,7 +82,6 @@ public final class NaturesAura {
 
         ModRegistry.init();
         DrainSpotEffects.init();
-        DeferredWorkQueue.runLater(ModRecipes::init);
 
         proxy.init(event);
     }
