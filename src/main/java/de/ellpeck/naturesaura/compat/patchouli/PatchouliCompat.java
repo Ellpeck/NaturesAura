@@ -56,7 +56,7 @@ public class PatchouliCompat implements ICompat {
     }
 
     @Override
-    public void preInit() {
+    public void setup() {
         DeferredWorkQueue.runLater(() -> {
             PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":rf_converter", ModConfig.instance.rfConverter.get());
             PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":chunk_loader", ModConfig.instance.chunkLoader.get());
@@ -64,17 +64,12 @@ public class PatchouliCompat implements ICompat {
     }
 
     @Override
-    public void preInitClient() {
+    public void setupClient() {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
     public void addItemTags(ItemTagProvider provider) {
-
-    }
-
-    @Override
-    public void postInit() {
 
     }
 

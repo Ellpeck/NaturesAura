@@ -41,9 +41,14 @@ public class CuriosCompat implements ICompat {
             .build();
 
     @Override
-    public void preInit() {
+    public void setup() {
         FMLJavaModLoadingContext.get().getModEventBus().register(this); // inter mod comms
         MinecraftForge.EVENT_BUS.register(this); // capabilities
+    }
+
+    @Override
+    public void setupClient() {
+
     }
 
     @SubscribeEvent
@@ -83,16 +88,6 @@ public class CuriosCompat implements ICompat {
                 }
             });
         }
-    }
-
-    @Override
-    public void preInitClient() {
-
-    }
-
-    @Override
-    public void postInit() {
-
     }
 
     @Override

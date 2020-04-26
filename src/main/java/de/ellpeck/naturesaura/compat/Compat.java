@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.compat;
 
 import com.google.common.collect.ImmutableMap;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.compat.crafttweaker.CraftTweakerCompat;
 import de.ellpeck.naturesaura.compat.enchantibility.EnchantibilityCompat;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import de.ellpeck.naturesaura.data.ItemTagProvider;
@@ -18,22 +17,17 @@ public final class Compat {
     private static final Map<String, Supplier<ICompat>> MODULE_TYPES = ImmutableMap.<String, Supplier<ICompat>>builder()
             .put("patchouli", PatchouliCompat::new)
             .put("curios", CuriosCompat::new)
-            .put("crafttweaker", CraftTweakerCompat::new)
             .put("enchantability", EnchantibilityCompat::new)
             .build();
     private static final Map<String, ICompat> MODULES = new HashMap<>();
 
-    public static void preInit() {
+    public static void setup() {
         populateModules(ModList.get()::isLoaded);
-        MODULES.values().forEach(ICompat::preInit);
+        MODULES.values().forEach(ICompat::setup);
     }
 
-    public static void preInitClient() {
-        MODULES.values().forEach(ICompat::preInitClient);
-    }
-
-    public static void postInit() {
-        MODULES.values().forEach(ICompat::postInit);
+    public static void setupClient() {
+        MODULES.values().forEach(ICompat::setupClient);
     }
 
     public static boolean hasCompat(String mod) {

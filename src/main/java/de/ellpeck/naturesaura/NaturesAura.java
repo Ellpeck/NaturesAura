@@ -68,7 +68,7 @@ public final class NaturesAura {
         Helper.registerCap(IAuraChunk.class);
         Helper.registerCap(IWorldData.class);
 
-        Compat.preInit();
+        Compat.setup();
         PacketHandler.init();
         new Multiblocks();
 
@@ -87,7 +87,6 @@ public final class NaturesAura {
     }
 
     private void postInit(FMLCommonSetupEvent event) {
-        Compat.postInit();
         proxy.postInit(event);
     }
 

@@ -12,7 +12,7 @@ import java.util.Collections;
 
 public class EnchantibilityCompat implements ICompat {
     @Override
-    public void preInit() {
+    public void setup() {
         DeferredWorkQueue.runLater(() -> {
             IInternals api = EnchantabilityApi.getInstance();
             api.registerEnchantEffect(EnchantibilityAuraMending.RES, ModEnchantments.AURA_MENDING, EnchantibilityAuraMending::new);
@@ -21,12 +21,7 @@ public class EnchantibilityCompat implements ICompat {
     }
 
     @Override
-    public void preInitClient() {
-
-    }
-
-    @Override
-    public void postInit() {
+    public void setupClient() {
 
     }
 

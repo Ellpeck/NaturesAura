@@ -4,11 +4,9 @@ import de.ellpeck.naturesaura.data.ItemTagProvider;
 
 public interface ICompat {
 
-    void preInit();
+    void setup();
 
-    void preInitClient();
-
-    void postInit();
+    void setupClient();
 
     void addItemTags(ItemTagProvider provider);
 }
