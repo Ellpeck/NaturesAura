@@ -67,6 +67,7 @@ public final class ModBlocks {
     public static Block AURA_CACTUS;
     public static Block TAINTED_GOLD_BLOCK;
     public static Block NETHER_GRASS;
+    public static Block LIGHT;
 
     public static Block.Properties prop(Material material, MaterialColor color) {
         return Block.Properties.create(material, color);

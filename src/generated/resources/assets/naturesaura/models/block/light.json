@@ -1,0 +1,6 @@
+{
+  "parent": "block/air",
+  "textures": {
+    "particle": "naturesaura:block/light"
+  }
+}

@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.data;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
+import de.ellpeck.naturesaura.reg.INoItemBlock;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
@@ -23,7 +24,7 @@ public class ItemModelGenerator extends ItemModelProvider {
                 ((ICustomItemModel) modItem).generateCustomItemModel(this);
             } else if (modItem instanceof Item) {
                 this.withExistingParent(name, "item/generated").texture("layer0", "item/" + name);
-            } else if (modItem instanceof Block) {
+            } else if (modItem instanceof Block && !(modItem instanceof INoItemBlock)) {
                 this.withExistingParent(name, this.modLoc("block/" + name));
             }
         }

@@ -48,4 +48,5 @@ public final class ModItems {
     public static Item DEATH_RING;
     public static Item TAINTED_GOLD;
     public static Item LOOT_FINDER;
+    public static Item LIGHT_STAFF;
 }

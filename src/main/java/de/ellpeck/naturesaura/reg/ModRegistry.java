@@ -12,10 +12,12 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
+import de.ellpeck.naturesaura.entities.EntityLightProjectile;
 import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
 import de.ellpeck.naturesaura.entities.ModEntities;
 import de.ellpeck.naturesaura.entities.render.RenderEffectInhibitor;
 import de.ellpeck.naturesaura.entities.render.RenderMoverMinecart;
+import de.ellpeck.naturesaura.entities.render.RenderStub;
 import de.ellpeck.naturesaura.gen.ModFeatures;
 import de.ellpeck.naturesaura.gen.WorldGenAncientTree;
 import de.ellpeck.naturesaura.gen.WorldGenAuraBloom;
@@ -131,7 +133,8 @@ public final class ModRegistry {
                 temp = new BlockAuraBloom("aura_cactus", TileEntityAuraCactus::new),
                 createFlowerPot(temp),
                 new BlockImpl("tainted_gold_block", ModBlocks.prop(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(3F)),
-                new BlockNetherGrass()
+                new BlockNetherGrass(),
+                new BlockLight()
         );
 
         if (ModConfig.instance.rfConverter.get())
@@ -197,7 +200,8 @@ public final class ModRegistry {
                 new ItemCrimsonMeal(),
                 new ItemDeathRing(),
                 new ItemImpl("tainted_gold"),
-                new ItemLootFinder()
+                new ItemLootFinder(),
+                new ItemLightStaff()
         );
         Helper.populateObjectHolders(ModItems.class, event.getRegistry());
     }
@@ -254,12 +258,17 @@ public final class ModRegistry {
                 EntityType.Builder.create(EntityEffectInhibitor::new, EntityClassification.MISC)
                         .size(1, 1).setShouldReceiveVelocityUpdates(true)
                         .setTrackingRange(64).setUpdateInterval(20).immuneToFire().build(NaturesAura.MOD_ID + ":effect_inhibitor")
-                        .setRegistryName("effect_inhibitor")
+                        .setRegistryName("effect_inhibitor"),
+                EntityType.Builder.<EntityLightProjectile>create(EntityLightProjectile::new, EntityClassification.MISC)
+                        .size(0.5F, 0.5F).setShouldReceiveVelocityUpdates(true)
+                        .setTrackingRange(64).setUpdateInterval(3).immuneToFire().build(NaturesAura.MOD_ID + ":light_projectile")
+                        .setRegistryName("light_projectile")
         );
         Helper.populateObjectHolders(ModEntities.class, event.getRegistry());
 
         NaturesAura.proxy.registerEntityRenderer(ModEntities.MOVER_CART, () -> RenderMoverMinecart::new);
         NaturesAura.proxy.registerEntityRenderer(ModEntities.EFFECT_INHIBITOR, () -> RenderEffectInhibitor::new);
+        NaturesAura.proxy.registerEntityRenderer(ModEntities.LIGHT_PROJECTILE, () -> RenderStub::new);
     }
 
     @SubscribeEvent
