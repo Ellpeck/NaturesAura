@@ -48,6 +48,7 @@ public final class ModConfig {
     public ForgeConfigSpec.ConfigValue<Integer> cacheBarLocation;
     public ForgeConfigSpec.ConfigValue<Boolean> debugText;
     public ForgeConfigSpec.ConfigValue<Boolean> debugWorld;
+    public ForgeConfigSpec.ConfigValue<Boolean> renderItemsOnPlayer;
 
     public ModConfig(ForgeConfigSpec.Builder builder) {
         builder.push("general");
@@ -161,6 +162,10 @@ public final class ModConfig {
                 .comment("If, when the F3 debug menu is open and the player is in creative mode, every Aura spot should be highlighted in the world for debug purposes")
                 .translation("config." + NaturesAura.MOD_ID + ".debugWorld")
                 .define("debugWorld", false);
+        this.renderItemsOnPlayer = builder
+                .comment("If certain equippable items, like the Environmental Eye, should be rendered on the player")
+                .translation("config." + NaturesAura.MOD_ID + ".renderItemsOnPlayer")
+                .define("renderItemsOnPlayer", true);
         builder.pop();
     }
 

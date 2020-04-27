@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.renderers;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.api.render.ITrinketItem.RenderType;
 import de.ellpeck.naturesaura.compat.Compat;
@@ -35,6 +36,8 @@ public class PlayerLayerTrinkets extends LayerRenderer<AbstractClientPlayerEntit
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, AbstractClientPlayerEntity player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        if (!ModConfig.instance.renderItemsOnPlayer.get())
+            return;
         if (player.getActivePotionEffect(Effects.INVISIBILITY) != null)
             return;
         ItemStack main = player.getHeldItemMainhand();
