@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " SG",
+        " RT",
+        "R  "
+    ],
+    "key": {
+        "R": {
+            "item": "naturesaura:ancient_stick"
+        },
+        "S": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "T": {
+            "item": "naturesaura:token_terror"
+        },
+        "G": {
+            "item": "minecraft:glowstone"
+        }
+    },
+    "result": {
+        "item": "naturesaura:light_staff"
+    }
+}
