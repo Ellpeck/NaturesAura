@@ -35,8 +35,12 @@ public class ItemCaveFinder extends ItemImpl {
                     for (int z = -range; z <= range; z++) {
                         BlockPos offset = pos.add(x, y, z);
                         BlockState state = worldIn.getBlockState(offset);
-                        if (!state.getBlock().canCreatureSpawn(state, worldIn, offset, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, null))
+                        try {
+                            if (!state.getBlock().canCreatureSpawn(state, worldIn, offset, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, null))
+                                continue;
+                        } catch (Exception e) {
                             continue;
+                        }
 
                         BlockPos offUp = offset.up();
                         BlockState stateUp = worldIn.getBlockState(offUp);
