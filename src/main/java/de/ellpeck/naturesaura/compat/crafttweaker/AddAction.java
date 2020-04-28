@@ -1,11 +1,12 @@
 package de.ellpeck.naturesaura.compat.crafttweaker;
 
 import com.blamejared.crafttweaker.api.actions.IAction;
+import com.blamejared.crafttweaker.api.actions.IRuntimeAction;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Map;
 
-public class AddAction<T> implements IAction {
+public class AddAction<T> implements IRuntimeAction {
 
     private final Map<ResourceLocation, T> registry;
     private final ResourceLocation res;

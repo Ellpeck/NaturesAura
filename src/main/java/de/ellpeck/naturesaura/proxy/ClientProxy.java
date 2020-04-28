@@ -47,8 +47,7 @@ public class ClientProxy implements IProxy {
         ScreenManager.registerFactory(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
 
         IResourceManager manager = Minecraft.getInstance().getResourceManager();
-        if (manager instanceof IReloadableResourceManager)
-            ((IReloadableResourceManager) manager).addReloadListener(new ModRecipes());
+        ((IReloadableResourceManager) manager).addReloadListener(new ModRecipes());
     }
 
     @Override

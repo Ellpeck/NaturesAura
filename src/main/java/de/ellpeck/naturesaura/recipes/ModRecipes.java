@@ -39,6 +39,17 @@ import java.util.Arrays;
 public class ModRecipes extends ReloadListener<Object> {
 
     private void init() {
+        // Clear all registries first
+        NaturesAuraAPI.TREE_RITUAL_RECIPES.clear();
+        NaturesAuraAPI.ALTAR_RECIPES.clear();
+        NaturesAuraAPI.OFFERING_RECIPES.clear();
+        NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.clear();
+        NaturesAuraAPI.FLOWERS.clear();
+        NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.clear();
+        NaturesAuraAPI.OVERWORLD_ORES.clear();
+        NaturesAuraAPI.NETHER_ORES.clear();
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.clear();
+
         new TreeRitualRecipe(res("eye"),
                 ing(new ItemStack(Blocks.OAK_SAPLING)), new ItemStack(ModItems.EYE), 250,
                 ing(Items.SPIDER_EYE),
