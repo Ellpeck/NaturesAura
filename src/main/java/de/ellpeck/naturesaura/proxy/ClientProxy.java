@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.gui.GuiEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import de.ellpeck.naturesaura.particles.ParticleMagic;
+import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.reg.*;
 import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
@@ -21,6 +22,8 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Tuple;
@@ -42,6 +45,10 @@ public class ClientProxy implements IProxy {
         Compat.setupClient();
         ScreenManager.registerFactory(ModContainers.ENDER_CRATE, GuiEnderCrate::new);
         ScreenManager.registerFactory(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
+
+        IResourceManager manager = Minecraft.getInstance().getResourceManager();
+        if (manager instanceof IReloadableResourceManager)
+            ((IReloadableResourceManager) manager).addReloadListener(new ModRecipes());
     }
 
     @Override

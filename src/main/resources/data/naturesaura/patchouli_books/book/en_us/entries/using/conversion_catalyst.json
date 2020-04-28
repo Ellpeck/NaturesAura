@@ -6,7 +6,7 @@
     "pages": [
         {
             "type": "text",
-            "text": "The $(l:collecting/altar)Natural Altar$() can be useful for infusing certain items with the power of $(aura), however, it can also assist in transmuting items from one type into another.$(br)This can be achieved by creating the $(item)Transmutation Catalyst$() and placing it on top of any of the four lower $(item)Golden Stone Brick$() blocks around the altar, and then placing the ingredient on the altar as usual."
+            "text": "The $(l:using/altar)Natural Altar$() can be useful for infusing certain items with the power of $(aura), however, it can also assist in transmuting items from one type into another.$(br)This can be achieved by creating the $(item)Transmutation Catalyst$() and placing it on top of any of the four lower $(item)Golden Stone Brick$() blocks around the altar, and then placing the ingredient on the altar as usual."
         },
         {
             "type": "naturesaura:tree_ritual",
