@@ -1,0 +1,14 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    }
+  ],
+  "entity": "minecraft:creeper",
+  "aura": 100000,
+  "time": 120
+}

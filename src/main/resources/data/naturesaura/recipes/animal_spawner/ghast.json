@@ -1,0 +1,17 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:ghast_tear"
+    }
+  ],
+  "entity": "minecraft:ghast",
+  "aura": 120000,
+  "time": 150
+}

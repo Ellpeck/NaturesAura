@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.api.recipes.WeightedOre;
+import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import de.ellpeck.naturesaura.chunk.effect.OreSpawnEffect;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
@@ -21,7 +21,6 @@ public final class ModConfig {
 
     public static ModConfig instance;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> additionalBotanistPickaxeConversions;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> additionalFlowers;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> auraTypeOverrides;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> additionalOres;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> oreExceptions;
@@ -56,10 +55,6 @@ public final class ModConfig {
                 .comment("Additional conversion recipes for the Botanist's Pickaxe right click function. Each entry needs to be formatted as modid:input_block[prop1=value1,...]->modid:output_block[prop1=value1,...] where block state properties are optional")
                 .translation("config." + NaturesAura.MOD_ID + ".additionalBotanistPickaxeConversions")
                 .defineList("additionalBotanistPickaxeConversions", Collections.emptyList(), s -> true);
-        this.additionalFlowers = builder
-                .comment("Additional blocks that several mechanics identify as flowers. Each entry needs to be formatted as modid:block[prop1=value1,...] where block state properties are optional")
-                .translation("config." + NaturesAura.MOD_ID + ".additionalFlowers")
-                .defineList("additionalFlowers", Collections.emptyList(), s -> true);
         this.auraTypeOverrides = builder
                 .comment("Additional dimensions that map to Aura types that should be present in them. This is useful if you have a modpack with custom dimensions that should have Aura act similarly to an existing dimension in them. Each entry needs to be formatted as dimension_name->aura_type, where aura_type can be any of naturesaura:overworld, naturesaura:nether and naturesaura:end.")
                 .translation("config." + NaturesAura.MOD_ID + ".auraTypeOverrides")
@@ -186,13 +181,6 @@ public final class ModConfig {
         }
 
         try {
-            for (String s : this.additionalFlowers.get())
-                NaturesAuraAPI.FLOWERS.add(Helper.getStateFromString(s));
-        } catch (Exception e) {
-            NaturesAura.LOGGER.warn("Error parsing additionalFlowers", e);
-        }
-
-        try {
             for (String s : this.auraTypeOverrides.get()) {
                 String[] split = s.split("->");
                 IAuraType type = NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(split[1]));
@@ -206,8 +194,7 @@ public final class ModConfig {
         try {
             for (String s : this.additionalOres.get()) {
                 String[] split = s.split(":");
-                Tag<Block> tag = BlockTags.getCollection().get(new ResourceLocation(split[0]));
-                WeightedOre ore = new WeightedOre(tag, Integer.parseInt(split[1]));
+                WeightedOre ore = new WeightedOre(new ResourceLocation(split[0]), Integer.parseInt(split[1]));
                 String dimension = split[2];
                 if ("nether".equalsIgnoreCase(dimension))
                     NaturesAuraAPI.NETHER_ORES.add(ore);

@@ -1,0 +1,17 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "item": "minecraft:beef"
+    },
+    {
+      "item": "minecraft:leather"
+    }
+  ],
+  "entity": "minecraft:cow",
+  "aura": 50000,
+  "time": 60
+}

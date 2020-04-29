@@ -28,6 +28,7 @@ import de.ellpeck.naturesaura.items.*;
 import de.ellpeck.naturesaura.items.tools.*;
 import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
+import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerPotBlock;
@@ -40,6 +41,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -280,6 +282,11 @@ public final class ModRegistry {
                 new WorldGenNetherWartMushroom().setRegistryName("nether_wart_mushroom")
         );
         Helper.populateObjectHolders(ModFeatures.class, event.getRegistry());
+    }
+
+    @SubscribeEvent
+    public static void registerRecipes(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+        ModRecipes.register(event.getRegistry());
     }
 
     public static void init() {

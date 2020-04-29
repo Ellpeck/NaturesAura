@@ -1,0 +1,17 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "item": "minecraft:scute"
+    },
+    {
+      "item": "minecraft:seagrass"
+    }
+  ],
+  "entity": "minecraft:turtle",
+  "aura": 100000,
+  "time": 150
+}

@@ -1,0 +1,17 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "item": "minecraft:cod"
+    },
+    {
+      "item": "minecraft:ice"
+    }
+  ],
+  "entity": "minecraft:polar_bear",
+  "aura": 50000,
+  "time": 60
+}

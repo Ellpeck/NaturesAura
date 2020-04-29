@@ -1,0 +1,12 @@
+{
+  "type": "naturesaura:offering",
+  "input": {
+    "item": "naturesaura:token_fear"
+  },
+  "start_item": {
+    "item": "naturesaura:calling_spirit"
+  },
+  "output": {
+    "item": "naturesaura:token_terror"
+  }
+}

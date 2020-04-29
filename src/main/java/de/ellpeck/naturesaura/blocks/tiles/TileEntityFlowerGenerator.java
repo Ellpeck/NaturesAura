@@ -12,6 +12,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -41,9 +42,8 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
                     for (int z = -range; z <= range; z++) {
                         BlockPos offset = this.pos.add(x, y, z);
                         BlockState state = this.world.getBlockState(offset);
-                        if (NaturesAuraAPI.FLOWERS.contains(state)) {
+                        if (BlockTags.SMALL_FLOWERS.contains(state.getBlock()))
                             possible.add(offset);
-                        }
                     }
                 }
             }

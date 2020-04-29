@@ -1,0 +1,14 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "item": "minecraft:porkchop"
+    }
+  ],
+  "entity": "minecraft:pig",
+  "aura": 50000,
+  "time": 60
+}

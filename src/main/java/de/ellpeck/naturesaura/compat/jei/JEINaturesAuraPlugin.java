@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.recipes.ModRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -15,7 +16,9 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 
 @JeiPlugin
@@ -68,9 +71,10 @@ public class JEINaturesAuraPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(NaturesAuraAPI.TREE_RITUAL_RECIPES.values(), TREE_RITUAL);
-        registration.addRecipes(NaturesAuraAPI.ALTAR_RECIPES.values(), ALTAR);
-        registration.addRecipes(NaturesAuraAPI.OFFERING_RECIPES.values(), OFFERING);
-        registration.addRecipes(NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.values(), SPAWNER);
+        RecipeManager manager = Minecraft.getInstance().world.getRecipeManager();
+        registration.addRecipes(manager.getRecipes(ModRecipes.TREE_RITUAL_TYPE, null, null), TREE_RITUAL);
+        registration.addRecipes(manager.getRecipes(ModRecipes.ALTAR_TYPE, null, null), ALTAR);
+        registration.addRecipes(manager.getRecipes(ModRecipes.OFFERING_TYPE, null, null), OFFERING);
+        registration.addRecipes(manager.getRecipes(ModRecipes.ANIMAL_SPAWNER_TYPE, null, null), SPAWNER);
     }
 }

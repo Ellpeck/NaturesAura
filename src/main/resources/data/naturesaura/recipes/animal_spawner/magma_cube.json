@@ -1,0 +1,14 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "item": "minecraft:magma_cream"
+    }
+  ],
+  "entity": "minecraft:magma_cube",
+  "aura": 100000,
+  "time": 100
+}

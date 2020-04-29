@@ -6,7 +6,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.api.recipes.WeightedOre;
+import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
@@ -102,7 +103,10 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                 outer:
                 while (true) {
                     WeightedOre ore = WeightedRandom.getRandomItem(world.rand, ores, totalWeight);
-                    for (Block toPlace : ore.tag.getAllElements()) {
+                    Tag<Block> tag = world.getTags().getBlocks().get(ore.tag);
+                    if (tag == null)
+                        continue;
+                    for (Block toPlace : tag.getAllElements()) {
                         if (toPlace == null || toPlace == Blocks.AIR)
                             continue;
 

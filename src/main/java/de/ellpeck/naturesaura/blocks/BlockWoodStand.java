@@ -2,7 +2,9 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.recipes.ModRecipe;
+import de.ellpeck.naturesaura.recipes.ModRecipes;
+import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
@@ -67,11 +69,11 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
         IWorld world = event.getWorld();
         BlockPos pos = event.getPos();
         if (!world.isRemote()) {
-            if (Multiblocks.TREE_RITUAL.isComplete(world, pos)) {
+            if (Multiblocks.TREE_RITUAL.isComplete((World) world, pos)) {
                 BlockState sapling = world.getBlockState(pos);
                 ItemStack saplingStack = sapling.getBlock().getItem(world, pos, sapling);
                 if (!saplingStack.isEmpty()) {
-                    for (TreeRitualRecipe recipe : NaturesAuraAPI.TREE_RITUAL_RECIPES.values()) {
+                    for (TreeRitualRecipe recipe : ((World) world).getRecipeManager().getRecipes(ModRecipes.TREE_RITUAL_TYPE, null, null)) {
                         if (recipe.saplingType.test(saplingStack)) {
                             List<Ingredient> required = new ArrayList<>(Arrays.asList(recipe.ingredients));
                             MutableObject<TileEntityWoodStand> toPick = new MutableObject<>();

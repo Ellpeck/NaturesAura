@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
+import de.ellpeck.naturesaura.recipes.AnimalSpawnerRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;

@@ -5,11 +5,12 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.BasicAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
+import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -203,7 +204,7 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
 
     private AltarRecipe getRecipeForInput(ItemStack input) {
         IAuraType type = IAuraType.forWorld(this.world);
-        for (AltarRecipe recipe : NaturesAuraAPI.ALTAR_RECIPES.values()) {
+        for (AltarRecipe recipe : this.world.getRecipeManager().getRecipes(ModRecipes.ALTAR_TYPE, null, null)) {
             if (recipe.input.test(input) && (recipe.requiredType == null || type.isSimilar(recipe.requiredType))) {
                 if (recipe.catalyst == Ingredient.EMPTY)
                     return recipe;
@@ -250,7 +251,8 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
         }
         if (type == SaveType.TILE) {
             if (compound.contains("recipe")) {
-                this.currentRecipe = NaturesAuraAPI.ALTAR_RECIPES.get(new ResourceLocation(compound.getString("recipe")));
+                if (this.hasWorld())
+                    this.currentRecipe = (AltarRecipe) this.world.getRecipeManager().getRecipe(new ResourceLocation(compound.getString("recipe"))).orElse(null);
                 this.timer = compound.getInt("timer");
             }
         }

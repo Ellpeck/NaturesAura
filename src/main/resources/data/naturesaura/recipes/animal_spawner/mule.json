@@ -1,0 +1,20 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "item": "minecraft:leather"
+    },
+    {
+      "item": "minecraft:chest"
+    },
+    {
+      "item": "minecraft:apple"
+    }
+  ],
+  "entity": "minecraft:mule",
+  "aura": 100000,
+  "time": 100
+}

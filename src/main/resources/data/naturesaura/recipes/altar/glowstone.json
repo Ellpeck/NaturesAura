@@ -1,0 +1,16 @@
+{
+  "type": "naturesaura:altar",
+  "input": {
+    "item": "minecraft:glowstone"
+  },
+  "output": {
+    "item": "minecraft:glowstone_dust",
+    "count": 4
+  },
+  "aura_type": "naturesaura:nether",
+  "catalyst": {
+    "item": "naturesaura:crushing_catalyst"
+  },
+  "aura": 3000,
+  "time": 40
+}

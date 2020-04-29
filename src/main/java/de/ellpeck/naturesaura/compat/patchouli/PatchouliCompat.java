@@ -8,12 +8,20 @@ import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.compat.ICompat;
 import de.ellpeck.naturesaura.data.ItemTagProvider;
 import de.ellpeck.naturesaura.events.ClientEvents;
+import de.ellpeck.naturesaura.recipes.ModRecipe;
+import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler.FancyInfo;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,7 +34,9 @@ import vazkii.patchouli.api.PatchouliAPI;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class PatchouliCompat implements ICompat {
 
@@ -47,12 +57,11 @@ public class PatchouliCompat implements ICompat {
         DeferredWorkQueue.runLater(() -> PatchouliAPI.instance.registerMultiblock(name, PatchouliAPI.instance.makeMultiblock(pattern, rawMatchers)));
     }
 
-    public static <T> T getRecipe(Map<ResourceLocation, T> recipes, String name) {
+    public static <T extends IRecipe<?>> T getRecipe(String type, String name) {
+        RecipeManager manager = Minecraft.getInstance().world.getRecipeManager();
         ResourceLocation res = new ResourceLocation(name);
-        T recipe = recipes.get(res);
-        if (recipe == null)
-            recipe = recipes.get(new ResourceLocation("crafttweaker", res.getPath()));
-        return recipe;
+        ResourceLocation pre = new ResourceLocation(res.getNamespace(), type + "/" + res.getPath());
+        return (T) manager.getRecipe(pre).orElse(null);
     }
 
     @Override

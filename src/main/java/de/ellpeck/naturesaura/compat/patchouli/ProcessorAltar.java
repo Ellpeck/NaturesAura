@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.compat.patchouli;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.recipes.AltarRecipe;
+import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.item.ItemStack;
@@ -16,7 +16,7 @@ public class ProcessorAltar implements IComponentProcessor {
 
     @Override
     public void setup(IVariableProvider<String> provider) {
-        this.recipe = PatchouliCompat.getRecipe(NaturesAuraAPI.ALTAR_RECIPES, provider.get("recipe"));
+        this.recipe = PatchouliCompat.getRecipe("altar", provider.get("recipe"));
     }
 
     @Override

@@ -1,0 +1,14 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "item": "minecraft:rabbit_hide"
+    }
+  ],
+  "entity": "minecraft:rabbit",
+  "aura": 30000,
+  "time": 40
+}

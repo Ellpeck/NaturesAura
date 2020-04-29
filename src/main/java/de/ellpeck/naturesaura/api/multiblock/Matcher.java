@@ -6,6 +6,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 
 public class Matcher {
 
@@ -34,6 +35,6 @@ public class Matcher {
     }
 
     public interface ICheck {
-        boolean matches(IWorld world, BlockPos start, BlockPos offset, BlockPos pos, BlockState state, char c);
+        boolean matches(World world, BlockPos start, BlockPos offset, BlockPos pos, BlockState state, char c);
     }
 }

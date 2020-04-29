@@ -1,0 +1,17 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "item": "minecraft:rotten_flesh"
+    },
+    {
+      "item": "minecraft:sand"
+    }
+  ],
+  "entity": "minecraft:husk",
+  "aura": 100000,
+  "time": 120
+}

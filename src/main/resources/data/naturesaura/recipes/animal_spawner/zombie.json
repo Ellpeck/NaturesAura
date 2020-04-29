@@ -1,0 +1,14 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "item": "minecraft:rotten_flesh"
+    }
+  ],
+  "entity": "minecraft:zombie",
+  "aura": 100000,
+  "time": 100
+}

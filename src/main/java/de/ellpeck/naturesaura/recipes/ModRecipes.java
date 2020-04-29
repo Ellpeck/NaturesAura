@@ -1,241 +1,52 @@
 package de.ellpeck.naturesaura.recipes;
 
+import com.google.gson.JsonObject;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.types.JsonOps;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.recipes.*;
-import de.ellpeck.naturesaura.api.recipes.ing.AmountIngredient;
-import de.ellpeck.naturesaura.api.recipes.ing.NBTIngredient;
-import de.ellpeck.naturesaura.blocks.ModBlocks;
-import de.ellpeck.naturesaura.chunk.effect.*;
-import de.ellpeck.naturesaura.items.ItemAuraBottle;
-import de.ellpeck.naturesaura.items.ItemEffectPowder;
-import de.ellpeck.naturesaura.items.ModItems;
-import de.ellpeck.naturesaura.misc.ColoredBlockHelper;
-import net.minecraft.block.Block;
+import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowerBlock;
 import net.minecraft.client.resources.ReloadListener;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class ModRecipes extends ReloadListener<Object> {
+public final class ModRecipes {
 
-    private void init() {
-        // Clear all registries first
-        NaturesAuraAPI.TREE_RITUAL_RECIPES.clear();
-        NaturesAuraAPI.ALTAR_RECIPES.clear();
-        NaturesAuraAPI.OFFERING_RECIPES.clear();
-        NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.clear();
-        NaturesAuraAPI.FLOWERS.clear();
-        NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.clear();
-        NaturesAuraAPI.OVERWORLD_ORES.clear();
-        NaturesAuraAPI.NETHER_ORES.clear();
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.clear();
+    public static final IRecipeType<AltarRecipe> ALTAR_TYPE = new RecipeType<>();
+    public static final IRecipeSerializer<AltarRecipe> ALTAR_SERIAIZER = new AltarRecipe.Serializer();
 
-        new TreeRitualRecipe(res("eye"),
-                ing(new ItemStack(Blocks.OAK_SAPLING)), new ItemStack(ModItems.EYE), 250,
-                ing(Items.SPIDER_EYE),
-                ing(Items.GOLD_INGOT),
-                ing(ModItems.GOLD_LEAF),
-                ing(ModItems.GOLD_LEAF)).register();
-        new TreeRitualRecipe(res("eye_improved"),
-                ing(new ItemStack(Blocks.OAK_SAPLING)), new ItemStack(ModItems.EYE_IMPROVED), 500,
-                ing(ModItems.EYE),
-                ing(ModItems.SKY_INGOT),
-                ing(ModItems.SKY_INGOT),
-                ing(ModBlocks.END_FLOWER),
-                ing(ModItems.GOLD_LEAF),
-                ing(ModItems.GOLD_LEAF)).register();
-        new TreeRitualRecipe(res("nature_altar"),
-                ing(Blocks.OAK_SAPLING), new ItemStack(ModBlocks.NATURE_ALTAR), 500,
-                ing(Blocks.STONE),
-                ing(Blocks.STONE),
-                ing(Blocks.STONE),
-                ing(ModItems.GOLD_LEAF),
-                ing(Items.GOLD_INGOT),
-                ing(ModItems.TOKEN_JOY)).register();
-        new TreeRitualRecipe(res("ancient_sapling"),
-                ing(Blocks.OAK_SAPLING), new ItemStack(ModBlocks.ANCIENT_SAPLING), 200,
-                ing(Blocks.OAK_SAPLING),
-                ing(Blocks.DANDELION),
-                ing(Blocks.POPPY),
-                ing(Items.WHEAT_SEEDS),
-                ing(Items.SUGAR_CANE),
-                ing(ModItems.GOLD_LEAF)).register();
-        new TreeRitualRecipe(res("furnace_heater"),
-                ing(Blocks.OAK_SAPLING), new ItemStack(ModBlocks.FURNACE_HEATER), 600,
-                ing(ModBlocks.INFUSED_STONE),
-                ing(ModBlocks.INFUSED_STONE),
-                ing(ModItems.TAINTED_GOLD),
-                ing(ModItems.INFUSED_IRON),
-                ing(Items.FIRE_CHARGE),
-                ing(Items.FLINT),
-                ing(Blocks.MAGMA_BLOCK),
-                ing(ModItems.TOKEN_FEAR)).register();
-        new TreeRitualRecipe(res("conversion_catalyst"),
-                ing(Blocks.JUNGLE_SAPLING), new ItemStack(ModBlocks.CONVERSION_CATALYST), 600,
-                ing(ModBlocks.GOLD_BRICK),
-                ing(ModBlocks.INFUSED_STONE),
-                ing(Items.BREWING_STAND),
-                ing(ModItems.SKY_INGOT),
-                ing(ModItems.GOLD_LEAF),
-                ing(Blocks.GLOWSTONE)).register();
-        new TreeRitualRecipe(res("crushing_catalyst"),
-                ing(Blocks.OAK_SAPLING), new ItemStack(ModBlocks.CRUSHING_CATALYST), 600,
-                ing(ModBlocks.GOLD_BRICK),
-                ing(ModBlocks.INFUSED_STONE),
-                ing(Blocks.PISTON),
-                ing(Items.FLINT),
-                ing(ModItems.TOKEN_ANGER)).register();
-        new TreeRitualRecipe(res("plant_powder"),
-                ing(new ItemStack(Blocks.OAK_SAPLING)),
-                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 24), PlantBoostEffect.NAME), 400,
-                ing(ModBlocks.GOLD_POWDER),
-                ing(ModBlocks.GOLD_POWDER),
-                ing(ModItems.SKY_INGOT),
-                ing(Items.WHEAT)).register();
-        new TreeRitualRecipe(res("cache_powder"),
-                ing(new ItemStack(Blocks.OAK_SAPLING)),
-                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 32), CacheRechargeEffect.NAME), 400,
-                ing(ModBlocks.GOLD_POWDER),
-                ing(ModBlocks.GOLD_POWDER),
-                ing(ModItems.SKY_INGOT),
-                ing(ModItems.AURA_CACHE)).register();
-        new TreeRitualRecipe(res("animal_powder"),
-                ing(Blocks.JUNGLE_SAPLING),
-                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 8), AnimalEffect.NAME), 400,
-                ing(ModBlocks.GOLD_POWDER),
-                ing(ModBlocks.GOLD_POWDER),
-                ing(ModItems.SKY_INGOT),
-                ing(Items.EGG)).register();
-        new TreeRitualRecipe(res("ore_spawn_powder"),
-                ing(Blocks.OAK_SAPLING),
-                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 4), OreSpawnEffect.NAME), 400,
-                ing(ModBlocks.GOLD_POWDER),
-                ing(ModBlocks.GOLD_POWDER),
-                ing(Blocks.DIAMOND_ORE),
-                ing(Blocks.REDSTONE_ORE)).register();
-        new TreeRitualRecipe(res("nether_grass_powder"),
-                ing(Blocks.OAK_SAPLING),
-                ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER, 24), NetherGrassEffect.NAME), 400,
-                ing(ModBlocks.GOLD_POWDER),
-                ing(ModBlocks.GOLD_POWDER),
-                ing(Blocks.NETHERRACK),
-                ing(Blocks.GRASS)).register();
-        new TreeRitualRecipe(res("token_joy"),
-                ing(Blocks.OAK_SAPLING), new ItemStack(ModItems.TOKEN_JOY, 2), 200,
-                nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)),
-                ing(ModItems.GOLD_LEAF),
-                ing(ItemTags.SMALL_FLOWERS),
-                ing(Items.APPLE),
-                ing(Blocks.TORCH),
-                ing(Items.IRON_INGOT)).register();
-        new TreeRitualRecipe(res("token_anger"),
-                ing(Blocks.OAK_SAPLING), new ItemStack(ModItems.TOKEN_ANGER, 2), 200,
-                nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER)),
-                ing(ModItems.GOLD_LEAF),
-                ing(Blocks.MAGMA_BLOCK),
-                ing(Items.BLAZE_POWDER),
-                ing(Items.GUNPOWDER),
-                ing(Items.ENDER_PEARL)).register();
-        new TreeRitualRecipe(res("token_sorrow"),
-                ing(Blocks.OAK_SAPLING), new ItemStack(ModItems.TOKEN_SORROW, 2), 200,
-                nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_OVERWORLD)),
-                ing(ModItems.GOLD_LEAF),
-                ing(Items.GHAST_TEAR),
-                ing(Items.BEEF, Items.MUTTON, Items.CHICKEN, Items.PORKCHOP),
-                ing(Blocks.GLASS),
-                ing(ItemTags.FISHES)).register();
-        new TreeRitualRecipe(res("token_fear"),
-                ing(Blocks.OAK_SAPLING), new ItemStack(ModItems.TOKEN_FEAR, 2), 200,
-                nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_NETHER)),
-                ing(ModItems.GOLD_LEAF),
-                ing(Items.ROTTEN_FLESH),
-                ing(Items.FEATHER),
-                ing(Items.BONE),
-                ing(Blocks.SOUL_SAND)).register();
+    public static final IRecipeType<AnimalSpawnerRecipe> ANIMAL_SPAWNER_TYPE = new RecipeType<>();
+    public static final IRecipeSerializer<AnimalSpawnerRecipe> ANIMAL_SPAWNER_SERIALIZER = new AnimalSpawnerRecipe.Serializer();
 
-        new AltarRecipe(res("infused_iron"),
-                ing(Items.IRON_INGOT), new ItemStack(ModItems.INFUSED_IRON),
-                NaturesAuraAPI.TYPE_OVERWORLD, Ingredient.EMPTY, 15000, 80).register();
-        new AltarRecipe(res("infused_iron_block"),
-                ing(Blocks.IRON_BLOCK), new ItemStack(ModBlocks.INFUSED_IRON_BLOCK),
-                NaturesAuraAPI.TYPE_OVERWORLD, Ingredient.EMPTY, 135000, 700).register();
-        new AltarRecipe(res("tainted_gold"),
-                ing(Items.GOLD_INGOT), new ItemStack(ModItems.TAINTED_GOLD),
-                NaturesAuraAPI.TYPE_NETHER, Ingredient.EMPTY, 15000, 80).register();
-        new AltarRecipe(res("tainted_gold_block"),
-                ing(Blocks.GOLD_BLOCK), new ItemStack(ModBlocks.TAINTED_GOLD_BLOCK),
-                NaturesAuraAPI.TYPE_NETHER, Ingredient.EMPTY, 135000, 700).register();
-        new AltarRecipe(res("infused_stone"),
-                ing(Blocks.STONE), new ItemStack(ModBlocks.INFUSED_STONE),
-                NaturesAuraAPI.TYPE_OVERWORLD, Ingredient.EMPTY, 7500, 40).register();
+    public static final IRecipeType<OfferingRecipe> OFFERING_TYPE = new RecipeType<>();
+    public static final IRecipeSerializer<OfferingRecipe> OFFERING_SERIALIZER = new OfferingRecipe.Serializer();
 
-        Ingredient conversion = ing(ModBlocks.CONVERSION_CATALYST);
-        new AltarRecipe(res("breath"), nbtIng(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), NaturesAuraAPI.TYPE_END)), new ItemStack(Items.DRAGON_BREATH), NaturesAuraAPI.TYPE_NETHER, conversion, 20000, 80).register();
-        new AltarRecipe(res("leather"), ing(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER), NaturesAuraAPI.TYPE_OVERWORLD, conversion, 10000, 50).register();
-        new AltarRecipe(res("soul_sand"), ing(Blocks.SAND), new ItemStack(Blocks.SOUL_SAND), NaturesAuraAPI.TYPE_NETHER, conversion, 5000, 100).register();
-        new AltarRecipe(res("nether_wart"), ing(Blocks.RED_MUSHROOM), new ItemStack(Items.NETHER_WART), NaturesAuraAPI.TYPE_NETHER, conversion, 30000, 250).register();
-        new AltarRecipe(res("prismarine"), ing(Items.QUARTZ), new ItemStack(Items.PRISMARINE_SHARD), NaturesAuraAPI.TYPE_NETHER, conversion, 55000, 200).register();
-        new AltarRecipe(res("water"), ing(Items.GLASS_BOTTLE), PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER), NaturesAuraAPI.TYPE_OVERWORLD, conversion, 25000, 200).register();
-        new AltarRecipe(res("coal"), ing(Items.CHARCOAL), new ItemStack(Items.COAL), NaturesAuraAPI.TYPE_OVERWORLD, conversion, 30000, 250).register();
+    public static final IRecipeType<TreeRitualRecipe> TREE_RITUAL_TYPE = new RecipeType<>();
+    public static final IRecipeSerializer<TreeRitualRecipe> TREE_RITUAL_SERIALIZER = new TreeRitualRecipe.Serializer();
 
-        Ingredient crushing = ing(ModBlocks.CRUSHING_CATALYST);
-        new AltarRecipe(res("bone"), ing(Items.BONE), new ItemStack(Items.BONE_MEAL, 6), NaturesAuraAPI.TYPE_OVERWORLD, crushing, 3000, 40).register();
-        new AltarRecipe(res("sugar"), ing(Items.SUGAR_CANE), new ItemStack(Items.SUGAR, 3), NaturesAuraAPI.TYPE_OVERWORLD, crushing, 3000, 40).register();
-        new AltarRecipe(res("blaze"), ing(Items.BLAZE_ROD), new ItemStack(Items.BLAZE_POWDER, 4), NaturesAuraAPI.TYPE_NETHER, crushing, 5000, 60).register();
-        new AltarRecipe(res("glowstone"), ing(Blocks.GLOWSTONE), new ItemStack(Items.GLOWSTONE_DUST, 4), NaturesAuraAPI.TYPE_NETHER, crushing, 3000, 40).register();
-        new AltarRecipe(res("sand"), ing(Blocks.COBBLESTONE), new ItemStack(Blocks.SAND), NaturesAuraAPI.TYPE_OVERWORLD, crushing, 3000, 40).register();
+    public static void register(IForgeRegistry<IRecipeSerializer<?>> registry) {
+        register(registry, "altar", ALTAR_TYPE, ALTAR_SERIAIZER);
+        register(registry, "animal_spawner", ANIMAL_SPAWNER_TYPE, ANIMAL_SPAWNER_SERIALIZER);
+        register(registry, "offering", OFFERING_TYPE, OFFERING_SERIALIZER);
+        register(registry, "tree_ritual", TREE_RITUAL_TYPE, TREE_RITUAL_SERIALIZER);
+    }
 
-        new OfferingRecipe(res("sky_ingot"),
-                amountIng(new ItemStack(ModItems.INFUSED_IRON, 3)),
-                ing(ModItems.CALLING_SPIRIT),
-                new ItemStack(ModItems.SKY_INGOT)).register();
-        new OfferingRecipe(res("sky_ingot_from_gold"),
-                ing(ModItems.TAINTED_GOLD),
-                ing(ModItems.CALLING_SPIRIT),
-                new ItemStack(ModItems.SKY_INGOT)).register();
-        new OfferingRecipe(res("clock_hand"),
-                ing(Items.NETHER_STAR),
-                ing(ModItems.CALLING_SPIRIT),
-                new ItemStack(ModItems.CLOCK_HAND)).register();
-        new OfferingRecipe(res("token_euphoria"),
-                ing(ModItems.TOKEN_JOY),
-                ing(ModItems.CALLING_SPIRIT),
-                new ItemStack(ModItems.TOKEN_EUPHORIA)).register();
-        new OfferingRecipe(res("token_rage"),
-                ing(ModItems.TOKEN_ANGER),
-                ing(ModItems.CALLING_SPIRIT),
-                new ItemStack(ModItems.TOKEN_RAGE)).register();
-        new OfferingRecipe(res("token_grief"),
-                ing(ModItems.TOKEN_SORROW),
-                ing(ModItems.CALLING_SPIRIT),
-                new ItemStack(ModItems.TOKEN_GRIEF)).register();
-        new OfferingRecipe(res("token_terror"),
-                ing(ModItems.TOKEN_FEAR),
-                ing(ModItems.CALLING_SPIRIT),
-                new ItemStack(ModItems.TOKEN_TERROR)).register();
-
+    public static void init() {
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
                 Blocks.COBBLESTONE.getDefaultState(),
                 Blocks.MOSSY_COBBLESTONE.getDefaultState());
@@ -249,106 +60,49 @@ public class ModRecipes extends ReloadListener<Object> {
                 Blocks.STONE_BRICK_WALL.getDefaultState(),
                 Blocks.MOSSY_STONE_BRICK_WALL.getDefaultState());
 
-        for (Block block : ForgeRegistries.BLOCKS)
-            if (block instanceof FlowerBlock)
-                NaturesAuraAPI.FLOWERS.addAll(block.getStateContainer().getValidStates());
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/coal", 5000);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/iron", 3000);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/gold", 500);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/diamond", 50);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/lapis", 250);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/redstone", 200);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/emerald", 30);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/quartz", 3000);
 
-        for (DyeColor color : DyeColor.values())
-            new AnimalSpawnerRecipe(res("sheep_" + color.getName()), EntityType.SHEEP,
-                    500, 60, ing(ModItems.BIRTH_SPIRIT), ing(Items.MUTTON),
-                    ing(ColoredBlockHelper.WOOL.get(color.getId()))) {
-                @Override
-                public Entity makeEntity(World world, double x, double y, double z) {
-                    SheepEntity sheep = (SheepEntity) super.makeEntity(world, x, y, z);
-                    sheep.setFleeceColor(color);
-                    return sheep;
-                }
-            }.register();
-        spawner("cow", EntityType.COW, 50000, 60, ing(Items.BEEF), ing(Items.LEATHER));
-        spawner("chicken", EntityType.CHICKEN, 30000, 40, ing(Items.FEATHER), ing(Items.EGG));
-        spawner("pig", EntityType.PIG, 50000, 60, ing(Items.PORKCHOP));
-        spawner("blaze", EntityType.BLAZE, 150000, 120, ing(Items.BLAZE_ROD), ing(Items.BLAZE_POWDER));
-        spawner("ghast", EntityType.GHAST, 120000, 150, ing(Items.GUNPOWDER), ing(Items.GHAST_TEAR));
-        spawner("ocelot", EntityType.OCELOT, 80000, 60, ing(ItemTags.FISHES), ing(ItemTags.WOOL));
-        spawner("mule", EntityType.MULE, 100000, 100, ing(Items.LEATHER), ing(Blocks.CHEST), ing(Items.APPLE));
-        spawner("bat", EntityType.BAT, 30000, 40, ing(Items.FEATHER));
-        spawner("endermite", EntityType.ENDERMITE, 30000, 40, ing(Items.ENDER_PEARL), ing(Blocks.STONE));
-        spawner("parrot", EntityType.PARROT, 50000, 60, ing(Items.FEATHER), ing(Items.COOKIE));
-        spawner("slime", EntityType.SLIME, 30000, 40, ing(Items.SLIME_BALL));
-        spawner("spider", EntityType.SPIDER, 100000, 120, ing(Items.STRING), ing(Items.SPIDER_EYE));
-        spawner("skeleton", EntityType.SKELETON, 100000, 120, ing(Items.BONE), ing(Items.ARROW));
-        spawner("enderman", EntityType.ENDERMAN, 120000, 120, ing(Items.ENDER_PEARL));
-        spawner("silverfish", EntityType.SILVERFISH, 30000, 40, ing(Blocks.STONE));
-        spawner("squid", EntityType.SQUID, 50000, 40, ing(Items.INK_SAC));
-        spawner("stray", EntityType.STRAY, 100000, 120, ing(Items.BONE), ing(Blocks.ICE));
-        spawner("shulker", EntityType.SHULKER, 150000, 100, ing(Items.SHULKER_SHELL));
-        spawner("husk", EntityType.HUSK, 100000, 120, ing(Items.ROTTEN_FLESH), ing(Blocks.SAND));
-        spawner("llama", EntityType.LLAMA, 60000, 80, ing(ItemTags.WOOL));
-        spawner("rabbit", EntityType.RABBIT, 30000, 40, ing(Items.RABBIT_HIDE));
-        spawner("magma_cube", EntityType.MAGMA_CUBE, 100000, 100, ing(Items.MAGMA_CREAM));
-        spawner("zombie_pigman", EntityType.ZOMBIE_PIGMAN, 120000, 150, ing(Items.ROTTEN_FLESH), ing(Items.GOLD_NUGGET));
-        spawner("polar_bear", EntityType.POLAR_BEAR, 50000, 60, ing(Items.COD), ing(Blocks.ICE));
-        spawner("mooshroom", EntityType.MOOSHROOM, 40000, 60, ing(Items.LEATHER), ing(Blocks.RED_MUSHROOM));
-        spawner("guardian", EntityType.GUARDIAN, 150000, 150, ing(Items.PRISMARINE_SHARD), ing(Items.PRISMARINE_CRYSTALS));
-        spawner("horse", EntityType.HORSE, 100000, 100, ing(Items.LEATHER));
-        spawner("donkey", EntityType.DONKEY, 100000, 100, ing(Items.LEATHER), ing(Blocks.CHEST));
-        spawner("cave_spider", EntityType.CAVE_SPIDER, 100000, 120, ing(Items.STRING), ing(Items.FERMENTED_SPIDER_EYE));
-        spawner("creeper", EntityType.CREEPER, 100000, 120, ing(Items.GUNPOWDER));
-        spawner("witch", EntityType.WITCH, 150000, 150, ing(Items.GLASS_BOTTLE), ing(Items.GLOWSTONE_DUST));
-        spawner("wither_skeleton", EntityType.WITHER_SKELETON, 150000, 150, ing(Items.BONE), ing(Blocks.OBSIDIAN));
-        spawner("wolf", EntityType.WOLF, 50000, 60, ing(Items.LEATHER), ing(Items.BONE));
-        spawner("zombie", EntityType.ZOMBIE, 100000, 100, ing(Items.ROTTEN_FLESH));
-        spawner("bee", EntityType.BEE, 50000, 100, ing(Items.HONEYCOMB), ing(Items.HONEY_BLOCK));
-        spawner("dolphin", EntityType.DOLPHIN, 100000, 150, ing(ItemTags.FISHES), ing(Items.MAP));
-        spawner("fox", EntityType.FOX, 30000, 100, ing(Items.SWEET_BERRIES), ing(Items.FEATHER));
-        spawner("panda", EntityType.PANDA, 100000, 100, ing(Items.BAMBOO), ing(Blocks.BAMBOO_SAPLING));
-        spawner("turtle", EntityType.TURTLE, 100000, 150, ing(Items.SCUTE), ing(Items.SEAGRASS));
-        spawner("phantom", EntityType.PHANTOM, 200000, 200, ing(Items.PHANTOM_MEMBRANE));
-        spawner("cat", EntityType.CAT, 50000, 100, ing(Items.STRING), ing(ItemTags.WOOL));
-
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_COAL, 5000));
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_IRON, 3000));
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_GOLD, 500));
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_DIAMOND, 50));
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_LAPIS, 250));
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_REDSTONE, 200));
-        NaturesAuraAPI.OVERWORLD_ORES.add(new WeightedOre(Tags.Blocks.ORES_EMERALD, 30));
-        NaturesAuraAPI.NETHER_ORES.add(new WeightedOre(Tags.Blocks.ORES_QUARTZ, 3000));
-
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/copper", 2000);
-        foreignOre(NaturesAuraAPI.NETHER_ORES, "ores/nether/copper", 2000);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/tin", 1800);
-        foreignOre(NaturesAuraAPI.NETHER_ORES, "ores/nether/tin", 1800);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/lead", 1500);
-        foreignOre(NaturesAuraAPI.NETHER_ORES, "ores/nether/lead", 1500);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/silver", 1000);
-        foreignOre(NaturesAuraAPI.NETHER_ORES, "ores/nether/silver", 1000);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/nickel", 100);
-        foreignOre(NaturesAuraAPI.NETHER_ORES, "ores/nether/nickel", 100);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/platinum", 20);
-        foreignOre(NaturesAuraAPI.NETHER_ORES, "ores/nether/platinum", 20);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/aluminum", 1200);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/aluminium", 1200);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/osmium", 1500);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/zinc", 1000);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/yellorite", 1200);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/uranium", 400);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/apatite", 700);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/ruby", 40);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/peridot", 40);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/topaz", 40);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/tanzanite", 40);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/malachite", 40);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/sapphire", 40);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/amber", 150);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/resonating", 50);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/sulfur", 3000);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/saltpeter", 250);
-        foreignOre(NaturesAuraAPI.NETHER_ORES, "ores/firestone", 30);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/salt", 2900);
-        foreignOre(NaturesAuraAPI.OVERWORLD_ORES, "ores/draconium", 5);
-        foreignOre(NaturesAuraAPI.NETHER_ORES, "ores/cobalt", 50);
-        foreignOre(NaturesAuraAPI.NETHER_ORES, "ores/ardite", 50);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/copper", 2000);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/copper", 2000);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/tin", 1800);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/tin", 1800);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/lead", 1500);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/lead", 1500);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/silver", 1000);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/silver", 1000);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/nickel", 100);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/nickel", 100);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/platinum", 20);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/platinum", 20);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/aluminum", 1200);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/aluminium", 1200);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/osmium", 1500);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/zinc", 1000);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/yellorite", 1200);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/uranium", 400);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/apatite", 700);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/ruby", 40);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/peridot", 40);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/topaz", 40);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/tanzanite", 40);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/malachite", 40);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/sapphire", 40);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/amber", 150);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/resonating", 50);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/sulfur", 3000);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/saltpeter", 250);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/firestone", 30);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/salt", 2900);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/draconium", 5);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/cobalt", 50);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/ardite", 50);
 
         NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.EGG, 2500);
         NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SNOWBALL, 3500);
@@ -362,57 +116,42 @@ public class ModRecipes extends ReloadListener<Object> {
         NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.TRIDENT, 3000000);
     }
 
-    private static void spawner(String name, EntityType entity, int aura, int time, Ingredient... ings) {
-        Ingredient[] actualIngs = new Ingredient[ings.length + 1];
-        actualIngs[0] = ing(ModItems.BIRTH_SPIRIT);
-        System.arraycopy(ings, 0, actualIngs, 1, ings.length);
-        new AnimalSpawnerRecipe(res(name), entity, aura, time, actualIngs).register();
-    }
-
-    private static void foreignOre(List<WeightedOre> list, String name, int weight) {
+    private static void ore(List<WeightedOre> list, String name, int weight) {
         ResourceLocation res = new ResourceLocation("forge", name);
-        Tag<Block> tag = BlockTags.getCollection().get(res);
-        if (tag == null)
-            return;
-        list.add(new WeightedOre(tag, weight));
+        list.add(new WeightedOre(res, weight));
     }
 
-    private static Ingredient ing(Block... blocks) {
-        return ing(Arrays.stream(blocks).map(ItemStack::new).toArray(ItemStack[]::new));
+    private static void register(IForgeRegistry<IRecipeSerializer<?>> registry, String name, IRecipeType<?> type, IRecipeSerializer<?> serializer) {
+        ResourceLocation res = new ResourceLocation(NaturesAura.MOD_ID, name);
+        Registry.register(Registry.RECIPE_TYPE, res, type);
+        registry.register(serializer.setRegistryName(res));
     }
 
-    private static Ingredient ing(Item... items) {
-        return ing(Arrays.stream(items).map(ItemStack::new).toArray(ItemStack[]::new));
+    public static JsonObject serializeStack(ItemStack stack) {
+        CompoundNBT nbt = stack.write(new CompoundNBT());
+        byte c = nbt.getByte("Count");
+        if (c != 1) {
+            nbt.putByte("count", c);
+        }
+        nbt.remove("Count");
+        renameTag(nbt, "id", "item");
+        renameTag(nbt, "tag", "nbt");
+        Dynamic<INBT> dyn = new Dynamic<>(NBTDynamicOps.INSTANCE, nbt);
+        return dyn.convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
     }
 
-    private static Ingredient ing(ItemStack... stacks) {
-        return Ingredient.fromStacks(stacks);
+    private static void renameTag(CompoundNBT nbt, String oldName, String newName) {
+        INBT tag = nbt.get(oldName);
+        if (tag != null) {
+            nbt.remove(oldName);
+            nbt.put(newName, tag);
+        }
     }
 
-    private static Ingredient ing(Tag<Item> tag) {
-        return Ingredient.fromTag(tag);
-    }
-
-    private static Ingredient nbtIng(ItemStack stack) {
-        return new NBTIngredient(stack);
-    }
-
-    private static Ingredient amountIng(ItemStack stack) {
-        return new AmountIngredient(stack);
-    }
-
-    private static ResourceLocation res(String name) {
-        return new ResourceLocation(NaturesAura.MOD_ID, name);
-    }
-
-    @Override
-    protected Object prepare(IResourceManager resourceManagerIn, IProfiler profilerIn) {
-        return null;
-    }
-
-    @Override
-    protected void apply(Object splashList, IResourceManager resourceManagerIn, IProfiler profilerIn) {
-        NaturesAura.LOGGER.info("Loading recipes");
-        this.init();
+    private static class RecipeType<T extends IRecipe<?>> implements IRecipeType<T> {
+        @Override
+        public String toString() {
+            return Registry.RECIPE_TYPE.getKey(this).toString();
+        }
     }
 }

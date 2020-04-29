@@ -1,0 +1,12 @@
+{
+  "type": "naturesaura:altar",
+  "input": {
+    "item": "minecraft:stone"
+  },
+  "output": {
+    "item": "naturesaura:infused_stone"
+  },
+  "aura_type": "naturesaura:overworld",
+  "aura": 7500,
+  "time": 40
+}

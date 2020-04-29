@@ -1,0 +1,18 @@
+{
+  "type": "naturesaura:altar",
+  "input": {
+    "item": "minecraft:glass_bottle"
+  },
+  "output": {
+    "nbt": {
+      "Potion": "minecraft:water"
+    },
+    "item": "minecraft:potion"
+  },
+  "aura_type": "naturesaura:overworld",
+  "catalyst": {
+    "item": "naturesaura:conversion_catalyst"
+  },
+  "aura": 25000,
+  "time": 200
+}

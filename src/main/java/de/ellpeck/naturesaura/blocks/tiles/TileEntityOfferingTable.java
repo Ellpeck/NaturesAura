@@ -2,7 +2,8 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.recipes.OfferingRecipe;
+import de.ellpeck.naturesaura.recipes.ModRecipes;
+import de.ellpeck.naturesaura.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
@@ -36,8 +38,8 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
         super(ModTileEntities.OFFERING_TABLE);
     }
 
-    private static OfferingRecipe getRecipe(ItemStack input) {
-        for (OfferingRecipe recipe : NaturesAuraAPI.OFFERING_RECIPES.values())
+    private OfferingRecipe getRecipe(ItemStack input) {
+        for (OfferingRecipe recipe : this.world.getRecipeManager().getRecipes(ModRecipes.OFFERING_TYPE, null, null))
             if (recipe.input.test(input))
                 return recipe;
         return null;
@@ -58,7 +60,7 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
                 if (items.isEmpty())
                     return;
 
-                OfferingRecipe recipe = getRecipe(stack);
+                OfferingRecipe recipe = this.getRecipe(stack);
                 if (recipe == null)
                     return;
 

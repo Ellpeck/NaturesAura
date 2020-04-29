@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.blocks.BlockNatureAltar;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LogBlock;
 import net.minecraft.block.SaplingBlock;
@@ -53,7 +54,7 @@ public final class Multiblocks {
                         // try-catch to prevent blocks that need to have been placed crashing here
                         try {
                             ItemStack stack = state.getBlock().getItem(world, pos, state);
-                            return !stack.isEmpty() && NaturesAuraAPI.TREE_RITUAL_RECIPES.values().stream().anyMatch(recipe -> recipe.saplingType.test(stack));
+                            return !stack.isEmpty() && world.getRecipeManager().getRecipes(ModRecipes.TREE_RITUAL_TYPE, null, null).stream().anyMatch(r -> r.saplingType.test(stack));
                         } catch (Exception e) {
                             return false;
                         }
@@ -76,7 +77,7 @@ public final class Multiblocks {
             new String[][]{
                     {"  RRRRR  ", " R     R ", "R  RRR  R", "R R   R R", "R R 0 R R", "R R   R R", "R  RRR  R", " R     R ", "  RRRRR  "}},
             'R', new Matcher(Blocks.POPPY.getDefaultState(),
-                    (world, start, offset, pos, state, c) -> NaturesAuraAPI.FLOWERS.contains(state)),
+                    (world, start, offset, pos, state, c) -> BlockTags.SMALL_FLOWERS.contains(state.getBlock())),
             '0', ModBlocks.OFFERING_TABLE,
             ' ', Matcher.wildcard());
     public static final IMultiblock ANIMAL_SPAWNER = NaturesAuraAPI.instance().createMultiblock(

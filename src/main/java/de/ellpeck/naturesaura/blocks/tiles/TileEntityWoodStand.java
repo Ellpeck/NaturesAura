@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
@@ -208,7 +208,8 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
             if (compound.contains("recipe")) {
                 this.ritualPos = BlockPos.fromLong(compound.getLong("ritual_pos"));
                 this.timer = compound.getInt("timer");
-                this.recipe = NaturesAuraAPI.TREE_RITUAL_RECIPES.get(new ResourceLocation(compound.getString("recipe")));
+                if (this.hasWorld())
+                    this.recipe = (TreeRitualRecipe) this.world.getRecipeManager().getRecipe(new ResourceLocation(compound.getString("recipe"))).orElse(null);
             }
         }
     }

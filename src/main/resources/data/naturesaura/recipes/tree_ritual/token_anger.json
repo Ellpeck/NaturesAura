@@ -1,0 +1,34 @@
+{
+  "type": "naturesaura:tree_ritual",
+  "ingredients": [
+    {
+      "type": "forge:nbt",
+      "item": "naturesaura:aura_bottle",
+      "count": 1,
+      "nbt": "{stored_type:\"naturesaura:nether\"}"
+    },
+    {
+      "item": "naturesaura:gold_leaf"
+    },
+    {
+      "item": "minecraft:magma_block"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:ender_pearl"
+    }
+  ],
+  "sapling": {
+    "item": "minecraft:oak_sapling"
+  },
+  "output": {
+    "item": "naturesaura:token_anger",
+    "count": 2
+  },
+  "time": 200
+}

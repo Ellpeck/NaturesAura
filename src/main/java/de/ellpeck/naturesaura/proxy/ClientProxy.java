@@ -45,9 +45,6 @@ public class ClientProxy implements IProxy {
         Compat.setupClient();
         ScreenManager.registerFactory(ModContainers.ENDER_CRATE, GuiEnderCrate::new);
         ScreenManager.registerFactory(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
-
-        IResourceManager manager = Minecraft.getInstance().getResourceManager();
-        ((IReloadableResourceManager) manager).addReloadListener(new ModRecipes());
     }
 
     @Override

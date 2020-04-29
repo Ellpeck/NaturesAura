@@ -136,9 +136,4 @@ public class CommonEvents {
     public void onServerStarting(FMLServerStartingEvent event) {
         CommandAura.register(event.getCommandDispatcher());
     }
-
-    @SubscribeEvent
-    public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
-        event.getServer().getResourceManager().addReloadListener(new ModRecipes());
-    }
 }

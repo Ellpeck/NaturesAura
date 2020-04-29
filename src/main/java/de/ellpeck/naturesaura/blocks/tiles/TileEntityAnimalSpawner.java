@@ -4,10 +4,11 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.api.recipes.AnimalSpawnerRecipe;
+import de.ellpeck.naturesaura.recipes.AnimalSpawnerRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -67,7 +68,7 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
                 List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class,
                         new AxisAlignedBB(this.pos).grow(2));
 
-                for (AnimalSpawnerRecipe recipe : NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.values()) {
+                for (AnimalSpawnerRecipe recipe : this.world.getRecipeManager().getRecipes(ModRecipes.ANIMAL_SPAWNER_TYPE, null, null)) {
                     if (recipe.ingredients.length != items.size())
                         continue;
                     List<Ingredient> required = new ArrayList<>(Arrays.asList(recipe.ingredients));
@@ -150,8 +151,10 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (compound.contains("recipe")) {
-                ResourceLocation name = new ResourceLocation(compound.getString("recipe"));
-                this.currentRecipe = NaturesAuraAPI.ANIMAL_SPAWNER_RECIPES.get(name);
+                if (this.hasWorld()) {
+                    ResourceLocation name = new ResourceLocation(compound.getString("recipe"));
+                    this.currentRecipe = (AnimalSpawnerRecipe) this.world.getRecipeManager().getRecipe(name).orElse(null);
+                }
                 this.spawnX = compound.getDouble("spawn_x");
                 this.spawnZ = compound.getDouble("spawn_z");
                 this.time = compound.getInt("time");

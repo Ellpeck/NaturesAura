@@ -9,11 +9,10 @@ import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
-import de.ellpeck.naturesaura.api.recipes.*;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.FlowerBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -43,31 +42,6 @@ public final class NaturesAuraAPI {
     public static final String MOD_ID = "naturesaura";
     public static final String API_ID = MOD_ID + "api";
     public static final String VERSION = "9";
-    /**
-     * The list of all {@link AltarRecipe} instances which are the recipes used
-     * by the Natural Altar. Newly created recipes can be easily added using
-     * {@link AltarRecipe#register()}.
-     */
-    public static final Map<ResourceLocation, AltarRecipe> ALTAR_RECIPES = new HashMap<>();
-    /**
-     * The list of all {@link TreeRitualRecipe} instances which are the recipes
-     * used in the Ritual of the Forest. Newly created recipes can be easily
-     * added using {@link TreeRitualRecipe#register()}.
-     */
-    public static final Map<ResourceLocation, TreeRitualRecipe> TREE_RITUAL_RECIPES = new HashMap<>();
-    /**
-     * The list of all {@link OfferingRecipe} instances which are the recipes
-     * used by the Offering Table. Newly created recipes can by easily added
-     * using {@link OfferingRecipe#register()}.
-     */
-    public static final Map<ResourceLocation, OfferingRecipe> OFFERING_RECIPES = new HashMap<>();
-    /**
-     * The list of all types of blocks that several mechanics in the mod use as
-     * flowers. Right now, this includes the Herbivorous Absorber and the
-     * Offering Table. By default, all {@link FlowerBlock} instances and all
-     * blocks specified in the config file are added
-     */
-    public static final List<BlockState> FLOWERS = new ArrayList<>();
     /**
      * A map of all of the block states that the Botanist's Pickaxe can convert
      * into their mossy variations. Contains mossy brick and mossy cobblestone
@@ -106,12 +80,6 @@ public final class NaturesAuraAPI {
      * using the multiblock maker debug tool.
      */
     public static final Map<ResourceLocation, IMultiblock> MULTIBLOCKS = new HashMap<>();
-    /**
-     * A map of all {@link AnimalSpawnerRecipe} objects that are used with the
-     * animal spawner block. To register a recipe, use {@link
-     * AnimalSpawnerRecipe#register()}.
-     */
-    public static final Map<ResourceLocation, AnimalSpawnerRecipe> ANIMAL_SPAWNER_RECIPES = new HashMap<>();
     /**
      * A list of all {@link WeightedOre} objects that represent ores that can
      * spawn inside of stone blocks in the overworld

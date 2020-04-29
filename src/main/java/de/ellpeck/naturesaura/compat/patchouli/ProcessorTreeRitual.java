@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.compat.patchouli;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.recipes.TreeRitualRecipe;
+import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariableProvider;
 import vazkii.patchouli.api.PatchouliAPI;
@@ -12,7 +12,7 @@ public class ProcessorTreeRitual implements IComponentProcessor {
 
     @Override
     public void setup(IVariableProvider<String> provider) {
-        this.recipe = PatchouliCompat.getRecipe(NaturesAuraAPI.TREE_RITUAL_RECIPES, provider.get("recipe"));
+        this.recipe = PatchouliCompat.getRecipe("tree_ritual", provider.get("recipe"));
     }
 
     @Override

@@ -1,0 +1,17 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "tag": "minecraft:fishes"
+    },
+    {
+      "tag": "minecraft:wool"
+    }
+  ],
+  "entity": "minecraft:ocelot",
+  "aura": 80000,
+  "time": 60
+}

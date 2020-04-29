@@ -1,0 +1,14 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "item": "minecraft:phantom_membrane"
+    }
+  ],
+  "entity": "minecraft:phantom",
+  "aura": 200000,
+  "time": 200
+}

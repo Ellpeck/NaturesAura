@@ -1,0 +1,15 @@
+{
+  "type": "naturesaura:altar",
+  "input": {
+    "item": "minecraft:charcoal"
+  },
+  "output": {
+    "item": "minecraft:coal"
+  },
+  "aura_type": "naturesaura:overworld",
+  "catalyst": {
+    "item": "naturesaura:conversion_catalyst"
+  },
+  "aura": 30000,
+  "time": 250
+}

@@ -1,0 +1,17 @@
+{
+  "type": "naturesaura:animal_spawner",
+  "ingredients": [
+    {
+      "item": "naturesaura:birth_spirit"
+    },
+    {
+      "item": "minecraft:string"
+    },
+    {
+      "item": "minecraft:fermented_spider_eye"
+    }
+  ],
+  "entity": "minecraft:cave_spider",
+  "aura": 100000,
+  "time": 120
+}
