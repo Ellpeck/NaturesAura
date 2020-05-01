@@ -80,6 +80,7 @@ public final class NaturesAura {
     private void init(FMLCommonSetupEvent event) {
         ModConfig.instance.apply();
 
+        ModRecipes.init();
         ModRegistry.init();
         DrainSpotEffects.init();
 
