@@ -52,7 +52,7 @@ public class BlockLootProvider implements IDataProvider {
             }
         }
 
-        this.lootFunctions.put(ModBlocks.ANCIENT_LEAVES, b -> LootTableHooks.genLeaves(b, ModBlocks.ANCIENT_SAPLING));
+        this.lootFunctions.put(ModBlocks.ANCIENT_LEAVES, LootTableHooks::genSilkOnly);
         this.lootFunctions.put(ModBlocks.DECAYED_LEAVES, LootTableHooks::genSilkOnly);
         this.lootFunctions.put(ModBlocks.GOLDEN_LEAVES, b -> LootTable.builder().addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(LootTableHooks.survivesExplosion(b, ItemLootEntry.builder(ModItems.GOLD_LEAF)).acceptCondition(BlockStateProperty.builder(b).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(BlockGoldenLeaves.STAGE, BlockGoldenLeaves.HIGHEST_STAGE)))).acceptCondition(RandomChance.builder(0.75F))));
         this.lootFunctions.put(ModBlocks.NETHER_WART_MUSHROOM, b -> LootTableHooks.genSilkOr(b, ItemLootEntry.builder(Items.NETHER_WART).acceptFunction(SetCount.builder(RandomValueRange.of(1, 2)))));
