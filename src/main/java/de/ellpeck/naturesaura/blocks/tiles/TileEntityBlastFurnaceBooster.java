@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.BlastFurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -16,6 +17,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 public class TileEntityBlastFurnaceBooster extends TileEntityImpl implements ITickableTileEntity {
 
@@ -34,6 +36,8 @@ public class TileEntityBlastFurnaceBooster extends TileEntityImpl implements ITi
         BlastFurnaceTileEntity tile = (BlastFurnaceTileEntity) below;
         IRecipe<?> recipe = this.world.getRecipeManager().getRecipe(TileEntityFurnaceHeater.getRecipeType(tile), tile, this.world).orElse(null);
         if (recipe == null)
+            return;
+        if (!this.isApplicable(recipe.getIngredients()))
             return;
 
         IIntArray data = TileEntityFurnaceHeater.getFurnaceData(tile);
@@ -63,6 +67,16 @@ public class TileEntityBlastFurnaceBooster extends TileEntityImpl implements ITi
 
         PacketHandler.sendToAllAround(this.world, this.pos, 32,
                 new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.BLAST_FURNACE_BOOSTER, 1));
+    }
+
+    private boolean isApplicable(List<Ingredient> ingredients) {
+        for (Ingredient ing : ingredients) {
+            for (ItemStack stack : ing.getMatchingStacks()) {
+                if (stack.getItem().getTags().stream().anyMatch(t -> t.getPath().startsWith("ores/")))
+                    return true;
+            }
+        }
+        return false;
     }
 
     @Override
