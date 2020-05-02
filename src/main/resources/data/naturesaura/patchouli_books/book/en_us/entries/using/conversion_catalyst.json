@@ -47,6 +47,41 @@
             "type": "naturesaura:altar",
             "text": "Turning $(item)Charcoal$() into $(item)Coal$()",
             "recipe": "naturesaura:coal"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Creating $(item)Spectral Arrows$()",
+            "recipe": "naturesaura:arrow"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Creating a $(item)Chorus Flower$()",
+            "recipe": "naturesaura:chorus"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Creating $(item)Fermented Spider Eyes$()",
+            "recipe": "naturesaura:fermented"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Creating a $(item)Lead$()",
+            "recipe": "naturesaura:lead"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Purifying a $(item)Poisonous Potato$()",
+            "recipe": "naturesaura:lead"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Creating $(item)Prismarine Crystals$()",
+            "recipe": "naturesaura:prismarine_crystal"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Creating a $(item)Rabbit's Foot$()",
+            "recipe": "naturesaura:rabbit_foot"
         }
     ]
 }

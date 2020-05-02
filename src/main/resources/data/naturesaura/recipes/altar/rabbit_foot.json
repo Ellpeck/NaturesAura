@@ -1,0 +1,15 @@
+{
+  "type": "naturesaura:altar",
+  "input": {
+    "item": "minecraft:rabbit_stew"
+  },
+  "output": {
+    "item": "minecraft:rabbit_foot"
+  },
+  "aura_type": "naturesaura:nether",
+  "catalyst": {
+    "item": "naturesaura:conversion_catalyst"
+  },
+  "aura": 15000,
+  "time": 80
+}
