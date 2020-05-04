@@ -136,7 +136,8 @@ public final class ModRegistry {
                 createFlowerPot(temp),
                 new BlockImpl("tainted_gold_block", ModBlocks.prop(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(3F)),
                 new BlockNetherGrass(),
-                new BlockLight()
+                new BlockLight(),
+                new BlockChorusGenerator()
         );
 
         if (ModConfig.instance.rfConverter.get())

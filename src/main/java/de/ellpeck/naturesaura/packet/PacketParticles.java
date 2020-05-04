@@ -485,6 +485,25 @@ public class PacketParticles {
                         message.posX + 0.5F, message.posY + 0.5F, message.posZ + 0.5F,
                         0.25F, color, 0.5F + world.rand.nextFloat()
                 );
+        }),
+        CHORUS_GENERATOR((message, world) -> {
+            int chorusX = message.data[0];
+            int chorusY = message.data[1];
+            int chorusZ = message.data[2];
+            for (int i = world.rand.nextInt(5) + 3; i >= 0; i--)
+                NaturesAuraAPI.instance().spawnMagicParticle(
+                        chorusX + world.rand.nextFloat(), chorusY + world.rand.nextFloat(), chorusZ + world.rand.nextFloat(),
+                        0F, 0F, 0F,
+                        0xbb0be3, 1F + world.rand.nextFloat(), 50, 0F, false, true);
+            for (int i = world.rand.nextInt(5) + 5; i >= 0; i--)
+                NaturesAuraAPI.instance().spawnMagicParticle(
+                        message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
+                        message.posY + 1.01F,
+                        message.posZ + 0.25F + world.rand.nextFloat() * 0.5F,
+                        world.rand.nextGaussian() * 0.01F,
+                        world.rand.nextFloat() * 0.04F + 0.02F,
+                        world.rand.nextGaussian() * 0.01F,
+                        0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 40, 0F, false, true);
         });
 
         public final BiConsumer<PacketParticles, World> action;
