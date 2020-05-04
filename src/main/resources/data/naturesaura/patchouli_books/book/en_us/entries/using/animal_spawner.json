@@ -168,6 +168,34 @@
         {
             "type": "naturesaura:animal_spawner",
             "recipe": "naturesaura:zombie"
+        },
+        {
+            "type": "naturesaura:animal_spawner",
+            "recipe": "naturesaura:bee"
+        },
+        {
+            "type": "naturesaura:animal_spawner",
+            "recipe": "naturesaura:dolphin"
+        },
+        {
+            "type": "naturesaura:animal_spawner",
+            "recipe": "naturesaura:fox"
+        },
+        {
+            "type": "naturesaura:animal_spawner",
+            "recipe": "naturesaura:panda"
+        },
+        {
+            "type": "naturesaura:animal_spawner",
+            "recipe": "naturesaura:turtle"
+        },
+        {
+            "type": "naturesaura:animal_spawner",
+            "recipe": "naturesaura:phantom"
+        },
+        {
+            "type": "naturesaura:animal_spawner",
+            "recipe": "naturesaura:cat"
         }
     ]
 }
