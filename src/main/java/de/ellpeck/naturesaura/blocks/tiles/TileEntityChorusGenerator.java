@@ -6,6 +6,9 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
@@ -96,6 +99,30 @@ public class TileEntityChorusGenerator extends TileEntityImpl implements ITickab
                 continue;
             blocks.add(offset);
             this.collectChorusPlant(offset, blocks);
+        }
+    }
+
+    @Override
+    public void writeNBT(CompoundNBT compound, SaveType type) {
+        super.writeNBT(compound, type);
+        if (type == SaveType.TILE) {
+            ListNBT list = new ListNBT();
+            for (BlockPos pos : this.currentlyBreaking)
+                list.add(NBTUtil.writeBlockPos(pos));
+            compound.put("breaking", list);
+            compound.putInt("aura", this.auraPerBlock);
+        }
+    }
+
+    @Override
+    public void readNBT(CompoundNBT compound, SaveType type) {
+        super.readNBT(compound, type);
+        if (type == SaveType.TILE) {
+            this.currentlyBreaking.clear();
+            ListNBT list = compound.getList("breaking", 10);
+            for (int i = 0; i < list.size(); i++)
+                this.currentlyBreaking.add(NBTUtil.readBlockPos(list.getCompound(i)));
+            this.auraPerBlock = compound.getInt("aura");
         }
     }
 }

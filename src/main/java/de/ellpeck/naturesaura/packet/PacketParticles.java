@@ -503,7 +503,7 @@ public class PacketParticles {
                         world.rand.nextGaussian() * 0.01F,
                         world.rand.nextFloat() * 0.04F + 0.02F,
                         world.rand.nextGaussian() * 0.01F,
-                        0x5ccc30, 1F + world.rand.nextFloat() * 1.5F, 40, 0F, false, true);
+                        IAuraType.forWorld(world).getColor(), 1F + world.rand.nextFloat() * 1.5F, 40, 0F, false, true);
         });
 
         public final BiConsumer<PacketParticles, World> action;
