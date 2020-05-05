@@ -10,11 +10,9 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityGratedChute;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityItemDistributor;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityRFConverter;
+import de.ellpeck.naturesaura.blocks.tiles.*;
 import de.ellpeck.naturesaura.enchant.ModEnchantment;
+import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ItemAuraCache;
 import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
 import de.ellpeck.naturesaura.items.ModItems;
@@ -58,10 +56,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.opengl.GL11;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientEvents {
@@ -446,6 +441,14 @@ public class ClientEvents {
                                 GlStateManager.disableDepthTest();
                                 AbstractGui.blit(x - 18, y - 18, u, 0, 16, 16, 256, 256);
                                 GlStateManager.enableDepthTest();
+                            } else if (tile instanceof TileEntityAuraTimer) {
+                                TileEntityAuraTimer timer = (TileEntityAuraTimer) tile;
+                                ItemStack stack = timer.getItemHandler(null).getStackInSlot(0);
+                                if (!stack.isEmpty()) {
+                                    Helper.renderItemInGui(stack, x - 20, y - 20, 1);
+                                    mc.fontRenderer.drawStringWithShadow(TextFormatting.GRAY + this.createTimeString(timer.getTotalTime()), x + 5, y - 11, 0xFFFFFF);
+                                    mc.fontRenderer.drawStringWithShadow(TextFormatting.GRAY + I18n.format("info.naturesaura.remaining", this.createTimeString(timer.getTimeLeft())), x + 5, y + 3, 0xFFFFFF);
+                                }
                             }
                         }
                     }
@@ -455,6 +458,14 @@ public class ClientEvents {
                 }
             }
         }
+    }
+
+    private String createTimeString(int totalTicks) {
+        int ticks = totalTicks % 20;
+        int seconds = totalTicks / 20 % 60;
+        int minutes = totalTicks / 20 / 60 % 60;
+        int hours = totalTicks / 20 / 60 / 60;
+        return String.format("%02d:%02d:%02d.%02d", hours, minutes, seconds, ticks);
     }
 
     private void drawContainerInfo(int stored, int max, int color, Minecraft mc, MainWindow res, int yOffset, String name, String textBelow) {

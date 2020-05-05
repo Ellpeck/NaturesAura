@@ -504,6 +504,15 @@ public class PacketParticles {
                         world.rand.nextFloat() * 0.04F + 0.02F,
                         world.rand.nextGaussian() * 0.01F,
                         IAuraType.forWorld(world).getColor(), 1F + world.rand.nextFloat() * 1.5F, 40, 0F, false, true);
+        }),
+        TIMER_RESET((message, world) -> {
+            int color = message.data[0];
+            for (int i = world.rand.nextInt(10) + 15; i >= 0; i--)
+                NaturesAuraAPI.instance().spawnMagicParticle(
+                        message.posX + 5 / 16F + world.rand.nextFloat() * 6 / 16F,
+                        message.posY + 2 / 16F + world.rand.nextFloat() * 8 / 16F,
+                        message.posZ + 5 / 16F + world.rand.nextFloat() * 6 / 16F,
+                        0, 0, 0, color, 2, 40 + world.rand.nextInt(20), 0, false, true);
         });
 
         public final BiConsumer<PacketParticles, World> action;

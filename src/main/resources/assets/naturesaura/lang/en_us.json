@@ -137,6 +137,7 @@
     "info.naturesaura.range_visualizer.start": "You take note of the magnification...",
     "info.naturesaura.range_visualizer.end": "You lose focus of the magnification...",
     "info.naturesaura.range_visualizer.end_all": "You lose focus of all magnifications...",
+    "info.naturesaura.remaining": "%s remaining",
     "advancement.naturesaura.root": "Nature's Aura",
     "advancement.naturesaura.root.desc": "Becoming a magical botanist",
     "advancement.naturesaura.get_book": "Pages of Discovery",

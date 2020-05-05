@@ -137,7 +137,8 @@ public final class ModRegistry {
                 new BlockImpl("tainted_gold_block", ModBlocks.prop(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(3F)),
                 new BlockNetherGrass(),
                 new BlockLight(),
-                new BlockChorusGenerator()
+                new BlockChorusGenerator(),
+                new BlockAuraTimer()
         );
 
         if (ModConfig.instance.rfConverter.get())
