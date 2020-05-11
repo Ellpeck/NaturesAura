@@ -58,7 +58,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
                         if (player.canPlayerEdit(actualPos.offset(facing), facing, stack)) {
                             if (facing != Direction.DOWN
                                     && world.getBlockState(actualPos.up()).getMaterial() == Material.AIR
-                                    && world.getBlockState(actualPos).getBlock() == Blocks.GRASS) {
+                                    && world.getBlockState(actualPos).getBlock() == Blocks.GRASS_BLOCK) {
                                 if (!world.isRemote) {
                                     world.setBlockState(actualPos, Blocks.GRASS_PATH.getDefaultState(), 11);
                                 }
