@@ -16,6 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public final class ModConfig {
 
@@ -173,8 +174,8 @@ public final class ModConfig {
             for (String s : this.additionalBotanistPickaxeConversions.get()) {
                 String[] split = s.split("->");
                 NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
-                        Helper.getStateFromString(split[0]),
-                        Helper.getStateFromString(split[1]));
+                        Objects.requireNonNull(Helper.getStateFromString(split[0]), "state1"),
+                        Objects.requireNonNull(Helper.getStateFromString(split[1]), "state2"));
             }
         } catch (Exception e) {
             NaturesAura.LOGGER.warn("Error parsing additionalBotanistPickaxeConversions", e);
@@ -183,9 +184,9 @@ public final class ModConfig {
         try {
             for (String s : this.auraTypeOverrides.get()) {
                 String[] split = s.split("->");
-                IAuraType type = NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(split[1]));
-                if (type instanceof BasicAuraType)
-                    ((BasicAuraType) type).addDimensionType(DimensionType.byName(new ResourceLocation(split[0])));
+                DimensionType dim = Objects.requireNonNull(DimensionType.byName(new ResourceLocation(split[0])), "dim");
+                BasicAuraType type = Objects.requireNonNull((BasicAuraType) NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(split[1])), "type");
+                type.addDimensionType(dim);
             }
         } catch (Exception e) {
             NaturesAura.LOGGER.warn("Error parsing auraTypeOverrides", e);
@@ -196,10 +197,13 @@ public final class ModConfig {
                 String[] split = s.split(":");
                 WeightedOre ore = new WeightedOre(new ResourceLocation(split[0]), Integer.parseInt(split[1]));
                 String dimension = split[2];
-                if ("nether".equalsIgnoreCase(dimension))
+                if ("nether".equalsIgnoreCase(dimension)) {
                     NaturesAuraAPI.NETHER_ORES.add(ore);
-                else
+                } else if ("overworld".equalsIgnoreCase(dimension)) {
                     NaturesAuraAPI.OVERWORLD_ORES.add(ore);
+                } else {
+                    throw new IllegalArgumentException(dimension);
+                }
             }
         } catch (Exception e) {
             NaturesAura.LOGGER.warn("Error parsing additionalOres", e);
@@ -207,7 +211,7 @@ public final class ModConfig {
 
         try {
             for (String s : this.oreExceptions.get())
-                OreSpawnEffect.SPAWN_EXCEPTIONS.add(Helper.getStateFromString(s));
+                OreSpawnEffect.SPAWN_EXCEPTIONS.add(Objects.requireNonNull(Helper.getStateFromString(s)));
         } catch (Exception e) {
             NaturesAura.LOGGER.warn("Error parsing oreExceptions", e);
         }
@@ -216,7 +220,7 @@ public final class ModConfig {
             for (String s : this.additionalProjectiles.get()) {
                 String[] split = s.split("->");
                 ResourceLocation name = new ResourceLocation(split[0]);
-                EntityType type = ForgeRegistries.ENTITIES.getValue(name);
+                EntityType<?> type = Objects.requireNonNull(ForgeRegistries.ENTITIES.getValue(name));
                 int amount = Integer.parseInt(split[1]);
                 NaturesAuraAPI.PROJECTILE_GENERATIONS.put(type, amount);
             }

@@ -78,7 +78,7 @@ public final class NaturesAura {
     }
 
     private void init(FMLCommonSetupEvent event) {
-        ModConfig.instance.apply();
+        DeferredWorkQueue.runLater(ModConfig.instance::apply);
 
         ModRecipes.init();
         ModRegistry.init();
