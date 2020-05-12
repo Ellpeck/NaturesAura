@@ -79,8 +79,8 @@ public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorP
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        super.tick(state, worldIn, pos, random);
+    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
+        super.randomTick(state, worldIn, pos, random);
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityAncientLeaves) {
@@ -89,6 +89,11 @@ public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorP
                 }
             }
         }
+    }
+
+    @Override
+    public boolean ticksRandomly(BlockState state) {
+        return true;
     }
 
     @Override
