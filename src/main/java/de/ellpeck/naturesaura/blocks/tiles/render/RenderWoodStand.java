@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
@@ -24,13 +25,13 @@ public class RenderWoodStand extends TileEntityRenderer<TileEntityWoodStand> {
         if (!stack.isEmpty()) {
             matrixStack.push();
             Item item = stack.getItem();
-            if (item instanceof BlockItem) {
-                matrixStack.translate(0.5F, 0.9735F, 0.5F);
-                float scale = 0.65F;
+            if (item instanceof BlockItem && ((BlockItem) item).getBlock().getDefaultState().getMaterial().isSolid()) {
+                matrixStack.translate(0.5F, 0.755F, 0.5F);
+                float scale = 0.95F;
                 matrixStack.scale(scale, scale, scale);
             } else {
-                matrixStack.translate(0.5F, 0.825F, 0.5F);
-                float scale = 0.4F;
+                matrixStack.translate(0.5F, 0.825F, 0.4F);
+                float scale = 0.75F;
                 matrixStack.scale(scale, scale, scale);
                 matrixStack.rotate(Vector3f.XP.rotationDegrees(90));
             }
