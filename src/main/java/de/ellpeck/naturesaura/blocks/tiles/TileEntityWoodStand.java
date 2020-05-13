@@ -21,6 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -79,7 +80,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
                                 new PacketParticles(this.ritualPos.getX(), this.ritualPos.getY(), this.ritualPos.getZ(), PacketParticles.Type.TR_GOLD_POWDER));
 
                         if (this.timer >= this.recipe.time) {
-                            this.recurseTreeDestruction(this.ritualPos, this.ritualPos);
+                            recurseTreeDestruction(this.world, this.ritualPos, this.ritualPos, true, false);
                             Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'G', (pos, matcher) -> {
                                 this.world.setBlockState(pos, Blocks.AIR.getDefaultState());
                                 return true;
@@ -127,10 +128,10 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
 
     }
 
-    private void recurseTreeDestruction(BlockPos pos, BlockPos start) {
+    public static void recurseTreeDestruction(World world, BlockPos pos, BlockPos start, boolean includeLeaves, boolean drop) {
         if (Math.abs(pos.getX() - start.getX()) >= 6
                 || Math.abs(pos.getZ() - start.getZ()) >= 6
-                || Math.abs(pos.getY() - start.getY()) >= 16) {
+                || Math.abs(pos.getY() - start.getY()) >= 32) {
             return;
         }
 
@@ -138,12 +139,16 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
                     BlockPos offset = pos.add(x, y, z);
-                    BlockState state = this.world.getBlockState(offset);
-                    if (state.getBlock() instanceof LogBlock || state.getBlock() instanceof LeavesBlock) {
-                        this.world.setBlockState(offset, Blocks.AIR.getDefaultState());
-                        PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), PacketParticles.Type.TR_DISAPPEAR));
-
-                        this.recurseTreeDestruction(offset, start);
+                    BlockState state = world.getBlockState(offset);
+                    if (state.getBlock() instanceof LogBlock || includeLeaves && state.getBlock() instanceof LeavesBlock) {
+                        if (drop) {
+                            world.destroyBlock(offset, true);
+                        } else {
+                            // in this case we don't want the particles, so we can't use destroyBlock
+                            world.setBlockState(offset, Blocks.AIR.getDefaultState());
+                            PacketHandler.sendToAllAround(world, pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), PacketParticles.Type.TR_DISAPPEAR));
+                        }
+                        recurseTreeDestruction(world, offset, start, includeLeaves, drop);
                     }
                 }
             }

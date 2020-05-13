@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "AAA",
+        "A A",
+        "A A"
+    ],
+    "key": {
+        "A": {
+            "item": "naturesaura:sky_ingot"
+        }
+    },
+    "result": {
+        "item": "naturesaura:sky_pants"
+    }
+}

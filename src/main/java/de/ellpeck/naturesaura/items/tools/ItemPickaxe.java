@@ -11,6 +11,8 @@ import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
@@ -20,6 +22,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -63,6 +66,24 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
             }
         }
         return ActionResultType.PASS;
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if (this == ModItems.SKY_PICKAXE) {
+            if (!(entityIn instanceof PlayerEntity))
+                return;
+            if (!isSelected || worldIn.isRemote)
+                return;
+            AxisAlignedBB bounds = new AxisAlignedBB(entityIn.getPosition()).grow(3.5F);
+            for (ItemEntity item : worldIn.getEntitiesWithinAABB(ItemEntity.class, bounds)) {
+                // only pick up freshly dropped items
+                if (item.getAge() >= 5)
+                    continue;
+                item.setPickupDelay(0);
+                item.onCollideWithPlayer((PlayerEntity) entityIn);
+            }
+        }
     }
 
     @Nullable

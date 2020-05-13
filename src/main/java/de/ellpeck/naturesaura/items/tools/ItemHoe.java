@@ -76,7 +76,7 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
                     success |= super.onItemUse(newContext) == ActionResultType.SUCCESS;
                 }
             }
-            return success ? ActionResultType.SUCCESS : ActionResultType.FAIL;
+            return success ? ActionResultType.SUCCESS : ActionResultType.PASS;
         }
         return super.onItemUse(context);
     }

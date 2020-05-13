@@ -47,7 +47,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
         for (int i = 0; i < 4; i++) {
             EquipmentSlotType slot = EquipmentSlotType.values()[i + 2];
             ItemStack stack = entity.getItemStackFromSlot(slot);
-            if (stack.isEmpty() || stack.getItem() != set[i])
+            if (stack.getItem() != set[i] && (slot != EquipmentSlotType.CHEST || stack.getItem() != Items.ELYTRA))
                 return false;
         }
         return true;
