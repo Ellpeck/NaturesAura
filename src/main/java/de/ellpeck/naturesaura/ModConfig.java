@@ -184,7 +184,7 @@ public final class ModConfig {
         try {
             for (String s : this.auraTypeOverrides.get()) {
                 String[] split = s.split("->");
-                DimensionType dim = Objects.requireNonNull(DimensionType.byName(new ResourceLocation(split[0])), "dim");
+                ResourceLocation dim = new ResourceLocation(split[0]);
                 BasicAuraType type = Objects.requireNonNull((BasicAuraType) NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(split[1])), "type");
                 type.addDimensionType(dim);
             }
