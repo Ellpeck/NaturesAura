@@ -205,7 +205,16 @@ public final class ModRegistry {
                 new ItemDeathRing(),
                 new ItemImpl("tainted_gold"),
                 new ItemLootFinder(),
-                new ItemLightStaff()
+                new ItemLightStaff(),
+                new ItemPickaxe("sky_pickaxe", ModItemTier.SKY, 1, -2.8F),
+                new ItemAxe("sky_axe", ModItemTier.SKY, 5.0F, -3.0F),
+                new ItemShovel("sky_shovel", ModItemTier.SKY, 1.5F, -3.0F),
+                new ItemHoe("sky_hoe", ModItemTier.SKY, -1.0F),
+                new ItemSword("sky_sword", ModItemTier.SKY, 3, -2.4F),
+                new ItemArmor("sky_helmet", ModArmorMaterial.SKY, EquipmentSlotType.HEAD),
+                new ItemArmor("sky_chest", ModArmorMaterial.SKY, EquipmentSlotType.CHEST),
+                new ItemArmor("sky_pants", ModArmorMaterial.SKY, EquipmentSlotType.LEGS),
+                new ItemArmor("sky_shoes", ModArmorMaterial.SKY, EquipmentSlotType.FEET)
         );
         Helper.populateObjectHolders(ModItems.class, event.getRegistry());
     }

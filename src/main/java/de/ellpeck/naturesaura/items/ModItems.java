@@ -49,4 +49,13 @@ public final class ModItems {
     public static Item TAINTED_GOLD;
     public static Item LOOT_FINDER;
     public static Item LIGHT_STAFF;
+    public static Item SKY_PICKAXE;
+    public static Item SKY_AXE;
+    public static Item SKY_SHOVEL;
+    public static Item SKY_HOE;
+    public static Item SKY_SWORD;
+    public static Item SKY_HELMET;
+    public static Item SKY_CHEST;
+    public static Item SKY_PANTS;
+    public static Item SKY_SHOES;
 }

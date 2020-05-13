@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.items.tools.ItemArmor;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import de.ellpeck.naturesaura.reg.ModArmorMaterial;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -74,7 +75,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                 source = DamageSource.causePlayerDamage((PlayerEntity) living);
             else
                 source = DamageSource.MAGIC;
-            boolean infusedSet = ItemArmor.isFullSetEquipped(living, 0);
+            boolean infusedSet = ItemArmor.isFullSetEquipped(living, ModArmorMaterial.INFUSED);
 
             int range = 5;
             List<LivingEntity> mobs = worldIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(

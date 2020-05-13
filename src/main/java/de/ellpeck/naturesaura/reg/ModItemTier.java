@@ -8,7 +8,8 @@ import net.minecraft.util.LazyValue;
 import java.util.function.Supplier;
 
 public enum ModItemTier implements IItemTier {
-    INFUSED(2, 250, 6.0F, 2.0F, 14, () -> Ingredient.fromItems(ModItems.INFUSED_IRON));
+    INFUSED(2, 250, 6, 2, 16, () -> Ingredient.fromItems(ModItems.INFUSED_IRON)),
+    SKY(3, 1500, 8, 3, 12, () -> Ingredient.fromItems(ModItems.SKY_INGOT));
 
     private final int harvestLevel;
     private final int maxUses;

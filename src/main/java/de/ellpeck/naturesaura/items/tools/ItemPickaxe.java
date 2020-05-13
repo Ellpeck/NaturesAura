@@ -68,9 +68,7 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (this == ModItems.INFUSED_IRON_PICKAXE)
-            return Helper.makeRechargeProvider(stack, true);
-        else return null;
+        return Helper.makeRechargeProvider(stack, true);
     }
 
     @Override

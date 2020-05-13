@@ -43,9 +43,7 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (this == ModItems.INFUSED_IRON_AXE)
             return Helper.makeRechargeProvider(stack, true);
-        else return null;
     }
 
     @Override

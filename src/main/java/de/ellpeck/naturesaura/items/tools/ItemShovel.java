@@ -86,9 +86,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (this == ModItems.INFUSED_IRON_SHOVEL)
-            return Helper.makeRechargeProvider(stack, true);
-        else return null;
+        return Helper.makeRechargeProvider(stack, true);
     }
 
     @Override

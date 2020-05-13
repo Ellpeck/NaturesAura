@@ -34,17 +34,18 @@ public class ItemSword extends SwordItem implements IModItem, ICustomItemModel {
 
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (this == ModItems.INFUSED_IRON_SWORD)
+        if (this == ModItems.INFUSED_IRON_SWORD) {
             target.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 60, 2));
+        } else if (this == ModItems.SKY_SWORD) {
+            target.addPotionEffect(new EffectInstance(Effects.LEVITATION, 60, 2));
+        }
         return super.hitEntity(stack, target, attacker);
     }
 
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (this == ModItems.INFUSED_IRON_SWORD)
-            return Helper.makeRechargeProvider(stack, true);
-        else return null;
+        return Helper.makeRechargeProvider(stack, true);
     }
 
     @Override
