@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -32,7 +33,7 @@ public class ItemLootFinder extends ItemImpl {
 
             BlockPos pos = playerIn.getPosition();
             Helper.getTileEntitiesInArea(worldIn, pos, 64, tile -> {
-                if (tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+                if (tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent() || tile instanceof MobSpawnerTileEntity) {
                     inst.spawnMagicParticle(
                             tile.getPos().getX() + 0.5F, tile.getPos().getY() + 0.5F, tile.getPos().getZ() + 0.5F,
                             0F, 0F, 0F, 0xf5f10a, 6F, 20 * 60, 0F, false, true);
