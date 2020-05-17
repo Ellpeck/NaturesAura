@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.Heightmap;
 
 public class TileEntitySnowCreator extends TileEntityImpl implements ITickableTileEntity {
@@ -45,7 +46,8 @@ public class TileEntitySnowCreator extends TileEntityImpl implements ITickableTi
                 return;
 
             for (int i = 0; i < 10; i++) {
-                BlockPos pos = this.pos.add(MathHelper.nextInt(this.world.rand, -range, range), 0, MathHelper.nextInt(this.world.rand, -range, range));
+                double angle = this.world.rand.nextFloat() * Math.PI * 2;
+                BlockPos pos = this.pos.add(Math.cos(angle) * range * this.world.rand.nextFloat(), 0, Math.sin(angle) * range * this.world.rand.nextFloat());
                 pos = this.world.getHeight(Heightmap.Type.MOTION_BLOCKING, pos);
                 BlockPos down = pos.down();
 
@@ -76,12 +78,13 @@ public class TileEntitySnowCreator extends TileEntityImpl implements ITickableTi
             if (this.world.getGameTime() % 30 != 0)
                 return;
             for (int i = range * 4; i >= 0; i--) {
-                BlockPos randomPos = this.pos.add(
-                        MathHelper.nextInt(this.world.rand, -range, range),
+                double angle = this.world.rand.nextFloat() * Math.PI * 2;
+                BlockPos pos = this.pos.add(
+                        Math.cos(angle) * range * this.world.rand.nextFloat(),
                         MathHelper.nextInt(this.world.rand, range / 2, range),
-                        MathHelper.nextInt(this.world.rand, -range, range));
+                        Math.sin(angle) * range * this.world.rand.nextFloat());
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        randomPos.getX() + this.world.rand.nextFloat(), randomPos.getY() + 1, randomPos.getZ() + this.world.rand.nextFloat(),
+                        pos.getX() + this.world.rand.nextFloat(), pos.getY() + 1, pos.getZ() + this.world.rand.nextFloat(),
                         this.world.rand.nextGaussian() * 0.05, 0, this.world.rand.nextGaussian() * 0.05,
                         0xdbe9ff, 1 + this.world.rand.nextFloat() * 1.5F, 10 * range, 0.05F + this.world.rand.nextFloat() * 0.05F, true, true
                 );
