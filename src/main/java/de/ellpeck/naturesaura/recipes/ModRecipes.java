@@ -104,15 +104,15 @@ public final class ModRecipes {
         ore(NaturesAuraAPI.NETHER_ORES, "ores/cobalt", 50);
         ore(NaturesAuraAPI.NETHER_ORES, "ores/ardite", 50);
 
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.EGG, 2500);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SNOWBALL, 3500);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SMALL_FIREBALL, 15000);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.ENDER_PEARL, 30000);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.EXPERIENCE_BOTTLE, 75000);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.ARROW, 10000);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SPECTRAL_ARROW, 15000);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SHULKER_BULLET, 250000);
-        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.LLAMA_SPIT, 80000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.EGG, 10000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SNOWBALL, 7000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SMALL_FIREBALL, 35000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.ENDER_PEARL, 50000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.EXPERIENCE_BOTTLE, 200000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.ARROW, 30000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SPECTRAL_ARROW, 40000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SHULKER_BULLET, 300000);
+        NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.LLAMA_SPIT, 100000);
         NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.TRIDENT, 3000000);
     }
 
