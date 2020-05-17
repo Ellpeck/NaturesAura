@@ -20,5 +20,6 @@ public class BlockTagProvider extends BlockTagsProvider {
         this.getBuilder(BlockTags.RAILS).add(ModBlocks.DIMENSION_RAIL_END, ModBlocks.DIMENSION_RAIL_NETHER, ModBlocks.DIMENSION_RAIL_OVERWORLD);
         this.getBuilder(BlockTags.SLABS).add(ModBlocks.ANCIENT_SLAB, ModBlocks.INFUSED_SLAB, ModBlocks.INFUSED_BRICK_SLAB);
         this.getBuilder(Tags.Blocks.DIRT).add(ModBlocks.NETHER_GRASS);
+        this.getBuilder(BlockTags.SMALL_FLOWERS).add(ModBlocks.END_FLOWER, ModBlocks.AURA_BLOOM);
     }
 }
