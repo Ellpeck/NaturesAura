@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " B ",
+        "CEC",
+        " B "
+    ],
+    "key": {
+        "E": {
+            "item": "minecraft:ender_eye"
+        },
+        "C": {
+            "type": "forge:nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:nether"
+            }
+        },
+        "B": {
+            "item": "minecraft:nether_brick"
+        }
+    },
+    "result": {
+        "item": "naturesaura:fortress_finder"
+    }
+}

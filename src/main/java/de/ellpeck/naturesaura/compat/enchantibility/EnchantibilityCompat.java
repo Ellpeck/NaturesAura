@@ -14,9 +14,8 @@ public class EnchantibilityCompat implements ICompat {
     @Override
     public void setup() {
         DeferredWorkQueue.runLater(() -> {
-            IInternals api = EnchantabilityApi.getInstance();
-            api.registerEnchantEffect(EnchantibilityAuraMending.RES, ModEnchantments.AURA_MENDING, EnchantibilityAuraMending::new);
-            api.registerEffectComponent(EnchantibilityAuraMending.RES, TickEvent.PlayerTickEvent.class, EnchantibilityAuraMending::onPlayerTick, e -> Collections.singletonList(e.player));
+            EnchantabilityApi.registerEnchantEffect(EnchantibilityAuraMending.RES, ModEnchantments.AURA_MENDING, EnchantibilityAuraMending::new);
+            EnchantabilityApi.registerEffectComponent(EnchantibilityAuraMending.RES, TickEvent.PlayerTickEvent.class, EnchantibilityAuraMending::onPlayerTick, e -> Collections.singletonList(e.player));
         });
     }
 

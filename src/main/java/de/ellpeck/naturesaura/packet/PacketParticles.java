@@ -4,9 +4,14 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
+import de.ellpeck.naturesaura.entities.EntityStructureFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -513,6 +518,22 @@ public class PacketParticles {
                         message.posY + 2 / 16F + world.rand.nextFloat() * 8 / 16F,
                         message.posZ + 5 / 16F + world.rand.nextFloat() * 6 / 16F,
                         0, 0, 0, color, 2, 40 + world.rand.nextInt(20), 0, false, true);
+        }),
+        STRUCTURE_FINDER((message, world) -> {
+            EntityStructureFinder entity = (EntityStructureFinder) world.getEntityByID(message.data[0]);
+            WorldRenderer renderer = Minecraft.getInstance().worldRenderer;
+
+            double d0 = message.posX + 0.5D;
+            double d13 = message.posY;
+            double d18 = message.posZ + 0.5D;
+            for (int j2 = 0; j2 < 8; ++j2)
+                renderer.addParticle(new ItemParticleData(ParticleTypes.ITEM, entity.getItem()), false, d0, d13, d18, world.rand.nextGaussian() * 0.15D, world.rand.nextDouble() * 0.2D, world.rand.nextGaussian() * 0.15D);
+
+            int color = entity.getDataManager().get(EntityStructureFinder.COLOR);
+            for (double d24 = 0.0D; d24 < (Math.PI * 2D); d24 += 0.15707963267948966D) {
+                NaturesAuraAPI.instance().spawnMagicParticle(d0 + Math.cos(d24) * 5.0D, d13 - 0.4D, d18 + Math.sin(d24) * 5.0D, Math.cos(d24) * -2, 0.0D, Math.sin(d24) * -2, color, 2, 60, 0, false, true);
+                NaturesAuraAPI.instance().spawnMagicParticle(d0 + Math.cos(d24) * 5.0D, d13 - 0.4D, d18 + Math.sin(d24) * 5.0D, Math.cos(d24) * -2.5, 0.0D, Math.sin(d24) * -2.5, color, 2, 60, 0, false, true);
+            }
         });
 
         public final BiConsumer<PacketParticles, World> action;

@@ -11,10 +11,7 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityAuraBloom.TileEntityAuraCac
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
-import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
-import de.ellpeck.naturesaura.entities.EntityLightProjectile;
-import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
-import de.ellpeck.naturesaura.entities.ModEntities;
+import de.ellpeck.naturesaura.entities.*;
 import de.ellpeck.naturesaura.entities.render.RenderEffectInhibitor;
 import de.ellpeck.naturesaura.entities.render.RenderMoverMinecart;
 import de.ellpeck.naturesaura.entities.render.RenderStub;
@@ -34,6 +31,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -214,7 +213,9 @@ public final class ModRegistry {
                 new ItemArmor("sky_helmet", ModArmorMaterial.SKY, EquipmentSlotType.HEAD),
                 new ItemArmor("sky_chest", ModArmorMaterial.SKY, EquipmentSlotType.CHEST),
                 new ItemArmor("sky_pants", ModArmorMaterial.SKY, EquipmentSlotType.LEGS),
-                new ItemArmor("sky_shoes", ModArmorMaterial.SKY, EquipmentSlotType.FEET)
+                new ItemArmor("sky_shoes", ModArmorMaterial.SKY, EquipmentSlotType.FEET),
+                new ItemStructureFinder("fortress_finder", "Fortress", 0xba2800),
+                new ItemStructureFinder("end_city_finder", "EndCity", 0xca5cd6)
         );
         Helper.populateObjectHolders(ModItems.class, event.getRegistry());
     }
@@ -275,13 +276,18 @@ public final class ModRegistry {
                 EntityType.Builder.<EntityLightProjectile>create(EntityLightProjectile::new, EntityClassification.MISC)
                         .size(0.5F, 0.5F).setShouldReceiveVelocityUpdates(true)
                         .setTrackingRange(64).setUpdateInterval(3).immuneToFire().build(NaturesAura.MOD_ID + ":light_projectile")
-                        .setRegistryName("light_projectile")
+                        .setRegistryName("light_projectile"),
+                EntityType.Builder.create(EntityStructureFinder::new, EntityClassification.MISC)
+                        .size(0.5F, 0.5F).setShouldReceiveVelocityUpdates(true)
+                        .setTrackingRange(64).setUpdateInterval(2).immuneToFire().build(NaturesAura.MOD_ID + ":structure_finder")
+                        .setRegistryName("structure_finder")
         );
         Helper.populateObjectHolders(ModEntities.class, event.getRegistry());
 
         NaturesAura.proxy.registerEntityRenderer(ModEntities.MOVER_CART, () -> RenderMoverMinecart::new);
         NaturesAura.proxy.registerEntityRenderer(ModEntities.EFFECT_INHIBITOR, () -> RenderEffectInhibitor::new);
         NaturesAura.proxy.registerEntityRenderer(ModEntities.LIGHT_PROJECTILE, () -> RenderStub::new);
+        NaturesAura.proxy.registerEntityRenderer(ModEntities.STRUCTURE_FINDER, () -> m -> new SpriteRenderer<>(m, Minecraft.getInstance().getItemRenderer()));
     }
 
     @SubscribeEvent
