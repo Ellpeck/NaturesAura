@@ -60,4 +60,5 @@ public final class ModItems {
     public static Item SKY_SHOES;
     public static Item FORTRESS_FINDER;
     public static Item END_CITY_FINDER;
+    public static Item BREAK_PREVENTION;
 }
