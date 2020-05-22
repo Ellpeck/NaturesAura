@@ -32,6 +32,8 @@ import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityClassification;
@@ -54,6 +56,7 @@ import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -263,6 +266,7 @@ public final class ModRegistry {
         Helper.populateObjectHolders(ModEnchantments.class, event.getRegistry());
     }
 
+    @SuppressWarnings("Convert2Lambda")
     @SubscribeEvent
     public static void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
         event.getRegistry().registerAll(
@@ -288,7 +292,13 @@ public final class ModRegistry {
         NaturesAura.proxy.registerEntityRenderer(ModEntities.MOVER_CART, () -> RenderMoverMinecart::new);
         NaturesAura.proxy.registerEntityRenderer(ModEntities.EFFECT_INHIBITOR, () -> RenderEffectInhibitor::new);
         NaturesAura.proxy.registerEntityRenderer(ModEntities.LIGHT_PROJECTILE, () -> RenderStub::new);
-        NaturesAura.proxy.registerEntityRenderer(ModEntities.STRUCTURE_FINDER, () -> m -> new SpriteRenderer<>(m, Minecraft.getInstance().getItemRenderer()));
+        // for some reason, only this one causes classloading issues if shortened to a lambda, what
+        NaturesAura.proxy.registerEntityRenderer(ModEntities.STRUCTURE_FINDER, () -> new IRenderFactory<EntityStructureFinder>() {
+            @Override
+            public EntityRenderer<? super EntityStructureFinder> createRenderFor(EntityRendererManager m) {
+                return new SpriteRenderer<>(m, Minecraft.getInstance().getItemRenderer());
+            }
+        });
     }
 
     @SubscribeEvent

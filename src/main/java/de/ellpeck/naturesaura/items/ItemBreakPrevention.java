@@ -12,6 +12,8 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -57,6 +59,7 @@ public class ItemBreakPrevention extends ItemImpl {
         }
 
         @SubscribeEvent
+        @OnlyIn(Dist.CLIENT)
         public void onTooltip(ItemTooltipEvent event) {
             ItemStack stack = event.getItemStack();
             if (!stack.hasTag() || !stack.getTag().getBoolean(NaturesAura.MOD_ID + ":break_prevention"))
