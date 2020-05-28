@@ -78,7 +78,7 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
             AxisAlignedBB bounds = new AxisAlignedBB(entityIn.getPosition()).grow(3.5F);
             for (ItemEntity item : worldIn.getEntitiesWithinAABB(ItemEntity.class, bounds)) {
                 // only pick up freshly dropped items
-                if (item.getAge() >= 5)
+                if (item.ticksExisted >= 5)
                     continue;
                 item.setPickupDelay(0);
                 item.onCollideWithPlayer((PlayerEntity) entityIn);
