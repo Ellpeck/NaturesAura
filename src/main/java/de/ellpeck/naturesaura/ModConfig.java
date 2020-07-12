@@ -61,7 +61,7 @@ public final class ModConfig {
                 .translation("config." + NaturesAura.MOD_ID + ".auraTypeOverrides")
                 .defineList("auraTypeOverrides", Collections.emptyList(), s -> true);
         this.additionalOres = builder
-                .comment("Additional blocks that are recognized as generatable ores for the passive ore generation effect. Each entry needs to be formatted as oredictEntry:oreWeight:dimension where a higher weight makes the ore more likely to spawn with 5000 being the weight of coal, the default ore with the highest weight, and dimension being any of overworld and nether")
+                .comment("Additional blocks that are recognized as generatable ores for the passive ore generation effect. Each entry needs to be formatted as tag_name->oreWeight->dimension where a higher weight makes the ore more likely to spawn with 5000 being the weight of coal, the default ore with the highest weight, and dimension being any of overworld and nether")
                 .translation("config." + NaturesAura.MOD_ID + ".additionalOres")
                 .defineList("additionalOres", Collections.emptyList(), s -> true);
         this.oreExceptions = builder
@@ -194,7 +194,7 @@ public final class ModConfig {
 
         try {
             for (String s : this.additionalOres.get()) {
-                String[] split = s.split(":");
+                String[] split = s.split("->");
                 WeightedOre ore = new WeightedOre(new ResourceLocation(split[0]), Integer.parseInt(split[1]));
                 String dimension = split[2];
                 if ("nether".equalsIgnoreCase(dimension)) {
