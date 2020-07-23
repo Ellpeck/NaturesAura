@@ -21,7 +21,7 @@ public class BlockFlowerGenerator extends BlockContainerImpl implements IVisuali
     @Override
     @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
-        return new AxisAlignedBB(pos).grow(3);
+        return new AxisAlignedBB(pos).grow(3, 1, 3);
     }
 
     @Override
