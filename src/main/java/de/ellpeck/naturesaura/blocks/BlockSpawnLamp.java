@@ -58,6 +58,9 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
             return;
         WorldData data = (WorldData) IWorldData.getWorldData((World) world);
         for (TileEntitySpawnLamp lamp : data.spawnLamps) {
+            if (lamp.isRemoved())
+                continue;
+
             int range = lamp.getRadius();
             if (range <= 0)
                 continue;
