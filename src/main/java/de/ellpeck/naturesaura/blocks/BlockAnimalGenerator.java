@@ -38,11 +38,11 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         LivingEntity entity = event.getEntityLiving();
-        if (entity.world.isRemote || !(entity instanceof AnimalEntity) || entity instanceof IMob || entity instanceof INPC)
+        if (entity.world.isRemote || entity.world.getGameTime() % 40 != 0 || !(entity instanceof AnimalEntity) || entity instanceof IMob || entity instanceof INPC)
             return;
         CompoundNBT data = entity.getPersistentData();
         int timeAlive = data.getInt(NaturesAura.MOD_ID + ":time_alive");
-        data.putInt(NaturesAura.MOD_ID + ":time_alive", timeAlive + 1);
+        data.putInt(NaturesAura.MOD_ID + ":time_alive", timeAlive + 40);
     }
 
     @SubscribeEvent
