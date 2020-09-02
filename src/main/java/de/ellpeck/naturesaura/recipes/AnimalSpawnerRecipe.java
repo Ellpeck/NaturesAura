@@ -13,6 +13,7 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -37,18 +38,11 @@ public class AnimalSpawnerRecipe extends ModRecipe {
         this.time = time;
     }
 
-    public Entity makeEntity(World world, double x, double y, double z) {
-        Entity entity = this.entity.create(world);
-        if (x == 0 && y == 0 && z == 0)
-            return entity;
-        entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360F), 0F);
-        if (entity instanceof MobEntity) {
-            MobEntity living = (MobEntity) entity;
-            living.rotationYawHead = entity.rotationYaw;
-            living.renderYawOffset = entity.rotationYaw;
-            living.onInitialSpawn(world, world.getDifficultyForLocation(living.getPosition()), SpawnReason.SPAWNER, null, null);
-        }
-        return entity;
+    public Entity makeEntity(World world, BlockPos pos) {
+        // passed position is zero on the client, so we don't want to do initialization stuff for the entity
+        if (pos == BlockPos.ZERO)
+            return this.entity.create(world);
+        return this.entity.create(world, null, null, null, pos, SpawnReason.SPAWNER, false, false);
     }
 
     @Override

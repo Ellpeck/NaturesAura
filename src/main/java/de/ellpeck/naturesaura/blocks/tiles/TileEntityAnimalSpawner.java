@@ -57,7 +57,7 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
 
                 this.time += 10;
                 if (this.time >= this.currentRecipe.time) {
-                    Entity entity = this.currentRecipe.makeEntity(this.world, this.spawnX, this.pos.getY() + 1, this.spawnZ);
+                    Entity entity = this.currentRecipe.makeEntity(this.world, new BlockPos(this.spawnX, this.pos.getY() + 1, this.spawnZ));
                     this.world.addEntity(entity);
 
                     this.currentRecipe = null;
@@ -121,7 +121,8 @@ public class TileEntityAnimalSpawner extends TileEntityImpl implements ITickable
                     this.world.rand.nextFloat() + 0.5F);
 
             if (this.entityClient == null) {
-                this.entityClient = this.currentRecipe.makeEntity(this.world, this.spawnX, this.pos.getY() + 1, this.spawnZ);
+                this.entityClient = this.currentRecipe.makeEntity(this.world, BlockPos.ZERO);
+                this.entityClient.setPosition(this.spawnX, this.pos.getY() + 1, this.spawnZ);
             }
             AxisAlignedBB bounds = this.entityClient.getBoundingBox();
             for (int i = this.world.rand.nextInt(5) + 5; i >= 0; i--)
