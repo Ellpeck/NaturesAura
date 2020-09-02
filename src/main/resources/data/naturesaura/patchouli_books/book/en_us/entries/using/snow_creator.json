@@ -3,7 +3,6 @@
     "icon": "naturesaura:snow_creator",
     "category": "using",
     "advancement": "naturesaura:sky_ingot",
-    "flag": "naturesaura:chunk_loader",
     "pages": [
         {
             "type": "text",
