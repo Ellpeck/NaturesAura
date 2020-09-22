@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.events;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import de.ellpeck.naturesaura.Helper;
+import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
@@ -10,6 +11,7 @@ import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.chunk.AuraChunkProvider;
 import de.ellpeck.naturesaura.commands.CommandAura;
+import de.ellpeck.naturesaura.gen.ModFeatures;
 import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
@@ -22,13 +24,19 @@ import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.server.ChunkHolder;
 import net.minecraft.world.server.ChunkManager;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -46,6 +54,15 @@ public class CommonEvents {
 
     private static final Method GET_LOADED_CHUNKS_METHOD = ObfuscationReflectionHelper.findMethod(ChunkManager.class, "func_223491_f");
     private static final ListMultimap<UUID, ChunkPos> PENDING_AURA_CHUNKS = ArrayListMultimap.create();
+
+    @SubscribeEvent
+    public void onBiomeLoad(BiomeLoadingEvent event) {
+        if (ModConfig.instance.auraBlooms.get()) {
+            event.getGeneration().func_242513_a(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.AURA_BLOOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+            if (event.getCategory() == Biome.Category.DESERT)
+                event.getGeneration().func_242513_a(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.AURA_CACTUS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+        }
+    }
 
     @SubscribeEvent
     public void onChunkCapsAttach(AttachCapabilitiesEvent<Chunk> event) {

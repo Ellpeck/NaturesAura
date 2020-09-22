@@ -56,6 +56,7 @@ import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.common.Mod;
@@ -327,16 +328,6 @@ public final class ModRegistry {
             if (item instanceof ITESRProvider)
                 NaturesAura.proxy.registerTESR((ITESRProvider) item);
         }
-
-        // TODO generate flower stuff naturally
-        /*for (Biome biome : ForgeRegistries.BIOMES) {
-            if (ModConfig.instance.auraBlooms.get()) {
-                biome.func_242440_e().func_242496_b().add()
-                biome.func_242427_a(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.AURA_BLOOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-                if (biome.getCategory() == Biome.Category.DESERT)
-                    biome.func_242427_a(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.AURA_CACTUS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-            }
-        }*/
     }
 
     public static Block createFlowerPot(Block block) {
