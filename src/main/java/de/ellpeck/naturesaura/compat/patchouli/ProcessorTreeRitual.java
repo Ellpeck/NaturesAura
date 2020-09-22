@@ -23,7 +23,7 @@ public class ProcessorTreeRitual implements IComponentProcessor {
         if (key.startsWith("input")) {
             int id = Integer.parseInt(key.substring(5)) - 1;
             if (this.recipe.ingredients.length > id)
-                return IVariable.from(this.recipe.ingredients[id]);
+                return PatchouliCompat.ingredientVariable(this.recipe.ingredients[id]);
             else
                 return null;
         } else {
@@ -31,7 +31,7 @@ public class ProcessorTreeRitual implements IComponentProcessor {
                 case "output":
                     return IVariable.from(this.recipe.result);
                 case "sapling":
-                    return IVariable.from(this.recipe.saplingType);
+                    return PatchouliCompat.ingredientVariable(this.recipe.saplingType);
                 case "name":
                     return IVariable.wrap(this.recipe.result.getDisplayName().getString());
                 default:

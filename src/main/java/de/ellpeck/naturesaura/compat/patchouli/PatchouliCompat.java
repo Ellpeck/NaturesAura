@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
@@ -31,14 +32,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 import vazkii.patchouli.api.BookDrawScreenEvent;
+import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.PatchouliAPI;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PatchouliCompat implements ICompat {
 
@@ -64,6 +64,11 @@ public class PatchouliCompat implements ICompat {
         ResourceLocation res = new ResourceLocation(name);
         ResourceLocation pre = new ResourceLocation(res.getNamespace(), type + "/" + res.getPath());
         return (T) manager.getRecipe(pre).orElse(null);
+    }
+
+    public static IVariable ingredientVariable(Ingredient ingredient) {
+        return IVariable.wrapList(Arrays.stream(ingredient.getMatchingStacks())
+                .map(IVariable::from).collect(Collectors.toList()));
     }
 
     @Override

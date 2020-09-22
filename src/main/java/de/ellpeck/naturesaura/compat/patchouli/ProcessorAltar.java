@@ -25,12 +25,12 @@ public class ProcessorAltar implements IComponentProcessor {
             return null;
         switch (key) {
             case "input":
-                return IVariable.from(this.recipe.input);
+                return PatchouliCompat.ingredientVariable(this.recipe.input);
             case "output":
                 return IVariable.from(this.recipe.output);
             case "catalyst":
                 if (this.recipe.catalyst != Ingredient.EMPTY)
-                    return IVariable.from(this.recipe.catalyst);
+                    return PatchouliCompat.ingredientVariable(this.recipe.catalyst);
                 else
                     return null;
             case "type":
