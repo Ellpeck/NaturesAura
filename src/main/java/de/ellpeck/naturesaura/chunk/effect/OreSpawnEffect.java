@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.chunk.effect;
 
-import com.sun.javafx.geom.Vec3d;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;

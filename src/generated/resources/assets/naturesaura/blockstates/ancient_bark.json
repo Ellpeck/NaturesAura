@@ -1,7 +1,7 @@
 {
   "variants": {
     "axis=x": {
-      "model": "naturesaura:block/ancient_bark",
+      "model": "naturesaura:block/ancient_bark_horizontal",
       "x": 90,
       "y": 90
     },
@@ -9,7 +9,7 @@
       "model": "naturesaura:block/ancient_bark"
     },
     "axis=z": {
-      "model": "naturesaura:block/ancient_bark",
+      "model": "naturesaura:block/ancient_bark_horizontal",
       "x": 90
     }
   }

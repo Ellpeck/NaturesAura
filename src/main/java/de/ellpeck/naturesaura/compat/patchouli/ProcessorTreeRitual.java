@@ -19,13 +19,13 @@ public class ProcessorTreeRitual implements IComponentProcessor {
     @Override
     public IVariable process(String key) {
         if (this.recipe == null)
-            return IVariable.empty();
+            return null;
         if (key.startsWith("input")) {
             int id = Integer.parseInt(key.substring(5)) - 1;
             if (this.recipe.ingredients.length > id)
                 return IVariable.from(this.recipe.ingredients[id]);
             else
-                return IVariable.empty();
+                return null;
         } else {
             switch (key) {
                 case "output":
@@ -35,7 +35,7 @@ public class ProcessorTreeRitual implements IComponentProcessor {
                 case "name":
                     return IVariable.wrap(this.recipe.result.getDisplayName().getString());
                 default:
-                    return IVariable.empty();
+                    return null;
             }
         }
     }

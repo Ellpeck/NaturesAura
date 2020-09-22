@@ -1,7 +1,7 @@
 {
   "variants": {
     "axis=x": {
-      "model": "naturesaura:block/ancient_log",
+      "model": "naturesaura:block/ancient_log_horizontal",
       "x": 90,
       "y": 90
     },
@@ -9,7 +9,7 @@
       "model": "naturesaura:block/ancient_log"
     },
     "axis=z": {
-      "model": "naturesaura:block/ancient_log",
+      "model": "naturesaura:block/ancient_log_horizontal",
       "x": 90
     }
   }

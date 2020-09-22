@@ -1,5 +1,5 @@
 {
-  "parent": "block/cube_bottom_top",
+  "parent": "minecraft:block/cube_bottom_top",
   "textures": {
     "side": "naturesaura:block/oak_generator",
     "bottom": "naturesaura:block/oak_generator_bottom",

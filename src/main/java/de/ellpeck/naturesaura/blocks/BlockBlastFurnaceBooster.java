@@ -21,7 +21,7 @@ public class BlockBlastFurnaceBooster extends BlockContainerImpl implements ICus
     private static final VoxelShape SHAPE = VoxelShapes.create(1 / 16F, 0, 1 / 16F, 15 / 16F, 1, 15 / 16F);
 
     public BlockBlastFurnaceBooster() {
-        super("blast_furnace_booster", TileEntityBlastFurnaceBooster::new, Block.Properties.from(Blocks.BLAST_FURNACE));
+        super("blast_furnace_booster", TileEntityBlastFurnaceBooster::new, Block.Properties.from(Blocks.BLAST_FURNACE).setLightLevel(s -> 0));
     }
 
     @Override

@@ -1,5 +1,5 @@
 {
-  "parent": "block/outer_stairs",
+  "parent": "minecraft:block/outer_stairs",
   "textures": {
     "side": "naturesaura:block/infused_brick",
     "bottom": "naturesaura:block/infused_brick",

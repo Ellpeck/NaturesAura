@@ -19,7 +19,7 @@ public class ProcessorOffering implements IComponentProcessor {
     @Override
     public IVariable process(String key) {
         if (this.recipe == null)
-            return IVariable.empty();
+            return null;
         switch (key) {
             case "input":
                 return IVariable.from(this.recipe.input);
@@ -30,7 +30,7 @@ public class ProcessorOffering implements IComponentProcessor {
             case "name":
                 return IVariable.wrap(this.recipe.output.getDisplayName().getString());
             default:
-                return IVariable.empty();
+                return null;
         }
     }
 }

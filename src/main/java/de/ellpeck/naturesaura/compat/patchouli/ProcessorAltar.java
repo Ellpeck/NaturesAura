@@ -22,7 +22,7 @@ public class ProcessorAltar implements IComponentProcessor {
     @Override
     public IVariable process(String key) {
         if (this.recipe == null)
-            return IVariable.empty();
+            return null;
         switch (key) {
             case "input":
                 return IVariable.from(this.recipe.input);
@@ -32,16 +32,16 @@ public class ProcessorAltar implements IComponentProcessor {
                 if (this.recipe.catalyst != Ingredient.EMPTY)
                     return IVariable.from(this.recipe.catalyst);
                 else
-                    return IVariable.empty();
+                    return null;
             case "type":
                 if (this.recipe.requiredType != null)
                     return IVariable.from(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), this.recipe.requiredType));
                 else
-                    return IVariable.empty();
+                    return null;
             case "name":
                 return IVariable.wrap(this.recipe.output.getDisplayName().getString());
             default:
-                return IVariable.empty();
+                return null;
         }
     }
 

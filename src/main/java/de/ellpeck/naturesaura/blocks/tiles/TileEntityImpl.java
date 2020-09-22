@@ -53,7 +53,8 @@ public class TileEntityImpl extends TileEntity {
 
     public void readNBT(CompoundNBT compound, SaveType type) {
         if (type != SaveType.BLOCK) {
-            super.read(this.getBlockState(), compound);
+            // looks like the block state isn't used in the super
+            super.read(null, compound);
             this.redstonePower = compound.getInt("redstone");
         }
     }

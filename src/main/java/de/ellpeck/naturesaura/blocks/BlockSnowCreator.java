@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockSnowCreator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
     public BlockSnowCreator() {
-        super("snow_creator", TileEntitySnowCreator::new, ModBlocks.prop(Blocks.FURNACE));
+        super("snow_creator", TileEntitySnowCreator::new, ModBlocks.prop(Blocks.STONE_BRICKS));
     }
 
     @Override

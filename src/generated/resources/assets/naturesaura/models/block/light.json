@@ -1,5 +1,5 @@
 {
-  "parent": "block/air",
+  "parent": "minecraft:block/air",
   "textures": {
     "particle": "naturesaura:block/light"
   }
