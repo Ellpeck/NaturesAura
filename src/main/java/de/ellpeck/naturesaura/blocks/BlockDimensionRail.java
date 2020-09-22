@@ -17,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.Property;
@@ -66,10 +67,10 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
         if (stack.getItem() == ModItems.RANGE_VISUALIZER) {
             if (!worldIn.isRemote) {
                 BlockPos goalPos = this.getGoalCoords(worldIn, pos);
-                // TODO dimension rail visualization
-/*
-                PacketHandler.sendTo(player, new PacketClient(0, this.goalDim, goalPos.getX(), goalPos.getY(), goalPos.getZ()));
-*/
+                CompoundNBT data = new CompoundNBT();
+                data.putString("dim", this.goalDim.func_240901_a_().toString());
+                data.putLong("pos", goalPos.toLong());
+                PacketHandler.sendTo(player, new PacketClient(0, data));
             }
             return ActionResultType.SUCCESS;
         }
@@ -93,8 +94,14 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
         cart.changeDimension(world.getServer().getWorld(this.goalDim), new ITeleporter() {
             @Override
             public Entity placeEntity(Entity entity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
-                Entity result = repositionEntity.apply(false);
-                result.moveToBlockPosAndAngles(goalCoords, yaw, result.rotationPitch);
+                // repositionEntity always causes a NPE because why wouldn't it, so this is a fixed copy
+                entity.world.getProfiler().endStartSection("reloading");
+                Entity result = entity.getType().create(destWorld);
+                if (result != null) {
+                    result.copyDataFromOld(entity);
+                    destWorld.addFromAnotherDimension(result);
+                    result.moveToBlockPosAndAngles(goalCoords, yaw, result.rotationPitch);
+                }
                 return result;
             }
         });

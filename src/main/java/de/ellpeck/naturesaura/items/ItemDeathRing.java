@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,8 +31,9 @@ public class ItemDeathRing extends ItemImpl {
                     entity.clearActivePotions();
                     entity.addPotionEffect(new EffectInstance(Effects.REGENERATION, 500, 1));
 
-                    PacketHandler.sendToAllAround(entity.world, entity.getPosition(), 32,
-                            new PacketClient(1, entity.getEntityId()));
+                    CompoundNBT data = new CompoundNBT();
+                    data.putInt("id", entity.getEntityId());
+                    PacketHandler.sendToAllAround(entity.world, entity.getPosition(), 32, new PacketClient(1, data));
 
                     equipped.shrink(1);
                     event.setCanceled(true);

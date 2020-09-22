@@ -150,7 +150,7 @@ public class ClientEvents {
                         NaturesAuraAPI.IInternalHooks inst = NaturesAuraAPI.instance();
                         inst.setParticleSpawnRange(512);
                         inst.setParticleDepth(false);
-                        for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_RAILS.get(mc.world.func_234923_W_())) {
+                        for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_RAILS.get(mc.world.func_234923_W_().func_240901_a_())) {
                             NaturesAuraAPI.instance().spawnMagicParticle(
                                     pos.getX() + mc.world.rand.nextFloat(),
                                     pos.getY() + mc.world.rand.nextFloat(),
@@ -216,7 +216,7 @@ public class ClientEvents {
                 RenderSystem.translated((pos.getX() + 0.1) / scale, (pos.getY() + 1.001) / scale, (pos.getZ() + 0.1) / scale);
                 RenderSystem.rotatef(90F, 1F, 0F, 0F);
                 RenderSystem.scalef(0.65F, 0.65F, 0.65F);
-                mc.fontRenderer.drawString(stack,format.format(spot.getValue()), 0, 0, 0);
+                mc.fontRenderer.drawString(stack, format.format(spot.getValue()), 0, 0, 0);
                 RenderSystem.popMatrix();
             }
 
@@ -232,7 +232,7 @@ public class ClientEvents {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBegin(GL11.GL_QUADS);
-            for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_BLOCKS.get(dim)) {
+            for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_BLOCKS.get(dim.func_240901_a_())) {
                 if (!mc.world.isBlockLoaded(pos))
                     continue;
                 BlockState state = mc.world.getBlockState(pos);
@@ -241,7 +241,7 @@ public class ClientEvents {
                     continue;
                 this.renderVisualize((IVisualizable) block, mc.world, pos);
             }
-            for (Entity entity : ItemRangeVisualizer.VISUALIZED_ENTITIES.get(dim)) {
+            for (Entity entity : ItemRangeVisualizer.VISUALIZED_ENTITIES.get(dim.func_240901_a_())) {
                 if (!entity.isAlive() || !(entity instanceof IVisualizable))
                     continue;
                 this.renderVisualize((IVisualizable) entity, mc.world, entity.getPosition());
@@ -385,7 +385,7 @@ public class ClientEvents {
                             if (tile != null && (container = tile.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null)) != null) {
                                 BlockState state = mc.world.getBlockState(pos);
                                 ItemStack blockStack = state.getBlock().getPickBlock(state, mc.objectMouseOver, mc.world, pos, mc.player);
-                                this.drawContainerInfo(stack,container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
+                                this.drawContainerInfo(stack, container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
                                         mc, res, 35, blockStack.getDisplayName().getString(), null);
 
                                 if (tile instanceof TileEntityNatureAltar) {
@@ -393,14 +393,14 @@ public class ClientEvents {
                                     if (!tileStack.isEmpty()) {
                                         IAuraContainer stackCont = tileStack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
                                         if (stackCont != null) {
-                                            this.drawContainerInfo(stack,stackCont.getStoredAura(), stackCont.getMaxAura(), stackCont.getAuraColor(),
+                                            this.drawContainerInfo(stack, stackCont.getStoredAura(), stackCont.getMaxAura(), stackCont.getAuraColor(),
                                                     mc, res, 55, tileStack.getDisplayName().getString(), null);
                                         }
                                     }
                                 }
                             } else if (tile instanceof TileEntityRFConverter) {
                                 EnergyStorage storage = ((TileEntityRFConverter) tile).storage;
-                                this.drawContainerInfo(stack,storage.getEnergyStored(), storage.getMaxEnergyStored(), 0xcc4916,
+                                this.drawContainerInfo(stack, storage.getEnergyStored(), storage.getMaxEnergyStored(), 0xcc4916,
                                         mc, res, 35, I18n.format("tile.naturesaura.rf_converter.name"),
                                         storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
                             } else if (tile instanceof TileEntityGratedChute) {
@@ -433,8 +433,8 @@ public class ClientEvents {
                                 ItemStack itemStack = timer.getItemHandler(null).getStackInSlot(0);
                                 if (!itemStack.isEmpty()) {
                                     Helper.renderItemInGui(itemStack, x - 20, y - 20, 1);
-                                    mc.fontRenderer.drawStringWithShadow(stack,TextFormatting.GRAY + this.createTimeString(timer.getTotalTime()), x + 5, y - 11, 0xFFFFFF);
-                                    mc.fontRenderer.drawStringWithShadow(stack,TextFormatting.GRAY + I18n.format("info.naturesaura.remaining", this.createTimeString(timer.getTimeLeft())), x + 5, y + 3, 0xFFFFFF);
+                                    mc.fontRenderer.drawStringWithShadow(stack, TextFormatting.GRAY + this.createTimeString(timer.getTotalTime()), x + 5, y - 11, 0xFFFFFF);
+                                    mc.fontRenderer.drawStringWithShadow(stack, TextFormatting.GRAY + I18n.format("info.naturesaura.remaining", this.createTimeString(timer.getTimeLeft())), x + 5, y + 3, 0xFFFFFF);
                                 }
                             }
                         }
@@ -464,13 +464,13 @@ public class ClientEvents {
 
         mc.getTextureManager().bindTexture(OVERLAYS);
         if (width < 80)
-            AbstractGui.blit(stack,x + width, y, width, 0, 80 - width, 6, 256, 256);
+            AbstractGui.blit(stack, x + width, y, width, 0, 80 - width, 6, 256, 256);
         if (width > 0)
-            AbstractGui.blit(stack,x, y, 0, 6, width, 6, 256, 256);
+            AbstractGui.blit(stack, x, y, 0, 6, width, 6, 256, 256);
 
-        mc.fontRenderer.drawStringWithShadow(stack,name, x + 40 - mc.fontRenderer.getStringWidth(name) / 2F, y - 9, color);
+        mc.fontRenderer.drawStringWithShadow(stack, name, x + 40 - mc.fontRenderer.getStringWidth(name) / 2F, y - 9, color);
 
         if (textBelow != null)
-            mc.fontRenderer.drawStringWithShadow(stack,textBelow, x + 40 - mc.fontRenderer.getStringWidth(textBelow) / 2F, y + 7, color);
+            mc.fontRenderer.drawStringWithShadow(stack, textBelow, x + 40 - mc.fontRenderer.getStringWidth(textBelow) / 2F, y + 7, color);
     }
 }
