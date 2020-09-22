@@ -7,6 +7,8 @@ import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -20,41 +22,29 @@ import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import top.theillusivec4.curios.api.CuriosCapability;
+import top.theillusivec4.curios.api.SlotTypeMessage;
+import top.theillusivec4.curios.api.SlotTypePreset;
+import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-// TODO curios
 public class CuriosCompat implements ICompat {
-    @Override
-    public void setup() {
 
-    }
-
-    @Override
-    public void setupClient() {
-
-    }
-
-    @Override
-    public void addItemTags(ItemTagProvider provider) {
-
-    }
-
-    /*private static final Map<Item, Tag<Item>> TYPES = ImmutableMap.<Item, Tag<Item>>builder()
-            .put(ModItems.EYE, CurioTags.CHARM)
-            .put(ModItems.EYE_IMPROVED, CurioTags.CHARM)
-            .put(ModItems.AURA_CACHE, CurioTags.BELT)
-            .put(ModItems.AURA_TROVE, CurioTags.BELT)
-            .put(ModItems.SHOCKWAVE_CREATOR, CurioTags.NECKLACE)
-            .put(ModItems.DEATH_RING, CurioTags.RING)
+    private static final Map<Item, String> TYPES = ImmutableMap.<Item, String>builder()
+            .put(ModItems.EYE, "charm")
+            .put(ModItems.EYE_IMPROVED, "charm")
+            .put(ModItems.AURA_CACHE, "belt")
+            .put(ModItems.AURA_TROVE, "belt")
+            .put(ModItems.SHOCKWAVE_CREATOR, "necklace")
+            .put(ModItems.DEATH_RING, "ring")
             .build();
 
     @Override
     public void setup() {
-        FMLJavaModLoadingContext.get().getModEventBus().register(this); // inter mod comms
-        MinecraftForge.EVENT_BUS.register(this); // capabilities
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::sendImc);
+        MinecraftForge.EVENT_BUS.addGenericListener(ItemStack.class, this::onCapabilitiesAttach);
     }
 
     @Override
@@ -62,16 +52,11 @@ public class CuriosCompat implements ICompat {
 
     }
 
-    @SubscribeEvent
-    public void sendImc(InterModEnqueueEvent event) {
-        TYPES.values().stream().distinct().forEach(t -> {
-            String path = t.getId().getPath();
-            InterModComms.sendTo("curios", CuriosAPI.IMC.REGISTER_TYPE, () -> new CurioIMCMessage(path));
-        });
+    private void sendImc(InterModEnqueueEvent event) {
+        TYPES.values().stream().distinct().forEach(t -> InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder(t).build()));
     }
 
-    @SubscribeEvent
-    public void onCapabilitiesAttach(AttachCapabilitiesEvent<ItemStack> event) {
+    private void onCapabilitiesAttach(AttachCapabilitiesEvent<ItemStack> event) {
         ItemStack stack = event.getObject();
         if (TYPES.containsKey(stack.getItem())) {
             event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "curios"), new ICapabilityProvider() {
@@ -82,8 +67,9 @@ public class CuriosCompat implements ICompat {
                         return LazyOptional.empty();
                     return LazyOptional.of(() -> (T) new ICurio() {
                         @Override
-                        public void onCurioTick(String identifier, int index, LivingEntity livingEntity) {
+                        public void curioTick(String identifier, int index, LivingEntity livingEntity) {
                             stack.getItem().inventoryTick(stack, livingEntity.world, livingEntity, -1, false);
+
                         }
 
                         @Override
@@ -92,7 +78,7 @@ public class CuriosCompat implements ICompat {
                         }
 
                         @Override
-                        public boolean shouldSyncToTracking(String identifier, LivingEntity livingEntity) {
+                        public boolean canSync(String identifier, int index, LivingEntity livingEntity) {
                             return true;
                         }
                     });
@@ -103,7 +89,9 @@ public class CuriosCompat implements ICompat {
 
     @Override
     public void addItemTags(ItemTagProvider provider) {
-        for (Map.Entry<Item, Tag<Item>> entry : TYPES.entrySet())
-            provider.getBuilder(entry.getValue()).add(entry.getKey());
-    }*/
+        for (Map.Entry<Item, String> entry : TYPES.entrySet()) {
+            ITag.INamedTag<Item> tag = ItemTags.createOptional(new ResourceLocation("curios", entry.getValue()));
+            provider.getOrCreateBuilder(tag).add(entry.getKey());
+        }
+    }
 }

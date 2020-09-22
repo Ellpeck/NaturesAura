@@ -19,6 +19,9 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -60,15 +63,11 @@ public class PlayerLayerTrinkets extends LayerRenderer<AbstractClientPlayerEntit
         }
 
         if (Compat.hasCompat("curios")) {
-            // TODO curios
-            /*ICurioItemHandler handler = CuriosAPI.getCuriosHandler(player).orElse(null);
+            IItemHandler handler = CuriosApi.getCuriosHelper().getEquippedCurios(player).orElse(null);
             if (handler != null) {
-                for (IItemHandler items : handler.getCurioMap().values()) {
-                    for (int i = 0; i < items.getSlots(); i++) {
-                        this.renderStack(items.getStackInSlot(i), player, type, main, second, matrices, buffer, packedLight);
-                    }
-                }
-            }*/
+                for (int i = 0; i < handler.getSlots(); i++)
+                    this.renderStack(handler.getStackInSlot(i), player, type, main, second, matrices, buffer, packedLight);
+            }
         }
     }
 

@@ -46,6 +46,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lwjgl.opengl.GL11;
+import top.theillusivec4.curios.api.CuriosApi;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -331,10 +332,9 @@ public final class Helper {
 
     public static ItemStack getEquippedItem(Predicate<ItemStack> predicate, PlayerEntity player) {
         if (Compat.hasCompat("curios")) {
-            // TODO curios
-           /* Optional<ItemStack> stack = CuriosAPI.getCurioEquipped(predicate, player).map(ImmutableTriple::getRight);
+            Optional<ItemStack> stack = CuriosApi.getCuriosHelper().findEquippedCurio(predicate, player).map(ImmutableTriple::getRight);
             if (stack.isPresent())
-                return stack.get();*/
+                return stack.get();
         }
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
             ItemStack slot = player.inventory.getStackInSlot(i);

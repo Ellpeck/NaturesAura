@@ -7,6 +7,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraftforge.common.Tags;
@@ -29,5 +30,10 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.getOrCreateBuilder(Tags.Items.RODS_WOODEN).add(ModItems.ANCIENT_STICK);
 
         Compat.addItemTags(this);
+    }
+
+    @Override
+    public Builder<Item> getOrCreateBuilder(ITag.INamedTag<Item> tag) {
+        return super.getOrCreateBuilder(tag);
     }
 }
