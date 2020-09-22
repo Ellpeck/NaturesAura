@@ -24,12 +24,6 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
 
     public ItemColorChanger() {
         super("color_changer", new Properties().maxStackSize(1));
-
-        // TODO move to using ItemModelsProperties.func_239418_a_ it seems like
-        /*this.addPropertyOverride(new ResourceLocation(NaturesAura.MOD_ID, "fill_mode"),
-                (stack, worldIn, entityIn) -> isFillMode(stack) ? 1F : 0F);
-        this.addPropertyOverride(new ResourceLocation(NaturesAura.MOD_ID, "has_color"),
-                (stack, worldIn, entityIn) -> getStoredColor(stack) != null ? 1F : 0F);*/
     }
 
     private static boolean changeOrCopyColor(PlayerEntity player, ItemStack stack, World world, BlockPos pos, DyeColor firstColor) {
@@ -72,7 +66,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
         return false;
     }
 
-    private static DyeColor getStoredColor(ItemStack stack) {
+    public static DyeColor getStoredColor(ItemStack stack) {
         if (!stack.hasTag()) {
             return null;
         } else {
@@ -85,7 +79,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
         stack.getOrCreateTag().putInt("color", color.getId());
     }
 
-    private static boolean isFillMode(ItemStack stack) {
+    public static boolean isFillMode(ItemStack stack) {
         if (!stack.hasTag()) {
             return false;
         } else {

@@ -1,9 +1,12 @@
 package de.ellpeck.naturesaura.proxy;
 
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.ClientEvents;
 import de.ellpeck.naturesaura.gui.GuiEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
+import de.ellpeck.naturesaura.items.ItemColorChanger;
+import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import de.ellpeck.naturesaura.particles.ParticleMagic;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
@@ -22,10 +25,12 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -45,6 +50,11 @@ public class ClientProxy implements IProxy {
         Compat.setupClient();
         ScreenManager.registerFactory(ModContainers.ENDER_CRATE, GuiEnderCrate::new);
         ScreenManager.registerFactory(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
+
+        ItemModelsProperties.func_239418_a_(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "fill_mode"),
+                (stack, worldIn, entityIn) -> ItemColorChanger.isFillMode(stack) ? 1F : 0F);
+        ItemModelsProperties.func_239418_a_(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "has_color"),
+                (stack, worldIn, entityIn) -> ItemColorChanger.getStoredColor(stack) != null ? 1F : 0F);
     }
 
     @Override
