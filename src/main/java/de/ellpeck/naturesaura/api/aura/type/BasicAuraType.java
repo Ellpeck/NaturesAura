@@ -16,14 +16,14 @@ public class BasicAuraType implements IAuraType {
     private final ResourceLocation name;
     private final int color;
     private final int priority;
-    private final Set<RegistryKey<World>> dimensions = new HashSet<>();
+    private final Set<ResourceLocation> dimensions = new HashSet<>();
 
     public BasicAuraType(ResourceLocation name, RegistryKey<World> dimension, int color, int priority) {
         this.name = name;
         this.color = color;
         this.priority = priority;
         if (dimension != null)
-            this.dimensions.add(dimension);
+            this.dimensions.add(dimension.func_240901_a_());
     }
 
     public BasicAuraType register() {
@@ -38,7 +38,7 @@ public class BasicAuraType implements IAuraType {
 
     @Override
     public boolean isPresentInWorld(IWorld world) {
-        return this.dimensions.isEmpty() || this.dimensions.contains(((World) world).func_234923_W_());
+        return this.dimensions.isEmpty() || this.dimensions.contains(((World) world).func_234923_W_().func_240901_a_());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class BasicAuraType implements IAuraType {
         return this.priority;
     }
 
-    public void addDimensionType(RegistryKey<World> type) {
+    public void addDimensionType(ResourceLocation type) {
         this.dimensions.add(type);
     }
 }

@@ -181,13 +181,12 @@ public final class ModConfig {
         }
 
         try {
-            // TODO aura type config
-            /*for (String s : this.auraTypeOverrides.get()) {
+            for (String s : this.auraTypeOverrides.get()) {
                 String[] split = s.split("->");
                 ResourceLocation dim = new ResourceLocation(split[0]);
                 BasicAuraType type = Objects.requireNonNull((BasicAuraType) NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(split[1])), "type");
                 type.addDimensionType(dim);
-            }*/
+            }
         } catch (Exception e) {
             NaturesAura.LOGGER.warn("Error parsing auraTypeOverrides", e);
         }
