@@ -117,8 +117,7 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
             return new BlockPos(pos.getX() / 8, pos.getY() / 2, pos.getZ() / 8);
         } else if (this == ModBlocks.DIMENSION_RAIL_END) {
             // travel to the end from the overworld
-            ServerWorld end = server.getWorld(this.goalDim);
-            return end.func_241135_u_().up(8);
+            return ServerWorld.field_241108_a_.up(8);
         } else {
             if (world.func_234923_W_() == World.field_234919_h_) {
                 // travel to the overworld from the nether
