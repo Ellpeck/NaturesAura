@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 
@@ -126,7 +127,7 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
         Minecraft minecraft = Minecraft.getInstance();
         Entity entity = this.entityCache.get(recipe.entity);
         if (entity == null) {
-            entity = recipe.makeEntity(minecraft.world, 0, 0, 0);
+            entity = recipe.makeEntity(minecraft.world, BlockPos.ZERO);
             this.entityCache.put(recipe.entity, entity);
         }
 
