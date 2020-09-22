@@ -14,7 +14,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.Heightmap;
 
 public class TileEntitySnowCreator extends TileEntityImpl implements ITickableTileEntity {

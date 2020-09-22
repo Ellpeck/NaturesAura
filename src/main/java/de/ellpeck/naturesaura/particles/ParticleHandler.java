@@ -80,7 +80,7 @@ public final class ParticleHandler {
             LightTexture lightmap = mc.gameRenderer.getLightTexture();
 
             RenderSystem.pushMatrix();
-            RenderSystem.multMatrix(stack.getLast().getPositionMatrix());
+            RenderSystem.multMatrix(stack.getLast().getMatrix());
             lightmap.enableLightmap();
 
             RenderSystem.enableAlphaTest();

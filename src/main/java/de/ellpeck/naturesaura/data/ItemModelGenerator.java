@@ -8,8 +8,8 @@ import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
-import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ItemModelGenerator extends ItemModelProvider {
     public ItemModelGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {

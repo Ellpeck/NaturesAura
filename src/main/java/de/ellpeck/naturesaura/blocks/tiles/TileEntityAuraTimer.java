@@ -73,7 +73,7 @@ public class TileEntityAuraTimer extends TileEntityImpl implements ITickableTile
 
             BlockState state = this.getBlockState();
             this.world.setBlockState(this.pos, state.with(BlockStateProperties.POWERED, true), 1);
-            this.world.getPendingBlockTicks().scheduleTick(this.pos, state.getBlock(), state.getBlock().tickRate(this.world));
+            this.world.getPendingBlockTicks().scheduleTick(this.pos, state.getBlock(), 4);
 
             int color = ItemAuraBottle.getType(this.itemHandler.getStackInSlot(0)).getColor();
             PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.TIMER_RESET, color));

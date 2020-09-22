@@ -20,6 +20,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -95,11 +97,11 @@ public class PatchouliCompat implements ICompat {
             RenderHelper.disableStandardItemLighting();
             GlStateManager.color4f(1, 1, 1, 1);
             event.gui.getMinecraft().getTextureManager().bindTexture(ClientEvents.BOOK_GUI);
-            AbstractGui.blit(x, y, 469, 0, 43, 42, 512, 256);
+            AbstractGui.blit(event.matrixStack, x, y, 469, 0, 43, 42, 512, 256);
 
             if (event.mouseX >= x && event.mouseY >= y && event.mouseX < x + 43 && event.mouseY < y + 42)
-                GuiUtils.drawHoveringText(
-                        Collections.singletonList(TextFormatting.GOLD + "It's the author Ellpeck's birthday!"),
+                GuiUtils.drawHoveringText(event.matrixStack,
+                        Collections.singletonList(new StringTextComponent("It's the author Ellpeck's birthday!").setStyle(Style.EMPTY.setFormatting(TextFormatting.GOLD))),
                         event.mouseX, event.mouseY, event.gui.width, event.gui.height, 0, event.gui.getMinecraft().fontRenderer);
         } else if (now.getMonth() == Month.JUNE) {
             int x = event.gui.width / 2 + 272 / 2;
@@ -108,15 +110,15 @@ public class PatchouliCompat implements ICompat {
             RenderHelper.disableStandardItemLighting();
             GlStateManager.color4f(1, 1, 1, 1);
             event.gui.getMinecraft().getTextureManager().bindTexture(ClientEvents.BOOK_GUI);
-            AbstractGui.blit(x, y, 424, 0, 45, 26, 512, 256);
+            AbstractGui.blit(event.matrixStack, x, y, 424, 0, 45, 26, 512, 256);
 
             if (event.mouseX >= x && event.mouseY >= y && event.mouseX < x + 45 && event.mouseY < y + 26)
-                GuiUtils.drawHoveringText(
-                        Collections.singletonList("§6Happy §4P§6r§ei§2d§9e§5!"),
+                GuiUtils.drawHoveringText(event.matrixStack,
+                        Collections.singletonList(new StringTextComponent("§6Happy §4P§6r§ei§2d§9e§5!")),
                         event.mouseX, event.mouseY, event.gui.width, event.gui.height, 0, event.gui.getMinecraft().fontRenderer);
         }
 
-        String name = event.gui.getMinecraft().player.getName().getFormattedText();
+        String name = event.gui.getMinecraft().player.getName().getString();
         FancyInfo info = SupporterFancyHandler.FANCY_INFOS.get(name);
         if (info != null) {
             int x = event.gui.width / 2 - 272 / 2 + 20;
@@ -126,20 +128,20 @@ public class PatchouliCompat implements ICompat {
             RenderSystem.color4f(1, 1, 1, 1);
             event.gui.getMinecraft().getTextureManager().bindTexture(ClientEvents.BOOK_GUI);
 
-            AbstractGui.blit(x, y, 496, 44, 16, 18, 512, 256);
+            AbstractGui.blit(event.matrixStack, x, y, 496, 44, 16, 18, 512, 256);
             if (info.tier == 1) {
-                AbstractGui.blit(x, y, 496 - 16, 44, 16, 18, 512, 256);
+                AbstractGui.blit(event.matrixStack, x, y, 496 - 16, 44, 16, 18, 512, 256);
             } else {
                 float r = ((info.color >> 16) & 255) / 255F;
                 float g = ((info.color >> 8) & 255) / 255F;
                 float b = (info.color & 255) / 255F;
                 RenderSystem.color3f(r, g, b);
-                AbstractGui.blit(x, y, 496 - 32, 44, 16, 18, 512, 256);
+                AbstractGui.blit(event.matrixStack, x, y, 496 - 32, 44, 16, 18, 512, 256);
             }
 
             if (event.mouseX >= x && event.mouseY >= y && event.mouseX < x + 16 && event.mouseY < y + 18)
-                GuiUtils.drawHoveringText(
-                        Collections.singletonList(TextFormatting.YELLOW + "Thanks for your support, " + name + "!"),
+                GuiUtils.drawHoveringText(event.matrixStack,
+                        Collections.singletonList(new StringTextComponent("Thanks for your support, " + name + "!").setStyle(Style.EMPTY.setFormatting(TextFormatting.YELLOW))),
                         event.mouseX, event.mouseY, event.gui.width, event.gui.height, 0, event.gui.getMinecraft().fontRenderer);
 
         }

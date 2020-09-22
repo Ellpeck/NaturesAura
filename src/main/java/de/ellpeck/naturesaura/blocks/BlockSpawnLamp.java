@@ -18,13 +18,14 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,7 +40,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     private static final VoxelShape SHAPE = VoxelShapes.create(4 / 16F, 0F, 4 / 16F, 12 / 16F, 13 / 16F, 12 / 16F);
 
     public BlockSpawnLamp() {
-        super("spawn_lamp", TileEntitySpawnLamp::new, ModBlocks.prop(Material.IRON).hardnessAndResistance(3F).lightValue(15).sound(SoundType.METAL));
+        super("spawn_lamp", TileEntitySpawnLamp::new, ModBlocks.prop(Material.IRON).hardnessAndResistance(3F).setLightLevel(s -> 15).sound(SoundType.METAL));
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -66,7 +67,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
                 continue;
 
             BlockPos lampPos = lamp.getPos();
-            if (!new AxisAlignedBB(lampPos).grow(range).contains(new Vec3d(pos)))
+            if (!new AxisAlignedBB(lampPos).grow(range).contains(new Vector3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)))
                 continue;
 
             MobEntity entity = (MobEntity) event.getEntityLiving();
@@ -74,7 +75,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
                 BlockPos spot = IAuraChunk.getHighestSpot(world, lampPos, 32, lampPos);
                 IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 200);
 
-                PacketHandler.sendToAllAround(world, lampPos, 32,
+                PacketHandler.sendToAllAround((ServerWorld) world, lampPos, 32,
                         new PacketParticles(lampPos.getX(), lampPos.getY(), lampPos.getZ(), PacketParticles.Type.SPAWN_LAMP));
             }
 
@@ -113,6 +114,6 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
 
     @Override
     public Supplier<RenderType> getRenderType() {
-        return RenderType::cutoutMipped;
+        return RenderType::getCutoutMipped;
     }
 }

@@ -32,8 +32,8 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
 
     private final String baseName;
 
-    public ItemHoe(String baseName, IItemTier material, float speed) {
-        super(material, speed, new Properties().group(NaturesAura.CREATIVE_TAB));
+    public ItemHoe(String baseName, IItemTier material, int speed) {
+        super(material, speed, 0, new Properties().group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
         ModRegistry.add(this);
     }

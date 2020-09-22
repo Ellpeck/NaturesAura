@@ -11,7 +11,7 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -42,7 +42,7 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
     public ActionResultType onItemUse(ItemUseContext context) {
         World world = context.getWorld();
         if (!world.isRemote) {
-            Vec3d hit = context.getHitVec();
+            Vector3d hit = context.getHitVec();
             ItemStack stack = context.getPlayer().getHeldItem(context.getHand());
             EntityEffectInhibitor.place(world, stack, hit.x, hit.y + 1, hit.z);
             stack.setCount(0);

@@ -9,8 +9,8 @@ import de.ellpeck.naturesaura.blocks.BlockNatureAltar;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.LogBlock;
 import net.minecraft.block.SaplingBlock;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ResourceLocation;
@@ -49,7 +49,7 @@ public final class Multiblocks {
             'G', ModBlocks.GOLD_POWDER,
             '0', new Matcher(Blocks.OAK_SAPLING.getDefaultState(),
                     (world, start, offset, pos, state, c) -> {
-                        if (state.getBlock() instanceof SaplingBlock || state.getBlock() instanceof LogBlock)
+                        if (state.getBlock() instanceof SaplingBlock || state.getMaterial() == Material.WOOD)
                             return true;
                         // try-catch to prevent blocks that need to have been placed crashing here
                         try {

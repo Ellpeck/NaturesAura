@@ -22,7 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -85,15 +85,15 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     private void addToPowderList() {
         if (!this.isAddedToWorld() || this.getInhibitedEffect() == null)
             return;
-        List<Tuple<Vec3d, Integer>> powders = this.getPowderList();
-        powders.add(new Tuple<>(this.getPositionVector(), this.getAmount()));
+        List<Tuple<Vector3d, Integer>> powders = this.getPowderList();
+        powders.add(new Tuple<>(this.getPositionVec(), this.getAmount()));
     }
 
     private void removeFromPowderList() {
         if (!this.isAddedToWorld() || this.getInhibitedEffect() == null)
             return;
-        List<Tuple<Vec3d, Integer>> powders = this.getPowderList();
-        Vec3d pos = this.getPositionVector();
+        List<Tuple<Vector3d, Integer>> powders = this.getPowderList();
+        Vector3d pos = this.getPositionVec();
         for (int i = 0; i < powders.size(); i++)
             if (pos.equals(powders.get(i).getA())) {
                 powders.remove(i);
@@ -101,8 +101,8 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
             }
     }
 
-    private List<Tuple<Vec3d, Integer>> getPowderList() {
-        ListMultimap<ResourceLocation, Tuple<Vec3d, Integer>> powders = ((WorldData) IWorldData.getWorldData(this.world)).effectPowders;
+    private List<Tuple<Vector3d, Integer>> getPowderList() {
+        ListMultimap<ResourceLocation, Tuple<Vector3d, Integer>> powders = ((WorldData) IWorldData.getWorldData(this.world)).effectPowders;
         return powders.get(this.getInhibitedEffect());
     }
 
@@ -196,7 +196,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     @Override
     @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
-        return Helper.aabb(this.getPositionVector()).grow(this.getAmount());
+        return Helper.aabb(this.getPositionVec()).grow(this.getAmount());
     }
 
     @Override

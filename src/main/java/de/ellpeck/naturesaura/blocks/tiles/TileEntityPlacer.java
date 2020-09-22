@@ -16,7 +16,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
@@ -109,7 +109,7 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickableTileEnt
             return stack;
         FakePlayer fake = FakePlayerFactory.getMinecraft((ServerWorld) this.world);
         fake.inventory.mainInventory.set(fake.inventory.currentItem, stack);
-        BlockRayTraceResult ray = new BlockRayTraceResult(new Vec3d(pos).add(0.5F, 0.5F, 0.5F), Direction.UP, pos, false);
+        BlockRayTraceResult ray = new BlockRayTraceResult(Vector3d.copyCentered(pos), Direction.UP, pos, false);
         ForgeHooks.onPlaceItemIntoWorld(new ItemUseContext(fake, Hand.MAIN_HAND, ray));
         return fake.getHeldItemMainhand().copy();
     }

@@ -7,9 +7,9 @@ import de.ellpeck.naturesaura.reg.ModArmorMaterial;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -81,7 +81,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
         @SubscribeEvent
         public void update(TickEvent.PlayerTickEvent event) {
             PlayerEntity player = event.player;
-            IAttributeInstance speed = player.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
+            ModifiableAttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
             String key = NaturesAura.MOD_ID + ":sky_equipped";
             CompoundNBT nbt = player.getPersistentData();
             boolean equipped = isFullSetEquipped(player, ModArmorMaterial.SKY);
@@ -90,7 +90,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
                 nbt.putBoolean(key, true);
                 player.stepHeight = 1.1F;
                 if (!speed.hasModifier(SKY_MOVEMENT_MODIFIER))
-                    speed.applyModifier(SKY_MOVEMENT_MODIFIER);
+                    speed.applyNonPersistentModifier(SKY_MOVEMENT_MODIFIER);
             } else if (!equipped && nbt.getBoolean(key)) {
                 // we just unequipped it
                 nbt.putBoolean(key, false);

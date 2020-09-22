@@ -25,10 +25,11 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
     public ItemColorChanger() {
         super("color_changer", new Properties().maxStackSize(1));
 
-        this.addPropertyOverride(new ResourceLocation(NaturesAura.MOD_ID, "fill_mode"),
+        // TODO move to using ItemModelsProperties.func_239418_a_ it seems like
+        /*this.addPropertyOverride(new ResourceLocation(NaturesAura.MOD_ID, "fill_mode"),
                 (stack, worldIn, entityIn) -> isFillMode(stack) ? 1F : 0F);
         this.addPropertyOverride(new ResourceLocation(NaturesAura.MOD_ID, "has_color"),
-                (stack, worldIn, entityIn) -> getStoredColor(stack) != null ? 1F : 0F);
+                (stack, worldIn, entityIn) -> getStoredColor(stack) != null ? 1F : 0F);*/
     }
 
     private static boolean changeOrCopyColor(PlayerEntity player, ItemStack stack, World world, BlockPos pos, DyeColor firstColor) {
@@ -39,7 +40,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
         DyeColor color = DyeColor.byId(blocks.indexOf(block));
         if (firstColor == null || color == firstColor) {
             DyeColor stored = getStoredColor(stack);
-            if (player.isShiftKeyDown()) {
+            if (player.isSneaking()) {
                 if (stored != color) {
                     world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                             SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 0.65F, 1F);
@@ -109,7 +110,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
-        if (playerIn.isShiftKeyDown() && getStoredColor(stack) != null) {
+        if (playerIn.isSneaking() && getStoredColor(stack) != null) {
             worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundCategory.PLAYERS, 0.65F, 1F);
             if (!worldIn.isRemote) {
                 setFillMode(stack, !isFillMode(stack));

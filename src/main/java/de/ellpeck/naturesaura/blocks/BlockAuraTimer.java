@@ -65,7 +65,7 @@ public class BlockAuraTimer extends BlockContainerImpl implements ICustomBlockSt
 
     @Override
     public Supplier<RenderType> getRenderType() {
-        return RenderType::cutout;
+        return RenderType::getCutout;
     }
 
     @Override
@@ -86,11 +86,6 @@ public class BlockAuraTimer extends BlockContainerImpl implements ICustomBlockSt
     @Override
     public int getWeakPower(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
         return state.get(BlockStateProperties.POWERED) ? 15 : 0;
-    }
-
-    @Override
-    public int tickRate(IWorldReader world) {
-        return 4;
     }
 
     @Override

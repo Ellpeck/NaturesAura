@@ -19,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.ServerWorldInfo;
 
 import java.util.List;
 
@@ -47,16 +48,16 @@ public class TileEntityTimeChanger extends TileEntityImpl implements ITickableTi
                         this.sendToClients();
                         return;
                     }
-                    this.world.setDayTime(current + toAdd);
+                    ((ServerWorldInfo) this.world.getWorldInfo()).setDayTime(current + toAdd);
 
                     BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 35, this.pos);
                     IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, (int) toAdd * 20);
 
                     if (this.world instanceof ServerWorld) {
                         PlayerList list = this.world.getServer().getPlayerList();
-                        list.sendPacketToAllPlayersInDimension(new SUpdateTimePacket(
+                        list.sendPacketToAllPlayers(new SUpdateTimePacket(
                                 this.world.getGameTime(), this.world.getDayTime(),
-                                this.world.getGameRules().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)), this.world.getDimension().getType());
+                                this.world.getGameRules().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)));
                     }
                     return;
                 }

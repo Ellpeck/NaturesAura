@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.recipes.AnimalSpawnerRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
 import vazkii.patchouli.api.IComponentProcessor;
+import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
 import vazkii.patchouli.api.PatchouliAPI;
 
@@ -13,31 +14,31 @@ public class ProcessorAnimalSpawner implements IComponentProcessor {
     private AnimalSpawnerRecipe recipe;
 
     @Override
-    public void setup(IVariableProvider<String> provider) {
-        this.recipe = PatchouliCompat.getRecipe("animal_spawner", provider.get("recipe"));
+    public void setup(IVariableProvider provider) {
+        this.recipe = PatchouliCompat.getRecipe("animal_spawner", provider.get("recipe").asString());
     }
 
     @Override
-    public String process(String key) {
+    public IVariable process(String key) {
         if (this.recipe == null)
-            return null;
+            return IVariable.empty();
         if (key.startsWith("input")) {
             int id = Integer.parseInt(key.substring(5)) - 1;
             if (this.recipe.ingredients.length > id)
-                return PatchouliAPI.instance.serializeIngredient(this.recipe.ingredients[id]);
+                return IVariable.from(this.recipe.ingredients[id]);
             else
-                return null;
+                return IVariable.empty();
         } else {
             switch (key) {
                 case "name":
-                    return this.recipe.entity.getName().getFormattedText();
+                    return IVariable.wrap(this.recipe.entity.getName().getString());
                 case "entity":
-                    return this.recipe.entity.getRegistryName().toString();
+                    return IVariable.wrap(this.recipe.entity.getRegistryName().toString());
                 case "egg":
                     ItemStack egg = new ItemStack(SpawnEggItem.getEgg(this.recipe.entity));
-                    return PatchouliAPI.instance.serializeItemStack(egg);
+                    return IVariable.from(egg);
                 default:
-                    return null;
+                    return IVariable.empty();
             }
         }
     }

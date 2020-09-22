@@ -21,7 +21,7 @@ public class BlockItemDistributor extends BlockContainerImpl implements ICustomB
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (!player.isShiftKeyDown())
+        if (!player.isSneaking())
             return ActionResultType.FAIL;
         TileEntity tile = worldIn.getTileEntity(pos);
         if (!(tile instanceof TileEntityItemDistributor))

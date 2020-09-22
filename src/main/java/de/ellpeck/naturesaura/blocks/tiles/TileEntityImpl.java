@@ -40,7 +40,7 @@ public class TileEntityImpl extends TileEntity {
     }
 
     @Override
-    public void read(CompoundNBT compound) {
+    public void read(BlockState state, CompoundNBT compound) {
         this.readNBT(compound, SaveType.TILE);
     }
 
@@ -53,7 +53,7 @@ public class TileEntityImpl extends TileEntity {
 
     public void readNBT(CompoundNBT compound, SaveType type) {
         if (type != SaveType.BLOCK) {
-            super.read(compound);
+            super.read(this.getBlockState(), compound);
             this.redstonePower = compound.getInt("redstone");
         }
     }
@@ -77,8 +77,9 @@ public class TileEntityImpl extends TileEntity {
     }
 
     @Override
-    public void handleUpdateTag(CompoundNBT tag) {
+    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
         this.readNBT(tag, SaveType.SYNC);
+
     }
 
     @Override

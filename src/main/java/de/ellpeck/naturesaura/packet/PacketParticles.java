@@ -236,7 +236,7 @@ public class PacketParticles {
                         message.posX + 0.5F,
                         message.posY + 0.5F,
                         message.posZ + 0.5F,
-                        0.6F, BiomeColors.func_228361_b_(world, new BlockPos(sapX, sapY, sapZ)), 1.5F);
+                        0.6F, BiomeColors.getGrassColor(world, new BlockPos(sapX, sapY, sapZ)), 1.5F);
             if (releaseAura)
                 for (int i = world.rand.nextInt(10) + 10; i >= 0; i--)
                     NaturesAuraAPI.instance().spawnMagicParticle(

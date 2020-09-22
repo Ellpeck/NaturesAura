@@ -28,8 +28,8 @@ public final class PacketHandler {
         network.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)), message);
     }
 
-    public static void sendToAllAround(IWorld world, BlockPos pos, int range, Object message) {
-        network.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, world.getDimension().getType())), message);
+    public static void sendToAllAround(World world, BlockPos pos, int range, Object message) {
+        network.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, world.func_234923_W_())), message);
     }
 
     public static void sendTo(PlayerEntity player, Object message) {

@@ -7,10 +7,12 @@ import de.ellpeck.naturesaura.reg.ModTileType;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.FluidTags;
@@ -22,8 +24,6 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -59,7 +59,7 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem {
     }
 
     @Override
-    public IFluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return this.hasWaterlogging() && state.get(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
 
@@ -74,7 +74,7 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem {
     @Nullable
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         if (this.hasWaterlogging()) {
-            IFluidState state = context.getWorld().getFluidState(context.getPos());
+            FluidState state = context.getWorld().getFluidState(context.getPos());
             return this.getDefaultState().with(BlockStateProperties.WATERLOGGED, state.isTagged(FluidTags.WATER) && state.getLevel() == 8);
         }
         return super.getStateForPlacement(context);
@@ -157,14 +157,9 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem {
                 TileEntityImpl impl = (TileEntityImpl) tile;
                 int newPower = world.getRedstonePowerFromNeighbors(pos);
                 if (impl.redstonePower != newPower)
-                    world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world));
+                    world.getPendingBlockTicks().scheduleTick(pos, this, 4);
             }
         }
-    }
-
-    @Override
-    public int tickRate(IWorldReader worldIn) {
-        return 4;
     }
 
     @Override

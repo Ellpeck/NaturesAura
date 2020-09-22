@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -16,6 +17,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -84,7 +86,9 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
                     for (int i = 0; i < recipeCount; i++)
                         this.itemsToSpawn.add(recipe.output.copy());
 
-                    ((ServerWorld) this.world).addLightningBolt(new LightningBoltEntity(this.world, this.pos.getX(), this.pos.getY(), this.pos.getZ(), true));
+                    LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.world);
+                    lightningboltentity.moveForced(Vector3d.copyCenteredHorizontally(this.pos));
+                    this.world.addEntity(lightningboltentity);
                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
                             (float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.OFFERING_TABLE,
                             this.pos.getX(), this.pos.getY(), this.pos.getZ()));

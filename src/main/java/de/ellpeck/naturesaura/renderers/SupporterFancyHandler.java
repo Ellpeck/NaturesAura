@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonReader;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.PointOfView;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerModelPart;
 import net.minecraft.util.math.BlockPos;
@@ -43,7 +44,7 @@ public class SupporterFancyHandler {
         if (player.isInvisible() || !player.isWearing(PlayerModelPart.CAPE))
             return;
         Minecraft mc = Minecraft.getInstance();
-        if (player == mc.player && mc.gameSettings.thirdPersonView == 0)
+        if (player == mc.player && mc.gameSettings.func_243230_g() == PointOfView.FIRST_PERSON)
             return;
         FancyInfo info = FANCY_INFOS.get(player.getGameProfile().getName());
         if (info == null)
@@ -54,7 +55,7 @@ public class SupporterFancyHandler {
             int color;
             if (info.tier == 1) {
                 BlockPos pos = player.getPosition();
-                color = BiomeColors.func_228361_b_(player.world, pos);
+                color = BiomeColors.getGrassColor(player.world, pos);
             } else {
                 color = info.color;
             }

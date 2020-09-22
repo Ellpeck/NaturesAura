@@ -5,10 +5,10 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 @OnlyIn(Dist.CLIENT)
 public class RenderEnderCrate extends TileEntityRenderer<TileEntityEnderCrate> {
     private static final Random RANDOM = new Random(31100L);
-    private static final List<RenderType> RENDER_TYPES = IntStream.range(0, 16).mapToObj(i -> RenderType.endPortal(i + 1)).collect(ImmutableList.toImmutableList());
+    private static final List<RenderType> RENDER_TYPES = IntStream.range(0, 16).mapToObj(i -> RenderType.getEndPortal(i + 1)).collect(ImmutableList.toImmutableList());
 
     public RenderEnderCrate(TileEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);
@@ -31,7 +31,7 @@ public class RenderEnderCrate extends TileEntityRenderer<TileEntityEnderCrate> {
         double d0 = tileEntityIn.getPos().distanceSq(this.renderDispatcher.renderInfo.getProjectedView(), true);
         int i = this.getPasses(d0);
         float f = this.getOffset();
-        Matrix4f matrix4f = matrixStackIn.getLast().getPositionMatrix();
+        Matrix4f matrix4f = matrixStackIn.getLast().getMatrix();
         this.renderCube(f, 0.15F, matrix4f, bufferIn.getBuffer(RENDER_TYPES.get(0)));
 
         for (int j = 1; j < i; ++j) {

@@ -1,13 +1,15 @@
 package de.ellpeck.naturesaura.gen;
 
+import com.mojang.serialization.Codec;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import java.util.Random;
@@ -15,11 +17,11 @@ import java.util.Random;
 public class WorldGenNetherWartMushroom extends Feature<NoFeatureConfig> {
 
     public WorldGenNetherWartMushroom() {
-        super(d -> NoFeatureConfig.NO_FEATURE_CONFIG);
+        super(Codec.unit(IFeatureConfig.NO_FEATURE_CONFIG));
     }
 
     @Override
-    public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+    public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator gen, Random rand, BlockPos pos, NoFeatureConfig p_241855_5_) {
         int height = rand.nextInt(5) + 4;
         if (rand.nextInt(10) == 0)
             height += 5;
@@ -32,7 +34,7 @@ public class WorldGenNetherWartMushroom extends Feature<NoFeatureConfig> {
         }
 
         // Place stem
-        this.setBlockState(worldIn, pos, Blocks.AIR.getDefaultState());
+        this.func_230367_a_(worldIn, pos, Blocks.AIR.getDefaultState());
         for (int i = 0; i < height; i++)
             this.placeIfPossible(worldIn, pos.up(i), Blocks.NETHER_WART_BLOCK);
 

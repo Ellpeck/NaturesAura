@@ -11,15 +11,15 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -95,15 +95,15 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
                 chunk.drainAura(spot, 100);
 
             ItemStack tool = this.getToolUsed(creator);
-            Vec3d dist = new Vec3d(
+            Vector3d dist = new Vector3d(
                     this.pos.getX() - connectedPos.getX(),
                     this.pos.getY() - connectedPos.getY(),
                     this.pos.getZ() - connectedPos.getZ()
             );
             double length = dist.length();
-            Vec3d normal = new Vec3d(dist.x / length, dist.y / length, dist.z / length);
+            Vector3d normal = new Vector3d(dist.x / length, dist.y / length, dist.z / length);
             for (float i = MathHelper.floor(length); i > 0; i -= 0.5F) {
-                Vec3d scaled = normal.scale(i);
+                Vector3d scaled = normal.scale(i);
                 BlockPos pos = connectedPos.add(
                         MathHelper.floor(scaled.x + 0.5F),
                         MathHelper.floor(scaled.y + 0.5F),
@@ -118,7 +118,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
                     FakePlayer fake = FakePlayerFactory.getMinecraft((ServerWorld) this.world);
                     if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.world, pos, state, fake))) {
                         List<ItemStack> drops = state.getDrops(new LootContext.Builder((ServerWorld) this.world)
-                                .withParameter(LootParameters.POSITION, pos)
+                                .withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(pos))
                                 .withParameter(LootParameters.BLOCK_STATE, state)
                                 .withParameter(LootParameters.TOOL, tool == null ? new ItemStack(Items.DIAMOND_PICKAXE) : tool)
                                 .withNullableParameter(LootParameters.BLOCK_ENTITY, this.world.getTileEntity(pos)));

@@ -7,13 +7,13 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityGeneratorLimitRemover;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -51,7 +51,7 @@ public class RenderGeneratorLimitRemover extends TileEntityRenderer<TileEntityGe
         private final ModelRenderer box;
 
         public ModelLimitRemoverGlint() {
-            super(RenderType::entityTranslucent);
+            super(RenderType::getEntityTranslucent);
             this.box = new ModelRenderer(this, 0, 0);
             this.box.setTextureSize(64, 64);
             this.box.addBox(0, 0, 0, 16, 16, 16);

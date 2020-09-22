@@ -18,11 +18,11 @@ import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.item.Items;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.BlockStateProperty;
+import net.minecraft.loot.conditions.RandomChance;
+import net.minecraft.loot.functions.SetCount;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.BlockStateProperty;
-import net.minecraft.world.storage.loot.conditions.RandomChance;
-import net.minecraft.world.storage.loot.functions.SetCount;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -103,7 +103,7 @@ public class BlockLootProvider implements IDataProvider {
         }
 
         public static LootTable.Builder genFlowerPot(Block block) {
-            return droppingAndFlowerPot(((FlowerPotBlock) block).func_220276_d());
+            return droppingAndFlowerPot(((FlowerPotBlock) block).getFlower());
         }
 
         public static <T> T survivesExplosion(Block block, ILootConditionConsumer<T> then) {

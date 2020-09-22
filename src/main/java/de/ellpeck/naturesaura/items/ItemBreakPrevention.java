@@ -7,10 +7,7 @@ import net.minecraft.item.ElytraItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -65,12 +62,14 @@ public class ItemBreakPrevention extends ItemImpl {
             if (!stack.hasTag() || !stack.getTag().getBoolean(NaturesAura.MOD_ID + ":break_prevention"))
                 return;
             List<ITextComponent> tooltip = event.getToolTip();
-            tooltip.add(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".break_prevention").setStyle(new Style().setColor(TextFormatting.GRAY)));
+            tooltip.add(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".break_prevention").setStyle(Style.EMPTY.setFormatting(TextFormatting.GRAY)));
             if (ElytraItem.isUsable(stack))
                 return;
             if (tooltip.size() < 1)
                 return;
-            tooltip.get(0).appendSibling(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".broken").setStyle(new Style().setColor(TextFormatting.GRAY)));
+            ITextComponent head = tooltip.get(0);
+            if (head instanceof TextComponent)
+                ((TextComponent) head).append(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".broken").setStyle(Style.EMPTY.setFormatting(TextFormatting.GRAY)));
         }
     }
 }

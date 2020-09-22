@@ -103,7 +103,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
         if (!blockstate1.isNormalCube(worldIn, blockpos1)) {
             boolean flag = blockstate.isSolidSide(worldIn, blockpos, Direction.UP) || blockstate.getBlock() == Blocks.HOPPER;
             if (flag && this.canConnectTo(worldIn.getBlockState(blockpos.up()))) {
-                if (blockstate.isCollisionShapeOpaque(worldIn, blockpos)) {
+                if (blockstate.hasOpaqueCollisionShape(worldIn, blockpos)) {
                     return RedstoneSide.UP;
                 }
 
@@ -187,26 +187,25 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     @Override
-    public void updateDiagonalNeighbors(BlockState state, IWorld worldIn, BlockPos pos, int flags) {
-        try (BlockPos.PooledMutable pool = BlockPos.PooledMutable.retain()) {
-            for (Direction direction : Direction.Plane.HORIZONTAL) {
-                RedstoneSide redstoneside = state.get(RedstoneWireBlock.FACING_PROPERTY_MAP.get(direction));
-                if (redstoneside != RedstoneSide.NONE && worldIn.getBlockState(pool.setPos(pos).move(direction)).getBlock() != this) {
-                    pool.move(Direction.DOWN);
-                    BlockState blockstate = worldIn.getBlockState(pool);
-                    if (blockstate.getBlock() != Blocks.OBSERVER) {
-                        BlockPos blockpos = pool.offset(direction.getOpposite());
-                        BlockState blockstate1 = blockstate.updatePostPlacement(direction.getOpposite(), worldIn.getBlockState(blockpos), worldIn, pool, blockpos);
-                        replaceBlock(blockstate, blockstate1, worldIn, pool, flags);
-                    }
+    public void updateDiagonalNeighbors(BlockState state, IWorld worldIn, BlockPos pos, int flags, int recursionLeft) {
+        BlockPos.Mutable pool = new BlockPos.Mutable();
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            RedstoneSide redstoneside = state.get(RedstoneWireBlock.FACING_PROPERTY_MAP.get(direction));
+            if (redstoneside != RedstoneSide.NONE && worldIn.getBlockState(pool.setPos(pos).move(direction)).getBlock() != this) {
+                pool.move(Direction.DOWN);
+                BlockState blockstate = worldIn.getBlockState(pool);
+                if (blockstate.getBlock() != Blocks.OBSERVER) {
+                    BlockPos blockpos = pool.offset(direction.getOpposite());
+                    BlockState blockstate1 = blockstate.updatePostPlacement(direction.getOpposite(), worldIn.getBlockState(blockpos), worldIn, pool, blockpos);
+                    replaceBlock(blockstate, blockstate1, worldIn, pool, flags);
+                }
 
-                    pool.setPos(pos).move(direction).move(Direction.UP);
-                    BlockState blockstate3 = worldIn.getBlockState(pool);
-                    if (blockstate3.getBlock() != Blocks.OBSERVER) {
-                        BlockPos blockpos1 = pool.offset(direction.getOpposite());
-                        BlockState blockstate2 = blockstate3.updatePostPlacement(direction.getOpposite(), worldIn.getBlockState(blockpos1), worldIn, pool, blockpos1);
-                        replaceBlock(blockstate3, blockstate2, worldIn, pool, flags);
-                    }
+                pool.setPos(pos).move(direction).move(Direction.UP);
+                BlockState blockstate3 = worldIn.getBlockState(pool);
+                if (blockstate3.getBlock() != Blocks.OBSERVER) {
+                    BlockPos blockpos1 = pool.offset(direction.getOpposite());
+                    BlockState blockstate2 = blockstate3.updatePostPlacement(direction.getOpposite(), worldIn.getBlockState(blockpos1), worldIn, pool, blockpos1);
+                    replaceBlock(blockstate3, blockstate2, worldIn, pool, flags);
                 }
             }
         }
@@ -235,6 +234,6 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
 
     @Override
     public Supplier<RenderType> getRenderType() {
-        return RenderType::cutoutMipped;
+        return RenderType::getCutoutMipped;
     }
 }

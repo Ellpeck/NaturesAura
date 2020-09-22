@@ -21,13 +21,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.INBT;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
+
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.AbstractChunkProvider;
@@ -45,7 +46,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lwjgl.opengl.GL11;
-import top.theillusivec4.curios.api.CuriosAPI;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -209,7 +209,7 @@ public final class Helper {
             if (split.length > 1) {
                 for (String part : split[1].replace("]", "").split(",")) {
                     String[] keyValue = part.split("=");
-                    for (IProperty<?> prop : state.getProperties()) {
+                    for (Property<?> prop : state.getProperties()) {
                         BlockState changed = findProperty(state, prop, keyValue[0], keyValue[1]);
                         if (changed != null) {
                             state = changed;
@@ -223,7 +223,7 @@ public final class Helper {
             return null;
     }
 
-    private static <T extends Comparable<T>> BlockState findProperty(BlockState state, IProperty<T> prop, String key, String newValue) {
+    private static <T extends Comparable<T>> BlockState findProperty(BlockState state, Property<T> prop, String key, String newValue) {
         if (key.equals(prop.getName()))
             for (T value : prop.getAllowedValues())
                 if (prop.getName(value).equals(newValue))
@@ -307,7 +307,7 @@ public final class Helper {
         return true;
     }
 
-    public static AxisAlignedBB aabb(Vec3d pos) {
+    public static AxisAlignedBB aabb(Vector3d pos) {
         return new AxisAlignedBB(pos.x, pos.y, pos.z, pos.x, pos.y, pos.z);
     }
 
@@ -331,9 +331,10 @@ public final class Helper {
 
     public static ItemStack getEquippedItem(Predicate<ItemStack> predicate, PlayerEntity player) {
         if (Compat.hasCompat("curios")) {
-            Optional<ItemStack> stack = CuriosAPI.getCurioEquipped(predicate, player).map(ImmutableTriple::getRight);
+            // TODO curios
+           /* Optional<ItemStack> stack = CuriosAPI.getCurioEquipped(predicate, player).map(ImmutableTriple::getRight);
             if (stack.isPresent())
-                return stack.get();
+                return stack.get();*/
         }
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
             ItemStack slot = player.inventory.getStackInSlot(i);

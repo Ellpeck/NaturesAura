@@ -49,7 +49,7 @@ public class RenderAuraTimer extends TileEntityRenderer<TileEntityAuraTimer> {
         private final ModelRenderer box;
 
         public AuraModel() {
-            super(RenderType::entityTranslucent);
+            super(RenderType::getEntityTranslucent);
             this.box = new ModelRenderer(this, 0, 0);
             this.box.setTextureSize(64, 64);
             this.box.addBox(0, 0, 0, 16, 16, 16);

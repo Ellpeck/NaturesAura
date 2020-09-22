@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -57,7 +57,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public void spawnParticleStream(float startX, float startY, float startZ, float endX, float endY, float endZ, float speed, int color, float scale) {
-        Vec3d dir = new Vec3d(endX - startX, endY - startY, endZ - startZ);
+        Vector3d dir = new Vector3d(endX - startX, endY - startY, endZ - startZ);
         double length = dir.length();
         if (length > 0) {
             dir = dir.normalize();
@@ -88,9 +88,9 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
-    public List<Tuple<Vec3d, Integer>> getActiveEffectPowders(World world, AxisAlignedBB area, ResourceLocation name) {
-        List<Tuple<Vec3d, Integer>> found = new ArrayList<>();
-        for (Tuple<Vec3d, Integer> powder : ((WorldData) IWorldData.getWorldData(world)).effectPowders.get(name))
+    public List<Tuple<Vector3d, Integer>> getActiveEffectPowders(World world, AxisAlignedBB area, ResourceLocation name) {
+        List<Tuple<Vector3d, Integer>> found = new ArrayList<>();
+        for (Tuple<Vector3d, Integer> powder : ((WorldData) IWorldData.getWorldData(world)).effectPowders.get(name))
             if (area.contains(powder.getA()))
                 found.add(powder);
         return found;
@@ -98,9 +98,9 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name) {
-        Vec3d posVec = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-        List<Tuple<Vec3d, Integer>> powders = this.getActiveEffectPowders(world, new AxisAlignedBB(pos).grow(64), name);
-        for (Tuple<Vec3d, Integer> powder : powders) {
+        Vector3d posVec = new Vector3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+        List<Tuple<Vector3d, Integer>> powders = this.getActiveEffectPowders(world, new AxisAlignedBB(pos).grow(64), name);
+        for (Tuple<Vector3d, Integer> powder : powders) {
             AxisAlignedBB bounds = Helper.aabb(powder.getA()).grow(powder.getB());
             if (bounds.contains(posVec))
                 return true;

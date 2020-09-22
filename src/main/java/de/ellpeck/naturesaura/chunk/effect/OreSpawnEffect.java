@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.chunk.effect;
 
+import com.sun.javafx.geom.Vec3d;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
@@ -14,9 +15,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.server.ServerWorld;
@@ -82,13 +85,13 @@ public class OreSpawnEffect implements IDrainSpotEffect {
         }
         int totalWeight = WeightedRandom.getTotalWeight(ores);
 
-        List<Tuple<Vec3d, Integer>> powders = NaturesAuraAPI.instance().getActiveEffectPowders(world,
+        List<Tuple<Vector3d, Integer>> powders = NaturesAuraAPI.instance().getActiveEffectPowders(world,
                 new AxisAlignedBB(pos).grow(this.dist), NAME);
         if (powders.isEmpty())
             return;
         for (int i = 0; i < this.amount; i++) {
-            Tuple<Vec3d, Integer> powder = powders.get(i % powders.size());
-            Vec3d powderPos = powder.getA();
+            Tuple<Vector3d, Integer> powder = powders.get(i % powders.size());
+            Vector3d powderPos = powder.getA();
             int range = powder.getB();
             int x = MathHelper.floor(powderPos.x + world.rand.nextGaussian() * range);
             int y = MathHelper.floor(powderPos.y + world.rand.nextGaussian() * range);
@@ -103,7 +106,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                 outer:
                 while (true) {
                     WeightedOre ore = WeightedRandom.getRandomItem(world.rand, ores, totalWeight);
-                    Tag<Block> tag = world.getTags().getBlocks().get(ore.tag);
+                    ITag<Block> tag = world.getTags().func_241835_a().get(ore.tag);
                     if (tag == null)
                         continue;
                     for (Block toPlace : tag.getAllElements()) {
@@ -112,7 +115,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
 
                         FakePlayer player = FakePlayerFactory.getMinecraft((ServerWorld) world);
                         player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-                        BlockRayTraceResult ray = new BlockRayTraceResult(new Vec3d(pos).add(0.5F, 0.5F, 0.5F), Direction.UP, pos, false);
+                        BlockRayTraceResult ray = new BlockRayTraceResult(Vector3d.copyCentered(pos), Direction.UP, pos, false);
                         BlockItemUseContext context = new BlockItemUseContext(new ItemUseContext(player, Hand.MAIN_HAND, ray));
                         BlockState stateToPlace = toPlace.getStateForPlacement(context);
                         if (SPAWN_EXCEPTIONS.contains(stateToPlace))

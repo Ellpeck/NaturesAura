@@ -13,7 +13,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
@@ -28,6 +27,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -45,7 +45,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
         if (worldIn.isRemote || !(entityIn instanceof LivingEntity))
             return;
         LivingEntity living = (LivingEntity) entityIn;
-        if (!living.onGround) {
+        if (!living.isOnGround()) {
             CompoundNBT compound = stack.getOrCreateTag();
             if (compound.getBoolean("air"))
                 return;
@@ -63,7 +63,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
 
             compound.putBoolean("air", false);
 
-            if (!living.isShiftKeyDown())
+            if (!living.isSneaking())
                 return;
             if (living.getDistanceSq(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z")) > 0.75F)
                 return;
@@ -115,7 +115,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
             matrices.translate(0, 0.125F, armor ? -0.195F : -0.1475F);
             matrices.scale(0.3F, 0.3F, 0.3F);
             matrices.rotate(Vector3f.XP.rotationDegrees(180));
-            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, packedLight, OverlayTexture.DEFAULT_LIGHT, matrices, buffer);
+            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, packedLight, OverlayTexture.NO_OVERLAY, matrices, buffer);
         }
     }
 }

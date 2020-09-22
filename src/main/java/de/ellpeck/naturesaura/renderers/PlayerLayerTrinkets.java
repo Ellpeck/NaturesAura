@@ -7,7 +7,6 @@ import de.ellpeck.naturesaura.api.render.ITrinketItem.RenderType;
 import de.ellpeck.naturesaura.compat.Compat;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
@@ -16,11 +15,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
-import top.theillusivec4.curios.api.CuriosAPI;
-import top.theillusivec4.curios.api.capability.ICurioItemHandler;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -62,14 +60,15 @@ public class PlayerLayerTrinkets extends LayerRenderer<AbstractClientPlayerEntit
         }
 
         if (Compat.hasCompat("curios")) {
-            ICurioItemHandler handler = CuriosAPI.getCuriosHandler(player).orElse(null);
+            // TODO curios
+            /*ICurioItemHandler handler = CuriosAPI.getCuriosHandler(player).orElse(null);
             if (handler != null) {
                 for (IItemHandler items : handler.getCurioMap().values()) {
                     for (int i = 0; i < items.getSlots(); i++) {
                         this.renderStack(items.getStackInSlot(i), player, type, main, second, matrices, buffer, packedLight);
                     }
                 }
-            }
+            }*/
         }
     }
 

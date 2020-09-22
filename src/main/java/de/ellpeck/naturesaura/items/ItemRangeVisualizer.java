@@ -13,19 +13,19 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class ItemRangeVisualizer extends ItemImpl {
 
-    public static final ListMultimap<DimensionType, BlockPos> VISUALIZED_BLOCKS = ArrayListMultimap.create();
-    public static final ListMultimap<DimensionType, Entity> VISUALIZED_ENTITIES = ArrayListMultimap.create();
-    public static final ListMultimap<DimensionType, BlockPos> VISUALIZED_RAILS = ArrayListMultimap.create();
+    public static final ListMultimap<RegistryKey<World>, BlockPos> VISUALIZED_BLOCKS = ArrayListMultimap.create();
+    public static final ListMultimap<RegistryKey<World>, Entity> VISUALIZED_ENTITIES = ArrayListMultimap.create();
+    public static final ListMultimap<RegistryKey<World>, BlockPos> VISUALIZED_RAILS = ArrayListMultimap.create();
 
     public ItemRangeVisualizer() {
         super("range_visualizer", new Properties().maxStackSize(1));
@@ -41,7 +41,7 @@ public class ItemRangeVisualizer extends ItemImpl {
             VISUALIZED_RAILS.clear();
     }
 
-    public static <T> void visualize(PlayerEntity player, ListMultimap<DimensionType, T> map, DimensionType dim, T value) {
+    public static <T> void visualize(PlayerEntity player, ListMultimap<RegistryKey<World>, T> map, RegistryKey<World> dim, T value) {
         if (map.containsEntry(dim, value)) {
             map.remove(dim, value);
             player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.end"), true);
@@ -54,7 +54,7 @@ public class ItemRangeVisualizer extends ItemImpl {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
-        if (playerIn.isShiftKeyDown()) {
+        if (playerIn.isSneaking()) {
             clear();
             playerIn.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.end_all"), true);
             return new ActionResult<>(ActionResultType.SUCCESS, stack);
@@ -70,7 +70,7 @@ public class ItemRangeVisualizer extends ItemImpl {
         Block block = state.getBlock();
         if (block instanceof IVisualizable) {
             if (world.isRemote)
-                visualize(context.getPlayer(), VISUALIZED_BLOCKS, world.getDimension().getType(), pos);
+                visualize(context.getPlayer(), VISUALIZED_BLOCKS, world.func_234923_W_(), pos);
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.PASS;
@@ -86,7 +86,7 @@ public class ItemRangeVisualizer extends ItemImpl {
             Entity entity = event.getTarget();
             if (entity instanceof IVisualizable) {
                 if (entity.world.isRemote) {
-                    DimensionType dim = entity.world.getDimension().getType();
+                    RegistryKey<World> dim = entity.world.func_234923_W_();
                     visualize(event.getPlayer(), VISUALIZED_ENTITIES, dim, entity);
                 }
                 event.getPlayer().swingArm(event.getHand());

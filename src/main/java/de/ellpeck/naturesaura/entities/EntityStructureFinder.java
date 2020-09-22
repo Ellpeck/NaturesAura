@@ -4,8 +4,8 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.EyeOfEnderEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.projectile.EyeOfEnderEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -15,7 +15,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -78,7 +78,7 @@ public class EntityStructureFinder extends EyeOfEnderEntity {
     public void tick() {
         this.baseTick();
 
-        Vec3d vec3d = this.getMotion();
+        Vector3d vec3d = this.getMotion();
         double d0 = this.getPosX() + vec3d.x;
         double d1 = this.getPosY() + vec3d.y;
         double d2 = this.getPosZ() + vec3d.z;
@@ -108,7 +108,7 @@ public class EntityStructureFinder extends EyeOfEnderEntity {
             }
 
             int j = this.getPosY() < this.targetY ? 1 : -1;
-            vec3d = new Vec3d(Math.cos(f2) * d5, d6 + ((double) j - d6) * (double) 0.015F, Math.sin(f2) * d5);
+            vec3d = new Vector3d(Math.cos(f2) * d5, d6 + ((double) j - d6) * (double) 0.015F, Math.sin(f2) * d5);
             this.setMotion(vec3d);
         }
 

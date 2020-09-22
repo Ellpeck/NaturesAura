@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.entities.render;
 
-import net.minecraft.client.renderer.culling.ClippingHelperImpl;
+import net.minecraft.client.renderer.culling.ClippingHelper;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.AtlasTexture;
@@ -13,7 +13,7 @@ public class RenderStub extends EntityRenderer<Entity> {
     }
 
     @Override
-    public boolean shouldRender(Entity livingEntityIn, ClippingHelperImpl camera, double camX, double camY, double camZ) {
+    public boolean shouldRender(Entity livingEntityIn, ClippingHelper camera, double camX, double camY, double camZ) {
         return false;
     }
 

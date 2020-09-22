@@ -19,20 +19,16 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.state.EnumProperty;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.RailShape;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.ITeleporter;
@@ -45,20 +41,20 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE;
 
     private final String name;
-    private final int goalDim;
-    private final DimensionType[] canUseDims;
+    private final RegistryKey<World> goalDim;
+    private final RegistryKey<World>[] canUseDims;
 
-    public BlockDimensionRail(String name, DimensionType goalDim, DimensionType... canUseDims) {
+    public BlockDimensionRail(String name, RegistryKey<World> goalDim, RegistryKey<World>... canUseDims) {
         super(false, ModBlocks.prop(Blocks.RAIL));
         this.name = name;
-        this.goalDim = goalDim.getId();
+        this.goalDim = goalDim;
         this.canUseDims = canUseDims;
 
         ModRegistry.add(this);
     }
 
-    private boolean canUseHere(DimensionType dimension) {
-        for (DimensionType dim : this.canUseDims)
+    private boolean canUseHere(RegistryKey<World> dimension) {
+        for (RegistryKey<World> dim : this.canUseDims)
             if (dim == dimension)
                 return true;
         return false;
@@ -70,7 +66,10 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
         if (stack.getItem() == ModItems.RANGE_VISUALIZER) {
             if (!worldIn.isRemote) {
                 BlockPos goalPos = this.getGoalCoords(worldIn, pos);
+                // TODO dimension rail visualization
+/*
                 PacketHandler.sendTo(player, new PacketClient(0, this.goalDim, goalPos.getX(), goalPos.getY(), goalPos.getZ()));
+*/
             }
             return ActionResultType.SUCCESS;
         }
@@ -83,7 +82,7 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
             return;
         if (cart.isBeingRidden())
             return;
-        if (!this.canUseHere(world.getDimension().getType()))
+        if (!this.canUseHere(world.func_234923_W_()))
             return;
 
         AxisAlignedBB box = cart.getBoundingBox();
@@ -91,7 +90,7 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
         world.playSound(null, pos, SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 1F, 1F);
 
         BlockPos goalCoords = this.getGoalCoords(world, pos);
-        cart.changeDimension(DimensionType.getById(this.goalDim), new ITeleporter() {
+        cart.changeDimension(world.getServer().getWorld(this.goalDim), new ITeleporter() {
             @Override
             public Entity placeEntity(Entity entity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
                 Entity result = repositionEntity.apply(false);
@@ -106,22 +105,21 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
 
     private BlockPos getGoalCoords(World world, BlockPos pos) {
         MinecraftServer server = world.getServer();
-        DimensionType goalDimType = DimensionType.getById(this.goalDim);
         if (this == ModBlocks.DIMENSION_RAIL_NETHER) {
             // travel to the nether from the overworld
             return new BlockPos(pos.getX() / 8, pos.getY() / 2, pos.getZ() / 8);
         } else if (this == ModBlocks.DIMENSION_RAIL_END) {
             // travel to the end from the overworld
-            ServerWorld end = server.getWorld(goalDimType);
-            return end.getSpawnCoordinate().up(8);
+            ServerWorld end = server.getWorld(this.goalDim);
+            return end.func_241135_u_().up(8);
         } else {
-            if (world.getDimension().getType() == DimensionType.THE_NETHER) {
+            if (world.func_234923_W_() == World.field_234919_h_) {
                 // travel to the overworld from the nether
                 return new BlockPos(pos.getX() * 8, pos.getY() * 2, pos.getZ() * 8);
             } else {
                 // travel to the overworld from the end
-                World overworld = server.getWorld(goalDimType);
-                BlockPos spawn = overworld.getSpawnPoint();
+                ServerWorld overworld = server.getWorld(this.goalDim);
+                BlockPos spawn = overworld.func_241135_u_();
                 BlockPos ret = new BlockPos(spawn.getX(), 0, spawn.getZ());
                 return ret.up(overworld.getHeight(Heightmap.Type.WORLD_SURFACE, spawn.getX(), spawn.getZ()));
             }
@@ -129,7 +127,7 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
     }
 
     @Override
-    public IProperty<RailShape> getShapeProperty() {
+    public Property<RailShape> getShapeProperty() {
         return SHAPE;
     }
 
@@ -155,7 +153,7 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
 
     @Override
     public Supplier<RenderType> getRenderType() {
-        return RenderType::cutoutMipped;
+        return RenderType::getCutoutMipped;
     }
 
     @Override

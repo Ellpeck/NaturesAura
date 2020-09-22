@@ -14,8 +14,6 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -25,6 +23,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -122,7 +122,7 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
     }
 
     @Override
-    public void draw(AnimalSpawnerRecipe recipe, double mouseX, double mouseY) {
+    public void draw(AnimalSpawnerRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
         Minecraft minecraft = Minecraft.getInstance();
         Entity entity = this.entityCache.get(recipe.entity);
         if (entity == null) {
@@ -133,7 +133,8 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
         float size = Math.max(1F, Math.max(recipe.entity.getWidth(), recipe.entity.getHeight()));
         renderEntity(35, 55, 100F / size * 0.4F, 40, size * 0.5F, (LivingEntity) entity);
 
-        String name = recipe.entity.getName().getFormattedText();
-        minecraft.fontRenderer.drawStringWithShadow(name, 36 - minecraft.fontRenderer.getStringWidth(name) / 2F, 55, 0xFFFFFF);
+        String name = recipe.entity.getName().getString();
+        minecraft.fontRenderer.drawStringWithShadow(matrixStack, name, 36 - minecraft.fontRenderer.getStringWidth(name) / 2F, 55, 0xFFFFFF);
+
     }
 }

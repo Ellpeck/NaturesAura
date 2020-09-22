@@ -19,19 +19,30 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import top.theillusivec4.curios.api.CurioTags;
-import top.theillusivec4.curios.api.CuriosAPI;
-import top.theillusivec4.curios.api.capability.CuriosCapability;
-import top.theillusivec4.curios.api.capability.ICurio;
-import top.theillusivec4.curios.api.imc.CurioIMCMessage;
+import top.theillusivec4.curios.api.CuriosCapability;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
+// TODO curios
 public class CuriosCompat implements ICompat {
+    @Override
+    public void setup() {
 
-    private static final Map<Item, Tag<Item>> TYPES = ImmutableMap.<Item, Tag<Item>>builder()
+    }
+
+    @Override
+    public void setupClient() {
+
+    }
+
+    @Override
+    public void addItemTags(ItemTagProvider provider) {
+
+    }
+
+    /*private static final Map<Item, Tag<Item>> TYPES = ImmutableMap.<Item, Tag<Item>>builder()
             .put(ModItems.EYE, CurioTags.CHARM)
             .put(ModItems.EYE_IMPROVED, CurioTags.CHARM)
             .put(ModItems.AURA_CACHE, CurioTags.BELT)
@@ -94,5 +105,5 @@ public class CuriosCompat implements ICompat {
     public void addItemTags(ItemTagProvider provider) {
         for (Map.Entry<Item, Tag<Item>> entry : TYPES.entrySet())
             provider.getBuilder(entry.getValue()).add(entry.getKey());
-    }
+    }*/
 }

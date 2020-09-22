@@ -67,9 +67,9 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
     @Override
     public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
         if (state.get(SaplingBlock.STAGE) == 0) {
-            world.setBlockState(pos, state.cycle(SaplingBlock.STAGE), 4);
+            world.setBlockState(pos, state.func_235896_a_(SaplingBlock.STAGE), 4);
         } else if (ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
-            ModFeatures.ANCIENT_TREE.place(world, world.getChunkProvider().getChunkGenerator(), rand, pos, WorldGenAncientTree.CONFIG);
+            ModFeatures.ANCIENT_TREE.func_241855_a(world, world.getChunkProvider().getChunkGenerator(), rand, pos, WorldGenAncientTree.CONFIG);
         }
     }
 
@@ -85,6 +85,6 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
 
     @Override
     public Supplier<RenderType> getRenderType() {
-        return RenderType::cutoutMipped;
+        return RenderType::getCutoutMipped;
     }
 }

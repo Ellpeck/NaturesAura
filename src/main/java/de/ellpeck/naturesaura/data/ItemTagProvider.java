@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.data;
 
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.data.DataGenerator;
@@ -9,10 +10,11 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ItemTagProvider extends ItemTagsProvider {
-    public ItemTagProvider(DataGenerator generatorIn) {
-        super(generatorIn);
+    public ItemTagProvider(DataGenerator generatorIn, BlockTagProvider blockTagProvider, ExistingFileHelper helper) {
+        super(generatorIn, blockTagProvider, NaturesAura.MOD_ID, helper);
     }
 
     @Override
@@ -24,13 +26,8 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.copy(BlockTags.RAILS, ItemTags.RAILS);
         this.copy(BlockTags.SLABS, ItemTags.SLABS);
 
-        this.getBuilder(Tags.Items.RODS_WOODEN).add(ModItems.ANCIENT_STICK);
+        this.getOrCreateBuilder(Tags.Items.RODS_WOODEN).add(ModItems.ANCIENT_STICK);
 
         Compat.addItemTags(this);
-    }
-
-    @Override
-    public Tag.Builder<Item> getBuilder(Tag<Item> tagIn) {
-        return super.getBuilder(tagIn);
     }
 }

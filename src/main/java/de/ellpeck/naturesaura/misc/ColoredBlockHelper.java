@@ -24,7 +24,7 @@ public final class ColoredBlockHelper {
     private static List<Block> collectBlocks(String name) {
         List<Block> blocks = new ArrayList<>();
         for (DyeColor color : DyeColor.values())
-            blocks.add(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(color.getName() + '_' + name)));
+            blocks.add(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(color.getString() + '_' + name)));
         return Collections.unmodifiableList(blocks);
     }
 

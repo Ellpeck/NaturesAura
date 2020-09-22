@@ -1,14 +1,15 @@
 package de.ellpeck.naturesaura.gen;
 
+import com.mojang.serialization.Codec;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAuraBloom;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
@@ -21,12 +22,12 @@ public class WorldGenAuraBloom extends Feature<NoFeatureConfig> {
     private final Block block;
 
     public WorldGenAuraBloom(Block block) {
-        super(d -> IFeatureConfig.NO_FEATURE_CONFIG);
+        super(Codec.unit(IFeatureConfig.NO_FEATURE_CONFIG));
         this.block = block;
     }
 
     @Override
-    public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+    public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator gen, Random rand, BlockPos pos, NoFeatureConfig p_241855_5_) {
         if (rand.nextInt(60) != 0)
             return false;
 

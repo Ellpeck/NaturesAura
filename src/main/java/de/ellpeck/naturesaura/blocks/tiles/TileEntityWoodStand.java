@@ -9,11 +9,11 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.LogBlock;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -140,7 +140,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
                 for (int z = -1; z <= 1; z++) {
                     BlockPos offset = pos.add(x, y, z);
                     BlockState state = world.getBlockState(offset);
-                    if (state.getBlock() instanceof LogBlock || includeLeaves && state.getBlock() instanceof LeavesBlock) {
+                    if (state.getBlock().getTags().contains(BlockTags.LOGS.getName()) || includeLeaves && state.getBlock() instanceof LeavesBlock) {
                         if (drop) {
                             world.destroyBlock(offset, true);
                         } else {
@@ -161,7 +161,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
         }
         for (int i = 0; i < 2; i++) {
             BlockState state = this.world.getBlockState(this.ritualPos.up(i));
-            if (!(state.getBlock() instanceof LogBlock))
+            if (!(state.getBlock().getTags().contains(BlockTags.LOGS.getName())))
                 return false;
         }
         if (this.timer < this.recipe.time / 2) {

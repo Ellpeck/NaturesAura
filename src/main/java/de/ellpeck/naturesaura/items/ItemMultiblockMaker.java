@@ -10,6 +10,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -72,11 +73,11 @@ public class ItemMultiblockMaker extends ItemImpl {
 
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
-        ITextComponent name = super.getDisplayName(stack);
+        TextComponent name = (TextComponent) super.getDisplayName(stack);
         int id = getMultiblock(stack);
         if (id < 0)
             return name;
         IMultiblock multi = multiblocks().get(id);
-        return multi == null ? name : name.appendText(" (" + multi.getName() + ")");
+        return multi == null ? name : name.appendString(" (" + multi.getName() + ")");
     }
 }

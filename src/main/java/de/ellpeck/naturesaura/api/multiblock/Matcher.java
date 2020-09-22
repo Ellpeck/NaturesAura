@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.api.multiblock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
@@ -22,8 +23,8 @@ public class Matcher {
         return new Matcher(Blocks.AIR.getDefaultState(), null);
     }
 
-    public static Matcher tag(Block defaultBlock, Tag tag) {
-        return new Matcher(defaultBlock.getDefaultState(), (world, start, offset, pos, state, c) -> state.getBlock().getTags().contains(tag.getId()));
+    public static Matcher tag(Block defaultBlock, ITag.INamedTag tag) {
+        return new Matcher(defaultBlock.getDefaultState(), (world, start, offset, pos, state, c) -> state.getBlock().getTags().contains(tag.getName()));
     }
 
     public BlockState getDefaultState() {

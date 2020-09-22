@@ -40,6 +40,6 @@ public class BlockDecayedLeaves extends BlockImpl implements ICustomBlockState, 
 
     @Override
     public Supplier<RenderType> getRenderType() {
-        return RenderType::cutoutMipped;
+        return RenderType::getCutoutMipped;
     }
 }

@@ -26,7 +26,7 @@ public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemB
     private static final VoxelShape SHAPE = makeCuboidShape(4, 4, 4, 12, 12, 12);
 
     public BlockLight() {
-        super("light", Properties.create(Material.WOOL).doesNotBlockMovement().lightValue(15));
+        super("light", Properties.create(Material.WOOL).doesNotBlockMovement().setLightLevel(s -> 15));
     }
 
     @Override
@@ -57,6 +57,6 @@ public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemB
 
     @Override
     public Supplier<RenderType> getRenderType() {
-        return RenderType::cutout;
+        return RenderType::getCutoutMipped;
     }
 }

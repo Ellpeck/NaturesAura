@@ -18,16 +18,16 @@ public class BlockFlowerPot extends FlowerPotBlock implements ICustomBlockState,
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models()
                 .withExistingParent(this.getBaseName(), "block/flower_pot_cross")
-                .texture("plant", "block/" + this.func_220276_d().getRegistryName().getPath()));
+                .texture("plant", "block/" + this.getFlower().getRegistryName().getPath()));
     }
 
     @Override
     public String getBaseName() {
-        return "potted_" + this.func_220276_d().getRegistryName().getPath();
+        return "potted_" + this.getFlower().getRegistryName().getPath();
     }
 
     @Override
     public Supplier<RenderType> getRenderType() {
-        return RenderType::cutout;
+        return RenderType::getCutout;
     }
 }

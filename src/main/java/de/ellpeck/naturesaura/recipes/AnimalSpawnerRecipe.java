@@ -15,6 +15,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.ServerWorldInfo;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -46,7 +48,7 @@ public class AnimalSpawnerRecipe extends ModRecipe {
             MobEntity living = (MobEntity) entity;
             living.rotationYawHead = entity.rotationYaw;
             living.renderYawOffset = entity.rotationYaw;
-            living.onInitialSpawn(world, world.getDifficultyForLocation(living.getPosition()), SpawnReason.SPAWNER, null, null);
+            living.onInitialSpawn((ServerWorld) world, world.getDifficultyForLocation(living.getPosition()), SpawnReason.SPAWNER, null, null);
         }
         return entity;
     }

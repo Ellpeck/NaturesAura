@@ -17,7 +17,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class WorldData implements IWorldData {
-    public final ListMultimap<ResourceLocation, Tuple<Vec3d, Integer>> effectPowders = ArrayListMultimap.create();
+    public final ListMultimap<ResourceLocation, Tuple<Vector3d, Integer>> effectPowders = ArrayListMultimap.create();
     public final List<BlockPos> recentlyConvertedMossStones = new ArrayList<>();
     private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();
     public final Set<TileEntitySpawnLamp> spawnLamps = new HashSet<>();

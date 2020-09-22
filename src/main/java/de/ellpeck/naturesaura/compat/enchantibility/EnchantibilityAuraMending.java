@@ -22,7 +22,7 @@ public class EnchantibilityAuraMending extends AbstractEnchantEffect {
             return;
         if (event.player.world.isRemote || event.player.world.getGameTime() % 10 != 0)
             return;
-        if (!event.player.isShiftKeyDown() || event.player.getHealth() >= event.player.getMaxHealth())
+        if (!event.player.isSneaking() || event.player.getHealth() >= event.player.getMaxHealth())
             return;
         int usage = 5000;
         if (NaturesAuraAPI.instance().extractAuraFromPlayer(event.player, usage, false))

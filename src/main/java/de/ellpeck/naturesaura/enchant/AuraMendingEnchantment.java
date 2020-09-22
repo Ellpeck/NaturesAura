@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 public class AuraMendingEnchantment extends ModEnchantment {
 
     public AuraMendingEnchantment() {
-        super("aura_mending", Rarity.RARE, EnchantmentType.ALL, EquipmentSlotType.values());
+        super("aura_mending", Rarity.RARE, EnchantmentType.BREAKABLE, EquipmentSlotType.values());
     }
 
     @Override

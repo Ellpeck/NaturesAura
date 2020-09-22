@@ -46,11 +46,12 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -124,9 +125,9 @@ public final class ModRegistry {
                 new BlockPowderPlacer(),
                 new BlockFireworkGenerator(),
                 new BlockProjectileGenerator(),
-                new BlockDimensionRail("overworld", DimensionType.OVERWORLD, DimensionType.THE_NETHER, DimensionType.THE_END),
-                new BlockDimensionRail("nether", DimensionType.THE_NETHER, DimensionType.OVERWORLD),
-                new BlockDimensionRail("end", DimensionType.THE_END, DimensionType.OVERWORLD),
+                new BlockDimensionRail("overworld", World.field_234918_g_, World.field_234919_h_, World.field_234920_i_),
+                new BlockDimensionRail("nether", World.field_234919_h_, World.field_234918_g_),
+                new BlockDimensionRail("end", World.field_234920_i_, World.field_234918_g_),
                 new BlockBlastFurnaceBooster(),
                 new BlockImpl("nether_wart_mushroom", ModBlocks.prop(Blocks.RED_MUSHROOM_BLOCK)),
                 new BlockAnimalContainer(),
@@ -166,7 +167,7 @@ public final class ModRegistry {
                 new ItemPickaxe("infused_iron_pickaxe", ModItemTier.INFUSED, 1, -2.8F),
                 new ItemAxe("infused_iron_axe", ModItemTier.INFUSED, 6.0F, -3.1F),
                 new ItemShovel("infused_iron_shovel", ModItemTier.INFUSED, 1.5F, -3.0F),
-                new ItemHoe("infused_iron_hoe", ModItemTier.INFUSED, -1.0F),
+                new ItemHoe("infused_iron_hoe", ModItemTier.INFUSED, -1),
                 new ItemSword("infused_iron_sword", ModItemTier.INFUSED, 3, -2.4F),
                 new ItemArmor("infused_iron_helmet", ModArmorMaterial.INFUSED, EquipmentSlotType.HEAD),
                 new ItemArmor("infused_iron_chest", ModArmorMaterial.INFUSED, EquipmentSlotType.CHEST),
@@ -211,14 +212,14 @@ public final class ModRegistry {
                 new ItemPickaxe("sky_pickaxe", ModItemTier.SKY, 1, -2.8F),
                 new ItemAxe("sky_axe", ModItemTier.SKY, 5.0F, -3.0F),
                 new ItemShovel("sky_shovel", ModItemTier.SKY, 1.5F, -3.0F),
-                new ItemHoe("sky_hoe", ModItemTier.SKY, -1.0F),
+                new ItemHoe("sky_hoe", ModItemTier.SKY, -1),
                 new ItemSword("sky_sword", ModItemTier.SKY, 3, -2.4F),
                 new ItemArmor("sky_helmet", ModArmorMaterial.SKY, EquipmentSlotType.HEAD),
                 new ItemArmor("sky_chest", ModArmorMaterial.SKY, EquipmentSlotType.CHEST),
                 new ItemArmor("sky_pants", ModArmorMaterial.SKY, EquipmentSlotType.LEGS),
                 new ItemArmor("sky_shoes", ModArmorMaterial.SKY, EquipmentSlotType.FEET),
-                new ItemStructureFinder("fortress_finder", "Fortress", 0xba2800),
-                new ItemStructureFinder("end_city_finder", "EndCity", 0xca5cd6),
+                new ItemStructureFinder("fortress_finder", Structure.field_236378_n_, 0xba2800),
+                new ItemStructureFinder("end_city_finder", Structure.field_236379_o_, 0xca5cd6),
                 new ItemBreakPrevention()
         );
         Helper.populateObjectHolders(ModItems.class, event.getRegistry());
@@ -327,13 +328,15 @@ public final class ModRegistry {
                 NaturesAura.proxy.registerTESR((ITESRProvider) item);
         }
 
-        for (Biome biome : ForgeRegistries.BIOMES) {
+        // TODO generate flower stuff naturally
+        /*for (Biome biome : ForgeRegistries.BIOMES) {
             if (ModConfig.instance.auraBlooms.get()) {
-                biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.AURA_BLOOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(Placement.NOPE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+                biome.func_242440_e().func_242496_b().add()
+                biome.func_242427_a(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.AURA_BLOOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
                 if (biome.getCategory() == Biome.Category.DESERT)
-                    biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.AURA_CACTUS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(Placement.NOPE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+                    biome.func_242427_a(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.AURA_CACTUS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
             }
-        }
+        }*/
     }
 
     public static Block createFlowerPot(Block block) {

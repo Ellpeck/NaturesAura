@@ -19,10 +19,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
@@ -54,9 +54,9 @@ public final class NaturesAuraAPI {
      * easily registered using {@link BasicAuraType#register()}.
      */
     public static final Map<ResourceLocation, IAuraType> AURA_TYPES = new HashMap<>();
-    public static final BasicAuraType TYPE_OVERWORLD = new BasicAuraType(new ResourceLocation(MOD_ID, "overworld"), DimensionType.OVERWORLD, 0x89cc37, 0).register();
-    public static final BasicAuraType TYPE_NETHER = new BasicAuraType(new ResourceLocation(MOD_ID, "nether"), DimensionType.THE_NETHER, 0x871c0c, 0).register();
-    public static final BasicAuraType TYPE_END = new BasicAuraType(new ResourceLocation(MOD_ID, "end"), DimensionType.THE_END, 0x302624, 0).register();
+    public static final BasicAuraType TYPE_OVERWORLD = new BasicAuraType(new ResourceLocation(MOD_ID, "overworld"), World.field_234918_g_, 0x89cc37, 0).register();
+    public static final BasicAuraType TYPE_NETHER = new BasicAuraType(new ResourceLocation(MOD_ID, "nether"), World.field_234919_h_, 0x871c0c, 0).register();
+    public static final BasicAuraType TYPE_END = new BasicAuraType(new ResourceLocation(MOD_ID, "end"), World.field_234920_i_, 0x302624, 0).register();
     public static final BasicAuraType TYPE_OTHER = new BasicAuraType(new ResourceLocation(MOD_ID, "other"), null, 0x2fa8a0, Integer.MIN_VALUE).register();
     /**
      * A map of all {@link IDrainSpotEffect} suppliers which are effects that
@@ -267,7 +267,7 @@ public final class NaturesAuraAPI {
          * @param name  The registry name of the powder
          * @return A list of powders' positions and ranges
          */
-        List<Tuple<Vec3d, Integer>> getActiveEffectPowders(World world, AxisAlignedBB area, ResourceLocation name);
+        List<Tuple<Vector3d, Integer>> getActiveEffectPowders(World world, AxisAlignedBB area, ResourceLocation name);
 
         /**
          * Returns true if there is an effect powder entity active anywhere

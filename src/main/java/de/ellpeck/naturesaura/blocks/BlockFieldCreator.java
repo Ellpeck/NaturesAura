@@ -38,7 +38,7 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
             if (!worldIn.isRemote) {
                 String key = NaturesAura.MOD_ID + ":field_creator_pos";
                 CompoundNBT compound = player.getPersistentData();
-                if (!player.isShiftKeyDown() && compound.contains(key)) {
+                if (!player.isSneaking() && compound.contains(key)) {
                     BlockPos stored = BlockPos.fromLong(compound.getLong(key));
                     TileEntityFieldCreator creator = (TileEntityFieldCreator) tile;
                     if (!pos.equals(stored)) {
@@ -95,17 +95,12 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
     }
 
     @Override
-    public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return false;
-    }
-
-    @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
     }
 
     @Override
     public Supplier<RenderType> getRenderType() {
-        return RenderType::cutoutMipped;
+        return RenderType::getCutoutMipped;
     }
 }

@@ -11,7 +11,6 @@ import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -23,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -46,7 +46,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     public void inventoryTick(ItemStack stackIn, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (!worldIn.isRemote && entityIn instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) entityIn;
-            if (player.isShiftKeyDown() && stackIn.getCapability(NaturesAuraAPI.capAuraContainer).isPresent()) {
+            if (player.isSneaking() && stackIn.getCapability(NaturesAuraAPI.capAuraContainer).isPresent()) {
                 IAuraContainer container = stackIn.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
                 if (container.getStoredAura() <= 0) {
                     return;
@@ -122,7 +122,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
             matrices.translate(-0.15F, 0.65F, chest ? -0.195F : legs ? -0.165F : -0.1475F);
             matrices.scale(0.5F, 0.5F, 0.5F);
             matrices.rotate(Vector3f.XP.rotationDegrees(180F));
-            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, packedLight, OverlayTexture.DEFAULT_LIGHT, matrices, buffer);
+            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, packedLight, OverlayTexture.NO_OVERLAY, matrices, buffer);
         }
     }
 }

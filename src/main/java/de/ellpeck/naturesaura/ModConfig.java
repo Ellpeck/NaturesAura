@@ -10,7 +10,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -182,12 +181,13 @@ public final class ModConfig {
         }
 
         try {
-            for (String s : this.auraTypeOverrides.get()) {
+            // TODO aura type config
+            /*for (String s : this.auraTypeOverrides.get()) {
                 String[] split = s.split("->");
                 ResourceLocation dim = new ResourceLocation(split[0]);
                 BasicAuraType type = Objects.requireNonNull((BasicAuraType) NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(split[1])), "type");
                 type.addDimensionType(dim);
-            }
+            }*/
         } catch (Exception e) {
             NaturesAura.LOGGER.warn("Error parsing auraTypeOverrides", e);
         }

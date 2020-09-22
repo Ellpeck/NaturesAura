@@ -9,13 +9,13 @@ import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.LogBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
@@ -47,7 +47,7 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
         if (itemstack.getItem() == ModItems.SKY_AXE) {
-            if (player.world.getBlockState(pos).getBlock() instanceof LogBlock) {
+            if (player.world.getBlockState(pos).getBlock().getTags().contains(BlockTags.LOGS.getName())) {
                 TileEntityWoodStand.recurseTreeDestruction(player.world, pos, pos, false, true);
                 return true;
             }

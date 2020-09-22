@@ -72,7 +72,7 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, IG
                 }
 
                 blockpos1 = blockpos1.add(rand.nextInt(3) - 1, (rand.nextInt(3) - 1) * rand.nextInt(3) / 2, rand.nextInt(3) - 1);
-                if (world.getBlockState(blockpos1.down()).getBlock() != this || world.getBlockState(blockpos1).isCollisionShapeOpaque(world, blockpos1)) {
+                if (world.getBlockState(blockpos1.down()).getBlock() != this || world.getBlockState(blockpos1).hasOpaqueCollisionShape(world, blockpos1)) {
                     break;
                 }
 

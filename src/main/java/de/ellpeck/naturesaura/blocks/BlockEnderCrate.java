@@ -56,7 +56,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     private static final ThreadLocal<WeakReference<World>> CACHED_WORLD = new ThreadLocal<>();
 
     public BlockEnderCrate() {
-        super("ender_crate", TileEntityEnderCrate::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(5F).lightValue(7).sound(SoundType.STONE));
+        super("ender_crate", TileEntityEnderCrate::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(5F).setLightLevel(s -> 7).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

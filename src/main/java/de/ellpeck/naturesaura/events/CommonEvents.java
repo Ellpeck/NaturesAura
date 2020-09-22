@@ -134,6 +134,6 @@ public class CommonEvents {
 
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
-        CommandAura.register(event.getCommandDispatcher());
+        CommandAura.register(event.getServer().getCommandManager().getDispatcher());
     }
 }

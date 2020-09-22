@@ -36,11 +36,11 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
 
     public static boolean convert(World world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
-        if ((state.getBlock().isFoliage(state, world, pos) || state.getBlock() instanceof LeavesBlock) && !(state.getBlock() instanceof BlockAncientLeaves || state.getBlock() instanceof BlockGoldenLeaves)) {
+        if (state.getBlock() instanceof LeavesBlock && !(state.getBlock() instanceof BlockAncientLeaves || state.getBlock() instanceof BlockGoldenLeaves)) {
             if (!world.isRemote) {
                 world.setBlockState(pos, ModBlocks.GOLDEN_LEAVES.getDefaultState()
-                        .with(DISTANCE, state.has(DISTANCE) ? state.get(DISTANCE) : 1)
-                        .with(PERSISTENT, state.has(PERSISTENT) ? state.get(PERSISTENT) : false));
+                        .with(DISTANCE, state.hasProperty(DISTANCE) ? state.get(DISTANCE) : 1)
+                        .with(PERSISTENT, state.hasProperty(PERSISTENT) ? state.get(PERSISTENT) : false));
             }
             return true;
         }
@@ -76,7 +76,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
         return (state, worldIn, pos, tintIndex) -> {
             int color = 0xF2FF00;
             if (state != null && worldIn != null && pos != null) {
-                int foliage = BiomeColors.func_228361_b_(worldIn, pos);
+                int foliage = BiomeColors.getFoliageColor(worldIn, pos);
                 return Helper.blendColors(color, foliage, state.get(STAGE) / (float) HIGHEST_STAGE);
             } else {
                 return color;
@@ -100,7 +100,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
             }
 
             if (stage > 1) {
-                BlockPos offset = pos.offset(Direction.random(random));
+                BlockPos offset = pos.offset(Direction.func_239631_a_(random));
                 if (worldIn.isBlockLoaded(offset))
                     convert(worldIn, offset);
             }

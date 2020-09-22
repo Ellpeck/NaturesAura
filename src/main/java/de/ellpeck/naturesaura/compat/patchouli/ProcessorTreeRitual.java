@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.compat.patchouli;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import vazkii.patchouli.api.IComponentProcessor;
+import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
 import vazkii.patchouli.api.PatchouliAPI;
 
@@ -11,30 +12,30 @@ public class ProcessorTreeRitual implements IComponentProcessor {
     private TreeRitualRecipe recipe;
 
     @Override
-    public void setup(IVariableProvider<String> provider) {
-        this.recipe = PatchouliCompat.getRecipe("tree_ritual", provider.get("recipe"));
+    public void setup(IVariableProvider provider) {
+        this.recipe = PatchouliCompat.getRecipe("tree_ritual", provider.get("recipe").asString());
     }
 
     @Override
-    public String process(String key) {
+    public IVariable process(String key) {
         if (this.recipe == null)
-            return null;
+            return IVariable.empty();
         if (key.startsWith("input")) {
             int id = Integer.parseInt(key.substring(5)) - 1;
             if (this.recipe.ingredients.length > id)
-                return PatchouliAPI.instance.serializeIngredient(this.recipe.ingredients[id]);
+                return IVariable.from(this.recipe.ingredients[id]);
             else
-                return null;
+                return IVariable.empty();
         } else {
             switch (key) {
                 case "output":
-                    return PatchouliAPI.instance.serializeItemStack(this.recipe.result);
+                    return IVariable.from(this.recipe.result);
                 case "sapling":
-                    return PatchouliAPI.instance.serializeIngredient(this.recipe.saplingType);
+                    return IVariable.from(this.recipe.saplingType);
                 case "name":
-                    return this.recipe.result.getDisplayName().getFormattedText();
+                    return IVariable.wrap(this.recipe.result.getDisplayName().getString());
                 default:
-                    return null;
+                    return IVariable.empty();
             }
         }
     }

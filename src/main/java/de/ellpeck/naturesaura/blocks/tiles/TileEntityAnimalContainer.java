@@ -5,7 +5,7 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.HashSet;
 import java.util.List;
@@ -38,13 +38,13 @@ public class TileEntityAnimalContainer extends TileEntityImpl implements ITickab
         for (AnimalEntity animal : animalsOutRange) {
             if (animalsInRange.contains(animal))
                 continue;
-            Vec3d pos = animal.getPositionVec();
-            Vec3d distance = pos.subtract(this.pos.getX(), pos.getY(), this.pos.getZ());
+            Vector3d pos = animal.getPositionVec();
+            Vector3d distance = pos.subtract(this.pos.getX(), pos.getY(), this.pos.getZ());
             distance = distance.normalize().scale(-0.15F);
             animal.setMotion(distance);
 
             if (this.world.rand.nextBoolean()) {
-                Vec3d eye = animal.getEyePosition(1).add(animal.getLookVec());
+                Vector3d eye = animal.getEyePosition(1).add(animal.getLookVec());
                 PacketHandler.sendToAllAround(this.world, this.pos, 32,
                         new PacketParticles((float) eye.getX(), (float) eye.getY(), (float) eye.getZ(), PacketParticles.Type.ANIMAL_CONTAINER));
             }

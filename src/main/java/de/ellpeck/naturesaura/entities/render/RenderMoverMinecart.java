@@ -7,13 +7,13 @@ import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 
 public class RenderMoverMinecart extends MinecartRenderer<EntityMoverMinecart> {
 
@@ -35,7 +35,7 @@ public class RenderMoverMinecart extends MinecartRenderer<EntityMoverMinecart> {
         matrixStackIn.translate(0, 22 / 16F, 0);
         matrixStackIn.translate(0, 0, 1);
         matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
-        this.model.render(matrixStackIn, bufferIn.getBuffer(this.model.getRenderType(RES)), packedLightIn, OverlayTexture.DEFAULT_LIGHT, 1, 1, 1, 1);
+        this.model.render(matrixStackIn, bufferIn.getBuffer(this.model.getRenderType(RES)), packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         matrixStackIn.pop();
     }
 
@@ -44,7 +44,7 @@ public class RenderMoverMinecart extends MinecartRenderer<EntityMoverMinecart> {
         private final ModelRenderer box;
 
         public ModelMoverMinecart() {
-            super(RenderType::entityCutout);
+            super(RenderType::getEntityCutout);
             this.box = new ModelRenderer(this, 0, 0);
             this.box.setTextureSize(64, 64);
             this.box.addBox(0, 0, 0, 16, 24, 16);

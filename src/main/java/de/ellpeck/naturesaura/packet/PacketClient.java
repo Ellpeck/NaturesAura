@@ -9,7 +9,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -54,9 +53,9 @@ public class PacketClient {
                 if (mc.world != null) {
                     switch (message.type) {
                         case 0: // dimension rail visualization
-                            int goalDim = message.data[0];
+                           /* int goalDim = message.data[0];
                             BlockPos goalPos = new BlockPos(message.data[1], message.data[2], message.data[3]);
-                            ItemRangeVisualizer.visualize(mc.player, ItemRangeVisualizer.VISUALIZED_RAILS, DimensionType.getById(goalDim), goalPos);
+                            ItemRangeVisualizer.visualize(mc.player, ItemRangeVisualizer.VISUALIZED_RAILS, DimensionType.getById(goalDim), goalPos);*/
                         case 1:
                             Entity entity = mc.world.getEntityByID(message.data[0]);
                             mc.particles.emitParticleAtEntity(entity, ParticleTypes.TOTEM_OF_UNDYING, 30);

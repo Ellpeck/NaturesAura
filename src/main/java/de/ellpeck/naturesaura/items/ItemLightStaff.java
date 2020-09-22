@@ -20,7 +20,7 @@ public class ItemLightStaff extends ItemImpl {
         ItemStack stack = playerIn.getHeldItem(handIn);
         if (!worldIn.isRemote && NaturesAuraAPI.instance().extractAuraFromPlayer(playerIn, 1000, false)) {
             EntityLightProjectile projectile = new EntityLightProjectile(ModEntities.LIGHT_PROJECTILE, playerIn, worldIn);
-            projectile.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0, 1.5F, 0);
+            projectile.func_234612_a_(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0, 1.5F, 0);
             worldIn.addEntity(projectile);
         }
         return new ActionResult<>(ActionResultType.SUCCESS, stack);

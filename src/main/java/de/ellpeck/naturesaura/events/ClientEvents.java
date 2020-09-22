@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.events;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.ellpeck.naturesaura.Helper;
@@ -31,15 +32,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IReorderingProcessor;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColors;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -70,25 +74,6 @@ public class ClientEvents {
     private static ItemStack heldCache = ItemStack.EMPTY;
     private static ItemStack heldEye = ItemStack.EMPTY;
     private static ItemStack heldOcular = ItemStack.EMPTY;
-
-    @SubscribeEvent
-    public void onTooltip(ItemTooltipEvent event) {
-        if (ModList.get().isLoaded("enchdesc"))
-            return;
-        ItemStack stack = event.getItemStack();
-        List<ITextComponent> tooltip = event.getToolTip();
-        for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(stack).entrySet()) {
-            Enchantment enchantment = entry.getKey();
-            if (!(enchantment instanceof ModEnchantment))
-                continue;
-            String info = I18n.format(enchantment.getName() + ".desc");
-            List<String> split = Minecraft.getInstance().fontRenderer.listFormattedStringToWidth(info, 250);
-            ITextComponent name = enchantment.getDisplayName(entry.getValue());
-            int addIndex = tooltip.indexOf(name) + 1;
-            for (int i = split.size() - 1; i >= 0; i--)
-                tooltip.add(addIndex, new StringTextComponent(TextFormatting.DARK_GRAY + split.get(i)));
-        }
-    }
 
     @SubscribeEvent
     public void onDebugRender(RenderGameOverlayEvent.Text event) {
@@ -152,7 +137,7 @@ public class ClientEvents {
                                                 mc.world.rand.nextGaussian() * 0.01F,
                                                 mc.world.rand.nextFloat() * 0.025F,
                                                 mc.world.rand.nextGaussian() * 0.01F,
-                                                BiomeColors.func_228361_b_(mc.world, pos),
+                                                BiomeColors.getGrassColor(mc.world, pos),
                                                 Math.min(2F, 1F + mc.world.rand.nextFloat() * (excess / 30000F)),
                                                 Math.min(300, 100 + mc.world.rand.nextInt(excess / 3000 + 1)),
                                                 0F, false, true);
@@ -165,7 +150,7 @@ public class ClientEvents {
                         NaturesAuraAPI.IInternalHooks inst = NaturesAuraAPI.instance();
                         inst.setParticleSpawnRange(512);
                         inst.setParticleDepth(false);
-                        for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_RAILS.get(mc.world.getDimension().getType())) {
+                        for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_RAILS.get(mc.world.func_234923_W_())) {
                             NaturesAuraAPI.instance().spawnMagicParticle(
                                     pos.getX() + mc.world.rand.nextFloat(),
                                     pos.getY() + mc.world.rand.nextFloat(),
@@ -195,13 +180,14 @@ public class ClientEvents {
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event) {
         Minecraft mc = Minecraft.getInstance();
+        MatrixStack stack = event.getMatrixStack();
         ParticleHandler.renderParticles(event.getMatrixStack(), mc.getRenderPartialTicks());
 
         RenderSystem.pushMatrix();
-        RenderSystem.multMatrix(event.getMatrixStack().getLast().getPositionMatrix());
+        RenderSystem.multMatrix(event.getMatrixStack().getLast().getMatrix());
 
         ActiveRenderInfo info = mc.gameRenderer.getActiveRenderInfo();
-        Vec3d view = info.getProjectedView();
+        Vector3d view = info.getProjectedView();
         GL11.glTranslated(-view.getX(), -view.getY(), -view.getZ());
 
         if (mc.gameSettings.showDebugInfo && mc.player.isCreative() && ModConfig.instance.debugWorld.get()) {
@@ -230,7 +216,7 @@ public class ClientEvents {
                 RenderSystem.translated((pos.getX() + 0.1) / scale, (pos.getY() + 1.001) / scale, (pos.getZ() + 0.1) / scale);
                 RenderSystem.rotatef(90F, 1F, 0F, 0F);
                 RenderSystem.scalef(0.65F, 0.65F, 0.65F);
-                mc.fontRenderer.drawString(format.format(spot.getValue()), 0, 0, 0);
+                mc.fontRenderer.drawString(stack,format.format(spot.getValue()), 0, 0, 0);
                 RenderSystem.popMatrix();
             }
 
@@ -239,7 +225,7 @@ public class ClientEvents {
         }
 
         if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER)) {
-            DimensionType dim = mc.world.getDimension().getType();
+            RegistryKey<World> dim = mc.world.func_234923_W_();
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_CULL_FACE);
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -283,6 +269,7 @@ public class ClientEvents {
     @SubscribeEvent
     public void onOverlayRender(RenderGameOverlayEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
+        MatrixStack stack = event.getMatrixStack();
         if (event.getType() == ElementType.ALL) {
             MainWindow res = event.getWindow();
             if (mc.player != null) {
@@ -300,14 +287,14 @@ public class ClientEvents {
                     RenderSystem.color4f((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 1);
                     mc.getTextureManager().bindTexture(OVERLAYS);
                     if (width < 80)
-                        AbstractGui.blit(x + width, y, width, 0, 80 - width, 6, 256, 256);
+                        AbstractGui.blit(stack, x + width, y, width, 0, 80 - width, 6, 256, 256);
                     if (width > 0)
-                        AbstractGui.blit(x, y, 0, 6, width, 6, 256, 256);
+                        AbstractGui.blit(stack, x, y, 0, 6, width, 6, 256, 256);
 
                     float scale = 0.75F;
                     RenderSystem.scalef(scale, scale, scale);
-                    String s = heldCache.getDisplayName().getFormattedText();
-                    mc.fontRenderer.drawStringWithShadow(s, conf == 1 ? x / scale : (x + 80) / scale - mc.fontRenderer.getStringWidth(s), (y - 7) / scale, color);
+                    String s = heldCache.getDisplayName().getString();
+                    mc.fontRenderer.drawStringWithShadow(stack, s, conf == 1 ? x / scale : (x + 80) / scale - mc.fontRenderer.getStringWidth(s), (y - 7) / scale, color);
 
                     RenderSystem.color4f(1F, 1F, 1F, 1);
                     RenderSystem.popMatrix();
@@ -336,33 +323,33 @@ public class ClientEvents {
                         int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
                         int y = !heldOcular.isEmpty() && totalPercentage > 1F ? startY + 26 : startY;
                         if (tHeight < 50)
-                            AbstractGui.blit(startX, y, 6, 12, 6, 50 - tHeight, 256, 256);
+                            AbstractGui.blit(stack, startX, y, 6, 12, 6, 50 - tHeight, 256, 256);
                         if (tHeight > 0)
-                            AbstractGui.blit(startX, y + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
+                            AbstractGui.blit(stack, startX, y + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
 
                         if (!heldOcular.isEmpty()) {
                             int topHeight = MathHelper.ceil(MathHelper.clamp((totalPercentage - 1F) * 2F, 0F, 1F) * 25);
                             if (topHeight > 0) {
                                 if (topHeight < 25)
-                                    AbstractGui.blit(startX, startY, 18, 12, 6, 25 - topHeight, 256, 256);
-                                AbstractGui.blit(startX, startY + 25 - topHeight, 12, 12 + 25 - topHeight, 6, topHeight, 256, 256);
+                                    AbstractGui.blit(stack, startX, startY, 18, 12, 6, 25 - topHeight, 256, 256);
+                                AbstractGui.blit(stack, startX, startY + 25 - topHeight, 12, 12 + 25 - topHeight, 6, topHeight, 256, 256);
                             }
                             int bottomHeight = MathHelper.floor(MathHelper.clamp((totalPercentage + 1F) * 2F - 1F, 0F, 1F) * 25);
                             if (bottomHeight < 25) {
-                                AbstractGui.blit(startX, startY + 51, 18, 12, 6, 25 - bottomHeight, 256, 256);
+                                AbstractGui.blit(stack, startX, startY + 51, 18, 12, 6, 25 - bottomHeight, 256, 256);
                                 if (bottomHeight > 0)
-                                    AbstractGui.blit(startX, startY + 51 + 25 - bottomHeight, 12, 12 + 25 - bottomHeight, 6, bottomHeight, 256, 256);
+                                    AbstractGui.blit(stack, startX, startY + 51 + 25 - bottomHeight, 12, 12 + 25 - bottomHeight, 6, bottomHeight, 256, 256);
                             }
                         }
 
                         if (totalPercentage > (heldOcular.isEmpty() ? 1F : 1.5F))
-                            mc.fontRenderer.drawStringWithShadow("+", startX + plusOffX, startY - 0.5F, color);
+                            mc.fontRenderer.drawStringWithShadow(stack, "+", startX + plusOffX, startY - 0.5F, color);
                         if (totalPercentage < (heldOcular.isEmpty() ? 0F : -0.5F))
-                            mc.fontRenderer.drawStringWithShadow("-", startX + plusOffX, startY - 0.5F + (heldOcular.isEmpty() ? 44 : 70), color);
+                            mc.fontRenderer.drawStringWithShadow(stack, "-", startX + plusOffX, startY - 0.5F + (heldOcular.isEmpty() ? 44 : 70), color);
 
                         RenderSystem.pushMatrix();
                         RenderSystem.scalef(textScale, textScale, textScale);
-                        mc.fontRenderer.drawStringWithShadow(text, textX / textScale, textY / textScale, color);
+                        mc.fontRenderer.drawStringWithShadow(stack, text, textX / textScale, textY / textScale, color);
                         RenderSystem.popMatrix();
 
                         if (!heldOcular.isEmpty()) {
@@ -374,12 +361,12 @@ public class ClientEvents {
                             for (Tuple<ItemStack, Boolean> effect : SHOWING_EFFECTS.values()) {
                                 int theX = (int) (stackX / scale);
                                 int theY = (int) (stackY / scale);
-                                ItemStack stack = effect.getA();
-                                Helper.renderItemInGui(stack, theX, theY, 1F);
+                                ItemStack itemStack = effect.getA();
+                                Helper.renderItemInGui(itemStack, theX, theY, 1F);
                                 if (effect.getB()) {
                                     GlStateManager.disableDepthTest();
                                     mc.getTextureManager().bindTexture(OVERLAYS);
-                                    AbstractGui.blit(theX, theY, 240, 0, 16, 16, 256, 256);
+                                    AbstractGui.blit(stack, theX, theY, 240, 0, 16, 16, 256, 256);
                                     GlStateManager.enableDepthTest();
                                 }
                                 stackY += 8;
@@ -398,40 +385,40 @@ public class ClientEvents {
                             if (tile != null && (container = tile.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null)) != null) {
                                 BlockState state = mc.world.getBlockState(pos);
                                 ItemStack blockStack = state.getBlock().getPickBlock(state, mc.objectMouseOver, mc.world, pos, mc.player);
-                                this.drawContainerInfo(container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
-                                        mc, res, 35, blockStack.getDisplayName().getFormattedText(), null);
+                                this.drawContainerInfo(stack,container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
+                                        mc, res, 35, blockStack.getDisplayName().getString(), null);
 
                                 if (tile instanceof TileEntityNatureAltar) {
                                     ItemStack tileStack = ((TileEntityNatureAltar) tile).getItemHandler(null).getStackInSlot(0);
                                     if (!tileStack.isEmpty()) {
                                         IAuraContainer stackCont = tileStack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
                                         if (stackCont != null) {
-                                            this.drawContainerInfo(stackCont.getStoredAura(), stackCont.getMaxAura(), stackCont.getAuraColor(),
-                                                    mc, res, 55, tileStack.getDisplayName().getFormattedText(), null);
+                                            this.drawContainerInfo(stack,stackCont.getStoredAura(), stackCont.getMaxAura(), stackCont.getAuraColor(),
+                                                    mc, res, 55, tileStack.getDisplayName().getString(), null);
                                         }
                                     }
                                 }
                             } else if (tile instanceof TileEntityRFConverter) {
                                 EnergyStorage storage = ((TileEntityRFConverter) tile).storage;
-                                this.drawContainerInfo(storage.getEnergyStored(), storage.getMaxEnergyStored(), 0xcc4916,
+                                this.drawContainerInfo(stack,storage.getEnergyStored(), storage.getMaxEnergyStored(), 0xcc4916,
                                         mc, res, 35, I18n.format("tile.naturesaura.rf_converter.name"),
                                         storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
                             } else if (tile instanceof TileEntityGratedChute) {
                                 TileEntityGratedChute chute = (TileEntityGratedChute) tile;
-                                ItemStack stack = chute.getItemHandler(null).getStackInSlot(0);
+                                ItemStack itemStack = chute.getItemHandler(null).getStackInSlot(0);
 
-                                if (stack.isEmpty())
-                                    mc.fontRenderer.drawStringWithShadow(
+                                if (itemStack.isEmpty())
+                                    mc.fontRenderer.drawStringWithShadow(stack,
                                             TextFormatting.GRAY.toString() + TextFormatting.ITALIC + I18n.format("info.naturesaura.empty"),
                                             x + 5, y - 11, 0xFFFFFF);
                                 else
-                                    Helper.renderItemInGui(stack, x + 2, y - 18, 1F);
+                                    Helper.renderItemInGui(itemStack, x + 2, y - 18, 1F);
 
                                 Helper.renderItemInGui(ITEM_FRAME, x - 24, y - 24, 1F);
                                 mc.getTextureManager().bindTexture(OVERLAYS);
                                 int u = chute.isBlacklist ? 240 : 224;
                                 GlStateManager.disableDepthTest();
-                                AbstractGui.blit(x - 18, y - 18, u, 0, 16, 16, 256, 256);
+                                AbstractGui.blit(stack, x - 18, y - 18, u, 0, 16, 16, 256, 256);
                                 GlStateManager.enableDepthTest();
                             } else if (tile instanceof TileEntityItemDistributor) {
                                 TileEntityItemDistributor distributor = (TileEntityItemDistributor) tile;
@@ -439,15 +426,15 @@ public class ClientEvents {
                                 mc.getTextureManager().bindTexture(OVERLAYS);
                                 int u = !distributor.isRandomMode ? 240 : 224;
                                 GlStateManager.disableDepthTest();
-                                AbstractGui.blit(x - 18, y - 18, u, 0, 16, 16, 256, 256);
+                                AbstractGui.blit(stack, x - 18, y - 18, u, 0, 16, 16, 256, 256);
                                 GlStateManager.enableDepthTest();
                             } else if (tile instanceof TileEntityAuraTimer) {
                                 TileEntityAuraTimer timer = (TileEntityAuraTimer) tile;
-                                ItemStack stack = timer.getItemHandler(null).getStackInSlot(0);
-                                if (!stack.isEmpty()) {
-                                    Helper.renderItemInGui(stack, x - 20, y - 20, 1);
-                                    mc.fontRenderer.drawStringWithShadow(TextFormatting.GRAY + this.createTimeString(timer.getTotalTime()), x + 5, y - 11, 0xFFFFFF);
-                                    mc.fontRenderer.drawStringWithShadow(TextFormatting.GRAY + I18n.format("info.naturesaura.remaining", this.createTimeString(timer.getTimeLeft())), x + 5, y + 3, 0xFFFFFF);
+                                ItemStack itemStack = timer.getItemHandler(null).getStackInSlot(0);
+                                if (!itemStack.isEmpty()) {
+                                    Helper.renderItemInGui(itemStack, x - 20, y - 20, 1);
+                                    mc.fontRenderer.drawStringWithShadow(stack,TextFormatting.GRAY + this.createTimeString(timer.getTotalTime()), x + 5, y - 11, 0xFFFFFF);
+                                    mc.fontRenderer.drawStringWithShadow(stack,TextFormatting.GRAY + I18n.format("info.naturesaura.remaining", this.createTimeString(timer.getTimeLeft())), x + 5, y + 3, 0xFFFFFF);
                                 }
                             }
                         }
@@ -468,7 +455,7 @@ public class ClientEvents {
         return String.format("%02d:%02d:%02d.%02d", hours, minutes, seconds, ticks);
     }
 
-    private void drawContainerInfo(int stored, int max, int color, Minecraft mc, MainWindow res, int yOffset, String name, String textBelow) {
+    private void drawContainerInfo(MatrixStack stack, int stored, int max, int color, Minecraft mc, MainWindow res, int yOffset, String name, String textBelow) {
         RenderSystem.color3f((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F);
 
         int x = res.getScaledWidth() / 2 - 40;
@@ -477,13 +464,13 @@ public class ClientEvents {
 
         mc.getTextureManager().bindTexture(OVERLAYS);
         if (width < 80)
-            AbstractGui.blit(x + width, y, width, 0, 80 - width, 6, 256, 256);
+            AbstractGui.blit(stack,x + width, y, width, 0, 80 - width, 6, 256, 256);
         if (width > 0)
-            AbstractGui.blit(x, y, 0, 6, width, 6, 256, 256);
+            AbstractGui.blit(stack,x, y, 0, 6, width, 6, 256, 256);
 
-        mc.fontRenderer.drawStringWithShadow(name, x + 40 - mc.fontRenderer.getStringWidth(name) / 2F, y - 9, color);
+        mc.fontRenderer.drawStringWithShadow(stack,name, x + 40 - mc.fontRenderer.getStringWidth(name) / 2F, y - 9, color);
 
         if (textBelow != null)
-            mc.fontRenderer.drawStringWithShadow(textBelow, x + 40 - mc.fontRenderer.getStringWidth(textBelow) / 2F, y + 7, color);
+            mc.fontRenderer.drawStringWithShadow(stack,textBelow, x + 40 - mc.fontRenderer.getStringWidth(textBelow) / 2F, y + 7, color);
     }
 }
