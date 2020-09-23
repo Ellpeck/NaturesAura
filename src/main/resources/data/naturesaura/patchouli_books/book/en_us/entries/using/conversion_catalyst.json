@@ -82,6 +82,11 @@
             "type": "naturesaura:altar",
             "text": "Creating a $(item)Rabbit's Foot$()",
             "recipe": "naturesaura:rabbit_foot"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Creating $(item)Gilded Blackstone$()",
+            "recipe": "naturesaura:gilded_blackstone"
         }
     ]
 }
