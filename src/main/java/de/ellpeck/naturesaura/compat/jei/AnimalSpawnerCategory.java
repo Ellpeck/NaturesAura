@@ -40,13 +40,12 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
         this.background = helper.createDrawable(new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/jei/animal_spawner.png"), 0, 0, 72, 86);
     }
 
-    private static void renderEntity(int x, int y, float scale, float yaw, float pitch, LivingEntity entity) {
+    private static void renderEntity(MatrixStack matrixstack, int x, int y, float scale, float yaw, float pitch, LivingEntity entity) {
         float f = (float) Math.atan(yaw / 40.0F);
         float f1 = (float) Math.atan(pitch / 40.0F);
         RenderSystem.pushMatrix();
         RenderSystem.translatef((float) x, (float) y, 1050.0F);
         RenderSystem.scalef(1.0F, 1.0F, -1.0F);
-        MatrixStack matrixstack = new MatrixStack();
         matrixstack.translate(0.0D, 0.0D, 1000.0D);
         matrixstack.scale(scale, scale, scale);
         Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
@@ -131,8 +130,10 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
             this.entityCache.put(recipe.entity, entity);
         }
 
+        matrixStack.push();
         float size = Math.max(1F, Math.max(recipe.entity.getWidth(), recipe.entity.getHeight()));
-        renderEntity(35, 55, 100F / size * 0.4F, 40, size * 0.5F, (LivingEntity) entity);
+        renderEntity(matrixStack, 35, 55, 100F / size * 0.4F, 40, size * 0.5F, (LivingEntity) entity);
+        matrixStack.pop();
 
         String name = recipe.entity.getName().getString();
         minecraft.fontRenderer.drawStringWithShadow(matrixStack, name, 36 - minecraft.fontRenderer.getStringWidth(name) / 2F, 55, 0xFFFFFF);
