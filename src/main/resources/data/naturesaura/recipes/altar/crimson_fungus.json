@@ -1,10 +1,10 @@
 {
   "type": "naturesaura:altar",
   "input": {
-    "item": "minecraft:crimson_fungus"
+    "item": "minecraft:red_mushroom"
   },
   "output": {
-    "item": "minecraft:nether_wart"
+    "item": "minecraft:crimson_fungus"
   },
   "aura_type": "naturesaura:nether",
   "catalyst": {

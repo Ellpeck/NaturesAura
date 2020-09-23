@@ -30,7 +30,7 @@
         },
         {
             "type": "naturesaura:altar",
-            "text": "Creating $(item)Nether Wart$() from poisonous mushrooms",
+            "text": "Creating $(item)Nether Wart$() from the Nether's spores",
             "recipe": "naturesaura:nether_wart"
         },
         {
@@ -87,6 +87,16 @@
             "type": "naturesaura:altar",
             "text": "Creating $(item)Gilded Blackstone$()",
             "recipe": "naturesaura:gilded_blackstone"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Creating $(item)Crimson Fungus$()",
+            "recipe": "naturesaura:crimson_fungus"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Creating $(item)Warped Fungus$()",
+            "recipe": "naturesaura:warped_fungus"
         }
     ]
 }
