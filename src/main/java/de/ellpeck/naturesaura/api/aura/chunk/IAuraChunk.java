@@ -14,7 +14,7 @@ import java.util.function.BiConsumer;
 /**
  * A class whose instances hold information about the aura present in any given
  * {@link Chunk}. To get an instance for a chunk, use {@link
- * #getAuraChunk(World, BlockPos)}.
+ * #getAuraChunk(IWorld, BlockPos)}.
  * <p>
  * It is not intended for API users to create custom implementation of this
  * class.

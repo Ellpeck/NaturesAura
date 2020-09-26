@@ -62,7 +62,6 @@ public final class NaturesAura {
     }
 
     private void preInit(FMLCommonSetupEvent event) {
-        NaturesAuraAPI.setInstance(new InternalHooks());
         Helper.registerCap(IAuraContainer.class);
         Helper.registerCap(IAuraRecharge.class);
         Helper.registerCap(IAuraChunk.class);

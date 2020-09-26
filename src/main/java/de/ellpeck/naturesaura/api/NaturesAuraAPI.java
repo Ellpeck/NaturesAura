@@ -20,7 +20,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -124,28 +123,24 @@ public final class NaturesAuraAPI {
      */
     @CapabilityInject(IWorldData.class)
     public static Capability<IWorldData> capWorldData;
-    private static IInternalHooks instance;
+    private static final IInternalHooks INSTANCE;
+
+    static {
+        try {
+            INSTANCE = (IInternalHooks) Class.forName("de.ellpeck.naturesaura.InternalHooks").newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * This method returns the active {@link IInternalHooks} instance which can
-     * be used to hook into the mod's internal functionalities.This will be
-     * overriden to a proper implementation. If you want to use this instance,
-     * use it after Nature's Aura's preInit phase.
+     * be used to hook into the mod's internal functionalities.
      *
      * @return The active {@link IInternalHooks} instance
      */
     public static IInternalHooks instance() {
-        return instance;
-    }
-
-    /**
-     * This is an internal function. Do not use.
-     */
-    public static void setInstance(IInternalHooks inst) {
-        if (instance == null)
-            instance = inst;
-        else
-            throw new IllegalStateException();
+        return INSTANCE;
     }
 
     /**
