@@ -153,6 +153,8 @@
     "info.naturesaura.remaining": "%s remaining",
     "info.naturesaura.break_prevention": "Eir's Token applied",
     "info.naturesaura.broken": " (Broken)",
+    "info.naturesaura.required_aura_type.naturesaura:overworld": "Requires Natural Altar",
+    "info.naturesaura.required_aura_type.naturesaura:nether": "Requires Crimson Altar",
     "advancement.naturesaura.root": "Nature's Aura",
     "advancement.naturesaura.root.desc": "Becoming a magical botanist",
     "advancement.naturesaura.get_book": "Pages of Discovery",

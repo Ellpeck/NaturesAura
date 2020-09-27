@@ -1,8 +1,11 @@
 package de.ellpeck.naturesaura.recipes;
 
 import com.google.gson.JsonObject;
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.items.ItemAuraBottle;
+import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -10,6 +13,8 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -47,6 +52,12 @@ public class AltarRecipe extends ModRecipe {
     @Override
     public IRecipeType<?> getType() {
         return ModRecipes.ALTAR_TYPE;
+    }
+
+    public ItemStack getDimensionBottle() {
+        ItemStack bottle = ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), this.requiredType);
+        bottle.setDisplayName(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".required_aura_type." + this.requiredType.getName()));
+        return bottle;
     }
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<AltarRecipe> {

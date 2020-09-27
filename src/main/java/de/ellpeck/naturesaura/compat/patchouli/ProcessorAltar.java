@@ -35,7 +35,7 @@ public class ProcessorAltar implements IComponentProcessor {
                     return null;
             case "type":
                 if (this.recipe.requiredType != null)
-                    return IVariable.from(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), this.recipe.requiredType));
+                    return IVariable.from(this.recipe.getDimensionBottle());
                 else
                     return null;
             case "name":

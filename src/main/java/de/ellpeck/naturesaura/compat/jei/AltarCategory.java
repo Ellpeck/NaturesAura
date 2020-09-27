@@ -62,7 +62,7 @@ public class AltarCategory implements IRecipeCategory<AltarRecipe> {
         if (altarRecipe.catalyst != Ingredient.EMPTY)
             builder.add(altarRecipe.catalyst.getMatchingStacks());
         if (altarRecipe.requiredType != null)
-            builder.add(ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), altarRecipe.requiredType));
+            builder.add(altarRecipe.getDimensionBottle());
         iIngredients.setInputs(VanillaTypes.ITEM, builder.build());
         iIngredients.setOutput(VanillaTypes.ITEM, altarRecipe.output);
     }
@@ -79,6 +79,6 @@ public class AltarCategory implements IRecipeCategory<AltarRecipe> {
                 Collections.singletonList(this.altar) : Arrays.asList(recipe.catalyst.getMatchingStacks()));
         group.init(3, true, 51, 18);
         if (recipe.requiredType != null)
-            group.set(3, ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), recipe.requiredType));
+            group.set(3, recipe.getDimensionBottle());
     }
 }
