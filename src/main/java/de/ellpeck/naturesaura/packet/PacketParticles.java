@@ -534,6 +534,38 @@ public class PacketParticles {
                 NaturesAuraAPI.instance().spawnMagicParticle(d0 + Math.cos(d24) * 5.0D, d13 - 0.4D, d18 + Math.sin(d24) * 5.0D, Math.cos(d24) * -2, 0.0D, Math.sin(d24) * -2, color, 2, 60, 0, false, true);
                 NaturesAuraAPI.instance().spawnMagicParticle(d0 + Math.cos(d24) * 5.0D, d13 - 0.4D, d18 + Math.sin(d24) * 5.0D, Math.cos(d24) * -2.5, 0.0D, Math.sin(d24) * -2.5, color, 2, 60, 0, false, true);
             }
+        }),
+        SLIME_SPLIT_GEN_CREATE((message, world) -> {
+            for (int i = world.rand.nextInt(5) + 5; i >= 0; i--)
+                NaturesAuraAPI.instance().spawnMagicParticle(
+                        message.posX + 0.25F + world.rand.nextFloat() * 0.5F,
+                        message.posY + 1.01F,
+                        message.posZ + 0.25F + world.rand.nextFloat() * 0.5F,
+                        world.rand.nextGaussian() * 0.01F,
+                        world.rand.nextFloat() * 0.04F + 0.02F,
+                        world.rand.nextGaussian() * 0.01F,
+                        message.data[0], 1F + world.rand.nextFloat() * 1.5F, 40, 0F, false, true);
+        }),
+        SLIME_SPLIT_GEN_START((message, world) -> {
+            int x = message.data[0];
+            int y = message.data[1];
+            int z = message.data[2];
+            int color = message.data[3];
+            for (int i = world.rand.nextInt(10) + 5; i >= 0; i--)
+                NaturesAuraAPI.instance().spawnMagicParticle(
+                        message.posX + (float) world.rand.nextGaussian() * 0.5F,
+                        message.posY + (float) world.rand.nextGaussian() * 0.5F,
+                        message.posZ + (float) world.rand.nextGaussian() * 0.5F,
+                        world.rand.nextGaussian() * 0.02F,
+                        world.rand.nextFloat() * 0.04F + 0.02F,
+                        world.rand.nextGaussian() * 0.02F,
+                        color, world.rand.nextFloat() + 1, world.rand.nextInt(20) + 20, 0, false, true);
+            for (int i = world.rand.nextInt(10) + 5; i >= 0; i--)
+                NaturesAuraAPI.instance().spawnParticleStream(
+                        message.posX + (float) world.rand.nextGaussian() * 0.5F,
+                        message.posY + (float) world.rand.nextGaussian() * 0.5F,
+                        message.posZ + (float) world.rand.nextGaussian() * 0.5F,
+                        x + 0.5F, y + 0.5F, z + 0.5F, 0.2F, color, world.rand.nextFloat() + 1);
         });
 
         public final BiConsumer<PacketParticles, World> action;

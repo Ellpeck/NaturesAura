@@ -142,7 +142,8 @@ public final class ModRegistry {
                 new BlockNetherGrass(),
                 new BlockLight(),
                 new BlockChorusGenerator(),
-                new BlockAuraTimer()
+                new BlockAuraTimer(),
+                new BlockSlimeSplitGenerator()
         );
 
         if (ModConfig.instance.rfConverter.get())

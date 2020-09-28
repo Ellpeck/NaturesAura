@@ -70,6 +70,7 @@ public final class ModBlocks {
     public static Block LIGHT;
     public static Block CHORUS_GENERATOR;
     public static Block AURA_TIMER;
+    public static Block SLIME_SPLIT_GENERATOR;
 
     public static Block.Properties prop(Material material, MaterialColor color) {
         return Block.Properties.create(material, color);
