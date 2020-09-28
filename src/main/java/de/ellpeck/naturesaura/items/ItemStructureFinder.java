@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.ServerWorldInfo;
 
 public class ItemStructureFinder extends ItemImpl {
     private final Structure structureName;
@@ -25,7 +26,8 @@ public class ItemStructureFinder extends ItemImpl {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
-        if (!worldIn.isRemote) {
+        // ServerWorld.getStructureManager().doesGenerateFeatures()
+        if (!worldIn.isRemote && ((ServerWorld) worldIn).func_241112_a_().func_235005_a_()) {
             BlockPos pos = ((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().func_235956_a_((ServerWorld) worldIn, this.structureName, playerIn.getPosition(), 1024, false);
             if (pos != null) {
                 EntityStructureFinder entity = new EntityStructureFinder(ModEntities.STRUCTURE_FINDER, worldIn);
