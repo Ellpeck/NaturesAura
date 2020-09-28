@@ -216,7 +216,7 @@ public class ClientEvents {
                 RenderSystem.translated((pos.getX() + 0.1) / scale, (pos.getY() + 1.001) / scale, (pos.getZ() + 0.1) / scale);
                 RenderSystem.rotatef(90F, 1F, 0F, 0F);
                 RenderSystem.scalef(0.65F, 0.65F, 0.65F);
-                mc.fontRenderer.drawString(stack, format.format(spot.getValue()), 0, 0, 0);
+                mc.fontRenderer.drawString(new MatrixStack(), format.format(spot.getValue()), 0, 0, 0);
                 RenderSystem.popMatrix();
             }
 
