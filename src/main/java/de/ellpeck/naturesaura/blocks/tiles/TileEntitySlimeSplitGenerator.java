@@ -80,7 +80,7 @@ public class TileEntitySlimeSplitGenerator extends TileEntityImpl implements ITi
         if (slime instanceof MagmaCubeEntity) {
             return 0x942516;
         } else {
-            return 0x1ed921;
+            return 0x4da84f;
         }
     }
 

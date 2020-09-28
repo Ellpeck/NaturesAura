@@ -1,0 +1,32 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "NJS",
+        "ISI",
+        "SWN"
+    ],
+    "key": {
+        "S": {
+            "item": "minecraft:slime_block"
+        },
+        "J": {
+            "item": "naturesaura:token_joy"
+        },
+        "W": {
+            "item": "naturesaura:token_grief"
+        },
+        "N": {
+            "type": "forge:nbt",
+            "item": "naturesaura:aura_bottle",
+            "nbt": {
+                "stored_type": "naturesaura:nether"
+            }
+        },
+        "I": {
+            "item": "naturesaura:sky_ingot"
+        }
+    },
+    "result": {
+        "item": "naturesaura:slime_split_generator"
+    }
+}
