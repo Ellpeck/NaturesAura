@@ -36,7 +36,7 @@ public final class Multiblocks {
             ALTAR_PATTERN,
             'C', Blocks.RED_NETHER_BRICKS,
             'B', Blocks.NETHER_BRICKS,
-            'W', Blocks.NETHER_WART_BLOCK,
+            'W', Blocks.CRIMSON_PLANKS,
             'M', ModBlocks.GOLD_NETHER_BRICK,
             '0', ModBlocks.NATURE_ALTAR.getDefaultState().with(BlockNatureAltar.NETHER, true),
             ' ', Matcher.wildcard());
