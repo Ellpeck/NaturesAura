@@ -566,6 +566,17 @@ public class PacketParticles {
                         message.posY + (float) world.rand.nextGaussian() * 0.5F,
                         message.posZ + (float) world.rand.nextGaussian() * 0.5F,
                         x + 0.5F, y + 0.5F, z + 0.5F, 0.2F, color, world.rand.nextFloat() + 1);
+        }),
+        PET_REVIVER((message, world) -> {
+            for (int i = world.rand.nextInt(50) + 150; i >= 0; i--)
+                NaturesAuraAPI.instance().spawnMagicParticle(
+                        message.posX + (float) world.rand.nextGaussian() * 0.4F,
+                        message.posY + (float) world.rand.nextGaussian() * 0.4F,
+                        message.posZ + (float) world.rand.nextGaussian() * 0.4F,
+                        world.rand.nextGaussian() * 0.002F,
+                        world.rand.nextFloat() * 0.001F + 0.002F,
+                        world.rand.nextGaussian() * 0.002F,
+                        message.data[0], world.rand.nextFloat() * 2 + 1, world.rand.nextInt(50) + 50, 0, false, true);
         });
 
         public final BiConsumer<PacketParticles, World> action;

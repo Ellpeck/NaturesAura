@@ -61,4 +61,5 @@ public final class ModItems {
     public static Item FORTRESS_FINDER;
     public static Item END_CITY_FINDER;
     public static Item BREAK_PREVENTION;
+    public static Item PET_REVIVER;
 }

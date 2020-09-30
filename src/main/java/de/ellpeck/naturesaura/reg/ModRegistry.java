@@ -222,7 +222,8 @@ public final class ModRegistry {
                 new ItemArmor("sky_shoes", ModArmorMaterial.SKY, EquipmentSlotType.FEET),
                 new ItemStructureFinder("fortress_finder", Structure.field_236378_n_, 0xba2800),
                 new ItemStructureFinder("end_city_finder", Structure.field_236379_o_, 0xca5cd6),
-                new ItemBreakPrevention()
+                new ItemBreakPrevention(),
+                new ItemPetReviver()
         );
         Helper.populateObjectHolders(ModItems.class, event.getRegistry());
     }
