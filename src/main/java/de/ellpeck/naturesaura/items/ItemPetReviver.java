@@ -12,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.SpawnLocationHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +22,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,11 +38,31 @@ public class ItemPetReviver extends ItemImpl {
 
     private static class Events {
 
+        @SubscribeEvent
+        public void onEntityTick(LivingEvent.LivingUpdateEvent event) {
+            LivingEntity entity = event.getEntityLiving();
+            if (entity.world.isRemote || entity.world.getGameTime() % 20 != 0 || !(entity instanceof TameableEntity))
+                return;
+            TameableEntity tameable = (TameableEntity) entity;
+            if (!tameable.isTamed() || !tameable.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":pet_reviver"))
+                return;
+            LivingEntity owner = tameable.getOwner();
+            if (owner == null || owner.getDistanceSq(tameable) > 5 * 5)
+                return;
+            if (entity.world.rand.nextFloat() >= 0.65F) {
+                ((ServerWorld) entity.world).spawnParticle(ParticleTypes.HEART,
+                        entity.getPosX() + entity.world.rand.nextGaussian() * 0.25F,
+                        entity.getPosYEye() + entity.world.rand.nextGaussian() * 0.25F,
+                        entity.getPosZ() + entity.world.rand.nextGaussian() * 0.25F,
+                        entity.world.rand.nextInt(2) + 1, 0, 0, 0, 0);
+            }
+        }
+
         // we need to use the event since the item doesn't receive the interaction for tamed pets..
         @SubscribeEvent
         public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
             Entity target = event.getTarget();
-            if (!(target instanceof TameableEntity))
+            if (!(target instanceof TameableEntity) || !((TameableEntity) target).isTamed())
                 return;
             if (target.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":pet_reviver"))
                 return;
@@ -48,7 +70,8 @@ public class ItemPetReviver extends ItemImpl {
             if (stack.getItem() != ModItems.PET_REVIVER)
                 return;
             target.getPersistentData().putBoolean(NaturesAura.MOD_ID + ":pet_reviver", true);
-            stack.shrink(1);
+            if (!target.world.isRemote)
+                stack.shrink(1);
             event.setCancellationResult(ActionResultType.SUCCESS);
             event.setCanceled(true);
         }
@@ -71,7 +94,6 @@ public class ItemPetReviver extends ItemImpl {
             LivingEntity owner = tameable.getOwner();
             if (owner instanceof ServerPlayerEntity) {
                 ServerPlayerEntity player = (ServerPlayerEntity) owner;
-
                 // I'm not really sure what this means, but I got it from PlayerList.func_232644_a_ haha
                 BlockPos pos = player.func_241140_K_();
                 if (pos != null) {

@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "TGJ",
+        "SBS",
+        " G "
+    ],
+    "key": {
+        "G": {
+            "item": "minecraft:gold_ingot"
+        },
+        "B": {
+            "item": "minecraft:bone"
+        },
+        "T": {
+            "item": "naturesaura:token_grief"
+        },
+        "J": {
+            "item": "naturesaura:token_joy"
+        },
+        "S": {
+            "item": "naturesaura:sky_ingot"
+        }
+    },
+    "result": {
+        "item": "naturesaura:pet_reviver"
+    }
+}
