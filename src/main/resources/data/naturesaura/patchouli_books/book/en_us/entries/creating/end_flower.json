@@ -11,7 +11,7 @@
         {
             "type": "spotlight",
             "item": "naturesaura:end_flower",
-            "text": "This flower bears very large amounts of $(aura) that can be harvested in an interesting way: Dropping an $(item)Ender Eye$() on the ground close to it will cause the rose to consume it and start dispersing its $(aura) into the environment. During this process, it can neither be stopped, nor harvested.",
+            "text": "This flower bears very large amounts of $(aura) that can be harvested in an interesting way: Dropping an $(item)Ender Eye$() on the ground close to it will cause the rose to consume it and start dispersing its $(aura) into the environment. During this process, it can neither be stopped, nor harvested. Note that this process does $(italic)not$() require a $(l:creating/generator_limit_remover)Creational Catalyst$().",
             "link_recipe": true
         }
     ]
