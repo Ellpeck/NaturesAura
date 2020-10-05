@@ -76,9 +76,8 @@ public class PlantBoostEffect implements IDrainSpotEffect {
                         try {
                             growable.grow((ServerWorld) world, world.rand, plantPos, state);
                         } catch (Exception e) {
-                            // Vanilla issue causes bamboo to crash if grown close to world height
-                            if (!(growable instanceof BambooBlock))
-                                throw e;
+                            // a lot of stuff throws here (double plants where generation only caused half of it to exist, bamboo at world height...)
+                            // so just catch all, bleh
                         }
                         BlockPos closestSpot = IAuraChunk.getHighestSpot(world, plantPos, 25, pos);
                         IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 3500);
