@@ -41,9 +41,9 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
         BlockState state = world.getBlockState(pos);
         if (this == ModItems.INFUSED_IRON_SHOVEL) {
             int damage = 0;
-            if (state.getBlock() == Blocks.DIRT) {
+            if (state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.MYCELIUM) {
                 if (world.getBlockState(pos.up()).getMaterial() == Material.AIR) {
-                    world.setBlockState(pos, Blocks.GRASS.getDefaultState());
+                    world.setBlockState(pos, Blocks.GRASS_BLOCK.getDefaultState());
                     damage = 5;
                 }
             } else {

@@ -125,7 +125,7 @@ public class ClientEvents {
                             BlockPos pos = new BlockPos(x, mc.world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z) - 1, z);
                             BlockState state = mc.world.getBlockState(pos);
                             Block block = state.getBlock();
-                            if (block instanceof IGrowable || block instanceof IPlantable || block instanceof LeavesBlock) {
+                            if (block instanceof IGrowable || block instanceof IPlantable || block instanceof LeavesBlock || block instanceof MyceliumBlock) {
                                 int excess = IAuraChunk.triangulateAuraInArea(mc.world, pos, 45) - IAuraChunk.DEFAULT_AURA;
                                 if (excess > 0) {
                                     int chance = Math.max(10, 50 - excess / 25000);
@@ -137,7 +137,7 @@ public class ClientEvents {
                                                 mc.world.rand.nextGaussian() * 0.01F,
                                                 mc.world.rand.nextFloat() * 0.025F,
                                                 mc.world.rand.nextGaussian() * 0.01F,
-                                                BiomeColors.getGrassColor(mc.world, pos),
+                                                block instanceof MyceliumBlock ? 0x875ca1 : BiomeColors.getGrassColor(mc.world, pos),
                                                 Math.min(2F, 1F + mc.world.rand.nextFloat() * (excess / 30000F)),
                                                 Math.min(300, 100 + mc.world.rand.nextInt(excess / 3000 + 1)),
                                                 0F, false, true);
