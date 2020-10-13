@@ -223,7 +223,8 @@ public final class ModRegistry {
                 new ItemStructureFinder("fortress_finder", Structure.field_236378_n_, 0xba2800),
                 new ItemStructureFinder("end_city_finder", Structure.field_236379_o_, 0xca5cd6),
                 new ItemBreakPrevention(),
-                new ItemPetReviver()
+                new ItemPetReviver(),
+                new ItemNetheriteFinder()
         );
         Helper.populateObjectHolders(ModItems.class, event.getRegistry());
     }

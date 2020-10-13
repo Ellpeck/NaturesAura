@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " NE",
+        "IRI",
+        "RN "
+    ],
+    "key": {
+        "R": {
+            "item": "naturesaura:ancient_stick"
+        },
+        "I": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "N": {
+            "item": "minecraft:netherrack"
+        },
+        "E": {
+            "item": "minecraft:netherite_scrap"
+        }
+    },
+    "result": {
+        "item": "naturesaura:netherite_finder"
+    }
+}
