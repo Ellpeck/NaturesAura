@@ -16,10 +16,10 @@
             "item": "naturesaura:infused_stone"
         },
         "T": {
-            "item": "naturesaura:token_rage"
+            "item": "naturesaura:token_anger"
         },
         "I": {
-            "item": "naturesaura:sky_ingot"
+            "item": "naturesaura:tainted_gold"
         },
         "X": {
             "item": "minecraft:compass"

@@ -2,7 +2,7 @@
     "name": "Shooting Mark",
     "icon": "naturesaura:projectile_generator",
     "category": "creating",
-    "advancement": "naturesaura:sky_ingot",
+    "advancement": "naturesaura:tainted_gold",
     "pages": [
         {
             "type": "text",

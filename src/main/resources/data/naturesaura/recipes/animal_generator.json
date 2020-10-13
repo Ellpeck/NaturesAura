@@ -13,13 +13,13 @@
             "item": "minecraft:iron_bars"
         },
         "S": {
-            "item": "naturesaura:sky_ingot"
+            "item": "naturesaura:tainted_gold"
         },
         "A": {
             "item": "minecraft:soul_sand"
         },
         "W": {
-            "item": "naturesaura:token_grief"
+            "item": "naturesaura:token_sorrow"
         }
     },
     "result": {

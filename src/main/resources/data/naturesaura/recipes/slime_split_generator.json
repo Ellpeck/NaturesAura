@@ -13,7 +13,7 @@
             "item": "naturesaura:token_joy"
         },
         "W": {
-            "item": "naturesaura:token_grief"
+            "item": "naturesaura:token_sorrow"
         },
         "N": {
             "type": "forge:nbt",
@@ -23,7 +23,7 @@
             }
         },
         "I": {
-            "item": "naturesaura:sky_ingot"
+            "item": "naturesaura:tainted_gold"
         }
     },
     "result": {
