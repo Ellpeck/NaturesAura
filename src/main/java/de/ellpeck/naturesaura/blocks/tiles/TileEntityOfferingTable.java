@@ -87,6 +87,7 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
                         this.itemsToSpawn.add(recipe.output.copy());
 
                     LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.world);
+                    lightningboltentity.setEffectOnly(true);
                     lightningboltentity.moveForced(Vector3d.copyCenteredHorizontally(this.pos));
                     this.world.addEntity(lightningboltentity);
                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
