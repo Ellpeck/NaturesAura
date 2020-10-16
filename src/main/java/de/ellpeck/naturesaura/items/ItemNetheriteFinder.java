@@ -34,7 +34,7 @@ public class ItemNetheriteFinder extends ItemImpl {
             inst.setParticleCulling(false);
 
             BlockPos pos = playerIn.getPosition();
-            int range = 64;
+            int range = 12;
             for (int x = -range; x <= range; x++) {
                 for (int y = 0; y <= 128; y++) {
                     for (int z = -range; z <= range; z++) {

@@ -10,7 +10,7 @@
         },
         {
             "type": "text",
-            "text": "When using it, all $(thing)Ancient Debris$() blocks in a rather large area around the user will be highlighted, making them visible even $(thing)through other blocks$(), for about a minute or so. During this time, the material can easily be located and mined.$(br)Needless to say, this operation requires a large amount of $(aura) from an $(l:items/aura_cache)Aura Cache$() or similar device."
+            "text": "When using it, all $(thing)Ancient Debris$() blocks in an area around the user will be highlighted, making them visible even $(thing)through other blocks$(), for about a minute or so. During this time, the material can easily be located and mined.$(br)Needless to say, this operation requires a large amount of $(aura) from an $(l:items/aura_cache)Aura Cache$() or similar device."
         },
         {
             "type": "crafting",

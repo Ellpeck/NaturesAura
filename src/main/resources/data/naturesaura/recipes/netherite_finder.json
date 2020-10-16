@@ -1,9 +1,9 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        " NE",
+        " XE",
         "IRI",
-        "RN "
+        "RY "
     ],
     "key": {
         "R": {
@@ -12,11 +12,14 @@
         "I": {
             "item": "naturesaura:sky_ingot"
         },
-        "N": {
-            "item": "minecraft:netherrack"
-        },
         "E": {
-            "item": "minecraft:netherite_scrap"
+            "item": "minecraft:netherite_ingot"
+        },
+        "X": {
+            "item": "minecraft:warped_stem"
+        },
+        "Y": {
+            "item": "minecraft:crimson_stem"
         }
     },
     "result": {
