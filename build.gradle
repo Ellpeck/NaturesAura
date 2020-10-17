@@ -140,9 +140,17 @@ task sourcesJar(type: Jar) {
     archiveName = "${baseName}-${version}-sources.${extension}"
 }
 
+task apiJar(type: Jar) {
+    from(sourceSets.main.output)
+    from(sourceSets.main.java)
+    include("de/ellpeck/naturesaura/api/**")
+    archiveName = "${baseName}-${version}-api.${extension}"
+}
+
 artifacts {
     archives deobfJar
     archives sourcesJar
+    archives apiJar
 }
 
 publishing {
@@ -156,9 +164,11 @@ publishing {
             artifact deobfJar {
                 classifier 'deobf'
             }
-
             artifact sourcesJar {
                 classifier 'sources'
+            }
+            artifact apiJar {
+                classifier 'api'
             }
 
             pom.withXml {
