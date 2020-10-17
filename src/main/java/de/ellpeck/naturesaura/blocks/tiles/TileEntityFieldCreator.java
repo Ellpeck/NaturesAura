@@ -92,7 +92,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
             this.sendParticles();
         } else {
             if (this.world.getGameTime() % 40 == 0)
-                chunk.drainAura(spot, 100);
+                chunk.drainAura(spot, 20);
 
             ItemStack tool = this.getToolUsed(creator);
             Vector3d dist = new Vector3d(
@@ -125,7 +125,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
                         this.world.destroyBlock(pos, false);
                         for (ItemStack stack : drops)
                             Block.spawnAsEntity(this.world, pos, stack);
-                        chunk.drainAura(spot, tool != null ? 1000 : 300);
+                        chunk.drainAura(spot, tool != null ? 300 : 100);
                         this.sendParticles();
                     }
                 }

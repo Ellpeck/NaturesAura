@@ -74,7 +74,7 @@ public final class ModConfig {
         this.fieldCreatorRange = builder
                 .comment("The amount of blocks that can be between two Aura Field Creators for them to be connectable and work together")
                 .translation("config." + NaturesAura.MOD_ID + ".fieldCreatorRange")
-                .define("fieldCreatorRange", 10);
+                .define("fieldCreatorRange", 24);
         this.auraToRFRatio = builder
                 .comment("The Aura to RF ratio used by the RF converter, read as aura*ratio = rf")
                 .translation("config." + NaturesAura.MOD_ID + ".auraToRFRatio")
