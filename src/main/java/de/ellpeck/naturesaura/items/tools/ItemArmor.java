@@ -21,6 +21,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -35,7 +36,6 @@ public class ItemArmor extends ArmorItem implements IModItem {
     public ItemArmor(String baseName, IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn) {
         super(materialIn, equipmentSlotIn, new Properties().group(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
         ModRegistry.add(this);
     }
 
@@ -64,10 +64,11 @@ public class ItemArmor extends ArmorItem implements IModItem {
         return Helper.makeRechargeProvider(stack, false);
     }
 
-    private static class EventHandler {
+    @Mod.EventBusSubscriber
+    private static final class EventHandler {
 
         @SubscribeEvent
-        public void onAttack(LivingAttackEvent event) {
+        public static void onAttack(LivingAttackEvent event) {
             LivingEntity entity = event.getEntityLiving();
             if (!entity.world.isRemote) {
                 if (!isFullSetEquipped(entity, ModArmorMaterial.INFUSED))
@@ -79,7 +80,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
         }
 
         @SubscribeEvent
-        public void update(TickEvent.PlayerTickEvent event) {
+        public static void update(TickEvent.PlayerTickEvent event) {
             PlayerEntity player = event.player;
             ModifiableAttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
             String key = NaturesAura.MOD_ID + ":sky_equipped";
