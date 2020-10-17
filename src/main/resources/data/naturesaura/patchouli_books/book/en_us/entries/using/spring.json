@@ -6,7 +6,7 @@
     "pages": [
         {
             "type": "text",
-            "text": "$(thing)Water$() sure is a marvelous fluid, able to interact with many other blocks in the world. The $(item)Everlasting Spring$() packages this ability elegantly into a solid structure, one that can even be used in areas that are usually deemed $(thing)too hot$() for water to exist there. As for simple actions, the $(item)Everlasting Spring$() can fill $(item)cauldrons$() on top of it, $(item)sponges$() close to it and $(item)buckets$() used on it with water."
+            "text": "The $(item)Everlasting Spring$() packages the many abilities of $(thing)water$() elegantly into a solid structure, one that can even be used in areas that are usually deemed $(thing)too hot$() for water to exist there. As for simple actions, the $(item)Everlasting Spring$() can fill $(item)cauldrons$() on top of it, $(item)sponges$() close to it and $(item)buckets$() used on it with water. It also irrigates $(thing)farmland$() in an area of five blocks around it."
         },
         {
             "type": "text",

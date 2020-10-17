@@ -39,8 +39,8 @@ public class TileEntitySpring extends TileEntityImpl implements ITickableTileEnt
         super.validate();
         if (!this.world.isRemote) {
             // add a ticket to water crops
-            AxisAlignedBB area = new AxisAlignedBB(this.pos).grow(5);
-            FarmlandWaterManager.addAABBTicket(this.world, area);
+            AxisAlignedBB area = new AxisAlignedBB(this.pos).grow(5, 1, 5);
+            this.waterTicket = FarmlandWaterManager.addAABBTicket(this.world, area);
         }
     }
 
