@@ -14,7 +14,7 @@ public class BlockAncientLog extends RotatedPillarBlock implements IModItem, ICu
     private final String baseName;
 
     public BlockAncientLog(String baseName) {
-        super(ModBlocks.prop(Material.WOOD,MaterialColor.PURPLE).hardnessAndResistance(2.0F).sound(SoundType.WOOD));
+        super(Properties.create(Material.WOOD, MaterialColor.PURPLE).hardnessAndResistance(2.0F).sound(SoundType.WOOD));
         this.baseName = baseName;
         ModRegistry.add(this);
     }

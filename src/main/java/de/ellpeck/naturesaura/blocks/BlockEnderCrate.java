@@ -9,9 +9,7 @@ import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
-import net.minecraft.block.AnvilBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -56,7 +54,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     private static final ThreadLocal<WeakReference<World>> CACHED_WORLD = new ThreadLocal<>();
 
     public BlockEnderCrate() {
-        super("ender_crate", TileEntityEnderCrate::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(5F).setLightLevel(s -> 7).sound(SoundType.STONE));
+        super("ender_crate", TileEntityEnderCrate::new, Properties.create(Material.ROCK).hardnessAndResistance(5F).setLightLevel(s -> 7).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

@@ -47,21 +47,14 @@ import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.placement.IPlacementConfig;
-import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -82,9 +75,9 @@ public final class ModRegistry {
         event.getRegistry().registerAll(
                 new BlockAncientLog("ancient_log"),
                 new BlockAncientLog("ancient_bark"),
-                temp = new BlockImpl("ancient_planks", ModBlocks.prop(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2F)),
-                new BlockStairsNA("ancient_stairs", "ancient_planks", temp::getDefaultState, ModBlocks.prop(temp)),
-                new Slab("ancient_slab", "ancient_planks", ModBlocks.prop(temp)),
+                temp = new BlockImpl("ancient_planks", Block.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2F)),
+                new BlockStairsNA("ancient_stairs", "ancient_planks", temp::getDefaultState, Block.Properties.from(temp)),
+                new Slab("ancient_slab", "ancient_planks", Block.Properties.from(temp)),
                 new BlockAncientLeaves(),
                 new BlockAncientSapling(),
                 new BlockNatureAltar(),
@@ -92,23 +85,23 @@ public final class ModRegistry {
                 new BlockGoldenLeaves(),
                 new BlockGoldPowder(),
                 new BlockWoodStand(),
-                temp = new BlockImpl("infused_stone", ModBlocks.prop(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(1.75F)),
-                new BlockStairsNA("infused_stairs", "infused_stone", temp::getDefaultState, ModBlocks.prop(temp)),
-                new Slab("infused_slab", "infused_stone", ModBlocks.prop(temp)),
-                temp = new BlockImpl("infused_brick", ModBlocks.prop(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(1.5F)),
-                new BlockStairsNA("infused_brick_stairs", "infused_brick", temp::getDefaultState, ModBlocks.prop(temp)),
-                new Slab("infused_brick_slab", "infused_brick", ModBlocks.prop(temp)),
+                temp = new BlockImpl("infused_stone", Block.Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(1.75F)),
+                new BlockStairsNA("infused_stairs", "infused_stone", temp::getDefaultState, Block.Properties.from(temp)),
+                new Slab("infused_slab", "infused_stone", Block.Properties.from(temp)),
+                temp = new BlockImpl("infused_brick", Block.Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(1.5F)),
+                new BlockStairsNA("infused_brick_stairs", "infused_brick", temp::getDefaultState, Block.Properties.from(temp)),
+                new Slab("infused_brick_slab", "infused_brick", Block.Properties.from(temp)),
                 new BlockFurnaceHeater(),
                 new BlockPotionGenerator(),
                 new BlockAuraDetector(),
-                new BlockCatalyst("conversion_catalyst", ModBlocks.prop(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(2.5F)),
-                new BlockCatalyst("crushing_catalyst", ModBlocks.prop(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(2.5F)),
+                new BlockCatalyst("conversion_catalyst", Block.Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(2.5F)),
+                new BlockCatalyst("crushing_catalyst", Block.Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(2.5F)),
                 new BlockFlowerGenerator(),
                 new BlockPlacer(),
                 new BlockHopperUpgrade(),
                 new BlockFieldCreator(),
                 new BlockOakGenerator(),
-                new BlockImpl("infused_iron_block", ModBlocks.prop(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(3F)),
+                new BlockImpl("infused_iron_block", Block.Properties.create(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(3F)),
                 new BlockOfferingTable(),
                 new BlockPickupStopper(),
                 new BlockSpawnLamp(),
@@ -117,8 +110,8 @@ public final class ModRegistry {
                 new BlockGratedChute(),
                 new BlockAnimalSpawner(),
                 new BlockAutoCrafter(),
-                new BlockImpl("gold_brick", ModBlocks.prop(Blocks.STONE_BRICKS)),
-                new BlockImpl("gold_nether_brick", ModBlocks.prop(Blocks.NETHER_BRICKS)),
+                new BlockImpl("gold_brick", Block.Properties.from(Blocks.STONE_BRICKS)),
+                new BlockImpl("gold_nether_brick", Block.Properties.from(Blocks.NETHER_BRICKS)),
                 new BlockMossGenerator(),
                 new BlockTimeChanger(),
                 new BlockGeneratorLimitRemover(),
@@ -130,7 +123,7 @@ public final class ModRegistry {
                 new BlockDimensionRail("nether", World.field_234919_h_, World.field_234918_g_),
                 new BlockDimensionRail("end", World.field_234920_i_, World.field_234918_g_),
                 new BlockBlastFurnaceBooster(),
-                new BlockImpl("nether_wart_mushroom", ModBlocks.prop(Blocks.RED_MUSHROOM_BLOCK)),
+                new BlockImpl("nether_wart_mushroom", Block.Properties.from(Blocks.RED_MUSHROOM_BLOCK)),
                 new BlockAnimalContainer(),
                 new BlockSnowCreator(),
                 new BlockItemDistributor(),
@@ -138,12 +131,13 @@ public final class ModRegistry {
                 createFlowerPot(temp),
                 temp = new BlockAuraBloom("aura_cactus", TileEntityAuraCactus::new),
                 createFlowerPot(temp),
-                new BlockImpl("tainted_gold_block", ModBlocks.prop(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(3F)),
+                new BlockImpl("tainted_gold_block", Block.Properties.create(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(3F)),
                 new BlockNetherGrass(),
                 new BlockLight(),
                 new BlockChorusGenerator(),
                 new BlockAuraTimer(),
-                new BlockSlimeSplitGenerator()
+                new BlockSlimeSplitGenerator(),
+                new BlockSpring()
         );
 
         if (ModConfig.instance.rfConverter.get())

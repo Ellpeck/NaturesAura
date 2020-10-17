@@ -21,7 +21,7 @@ public class BlockAnimalContainer extends BlockContainerImpl implements IVisuali
     private static final VoxelShape SHAPE = makeCuboidShape(5, 0, 5, 11, 13, 11);
 
     public BlockAnimalContainer() {
-        super("animal_container", TileEntityAnimalContainer::new, ModBlocks.prop(Blocks.STONE));
+        super("animal_container", TileEntityAnimalContainer::new, Properties.from(Blocks.STONE));
     }
 
     @Override

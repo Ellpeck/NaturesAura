@@ -49,7 +49,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     private static final VoxelShape WEST_RAYTRACE_SHAPE = VoxelShapes.or(IHopper.INSIDE_BOWL_SHAPE, Block.makeCuboidShape(0.0D, 8.0D, 6.0D, 4.0D, 10.0D, 10.0D));
 
     public BlockGratedChute() {
-        super("grated_chute", TileEntityGratedChute::new, ModBlocks.prop(Material.IRON).hardnessAndResistance(3.0F, 8.0F).sound(SoundType.METAL));
+        super("grated_chute", TileEntityGratedChute::new, Properties.create(Material.IRON).hardnessAndResistance(3.0F, 8.0F).sound(SoundType.METAL));
     }
 
     @Override

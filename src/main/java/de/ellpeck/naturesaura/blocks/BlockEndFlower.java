@@ -37,7 +37,7 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 
     public BlockEndFlower() {
-        super(ModBlocks.prop(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0.5F).sound(SoundType.PLANT));
+        super(Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0.5F).sound(SoundType.PLANT));
         MinecraftForge.EVENT_BUS.register(this);
         ModRegistry.add(this);
         ModRegistry.add(new ModTileType<>(TileEntityEndFlower::new, this));

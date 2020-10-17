@@ -71,17 +71,5 @@ public final class ModBlocks {
     public static Block CHORUS_GENERATOR;
     public static Block AURA_TIMER;
     public static Block SLIME_SPLIT_GENERATOR;
-
-    public static Block.Properties prop(Material material, MaterialColor color) {
-        return Block.Properties.create(material, color);
-    }
-
-    public static Block.Properties prop(Material material) {
-        return Block.Properties.create(material);
-    }
-
-    public static Block.Properties prop(Block block) {
-        return Block.Properties.from(block);
-    }
-
+    public static Block SPRING;
 }

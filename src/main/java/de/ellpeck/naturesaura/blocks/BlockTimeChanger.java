@@ -8,7 +8,7 @@ import net.minecraft.block.material.Material;
 
 public class BlockTimeChanger extends BlockContainerImpl implements ICustomBlockState {
     public BlockTimeChanger() {
-        super("time_changer", TileEntityTimeChanger::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
+        super("time_changer", TileEntityTimeChanger::new, Properties.create(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
     }
 
     @Override

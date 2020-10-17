@@ -25,7 +25,7 @@ import java.util.Random;
 public class BlockOakGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockOakGenerator() {
-        super("oak_generator", TileEntityOakGenerator::new, ModBlocks.prop(Material.WOOD).hardnessAndResistance(2F).sound(SoundType.WOOD));
+        super("oak_generator", TileEntityOakGenerator::new, Properties.create(Material.WOOD).hardnessAndResistance(2F).sound(SoundType.WOOD));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

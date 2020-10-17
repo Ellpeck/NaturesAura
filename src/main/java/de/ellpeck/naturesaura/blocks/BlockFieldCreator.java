@@ -18,7 +18,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -28,7 +27,7 @@ import java.util.function.Supplier;
 
 public class BlockFieldCreator extends BlockContainerImpl implements ICustomBlockState, ICustomRenderType {
     public BlockFieldCreator() {
-        super("field_creator", TileEntityFieldCreator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).notSolid().sound(SoundType.STONE));
+        super("field_creator", TileEntityFieldCreator::new, Properties.create(Material.ROCK).hardnessAndResistance(2F).notSolid().sound(SoundType.STONE));
     }
 
     @Override

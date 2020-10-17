@@ -38,7 +38,7 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
     };
 
     public BlockFurnaceHeater() {
-        super("furnace_heater", TileEntityFurnaceHeater::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
+        super("furnace_heater", TileEntityFurnaceHeater::new, Properties.create(Material.ROCK).hardnessAndResistance(3F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
     }
 
     @Override

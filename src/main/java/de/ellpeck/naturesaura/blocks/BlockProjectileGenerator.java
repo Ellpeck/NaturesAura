@@ -32,7 +32,7 @@ import java.util.function.Supplier;
 
 public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider<TileEntityProjectileGenerator>, ICustomBlockState {
     public BlockProjectileGenerator() {
-        super("projectile_generator", TileEntityProjectileGenerator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
+        super("projectile_generator", TileEntityProjectileGenerator::new, Properties.create(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

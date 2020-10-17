@@ -2,9 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.IGrowable;
+import net.minecraft.block.*;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
@@ -16,7 +14,7 @@ import java.util.Random;
 public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, IGrowable {
 
     public BlockNetherGrass() {
-        super("nether_grass", ModBlocks.prop(Blocks.NETHERRACK).tickRandomly());
+        super("nether_grass", Properties.from(Blocks.NETHERRACK).tickRandomly());
     }
 
     @Override

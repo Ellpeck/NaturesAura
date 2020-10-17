@@ -8,7 +8,7 @@ import net.minecraftforge.common.ToolType;
 
 public class BlockPotionGenerator extends BlockContainerImpl implements ICustomBlockState {
     public BlockPotionGenerator() {
-        super("potion_generator", TileEntityPotionGenerator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(5F).harvestTool(ToolType.PICKAXE).harvestLevel(1));
+        super("potion_generator", TileEntityPotionGenerator::new, Properties.create(Material.ROCK).hardnessAndResistance(5F).harvestTool(ToolType.PICKAXE).harvestLevel(1));
     }
 
     @Override

@@ -24,7 +24,7 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
     public BlockAncientSapling() {
-        super(ModBlocks.prop(Material.PLANTS).hardnessAndResistance(0.0F).sound(SoundType.PLANT));
+        super(Properties.create(Material.PLANTS).hardnessAndResistance(0.0F).sound(SoundType.PLANT));
         ModRegistry.add(this);
     }
 

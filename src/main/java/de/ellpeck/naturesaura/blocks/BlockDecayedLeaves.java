@@ -3,9 +3,7 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ICustomRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.math.BlockPos;
@@ -18,7 +16,7 @@ import java.util.function.Supplier;
 public class BlockDecayedLeaves extends BlockImpl implements ICustomBlockState, ICustomRenderType {
 
     public BlockDecayedLeaves() {
-        super("decayed_leaves", ModBlocks.prop(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT).notSolid().tickRandomly());
+        super("decayed_leaves", Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT).notSolid().tickRandomly());
     }
 
     @Override

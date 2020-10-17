@@ -23,7 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
     public BlockPickupStopper() {
-        super("pickup_stopper", TileEntityPickupStopper::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
+        super("pickup_stopper", TileEntityPickupStopper::new, Properties.create(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

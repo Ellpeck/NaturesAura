@@ -33,7 +33,7 @@ public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvi
     private static final VoxelShape SHAPE = VoxelShapes.create(2 / 16F, 0F, 2 / 16F, 14 / 16F, 1F, 14 / 16F);
 
     public BlockOfferingTable() {
-        super("offering_table", TileEntityOfferingTable::new, ModBlocks.prop(Material.WOOD).hardnessAndResistance(2F).sound(SoundType.WOOD));
+        super("offering_table", TileEntityOfferingTable::new, Properties.create(Material.WOOD).hardnessAndResistance(2F).sound(SoundType.WOOD));
     }
 
     @Override

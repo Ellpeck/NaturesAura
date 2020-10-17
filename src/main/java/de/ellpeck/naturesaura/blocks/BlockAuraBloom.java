@@ -27,7 +27,7 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
     private final Supplier<TileEntity> tileEntitySupplier;
 
     public BlockAuraBloom(String baseName, Supplier<TileEntity> tileEntitySupplier) {
-        super(ModBlocks.prop(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0).sound(SoundType.PLANT));
+        super(Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0).sound(SoundType.PLANT));
         this.baseName = baseName;
         this.tileEntitySupplier = tileEntitySupplier;
         ModRegistry.add(this);

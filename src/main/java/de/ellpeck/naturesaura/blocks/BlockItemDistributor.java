@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 public class BlockItemDistributor extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockItemDistributor() {
-        super("item_distributor", TileEntityItemDistributor::new, ModBlocks.prop(Blocks.STONE_BRICKS));
+        super("item_distributor", TileEntityItemDistributor::new, Properties.from(Blocks.STONE_BRICKS));
     }
 
     @Override

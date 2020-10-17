@@ -4,9 +4,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAncientLeaves;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.*;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -25,7 +23,7 @@ import java.util.Random;
 public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorProvidingBlock, IColorProvidingItem, ICustomBlockState {
 
     public BlockAncientLeaves() {
-        super(ModBlocks.prop(Material.LEAVES, MaterialColor.PINK).hardnessAndResistance(0.2F).tickRandomly().notSolid().sound(SoundType.PLANT));
+        super(Properties.create(Material.LEAVES, MaterialColor.PINK).hardnessAndResistance(0.2F).tickRandomly().notSolid().sound(SoundType.PLANT));
         ModRegistry.add(this);
         ModRegistry.add(new ModTileType<>(TileEntityAncientLeaves::new, this));
     }

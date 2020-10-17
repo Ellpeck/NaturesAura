@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 public class BlockAuraDetector extends BlockContainerImpl {
 
     public BlockAuraDetector() {
-        super("aura_detector", TileEntityAuraDetector::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
+        super("aura_detector", TileEntityAuraDetector::new, Properties.create(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
     }
 
     @Override

@@ -8,10 +8,7 @@ import de.ellpeck.naturesaura.packet.PacketClient;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.*;
-import net.minecraft.block.AbstractRailBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
@@ -46,7 +43,7 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
     private final RegistryKey<World>[] canUseDims;
 
     public BlockDimensionRail(String name, RegistryKey<World> goalDim, RegistryKey<World>... canUseDims) {
-        super(false, ModBlocks.prop(Blocks.RAIL));
+        super(false, Properties.from(Blocks.RAIL));
         this.name = name;
         this.goalDim = goalDim;
         this.canUseDims = canUseDims;

@@ -41,7 +41,7 @@ public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvide
     public static final BooleanProperty NETHER = BooleanProperty.create("nether");
 
     public BlockNatureAltar() {
-        super("nature_altar", TileEntityNatureAltar::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(4F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
+        super("nature_altar", TileEntityNatureAltar::new, Properties.create(Material.ROCK).hardnessAndResistance(4F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
         this.setDefaultState(this.getDefaultState().with(NETHER, false));
     }
 

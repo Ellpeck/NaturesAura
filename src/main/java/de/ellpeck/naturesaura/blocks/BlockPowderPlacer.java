@@ -17,7 +17,7 @@ public class BlockPowderPlacer extends BlockContainerImpl implements ICustomBloc
     private static final VoxelShape SHAPE = VoxelShapes.create(0F, 0F, 0F, 1F, 4 / 16F, 1F);
 
     public BlockPowderPlacer() {
-        super("powder_placer", TileEntityPowderPlacer::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2, 5F).sound(SoundType.STONE));
+        super("powder_placer", TileEntityPowderPlacer::new, Properties.create(Material.ROCK).hardnessAndResistance(2, 5F).sound(SoundType.STONE));
     }
 
     @Override

@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockFireworkGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
     public BlockFireworkGenerator() {
-        super("firework_generator", TileEntityFireworkGenerator::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
+        super("firework_generator", TileEntityFireworkGenerator::new, Properties.create(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
     }
 
     @Override

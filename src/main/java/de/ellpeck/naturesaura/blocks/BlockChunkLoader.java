@@ -26,7 +26,7 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
     private static final VoxelShape SHAPE = makeCuboidShape(4, 4, 4, 12, 12, 12);
 
     public BlockChunkLoader() {
-        super("chunk_loader", TileEntityChunkLoader::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
+        super("chunk_loader", TileEntityChunkLoader::new, Properties.create(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
     }
 
     @Override

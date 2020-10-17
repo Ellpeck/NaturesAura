@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 public class BlockGeneratorLimitRemover extends BlockContainerImpl implements ITESRProvider<TileEntityGeneratorLimitRemover>, ICustomBlockState {
 
     public BlockGeneratorLimitRemover() {
-        super("generator_limit_remover", TileEntityGeneratorLimitRemover::new, ModBlocks.prop(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
+        super("generator_limit_remover", TileEntityGeneratorLimitRemover::new, Properties.create(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
     }
 
     @Override

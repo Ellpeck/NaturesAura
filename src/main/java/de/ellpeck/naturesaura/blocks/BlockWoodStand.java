@@ -1,8 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.recipes.ModRecipe;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
@@ -50,7 +48,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
     private static final VoxelShape SHAPE = VoxelShapes.create(3 / 16F, 0F, 3 / 16F, 13 / 16F, 13 / 16F, 13 / 16F);
 
     public BlockWoodStand() {
-        super("wood_stand", TileEntityWoodStand::new, ModBlocks.prop(Material.WOOD).hardnessAndResistance(1.5F).sound(SoundType.WOOD).harvestLevel(0).harvestTool(ToolType.AXE));
+        super("wood_stand", TileEntityWoodStand::new, Properties.create(Material.WOOD).hardnessAndResistance(1.5F).sound(SoundType.WOOD).harvestLevel(0).harvestTool(ToolType.AXE));
         MinecraftForge.EVENT_BUS.register(this);
     }
 
