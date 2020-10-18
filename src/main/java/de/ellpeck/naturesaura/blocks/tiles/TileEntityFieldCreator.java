@@ -125,7 +125,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
                         this.world.destroyBlock(pos, false);
                         for (ItemStack stack : drops)
                             Block.spawnAsEntity(this.world, pos, stack);
-                        chunk.drainAura(spot, tool.isEmpty() ? 300 : 100);
+                        chunk.drainAura(spot, !tool.isEmpty() ? 300 : 100);
                         this.sendParticles();
                     }
                 }
