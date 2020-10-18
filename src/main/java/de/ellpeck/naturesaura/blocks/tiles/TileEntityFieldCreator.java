@@ -120,12 +120,12 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
                         List<ItemStack> drops = state.getDrops(new LootContext.Builder((ServerWorld) this.world)
                                 .withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(pos))
                                 .withParameter(LootParameters.BLOCK_STATE, state)
-                                .withParameter(LootParameters.TOOL, tool == null ? new ItemStack(Items.DIAMOND_PICKAXE) : tool)
+                                .withParameter(LootParameters.TOOL, tool.isEmpty() ? new ItemStack(Items.DIAMOND_PICKAXE) : tool)
                                 .withNullableParameter(LootParameters.BLOCK_ENTITY, this.world.getTileEntity(pos)));
                         this.world.destroyBlock(pos, false);
                         for (ItemStack stack : drops)
                             Block.spawnAsEntity(this.world, pos, stack);
-                        chunk.drainAura(spot, tool != null ? 300 : 100);
+                        chunk.drainAura(spot, tool.isEmpty() ? 300 : 100);
                         this.sendParticles();
                     }
                 }
