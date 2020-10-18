@@ -136,9 +136,13 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
     private ItemStack getToolUsed(TileEntityFieldCreator other) {
         ItemStack myTool = this.getMyTool();
         ItemStack otherTool = other.getMyTool();
-        if (myTool != null && otherTool != null)
-            return this.world.rand.nextBoolean() ? myTool : otherTool;
-        return myTool;
+        if (!myTool.isEmpty()) {
+            // if both have tools, choose randomly
+            if (!otherTool.isEmpty())
+                return this.world.rand.nextBoolean() ? myTool : otherTool;
+            return myTool;
+        }
+        return otherTool;
     }
 
     private ItemStack getMyTool() {
@@ -148,7 +152,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
             if (!stack.isEmpty())
                 return stack;
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     private void sendParticles() {

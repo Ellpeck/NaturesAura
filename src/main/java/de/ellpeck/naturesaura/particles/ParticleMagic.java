@@ -6,14 +6,19 @@ import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.ReuseableStream;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.stream.Stream;
 
 @OnlyIn(Dist.CLIENT)
 public class ParticleMagic extends Particle {
@@ -57,10 +62,6 @@ public class ParticleMagic extends Particle {
         } else {
             this.motionY -= 0.04D * (double) this.particleGravity;
             this.move(this.motionX, this.motionY, this.motionZ);
-            if (Math.abs(this.posY - this.prevPosY) <= 0.01F) {
-                this.motionX *= 0.7F;
-                this.motionZ *= 0.7F;
-            }
 
             float lifeRatio = (float) this.age / (float) this.maxAge;
             if (this.fade && lifeRatio > 0.75F)
@@ -69,6 +70,26 @@ public class ParticleMagic extends Particle {
                 this.particleScale = this.desiredScale * (lifeRatio / 0.25F);
             else if (this.fade)
                 this.particleScale = this.desiredScale * (1F - (lifeRatio - 0.25F) / 0.75F);
+        }
+    }
+
+    @Override
+    public void move(double x, double y, double z) {
+        double lastY = y;
+        if (this.canCollide && (x != 0 || y != 0 || z != 0)) {
+            Vector3d motion = Entity.collideBoundingBoxHeuristically(null, new Vector3d(x, y, z), this.getBoundingBox(), this.world, ISelectionContext.dummy(), new ReuseableStream<>(Stream.empty()));
+            x = motion.x;
+            y = motion.y;
+            z = motion.z;
+        }
+        if (x != 0 || y != 0 || z != 0) {
+            this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
+            this.resetPositionToBB();
+        }
+        this.onGround = lastY != y && lastY < 0;
+        if (this.onGround) {
+            this.motionX = 0;
+            this.motionZ = 0;
         }
     }
 
