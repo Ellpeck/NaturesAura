@@ -10,7 +10,7 @@
             "translate": "advancement.naturesaura.positive_imbalance.desc"
         }
     },
-    "parent": "naturesaura:altar",
+    "parent": "naturesaura:root",
     "criteria": {
         "triggered_in_code": {
             "trigger": "minecraft:impossible"
