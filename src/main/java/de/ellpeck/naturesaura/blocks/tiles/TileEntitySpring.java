@@ -27,7 +27,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class TileEntitySpring extends TileEntityImpl implements ITickableTileEntity {
 
-    private final LazyOptional<IFluidHandler> tank = LazyOptional.of(() -> new InfiniteTank());
+    private final LazyOptional<IFluidHandler> tank = LazyOptional.of(InfiniteTank::new);
     private AABBTicket waterTicket;
 
     public TileEntitySpring() {
@@ -51,6 +51,7 @@ public class TileEntitySpring extends TileEntityImpl implements ITickableTileEnt
             this.waterTicket.invalidate();
             this.waterTicket = null;
         }
+        this.tank.invalidate();
     }
 
     @Override
