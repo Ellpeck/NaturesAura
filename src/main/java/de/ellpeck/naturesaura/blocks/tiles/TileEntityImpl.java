@@ -28,6 +28,8 @@ import java.util.stream.Stream;
 public class TileEntityImpl extends TileEntity {
 
     public int redstonePower;
+    private LazyOptional<IItemHandler> itemHandler;
+    private LazyOptional<IAuraContainer> auraContainer;
 
     public TileEntityImpl(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);
@@ -96,11 +98,11 @@ public class TileEntityImpl extends TileEntity {
         entities.forEach(e -> e.connection.sendPacket(packet));
     }
 
-    public IItemHandlerModifiable getItemHandler(Direction facing) {
+    public IItemHandlerModifiable getItemHandler() {
         return null;
     }
 
-    public IAuraContainer getAuraContainer(Direction facing) {
+    public IAuraContainer getAuraContainer() {
         return null;
     }
 
@@ -108,18 +110,33 @@ public class TileEntityImpl extends TileEntity {
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            IItemHandler handler = this.getItemHandler(facing);
-            return handler == null ? LazyOptional.empty() : LazyOptional.of(() -> (T) handler);
+            if (this.itemHandler == null) {
+                IItemHandler handler = this.getItemHandler();
+                this.itemHandler = handler == null ? LazyOptional.empty() : LazyOptional.of(() -> handler);
+            }
+            return this.itemHandler.cast();
         } else if (capability == NaturesAuraAPI.capAuraContainer) {
-            IAuraContainer container = this.getAuraContainer(facing);
-            return container == null ? LazyOptional.empty() : LazyOptional.of(() -> (T) container);
+            if (this.auraContainer == null) {
+                IAuraContainer container = this.getAuraContainer();
+                this.auraContainer = container == null ? LazyOptional.empty() : LazyOptional.of(() -> container);
+            }
+            return this.auraContainer.cast();
         } else {
             return super.getCapability(capability, facing);
         }
     }
 
+    @Override
+    public void remove() {
+        super.remove();
+        if (this.itemHandler != null)
+            this.itemHandler.invalidate();
+        if (this.auraContainer != null)
+            this.auraContainer.invalidate();
+    }
+
     public void dropInventory() {
-        IItemHandler handler = this.getItemHandler(null);
+        IItemHandler handler = this.getItemHandler();
         if (handler != null) {
             for (int i = 0; i < handler.getSlots(); i++) {
                 ItemStack stack = handler.getStackInSlot(i);

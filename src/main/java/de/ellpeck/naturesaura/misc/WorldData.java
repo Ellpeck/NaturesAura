@@ -31,11 +31,12 @@ public class WorldData implements IWorldData {
     public final List<BlockPos> recentlyConvertedMossStones = new ArrayList<>();
     private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();
     public final Set<TileEntitySpawnLamp> spawnLamps = new HashSet<>();
+    private final LazyOptional<WorldData> lazyThis = LazyOptional.of(() -> this);
 
     @Nullable
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-        return capability == NaturesAuraAPI.capWorldData ? LazyOptional.of(() -> (T) this) : LazyOptional.empty();
+        return capability == NaturesAuraAPI.capWorldData ? this.lazyThis.cast() : LazyOptional.empty();
     }
 
     @Override

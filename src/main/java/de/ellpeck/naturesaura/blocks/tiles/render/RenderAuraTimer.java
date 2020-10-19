@@ -27,7 +27,7 @@ public class RenderAuraTimer extends TileEntityRenderer<TileEntityAuraTimer> {
 
     @Override
     public void render(TileEntityAuraTimer tile, float partialTicks, MatrixStack stack, IRenderTypeBuffer buffer, int combinedLightIn, int combinedOverlayIn) {
-        ItemStack bottle = tile.getItemHandler(null).getStackInSlot(0);
+        ItemStack bottle = tile.getItemHandler().getStackInSlot(0);
         if (bottle.isEmpty())
             return;
         stack.push();

@@ -139,7 +139,7 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
     }
 
     @Override
-    public IItemHandlerModifiable getItemHandler(Direction facing) {
+    public IItemHandlerModifiable getItemHandler() {
         return this.items;
     }
 }

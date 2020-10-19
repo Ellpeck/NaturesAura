@@ -101,7 +101,7 @@ public class TileEntityAuraTimer extends TileEntityImpl implements ITickableTile
     }
 
     @Override
-    public IItemHandlerModifiable getItemHandler(Direction facing) {
+    public IItemHandlerModifiable getItemHandler() {
         return this.itemHandler;
     }
 

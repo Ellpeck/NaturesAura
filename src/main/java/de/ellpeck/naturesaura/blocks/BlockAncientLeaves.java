@@ -63,7 +63,7 @@ public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorP
         if (rand.nextFloat() >= 0.95F && !worldIn.getBlockState(pos.down()).isOpaqueCube(worldIn, pos)) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityAncientLeaves) {
-                if (((TileEntityAncientLeaves) tile).getAuraContainer(null).getStoredAura() > 0) {
+                if (((TileEntityAncientLeaves) tile).getAuraContainer().getStoredAura() > 0) {
                     NaturesAuraAPI.instance().spawnMagicParticle(
                             pos.getX() + rand.nextDouble(), pos.getY(), pos.getZ() + rand.nextDouble(),
                             0F, 0F, 0F, 0xCC4780,
@@ -82,7 +82,7 @@ public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorP
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileEntityAncientLeaves) {
-                if (((TileEntityAncientLeaves) tile).getAuraContainer(null).getStoredAura() <= 0) {
+                if (((TileEntityAncientLeaves) tile).getAuraContainer().getStoredAura() <= 0) {
                     worldIn.setBlockState(pos, ModBlocks.DECAYED_LEAVES.getDefaultState());
                 }
             }

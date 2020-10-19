@@ -259,12 +259,12 @@ public class TileEntityNatureAltar extends TileEntityImpl implements ITickableTi
     }
 
     @Override
-    public IAuraContainer getAuraContainer(Direction facing) {
+    public IAuraContainer getAuraContainer() {
         return this.container;
     }
 
     @Override
-    public IItemHandlerModifiable getItemHandler(Direction facing) {
+    public IItemHandlerModifiable getItemHandler() {
         return this.items;
     }
 

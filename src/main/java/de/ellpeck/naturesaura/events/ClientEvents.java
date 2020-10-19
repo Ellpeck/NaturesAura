@@ -389,7 +389,7 @@ public class ClientEvents {
                                         mc, res, 35, blockStack.getDisplayName().getString(), null);
 
                                 if (tile instanceof TileEntityNatureAltar) {
-                                    ItemStack tileStack = ((TileEntityNatureAltar) tile).getItemHandler(null).getStackInSlot(0);
+                                    ItemStack tileStack = ((TileEntityNatureAltar) tile).getItemHandler().getStackInSlot(0);
                                     if (!tileStack.isEmpty()) {
                                         IAuraContainer stackCont = tileStack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
                                         if (stackCont != null) {
@@ -405,7 +405,7 @@ public class ClientEvents {
                                         storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
                             } else if (tile instanceof TileEntityGratedChute) {
                                 TileEntityGratedChute chute = (TileEntityGratedChute) tile;
-                                ItemStack itemStack = chute.getItemHandler(null).getStackInSlot(0);
+                                ItemStack itemStack = chute.getItemHandler().getStackInSlot(0);
 
                                 if (itemStack.isEmpty())
                                     mc.fontRenderer.drawStringWithShadow(stack,
@@ -430,7 +430,7 @@ public class ClientEvents {
                                 GlStateManager.enableDepthTest();
                             } else if (tile instanceof TileEntityAuraTimer) {
                                 TileEntityAuraTimer timer = (TileEntityAuraTimer) tile;
-                                ItemStack itemStack = timer.getItemHandler(null).getStackInSlot(0);
+                                ItemStack itemStack = timer.getItemHandler().getStackInSlot(0);
                                 if (!itemStack.isEmpty()) {
                                     Helper.renderItemInGui(itemStack, x - 20, y - 20, 1);
                                     mc.fontRenderer.drawStringWithShadow(stack, TextFormatting.GRAY + this.createTimeString(timer.getTotalTime()), x + 5, y - 11, 0xFFFFFF);

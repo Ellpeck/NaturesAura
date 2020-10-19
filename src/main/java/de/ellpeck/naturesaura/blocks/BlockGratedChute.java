@@ -131,7 +131,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityGratedChute) {
-            IItemHandler handler = ((TileEntityGratedChute) tile).getItemHandler(null);
+            IItemHandler handler = ((TileEntityGratedChute) tile).getItemHandler();
             ItemStack stack = handler.getStackInSlot(0);
             if (stack.isEmpty())
                 return 0;

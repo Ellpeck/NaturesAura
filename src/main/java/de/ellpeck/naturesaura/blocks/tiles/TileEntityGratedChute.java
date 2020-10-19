@@ -145,7 +145,7 @@ public class TileEntityGratedChute extends TileEntityImpl implements ITickableTi
     }
 
     @Override
-    public IItemHandlerModifiable getItemHandler(Direction facing) {
+    public IItemHandlerModifiable getItemHandler() {
         return this.items;
     }
 }

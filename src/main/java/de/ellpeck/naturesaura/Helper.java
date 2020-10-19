@@ -140,7 +140,7 @@ public final class Helper {
     public static ActionResultType putStackOnTile(PlayerEntity player, Hand hand, BlockPos pos, int slot, boolean sound) {
         TileEntity tile = player.world.getTileEntity(pos);
         if (tile instanceof TileEntityImpl) {
-            IItemHandlerModifiable handler = ((TileEntityImpl) tile).getItemHandler(null);
+            IItemHandlerModifiable handler = ((TileEntityImpl) tile).getItemHandler();
             if (handler != null) {
                 ItemStack handStack = player.getHeldItem(hand);
                 if (!handStack.isEmpty()) {
@@ -176,18 +176,17 @@ public final class Helper {
 
     public static ICapabilityProvider makeRechargeProvider(ItemStack stack, boolean needsSelected) {
         return new ICapabilityProvider() {
-            private final IAuraRecharge recharge = (container, containerSlot, itemSlot, isSelected) -> {
-                if (isSelected || !needsSelected) {
+            private final LazyOptional<IAuraRecharge> recharge = LazyOptional.of(() -> (container, containerSlot, itemSlot, isSelected) -> {
+                if (isSelected || !needsSelected)
                     return rechargeAuraItem(stack, container, 300);
-                }
                 return false;
-            };
+            });
 
             @Nullable
             @Override
             public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
                 if (capability == NaturesAuraAPI.capAuraRecharge)
-                    return LazyOptional.of(() -> (T) this.recharge);
+                    return this.recharge.cast();
                 return LazyOptional.empty();
             }
         };

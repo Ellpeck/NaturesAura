@@ -80,7 +80,7 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
     }
 
     @Override
-    public IItemHandlerModifiable getItemHandler(Direction facing) {
+    public IItemHandlerModifiable getItemHandler() {
         if (this.canOpen())
             return this.wrappedEnderStorage;
         return null;
@@ -146,6 +146,6 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
     @Nullable
     @Override
     public Container createMenu(int window, PlayerInventory inv, PlayerEntity player) {
-        return new ContainerEnderCrate(ModContainers.ENDER_CRATE, window, player, this.getItemHandler(null));
+        return new ContainerEnderCrate(ModContainers.ENDER_CRATE, window, player, this.getItemHandler());
     }
 }

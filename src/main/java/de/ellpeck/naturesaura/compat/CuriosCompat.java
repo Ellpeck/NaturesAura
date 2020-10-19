@@ -60,28 +60,30 @@ public class CuriosCompat implements ICompat {
         ItemStack stack = event.getObject();
         if (TYPES.containsKey(stack.getItem())) {
             event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "curios"), new ICapabilityProvider() {
+                private final LazyOptional<ICurio> curio = LazyOptional.of(() -> new ICurio() {
+                    @Override
+                    public void curioTick(String identifier, int index, LivingEntity livingEntity) {
+                        stack.getItem().inventoryTick(stack, livingEntity.world, livingEntity, -1, false);
+
+                    }
+
+                    @Override
+                    public boolean canRightClickEquip() {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean canSync(String identifier, int index, LivingEntity livingEntity) {
+                        return true;
+                    }
+                });
+
                 @Nonnull
                 @Override
                 public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
                     if (cap != CuriosCapability.ITEM)
                         return LazyOptional.empty();
-                    return LazyOptional.of(() -> (T) new ICurio() {
-                        @Override
-                        public void curioTick(String identifier, int index, LivingEntity livingEntity) {
-                            stack.getItem().inventoryTick(stack, livingEntity.world, livingEntity, -1, false);
-
-                        }
-
-                        @Override
-                        public boolean canRightClickEquip() {
-                            return true;
-                        }
-
-                        @Override
-                        public boolean canSync(String identifier, int index, LivingEntity livingEntity) {
-                            return true;
-                        }
-                    });
+                    return this.curio.cast();
                 }
             });
         }

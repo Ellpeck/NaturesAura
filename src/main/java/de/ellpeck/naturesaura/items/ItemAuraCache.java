@@ -99,13 +99,13 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         return new ICapabilityProvider() {
-            private final ItemAuraContainer container = new ItemAuraContainer(stack, null, ItemAuraCache.this.capacity);
+            private final LazyOptional<ItemAuraContainer> container = LazyOptional.of(() -> new ItemAuraContainer(stack, null, ItemAuraCache.this.capacity));
 
             @Nonnull
             @Override
             public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
                 if (capability == NaturesAuraAPI.capAuraContainer) {
-                    return LazyOptional.of(() -> (T) this.container);
+                    return this.container.cast();
                 } else {
                     return LazyOptional.empty();
                 }

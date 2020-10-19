@@ -254,7 +254,7 @@ public final class ModRegistry {
                 IForgeContainerType.create((windowId, inv, data) -> {
                     TileEntity tile = inv.player.world.getTileEntity(data.readBlockPos());
                     if (tile instanceof TileEntityEnderCrate)
-                        return new ContainerEnderCrate(ModContainers.ENDER_CRATE, windowId, inv.player, ((TileEntityEnderCrate) tile).getItemHandler(null));
+                        return new ContainerEnderCrate(ModContainers.ENDER_CRATE, windowId, inv.player, ((TileEntityEnderCrate) tile).getItemHandler());
                     return null;
                 }).setRegistryName("ender_crate"),
                 IForgeContainerType.create((windowId, inv, data) -> {

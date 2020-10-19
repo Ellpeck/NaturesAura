@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 public class TileEntityRFConverter extends TileEntityImpl implements ITickableTileEntity {
 
     public final RFStorage storage = new RFStorage();
+    private final LazyOptional<IEnergyStorage> storageOptional = LazyOptional.of(() -> this.storage);
     private int lastEnergy;
 
     public TileEntityRFConverter() {
@@ -92,9 +93,15 @@ public class TileEntityRFConverter extends TileEntityImpl implements ITickableTi
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
         if (capability == CapabilityEnergy.ENERGY)
-            return LazyOptional.of(() -> (T) this.storage);
+            return this.storageOptional.cast();
         else
             return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public void remove() {
+        super.remove();
+        this.storageOptional.invalidate();
     }
 
     public static class RFStorage extends EnergyStorage {

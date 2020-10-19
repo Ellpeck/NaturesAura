@@ -80,7 +80,7 @@ public class TileEntityBlastFurnaceBooster extends TileEntityImpl implements ITi
     }
 
     @Override
-    public IItemHandlerModifiable getItemHandler(Direction facing) {
+    public IItemHandlerModifiable getItemHandler() {
         TileEntity below = this.world.getTileEntity(this.pos.down());
         if (!(below instanceof BlastFurnaceTileEntity))
             return null;

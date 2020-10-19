@@ -29,7 +29,7 @@ public class TileEntityAncientLeaves extends TileEntityImpl {
     }
 
     @Override
-    public IAuraContainer getAuraContainer(Direction facing) {
+    public IAuraContainer getAuraContainer() {
         return this.container;
     }
 

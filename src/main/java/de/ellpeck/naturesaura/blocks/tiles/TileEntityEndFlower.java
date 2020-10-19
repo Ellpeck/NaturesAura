@@ -105,7 +105,7 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
     }
 
     @Override
-    public IAuraContainer getAuraContainer(Direction facing) {
+    public IAuraContainer getAuraContainer() {
         return this.container;
     }
 

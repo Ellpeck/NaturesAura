@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
 public class AuraChunkProvider implements ICapabilityProvider, INBTSerializable<CompoundNBT> {
 
     private final Chunk chunk;
+    private final LazyOptional<IAuraChunk> lazyChunk = LazyOptional.of(this::getAuraChunk);
     private IAuraChunk auraChunk;
 
     public AuraChunkProvider(Chunk chunk) {
@@ -32,7 +33,7 @@ public class AuraChunkProvider implements ICapabilityProvider, INBTSerializable<
     @Nullable
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-        return capability == NaturesAuraAPI.capAuraChunk ? LazyOptional.of(() -> (T) this.getAuraChunk()) : LazyOptional.empty();
+        return capability == NaturesAuraAPI.capAuraChunk ? this.lazyChunk.cast() : LazyOptional.empty();
     }
 
     @Override

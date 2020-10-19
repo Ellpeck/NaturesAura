@@ -220,7 +220,7 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
     }
 
     @Override
-    public IItemHandlerModifiable getItemHandler(Direction facing) {
+    public IItemHandlerModifiable getItemHandler() {
         return this.items;
     }
 }
