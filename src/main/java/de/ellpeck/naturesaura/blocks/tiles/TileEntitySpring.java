@@ -143,17 +143,17 @@ public class TileEntitySpring extends TileEntityImpl implements ITickableTileEnt
     private class InfiniteTank implements IFluidTank {
         @Override
         public FluidStack getFluid() {
-            return new FluidStack(Fluids.WATER, Integer.MAX_VALUE);
+            return new FluidStack(Fluids.WATER, 1000);
         }
 
         @Override
         public int getFluidAmount() {
-            return Integer.MAX_VALUE;
+            return 1000;
         }
 
         @Override
         public int getCapacity() {
-            return Integer.MAX_VALUE;
+            return 1000;
         }
 
         @Override
@@ -168,9 +168,10 @@ public class TileEntitySpring extends TileEntityImpl implements ITickableTileEnt
 
         @Override
         public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
+            int drain = Math.min(maxDrain, 1000);
             if (action.execute())
-                TileEntitySpring.this.consumeAura(2 * maxDrain);
-            return new FluidStack(Fluids.WATER, maxDrain);
+                TileEntitySpring.this.consumeAura(2 * drain);
+            return new FluidStack(Fluids.WATER, drain);
         }
 
         @Override
