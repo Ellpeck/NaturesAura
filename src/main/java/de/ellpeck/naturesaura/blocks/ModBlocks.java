@@ -3,6 +3,8 @@ package de.ellpeck.naturesaura.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 @SuppressWarnings("FieldNamingConvention")
 public final class ModBlocks {
@@ -72,4 +74,7 @@ public final class ModBlocks {
     public static Block AURA_TIMER;
     public static Block SLIME_SPLIT_GENERATOR;
     public static Block SPRING;
+    public static Block WARPED_AURA_MUSHROOM;
+    public static Block CRIMSON_AURA_MUSHROOM;
+    public static Block AURA_MUSHROOM;
 }

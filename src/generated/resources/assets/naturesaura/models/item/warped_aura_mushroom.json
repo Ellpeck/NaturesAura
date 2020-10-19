@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "naturesaura:block/warped_aura_mushroom"
+  }
+}

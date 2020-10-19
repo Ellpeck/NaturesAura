@@ -40,10 +40,4 @@ public class TileEntityAuraBloom extends TileEntityImpl implements ITickableTile
         if (type == SaveType.TILE)
             this.justGenerated = compound.getBoolean("just_generated");
     }
-
-    public static class TileEntityAuraCactus extends TileEntityAuraBloom {
-        public TileEntityAuraCactus() {
-            super(ModTileEntities.AURA_CACTUS);
-        }
-    }
 }

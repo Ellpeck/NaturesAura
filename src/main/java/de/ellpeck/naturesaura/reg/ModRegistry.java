@@ -7,7 +7,6 @@ import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.*;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityAuraBloom;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityAuraBloom.TileEntityAuraCactus;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
 import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
@@ -127,9 +126,15 @@ public final class ModRegistry {
                 new BlockAnimalContainer(),
                 new BlockSnowCreator(),
                 new BlockItemDistributor(),
-                temp = new BlockAuraBloom("aura_bloom", TileEntityAuraBloom::new),
+                temp = new BlockAuraBloom("aura_bloom", Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.PODZOL, Blocks.COARSE_DIRT, Blocks.FARMLAND),
                 createFlowerPot(temp),
-                temp = new BlockAuraBloom("aura_cactus", TileEntityAuraCactus::new),
+                temp = new BlockAuraBloom("aura_cactus", Blocks.SAND, Blocks.RED_SAND),
+                createFlowerPot(temp),
+                temp = new BlockAuraBloom("warped_aura_mushroom", Blocks.WARPED_NYLIUM),
+                createFlowerPot(temp),
+                temp = new BlockAuraBloom("crimson_aura_mushroom", Blocks.CRIMSON_NYLIUM),
+                createFlowerPot(temp),
+                temp = new BlockAuraBloom("aura_mushroom", Blocks.MYCELIUM),
                 createFlowerPot(temp),
                 new BlockImpl("tainted_gold_block", Block.Properties.create(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(3F)),
                 new BlockNetherGrass(),
@@ -225,6 +230,9 @@ public final class ModRegistry {
 
     @SubscribeEvent
     public static void registerTiles(RegistryEvent.Register<TileEntityType<?>> event) {
+        // add tile entities that support multiple blocks
+        add(new ModTileType<>(TileEntityAuraBloom::new, "aura_bloom", ALL_ITEMS.stream().filter(i -> i instanceof BlockAuraBloom).toArray(IModItem[]::new)));
+
         for (IModItem item : ALL_ITEMS) {
             if (item instanceof ModTileType)
                 event.getRegistry().register(((ModTileType) item).type);
@@ -303,8 +311,11 @@ public final class ModRegistry {
     @SubscribeEvent
     public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
         event.getRegistry().registerAll(
-                new WorldGenAuraBloom(ModBlocks.AURA_BLOOM).setRegistryName("aura_bloom"),
-                new WorldGenAuraBloom(ModBlocks.AURA_CACTUS).setRegistryName("aura_cactus"),
+                new WorldGenAuraBloom(ModBlocks.AURA_BLOOM, 60, false).setRegistryName("aura_bloom"),
+                new WorldGenAuraBloom(ModBlocks.AURA_CACTUS, 60, false).setRegistryName("aura_cactus"),
+                new WorldGenAuraBloom(ModBlocks.WARPED_AURA_MUSHROOM, 10, true).setRegistryName("warped_aura_mushroom"),
+                new WorldGenAuraBloom(ModBlocks.CRIMSON_AURA_MUSHROOM, 10, true).setRegistryName("crimson_aura_mushroom"),
+                new WorldGenAuraBloom(ModBlocks.AURA_MUSHROOM, 20, false).setRegistryName("aura_mushroom"),
                 new WorldGenAncientTree().setRegistryName("ancient_tree"),
                 new WorldGenNetherWartMushroom().setRegistryName("nether_wart_mushroom")
         );

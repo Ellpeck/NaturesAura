@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
+import de.ellpeck.naturesaura.blocks.tiles.TileEntityAuraBloom;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.*;
@@ -7,6 +8,8 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.Entity;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -18,27 +21,32 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockState, ICustomItemModel, ICustomRenderType {
 
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
     private final String baseName;
-    private final Supplier<TileEntity> tileEntitySupplier;
+    private final Block[] allowedGround;
 
-    public BlockAuraBloom(String baseName, Supplier<TileEntity> tileEntitySupplier) {
+    public BlockAuraBloom(String baseName, Block... allowedGround) {
         super(Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0).sound(SoundType.PLANT));
         this.baseName = baseName;
-        this.tileEntitySupplier = tileEntitySupplier;
+        this.allowedGround = allowedGround;
         ModRegistry.add(this);
-        ModRegistry.add(new ModTileType<>(this.tileEntitySupplier, this));
     }
 
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-        if (this == ModBlocks.AURA_CACTUS)
-            return worldIn.getBlockState(pos.down()).getBlock() instanceof SandBlock;
-        return super.isValidPosition(state, worldIn, pos);
+        BlockPos down = pos.down();
+        return this.isValidGround(worldIn.getBlockState(down), worldIn, down);
+    }
+
+    @Override
+    protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
+        return Arrays.stream(this.allowedGround).anyMatch(state::isIn);
     }
 
     @Override
@@ -76,7 +84,7 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return this.tileEntitySupplier.get();
+        return new TileEntityAuraBloom();
     }
 
     @Override

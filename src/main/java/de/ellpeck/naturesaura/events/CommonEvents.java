@@ -14,21 +14,19 @@ import de.ellpeck.naturesaura.commands.CommandAura;
 import de.ellpeck.naturesaura.gen.ModFeatures;
 import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
-import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IFutureReloadListener;
-import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.ConfiguredPlacement;
 import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.gen.placement.NoPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.server.ChunkHolder;
 import net.minecraft.world.server.ChunkManager;
@@ -40,15 +38,12 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 public class CommonEvents {
 
@@ -58,9 +53,20 @@ public class CommonEvents {
     @SubscribeEvent
     public void onBiomeLoad(BiomeLoadingEvent event) {
         if (ModConfig.instance.auraBlooms.get()) {
-            event.getGeneration().func_242513_a(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.AURA_BLOOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-            if (event.getCategory() == Biome.Category.DESERT)
-                event.getGeneration().func_242513_a(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.AURA_CACTUS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+            ConfiguredPlacement<NoPlacementConfig> placement = Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG);
+            event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.AURA_BLOOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(placement));
+            switch (event.getCategory()) {
+                case DESERT:
+                    event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.AURA_CACTUS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(placement));
+                    break;
+                case NETHER:
+                    event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.CRIMSON_AURA_MUSHROOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(placement));
+                    event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.WARPED_AURA_MUSHROOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(placement));
+                    break;
+                case MUSHROOM:
+                    event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.AURA_MUSHROOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(placement));
+                    break;
+            }
         }
     }
 

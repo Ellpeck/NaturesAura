@@ -37,7 +37,6 @@ public final class ModTileEntities {
     public static TileEntityType<TileEntitySnowCreator> SNOW_CREATOR;
     public static TileEntityType<TileEntityItemDistributor> ITEM_DISTRIBUTOR;
     public static TileEntityType<TileEntityAuraBloom> AURA_BLOOM;
-    public static TileEntityType<TileEntityAuraBloom> AURA_CACTUS;
     public static TileEntityType<TileEntityChorusGenerator> CHORUS_GENERATOR;
     public static TileEntityType<TileEntityAuraTimer> AURA_TIMER;
     public static TileEntityType<TileEntitySlimeSplitGenerator> SLIME_SPLIT_GENERATOR;

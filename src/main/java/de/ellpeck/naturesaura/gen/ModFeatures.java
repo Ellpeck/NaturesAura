@@ -12,5 +12,8 @@ public final class ModFeatures {
     public static Feature<NoFeatureConfig> NETHER_WART_MUSHROOM;
     public static Feature<NoFeatureConfig> AURA_BLOOM;
     public static Feature<NoFeatureConfig> AURA_CACTUS;
+    public static Feature<NoFeatureConfig> WARPED_AURA_MUSHROOM;
+    public static Feature<NoFeatureConfig> CRIMSON_AURA_MUSHROOM;
+    public static Feature<NoFeatureConfig> AURA_MUSHROOM;
 
 }
