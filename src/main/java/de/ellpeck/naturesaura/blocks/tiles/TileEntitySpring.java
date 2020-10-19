@@ -27,7 +27,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class TileEntitySpring extends TileEntityImpl implements ITickableTileEntity {
 
-    private final IFluidTank tank = new InfiniteTank();
+    private final IFluidHandler tank = new InfiniteTank();
     private AABBTicket waterTicket;
 
     public TileEntitySpring() {
@@ -140,7 +140,7 @@ public class TileEntitySpring extends TileEntityImpl implements ITickableTileEnt
         return (!source || state.isSource()) && state.getFluid().isIn(FluidTags.LAVA);
     }
 
-    private class InfiniteTank implements IFluidTank {
+    private class InfiniteTank implements IFluidTank, IFluidHandler {
         @Override
         public FluidStack getFluid() {
             return new FluidStack(Fluids.WATER, 1000);
@@ -179,6 +179,26 @@ public class TileEntitySpring extends TileEntityImpl implements ITickableTileEnt
             if (this.isFluidValid(resource))
                 return this.drain(resource.getAmount(), action);
             return FluidStack.EMPTY;
+        }
+
+        @Override
+        public int getTanks() {
+            return 1;
+        }
+
+        @Override
+        public FluidStack getFluidInTank(int tank) {
+            return this.getFluid();
+        }
+
+        @Override
+        public int getTankCapacity(int tank) {
+            return this.getCapacity();
+        }
+
+        @Override
+        public boolean isFluidValid(int tank, FluidStack stack) {
+            return this.isFluidValid(stack);
         }
     }
 }
