@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura;
 
+import com.google.common.base.Strings;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
@@ -88,6 +89,11 @@ public final class NaturesAura {
 
     private void postInit(FMLCommonSetupEvent event) {
         proxy.postInit(event);
+
+        LOGGER.info("-- Nature's Aura Fake Player Information --");
+        LOGGER.info("Name: [Minecraft]");
+        LOGGER.info("UUID: 41C82C87-7AfB-4024-BA57-13D2C99CAE77");
+        LOGGER.info(Strings.padStart("", 43, '-'));
     }
 
 }
