@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "side": "naturesaura:block/weather_changer",
+    "bottom": "naturesaura:block/weather_changer_bottom",
+    "top": "naturesaura:block/weather_changer_top"
+  }
+}

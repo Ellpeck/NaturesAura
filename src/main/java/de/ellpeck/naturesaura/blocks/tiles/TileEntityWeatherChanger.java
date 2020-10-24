@@ -59,7 +59,7 @@ public class TileEntityWeatherChanger extends TileEntityImpl implements ITickabl
         if (this.processTime > 0) {
             if (this.processTime % 20 == 0) {
                 BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 35, this.pos);
-                IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 30000);
+                IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 30000 * this.itemAmount);
             }
 
             this.processTime--;
