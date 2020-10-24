@@ -77,4 +77,5 @@ public final class ModBlocks {
     public static Block WARPED_AURA_MUSHROOM;
     public static Block CRIMSON_AURA_MUSHROOM;
     public static Block AURA_MUSHROOM;
+    public static Block WEATHER_CHANGER;
 }

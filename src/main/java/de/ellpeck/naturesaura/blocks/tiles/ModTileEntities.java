@@ -41,4 +41,5 @@ public final class ModTileEntities {
     public static TileEntityType<TileEntityAuraTimer> AURA_TIMER;
     public static TileEntityType<TileEntitySlimeSplitGenerator> SLIME_SPLIT_GENERATOR;
     public static TileEntityType<TileEntitySpring> SPRING;
+    public static TileEntityType<TileEntityWeatherChanger> WEATHER_CHANGER;
 }

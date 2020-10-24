@@ -142,7 +142,8 @@ public final class ModRegistry {
                 new BlockChorusGenerator(),
                 new BlockAuraTimer(),
                 new BlockSlimeSplitGenerator(),
-                new BlockSpring()
+                new BlockSpring(),
+                new BlockWeatherChanger()
         );
 
         if (ModConfig.instance.rfConverter.get())

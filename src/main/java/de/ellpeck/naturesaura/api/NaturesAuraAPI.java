@@ -9,12 +9,14 @@ import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.api.misc.WeatherType;
 import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -94,6 +96,11 @@ public final class NaturesAuraAPI {
      * each generate in the projectile generator
      */
     public static final Map<EntityType, Integer> PROJECTILE_GENERATIONS = new HashMap<>();
+    /**
+     * A map of all of the items that cause the {@link WeatherType} to be
+     * changed using the weather changer
+     */
+    public static final Map<ItemStack, WeatherType> WEATHER_CHANGER_CONVERSIONS = new HashMap<>();
     /**
      * The capability for any item or block that stores Aura in the form of an
      * {@link IAuraContainer}

@@ -5,11 +5,13 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.misc.WeatherType;
 import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -114,6 +116,10 @@ public final class ModRecipes {
         NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.SHULKER_BULLET, 300000);
         NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.LLAMA_SPIT, 100000);
         NaturesAuraAPI.PROJECTILE_GENERATIONS.put(EntityType.TRIDENT, 3000000);
+
+        NaturesAuraAPI.WEATHER_CHANGER_CONVERSIONS.put(new ItemStack(Blocks.SUNFLOWER), WeatherType.SUN);
+        NaturesAuraAPI.WEATHER_CHANGER_CONVERSIONS.put(new ItemStack(Items.DARK_PRISMARINE), WeatherType.RAIN);
+        NaturesAuraAPI.WEATHER_CHANGER_CONVERSIONS.put(new ItemStack(Items.FIRE_CHARGE), WeatherType.THUNDERSTORM);
     }
 
     private static void ore(List<WeightedOre> list, String name, int weight) {
