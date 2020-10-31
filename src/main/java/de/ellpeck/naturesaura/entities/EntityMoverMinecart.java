@@ -16,7 +16,6 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.LongNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -87,13 +86,14 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
         if (this.isActive != receivingPower) {
             this.isActive = receivingPower;
 
+            BlockPos pos = this.getPosition();
             if (!this.isActive) {
+                this.moveAura(this.world, this.lastPosition, this.world, pos);
                 this.spotOffsets.clear();
                 this.lastPosition = BlockPos.ZERO;
                 return;
             }
 
-            BlockPos pos = this.getPosition();
             IAuraChunk.getSpotsInArea(this.world, pos, 25, (spot, amount) -> {
                 if (amount > 0)
                     this.spotOffsets.add(spot.subtract(pos));
@@ -133,7 +133,6 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
         for (INBT base : list)
             this.spotOffsets.add(BlockPos.fromLong(((LongNBT) base).getLong()));
     }
-
 
     @Nullable
     @Override
