@@ -63,13 +63,21 @@ public final class ModRecipes {
                 Blocks.MOSSY_STONE_BRICK_WALL.getDefaultState());
 
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/coal", 5000);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/coal", 5000);
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/iron", 3000);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/iron", 3000);
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/gold", 500);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/gold", 500);
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/diamond", 50);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/diamond", 50);
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/lapis", 250);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/lapis", 250);
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/redstone", 200);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/redstone", 200);
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/emerald", 30);
-        ore(NaturesAuraAPI.NETHER_ORES, "ores/quartz", 3000);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/emerald", 30);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/quartz", 8000);
+        ore(NaturesAuraAPI.NETHER_ORES, "ores/netherite_scrap", 30);
 
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/copper", 2000);
         ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/copper", 2000);
