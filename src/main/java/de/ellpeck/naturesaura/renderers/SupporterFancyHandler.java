@@ -91,7 +91,7 @@ public class SupporterFancyHandler {
         @Override
         public void run() {
             try {
-                URL url = new URL("https://raw.githubusercontent.com/Ellpeck/NaturesAura/master/supporters.json");
+                URL url = new URL("https://raw.githubusercontent.com/Ellpeck/NaturesAura/main/supporters.json");
                 JsonReader reader = new JsonReader(new InputStreamReader(url.openStream()));
                 JsonParser parser = new JsonParser();
 

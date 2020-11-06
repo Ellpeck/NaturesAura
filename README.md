@@ -2,7 +2,7 @@
 Nature's Aura is a mod about collecting, using and replenishing the Aura naturally present in the world to create useful devices and unique mechanics.
 
 ## Maven
-To add this project as a dependency (for using the [API](https://github.com/Ellpeck/NaturesAura/tree/master/src/main/java/de/ellpeck/naturesaura/api), for example), put this into your `build.gradle` file:
+To add this project as a dependency (for using the [API](https://github.com/Ellpeck/NaturesAura/tree/main/src/main/java/de/ellpeck/naturesaura/api), for example), put this into your `build.gradle` file:
 ```
 repositories {
     maven {
