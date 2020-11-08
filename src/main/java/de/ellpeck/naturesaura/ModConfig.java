@@ -2,13 +2,9 @@ package de.ellpeck.naturesaura;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
-import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import de.ellpeck.naturesaura.chunk.effect.OreSpawnEffect;
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -31,6 +27,7 @@ public final class ModConfig {
     public ForgeConfigSpec.ConfigValue<Boolean> rfConverter;
     public ForgeConfigSpec.ConfigValue<Boolean> chunkLoader;
     public ForgeConfigSpec.ConfigValue<Boolean> grassDieEffect;
+    public ForgeConfigSpec.ConfigValue<Boolean> netherDecayEffect;
     public ForgeConfigSpec.ConfigValue<Boolean> plantBoostEffect;
     public ForgeConfigSpec.ConfigValue<Boolean> cacheRechargeEffect;
     public ForgeConfigSpec.ConfigValue<Boolean> explosionEffect;
@@ -94,6 +91,10 @@ public final class ModConfig {
                 .comment("If the Aura Imbalance effect of grass and trees dying in the area if the Aura levels are too low should occur")
                 .translation("config." + NaturesAura.MOD_ID + ".grassDieEffect")
                 .define("grassDieEffect", true);
+        this.netherDecayEffect = builder
+                .comment("If the Aura Imbalance effect of nether blocks degrading in the area if the Aura levels are too low should occur")
+                .translation("config." + NaturesAura.MOD_ID + ".netherDecayEffect")
+                .define("netherDecayEffect", true);
         this.plantBoostEffect = builder
                 .comment("If the Aura Imbalance effect of plant growth being boosted if the Aura levels are high enough should occur")
                 .translation("config." + NaturesAura.MOD_ID + ".plantBoostEffect")
@@ -165,9 +166,8 @@ public final class ModConfig {
     }
 
     public void apply() {
-        if (!this.grassDieEffect.get() && !this.explosionEffect.get() && !this.breathlessEffect.get()) {
+        if (!this.grassDieEffect.get() && !this.netherDecayEffect.get() && !this.explosionEffect.get() && !this.breathlessEffect.get())
             throw new IllegalStateException("Nature's Aura has detected that all negative Aura Imbalance effects are disabled in the config file. This is disallowed behavior. Please enable at least one negative effect.");
-        }
 
         try {
             for (String s : this.additionalBotanistPickaxeConversions.get()) {
