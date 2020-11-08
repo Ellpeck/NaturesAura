@@ -32,6 +32,7 @@ public final class ModConfig {
     public ForgeConfigSpec.ConfigValue<Boolean> cacheRechargeEffect;
     public ForgeConfigSpec.ConfigValue<Boolean> explosionEffect;
     public ForgeConfigSpec.ConfigValue<Boolean> breathlessEffect;
+    public ForgeConfigSpec.ConfigValue<Boolean> angerEffect;
     public ForgeConfigSpec.ConfigValue<Boolean> animalEffect;
     public ForgeConfigSpec.ConfigValue<Boolean> oreEffect;
     public ForgeConfigSpec.ConfigValue<Boolean> auraBlooms;
@@ -111,6 +112,10 @@ public final class ModConfig {
                 .comment("If the Aura Imbalance effect of breathlessness if Aura levels are too low should occur")
                 .translation("config." + NaturesAura.MOD_ID + ".breathlessEffect")
                 .define("breathlessEffect", true);
+        this.angerEffect = builder
+                .comment("If the Aura Imbalance effect of passive mobs being angered if Aura levels are too low should occur")
+                .translation("config." + NaturesAura.MOD_ID + ".angerEffect")
+                .define("angerEffect", true);
         this.animalEffect = builder
                 .comment("If the Aura Imbalance effect of farm animals being affected in positive ways if Aura levels are too high should occur")
                 .translation("config." + NaturesAura.MOD_ID + ".animalEffect")
@@ -166,7 +171,7 @@ public final class ModConfig {
     }
 
     public void apply() {
-        if (!this.grassDieEffect.get() && !this.netherDecayEffect.get() && !this.explosionEffect.get() && !this.breathlessEffect.get())
+        if (!this.grassDieEffect.get() && !this.netherDecayEffect.get() && !this.explosionEffect.get() && !this.breathlessEffect.get() && !this.angerEffect.get())
             throw new IllegalStateException("Nature's Aura has detected that all negative Aura Imbalance effects are disabled in the config file. This is disallowed behavior. Please enable at least one negative effect.");
 
         try {
