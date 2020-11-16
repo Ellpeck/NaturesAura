@@ -118,6 +118,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
                     FakePlayer fake = FakePlayerFactory.getMinecraft((ServerWorld) this.world);
                     if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.world, pos, state, fake))) {
                         List<ItemStack> drops = state.getDrops(new LootContext.Builder((ServerWorld) this.world)
+                                .withParameter(LootParameters.THIS_ENTITY, fake)
                                 .withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(pos))
                                 .withParameter(LootParameters.BLOCK_STATE, state)
                                 .withParameter(LootParameters.TOOL, tool.isEmpty() ? new ItemStack(Items.DIAMOND_PICKAXE) : tool)
