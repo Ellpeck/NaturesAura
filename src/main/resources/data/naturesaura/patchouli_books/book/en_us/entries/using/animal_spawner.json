@@ -123,7 +123,7 @@
         },
         {
             "type": "naturesaura:animal_spawner",
-            "recipe": "naturesaura:zombie_pigman"
+            "recipe": "naturesaura:zombified_piglin"
         },
         {
             "type": "naturesaura:animal_spawner",
@@ -196,6 +196,18 @@
         {
             "type": "naturesaura:animal_spawner",
             "recipe": "naturesaura:cat"
+        },
+        {
+            "type": "naturesaura:animal_spawner",
+            "recipe": "naturesaura:piglin"
+        },
+        {
+            "type": "naturesaura:animal_spawner",
+            "recipe": "naturesaura:piglin_brute"
+        },
+        {
+            "type": "naturesaura:animal_spawner",
+            "recipe": "naturesaura:hoglin"
         }
     ]
 }

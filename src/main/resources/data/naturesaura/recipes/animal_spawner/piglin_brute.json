@@ -8,10 +8,10 @@
       "item": "minecraft:rotten_flesh"
     },
     {
-      "item": "minecraft:gold_nugget"
+      "item": "minecraft:gold_block"
     }
   ],
-  "entity": "minecraft:zombie_pigman",
+  "entity": "minecraft:piglin_brute",
   "aura": 120000,
   "time": 150
 }
