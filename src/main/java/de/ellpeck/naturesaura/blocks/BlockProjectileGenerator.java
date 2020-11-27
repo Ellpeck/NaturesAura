@@ -10,11 +10,20 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.dispenser.IPosition;
+import net.minecraft.dispenser.ProjectileDispenseBehavior;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EnderPearlEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.entity.projectile.TridentEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundCategory;
@@ -23,9 +32,11 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -35,6 +46,22 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
         super("projectile_generator", TileEntityProjectileGenerator::new, Properties.create(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
+        DispenserBlock.registerDispenseBehavior(Items.ENDER_PEARL, new ProjectileDispenseBehavior() {
+            @Override
+            protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+                return new EnderPearlEntity(worldIn, position.getX(), position.getY(), position.getZ());
+            }
+        });
+        DispenserBlock.registerDispenseBehavior(Items.TRIDENT, new ProjectileDispenseBehavior() {
+            @Override
+            protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+                TridentEntity ret = new TridentEntity(worldIn, position.getX(), position.getY(), position.getZ());
+                // set thrownStack
+                ObfuscationReflectionHelper.setPrivateValue(TridentEntity.class, ret, stackIn.copy(), "field_203054_h");
+                ret.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
+                return ret;
+            }
+        });
     }
 
     @SubscribeEvent
