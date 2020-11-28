@@ -25,5 +25,9 @@
     "Ridanis": {
         "tier": 2,
         "color": "000000"
+    },
+    "gefailter71": {
+        "tier": 2,
+        "color": "fa7ff2"
     }
 }
