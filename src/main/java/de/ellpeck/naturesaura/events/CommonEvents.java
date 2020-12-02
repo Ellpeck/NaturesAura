@@ -21,13 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.GenerationStage.Decoration;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.placement.ConfiguredPlacement;
-import net.minecraft.world.gen.placement.IPlacementConfig;
-import net.minecraft.world.gen.placement.NoPlacementConfig;
-import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.server.ChunkHolder;
 import net.minecraft.world.server.ChunkManager;
 import net.minecraft.world.server.ServerChunkProvider;
@@ -53,18 +47,17 @@ public class CommonEvents {
     @SubscribeEvent
     public void onBiomeLoad(BiomeLoadingEvent event) {
         if (ModConfig.instance.auraBlooms.get()) {
-            ConfiguredPlacement<NoPlacementConfig> placement = Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG);
-            event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.AURA_BLOOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(placement));
+            event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.Configured.AURA_BLOOM);
             switch (event.getCategory()) {
                 case DESERT:
-                    event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.AURA_CACTUS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(placement));
+                    event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.Configured.AURA_CACTUS);
                     break;
                 case NETHER:
-                    event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.CRIMSON_AURA_MUSHROOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(placement));
-                    event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.WARPED_AURA_MUSHROOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(placement));
+                    event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.Configured.CRIMSON_AURA_MUSHROOM);
+                    event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.Configured.WARPED_AURA_MUSHROOM);
                     break;
                 case MUSHROOM:
-                    event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.AURA_MUSHROOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(placement));
+                    event.getGeneration().func_242513_a(Decoration.VEGETAL_DECORATION, ModFeatures.Configured.AURA_MUSHROOM);
                     break;
             }
         }

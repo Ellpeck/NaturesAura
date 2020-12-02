@@ -1,9 +1,8 @@
 package de.ellpeck.naturesaura.gen;
 
-import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.TreeFeature;
+import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 @SuppressWarnings("FieldNamingConvention")
 public final class ModFeatures {
@@ -16,4 +15,13 @@ public final class ModFeatures {
     public static Feature<NoFeatureConfig> CRIMSON_AURA_MUSHROOM;
     public static Feature<NoFeatureConfig> AURA_MUSHROOM;
 
+    public static final class Configured {
+
+        public static final ConfiguredFeature AURA_BLOOM = ModFeatures.AURA_BLOOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
+        public static final ConfiguredFeature AURA_CACTUS = ModFeatures.AURA_CACTUS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
+        public static final ConfiguredFeature CRIMSON_AURA_MUSHROOM = ModFeatures.CRIMSON_AURA_MUSHROOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
+        public static final ConfiguredFeature WARPED_AURA_MUSHROOM = ModFeatures.WARPED_AURA_MUSHROOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
+        public static final ConfiguredFeature AURA_MUSHROOM = ModFeatures.AURA_MUSHROOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
+
+    }
 }

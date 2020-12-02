@@ -45,7 +45,10 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -55,6 +58,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -336,6 +340,15 @@ public final class ModRegistry {
                 NaturesAura.proxy.addColorProvidingItem((IColorProvidingItem) item);
             if (item instanceof ITESRProvider)
                 NaturesAura.proxy.registerTESR((ITESRProvider) item);
+        }
+
+        for (Field entry : ModFeatures.Configured.class.getFields()) {
+            try {
+                ConfiguredFeature feature = (ConfiguredFeature) entry.get(null);
+                Registry.register(WorldGenRegistries.field_243653_e, feature.feature.getRegistryName(), feature);
+            } catch (IllegalAccessException e) {
+                NaturesAura.LOGGER.error(e);
+            }
         }
     }
 
