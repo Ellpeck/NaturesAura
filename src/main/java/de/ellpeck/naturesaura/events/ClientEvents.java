@@ -81,13 +81,8 @@ public class ClientEvents {
         if (mc.gameSettings.showDebugInfo && ModConfig.instance.debugText.get()) {
             String prefix = TextFormatting.GREEN + "[" + NaturesAura.MOD_NAME + "]" + TextFormatting.RESET + " ";
             List<String> left = event.getLeft();
-            left.add("");
-
-            int depth = ParticleHandler.getParticleAmount(true);
-            int noDepth = ParticleHandler.getParticleAmount(false);
-            left.add(prefix + "P: " + (depth + noDepth) + " (D: " + depth + " nD: " + noDepth + ")");
-
             if (mc.player.isCreative()) {
+                left.add("");
                 MutableInt amount = new MutableInt(IAuraChunk.DEFAULT_AURA);
                 MutableInt spots = new MutableInt();
                 IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 35, (blockPos, drainSpot) -> {
@@ -110,7 +105,6 @@ public class ClientEvents {
 
             Minecraft mc = Minecraft.getInstance();
             if (mc.world == null) {
-                ParticleHandler.clearParticles();
                 ItemRangeVisualizer.clear();
                 PENDING_AURA_CHUNKS.clear();
             } else {
@@ -161,8 +155,6 @@ public class ClientEvents {
                         inst.setParticleSpawnRange(32);
                     }
 
-                    ParticleHandler.updateParticles();
-
                     heldCache = Helper.getEquippedItem(s -> s.getItem() instanceof ItemAuraCache, mc.player);
                     heldEye = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE, mc.player);
                     heldOcular = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE_IMPROVED, mc.player);
@@ -180,8 +172,6 @@ public class ClientEvents {
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event) {
         Minecraft mc = Minecraft.getInstance();
-        MatrixStack stack = event.getMatrixStack();
-        ParticleHandler.renderParticles(event.getMatrixStack(), mc.getRenderPartialTicks());
 
         RenderSystem.pushMatrix();
         RenderSystem.multMatrix(event.getMatrixStack().getLast().getMatrix());

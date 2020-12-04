@@ -9,7 +9,6 @@ import de.ellpeck.naturesaura.items.ItemColorChanger;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import de.ellpeck.naturesaura.particles.ParticleMagic;
-import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.reg.*;
 import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
@@ -26,8 +25,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.resources.IResourceManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -103,7 +100,7 @@ public class ClientProxy implements IProxy {
         ParticleHandler.spawnParticle(() -> new ParticleMagic(Minecraft.getInstance().world,
                 posX, posY, posZ,
                 motionX, motionY, motionZ,
-                color, scale, maxAge, gravity, collision, fade), posX, posY, posZ);
+                color, scale, maxAge, gravity, collision, fade, ParticleHandler.depthEnabled), posX, posY, posZ);
     }
 
     @Override

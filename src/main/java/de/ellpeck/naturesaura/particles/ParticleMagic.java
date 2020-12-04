@@ -14,7 +14,6 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,15 +26,17 @@ public class ParticleMagic extends Particle {
 
     private final float desiredScale;
     private final boolean fade;
+    private final boolean depth;
     private float particleScale;
 
-    public ParticleMagic(ClientWorld world, double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade) {
+    public ParticleMagic(ClientWorld world, double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade, boolean depth) {
         super(world, posX, posY, posZ);
         this.desiredScale = scale;
         this.maxAge = maxAge;
         this.canCollide = collision;
         this.particleGravity = gravity;
         this.fade = fade;
+        this.depth = depth;
 
         this.motionX = motionX;
         this.motionY = motionY;
@@ -119,7 +120,7 @@ public class ParticleMagic extends Particle {
 
     @Override
     public IParticleRenderType getRenderType() {
-        return IParticleRenderType.CUSTOM;
+        return this.depth ? ParticleHandler.MAGIC : ParticleHandler.MAGIC_NO_DEPTH;
     }
 
     @Override
