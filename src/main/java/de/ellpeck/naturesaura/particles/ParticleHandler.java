@@ -1,21 +1,11 @@
 package de.ellpeck.naturesaura.particles;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import de.ellpeck.naturesaura.ModConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.ParticleStatus;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +20,10 @@ public final class ParticleHandler {
     public static int range = 32;
     public static boolean culling = true;
 
-    public static void spawnParticle(Supplier<Particle> particle, double x, double y, double z) {
+    public static void spawnParticle(Supplier<Particle> particleSupplier, double x, double y, double z) {
         if (Minecraft.getInstance().player.getDistanceSq(x, y, z) <= range * range) {
+            Minecraft mc = Minecraft.getInstance();
             if (culling) {
-                Minecraft mc = Minecraft.getInstance();
                 if (ModConfig.instance.respectVanillaParticleSettings.get()) {
                     ParticleStatus setting = mc.gameSettings.particles;
                     if (setting != ParticleStatus.ALL &&
@@ -45,11 +35,12 @@ public final class ParticleHandler {
                 if (setting < 1 && mc.world.rand.nextDouble() > setting)
                     return;
             }
-
+            Particle particle = particleSupplier.get();
             if (depthEnabled)
-                PARTICLES.add(particle.get());
+                PARTICLES.add(particle);
             else
-                PARTICLES_NO_DEPTH.add(particle.get());
+                PARTICLES_NO_DEPTH.add(particle);
+            mc.particles.addEffect(particle);
         }
     }
 
@@ -63,62 +54,8 @@ public final class ParticleHandler {
     }
 
     private static void updateList(List<Particle> particles) {
-        for (int i = particles.size() - 1; i >= 0; i--) {
-            Particle particle = particles.get(i);
-            particle.tick();
-            if (!particle.isAlive())
-                particles.remove(i);
-        }
-    }
-
-    public static void renderParticles(MatrixStack stack, float partialTicks) {
-        Minecraft mc = Minecraft.getInstance();
-        ClientPlayerEntity player = mc.player;
-
-        if (player != null) {
-            ActiveRenderInfo info = mc.gameRenderer.getActiveRenderInfo();
-            LightTexture lightmap = mc.gameRenderer.getLightTexture();
-
-            RenderSystem.pushMatrix();
-            RenderSystem.multMatrix(stack.getLast().getMatrix());
-            lightmap.enableLightmap();
-
-            RenderSystem.enableAlphaTest();
-            RenderSystem.enableBlend();
-            RenderSystem.alphaFunc(516, 0.003921569F);
-            RenderSystem.disableCull();
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-            RenderSystem.enableFog();
-            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-            RenderSystem.depthMask(false);
-
-            mc.getTextureManager().bindTexture(ParticleMagic.TEXTURE);
-            Tessellator tessy = Tessellator.getInstance();
-            BufferBuilder buffer = tessy.getBuffer();
-
-            RenderSystem.enableDepthTest();
-            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-            for (Particle particle : PARTICLES)
-                particle.renderParticle(buffer, info, partialTicks);
-            tessy.draw();
-            RenderSystem.disableDepthTest();
-            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-            for (Particle particle : PARTICLES_NO_DEPTH)
-                particle.renderParticle(buffer, info, partialTicks);
-            tessy.draw();
-            RenderSystem.enableDepthTest();
-
-            RenderSystem.enableCull();
-            RenderSystem.depthMask(true);
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            RenderSystem.disableBlend();
-            RenderSystem.alphaFunc(516, 0.1F);
-            RenderSystem.disableFog();
-
-            lightmap.disableLightmap();
-            RenderSystem.popMatrix();
-        }
+        //particles.forEach(Particle::tick); // No longer needed because using vanilla particle system
+        particles.removeIf((particle) -> !particle.isAlive());
     }
 
     public static int getParticleAmount(boolean depth) {

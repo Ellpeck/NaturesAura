@@ -180,9 +180,6 @@ public class ClientEvents {
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event) {
         Minecraft mc = Minecraft.getInstance();
-        MatrixStack stack = event.getMatrixStack();
-        ParticleHandler.renderParticles(event.getMatrixStack(), mc.getRenderPartialTicks());
-
         RenderSystem.pushMatrix();
         RenderSystem.multMatrix(event.getMatrixStack().getLast().getMatrix());
 
@@ -252,7 +249,7 @@ public class ClientEvents {
             GL11.glPopMatrix();
         }
 
-        GL11.glPopMatrix();
+        RenderSystem.popMatrix();
     }
 
     private void renderVisualize(IVisualizable visualize, World

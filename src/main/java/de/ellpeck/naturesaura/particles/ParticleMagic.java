@@ -28,6 +28,7 @@ public class ParticleMagic extends Particle {
     private final float desiredScale;
     private final boolean fade;
     private float particleScale;
+    private boolean depthEnabled = ParticleHandler.depthEnabled;
 
     public ParticleMagic(ClientWorld world, double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade) {
         super(world, posX, posY, posZ);
@@ -119,7 +120,7 @@ public class ParticleMagic extends Particle {
 
     @Override
     public IParticleRenderType getRenderType() {
-        return IParticleRenderType.CUSTOM;
+        return depthEnabled ? ParticleRenderTypes.PARTICLE_MAGIC_TRANSLUCENT : ParticleRenderTypes.PARTICLE_MAGIC_TRANSLUCENT_NO_DEPTH;
     }
 
     @Override
