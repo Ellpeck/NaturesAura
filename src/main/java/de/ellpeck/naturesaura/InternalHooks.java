@@ -110,7 +110,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public void getAuraSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
-        Helper.getAuraChunksInArea(world, pos, radius, chunk -> chunk.getSpotsInArea(pos, radius, consumer));
+        Helper.getAuraChunksWithSpotsInArea(world, pos, radius, chunk -> chunk.getSpotsInArea(pos, radius, consumer));
     }
 
     @Override

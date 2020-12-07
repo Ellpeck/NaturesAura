@@ -7,7 +7,9 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.tiles.ItemStackHandlerNA;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntitySpawnLamp;
+import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -28,9 +30,10 @@ import java.util.*;
 
 public class WorldData implements IWorldData {
     public final ListMultimap<ResourceLocation, Tuple<Vector3d, Integer>> effectPowders = ArrayListMultimap.create();
+    public final Long2ObjectOpenHashMap<AuraChunk> auraChunksWithSpots = new Long2ObjectOpenHashMap<>();
     public final List<BlockPos> recentlyConvertedMossStones = new ArrayList<>();
-    private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();
     public final Set<TileEntitySpawnLamp> spawnLamps = new HashSet<>();
+    private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();
     private final LazyOptional<WorldData> lazyThis = LazyOptional.of(() -> this);
 
     @Nullable

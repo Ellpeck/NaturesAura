@@ -5,6 +5,8 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect.ActiveType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -50,8 +52,8 @@ public class AuraChunk implements IAuraChunk {
     public int drainAura(BlockPos pos, int amount, boolean aimForZero, boolean simulate) {
         if (amount <= 0)
             return 0;
-        MutableInt spot = this.getActualDrainSpot(pos, true);
-        int curr = spot.intValue();
+        MutableInt spot = this.getActualDrainSpot(pos, !simulate);
+        int curr = spot != null ? spot.intValue() : 0;
         if (curr < 0 && curr - amount > 0) // Underflow protection
             return this.drainAura(pos.up(), amount, aimForZero, simulate);
         if (aimForZero) {
@@ -76,8 +78,8 @@ public class AuraChunk implements IAuraChunk {
     public int storeAura(BlockPos pos, int amount, boolean aimForZero, boolean simulate) {
         if (amount <= 0)
             return 0;
-        MutableInt spot = this.getActualDrainSpot(pos, true);
-        int curr = spot.intValue();
+        MutableInt spot = this.getActualDrainSpot(pos, !simulate);
+        int curr = spot != null ? spot.intValue() : 0;
         if (curr > 0 && curr + amount < 0) // Overflow protection
             return this.storeAura(pos.up(), amount, aimForZero, simulate);
         if (aimForZero) {
@@ -128,6 +130,7 @@ public class AuraChunk implements IAuraChunk {
         this.drainSpots.clear();
         for (Map.Entry<BlockPos, MutableInt> entry : spots.entrySet())
             this.addDrainSpot(entry.getKey(), entry.getValue());
+        this.addOrRemoveAsActive();
     }
 
     @Override
@@ -139,6 +142,7 @@ public class AuraChunk implements IAuraChunk {
     public void markDirty() {
         this.chunk.markDirty();
         this.needsSync = true;
+        this.addOrRemoveAsActive();
     }
 
     public void update() {
@@ -217,6 +221,17 @@ public class AuraChunk implements IAuraChunk {
             this.addDrainSpot(
                     BlockPos.fromLong(tag.getLong("pos")),
                     new MutableInt(tag.getInt("amount")));
+        }
+        this.addOrRemoveAsActive();
+    }
+
+    private void addOrRemoveAsActive() {
+        long chunkPos = this.chunk.getPos().asLong();
+        WorldData data = (WorldData) IWorldData.getWorldData(this.chunk.getWorld());
+        if (this.drainSpots.size() > 0) {
+            data.auraChunksWithSpots.put(chunkPos, this);
+        } else {
+            data.auraChunksWithSpots.remove(chunkPos);
         }
     }
 }

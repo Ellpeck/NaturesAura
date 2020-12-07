@@ -5,14 +5,15 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
+import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.compat.Compat;
+import de.ellpeck.naturesaura.misc.WorldData;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,7 +28,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -77,15 +77,13 @@ public final class Helper {
         return false;
     }
 
-    public static void getAuraChunksInArea(World world, BlockPos pos, int radius, Consumer<AuraChunk> consumer) {
+    public static void getAuraChunksWithSpotsInArea(World world, BlockPos pos, int radius, Consumer<AuraChunk> consumer) {
+        WorldData data = (WorldData) IWorldData.getWorldData(world);
         for (int x = pos.getX() - radius >> 4; x <= pos.getX() + radius >> 4; x++) {
             for (int z = pos.getZ() - radius >> 4; z <= pos.getZ() + radius >> 4; z++) {
-                Chunk chunk = getLoadedChunk(world, x, z);
-                if (chunk != null) {
-                    AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
-                    if (auraChunk != null)
-                        consumer.accept(auraChunk);
-                }
+                AuraChunk chunk = data.auraChunksWithSpots.get(ChunkPos.asLong(x, z));
+                if (chunk != null)
+                    consumer.accept(chunk);
             }
         }
     }

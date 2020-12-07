@@ -12,13 +12,10 @@ import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.*;
-import de.ellpeck.naturesaura.enchant.ModEnchantment;
-import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ItemAuraCache;
 import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
-import de.ellpeck.naturesaura.particles.ParticleHandler;
 import net.minecraft.block.*;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -26,22 +23,19 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColors;
 import net.minecraft.world.gen.Heightmap;
@@ -53,14 +47,15 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.opengl.GL11;
 
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientEvents {
@@ -85,12 +80,14 @@ public class ClientEvents {
                 left.add("");
                 MutableInt amount = new MutableInt(IAuraChunk.DEFAULT_AURA);
                 MutableInt spots = new MutableInt();
+                MutableInt chunks = new MutableInt();
                 IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 35, (blockPos, drainSpot) -> {
                     spots.increment();
                     amount.add(drainSpot);
                 });
+                Helper.getAuraChunksWithSpotsInArea(mc.world, mc.player.getPosition(), 35, c -> chunks.increment());
                 NumberFormat format = NumberFormat.getInstance();
-                left.add(prefix + "A: " + format.format(amount.intValue()) + " (S: " + spots.intValue() + ")");
+                left.add(prefix + "A: " + format.format(amount.intValue()) + " (S: " + spots.intValue() + ", C: " + chunks.intValue() + ")");
                 left.add(prefix + "AT: " + IAuraType.forWorld(mc.world).getName());
             }
         }
@@ -161,7 +158,7 @@ public class ClientEvents {
 
                     if (!heldOcular.isEmpty() && mc.world.getGameTime() % 20 == 0) {
                         SHOWING_EFFECTS.clear();
-                        Helper.getAuraChunksInArea(mc.world, mc.player.getPosition(), 100,
+                        Helper.getAuraChunksWithSpotsInArea(mc.world, mc.player.getPosition(), 100,
                                 chunk -> chunk.getActiveEffectIcons(mc.player, SHOWING_EFFECTS));
                     }
                 }
