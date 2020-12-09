@@ -115,7 +115,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
             if (tile instanceof TileEntityEnderCrate) {
                 TileEntityEnderCrate crate = (TileEntityEnderCrate) tile;
                 if (crate.canOpen()) {
-                    crate.drainAura(10000);
+                    crate.drainAura(2500);
                     NetworkHooks.openGui((ServerPlayerEntity) player, crate, pos);
                 }
             }

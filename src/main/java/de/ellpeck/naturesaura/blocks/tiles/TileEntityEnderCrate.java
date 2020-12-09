@@ -12,7 +12,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -47,7 +46,7 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
             ItemStack remain = this.getStorage().insertItem(slot, stack, simulate);
             if (!simulate)
-                TileEntityEnderCrate.this.drainAura((stack.getCount() - remain.getCount()) * 500);
+                TileEntityEnderCrate.this.drainAura((stack.getCount() - remain.getCount()) * 20);
             return remain;
         }
 
@@ -56,7 +55,7 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
             ItemStack extracted = this.getStorage().extractItem(slot, amount, simulate);
             if (!simulate)
-                TileEntityEnderCrate.this.drainAura(extracted.getCount() * 500);
+                TileEntityEnderCrate.this.drainAura(extracted.getCount() * 20);
             return extracted;
         }
 
