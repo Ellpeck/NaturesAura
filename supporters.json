@@ -35,5 +35,9 @@
     },
     "VlaDracul3": {
         "tier": 1
+    },
+    "Anthonys_Lab": {
+        "tier": 2,
+        "color": "ff0000"
     }
 }
