@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.dispenser.ProjectileDispenseBehavior;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.EnderPearlEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -49,7 +50,9 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
         DispenserBlock.registerDispenseBehavior(Items.ENDER_PEARL, new ProjectileDispenseBehavior() {
             @Override
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                return new EnderPearlEntity(worldIn, position.getX(), position.getY(), position.getZ());
+                EnderPearlEntity ret = new EnderPearlEntity(EntityType.ENDER_PEARL, worldIn);
+                ret.setPosition(position.getX(), position.getY(), position.getZ());
+                return ret;
             }
         });
         DispenserBlock.registerDispenseBehavior(Items.TRIDENT, new ProjectileDispenseBehavior() {
