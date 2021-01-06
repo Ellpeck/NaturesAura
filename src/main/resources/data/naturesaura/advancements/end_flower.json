@@ -12,12 +12,14 @@
     },
     "parent": "naturesaura:wood_stand",
     "criteria": {
-        "killed_dragon": {
-            "trigger": "minecraft:player_killed_entity",
+        "materials": {
+            "trigger": "minecraft:inventory_changed",
             "conditions": {
-                "entity": {
-                    "type": "ender_dragon"
-                }
+                "items": [
+                    {
+                        "item": "naturesaura:end_flower"
+                    }
+                ]
             }
         }
     }

@@ -11,7 +11,7 @@
             "translate": "advancement.naturesaura.aura_bottle_nether.desc"
         }
     },
-    "parent": "naturesaura:wood_stand",
+    "parent": "naturesaura:altar",
     "criteria": {
         "bottle": {
             "trigger": "minecraft:inventory_changed",

@@ -10,7 +10,7 @@
             "translate": "advancement.naturesaura.tainted_gold.desc"
         }
     },
-    "parent": "naturesaura:altar",
+    "parent": "naturesaura:aura_bottle_nether",
     "criteria": {
         "materials": {
             "trigger": "minecraft:inventory_changed",
