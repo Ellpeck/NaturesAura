@@ -66,7 +66,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
     public void onTreeGrow(SaplingGrowTreeEvent event) {
         IWorld world = event.getWorld();
         BlockPos pos = event.getPos();
-        if (!world.isRemote()) {
+        if (!world.isRemote() && world instanceof World) {
             if (Multiblocks.TREE_RITUAL.isComplete((World) world, pos)) {
                 BlockState sapling = world.getBlockState(pos);
                 ItemStack saplingStack = sapling.getBlock().getItem(world, pos, sapling);
