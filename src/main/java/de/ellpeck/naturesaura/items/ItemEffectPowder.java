@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.items;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
@@ -34,7 +33,7 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
     }
 
     public static ItemStack setEffect(ItemStack stack, ResourceLocation effect) {
-        stack.getOrCreateTag().putString("effect", effect.toString());
+        stack.getOrCreateTag().putString("effect", effect != null ? effect.toString() : "");
         return stack;
     }
 
