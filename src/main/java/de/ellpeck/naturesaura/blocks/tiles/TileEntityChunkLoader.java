@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -16,15 +17,10 @@ import java.util.stream.Collectors;
 public class TileEntityChunkLoader extends TileEntityImpl implements ITickableTileEntity {
 
     private final List<ChunkPos> forcedChunks = new ArrayList<>();
+    private boolean firstTick = true;
 
     public TileEntityChunkLoader() {
         super(ModTileEntities.CHUNK_LOADER);
-    }
-
-    @Override
-    public void validate() {
-        super.validate();
-        this.loadChunks(false);
     }
 
     @Override
@@ -47,7 +43,7 @@ public class TileEntityChunkLoader extends TileEntityImpl implements ITickableTi
     }
 
     private void loadChunks(boolean unload) {
-        if (this.world.isRemote)
+        if (this.world.isRemote || !ModConfig.instance.chunkLoader.get())
             return;
         ServerWorld world = (ServerWorld) this.world;
 
@@ -82,7 +78,14 @@ public class TileEntityChunkLoader extends TileEntityImpl implements ITickableTi
 
     @Override
     public void tick() {
-        if (!this.world.isRemote) {
+        if (!this.world.isRemote && ModConfig.instance.chunkLoader.get()) {
+            // defer loading chunks on load to here since, otherwise, deadlocks happen oof
+            // since forced chunks are saved to disk by the game, this is only necessary for when the chunk loader config changes
+            if (this.firstTick) {
+                this.loadChunks(false);
+                this.firstTick = false;
+            }
+
             if (this.world.getGameTime() % 20 != 0)
                 return;
             int toUse = MathHelper.ceil(this.range() / 2F);

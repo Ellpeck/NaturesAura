@@ -28,8 +28,8 @@
     },
     "conditions": [
         {
-            "type": "forge:item_exists",
-            "item": "naturesaura:chunk_loader"
+            "type": "naturesaura:enabled",
+            "config": "chunkLoader"
         }
     ]
 }

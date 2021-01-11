@@ -27,8 +27,8 @@
     },
     "conditions": [
         {
-            "type": "forge:item_exists",
-            "item": "naturesaura:rf_converter"
+            "type": "naturesaura:enabled",
+            "config": "rfConverter"
         }
     ]
 }

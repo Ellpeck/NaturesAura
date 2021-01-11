@@ -24,6 +24,7 @@ import de.ellpeck.naturesaura.items.*;
 import de.ellpeck.naturesaura.items.tools.*;
 import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
+import de.ellpeck.naturesaura.recipes.EnabledCondition;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -51,6 +52,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -147,14 +149,10 @@ public final class ModRegistry {
                 new BlockAuraTimer(),
                 new BlockSlimeSplitGenerator(),
                 new BlockSpring(),
-                new BlockWeatherChanger()
+                new BlockWeatherChanger(),
+                new BlockRFConverter(),
+                new BlockChunkLoader()
         );
-
-        if (ModConfig.instance.rfConverter.get())
-            event.getRegistry().register(new BlockRFConverter());
-        if (ModConfig.instance.chunkLoader.get())
-            event.getRegistry().register(new BlockChunkLoader());
-
         Helper.populateObjectHolders(ModBlocks.class, event.getRegistry());
     }
 
@@ -330,6 +328,7 @@ public final class ModRegistry {
     @SubscribeEvent
     public static void registerRecipes(RegistryEvent.Register<IRecipeSerializer<?>> event) {
         ModRecipes.register(event.getRegistry());
+        CraftingHelper.register(new EnabledCondition.Serializer());
     }
 
     public static void init() {

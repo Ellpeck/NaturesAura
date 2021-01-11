@@ -43,7 +43,7 @@ public class TileEntityRFConverter extends TileEntityImpl implements ITickableTi
 
     @Override
     public void tick() {
-        if (!this.world.isRemote) {
+        if (!this.world.isRemote && ModConfig.instance.rfConverter.get()) {
             if (this.lastEnergy != this.storage.getEnergyStored() && this.world.getGameTime() % 10 == 0) {
                 this.sendToClients();
                 this.lastEnergy = this.storage.getEnergyStored();

@@ -1,5 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
+import de.ellpeck.naturesaura.ModConfig;
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityChunkLoader;
@@ -8,17 +10,22 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 public class BlockChunkLoader extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
@@ -56,6 +63,8 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if (!ModConfig.instance.chunkLoader.get())
+            return;
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileEntityChunkLoader) {
             int range = ((TileEntityChunkLoader) tile).range();
@@ -76,6 +85,16 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
+    }
+
+    @Override
+    public String getTranslationKey() {
+        return ModConfig.instance.chunkLoader.get() ? super.getTranslationKey() : "block." + NaturesAura.MOD_ID + "." + this.getBaseName() + ".disabled";
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Override

@@ -388,7 +388,7 @@ public class ClientEvents {
                             } else if (tile instanceof TileEntityRFConverter) {
                                 EnergyStorage storage = ((TileEntityRFConverter) tile).storage;
                                 this.drawContainerInfo(stack, storage.getEnergyStored(), storage.getMaxEnergyStored(), 0xcc4916,
-                                        mc, res, 35, I18n.format("tile.naturesaura.rf_converter.name"),
+                                        mc, res, 35, I18n.format("block.naturesaura.rf_converter"),
                                         storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
                             } else if (tile instanceof TileEntityGratedChute) {
                                 TileEntityGratedChute chute = (TileEntityGratedChute) tile;

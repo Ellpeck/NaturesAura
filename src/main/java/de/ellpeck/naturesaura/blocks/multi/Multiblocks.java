@@ -98,7 +98,7 @@ public final class Multiblocks {
             'L', ModBlocks.ANCIENT_LOG,
             '0', ModBlocks.AUTO_CRAFTER,
             ' ', Matcher.wildcard());
-    public static final IMultiblock RF_CONVERTER = ModConfig.instance.rfConverter.get() ? NaturesAuraAPI.instance().createMultiblock(
+    public static final IMultiblock RF_CONVERTER = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "rf_converter"),
             new String[][]{
                     {"       ", "       ", "       ", "   R   ", "       ", "       ", "       "},
@@ -110,5 +110,5 @@ public final class Multiblocks {
                     {"       ", "       ", "       ", "   R   ", "       ", "       ", "       "}},
             'R', Blocks.REDSTONE_BLOCK,
             '0', ModBlocks.RF_CONVERTER,
-            ' ', Matcher.wildcard()) : null;
+            ' ', Matcher.wildcard());
 }
