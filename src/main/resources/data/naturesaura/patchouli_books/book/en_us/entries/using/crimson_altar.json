@@ -17,7 +17,7 @@
         {
             "type": "multiblock",
             "multiblock_id": "naturesaura:nether_altar",
-            "text": "How to assemble the $(item)Crimson Altar$()"
+            "text": "How to assemble the $(item)Crimson Altar$(). The $(item)Crimson Planks$() can be replaced with $(item)Warped Planks$()."
         },
         {
             "type": "crafting",

@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.blocks.BlockNatureAltar;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import de.ellpeck.naturesaura.data.BlockTagProvider;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SaplingBlock;
@@ -36,7 +37,7 @@ public final class Multiblocks {
             ALTAR_PATTERN,
             'C', Blocks.RED_NETHER_BRICKS,
             'B', Blocks.NETHER_BRICKS,
-            'W', Blocks.CRIMSON_PLANKS,
+            'W', Matcher.tag(Blocks.CRIMSON_PLANKS, BlockTagProvider.NETHER_ALTAR_WOOD),
             'M', ModBlocks.GOLD_NETHER_BRICK,
             '0', ModBlocks.NATURE_ALTAR.getDefaultState().with(BlockNatureAltar.NETHER, true),
             ' ', Matcher.wildcard());
