@@ -10,7 +10,7 @@
         },
         {
             "type": "text",
-            "text": "normal-sized oaks to grow.$(br)In the process, the additional natural energy of any saplings that were growing into big trees gets turned into a quite substantial amount of $(aura) that will be fed into the environment.$(p)Quite obviously, a great way to make use of this is for an automatic $(thing)tree farm$()."
+            "text": "normal-sized oaks to grow.$(br)In the process, the additional natural energy of any saplings that were growing into big trees gets turned into a quite substantial amount of $(aura) that will be fed into the environment.$(br)It should be noted that, as the $(thing)overworld$() realm is the only area where the trees in question naturally grow, it is also the only area where this device has an effect.$(br)Quite obviously, a great way to make use of this is for an automatic $(thing)tree farm$()."
         },
         {
             "type": "crafting",
