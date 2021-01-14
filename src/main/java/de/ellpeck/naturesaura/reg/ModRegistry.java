@@ -221,8 +221,9 @@ public final class ModRegistry {
                 new ItemArmor("sky_chest", ModArmorMaterial.SKY, EquipmentSlotType.CHEST),
                 new ItemArmor("sky_pants", ModArmorMaterial.SKY, EquipmentSlotType.LEGS),
                 new ItemArmor("sky_shoes", ModArmorMaterial.SKY, EquipmentSlotType.FEET),
-                new ItemStructureFinder("fortress_finder", Structure.field_236378_n_, 0xba2800),
-                new ItemStructureFinder("end_city_finder", Structure.field_236379_o_, 0xca5cd6),
+                new ItemStructureFinder("fortress_finder", Structure.field_236378_n_, 0xba2800, 1024),
+                new ItemStructureFinder("end_city_finder", Structure.field_236379_o_, 0xca5cd6, 1024),
+                new ItemStructureFinder("outpost_finder", Structure.field_236366_b_, 0xab9f98, 2048),
                 new ItemBreakPrevention(),
                 new ItemPetReviver(),
                 new ItemNetheriteFinder()

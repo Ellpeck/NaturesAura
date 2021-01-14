@@ -15,11 +15,13 @@ import net.minecraft.world.server.ServerWorld;
 public class ItemStructureFinder extends ItemImpl {
     private final Structure structureName;
     private final int color;
+    private final int radius;
 
-    public ItemStructureFinder(String baseName, Structure structureName, int color) {
+    public ItemStructureFinder(String baseName, Structure structureName, int color, int radius) {
         super(baseName);
         this.structureName = structureName;
         this.color = color;
+        this.radius = radius;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class ItemStructureFinder extends ItemImpl {
         ItemStack stack = playerIn.getHeldItem(handIn);
         // ServerWorld.getStructureManager().doesGenerateFeatures()
         if (!worldIn.isRemote && ((ServerWorld) worldIn).func_241112_a_().func_235005_a_()) {
-            BlockPos pos = ((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().func_235956_a_((ServerWorld) worldIn, this.structureName, playerIn.getPosition(), 1024, false);
+            BlockPos pos = ((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().func_235956_a_((ServerWorld) worldIn, this.structureName, playerIn.getPosition(), this.radius, false);
             if (pos != null) {
                 EntityStructureFinder entity = new EntityStructureFinder(ModEntities.STRUCTURE_FINDER, worldIn);
                 entity.setPosition(playerIn.getPosX(), playerIn.getPosYHeight(0.5D), playerIn.getPosZ());
