@@ -14,6 +14,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.FarmlandWaterManager;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.ticket.AABBTicket;
@@ -23,7 +24,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class TileEntitySpring extends TileEntityImpl implements ITickableTileEntity {
 
@@ -171,7 +171,7 @@ public class TileEntitySpring extends TileEntityImpl implements ITickableTileEnt
         public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
             int drain = Math.min(maxDrain, 1000);
             if (action.execute())
-                TileEntitySpring.this.consumeAura(2 * drain);
+                TileEntitySpring.this.consumeAura(MathHelper.ceil(drain / 2F));
             return new FluidStack(Fluids.WATER, drain);
         }
 
