@@ -8,8 +8,6 @@ import de.ellpeck.naturesaura.entities.EntityStructureFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;

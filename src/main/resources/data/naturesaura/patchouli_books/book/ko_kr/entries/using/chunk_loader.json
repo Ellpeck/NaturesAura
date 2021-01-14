@@ -1,22 +1,22 @@
 {
-  "name": "세계의 눈",
-  "icon": "naturesaura:chunk_loader",
-  "category": "using",
-  "advancement": "naturesaura:aura_bottle_end",
-  "flag": "naturesaura:chunk_loader",
-  "pages": [
-    {
-      "type": "text",
-      "text": "우리가 살고 있는 세계 중에서, 핵심 요소는 결코 제대로 이해되지 않았다: 아무도 보지 않는 곳에서는 아무 일도 일어나지 않는 것 같다 - 시간 자체가 잠시 멈춘 것 같다. 이러한 자연 현상은 특히 장거리 자동 운송과 관련하여 때로는 문제가 될 수 있다. 그러나 $(item)세계의 눈$()은 여러분을 위해 $(thing)활동적$()으로 유지되어야 할 지역을 바라보게 될 것이며, 동시에 시야를 유지하기 위해 소량의 $(#419600)오라$()를 필요로 할 것이다."
-    },
-    {
-      "type": "text",
-      "text": "이것을 설치하기 위해서, 눈을 내려놓고 $(thing)레드스톤 신호$()를 제공해라 - 신호가 강할수록 블록의 반지름이 높아지며, 약 30이 최대가 된다. 이러한 방식의 주시가 어떻게 기능하는지에 대한 특성 때문에, 범위가 항상 정확하게 충족되는 것은 아니며, 이는 때때로 로딩될 영역이 예상 범위보다 $(thing)약간 더 크다$()는 것을 의미한다."
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)세계의 눈$() 만들기$(p)$(italic)청크 로드",
-      "recipe": "naturesaura:chunk_loader"
-    }
-  ]
+    "name": "세계의 눈",
+    "icon": "naturesaura:chunk_loader",
+    "category": "using",
+    "advancement": "naturesaura:aura_bottle_end",
+    "flag": "naturesaura:chunk_loader",
+    "pages": [
+        {
+            "type": "text",
+            "text": "우리가 살고 있는 세계 중에서, 핵심 요소는 결코 제대로 이해되지 않았다: 아무도 보지 않는 곳에서는 아무 일도 일어나지 않는 것 같다 - 시간 자체가 잠시 멈춘 것 같다. 이러한 자연 현상은 특히 장거리 자동 운송과 관련하여 때로는 문제가 될 수 있다. 그러나 $(item)세계의 눈$()은 여러분을 위해 $(thing)활동적$()으로 유지되어야 할 지역을 바라보게 될 것이며, 동시에 시야를 유지하기 위해 소량의 $(#419600)오라$()를 필요로 할 것이다."
+        },
+        {
+            "type": "text",
+            "text": "이것을 설치하기 위해서, 눈을 내려놓고 $(thing)레드스톤 신호$()를 제공해라 - 신호가 강할수록 블록의 반지름이 높아지며, 약 30이 최대가 된다. 이러한 방식의 주시가 어떻게 기능하는지에 대한 특성 때문에, 범위가 항상 정확하게 충족되는 것은 아니며, 이는 때때로 로딩될 영역이 예상 범위보다 $(thing)약간 더 크다$()는 것을 의미한다."
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)세계의 눈$() 만들기$(p)$(italic)청크 로드",
+            "recipe": "naturesaura:chunk_loader"
+        }
+    ]
 }

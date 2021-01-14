@@ -4,9 +4,6 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityChorusGenerator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.tileentity.TileEntity;
-
-import java.util.function.Supplier;
 
 public class BlockChorusGenerator extends BlockContainerImpl implements ICustomBlockState {
     public BlockChorusGenerator() {

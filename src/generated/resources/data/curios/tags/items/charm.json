@@ -1,7 +1,7 @@
 {
-  "replace": false,
-  "values": [
-    "naturesaura:eye",
-    "naturesaura:eye_improved"
-  ]
+    "replace": false,
+    "values": [
+        "naturesaura:eye",
+        "naturesaura:eye_improved"
+    ]
 }

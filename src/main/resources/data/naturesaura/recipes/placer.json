@@ -15,8 +15,8 @@
         "H": {
             "item": "minecraft:hopper"
         },
-        "C":{
-            "item":"minecraft:cobblestone"
+        "C": {
+            "item": "minecraft:cobblestone"
         }
     },
     "result": {

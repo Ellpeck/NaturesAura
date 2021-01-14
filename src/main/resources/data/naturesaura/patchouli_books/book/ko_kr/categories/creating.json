@@ -1,6 +1,6 @@
 {
-  "name": "오라의 생산",
-  "description": "이 세상에 있는 $(#419600)오라$()의 아름다움은 한번 빠지면 회복할 수 없는 것처럼 보이기 때문에 생각해 보면 골치 아플 수 있다. 그러나 이는 다음과 같은 경우 아니다: 이 카테고리에는 다양한 기술을 사용하여 $(#419600)오라$()를 만드는 방법에 대한 설명이 수록되어 있다.",
-  "icon": "naturesaura:textures/gui/patchouli/categories/creating.png",
-  "sortnum": 18
+    "name": "오라의 생산",
+    "description": "이 세상에 있는 $(#419600)오라$()의 아름다움은 한번 빠지면 회복할 수 없는 것처럼 보이기 때문에 생각해 보면 골치 아플 수 있다. 그러나 이는 다음과 같은 경우 아니다: 이 카테고리에는 다양한 기술을 사용하여 $(#419600)오라$()를 만드는 방법에 대한 설명이 수록되어 있다.",
+    "icon": "naturesaura:textures/gui/patchouli/categories/creating.png",
+    "sortnum": 18
 }

@@ -1,28 +1,28 @@
 {
-  "type": "naturesaura:tree_ritual",
-  "ingredients": [
-    {
-      "item": "naturesaura:gold_powder"
+    "type": "naturesaura:tree_ritual",
+    "ingredients": [
+        {
+            "item": "naturesaura:gold_powder"
+        },
+        {
+            "item": "naturesaura:gold_powder"
+        },
+        {
+            "item": "naturesaura:sky_ingot"
+        },
+        {
+            "item": "naturesaura:aura_cache"
+        }
+    ],
+    "sapling": {
+        "item": "minecraft:oak_sapling"
     },
-    {
-      "item": "naturesaura:gold_powder"
+    "output": {
+        "nbt": {
+            "effect": "naturesaura:cache_recharge"
+        },
+        "item": "naturesaura:effect_powder",
+        "count": 32
     },
-    {
-      "item": "naturesaura:sky_ingot"
-    },
-    {
-      "item": "naturesaura:aura_cache"
-    }
-  ],
-  "sapling": {
-    "item": "minecraft:oak_sapling"
-  },
-  "output": {
-    "nbt": {
-      "effect": "naturesaura:cache_recharge"
-    },
-    "item": "naturesaura:effect_powder",
-    "count": 32
-  },
-  "time": 400
+    "time": 400
 }

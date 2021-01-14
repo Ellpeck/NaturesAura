@@ -1,13 +1,13 @@
 {
-  "variants": {
-    "type=top": {
-      "model": "naturesaura:block/infused_brick_slab_top"
-    },
-    "type=bottom": {
-      "model": "naturesaura:block/infused_brick_slab"
-    },
-    "type=double": {
-      "model": "naturesaura:block/infused_brick_slab_double"
+    "variants": {
+        "type=top": {
+            "model": "naturesaura:block/infused_brick_slab_top"
+        },
+        "type=bottom": {
+            "model": "naturesaura:block/infused_brick_slab"
+        },
+        "type=double": {
+            "model": "naturesaura:block/infused_brick_slab_double"
+        }
     }
-  }
 }

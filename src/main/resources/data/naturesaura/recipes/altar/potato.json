@@ -1,15 +1,15 @@
 {
-  "type": "naturesaura:altar",
-  "input": {
-    "item": "minecraft:poisonous_potato"
-  },
-  "output": {
-    "item": "minecraft:potato"
-  },
-  "aura_type": "naturesaura:overworld",
-  "catalyst": {
-    "item": "naturesaura:conversion_catalyst"
-  },
-  "aura": 10000,
-  "time": 50
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:poisonous_potato"
+    },
+    "output": {
+        "item": "minecraft:potato"
+    },
+    "aura_type": "naturesaura:overworld",
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 10000,
+    "time": 50
 }

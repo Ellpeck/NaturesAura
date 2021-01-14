@@ -1,13 +1,13 @@
 {
-  "name": "버블즈",
-  "icon": "minecraft:totem_of_undying",
-  "category": "intro",
-  "read_by_default": true,
-  "flag": "mod:baubles",
-  "pages": [
-    {
-      "type": "text",
-      "text": "때때로 당신은 $(thing)인벤토리$()의 공간을 잃고, 배낭을 어수선하게 하고, 속도를 늦추는 하늘 높이 만큼 많이 쌓인 블록과 아이템들을 가지고 있는 것을 발견할 수 있다.$(br)일부 $(thing)자연의 아이템$()은 $(item)버블즈$()처럼 팔, 허리, 가슴 위에 직접 착용할 수 있을 것이다. 어떤 아이템이 이러한 기능을 가지고 있다면, 그 아이템에 해당하는 신체 부분이 툴팁에 표시될 것이다."
-    }
-  ]
+    "name": "버블즈",
+    "icon": "minecraft:totem_of_undying",
+    "category": "intro",
+    "read_by_default": true,
+    "flag": "mod:baubles",
+    "pages": [
+        {
+            "type": "text",
+            "text": "때때로 당신은 $(thing)인벤토리$()의 공간을 잃고, 배낭을 어수선하게 하고, 속도를 늦추는 하늘 높이 만큼 많이 쌓인 블록과 아이템들을 가지고 있는 것을 발견할 수 있다.$(br)일부 $(thing)자연의 아이템$()은 $(item)버블즈$()처럼 팔, 허리, 가슴 위에 직접 착용할 수 있을 것이다. 어떤 아이템이 이러한 기능을 가지고 있다면, 그 아이템에 해당하는 신체 부분이 툴팁에 표시될 것이다."
+        }
+    ]
 }

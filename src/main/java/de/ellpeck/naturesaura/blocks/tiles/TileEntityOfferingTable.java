@@ -1,25 +1,23 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.recipes.ModRecipes;
-import de.ellpeck.naturesaura.recipes.OfferingRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import de.ellpeck.naturesaura.recipes.ModRecipes;
+import de.ellpeck.naturesaura.recipes.OfferingRecipe;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -85,6 +83,11 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
 
                     for (int i = 0; i < recipeCount; i++)
                         this.itemsToSpawn.add(recipe.output.copy());
+
+                    if (Multiblocks.OFFERING_TABLE.forEach(this.pos, 'R', (pos, m) -> this.world.getBlockState(pos).getBlock() == Blocks.WITHER_ROSE)) {
+                        for (int i = this.world.rand.nextInt(5) + 3; i >= 0; i--)
+                            this.itemsToSpawn.add(new ItemStack(Items.BLACK_DYE));
+                    }
 
                     LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.world);
                     lightningboltentity.setEffectOnly(true);

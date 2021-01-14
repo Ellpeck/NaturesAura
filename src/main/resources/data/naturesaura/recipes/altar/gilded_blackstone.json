@@ -1,15 +1,15 @@
 {
-  "type": "naturesaura:altar",
-  "input": {
-    "item": "minecraft:blackstone"
-  },
-  "output": {
-    "item": "minecraft:gilded_blackstone"
-  },
-  "aura_type": "naturesaura:nether",
-  "catalyst": {
-    "item": "naturesaura:conversion_catalyst"
-  },
-  "aura": 50000,
-  "time": 300
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:blackstone"
+    },
+    "output": {
+        "item": "minecraft:gilded_blackstone"
+    },
+    "aura_type": "naturesaura:nether",
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 50000,
+    "time": 300
 }

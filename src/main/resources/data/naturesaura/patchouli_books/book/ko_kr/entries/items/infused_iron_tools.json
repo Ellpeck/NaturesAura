@@ -1,41 +1,41 @@
 {
-  "name": "식물학자의 도구",
-  "icon": "naturesaura:infused_iron_pickaxe",
-  "category": "items",
-  "advancement": "naturesaura:infused_materials",
-  "pages": [
-    {
-      "type": "text",
-      "text": "$(l:using/altar)스며든 철$()의 내재된 힘을 이용하여, 기본 재료인 $(item)철$()과 유사한 성질을 가질 뿐만 아니라, 별로 기대하지 않는 추가적인 특징들을 가진 도구들을 생산할 수 있다.$(br)다음 페이지에는 도구를 만드는 방법과 특수 기능을 사용하는 방법이 표시된다."
-    },
-    {
-      "type": "text",
-      "text": "게다가, $(l:items/aura_cache)오라 캐시$()를 가지고 갈 때, 도구는 내구성을 재생하기 위해 저장한 $(#419600)오라$()를 사용할 수 있어 수명을 크게 늘릴 수 있을 것이다. 이를 위해서는 가만히 있으며 움크리기를 하면 되고, 손에 든 도구는 서서히 재충전하게 된다."
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)식물학자의 곡괭이$()는, 블록과 상호작용할 때, $(thing)이끼 낀$() 변형이 있다면, 그것을 이끼가 끼는 블록으로 변화시킬 것이다.",
-      "recipe": "naturesaura:infused_pickaxe"
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)식물학자의 손도끼$()는 $(thing)나뭇잎$()을 제거하는 데 꽤 뛰어나서, 일반 도구보다 훨씬 더 빨리 한다.",
-      "recipe": "naturesaura:infused_axe"
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)식물학자의 삽$()은 잔디 위에 더 넓은 $(thing)길$()을 만드는 것과 함께 단순한 상호작용을 통해 아무것도 없는 땅에 $(thing)풀$()을 자라게 하는 능력을 가지고 있다.",
-      "recipe": "naturesaura:infused_shovel"
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)식물학자의 괭이$()는 풀이나 흙 조각에 단순히 이용되는 것으로 농부가 오래된 방식으로 다른 종류의 $(thing)씨앗$()을 얻는 것을 돕는다.",
-      "recipe": "naturesaura:infused_hoe"
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)식물학자의 검$()은 몬스터들을 다루는 좋은 방법이다. 당신이 때린 어떤 몬스터도 2초간 $(thing)속도를 늦추게$() 해서 더 쉬운 표적이 되게 할 것이다.",
-      "recipe": "naturesaura:infused_sword"
-    }
-  ]
+    "name": "식물학자의 도구",
+    "icon": "naturesaura:infused_iron_pickaxe",
+    "category": "items",
+    "advancement": "naturesaura:infused_materials",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(l:using/altar)스며든 철$()의 내재된 힘을 이용하여, 기본 재료인 $(item)철$()과 유사한 성질을 가질 뿐만 아니라, 별로 기대하지 않는 추가적인 특징들을 가진 도구들을 생산할 수 있다.$(br)다음 페이지에는 도구를 만드는 방법과 특수 기능을 사용하는 방법이 표시된다."
+        },
+        {
+            "type": "text",
+            "text": "게다가, $(l:items/aura_cache)오라 캐시$()를 가지고 갈 때, 도구는 내구성을 재생하기 위해 저장한 $(#419600)오라$()를 사용할 수 있어 수명을 크게 늘릴 수 있을 것이다. 이를 위해서는 가만히 있으며 움크리기를 하면 되고, 손에 든 도구는 서서히 재충전하게 된다."
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)식물학자의 곡괭이$()는, 블록과 상호작용할 때, $(thing)이끼 낀$() 변형이 있다면, 그것을 이끼가 끼는 블록으로 변화시킬 것이다.",
+            "recipe": "naturesaura:infused_pickaxe"
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)식물학자의 손도끼$()는 $(thing)나뭇잎$()을 제거하는 데 꽤 뛰어나서, 일반 도구보다 훨씬 더 빨리 한다.",
+            "recipe": "naturesaura:infused_axe"
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)식물학자의 삽$()은 잔디 위에 더 넓은 $(thing)길$()을 만드는 것과 함께 단순한 상호작용을 통해 아무것도 없는 땅에 $(thing)풀$()을 자라게 하는 능력을 가지고 있다.",
+            "recipe": "naturesaura:infused_shovel"
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)식물학자의 괭이$()는 풀이나 흙 조각에 단순히 이용되는 것으로 농부가 오래된 방식으로 다른 종류의 $(thing)씨앗$()을 얻는 것을 돕는다.",
+            "recipe": "naturesaura:infused_hoe"
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)식물학자의 검$()은 몬스터들을 다루는 좋은 방법이다. 당신이 때린 어떤 몬스터도 2초간 $(thing)속도를 늦추게$() 해서 더 쉬운 표적이 되게 할 것이다.",
+            "recipe": "naturesaura:infused_sword"
+        }
+    ]
 }

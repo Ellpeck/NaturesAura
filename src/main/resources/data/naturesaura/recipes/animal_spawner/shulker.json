@@ -1,14 +1,14 @@
 {
-  "type": "naturesaura:animal_spawner",
-  "ingredients": [
-    {
-      "item": "naturesaura:birth_spirit"
-    },
-    {
-      "item": "minecraft:shulker_shell"
-    }
-  ],
-  "entity": "minecraft:shulker",
-  "aura": 150000,
-  "time": 100
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:shulker_shell"
+        }
+    ],
+    "entity": "minecraft:shulker",
+    "aura": 150000,
+    "time": 100
 }

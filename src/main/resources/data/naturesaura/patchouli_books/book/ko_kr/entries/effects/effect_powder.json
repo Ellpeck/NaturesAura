@@ -1,17 +1,17 @@
 {
-  "name": "효과 가루",
-  "icon": "naturesaura:effect_powder{effect:'naturesaura:plant_boost'}",
-  "category": "effects",
-  "advancement": "naturesaura:positive_imbalance",
-  "priority": true,
-  "pages": [
-    {
-      "type": "text",
-      "text": "$(item)효과 가루$()는 두가지 목적을 가진 마법 물질이다. 우선, 그것은 기존의 수동적 효과의 발생을 $(thing)억제$()할 수 있다. 게다가, 어떤 영향은 처음부터 이것과 함께만 일어날 수 있으며, 또한 $(thing)생산적인$() 능력을 가지고 있다는 것을 의미한다.$(p)물론 이 가루는 긍정적인 효과에만 효과가 있다."
-    },
-    {
-      "type": "text",
-      "text": "이것을 사용하기 위해서, 어떤 크기의 스택만 땅에 내려놓으면, 사용하는 가루의 종류에 따라 그 효과를 만들거나 멈추게 된다. 블록에서 효과가 가지는 $(thing)범위$()는 아래 배치되는 스택 크기와 동일하다. 땅에 있을 때 때리면 아이템 형태로 돌아가게 된다.$(p)$(item)효과 가루$()에 부여된 각각의 효과는 각 챕터의 제작법에서 보여줄 것이다."
-    }
-  ]
+    "name": "효과 가루",
+    "icon": "naturesaura:effect_powder{effect:'naturesaura:plant_boost'}",
+    "category": "effects",
+    "advancement": "naturesaura:positive_imbalance",
+    "priority": true,
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(item)효과 가루$()는 두가지 목적을 가진 마법 물질이다. 우선, 그것은 기존의 수동적 효과의 발생을 $(thing)억제$()할 수 있다. 게다가, 어떤 영향은 처음부터 이것과 함께만 일어날 수 있으며, 또한 $(thing)생산적인$() 능력을 가지고 있다는 것을 의미한다.$(p)물론 이 가루는 긍정적인 효과에만 효과가 있다."
+        },
+        {
+            "type": "text",
+            "text": "이것을 사용하기 위해서, 어떤 크기의 스택만 땅에 내려놓으면, 사용하는 가루의 종류에 따라 그 효과를 만들거나 멈추게 된다. 블록에서 효과가 가지는 $(thing)범위$()는 아래 배치되는 스택 크기와 동일하다. 땅에 있을 때 때리면 아이템 형태로 돌아가게 된다.$(p)$(item)효과 가루$()에 부여된 각각의 효과는 각 챕터의 제작법에서 보여줄 것이다."
+        }
+    ]
 }

@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "naturesaura:item/infused_iron_sword"
-  }
+    "parent": "minecraft:item/handheld",
+    "textures": {
+        "layer0": "naturesaura:item/infused_iron_sword"
+    }
 }

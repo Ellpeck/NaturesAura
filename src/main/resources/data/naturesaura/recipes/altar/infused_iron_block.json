@@ -1,12 +1,12 @@
 {
-  "type": "naturesaura:altar",
-  "input": {
-    "item": "minecraft:iron_block"
-  },
-  "output": {
-    "item": "naturesaura:infused_iron_block"
-  },
-  "aura_type": "naturesaura:overworld",
-  "aura": 135000,
-  "time": 700
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:iron_block"
+    },
+    "output": {
+        "item": "naturesaura:infused_iron_block"
+    },
+    "aura_type": "naturesaura:overworld",
+    "aura": 135000,
+    "time": 700
 }

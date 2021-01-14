@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "naturesaura:block/powder_placer"
+    "variants": {
+        "": {
+            "model": "naturesaura:block/powder_placer"
+        }
     }
-  }
 }

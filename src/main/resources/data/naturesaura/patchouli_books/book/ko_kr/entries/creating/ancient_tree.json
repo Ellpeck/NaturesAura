@@ -1,22 +1,22 @@
 {
-  "name": "고대의 나무",
-  "icon": "naturesaura:ancient_leaves",
-  "category": "creating",
-  "advancement": "naturesaura:wood_stand",
-  "pages": [
-    {
-      "type": "text",
-      "text": "한 지역의 $(#419600)오라$()를 보충하는 기본적인 방법은 $(item)고대의 나무$()이다. 일단 $(item)고대의 묘목$()이 만들어지면, 보통의 나무처럼 자랄 것이지만, 잎들은 $(#419600)오라$() 수치를 천천히 정상으로 증가시키기 시작할 것이다.$(br)그러나 이 과정에서는 나무가 잘 진행되지 않는다: 잎의 $(#419600)오라$()가 세상으로 빠져나가면서 잎은 죽어가기 시작하는데, 충분히 빠지면 나무는 벌거벗은 채로 남게 된다."
-    },
-    {
-      "type": "naturesaura:tree_ritual",
-      "text": "$(l:practices/tree_ritual)숲의 의식$()을 이용해 $(item)고대의 묘목$() 만들기",
-      "recipe": "naturesaura:ancient_sapling"
-    },
-    {
-      "type": "crafting",
-      "recipe": "naturesaura:ancient_planks",
-      "recipe2": "naturesaura:ancient_stick"
-    }
-  ]
+    "name": "고대의 나무",
+    "icon": "naturesaura:ancient_leaves",
+    "category": "creating",
+    "advancement": "naturesaura:wood_stand",
+    "pages": [
+        {
+            "type": "text",
+            "text": "한 지역의 $(#419600)오라$()를 보충하는 기본적인 방법은 $(item)고대의 나무$()이다. 일단 $(item)고대의 묘목$()이 만들어지면, 보통의 나무처럼 자랄 것이지만, 잎들은 $(#419600)오라$() 수치를 천천히 정상으로 증가시키기 시작할 것이다.$(br)그러나 이 과정에서는 나무가 잘 진행되지 않는다: 잎의 $(#419600)오라$()가 세상으로 빠져나가면서 잎은 죽어가기 시작하는데, 충분히 빠지면 나무는 벌거벗은 채로 남게 된다."
+        },
+        {
+            "type": "naturesaura:tree_ritual",
+            "text": "$(l:practices/tree_ritual)숲의 의식$()을 이용해 $(item)고대의 묘목$() 만들기",
+            "recipe": "naturesaura:ancient_sapling"
+        },
+        {
+            "type": "crafting",
+            "recipe": "naturesaura:ancient_planks",
+            "recipe2": "naturesaura:ancient_stick"
+        }
+    ]
 }

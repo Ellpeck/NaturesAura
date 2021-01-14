@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "naturesaura:block/infused_iron_block"
+    "variants": {
+        "": {
+            "model": "naturesaura:block/infused_iron_block"
+        }
     }
-  }
 }

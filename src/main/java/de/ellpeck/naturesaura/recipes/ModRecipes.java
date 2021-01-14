@@ -8,7 +8,6 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.misc.WeatherType;
 import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -20,11 +19,8 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import java.util.Arrays;
 import java.util.List;
 
 public final class ModRecipes {

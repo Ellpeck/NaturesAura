@@ -1,13 +1,11 @@
 package de.ellpeck.naturesaura.compat.patchouli;
 
-import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.recipes.AnimalSpawnerRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
-import vazkii.patchouli.api.PatchouliAPI;
 
 public class ProcessorAnimalSpawner implements IComponentProcessor {
 

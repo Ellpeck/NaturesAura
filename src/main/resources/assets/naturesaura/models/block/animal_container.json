@@ -1,63 +1,135 @@
 {
-	"credit": "Made with Blockbench",
-	"parent": "minecraft:block/block",
-	"textures": {
-		"0": "naturesaura:block/infused_brick",
-		"1": "naturesaura:block/animal_container_eye",
-		"particle": "naturesaura:block/infused_brick"
-	},
-	"elements": [
-		{
-			"name": "base",
-			"from": [3, 0, 3],
-			"to": [13, 1, 13],
-			"faces": {
-				"north": {"uv": [0, 0, 10, 1], "texture": "#0"},
-				"east": {"uv": [0, 0, 10, 1], "texture": "#0"},
-				"south": {"uv": [0, 0, 10, 1], "texture": "#0"},
-				"west": {"uv": [0, 0, 10, 1], "texture": "#0"},
-				"up": {"uv": [0, 0, 10, 10], "texture": "#0"},
-				"down": {"uv": [0, 0, 10, 10], "texture": "#0"}
-			}
-		},
-		{
-			"name": "base2",
-			"from": [4, 1, 4],
-			"to": [12, 2, 12],
-			"faces": {
-				"north": {"uv": [0, 0, 8, 1], "texture": "#0"},
-				"east": {"uv": [0, 0, 8, 1], "texture": "#0"},
-				"south": {"uv": [0, 0, 8, 1], "texture": "#0"},
-				"west": {"uv": [0, 0, 8, 1], "texture": "#0"},
-				"up": {"uv": [0, 0, 8, 8], "texture": "#0"},
-				"down": {"uv": [0, 0, 8, 8], "texture": "#0"}
-			}
-		},
-		{
-			"name": "stem",
-			"from": [6, 2, 6],
-			"to": [10, 7, 10],
-			"faces": {
-				"north": {"uv": [0, 0, 4, 5], "texture": "#0"},
-				"east": {"uv": [0, 0, 4, 5], "texture": "#0"},
-				"south": {"uv": [0, 0, 4, 5], "texture": "#0"},
-				"west": {"uv": [0, 0, 4, 5], "texture": "#0"},
-				"up": {"uv": [0, 0, 4, 4], "texture": "#0"},
-				"down": {"uv": [0, 0, 4, 4], "texture": "#0"}
-			}
-		},
-		{
-			"name": "eye",
-			"from": [5, 7, 5],
-			"to": [11, 13, 11],
-			"faces": {
-				"north": {"uv": [0, 0, 6, 6], "texture": "#1"},
-				"east": {"uv": [0, 0, 6, 6], "texture": "#1"},
-				"south": {"uv": [0, 0, 6, 6], "texture": "#1"},
-				"west": {"uv": [0, 0, 6, 6], "texture": "#1"},
-				"up": {"uv": [6, 0, 12, 6], "texture": "#1"},
-				"down": {"uv": [6, 0, 12, 6], "texture": "#1"}
-			}
-		}
-	]
+    "credit": "Made with Blockbench",
+    "parent": "minecraft:block/block",
+    "textures": {
+        "0": "naturesaura:block/infused_brick",
+        "1": "naturesaura:block/animal_container_eye",
+        "particle": "naturesaura:block/infused_brick"
+    },
+    "elements": [
+        {
+            "name": "base",
+            "from": [3, 0, 3],
+            "to": [13, 1, 13],
+            "faces": {
+                "north": {
+                    "uv": [0, 0, 10, 1],
+                    "texture": "#0"
+                },
+                "east": {
+                    "uv": [0, 0, 10, 1],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [0, 0, 10, 1],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [0, 0, 10, 1],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [0, 0, 10, 10],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [0, 0, 10, 10],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "name": "base2",
+            "from": [4, 1, 4],
+            "to": [12, 2, 12],
+            "faces": {
+                "north": {
+                    "uv": [0, 0, 8, 1],
+                    "texture": "#0"
+                },
+                "east": {
+                    "uv": [0, 0, 8, 1],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [0, 0, 8, 1],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [0, 0, 8, 1],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [0, 0, 8, 8],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [0, 0, 8, 8],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "name": "stem",
+            "from": [6, 2, 6],
+            "to": [10, 7, 10],
+            "faces": {
+                "north": {
+                    "uv": [0, 0, 4, 5],
+                    "texture": "#0"
+                },
+                "east": {
+                    "uv": [0, 0, 4, 5],
+                    "texture": "#0"
+                },
+                "south": {
+                    "uv": [0, 0, 4, 5],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [0, 0, 4, 5],
+                    "texture": "#0"
+                },
+                "up": {
+                    "uv": [0, 0, 4, 4],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [0, 0, 4, 4],
+                    "texture": "#0"
+                }
+            }
+        },
+        {
+            "name": "eye",
+            "from": [5, 7, 5],
+            "to": [11, 13, 11],
+            "faces": {
+                "north": {
+                    "uv": [0, 0, 6, 6],
+                    "texture": "#1"
+                },
+                "east": {
+                    "uv": [0, 0, 6, 6],
+                    "texture": "#1"
+                },
+                "south": {
+                    "uv": [0, 0, 6, 6],
+                    "texture": "#1"
+                },
+                "west": {
+                    "uv": [0, 0, 6, 6],
+                    "texture": "#1"
+                },
+                "up": {
+                    "uv": [6, 0, 12, 6],
+                    "texture": "#1"
+                },
+                "down": {
+                    "uv": [6, 0, 12, 6],
+                    "texture": "#1"
+                }
+            }
+        }
+    ]
 }

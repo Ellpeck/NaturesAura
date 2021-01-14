@@ -4,7 +4,6 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.NaturalAuraContainer;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
 
 public class TileEntityAncientLeaves extends TileEntityImpl {
 

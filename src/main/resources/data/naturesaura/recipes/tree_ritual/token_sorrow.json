@@ -1,45 +1,45 @@
 {
-  "type": "naturesaura:tree_ritual",
-  "ingredients": [
-    {
-      "type": "forge:nbt",
-      "item": "naturesaura:aura_bottle",
-      "count": 1,
-      "nbt": "{stored_type:\"naturesaura:overworld\"}"
-    },
-    {
-      "item": "naturesaura:gold_leaf"
-    },
-    {
-      "item": "minecraft:ghast_tear"
-    },
-    [
-      {
-        "item": "minecraft:beef"
-      },
-      {
-        "item": "minecraft:mutton"
-      },
-      {
-        "item": "minecraft:chicken"
-      },
-      {
-        "item": "minecraft:porkchop"
-      }
+    "type": "naturesaura:tree_ritual",
+    "ingredients": [
+        {
+            "type": "forge:nbt",
+            "item": "naturesaura:aura_bottle",
+            "count": 1,
+            "nbt": "{stored_type:\"naturesaura:overworld\"}"
+        },
+        {
+            "item": "naturesaura:gold_leaf"
+        },
+        {
+            "item": "minecraft:ghast_tear"
+        },
+        [
+            {
+                "item": "minecraft:beef"
+            },
+            {
+                "item": "minecraft:mutton"
+            },
+            {
+                "item": "minecraft:chicken"
+            },
+            {
+                "item": "minecraft:porkchop"
+            }
+        ],
+        {
+            "item": "minecraft:glass"
+        },
+        {
+            "tag": "minecraft:fishes"
+        }
     ],
-    {
-      "item": "minecraft:glass"
+    "sapling": {
+        "item": "minecraft:oak_sapling"
     },
-    {
-      "tag": "minecraft:fishes"
-    }
-  ],
-  "sapling": {
-    "item": "minecraft:oak_sapling"
-  },
-  "output": {
-    "item": "naturesaura:token_sorrow",
-    "count": 2
-  },
-  "time": 200
+    "output": {
+        "item": "naturesaura:token_sorrow",
+        "count": 2
+    },
+    "time": 200
 }

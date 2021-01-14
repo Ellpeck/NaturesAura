@@ -1,12 +1,12 @@
 {
-  "type": "naturesaura:offering",
-  "input": {
-    "item": "naturesaura:token_joy"
-  },
-  "start_item": {
-    "item": "naturesaura:calling_spirit"
-  },
-  "output": {
-    "item": "naturesaura:token_euphoria"
-  }
+    "type": "naturesaura:offering",
+    "input": {
+        "item": "naturesaura:token_joy"
+    },
+    "start_item": {
+        "item": "naturesaura:calling_spirit"
+    },
+    "output": {
+        "item": "naturesaura:token_euphoria"
+    }
 }

@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.api.misc;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;

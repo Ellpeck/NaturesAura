@@ -12,8 +12,8 @@
         "I": {
             "item": "naturesaura:infused_iron"
         },
-        "C":{
-            "item":"minecraft:cobblestone"
+        "C": {
+            "item": "minecraft:cobblestone"
         }
     },
     "result": {

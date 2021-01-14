@@ -1,17 +1,17 @@
 {
-  "type": "naturesaura:animal_spawner",
-  "ingredients": [
-    {
-      "item": "naturesaura:birth_spirit"
-    },
-    {
-      "item": "minecraft:blaze_rod"
-    },
-    {
-      "item": "minecraft:blaze_powder"
-    }
-  ],
-  "entity": "minecraft:blaze",
-  "aura": 150000,
-  "time": 120
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:blaze_rod"
+        },
+        {
+            "item": "minecraft:blaze_powder"
+        }
+    ],
+    "entity": "minecraft:blaze",
+    "aura": 150000,
+    "time": 120
 }

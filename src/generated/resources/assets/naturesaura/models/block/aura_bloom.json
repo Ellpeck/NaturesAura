@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "naturesaura:block/aura_bloom"
-  }
+    "parent": "minecraft:block/cross",
+    "textures": {
+        "cross": "naturesaura:block/aura_bloom"
+    }
 }

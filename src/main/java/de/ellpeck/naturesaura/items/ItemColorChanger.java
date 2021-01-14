@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.items;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.misc.ColoredBlockHelper;

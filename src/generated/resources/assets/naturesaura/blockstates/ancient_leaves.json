@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "naturesaura:block/ancient_leaves"
+    "variants": {
+        "": {
+            "model": "naturesaura:block/ancient_leaves"
+        }
     }
-  }
 }

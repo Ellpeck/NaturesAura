@@ -1,24 +1,24 @@
 {
-  "type": "naturesaura:tree_ritual",
-  "ingredients": [
-    {
-      "item": "minecraft:spider_eye"
+    "type": "naturesaura:tree_ritual",
+    "ingredients": [
+        {
+            "item": "minecraft:spider_eye"
+        },
+        {
+            "item": "minecraft:gold_ingot"
+        },
+        {
+            "item": "naturesaura:gold_leaf"
+        },
+        {
+            "item": "naturesaura:gold_leaf"
+        }
+    ],
+    "sapling": {
+        "item": "minecraft:oak_sapling"
     },
-    {
-      "item": "minecraft:gold_ingot"
+    "output": {
+        "item": "naturesaura:eye"
     },
-    {
-      "item": "naturesaura:gold_leaf"
-    },
-    {
-      "item": "naturesaura:gold_leaf"
-    }
-  ],
-  "sapling": {
-    "item": "minecraft:oak_sapling"
-  },
-  "output": {
-    "item": "naturesaura:eye"
-  },
-  "time": 250
+    "time": 250
 }

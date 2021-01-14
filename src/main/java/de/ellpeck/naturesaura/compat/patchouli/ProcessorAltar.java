@@ -1,14 +1,10 @@
 package de.ellpeck.naturesaura.compat.patchouli;
 
 import de.ellpeck.naturesaura.recipes.AltarRecipe;
-import de.ellpeck.naturesaura.items.ItemAuraBottle;
-import de.ellpeck.naturesaura.items.ModItems;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
-import vazkii.patchouli.api.PatchouliAPI;
 
 public class ProcessorAltar implements IComponentProcessor {
 

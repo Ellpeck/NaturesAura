@@ -1,17 +1,17 @@
 {
-  "type": "naturesaura:animal_spawner",
-  "ingredients": [
-    {
-      "item": "naturesaura:birth_spirit"
-    },
-    {
-      "item": "minecraft:honeycomb"
-    },
-    {
-      "item": "minecraft:honey_block"
-    }
-  ],
-  "entity": "minecraft:bee",
-  "aura": 50000,
-  "time": 100
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:honeycomb"
+        },
+        {
+            "item": "minecraft:honey_block"
+        }
+    ],
+    "entity": "minecraft:bee",
+    "aura": 50000,
+    "time": 100
 }

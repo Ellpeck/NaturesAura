@@ -1,17 +1,17 @@
 {
-  "type": "naturesaura:animal_spawner",
-  "ingredients": [
-    {
-      "item": "naturesaura:birth_spirit"
-    },
-    {
-      "tag": "minecraft:fishes"
-    },
-    {
-      "item": "minecraft:map"
-    }
-  ],
-  "entity": "minecraft:dolphin",
-  "aura": 100000,
-  "time": 150
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "tag": "minecraft:fishes"
+        },
+        {
+            "item": "minecraft:map"
+        }
+    ],
+    "entity": "minecraft:dolphin",
+    "aura": 100000,
+    "time": 150
 }

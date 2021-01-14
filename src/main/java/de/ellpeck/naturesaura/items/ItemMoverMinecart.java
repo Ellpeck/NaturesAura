@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.items;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
 import de.ellpeck.naturesaura.entities.ModEntities;
 import net.minecraft.block.AbstractRailBlock;

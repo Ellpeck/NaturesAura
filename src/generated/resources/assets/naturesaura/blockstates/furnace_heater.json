@@ -1,56 +1,56 @@
 {
-  "variants": {
-    "facing=down,waterlogged=false": {
-      "model": "naturesaura:block/furnace_heater",
-      "x": 180
-    },
-    "facing=up,waterlogged=false": {
-      "model": "naturesaura:block/furnace_heater"
-    },
-    "facing=north,waterlogged=false": {
-      "model": "naturesaura:block/furnace_heater",
-      "x": 90
-    },
-    "facing=south,waterlogged=false": {
-      "model": "naturesaura:block/furnace_heater",
-      "x": 90,
-      "y": 180
-    },
-    "facing=west,waterlogged=false": {
-      "model": "naturesaura:block/furnace_heater",
-      "x": 90,
-      "y": 270
-    },
-    "facing=east,waterlogged=false": {
-      "model": "naturesaura:block/furnace_heater",
-      "x": 90,
-      "y": 90
-    },
-    "facing=down,waterlogged=true": {
-      "model": "naturesaura:block/furnace_heater",
-      "x": 180
-    },
-    "facing=up,waterlogged=true": {
-      "model": "naturesaura:block/furnace_heater"
-    },
-    "facing=north,waterlogged=true": {
-      "model": "naturesaura:block/furnace_heater",
-      "x": 90
-    },
-    "facing=south,waterlogged=true": {
-      "model": "naturesaura:block/furnace_heater",
-      "x": 90,
-      "y": 180
-    },
-    "facing=west,waterlogged=true": {
-      "model": "naturesaura:block/furnace_heater",
-      "x": 90,
-      "y": 270
-    },
-    "facing=east,waterlogged=true": {
-      "model": "naturesaura:block/furnace_heater",
-      "x": 90,
-      "y": 90
+    "variants": {
+        "facing=down,waterlogged=false": {
+            "model": "naturesaura:block/furnace_heater",
+            "x": 180
+        },
+        "facing=up,waterlogged=false": {
+            "model": "naturesaura:block/furnace_heater"
+        },
+        "facing=north,waterlogged=false": {
+            "model": "naturesaura:block/furnace_heater",
+            "x": 90
+        },
+        "facing=south,waterlogged=false": {
+            "model": "naturesaura:block/furnace_heater",
+            "x": 90,
+            "y": 180
+        },
+        "facing=west,waterlogged=false": {
+            "model": "naturesaura:block/furnace_heater",
+            "x": 90,
+            "y": 270
+        },
+        "facing=east,waterlogged=false": {
+            "model": "naturesaura:block/furnace_heater",
+            "x": 90,
+            "y": 90
+        },
+        "facing=down,waterlogged=true": {
+            "model": "naturesaura:block/furnace_heater",
+            "x": 180
+        },
+        "facing=up,waterlogged=true": {
+            "model": "naturesaura:block/furnace_heater"
+        },
+        "facing=north,waterlogged=true": {
+            "model": "naturesaura:block/furnace_heater",
+            "x": 90
+        },
+        "facing=south,waterlogged=true": {
+            "model": "naturesaura:block/furnace_heater",
+            "x": 90,
+            "y": 180
+        },
+        "facing=west,waterlogged=true": {
+            "model": "naturesaura:block/furnace_heater",
+            "x": 90,
+            "y": 270
+        },
+        "facing=east,waterlogged=true": {
+            "model": "naturesaura:block/furnace_heater",
+            "x": 90,
+            "y": 90
+        }
     }
-  }
 }

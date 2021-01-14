@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.items;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.ItemAuraContainer;

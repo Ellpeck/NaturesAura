@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "naturesaura:block/potion_generator"
+    "variants": {
+        "": {
+            "model": "naturesaura:block/potion_generator"
+        }
     }
-  }
 }

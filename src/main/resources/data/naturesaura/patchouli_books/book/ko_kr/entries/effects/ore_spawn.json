@@ -1,21 +1,21 @@
 {
-  "name": "미네랄 축적",
-  "icon": "minecraft:diamond_ore",
-  "category": "effects",
-  "advancement": "naturesaura:positive_imbalance",
-  "pages": [
-    {
-      "type": "text",
-      "text": "$(l:creating/generator_limit_remover)생산 촉매제$()를 사용하여 $(l:items/eye)자연의 눈$()에 보이는 지점을 넘어 $(#419600)오라$()를 만들 수 있다. 이 기능은 높은 수준의 불균형 효과를 발생시킬 수 있도록 한다: $(l:effects/effect_powder)풍족의 가루$()가 주변에 존재한다면 $(item)미네랄 축적$()이 발생하기 시작할 것이다."
-    },
-    {
-      "type": "text",
-      "text": "다양한 희귀한 $(thing)광물$()들이 오버월드의 $(item)돌$()과 네더의 $(item)네더랙$()에서 나타나기 시작할 것이고, 예상컨대, 이 광물들이 생기는 동안 꽤 많은 양의 자연의 $(#419600)오라$()가 배출될 것이다.$(p)물론, 이와 같은 생산적 기능은 일종의 자동화에 사용될 수도 있고, 어쩌면 $(l:using/field_creator)오라 필드 생성기$()와 같은 블록을 이용할 수도 있다."
-    },
-    {
-      "type": "naturesaura:tree_ritual",
-      "recipe": "naturesaura:ore_spawn_powder",
-      "text": "$(l:effects/effect_powder)풍족의 가루$() 만들기"
-    }
-  ]
+    "name": "미네랄 축적",
+    "icon": "minecraft:diamond_ore",
+    "category": "effects",
+    "advancement": "naturesaura:positive_imbalance",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(l:creating/generator_limit_remover)생산 촉매제$()를 사용하여 $(l:items/eye)자연의 눈$()에 보이는 지점을 넘어 $(#419600)오라$()를 만들 수 있다. 이 기능은 높은 수준의 불균형 효과를 발생시킬 수 있도록 한다: $(l:effects/effect_powder)풍족의 가루$()가 주변에 존재한다면 $(item)미네랄 축적$()이 발생하기 시작할 것이다."
+        },
+        {
+            "type": "text",
+            "text": "다양한 희귀한 $(thing)광물$()들이 오버월드의 $(item)돌$()과 네더의 $(item)네더랙$()에서 나타나기 시작할 것이고, 예상컨대, 이 광물들이 생기는 동안 꽤 많은 양의 자연의 $(#419600)오라$()가 배출될 것이다.$(p)물론, 이와 같은 생산적 기능은 일종의 자동화에 사용될 수도 있고, 어쩌면 $(l:using/field_creator)오라 필드 생성기$()와 같은 블록을 이용할 수도 있다."
+        },
+        {
+            "type": "naturesaura:tree_ritual",
+            "recipe": "naturesaura:ore_spawn_powder",
+            "text": "$(l:effects/effect_powder)풍족의 가루$() 만들기"
+        }
+    ]
 }

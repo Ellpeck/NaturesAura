@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.items;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.BlockGoldenLeaves;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import net.minecraft.client.renderer.color.IItemColor;

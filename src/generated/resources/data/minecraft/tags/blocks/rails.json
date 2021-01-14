@@ -1,8 +1,8 @@
 {
-  "replace": false,
-  "values": [
-    "naturesaura:dimension_rail_end",
-    "naturesaura:dimension_rail_nether",
-    "naturesaura:dimension_rail_overworld"
-  ]
+    "replace": false,
+    "values": [
+        "naturesaura:dimension_rail_end",
+        "naturesaura:dimension_rail_nether",
+        "naturesaura:dimension_rail_overworld"
+    ]
 }

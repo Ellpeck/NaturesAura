@@ -1,14 +1,14 @@
 {
-  "type": "naturesaura:animal_spawner",
-  "ingredients": [
-    {
-      "item": "naturesaura:birth_spirit"
-    },
-    {
-      "item": "minecraft:slime_ball"
-    }
-  ],
-  "entity": "minecraft:slime",
-  "aura": 30000,
-  "time": 40
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:slime_ball"
+        }
+    ],
+    "entity": "minecraft:slime",
+    "aura": 30000,
+    "time": 40
 }

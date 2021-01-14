@@ -1,17 +1,17 @@
 {
-  "type": "naturesaura:animal_spawner",
-  "ingredients": [
-    {
-      "item": "naturesaura:birth_spirit"
-    },
-    {
-      "item": "minecraft:feather"
-    },
-    {
-      "item": "minecraft:cookie"
-    }
-  ],
-  "entity": "minecraft:parrot",
-  "aura": 50000,
-  "time": 60
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:feather"
+        },
+        {
+            "item": "minecraft:cookie"
+        }
+    ],
+    "entity": "minecraft:parrot",
+    "aura": 50000,
+    "time": 60
 }

@@ -1,17 +1,17 @@
 {
-  "name": "오라 수집기",
-  "icon": "naturesaura:aura_trove",
-  "category": "items",
-  "advancement": "naturesaura:sky_ingot",
-  "pages": [
-    {
-      "type": "text",
-      "text": "$(l:items/aura_cache)오라 캐시$()가 정기적으로 재충전하지 않고 사용하기에 필요한 $(#419600)오라$() 양이 너무 많아지면, 저장 용량의 3배인 $(item)오라 캐시$()의 상위 아이템인 $(item)오라 수집기$()의 도움을 받을 수 있다."
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)오라 수집기$() 만들기",
-      "recipe": "naturesaura:aura_trove"
-    }
-  ]
+    "name": "오라 수집기",
+    "icon": "naturesaura:aura_trove",
+    "category": "items",
+    "advancement": "naturesaura:sky_ingot",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(l:items/aura_cache)오라 캐시$()가 정기적으로 재충전하지 않고 사용하기에 필요한 $(#419600)오라$() 양이 너무 많아지면, 저장 용량의 3배인 $(item)오라 캐시$()의 상위 아이템인 $(item)오라 수집기$()의 도움을 받을 수 있다."
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)오라 수집기$() 만들기",
+            "recipe": "naturesaura:aura_trove"
+        }
+    ]
 }

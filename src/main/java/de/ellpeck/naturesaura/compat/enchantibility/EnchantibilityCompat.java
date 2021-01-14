@@ -6,7 +6,6 @@ import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import quarris.enchantability.api.EnchantabilityApi;
-import quarris.enchantability.api.EnchantabilityApi.IInternals;
 
 import java.util.Collections;
 

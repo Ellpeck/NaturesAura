@@ -1,6 +1,6 @@
 {
-  "name": "소개",
-  "description": "지금까지 $(#419600)오라$()의 힘을 이용해 본 적 없는 사람에게는, 그것을 손에 넣는다는 것이 벅찬 일이 될지도 모른다.$(br2)이 입문서는 이 힘을 어떻게, 그리고 어디에서 작동하는지 간략하게 설명해 줄 것이다.",
-  "icon": "naturesaura:textures/gui/patchouli/categories/intro.png",
-  "sortnum": 0
+    "name": "소개",
+    "description": "지금까지 $(#419600)오라$()의 힘을 이용해 본 적 없는 사람에게는, 그것을 손에 넣는다는 것이 벅찬 일이 될지도 모른다.$(br2)이 입문서는 이 힘을 어떻게, 그리고 어디에서 작동하는지 간략하게 설명해 줄 것이다.",
+    "icon": "naturesaura:textures/gui/patchouli/categories/intro.png",
+    "sortnum": 0
 }

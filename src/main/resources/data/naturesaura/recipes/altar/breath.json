@@ -1,18 +1,18 @@
 {
-  "type": "naturesaura:altar",
-  "input": {
-    "type": "forge:nbt",
-    "item": "naturesaura:aura_bottle",
-    "count": 1,
-    "nbt": "{stored_type:\"naturesaura:end\"}"
-  },
-  "output": {
-    "item": "minecraft:dragon_breath"
-  },
-  "aura_type": "naturesaura:nether",
-  "catalyst": {
-    "item": "naturesaura:conversion_catalyst"
-  },
-  "aura": 20000,
-  "time": 80
+    "type": "naturesaura:altar",
+    "input": {
+        "type": "forge:nbt",
+        "item": "naturesaura:aura_bottle",
+        "count": 1,
+        "nbt": "{stored_type:\"naturesaura:end\"}"
+    },
+    "output": {
+        "item": "minecraft:dragon_breath"
+    },
+    "aura_type": "naturesaura:nether",
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 20000,
+    "time": 80
 }

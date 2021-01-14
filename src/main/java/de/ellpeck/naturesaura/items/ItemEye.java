@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura.items;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

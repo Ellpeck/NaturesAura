@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "naturesaura:block/aura_bloom"
-  }
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "naturesaura:block/aura_bloom"
+    }
 }

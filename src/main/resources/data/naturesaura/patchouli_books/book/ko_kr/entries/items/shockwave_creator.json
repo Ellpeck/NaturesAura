@@ -1,17 +1,17 @@
 {
-  "name": "분노의 부적",
-  "icon": "naturesaura:shockwave_creator",
-  "category": "items",
-  "advancement": "naturesaura:infused_tools",
-  "pages": [
-    {
-      "type": "text",
-      "text": "$(item)분노의 부적$()은, 인벤토리 내에 가지고 있을 때, 착용자가 힘을 집중할 수 있게 해주며, 제자리에서 $(thing)웅크리고$() $(thing)점프$()할 때, 가까이 있는 다른 생명체에게 피해를 주는 $(item)충격파$()를 만들어낼 수 있을 정도로 세게 땅을 밟을 수 있게 해준다.$(br)물론, 이것은 $(#419600)오라$()의 소모로, 예를 들어 저장된 $(l:items/aura_cache)오라 캐시$() 형태로 소모된다."
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)분노의 부적$() 만들기",
-      "recipe": "naturesaura:shockwave_creator"
-    }
-  ]
+    "name": "분노의 부적",
+    "icon": "naturesaura:shockwave_creator",
+    "category": "items",
+    "advancement": "naturesaura:infused_tools",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(item)분노의 부적$()은, 인벤토리 내에 가지고 있을 때, 착용자가 힘을 집중할 수 있게 해주며, 제자리에서 $(thing)웅크리고$() $(thing)점프$()할 때, 가까이 있는 다른 생명체에게 피해를 주는 $(item)충격파$()를 만들어낼 수 있을 정도로 세게 땅을 밟을 수 있게 해준다.$(br)물론, 이것은 $(#419600)오라$()의 소모로, 예를 들어 저장된 $(l:items/aura_cache)오라 캐시$() 형태로 소모된다."
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)분노의 부적$() 만들기",
+            "recipe": "naturesaura:shockwave_creator"
+        }
+    ]
 }

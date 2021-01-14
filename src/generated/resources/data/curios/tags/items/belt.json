@@ -1,7 +1,7 @@
 {
-  "replace": false,
-  "values": [
-    "naturesaura:aura_cache",
-    "naturesaura:aura_trove"
-  ]
+    "replace": false,
+    "values": [
+        "naturesaura:aura_cache",
+        "naturesaura:aura_trove"
+    ]
 }

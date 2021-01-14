@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "naturesaura:block/field_creator"
+    "variants": {
+        "": {
+            "model": "naturesaura:block/field_creator"
+        }
     }
-  }
 }

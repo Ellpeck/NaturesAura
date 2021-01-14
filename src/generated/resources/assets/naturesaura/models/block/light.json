@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/air",
-  "textures": {
-    "particle": "naturesaura:block/light"
-  }
+    "parent": "minecraft:block/air",
+    "textures": {
+        "particle": "naturesaura:block/light"
+    }
 }

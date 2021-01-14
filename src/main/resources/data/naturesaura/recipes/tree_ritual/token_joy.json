@@ -1,34 +1,34 @@
 {
-  "type": "naturesaura:tree_ritual",
-  "ingredients": [
-    {
-      "type": "forge:nbt",
-      "item": "naturesaura:aura_bottle",
-      "count": 1,
-      "nbt": "{stored_type:\"naturesaura:overworld\"}"
+    "type": "naturesaura:tree_ritual",
+    "ingredients": [
+        {
+            "type": "forge:nbt",
+            "item": "naturesaura:aura_bottle",
+            "count": 1,
+            "nbt": "{stored_type:\"naturesaura:overworld\"}"
+        },
+        {
+            "item": "naturesaura:gold_leaf"
+        },
+        {
+            "tag": "minecraft:small_flowers"
+        },
+        {
+            "item": "minecraft:apple"
+        },
+        {
+            "item": "minecraft:torch"
+        },
+        {
+            "item": "minecraft:iron_ingot"
+        }
+    ],
+    "sapling": {
+        "item": "minecraft:oak_sapling"
     },
-    {
-      "item": "naturesaura:gold_leaf"
+    "output": {
+        "item": "naturesaura:token_joy",
+        "count": 2
     },
-    {
-      "tag": "minecraft:small_flowers"
-    },
-    {
-      "item": "minecraft:apple"
-    },
-    {
-      "item": "minecraft:torch"
-    },
-    {
-      "item": "minecraft:iron_ingot"
-    }
-  ],
-  "sapling": {
-    "item": "minecraft:oak_sapling"
-  },
-  "output": {
-    "item": "naturesaura:token_joy",
-    "count": 2
-  },
-  "time": 200
+    "time": 200
 }

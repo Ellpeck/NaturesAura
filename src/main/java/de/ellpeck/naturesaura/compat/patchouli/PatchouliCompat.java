@@ -8,23 +8,18 @@ import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.compat.ICompat;
 import de.ellpeck.naturesaura.data.ItemTagProvider;
 import de.ellpeck.naturesaura.events.ClientEvents;
-import de.ellpeck.naturesaura.recipes.ModRecipe;
-import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler.FancyInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,7 +32,8 @@ import vazkii.patchouli.api.PatchouliAPI;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class PatchouliCompat implements ICompat {

@@ -1,17 +1,17 @@
 {
-  "type": "naturesaura:animal_spawner",
-  "ingredients": [
-    {
-      "item": "naturesaura:birth_spirit"
-    },
-    {
-      "item": "minecraft:prismarine_shard"
-    },
-    {
-      "item": "minecraft:prismarine_crystals"
-    }
-  ],
-  "entity": "minecraft:guardian",
-  "aura": 150000,
-  "time": 150
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:prismarine_shard"
+        },
+        {
+            "item": "minecraft:prismarine_crystals"
+        }
+    ],
+    "entity": "minecraft:guardian",
+    "aura": 150000,
+    "time": 150
 }

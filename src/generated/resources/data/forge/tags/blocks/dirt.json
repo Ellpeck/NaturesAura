@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "naturesaura:nether_grass"
-  ]
+    "replace": false,
+    "values": [
+        "naturesaura:nether_grass"
+    ]
 }

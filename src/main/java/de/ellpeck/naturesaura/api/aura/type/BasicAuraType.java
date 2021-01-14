@@ -3,10 +3,8 @@ package de.ellpeck.naturesaura.api.aura.type;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
 import java.util.Set;

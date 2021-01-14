@@ -2,10 +2,8 @@ package de.ellpeck.naturesaura.compat.jei;
 
 import com.google.common.collect.ImmutableList;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
-import de.ellpeck.naturesaura.items.ItemAuraBottle;
-import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;

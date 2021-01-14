@@ -1,15 +1,15 @@
 {
-  "type": "naturesaura:altar",
-  "input": {
-    "item": "minecraft:rotten_flesh"
-  },
-  "output": {
-    "item": "minecraft:leather"
-  },
-  "aura_type": "naturesaura:overworld",
-  "catalyst": {
-    "item": "naturesaura:conversion_catalyst"
-  },
-  "aura": 10000,
-  "time": 50
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:rotten_flesh"
+    },
+    "output": {
+        "item": "minecraft:leather"
+    },
+    "aura_type": "naturesaura:overworld",
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 10000,
+    "time": 50
 }

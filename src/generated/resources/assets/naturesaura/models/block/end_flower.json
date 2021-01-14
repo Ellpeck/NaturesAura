@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "naturesaura:block/end_flower"
-  }
+    "parent": "minecraft:block/cross",
+    "textures": {
+        "cross": "naturesaura:block/end_flower"
+    }
 }

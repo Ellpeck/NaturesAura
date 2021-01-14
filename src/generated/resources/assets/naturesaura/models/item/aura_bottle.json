@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "naturesaura:item/aura_bottle",
-    "layer1": "naturesaura:item/aura_bottle_overlay"
-  }
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "naturesaura:item/aura_bottle",
+        "layer1": "naturesaura:item/aura_bottle_overlay"
+    }
 }

@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/flower_pot_cross",
-  "textures": {
-    "plant": "naturesaura:block/crimson_aura_mushroom"
-  }
+    "parent": "minecraft:block/flower_pot_cross",
+    "textures": {
+        "plant": "naturesaura:block/crimson_aura_mushroom"
+    }
 }

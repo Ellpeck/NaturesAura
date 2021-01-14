@@ -1,21 +1,21 @@
 {
-  "name": "사격 마크",
-  "icon": "naturesaura:projectile_generator",
-  "category": "creating",
-  "advancement": "naturesaura:sky_ingot",
-  "pages": [
-    {
-      "type": "text",
-      "text": "어떤 $(thing)투사체$()의 강점은, 어떤 경우에는, 생명체를 뚫어 순간이동 시킬 수 있을 정도로 충분히 강하다. 그러나, 이 힘은 또한 $(#419600)오라$()를 만드는 데 사용될 수 있다: $(item)사격 마크$()는 그것을 쏘는 모든 발사체의 에너지를 자연으로 확산시키는 $(#419600)오라$()로 변환한다."
-    },
-    {
-      "type": "text",
-      "text": "이것을 위해, 다른 종류의 투사체는 다른 양을 생산한다 - $(item)눈덩이$()는 예를 들어, $(item)엔더 진주$()보다 더 적은 양의 에너지를 생산한다.$(p)그러나 주의할 점이 있다: 투사체는 북쪽 면부터 시작해서 $(thing)순서대로$() 사면을 향해 쏠 필요가 있다. 비활성화 된 면을 타격하는 투사체는 어떤 $(#419600)오라$()도 생성하지 않는다."
-    },
-    {
-      "type": "crafting",
-      "recipe": "naturesaura:projectile_generator",
-      "text": "$(item)사격 마크$() 만들기"
-    }
-  ]
+    "name": "사격 마크",
+    "icon": "naturesaura:projectile_generator",
+    "category": "creating",
+    "advancement": "naturesaura:sky_ingot",
+    "pages": [
+        {
+            "type": "text",
+            "text": "어떤 $(thing)투사체$()의 강점은, 어떤 경우에는, 생명체를 뚫어 순간이동 시킬 수 있을 정도로 충분히 강하다. 그러나, 이 힘은 또한 $(#419600)오라$()를 만드는 데 사용될 수 있다: $(item)사격 마크$()는 그것을 쏘는 모든 발사체의 에너지를 자연으로 확산시키는 $(#419600)오라$()로 변환한다."
+        },
+        {
+            "type": "text",
+            "text": "이것을 위해, 다른 종류의 투사체는 다른 양을 생산한다 - $(item)눈덩이$()는 예를 들어, $(item)엔더 진주$()보다 더 적은 양의 에너지를 생산한다.$(p)그러나 주의할 점이 있다: 투사체는 북쪽 면부터 시작해서 $(thing)순서대로$() 사면을 향해 쏠 필요가 있다. 비활성화 된 면을 타격하는 투사체는 어떤 $(#419600)오라$()도 생성하지 않는다."
+        },
+        {
+            "type": "crafting",
+            "recipe": "naturesaura:projectile_generator",
+            "text": "$(item)사격 마크$() 만들기"
+        }
+    ]
 }

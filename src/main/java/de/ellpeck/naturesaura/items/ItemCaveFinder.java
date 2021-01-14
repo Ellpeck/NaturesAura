@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.items;
 
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;

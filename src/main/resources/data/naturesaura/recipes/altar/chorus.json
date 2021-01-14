@@ -1,15 +1,15 @@
 {
-  "type": "naturesaura:altar",
-  "input": {
-    "item": "minecraft:popped_chorus_fruit"
-  },
-  "output": {
-    "item": "minecraft:chorus_flower"
-  },
-  "aura_type": "naturesaura:overworld",
-  "catalyst": {
-    "item": "naturesaura:conversion_catalyst"
-  },
-  "aura": 15000,
-  "time": 80
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:popped_chorus_fruit"
+    },
+    "output": {
+        "item": "minecraft:chorus_flower"
+    },
+    "aura_type": "naturesaura:overworld",
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 15000,
+    "time": 80
 }

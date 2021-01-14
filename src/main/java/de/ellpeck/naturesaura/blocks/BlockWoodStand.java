@@ -1,13 +1,13 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.recipes.ModRecipes;
-import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderWoodStand;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.recipes.ModRecipes;
+import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.block.BlockState;

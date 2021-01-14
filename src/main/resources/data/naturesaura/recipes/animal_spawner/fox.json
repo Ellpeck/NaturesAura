@@ -1,17 +1,17 @@
 {
-  "type": "naturesaura:animal_spawner",
-  "ingredients": [
-    {
-      "item": "naturesaura:birth_spirit"
-    },
-    {
-      "item": "minecraft:sweet_berries"
-    },
-    {
-      "item": "minecraft:feather"
-    }
-  ],
-  "entity": "minecraft:fox",
-  "aura": 30000,
-  "time": 100
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:sweet_berries"
+        },
+        {
+            "item": "minecraft:feather"
+        }
+    ],
+    "entity": "minecraft:fox",
+    "aura": 30000,
+    "time": 100
 }

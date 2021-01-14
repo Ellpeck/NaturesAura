@@ -1,17 +1,17 @@
 {
-  "name": "오라 감지기",
-  "icon": "naturesaura:aura_detector",
-  "category": "devices",
-  "advancement": "naturesaura:infused_materials",
-  "pages": [
-    {
-      "type": "text",
-      "text": "$(#419600)오라$()를 가지고 작업할 때, 직접 확인하기 위해 그곳에 있지 않아도 어떤 지역의 수준에 대해 아는 것이 유용할 수 있다. $(item)오라 감지기$()는 당신이 그것에 $(item)레드스톤 비교기$()를 부착하면, 그 주변의 가까운곳의 $(#419600)오라$()의 양에 근거하여 $(thing)레드스톤 신호$()를 보낸다. 이것의 표시 범위는 $(l:items/eye)자연의 눈$()과 비슷하다."
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)오라 감지기$() 만들기",
-      "recipe": "naturesaura:aura_detector"
-    }
-  ]
+    "name": "오라 감지기",
+    "icon": "naturesaura:aura_detector",
+    "category": "devices",
+    "advancement": "naturesaura:infused_materials",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(#419600)오라$()를 가지고 작업할 때, 직접 확인하기 위해 그곳에 있지 않아도 어떤 지역의 수준에 대해 아는 것이 유용할 수 있다. $(item)오라 감지기$()는 당신이 그것에 $(item)레드스톤 비교기$()를 부착하면, 그 주변의 가까운곳의 $(#419600)오라$()의 양에 근거하여 $(thing)레드스톤 신호$()를 보낸다. 이것의 표시 범위는 $(l:items/eye)자연의 눈$()과 비슷하다."
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)오라 감지기$() 만들기",
+            "recipe": "naturesaura:aura_detector"
+        }
+    ]
 }

@@ -1,19 +1,19 @@
 {
-  "variants": {
-    "facing=north": {
-      "model": "naturesaura:block/auto_crafter"
-    },
-    "facing=south": {
-      "model": "naturesaura:block/auto_crafter",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "naturesaura:block/auto_crafter",
-      "y": 270
-    },
-    "facing=east": {
-      "model": "naturesaura:block/auto_crafter",
-      "y": 90
+    "variants": {
+        "facing=north": {
+            "model": "naturesaura:block/auto_crafter"
+        },
+        "facing=south": {
+            "model": "naturesaura:block/auto_crafter",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "naturesaura:block/auto_crafter",
+            "y": 270
+        },
+        "facing=east": {
+            "model": "naturesaura:block/auto_crafter",
+            "y": 90
+        }
     }
-  }
 }

@@ -1,18 +1,18 @@
 {
-  "name": "망각의 장미",
-  "icon": "naturesaura:end_flower",
-  "category": "creating",
-  "advancement": "naturesaura:end_flower",
-  "pages": [
-    {
-      "type": "text",
-      "text": "$(thing)엔더 드래곤$()은 딱 보기에도 사납다고 알려져 있다. 누구보다 $(thing)엔더$()를 잘 지켜주지만 패배할 수 있어 이것은 새끼의 토큰과 많은 자부심을 가질 뿐만 아니라 $(item)망각의 장미$()도 지니고 있다. 용이 죽으면, 어떤 식물학자에게 수집되어 어떤 차원에도 놓일 준비가 되어, 엔더 섬 땅으로부터 싹을 틔우기 시작할 것이다."
-    },
-    {
-      "type": "spotlight",
-      "item": "naturesaura:end_flower",
-      "text": "이 꽃은 흥미로운 방법으로 수확할 수 있는 매우 많은 양의 $(#419600)오라$()를 가지고 있다: $(item)엔더의 눈$() 하나를 땅에 떨어뜨리면 장미가 그것을 소모하고 그것의 $(#419600)오라$()를 자연으로 흐뜨려트리기 시작할 것이다. 이 과정 동안, 멈출 수도, 수확할 수도 없다.",
-      "link_recipe": true
-    }
-  ]
+    "name": "망각의 장미",
+    "icon": "naturesaura:end_flower",
+    "category": "creating",
+    "advancement": "naturesaura:end_flower",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(thing)엔더 드래곤$()은 딱 보기에도 사납다고 알려져 있다. 누구보다 $(thing)엔더$()를 잘 지켜주지만 패배할 수 있어 이것은 새끼의 토큰과 많은 자부심을 가질 뿐만 아니라 $(item)망각의 장미$()도 지니고 있다. 용이 죽으면, 어떤 식물학자에게 수집되어 어떤 차원에도 놓일 준비가 되어, 엔더 섬 땅으로부터 싹을 틔우기 시작할 것이다."
+        },
+        {
+            "type": "spotlight",
+            "item": "naturesaura:end_flower",
+            "text": "이 꽃은 흥미로운 방법으로 수확할 수 있는 매우 많은 양의 $(#419600)오라$()를 가지고 있다: $(item)엔더의 눈$() 하나를 땅에 떨어뜨리면 장미가 그것을 소모하고 그것의 $(#419600)오라$()를 자연으로 흐뜨려트리기 시작할 것이다. 이 과정 동안, 멈출 수도, 수확할 수도 없다.",
+            "link_recipe": true
+        }
+    ]
 }

@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura.reg;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.blocks.*;

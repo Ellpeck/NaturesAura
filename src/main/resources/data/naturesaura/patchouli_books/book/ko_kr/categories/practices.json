@@ -1,6 +1,6 @@
 {
-  "name": "자연의 연습",
-  "description": "$(#419600)오라$()에 관련된 것은 반드시 수집과 저장에만 해당되는 것이 아니라, 장기적으로 유용할 수 있는 다른 연습일 수 있다. 이 카테고리는 어떤 연습이 존재하고 이를 실행할 수 있는 방법에 대한 정보를 제공한다.",
-  "icon": "naturesaura:textures/gui/patchouli/categories/practices.png",
-  "sortnum": 5
+    "name": "자연의 연습",
+    "description": "$(#419600)오라$()에 관련된 것은 반드시 수집과 저장에만 해당되는 것이 아니라, 장기적으로 유용할 수 있는 다른 연습일 수 있다. 이 카테고리는 어떤 연습이 존재하고 이를 실행할 수 있는 방법에 대한 정보를 제공한다.",
+    "icon": "naturesaura:textures/gui/patchouli/categories/practices.png",
+    "sortnum": 5
 }

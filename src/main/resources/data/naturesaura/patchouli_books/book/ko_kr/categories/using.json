@@ -1,6 +1,6 @@
 {
-  "name": "오라의 이용",
-  "description": "월드로부터 $(#419600)오라$()를 모을 때, 어떤 사람이 물어보는 본능적인 질문은 $(italic)\"어떻게 이것을 이용할 수 있을까?\"$()일 것이다. 이 카테고리는 단지 그것을 설명할 항목을 포함하고 있다.",
-  "icon": "naturesaura:textures/gui/patchouli/categories/using.png",
-  "sortnum": 15
+    "name": "오라의 이용",
+    "description": "월드로부터 $(#419600)오라$()를 모을 때, 어떤 사람이 물어보는 본능적인 질문은 $(italic)\"어떻게 이것을 이용할 수 있을까?\"$()일 것이다. 이 카테고리는 단지 그것을 설명할 항목을 포함하고 있다.",
+    "icon": "naturesaura:textures/gui/patchouli/categories/using.png",
+    "sortnum": 15
 }

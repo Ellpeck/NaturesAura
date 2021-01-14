@@ -1,8 +1,8 @@
 {
-  "replace": false,
-  "values": [
-    "naturesaura:golden_leaves",
-    "naturesaura:ancient_leaves",
-    "naturesaura:decayed_leaves"
-  ]
+    "replace": false,
+    "values": [
+        "naturesaura:golden_leaves",
+        "naturesaura:ancient_leaves",
+        "naturesaura:decayed_leaves"
+    ]
 }

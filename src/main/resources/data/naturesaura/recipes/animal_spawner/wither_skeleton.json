@@ -1,17 +1,17 @@
 {
-  "type": "naturesaura:animal_spawner",
-  "ingredients": [
-    {
-      "item": "naturesaura:birth_spirit"
-    },
-    {
-      "item": "minecraft:bone"
-    },
-    {
-      "item": "minecraft:obsidian"
-    }
-  ],
-  "entity": "minecraft:wither_skeleton",
-  "aura": 150000,
-  "time": 150
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:bone"
+        },
+        {
+            "item": "minecraft:obsidian"
+        }
+    ],
+    "entity": "minecraft:wither_skeleton",
+    "aura": 150000,
+    "time": 150
 }

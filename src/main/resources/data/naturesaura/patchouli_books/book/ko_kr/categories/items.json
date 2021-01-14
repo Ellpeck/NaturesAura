@@ -1,6 +1,6 @@
 {
-  "name": "자연의 아이템",
-  "description": "자연에 대한 생각은 해변이나 숲, 혹은 평원으로 여러분을 이끌지도 모르지만, 때때로 그것은 자연 그 자체와 강하게 얽혀 있는 물건과 악세사리들로 여러분을 이끌지도 모른다. 이 카테고리에서는 그러한 아이템을 찾을 수 있다.",
-  "icon": "naturesaura:textures/gui/patchouli/categories/items.png",
-  "sortnum": 25
+    "name": "자연의 아이템",
+    "description": "자연에 대한 생각은 해변이나 숲, 혹은 평원으로 여러분을 이끌지도 모르지만, 때때로 그것은 자연 그 자체와 강하게 얽혀 있는 물건과 악세사리들로 여러분을 이끌지도 모른다. 이 카테고리에서는 그러한 아이템을 찾을 수 있다.",
+    "icon": "naturesaura:textures/gui/patchouli/categories/items.png",
+    "sortnum": 25
 }

@@ -1,20 +1,20 @@
 {
-  "type": "naturesaura:animal_spawner",
-  "ingredients": [
-    {
-      "item": "naturesaura:birth_spirit"
-    },
-    {
-      "item": "minecraft:rotten_flesh"
-    },
-    {
-      "item": "minecraft:porkchop"
-    },
-    {
-      "item": "minecraft:gold_nugget"
-    }
-  ],
-  "entity": "minecraft:hoglin",
-  "aura": 120000,
-  "time": 150
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:rotten_flesh"
+        },
+        {
+            "item": "minecraft:porkchop"
+        },
+        {
+            "item": "minecraft:gold_nugget"
+        }
+    ],
+    "entity": "minecraft:hoglin",
+    "aura": 120000,
+    "time": 150
 }

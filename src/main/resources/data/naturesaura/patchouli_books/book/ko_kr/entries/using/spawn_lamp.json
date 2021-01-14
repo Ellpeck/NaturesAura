@@ -1,17 +1,17 @@
 {
-  "name": "안식의 등불",
-  "icon": "naturesaura:spawn_lamp",
-  "category": "using",
-  "advancement": "naturesaura:aura_bottle_end",
-  "pages": [
-    {
-      "type": "text",
-      "text": "$(item)안식의 등불$()은 훌륭한 장식품이지만, 또 다른 매우 유용한 기능을 가지고 있다: $(thing)레드스톤 신호$()가 공급될 때, 등불의 주변 약 48블록의 지역에 있는 어떠한 몬스터도, 밝기 수준에 관계 없이, 완전히 $(thing)나타나지 않게$() 할 것이다. 이를 위해 레드스톤 신호의 강도가 범위를 결정한다. 몬스터의 생성이 중단될 때마다 소량의 $(#419600)오라$()가 사용된다."
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)안식의 등불$() 만들기",
-      "recipe": "naturesaura:spawn_lamp"
-    }
-  ]
+    "name": "안식의 등불",
+    "icon": "naturesaura:spawn_lamp",
+    "category": "using",
+    "advancement": "naturesaura:aura_bottle_end",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(item)안식의 등불$()은 훌륭한 장식품이지만, 또 다른 매우 유용한 기능을 가지고 있다: $(thing)레드스톤 신호$()가 공급될 때, 등불의 주변 약 48블록의 지역에 있는 어떠한 몬스터도, 밝기 수준에 관계 없이, 완전히 $(thing)나타나지 않게$() 할 것이다. 이를 위해 레드스톤 신호의 강도가 범위를 결정한다. 몬스터의 생성이 중단될 때마다 소량의 $(#419600)오라$()가 사용된다."
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)안식의 등불$() 만들기",
+            "recipe": "naturesaura:spawn_lamp"
+        }
+    ]
 }

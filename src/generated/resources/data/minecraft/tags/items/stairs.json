@@ -1,8 +1,8 @@
 {
-  "replace": false,
-  "values": [
-    "naturesaura:ancient_stairs",
-    "naturesaura:infused_brick_stairs",
-    "naturesaura:infused_stairs"
-  ]
+    "replace": false,
+    "values": [
+        "naturesaura:ancient_stairs",
+        "naturesaura:infused_brick_stairs",
+        "naturesaura:infused_stairs"
+    ]
 }

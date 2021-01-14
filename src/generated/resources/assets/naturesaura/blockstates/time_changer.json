@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "naturesaura:block/time_changer"
+    "variants": {
+        "": {
+            "model": "naturesaura:block/time_changer"
+        }
     }
-  }
 }

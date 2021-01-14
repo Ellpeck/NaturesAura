@@ -1,10 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 @SuppressWarnings("FieldNamingConvention")
 public final class ModBlocks {

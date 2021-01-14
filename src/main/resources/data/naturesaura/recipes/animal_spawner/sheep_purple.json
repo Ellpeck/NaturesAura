@@ -1,17 +1,17 @@
 {
-  "type": "naturesaura:animal_spawner",
-  "ingredients": [
-    {
-      "item": "naturesaura:birth_spirit"
-    },
-    {
-      "item": "minecraft:mutton"
-    },
-    {
-      "item": "minecraft:purple_wool"
-    }
-  ],
-  "entity": "minecraft:sheep",
-  "aura": 500,
-  "time": 60
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:mutton"
+        },
+        {
+            "item": "minecraft:purple_wool"
+        }
+    ],
+    "entity": "minecraft:sheep",
+    "aura": 500,
+    "time": 60
 }

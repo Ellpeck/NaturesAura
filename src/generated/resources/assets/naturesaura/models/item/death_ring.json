@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "naturesaura:item/death_ring"
-  }
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "naturesaura:item/death_ring"
+    }
 }

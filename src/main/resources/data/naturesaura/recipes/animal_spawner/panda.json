@@ -1,17 +1,17 @@
 {
-  "type": "naturesaura:animal_spawner",
-  "ingredients": [
-    {
-      "item": "naturesaura:birth_spirit"
-    },
-    {
-      "item": "minecraft:bamboo"
-    },
-    {
-      "item": "minecraft:jungle_sapling"
-    }
-  ],
-  "entity": "minecraft:panda",
-  "aura": 100000,
-  "time": 100
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:bamboo"
+        },
+        {
+            "item": "minecraft:jungle_sapling"
+        }
+    ],
+    "entity": "minecraft:panda",
+    "aura": 100000,
+    "time": 100
 }

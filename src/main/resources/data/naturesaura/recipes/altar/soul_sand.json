@@ -1,15 +1,15 @@
 {
-  "type": "naturesaura:altar",
-  "input": {
-    "item": "minecraft:sand"
-  },
-  "output": {
-    "item": "minecraft:soul_sand"
-  },
-  "aura_type": "naturesaura:nether",
-  "catalyst": {
-    "item": "naturesaura:conversion_catalyst"
-  },
-  "aura": 5000,
-  "time": 100
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:sand"
+    },
+    "output": {
+        "item": "minecraft:soul_sand"
+    },
+    "aura_type": "naturesaura:nether",
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 5000,
+    "time": 100
 }

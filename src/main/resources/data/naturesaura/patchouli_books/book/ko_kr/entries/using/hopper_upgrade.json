@@ -1,17 +1,17 @@
 {
-  "name": "호퍼 향상기",
-  "icon": "naturesaura:hopper_upgrade",
-  "category": "using",
-  "advancement": "naturesaura:infused_materials",
-  "pages": [
-    {
-      "type": "text",
-      "text": "$(item)호퍼$()를 이용해 물건을 수집하는 것도 유용하지만, 특히 물건을 수집해야 하는 넓은 면적을 갖게 되면 불편할 수 있다. 이를 위해 $(item)호퍼 향상기$()는 도움이 될 것이다: 단순히 $(item)호퍼$() 위에 올려놓음으로써, 아이템을 모으는 범위를 약 $(thing)7블록$()으로 급격하게 증가시킬 것이다.$(br)아이템을 수집할 때 소량의 $(#419600)오라$()를 사용한다."
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)호퍼 향상기$() 제작",
-      "recipe": "naturesaura:hopper_upgrade"
-    }
-  ]
+    "name": "호퍼 향상기",
+    "icon": "naturesaura:hopper_upgrade",
+    "category": "using",
+    "advancement": "naturesaura:infused_materials",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(item)호퍼$()를 이용해 물건을 수집하는 것도 유용하지만, 특히 물건을 수집해야 하는 넓은 면적을 갖게 되면 불편할 수 있다. 이를 위해 $(item)호퍼 향상기$()는 도움이 될 것이다: 단순히 $(item)호퍼$() 위에 올려놓음으로써, 아이템을 모으는 범위를 약 $(thing)7블록$()으로 급격하게 증가시킬 것이다.$(br)아이템을 수집할 때 소량의 $(#419600)오라$()를 사용한다."
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)호퍼 향상기$() 제작",
+            "recipe": "naturesaura:hopper_upgrade"
+        }
+    ]
 }

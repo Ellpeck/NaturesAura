@@ -1,29 +1,29 @@
 {
-  "name": "눈부신 나무",
-  "icon": "naturesaura:gold_leaf",
-  "category": "practices",
-  "priority": true,
-  "turnin": "naturesaura:gold_leaf",
-  "pages": [
-    {
-      "type": "text",
-      "text": "식물학자가 물체를 가진 $(#419600)오라$()의 마법적인 특성을 알아내려고 노력해온 세월 동안, 그들은 예기치 않은, 그러나 흔한 주제를 발견 했다: $(item)금$()은 인간과 $(#419600)오라$()의 상호작용에 항상 역할을 하는 것처럼 보인다."
-    },
-    {
-      "type": "spotlight",
-      "text": "이 물질과 처음 접촉하기 위해서는, 수확할 때 섬세하지만 강력한 물질인 $(item)금 잎$()을 떨어뜨릴 수 있는 $(item)금빛 나무$()를 만들어야 한다. 그런 나무를 만들려면 간단하게 $(item)금빛 섬유$()를 조금 만들어 나무의 잎속에 넣어라. 그러면 시간이 광휘를 가져다 줄 것이다.",
-      "item": "naturesaura:gold_leaf",
-      "link_recipe": true
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)금빛 섬유$() 제작",
-      "recipe": "naturesaura:gold_fiber"
-    },
-    {
-      "type": "crafting",
-      "text": "일단 수확한 $(item)금 잎$()은 쉽게 금빛 가루로 부술 수 있는데, $(item)금빛 가루$()는 $(l:practices/tree_ritual)숲의 의식$()에 필수적인 부분으로 땅에 놓을 수 있다.",
-      "recipe": "naturesaura:gold_powder"
-    }
-  ]
+    "name": "눈부신 나무",
+    "icon": "naturesaura:gold_leaf",
+    "category": "practices",
+    "priority": true,
+    "turnin": "naturesaura:gold_leaf",
+    "pages": [
+        {
+            "type": "text",
+            "text": "식물학자가 물체를 가진 $(#419600)오라$()의 마법적인 특성을 알아내려고 노력해온 세월 동안, 그들은 예기치 않은, 그러나 흔한 주제를 발견 했다: $(item)금$()은 인간과 $(#419600)오라$()의 상호작용에 항상 역할을 하는 것처럼 보인다."
+        },
+        {
+            "type": "spotlight",
+            "text": "이 물질과 처음 접촉하기 위해서는, 수확할 때 섬세하지만 강력한 물질인 $(item)금 잎$()을 떨어뜨릴 수 있는 $(item)금빛 나무$()를 만들어야 한다. 그런 나무를 만들려면 간단하게 $(item)금빛 섬유$()를 조금 만들어 나무의 잎속에 넣어라. 그러면 시간이 광휘를 가져다 줄 것이다.",
+            "item": "naturesaura:gold_leaf",
+            "link_recipe": true
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)금빛 섬유$() 제작",
+            "recipe": "naturesaura:gold_fiber"
+        },
+        {
+            "type": "crafting",
+            "text": "일단 수확한 $(item)금 잎$()은 쉽게 금빛 가루로 부술 수 있는데, $(item)금빛 가루$()는 $(l:practices/tree_ritual)숲의 의식$()에 필수적인 부분으로 땅에 놓을 수 있다.",
+            "recipe": "naturesaura:gold_powder"
+        }
+    ]
 }

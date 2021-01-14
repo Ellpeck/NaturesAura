@@ -1,16 +1,16 @@
 {
-  "type": "naturesaura:altar",
-  "input": {
-    "item": "minecraft:bone"
-  },
-  "output": {
-    "item": "minecraft:bone_meal",
-    "count": 6
-  },
-  "aura_type": "naturesaura:overworld",
-  "catalyst": {
-    "item": "naturesaura:crushing_catalyst"
-  },
-  "aura": 3000,
-  "time": 40
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:bone"
+    },
+    "output": {
+        "item": "minecraft:bone_meal",
+        "count": 6
+    },
+    "aura_type": "naturesaura:overworld",
+    "catalyst": {
+        "item": "naturesaura:crushing_catalyst"
+    },
+    "aura": 3000,
+    "time": 40
 }

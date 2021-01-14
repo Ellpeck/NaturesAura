@@ -1,14 +1,10 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.api.misc.IWorldData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ElytraItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,7 +13,6 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class ItemBreakPrevention extends ItemImpl {

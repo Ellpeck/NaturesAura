@@ -1,16 +1,16 @@
 {
-  "type": "naturesaura:altar",
-  "input": {
-    "item": "minecraft:blaze_rod"
-  },
-  "output": {
-    "item": "minecraft:blaze_powder",
-    "count": 4
-  },
-  "aura_type": "naturesaura:nether",
-  "catalyst": {
-    "item": "naturesaura:crushing_catalyst"
-  },
-  "aura": 5000,
-  "time": 60
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:blaze_rod"
+    },
+    "output": {
+        "item": "minecraft:blaze_powder",
+        "count": 4
+    },
+    "aura_type": "naturesaura:nether",
+    "catalyst": {
+        "item": "naturesaura:crushing_catalyst"
+    },
+    "aura": 5000,
+    "time": 60
 }

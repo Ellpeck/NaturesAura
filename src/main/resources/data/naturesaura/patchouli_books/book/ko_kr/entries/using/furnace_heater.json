@@ -1,17 +1,17 @@
 {
-  "name": "외부 발화기",
-  "icon": "naturesaura:furnace_heater",
-  "category": "using",
-  "advancement": "naturesaura:infused_materials",
-  "pages": [
-    {
-      "type": "text",
-      "text": "어느 순간, 사람들은 $(item)화로$()가 너무 느리고 효율적으로 사용하기에는 너무 많은 자원을 소비하고 있다는 것을 깨닫는다.$(br)$(item)외부 발화기$()는 모든 종류의 물질을 녹이는 데 필요한 열을 제공하는 것과 함께 그것의 모든 면에 놓여진 $(item)화로$()의 속도를 높인다. 참고로, 이에 필요한 $(#419600)오라$()가 소모되는 반면, 자연의 수준은 부정적으로 떨어지고, $(l:intro/aura)회복이 절감$()할지도 모른다."
-    },
-    {
-      "type": "naturesaura:tree_ritual",
-      "text": "$(l:practices/tree_ritual)숲의 의식$()을 이용해 $(item)외부 발화기$() 제작",
-      "recipe": "naturesaura:furnace_heater"
-    }
-  ]
+    "name": "외부 발화기",
+    "icon": "naturesaura:furnace_heater",
+    "category": "using",
+    "advancement": "naturesaura:infused_materials",
+    "pages": [
+        {
+            "type": "text",
+            "text": "어느 순간, 사람들은 $(item)화로$()가 너무 느리고 효율적으로 사용하기에는 너무 많은 자원을 소비하고 있다는 것을 깨닫는다.$(br)$(item)외부 발화기$()는 모든 종류의 물질을 녹이는 데 필요한 열을 제공하는 것과 함께 그것의 모든 면에 놓여진 $(item)화로$()의 속도를 높인다. 참고로, 이에 필요한 $(#419600)오라$()가 소모되는 반면, 자연의 수준은 부정적으로 떨어지고, $(l:intro/aura)회복이 절감$()할지도 모른다."
+        },
+        {
+            "type": "naturesaura:tree_ritual",
+            "text": "$(l:practices/tree_ritual)숲의 의식$()을 이용해 $(item)외부 발화기$() 제작",
+            "recipe": "naturesaura:furnace_heater"
+        }
+    ]
 }

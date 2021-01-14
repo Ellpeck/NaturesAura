@@ -1,35 +1,35 @@
 {
-  "name": "월드 레일",
-  "icon": "naturesaura:dimension_rail_nether",
-  "category": "using",
-  "advancement": "naturesaura:sky_ingot",
-  "pages": [
-    {
-      "type": "text",
-      "text": "$(item)광산 수레$()는 $(thing)포탈$()을 통해서도 여행할 수 있는 제한된 능력을 가지고 있지만, 이것은 확실히 복잡하고 만들기 어렵다. $(item)월드 레일$()은 이 문제를 쉽게 해결한다: 알려진 각 차원마다 한 가지씩 총 세 가지 종류가 있다. 광산 수레가 그 중 하나를 넘어가면, 그것은 직접 레일에 할당된 차원으로 운반되는 동시에, 그 과정에서 약간의 $(#419600)오라$()를 소모한다."
-    },
-    {
-      "type": "text",
-      "text": "광산 수레가 전송되는 $(thing)위치$()의 선택은 이동되는 차원에 기초한다:$(br)오버월드와 네더 사이를 여행하면 일반 포탈의 작동 방식과 마찬가지로 마인카트가 8분의 1의 위치로 전송된다.$(br)오버월드에서 엔더를 여행하는 것은 광산 수레를 $(thing)흑요석 플랫폼$()으로 보내고, 반대의 경우 여행할 때, 오버월드의 스폰 지점으로 보내게 될 것이다."
-    },
-    {
-      "type": "text",
-      "text": "레일 중 어느 하나에 $(l:items/range_visualizer)신비한 돋보기$()를 사용하면 목적지 위치가 목적지 차원에서 강조 표시되며, 하이라이트는 $(thing)벽을 통과해$() 볼 수 있으므로 큰 번거로움 없이 쉽게 찾을 수 있다.$(p)이 레일들에 대한 유일한 경고는 $(thing)살아있는 것$()이 타고 있는 수레를 운반하기에는 충분한 힘을 가지고 있지 않은것 같다는 것이다."
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)오버월드의 레일$() 만들기",
-      "recipe": "naturesaura:dimension_rail_overworld"
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)네더의 레일$() 만들기",
-      "recipe": "naturesaura:dimension_rail_nether"
-    },
-    {
-      "type": "crafting",
-      "text": "$(item)엔더의 레일$() 만들기",
-      "recipe": "naturesaura:dimension_rail_end"
-    }
-  ]
+    "name": "월드 레일",
+    "icon": "naturesaura:dimension_rail_nether",
+    "category": "using",
+    "advancement": "naturesaura:sky_ingot",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(item)광산 수레$()는 $(thing)포탈$()을 통해서도 여행할 수 있는 제한된 능력을 가지고 있지만, 이것은 확실히 복잡하고 만들기 어렵다. $(item)월드 레일$()은 이 문제를 쉽게 해결한다: 알려진 각 차원마다 한 가지씩 총 세 가지 종류가 있다. 광산 수레가 그 중 하나를 넘어가면, 그것은 직접 레일에 할당된 차원으로 운반되는 동시에, 그 과정에서 약간의 $(#419600)오라$()를 소모한다."
+        },
+        {
+            "type": "text",
+            "text": "광산 수레가 전송되는 $(thing)위치$()의 선택은 이동되는 차원에 기초한다:$(br)오버월드와 네더 사이를 여행하면 일반 포탈의 작동 방식과 마찬가지로 마인카트가 8분의 1의 위치로 전송된다.$(br)오버월드에서 엔더를 여행하는 것은 광산 수레를 $(thing)흑요석 플랫폼$()으로 보내고, 반대의 경우 여행할 때, 오버월드의 스폰 지점으로 보내게 될 것이다."
+        },
+        {
+            "type": "text",
+            "text": "레일 중 어느 하나에 $(l:items/range_visualizer)신비한 돋보기$()를 사용하면 목적지 위치가 목적지 차원에서 강조 표시되며, 하이라이트는 $(thing)벽을 통과해$() 볼 수 있으므로 큰 번거로움 없이 쉽게 찾을 수 있다.$(p)이 레일들에 대한 유일한 경고는 $(thing)살아있는 것$()이 타고 있는 수레를 운반하기에는 충분한 힘을 가지고 있지 않은것 같다는 것이다."
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)오버월드의 레일$() 만들기",
+            "recipe": "naturesaura:dimension_rail_overworld"
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)네더의 레일$() 만들기",
+            "recipe": "naturesaura:dimension_rail_nether"
+        },
+        {
+            "type": "crafting",
+            "text": "$(item)엔더의 레일$() 만들기",
+            "recipe": "naturesaura:dimension_rail_end"
+        }
+    ]
 }

@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "naturesaura:block/animal_generator"
+    "variants": {
+        "": {
+            "model": "naturesaura:block/animal_generator"
+        }
     }
-  }
 }

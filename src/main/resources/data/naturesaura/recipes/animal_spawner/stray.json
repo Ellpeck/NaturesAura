@@ -1,17 +1,17 @@
 {
-  "type": "naturesaura:animal_spawner",
-  "ingredients": [
-    {
-      "item": "naturesaura:birth_spirit"
-    },
-    {
-      "item": "minecraft:bone"
-    },
-    {
-      "item": "minecraft:ice"
-    }
-  ],
-  "entity": "minecraft:stray",
-  "aura": 100000,
-  "time": 120
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:bone"
+        },
+        {
+            "item": "minecraft:ice"
+        }
+    ],
+    "entity": "minecraft:stray",
+    "aura": 100000,
+    "time": 120
 }
