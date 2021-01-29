@@ -102,7 +102,7 @@ public final class ModRecipes {
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/sapphire", 40);
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/amber", 150);
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/resonating", 50);
-        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/sulfur", 3000);
+        ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/sulfur", 600);
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/saltpeter", 250);
         ore(NaturesAuraAPI.NETHER_ORES, "ores/firestone", 30);
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/salt", 2900);
