@@ -30,7 +30,7 @@ import java.util.*;
 
 public class WorldData implements IWorldData {
     public final ListMultimap<ResourceLocation, Tuple<Vector3d, Integer>> effectPowders = ArrayListMultimap.create();
-    public final Long2ObjectOpenHashMap<AuraChunk> auraChunksWithSpots = new Long2ObjectOpenHashMap<>();
+    public final Long2ObjectOpenHashMap<WorldSection> worldSectionsWithSpots = new Long2ObjectOpenHashMap<>();
     public final List<BlockPos> recentlyConvertedMossStones = new ArrayList<>();
     public final Set<TileEntitySpawnLamp> spawnLamps = new HashSet<>();
     private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();
@@ -99,5 +99,11 @@ public class WorldData implements IWorldData {
         this.recentlyConvertedMossStones.add(pos);
         if (this.recentlyConvertedMossStones.size() > 512)
             this.recentlyConvertedMossStones.remove(0);
+    }
+
+    public static class WorldSection {
+        // each world section is 128 blocks big
+        public static final int B_SIZE = 7;
+        public final Long2ObjectOpenHashMap<AuraChunk> chunksWithSpots = new Long2ObjectOpenHashMap<>();
     }
 }
