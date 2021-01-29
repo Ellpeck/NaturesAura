@@ -34,7 +34,7 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
     public void onTreeGrow(SaplingGrowTreeEvent event) {
         IWorld world = event.getWorld();
         BlockPos pos = event.getPos();
-        if (!world.isRemote() && IAuraType.forWorld(world).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD)
+        if (world instanceof World && !world.isRemote() && IAuraType.forWorld(world).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD)
                 && world.getBlockState(pos).getBlock() instanceof SaplingBlock) {
             Helper.getTileEntitiesInArea(world, pos, 10, tile -> {
                 if (!(tile instanceof TileEntityOakGenerator))
