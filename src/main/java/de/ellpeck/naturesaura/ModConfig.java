@@ -202,8 +202,10 @@ public final class ModConfig {
                 WeightedOre ore = new WeightedOre(new ResourceLocation(split[0]), Integer.parseInt(split[1]));
                 String dimension = split[2];
                 if ("nether".equalsIgnoreCase(dimension)) {
+                    NaturesAuraAPI.NETHER_ORES.removeIf(o -> o.tag.equals(ore.tag));
                     NaturesAuraAPI.NETHER_ORES.add(ore);
                 } else if ("overworld".equalsIgnoreCase(dimension)) {
+                    NaturesAuraAPI.OVERWORLD_ORES.removeIf(o -> o.tag.equals(ore.tag));
                     NaturesAuraAPI.OVERWORLD_ORES.add(ore);
                 } else {
                     throw new IllegalArgumentException(dimension);
