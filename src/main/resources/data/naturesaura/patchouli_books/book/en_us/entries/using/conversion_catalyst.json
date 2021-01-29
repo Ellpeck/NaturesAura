@@ -71,7 +71,7 @@
         {
             "type": "naturesaura:altar",
             "text": "Purifying a $(item)Poisonous Potato$()",
-            "recipe": "naturesaura:lead"
+            "recipe": "naturesaura:potato"
         },
         {
             "type": "naturesaura:altar",
