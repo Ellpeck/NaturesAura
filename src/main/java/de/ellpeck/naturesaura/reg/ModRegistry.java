@@ -45,10 +45,10 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -59,7 +59,6 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
 
-import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -341,14 +340,12 @@ public final class ModRegistry {
                 NaturesAura.proxy.registerTESR((ITESRProvider) item);
         }
 
-        for (Field entry : ModFeatures.Configured.class.getFields()) {
-            try {
-                ConfiguredFeature feature = (ConfiguredFeature) entry.get(null);
-                Registry.register(WorldGenRegistries.field_243653_e, feature.feature.getRegistryName(), feature);
-            } catch (IllegalAccessException e) {
-                NaturesAura.LOGGER.error(e);
-            }
-        }
+        // register features again for some reason
+        Registry.register(WorldGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "aura_bloom"), ModFeatures.Configured.AURA_BLOOM);
+        Registry.register(WorldGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "aura_cactus"), ModFeatures.Configured.AURA_CACTUS);
+        Registry.register(WorldGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "crimson_aura_mushroom"), ModFeatures.Configured.CRIMSON_AURA_MUSHROOM);
+        Registry.register(WorldGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "warped_aura_mushroom"), ModFeatures.Configured.WARPED_AURA_MUSHROOM);
+        Registry.register(WorldGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "aura_mushroom"), ModFeatures.Configured.AURA_MUSHROOM);
     }
 
     public static Block createFlowerPot(Block block) {
