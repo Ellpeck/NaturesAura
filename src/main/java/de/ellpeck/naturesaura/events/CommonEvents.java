@@ -21,6 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.server.ChunkHolder;
 import net.minecraft.world.server.ChunkManager;
@@ -29,6 +30,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -72,6 +74,19 @@ public class CommonEvents {
     @SubscribeEvent
     public void onWorldCapsAttach(AttachCapabilitiesEvent<World> event) {
         event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "data"), new WorldData());
+    }
+
+    @SubscribeEvent
+    public void onChunkUnload(ChunkEvent.Unload event) {
+        IChunk iChunk = event.getChunk();
+        if (iChunk instanceof Chunk) {
+            Chunk chunk = (Chunk) iChunk;
+            IAuraChunk auraChunk = chunk.getCapability(NaturesAuraAPI.capAuraChunk).orElse(null);
+            if (auraChunk instanceof AuraChunk) {
+                WorldData data = (WorldData) IWorldData.getWorldData(chunk.getWorld());
+                data.auraChunksWithSpots.remove(chunk.getPos().asLong());
+            }
+        }
     }
 
     @SubscribeEvent
