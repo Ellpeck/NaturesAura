@@ -59,6 +59,8 @@ public class NetherGrassEffect implements IDrainSpotEffect {
 
     @Override
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (world.getGameTime() % 40 != 0)
+            return;
         if (!this.calcValues(world, pos, spot))
             return;
         for (int i = this.amount / 2 + world.rand.nextInt(this.amount / 2); i >= 0; i--) {

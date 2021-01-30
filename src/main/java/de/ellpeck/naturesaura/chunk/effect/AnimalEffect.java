@@ -66,6 +66,8 @@ public class AnimalEffect implements IDrainSpotEffect {
 
     @Override
     public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (world.getGameTime() % 200 != 0)
+            return;
         if (!this.calcValues(world, pos, spot))
             return;
 
@@ -73,40 +75,38 @@ public class AnimalEffect implements IDrainSpotEffect {
         if (animals.size() >= 200)
             return;
 
-        if (world.getGameTime() % 200 == 0) {
-            List<ItemEntity> items = world.getEntitiesWithinAABB(ItemEntity.class, this.bb);
-            for (ItemEntity item : items) {
-                if (!item.isAlive())
-                    continue;
-                if (!NaturesAuraAPI.instance().isEffectPowderActive(world, item.getPosition(), NAME))
-                    continue;
+        List<ItemEntity> items = world.getEntitiesWithinAABB(ItemEntity.class, this.bb);
+        for (ItemEntity item : items) {
+            if (!item.isAlive())
+                continue;
+            if (!NaturesAuraAPI.instance().isEffectPowderActive(world, item.getPosition(), NAME))
+                continue;
 
-                ItemStack stack = item.getItem();
-                if (!(stack.getItem() instanceof EggItem))
-                    continue;
-                // The getAge() method is client-side only for absolutely no reason but I want it so I don't care
-                int age = ObfuscationReflectionHelper.getPrivateValue(ItemEntity.class, item, "field_70292_b");
-                if (age < item.lifespan / 2)
-                    continue;
+            ItemStack stack = item.getItem();
+            if (!(stack.getItem() instanceof EggItem))
+                continue;
+            // The getAge() method is client-side only for absolutely no reason but I want it so I don't care
+            int age = ObfuscationReflectionHelper.getPrivateValue(ItemEntity.class, item, "field_70292_b");
+            if (age < item.lifespan / 2)
+                continue;
 
-                if (stack.getCount() <= 1)
-                    item.remove();
-                else {
-                    stack.shrink(1);
-                    item.setItem(stack);
-                }
-
-                ChickenEntity chicken = new ChickenEntity(EntityType.CHICKEN, world);
-                chicken.setGrowingAge(-24000);
-                chicken.setPosition(item.getPosX(), item.getPosY(), item.getPosZ());
-                world.addEntity(chicken);
-
-                BlockPos closestSpot = IAuraChunk.getHighestSpot(world, item.getPosition(), 35, pos);
-                IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 2000);
+            if (stack.getCount() <= 1)
+                item.remove();
+            else {
+                stack.shrink(1);
+                item.setItem(stack);
             }
+
+            ChickenEntity chicken = new ChickenEntity(EntityType.CHICKEN, world);
+            chicken.setGrowingAge(-24000);
+            chicken.setPosition(item.getPosX(), item.getPosY(), item.getPosZ());
+            world.addEntity(chicken);
+
+            BlockPos closestSpot = IAuraChunk.getHighestSpot(world, item.getPosition(), 35, pos);
+            IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 2000);
         }
 
-        if (world.rand.nextInt(200) <= this.chance) {
+        if (world.rand.nextInt(20) <= this.chance) {
             if (animals.size() < 2)
                 return;
             AnimalEntity first = animals.get(world.rand.nextInt(animals.size()));
