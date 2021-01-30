@@ -81,15 +81,13 @@ public class ClientEvents {
                 MutableInt amount = new MutableInt(IAuraChunk.DEFAULT_AURA);
                 MutableInt spots = new MutableInt();
                 MutableInt chunks = new MutableInt();
-                MutableInt sections = new MutableInt();
                 IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 35, (blockPos, drainSpot) -> {
                     spots.increment();
                     amount.add(drainSpot);
                 });
                 Helper.getAuraChunksWithSpotsInArea(mc.world, mc.player.getPosition(), 35, c -> chunks.increment());
-                Helper.getWorldSectionsWithSpotsInArea(mc.world, mc.player.getPosition(), 35, s -> sections.increment());
                 NumberFormat format = NumberFormat.getInstance();
-                left.add(prefix + "A: " + format.format(amount.intValue()) + " (S: " + spots.intValue() + ", C: " + chunks.intValue() + ", WS: " + sections.intValue() + ")");
+                left.add(prefix + "A: " + format.format(amount.intValue()) + " (S: " + spots.intValue() + ", C: " + chunks.intValue() + ")");
                 left.add(prefix + "AT: " + IAuraType.forWorld(mc.world).getName());
             }
         }

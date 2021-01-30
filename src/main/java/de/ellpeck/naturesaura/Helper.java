@@ -10,7 +10,6 @@ import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.misc.WorldData;
-import de.ellpeck.naturesaura.misc.WorldData.WorldSection;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -78,25 +77,15 @@ public final class Helper {
         return false;
     }
 
-    public static void getWorldSectionsWithSpotsInArea(World world, BlockPos pos, int radius, Consumer<WorldSection> consumer){
+    public static void getAuraChunksWithSpotsInArea(World world, BlockPos pos, int radius, Consumer<AuraChunk> consumer) {
         WorldData data = (WorldData) IWorldData.getWorldData(world);
-        for (int x = pos.getX() - radius >> WorldSection.B_SIZE; x <= pos.getX() + radius >> WorldSection.B_SIZE; x++) {
-            for (int z = pos.getZ() - radius >> WorldSection.B_SIZE; z <= pos.getZ() + radius >> WorldSection.B_SIZE; z++) {
-                WorldSection section = data.worldSectionsWithSpots.get(ChunkPos.asLong(x, z));
-                if (section != null)
-                    consumer.accept(section);
+        for (int x = pos.getX() - radius >> 4; x <= pos.getX() + radius >> 4; x++) {
+            for (int z = pos.getZ() - radius >> 4; z <= pos.getZ() + radius >> 4; z++) {
+                AuraChunk chunk = data.auraChunksWithSpots.get(ChunkPos.asLong(x, z));
+                if (chunk != null)
+                    consumer.accept(chunk);
             }
         }
-    }
-
-    public static void getAuraChunksWithSpotsInArea(World world, BlockPos pos, int radius, Consumer<AuraChunk> consumer) {
-       getWorldSectionsWithSpotsInArea(world,pos,radius, s -> {
-           for (AuraChunk chunk : s.chunksWithSpots.values()) {
-               ChunkPos chunkPos = chunk.getPos();
-               if (chunkPos.x >= pos.getX() - radius >> 4 && chunkPos.x <= pos.getX() + radius >> 4 && chunkPos.z >= pos.getZ() - radius >> 4 && chunkPos.z <= pos.getZ() + radius >> 4)
-                   consumer.accept(chunk);
-           }
-       });
     }
 
     public static List<ItemFrameEntity> getAttachedItemFrames(World world, BlockPos pos) {

@@ -7,7 +7,6 @@ import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect.ActiveType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.misc.IWorldData;
 import de.ellpeck.naturesaura.misc.WorldData;
-import de.ellpeck.naturesaura.misc.WorldData.WorldSection;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -120,7 +119,7 @@ public class AuraChunk implements IAuraChunk {
     private void addDrainSpot(BlockPos pos, MutableInt spot) {
         int expX = pos.getX() >> 4;
         int expZ = pos.getZ() >> 4;
-        ChunkPos myPos = this.getPos();
+        ChunkPos myPos = this.chunk.getPos();
         if (expX != myPos.x || expZ != myPos.z)
             throw new IllegalArgumentException("Tried to add drain spot " + pos + " to chunk at " + myPos.x + ", " + myPos.z + " when it should've been added to chunk at " + expX + ", " + expZ);
 
@@ -131,7 +130,7 @@ public class AuraChunk implements IAuraChunk {
         this.drainSpots.clear();
         for (Map.Entry<BlockPos, MutableInt> entry : spots.entrySet())
             this.addDrainSpot(entry.getKey(), entry.getValue());
-        this.addOrRemoveAsActive(this.drainSpots.size() > 0);
+        this.addOrRemoveAsActive();
     }
 
     @Override
@@ -143,7 +142,7 @@ public class AuraChunk implements IAuraChunk {
     public void markDirty() {
         this.chunk.markDirty();
         this.needsSync = true;
-        this.addOrRemoveAsActive(this.drainSpots.size() > 0);
+        this.addOrRemoveAsActive();
     }
 
     public void update() {
@@ -157,7 +156,7 @@ public class AuraChunk implements IAuraChunk {
         }
 
         if (this.needsSync) {
-            ChunkPos pos = this.getPos();
+            ChunkPos pos = this.chunk.getPos();
             PacketHandler.sendToAllLoaded(world,
                     new BlockPos(pos.x * 16, 0, pos.z * 16),
                     this.makePacket());
@@ -166,7 +165,7 @@ public class AuraChunk implements IAuraChunk {
     }
 
     public PacketAuraChunk makePacket() {
-        ChunkPos pos = this.getPos();
+        ChunkPos pos = this.chunk.getPos();
         return new PacketAuraChunk(pos.x, pos.z, this.drainSpots);
     }
 
@@ -198,27 +197,6 @@ public class AuraChunk implements IAuraChunk {
         }
     }
 
-    public ChunkPos getPos() {
-        return this.chunk.getPos();
-    }
-
-    public void addOrRemoveAsActive(boolean add) {
-        ChunkPos chunkPos = this.getPos();
-        long sectionPos = new ChunkPos(chunkPos.x >> WorldSection.B_SIZE - 4, chunkPos.z >> WorldSection.B_SIZE - 4).asLong();
-        WorldData data = (WorldData) IWorldData.getWorldData(this.chunk.getWorld());
-        if (add) {
-            WorldSection section = data.worldSectionsWithSpots.computeIfAbsent(sectionPos, l -> new WorldSection());
-            section.chunksWithSpots.put(chunkPos.asLong(), this);
-        } else {
-            WorldSection section = data.worldSectionsWithSpots.get(sectionPos);
-            if (section != null) {
-                section.chunksWithSpots.remove(chunkPos.asLong());
-                if (section.chunksWithSpots.size() <= 0)
-                    data.worldSectionsWithSpots.remove(sectionPos);
-            }
-        }
-    }
-
     @Override
     public CompoundNBT serializeNBT() {
         ListNBT list = new ListNBT();
@@ -244,7 +222,16 @@ public class AuraChunk implements IAuraChunk {
                     BlockPos.fromLong(tag.getLong("pos")),
                     new MutableInt(tag.getInt("amount")));
         }
-        this.addOrRemoveAsActive(this.drainSpots.size() > 0);
+        this.addOrRemoveAsActive();
     }
 
+    private void addOrRemoveAsActive() {
+        long chunkPos = this.chunk.getPos().asLong();
+        WorldData data = (WorldData) IWorldData.getWorldData(this.chunk.getWorld());
+        if (this.drainSpots.size() > 0) {
+            data.auraChunksWithSpots.put(chunkPos, this);
+        } else {
+            data.auraChunksWithSpots.remove(chunkPos);
+        }
+    }
 }

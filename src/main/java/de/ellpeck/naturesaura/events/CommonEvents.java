@@ -19,10 +19,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.server.ChunkHolder;
 import net.minecraft.world.server.ChunkManager;
@@ -31,7 +29,6 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -70,16 +67,6 @@ public class CommonEvents {
     public void onChunkCapsAttach(AttachCapabilitiesEvent<Chunk> event) {
         Chunk chunk = event.getObject();
         event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "aura"), new AuraChunkProvider(chunk));
-    }
-
-    @SubscribeEvent
-    public void onChunkUnload(ChunkEvent.Unload event) {
-        IChunk chunk = event.getChunk();
-        if (chunk instanceof Chunk) {
-            IAuraChunk auraChunk = ((Chunk) chunk).getCapability(NaturesAuraAPI.capAuraChunk).orElse(null);
-            if (auraChunk instanceof AuraChunk)
-                ((AuraChunk) auraChunk).addOrRemoveAsActive(false);
-        }
     }
 
     @SubscribeEvent
