@@ -29,12 +29,11 @@ public class TileEntityAnimalContainer extends TileEntityImpl implements ITickab
 
     @Override
     public void tick() {
-        if (this.world.isRemote || this.world.getGameTime() % 2 != 0)
+        if (this.world.isRemote)
             return;
-
         int radius = this.getRadius();
         Set<AnimalEntity> animalsInRange = new HashSet<>(this.world.getEntitiesWithinAABB(AnimalEntity.class, new AxisAlignedBB(this.pos).grow(radius - 1)));
-        List<AnimalEntity> animalsOutRange = this.world.getEntitiesWithinAABB(AnimalEntity.class, new AxisAlignedBB(this.pos).grow(radius));
+        List<AnimalEntity> animalsOutRange = this.world.getEntitiesWithinAABB(AnimalEntity.class, new AxisAlignedBB(this.pos).grow(radius + 1));
         for (AnimalEntity animal : animalsOutRange) {
             if (animalsInRange.contains(animal))
                 continue;
