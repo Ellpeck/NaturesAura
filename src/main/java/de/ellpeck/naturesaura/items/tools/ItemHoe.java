@@ -37,7 +37,7 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
         if (this == ModItems.INFUSED_IRON_HOE) {
             World world = context.getWorld();
             ActionResultType result = super.onItemUse(context);
-            if (!world.isRemote && result == ActionResultType.SUCCESS) {
+            if (!world.isRemote && result.isSuccessOrConsume()) {
                 ItemStack seed = ItemStack.EMPTY;
                 Random random = world.getRandom();
                 BlockPos pos = context.getPos();
