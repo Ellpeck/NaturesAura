@@ -72,7 +72,7 @@ public class AnimalEffect implements IDrainSpotEffect {
             return;
 
         List<AnimalEntity> animals = world.getEntitiesWithinAABB(AnimalEntity.class, this.bb);
-        if (animals.size() >= 200)
+        if (animals.size() >= ModConfig.instance.maxAnimalsAroundPowder.get())
             return;
 
         List<ItemEntity> items = world.getEntitiesWithinAABB(ItemEntity.class, this.bb);

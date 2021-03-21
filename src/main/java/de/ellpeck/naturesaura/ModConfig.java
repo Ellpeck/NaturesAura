@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.chunk.effect.OreSpawnEffect;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Collections;
@@ -16,36 +17,37 @@ import java.util.Objects;
 public final class ModConfig {
 
     public static ModConfig instance;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> additionalBotanistPickaxeConversions;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> auraTypeOverrides;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> additionalOres;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> oreExceptions;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> additionalProjectiles;
-    public ForgeConfigSpec.ConfigValue<Integer> fieldCreatorRange;
-    public ForgeConfigSpec.ConfigValue<Double> auraToRFRatio;
+    public ConfigValue<List<? extends String>> additionalBotanistPickaxeConversions;
+    public ConfigValue<List<? extends String>> auraTypeOverrides;
+    public ConfigValue<List<? extends String>> additionalOres;
+    public ConfigValue<List<? extends String>> oreExceptions;
+    public ConfigValue<List<? extends String>> additionalProjectiles;
+    public ConfigValue<Integer> fieldCreatorRange;
+    public ConfigValue<Double> auraToRFRatio;
+    public ConfigValue<Integer> maxAnimalsAroundPowder;
 
-    public ForgeConfigSpec.ConfigValue<Boolean> rfConverter;
-    public ForgeConfigSpec.ConfigValue<Boolean> chunkLoader;
-    public ForgeConfigSpec.ConfigValue<Boolean> grassDieEffect;
-    public ForgeConfigSpec.ConfigValue<Boolean> netherDecayEffect;
-    public ForgeConfigSpec.ConfigValue<Boolean> plantBoostEffect;
-    public ForgeConfigSpec.ConfigValue<Boolean> cacheRechargeEffect;
-    public ForgeConfigSpec.ConfigValue<Boolean> explosionEffect;
-    public ForgeConfigSpec.ConfigValue<Boolean> breathlessEffect;
-    public ForgeConfigSpec.ConfigValue<Boolean> angerEffect;
-    public ForgeConfigSpec.ConfigValue<Boolean> animalEffect;
-    public ForgeConfigSpec.ConfigValue<Boolean> oreEffect;
-    public ForgeConfigSpec.ConfigValue<Boolean> auraBlooms;
-    public ForgeConfigSpec.ConfigValue<Boolean> netherGrassEffect;
+    public ConfigValue<Boolean> rfConverter;
+    public ConfigValue<Boolean> chunkLoader;
+    public ConfigValue<Boolean> grassDieEffect;
+    public ConfigValue<Boolean> netherDecayEffect;
+    public ConfigValue<Boolean> plantBoostEffect;
+    public ConfigValue<Boolean> cacheRechargeEffect;
+    public ConfigValue<Boolean> explosionEffect;
+    public ConfigValue<Boolean> breathlessEffect;
+    public ConfigValue<Boolean> angerEffect;
+    public ConfigValue<Boolean> animalEffect;
+    public ConfigValue<Boolean> oreEffect;
+    public ConfigValue<Boolean> auraBlooms;
+    public ConfigValue<Boolean> netherGrassEffect;
 
-    public ForgeConfigSpec.ConfigValue<Double> particleAmount;
-    public ForgeConfigSpec.ConfigValue<Boolean> respectVanillaParticleSettings;
-    public ForgeConfigSpec.ConfigValue<Double> excessParticleAmount;
-    public ForgeConfigSpec.ConfigValue<Integer> auraBarLocation;
-    public ForgeConfigSpec.ConfigValue<Integer> cacheBarLocation;
-    public ForgeConfigSpec.ConfigValue<Boolean> debugText;
-    public ForgeConfigSpec.ConfigValue<Boolean> debugWorld;
-    public ForgeConfigSpec.ConfigValue<Boolean> renderItemsOnPlayer;
+    public ConfigValue<Double> particleAmount;
+    public ConfigValue<Boolean> respectVanillaParticleSettings;
+    public ConfigValue<Double> excessParticleAmount;
+    public ConfigValue<Integer> auraBarLocation;
+    public ConfigValue<Integer> cacheBarLocation;
+    public ConfigValue<Boolean> debugText;
+    public ConfigValue<Boolean> debugWorld;
+    public ConfigValue<Boolean> renderItemsOnPlayer;
 
     public ModConfig(ForgeConfigSpec.Builder builder) {
         builder.push("general");
@@ -77,6 +79,10 @@ public final class ModConfig {
                 .comment("The Aura to RF ratio used by the RF converter, read as aura*ratio = rf")
                 .translation("config." + NaturesAura.MOD_ID + ".auraToRFRatio")
                 .define("auraToRFRatio", 0.05);
+        this.maxAnimalsAroundPowder = builder
+                .comment("The maximum amount of animals that can be around the powder of fertility before it stops working")
+                .translation("config." + NaturesAura.MOD_ID + ".maxAnimalsAroundPowder")
+                .define("maxAnimalsAroundPowder", 200);
         builder.pop();
 
         builder.push("features");
