@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "WW",
+        "WW"
+    ],
+    "key": {
+        "W": {
+            "item": "naturesaura:ancient_log"
+        }
+    },
+    "result": {
+        "item": "naturesaura:ancient_bark",
+        "count": 3
+    }
+}
