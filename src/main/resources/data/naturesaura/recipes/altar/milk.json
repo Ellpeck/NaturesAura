@@ -1,0 +1,15 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:water_bucket"
+    },
+    "output": {
+        "item": "minecraft:milk_bucket"
+    },
+    "aura_type": "naturesaura:overworld",
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 80000,
+    "time": 200
+}

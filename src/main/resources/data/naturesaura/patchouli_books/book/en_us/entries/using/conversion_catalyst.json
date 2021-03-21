@@ -97,6 +97,16 @@
             "type": "naturesaura:altar",
             "text": "Creating $(item)Warped Fungus$()",
             "recipe": "naturesaura:warped_fungus"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Turning $(item)Apples$() into $(item)Eggs$()",
+            "recipe": "naturesaura:egg"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Turning $(item)Water$() into $(item)Milk$()$(p)$(italic)Just like Jesus$()",
+            "recipe": "naturesaura:milk"
         }
     ]
 }

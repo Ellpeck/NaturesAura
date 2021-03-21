@@ -1,0 +1,15 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:apple"
+    },
+    "output": {
+        "item": "minecraft:egg"
+    },
+    "aura_type": "naturesaura:overworld",
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 5000,
+    "time": 50
+}
