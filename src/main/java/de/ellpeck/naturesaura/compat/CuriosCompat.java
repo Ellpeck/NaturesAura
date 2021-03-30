@@ -17,9 +17,11 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import top.theillusivec4.curios.api.CuriosCapability;
+import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
@@ -39,7 +41,7 @@ public class CuriosCompat implements ICompat {
             .build();
 
     @Override
-    public void setup() {
+    public void setup(FMLCommonSetupEvent event) {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::sendImc);
         MinecraftForge.EVENT_BUS.addGenericListener(ItemStack.class, this::onCapabilitiesAttach);
     }
@@ -65,7 +67,7 @@ public class CuriosCompat implements ICompat {
                     }
 
                     @Override
-                    public boolean canRightClickEquip() {
+                    public boolean canEquipFromUse(SlotContext slotContext) {
                         return true;
                     }
 

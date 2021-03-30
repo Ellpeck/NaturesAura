@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.compat.enchantibility.EnchantibilityCompat;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import de.ellpeck.naturesaura.data.ItemTagProvider;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +22,9 @@ public final class Compat {
             .build();
     private static final Map<String, ICompat> MODULES = new HashMap<>();
 
-    public static void setup() {
+    public static void setup(FMLCommonSetupEvent event) {
         populateModules(ModList.get()::isLoaded);
-        MODULES.values().forEach(ICompat::setup);
+        MODULES.values().forEach(c -> c.setup(event));
     }
 
     public static void setupClient() {

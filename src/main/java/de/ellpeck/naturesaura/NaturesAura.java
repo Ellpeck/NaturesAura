@@ -35,7 +35,6 @@ public final class NaturesAura {
 
     public static final String MOD_ID = NaturesAuraAPI.MOD_ID;
     public static final String MOD_NAME = "Nature's Aura";
-    public static final String VERSION = "@VERSION@";
 
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
     public static final ItemGroup CREATIVE_TAB = new ItemGroup(MOD_ID) {
@@ -45,7 +44,7 @@ public final class NaturesAura {
         }
     };
     public static NaturesAura instance;
-    public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
+    public static IProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
     public NaturesAura() {
         instance = this;
@@ -68,7 +67,7 @@ public final class NaturesAura {
         Helper.registerCap(IAuraChunk.class);
         Helper.registerCap(IWorldData.class);
 
-        Compat.setup();
+        Compat.setup(event);
         PacketHandler.init();
         new Multiblocks();
 
@@ -78,7 +77,7 @@ public final class NaturesAura {
     }
 
     private void init(FMLCommonSetupEvent event) {
-        DeferredWorkQueue.runLater(ModConfig.instance::apply);
+        event.enqueueWork(ModConfig.instance::apply);
 
         ModRecipes.init();
         ModRegistry.init();

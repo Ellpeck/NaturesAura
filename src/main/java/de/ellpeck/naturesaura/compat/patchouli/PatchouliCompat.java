@@ -26,19 +26,21 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.client.gui.GuiUtils;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import vazkii.patchouli.api.BookDrawScreenEvent;
+import vazkii.patchouli.api.IMultiblock;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.PatchouliAPI;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PatchouliCompat implements ICompat {
 
     private static final ResourceLocation BOOK = new ResourceLocation(NaturesAura.MOD_ID, "book");
+    private static final Map<ResourceLocation, IMultiblock> MULTIBLOCKS = new HashMap<>();
 
     public static void addPatchouliMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
         for (int i = 1; i < rawMatchers.length; i += 2) {
@@ -46,13 +48,13 @@ public class PatchouliCompat implements ICompat {
                 Matcher matcher = (Matcher) rawMatchers[i];
                 Matcher.ICheck check = matcher.getCheck();
                 if (check == null)
-                    rawMatchers[i] = PatchouliAPI.instance.anyMatcher();
+                    rawMatchers[i] = PatchouliAPI.get().anyMatcher();
                 else
-                    rawMatchers[i] = PatchouliAPI.instance.predicateMatcher(matcher.getDefaultState(),
+                    rawMatchers[i] = PatchouliAPI.get().predicateMatcher(matcher.getDefaultState(),
                             state -> check.matches(null, null, null, null, state, (char) 0));
             }
         }
-        DeferredWorkQueue.runLater(() -> PatchouliAPI.instance.registerMultiblock(name, PatchouliAPI.instance.makeMultiblock(pattern, rawMatchers)));
+        MULTIBLOCKS.put(name, PatchouliAPI.get().makeMultiblock(pattern, rawMatchers));
     }
 
     public static <T extends IRecipe<?>> T getRecipe(String type, String name) {
@@ -68,10 +70,13 @@ public class PatchouliCompat implements ICompat {
     }
 
     @Override
-    public void setup() {
-        DeferredWorkQueue.runLater(() -> {
-            PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":rf_converter", ModConfig.instance.rfConverter.get());
-            PatchouliAPI.instance.setConfigFlag(NaturesAura.MOD_ID + ":chunk_loader", ModConfig.instance.chunkLoader.get());
+    public void setup(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            for (Map.Entry<ResourceLocation, IMultiblock> entry : MULTIBLOCKS.entrySet())
+                PatchouliAPI.get().registerMultiblock(entry.getKey(), entry.getValue());
+
+            PatchouliAPI.get().setConfigFlag(NaturesAura.MOD_ID + ":rf_converter", ModConfig.instance.rfConverter.get());
+            PatchouliAPI.get().setConfigFlag(NaturesAura.MOD_ID + ":chunk_loader", ModConfig.instance.chunkLoader.get());
         });
     }
 
