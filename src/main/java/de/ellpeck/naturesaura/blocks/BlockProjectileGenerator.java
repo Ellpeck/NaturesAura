@@ -43,6 +43,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider<TileEntityProjectileGenerator>, ICustomBlockState {
+
     public BlockProjectileGenerator() {
         super("projectile_generator", TileEntityProjectileGenerator::new, Properties.create(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
 
@@ -58,7 +59,8 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
         DispenserBlock.registerDispenseBehavior(Items.TRIDENT, new ProjectileDispenseBehavior() {
             @Override
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                TridentEntity ret = new TridentEntity(worldIn, position.getX(), position.getY(), position.getZ());
+                TridentEntity ret = new TridentEntity(EntityType.TRIDENT, worldIn);
+                ret.setPosition(position.getX(), position.getY(), position.getZ());
                 // set thrownStack
                 ObfuscationReflectionHelper.setPrivateValue(TridentEntity.class, ret, stackIn.copy(), "field_203054_h");
                 ret.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
