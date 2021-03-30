@@ -51,12 +51,8 @@ public class TileEntityMossGenerator extends TileEntityImpl implements ITickable
             BlockState result = NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.inverse().get(state);
 
             int toAdd = 7000;
-            if (this.canGenerateRightNow(35, toAdd)) {
-                while (toAdd > 0) {
-                    BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 35, this.pos);
-                    toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
-                }
-
+            if (this.canGenerateRightNow(toAdd)) {
+                this.generateAura(toAdd);
                 PacketHandler.sendToAllAround(this.world, this.pos, 32,
                         new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), PacketParticles.Type.MOSS_GENERATOR));
             }

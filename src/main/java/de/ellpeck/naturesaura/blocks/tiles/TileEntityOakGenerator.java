@@ -25,12 +25,9 @@ public class TileEntityOakGenerator extends TileEntityImpl implements ITickableT
                 BlockPos pos = this.scheduledBigTrees.remove();
                 if (this.world.getBlockState(pos).getBlock().getTags().contains(BlockTags.LOGS.getName())) {
                     int toAdd = 100000;
-                    boolean canGen = this.canGenerateRightNow(25, toAdd);
+                    boolean canGen = this.canGenerateRightNow(toAdd);
                     if (canGen)
-                        while (toAdd > 0) {
-                            BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 25, this.pos);
-                            toAdd -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toAdd);
-                        }
+                        this.generateAura(toAdd);
 
                     PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
                             this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.OAK_GENERATOR,

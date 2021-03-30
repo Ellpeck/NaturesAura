@@ -78,11 +78,7 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
             } else {
                 int toDrain = Math.min(5000, this.container.getStoredAura());
                 this.container.drainAura(toDrain, false);
-
-                while (toDrain > 0) {
-                    BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);
-                    toDrain -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, toDrain);
-                }
+                this.generateAura(toDrain);
 
                 if (this.container.getStoredAura() <= 0) {
                     this.world.setBlockState(this.pos, Blocks.DEAD_BUSH.getDefaultState());

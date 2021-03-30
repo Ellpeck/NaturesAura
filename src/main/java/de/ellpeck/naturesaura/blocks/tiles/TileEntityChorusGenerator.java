@@ -46,12 +46,7 @@ public class TileEntityChorusGenerator extends TileEntityImpl implements ITickab
         this.world.removeBlock(pos, false);
         this.world.playSound(null, this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5,
                 SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.BLOCKS, 0.5F, 1F);
-
-        int aura = this.auraPerBlock;
-        while (aura > 0) {
-            BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 35, this.pos);
-            aura -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, aura);
-        }
+        this.generateAura(this.auraPerBlock);
     }
 
     @Override

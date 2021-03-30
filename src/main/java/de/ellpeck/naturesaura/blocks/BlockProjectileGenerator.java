@@ -88,13 +88,9 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
         Integer amount = NaturesAuraAPI.PROJECTILE_GENERATIONS.get(entity.getType());
         if (amount == null || amount <= 0)
             return;
-        if (!generator.canGenerateRightNow(35, amount))
+        if (!generator.canGenerateRightNow(amount))
             return;
-
-        while (amount > 0) {
-            BlockPos spot = IAuraChunk.getLowestSpot(entity.world, pos, 35, pos);
-            amount -= IAuraChunk.getAuraChunk(entity.world, spot).storeAura(spot, amount);
-        }
+        generator.generateAura(amount);
 
         PacketHandler.sendToAllAround(entity.world, pos, 32,
                 new PacketParticles((float) entity.getPosX(), (float) entity.getPosY(), (float) entity.getPosZ(), PacketParticles.Type.PROJECTILE_GEN, pos.getX(), pos.getY(), pos.getZ()));

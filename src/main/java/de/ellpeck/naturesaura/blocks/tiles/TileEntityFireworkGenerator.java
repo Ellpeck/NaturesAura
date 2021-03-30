@@ -98,7 +98,7 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
 
                     if (generateFactor > 0) {
                         int toAdd = MathHelper.ceil(generateFactor * 10000F);
-                        if (this.canGenerateRightNow(35, toAdd)) {
+                        if (this.canGenerateRightNow(toAdd)) {
                             this.toRelease = toAdd;
                             this.releaseTimer = 15 * flightTime + 40;
                         }
@@ -121,10 +121,8 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
             if (this.releaseTimer > 0) {
                 this.releaseTimer--;
                 if (this.releaseTimer <= 0) {
-                    while (this.toRelease > 0) {
-                        BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 35, this.pos);
-                        this.toRelease -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, this.toRelease);
-                    }
+                    this.generateAura(this.toRelease);
+                    this.toRelease = 0;
 
                     PacketHandler.sendToAllLoaded(this.world, this.pos,
                             new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.FLOWER_GEN_AURA_CREATION));

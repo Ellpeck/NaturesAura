@@ -14,6 +14,7 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
@@ -168,18 +169,25 @@ public class TileEntityImpl extends TileEntity {
         }
     }
 
-    public boolean canGenerateRightNow(int range, int toAdd) {
+    public boolean canGenerateRightNow(int toAdd) {
         if (this.wantsLimitRemover()) {
             BlockState below = this.world.getBlockState(this.pos.down());
             if (below.getBlock() == ModBlocks.GENERATOR_LIMIT_REMOVER)
                 return true;
         }
-        int aura = IAuraChunk.getAuraInArea(this.world, this.pos, range);
+        int aura = IAuraChunk.getAuraInArea(this.world, this.pos, 35);
         return aura + toAdd <= IAuraChunk.DEFAULT_AURA * 2;
     }
 
     public boolean wantsLimitRemover() {
         return false;
+    }
+
+    public void generateAura(int amount) {
+        while (amount > 0) {
+            BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 35, this.pos);
+            amount -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, amount);
+        }
     }
 
     public enum SaveType {

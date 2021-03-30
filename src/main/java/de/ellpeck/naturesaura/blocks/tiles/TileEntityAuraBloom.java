@@ -22,8 +22,7 @@ public class TileEntityAuraBloom extends TileEntityImpl implements ITickableTile
     public void tick() {
         if (this.world.isRemote || !this.justGenerated)
             return;
-        IAuraChunk chunk = IAuraChunk.getAuraChunk(this.world, this.pos);
-        chunk.storeAura(this.pos, 150000);
+        this.generateAura(150000);
         this.justGenerated = false;
     }
 

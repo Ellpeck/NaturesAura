@@ -25,11 +25,8 @@ public class TileEntitySlimeSplitGenerator extends TileEntityImpl implements ITi
             return;
         if (this.generationTimer > 0) {
             int amount = this.amountToRelease * 10;
-            if (this.canGenerateRightNow(35, amount)) {
-                while (amount > 0) {
-                    BlockPos pos = IAuraChunk.getLowestSpot(this.world, this.pos, 35, this.pos);
-                    amount -= IAuraChunk.getAuraChunk(this.world, pos).storeAura(pos, amount);
-                }
+            if (this.canGenerateRightNow(amount)) {
+                this.generateAura(amount);
                 PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.SLIME_SPLIT_GEN_CREATE, this.color));
             }
             this.generationTimer -= 10;

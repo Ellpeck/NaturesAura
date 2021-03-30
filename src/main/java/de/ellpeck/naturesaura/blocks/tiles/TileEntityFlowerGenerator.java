@@ -58,14 +58,11 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
             int addAmount = 25000;
             int toAdd = Math.max(0, addAmount - curr.getValue() * 100);
             if (toAdd > 0) {
-                if (IAuraType.forWorld(this.world).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD) && this.canGenerateRightNow(30, toAdd)) {
-                    int remain = toAdd;
-                    while (remain > 0) {
-                        BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 30, this.pos);
-                        remain -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, remain);
-                    }
-                } else
+                if (IAuraType.forWorld(this.world).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD) && this.canGenerateRightNow(toAdd)) {
+                    this.generateAura(toAdd);
+                } else {
                     toAdd = 0;
+                }
             }
 
             for (Map.Entry<BlockState, MutableInt> entry : this.consumedRecently.entrySet()) {
