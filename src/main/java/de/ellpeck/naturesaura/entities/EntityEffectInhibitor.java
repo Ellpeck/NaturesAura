@@ -35,6 +35,8 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     private static final DataParameter<String> INHIBITED_EFFECT = EntityDataManager.createKey(EntityEffectInhibitor.class, DataSerializers.STRING);
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityEffectInhibitor.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> AMOUNT = EntityDataManager.createKey(EntityEffectInhibitor.class, DataSerializers.VARINT);
+    private ResourceLocation lastEffect;
+    private boolean powderListDirty;
 
     @OnlyIn(Dist.CLIENT)
     public int renderTicks;
@@ -56,13 +58,14 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     @Override
     public void onAddedToWorld() {
         super.onAddedToWorld();
-        this.addToPowderList();
+        this.powderListDirty = true;
     }
 
     @Override
     public void onRemovedFromWorld() {
-        this.removeFromPowderList();
         super.onRemovedFromWorld();
+        this.setInhibitedEffect(null);
+        this.updatePowderListStatus();
     }
 
     @Override
@@ -73,42 +76,26 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     @Override
+    public void notifyDataManagerChange(DataParameter<?> key) {
+        super.notifyDataManagerChange(key);
+        if (INHIBITED_EFFECT.equals(key) || AMOUNT.equals(key))
+            this.powderListDirty = true;
+    }
+
+    @Override
     public void setPosition(double x, double y, double z) {
-        boolean should = x != this.getPosX() || y != this.getPosY() || z != this.getPosZ();
-        if (should)
-            this.removeFromPowderList();
+        if (x != this.getPosX() || y != this.getPosY() || z != this.getPosZ())
+            this.powderListDirty = true;
         super.setPosition(x, y, z);
-        if (should)
-            this.addToPowderList();
-    }
-
-    private void addToPowderList() {
-        if (!this.isAddedToWorld() || this.getInhibitedEffect() == null)
-            return;
-        List<Tuple<Vector3d, Integer>> powders = this.getPowderList();
-        powders.add(new Tuple<>(this.getPositionVec(), this.getAmount()));
-    }
-
-    private void removeFromPowderList() {
-        if (!this.isAddedToWorld() || this.getInhibitedEffect() == null)
-            return;
-        List<Tuple<Vector3d, Integer>> powders = this.getPowderList();
-        Vector3d pos = this.getPositionVec();
-        for (int i = 0; i < powders.size(); i++)
-            if (pos.equals(powders.get(i).getA())) {
-                powders.remove(i);
-                break;
-            }
-    }
-
-    private List<Tuple<Vector3d, Integer>> getPowderList() {
-        ListMultimap<ResourceLocation, Tuple<Vector3d, Integer>> powders = ((WorldData) IWorldData.getWorldData(this.world)).effectPowders;
-        return powders.get(this.getInhibitedEffect());
     }
 
     @Override
     public void tick() {
         super.tick();
+
+        if (this.powderListDirty)
+            this.updatePowderListStatus();
+
         if (this.world.isRemote) {
             if (this.world.getGameTime() % 5 == 0) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
@@ -170,9 +157,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     public void setInhibitedEffect(ResourceLocation effect) {
-        this.removeFromPowderList();
-        this.dataManager.set(INHIBITED_EFFECT, effect.toString());
-        this.addToPowderList();
+        this.dataManager.set(INHIBITED_EFFECT, effect != null ? effect.toString() : null);
     }
 
     public int getColor() {
@@ -188,9 +173,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     public void setAmount(int amount) {
-        this.removeFromPowderList();
         this.dataManager.set(AMOUNT, amount);
-        this.addToPowderList();
     }
 
     @Override
@@ -203,5 +186,22 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     @OnlyIn(Dist.CLIENT)
     public int getVisualizationColor(World world, BlockPos pos) {
         return this.getColor();
+    }
+
+    private void updatePowderListStatus() {
+        ListMultimap<ResourceLocation, Tuple<Vector3d, Integer>> powders = ((WorldData) IWorldData.getWorldData(this.world)).effectPowders;
+        if (this.lastEffect != null) {
+            List<Tuple<Vector3d, Integer>> oldList = powders.get(this.lastEffect);
+            oldList.removeIf(t -> this.getPositionVec().equals(t.getA()));
+            System.out.println("Removing from old list with effect " + this.lastEffect);
+        }
+        ResourceLocation effect = this.getInhibitedEffect();
+        if (effect != null) {
+            List<Tuple<Vector3d, Integer>> newList = powders.get(effect);
+            newList.add(new Tuple<>(this.getPositionVec(), this.getAmount()));
+            System.out.println("Adding to new list with effect " + effect);
+        }
+        this.powderListDirty = false;
+        this.lastEffect = effect;
     }
 }
