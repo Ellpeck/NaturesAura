@@ -193,13 +193,11 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
         if (this.lastEffect != null) {
             List<Tuple<Vector3d, Integer>> oldList = powders.get(this.lastEffect);
             oldList.removeIf(t -> this.getPositionVec().equals(t.getA()));
-            System.out.println("Removing from old list with effect " + this.lastEffect);
         }
         ResourceLocation effect = this.getInhibitedEffect();
         if (effect != null) {
             List<Tuple<Vector3d, Integer>> newList = powders.get(effect);
             newList.add(new Tuple<>(this.getPositionVec(), this.getAmount()));
-            System.out.println("Adding to new list with effect " + effect);
         }
         this.powderListDirty = false;
         this.lastEffect = effect;
