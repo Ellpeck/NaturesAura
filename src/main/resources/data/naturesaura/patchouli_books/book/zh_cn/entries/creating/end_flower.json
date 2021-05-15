@@ -11,7 +11,7 @@
         {
             "type": "spotlight",
             "item": "naturesaura:end_flower",
-            "text": "这种玫瑰蕴含大量的$(#419600)灵气$()，这些$(#419600)灵气$()可以被一种有趣的方式提取：在靠近玫瑰的地方丢一个$(item)末影之眼$()会使得玫瑰变成$(#419600)灵气$()并散布到环境中。这个过程一旦开始就无法停止，此时玫瑰也无法被采集。注意，这个过程$(italic)不$()需要$(l:creating/generator_limit_remover)制造催化器$()。",
+            "text": "这种玫瑰蕴含大量的$(aura-zh-cn)，这些$(aura-zh-cn)可以被一种有趣的方式提取：在靠近玫瑰的地方丢一个$(item)末影之眼$()会使得玫瑰变成$(aura-zh-cn)并散布到环境中。这个过程一旦开始就无法停止，此时玫瑰也无法被采集。注意，这个过程$(italic)不$()需要$(l:creating/generator_limit_remover)制造催化器$()。",
             "link_recipe": true
         }
     ]
