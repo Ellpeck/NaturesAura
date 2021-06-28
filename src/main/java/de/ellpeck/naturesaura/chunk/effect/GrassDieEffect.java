@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class GrassDieEffect implements IDrainSpotEffect {
 
@@ -25,9 +26,10 @@ public class GrassDieEffect implements IDrainSpotEffect {
 
     private boolean calcValues(World world, BlockPos pos, Integer spot) {
         if (spot < 0) {
-            int aura = IAuraChunk.getAuraInArea(world, pos, 50);
+            Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(world, pos, 50);
+            int aura = auraAndSpots.getLeft();
             if (aura < 0) {
-                this.amount = Math.min(300, MathHelper.ceil(Math.abs(aura) / 100000F / IAuraChunk.getSpotAmountInArea(world, pos, 50)));
+                this.amount = Math.min(300, MathHelper.ceil(Math.abs(aura) / 100000F / auraAndSpots.getRight()));
                 if (this.amount > 1) {
                     this.dist = MathHelper.clamp(Math.abs(aura) / 75000, 5, 75);
                     return true;

@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class NetherDecayEffect implements IDrainSpotEffect {
 
@@ -31,10 +32,11 @@ public class NetherDecayEffect implements IDrainSpotEffect {
     private boolean calcValues(World world, BlockPos pos, Integer spot) {
         if (spot >= 0)
             return false;
-        int aura = IAuraChunk.getAuraInArea(world, pos, 50);
+        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(world, pos, 50);
+        int aura = auraAndSpots.getLeft();
         if (aura >= 0)
             return false;
-        this.amount = Math.min(300, MathHelper.ceil(Math.abs(aura) / 50000F / IAuraChunk.getSpotAmountInArea(world, pos, 50)));
+        this.amount = Math.min(300, MathHelper.ceil(Math.abs(aura) / 50000F / auraAndSpots.getRight()));
         if (this.amount <= 1)
             return false;
         this.dist = MathHelper.clamp(Math.abs(aura) / 50000, 5, 75);

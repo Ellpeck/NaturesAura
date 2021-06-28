@@ -26,6 +26,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;
 import java.util.List;
@@ -42,10 +43,11 @@ public class OreSpawnEffect implements IDrainSpotEffect {
     private boolean calcValues(World world, BlockPos pos, Integer spot) {
         if (spot <= 0)
             return false;
-        int aura = IAuraChunk.getAuraInArea(world, pos, 30);
+        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(world, pos, 30);
+        int aura = auraAndSpots.getLeft();
         if (aura <= 2000000)
             return false;
-        this.amount = Math.min(20, MathHelper.ceil(Math.abs(aura) / 300000F / IAuraChunk.getSpotAmountInArea(world, pos, 30)));
+        this.amount = Math.min(20, MathHelper.ceil(Math.abs(aura) / 300000F / auraAndSpots.getRight()));
         if (this.amount <= 0)
             return false;
         this.dist = MathHelper.clamp(Math.abs(aura) / 150000, 5, 20);

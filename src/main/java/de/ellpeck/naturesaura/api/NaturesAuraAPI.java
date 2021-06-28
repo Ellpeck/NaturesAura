@@ -26,6 +26,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +41,7 @@ import java.util.function.Supplier;
  * internal mod functions not exposed to the API.
  */
 public final class NaturesAuraAPI {
+
     public static final String MOD_ID = "naturesaura";
     public static final String API_ID = MOD_ID + "api";
     public static final String VERSION = "9";
@@ -299,6 +301,11 @@ public final class NaturesAuraAPI {
          * @see IAuraChunk#getAuraInArea(IWorld, BlockPos, int)
          */
         int getAuraInArea(World world, BlockPos pos, int radius);
+
+        /**
+         * @see IAuraChunk#getAuraAndSpotAmountInArea(World, BlockPos, int)
+         */
+        Pair<Integer, Integer> getAuraAndSpotAmountInArea(World world, BlockPos pos, int radius);
 
         /**
          * @see IAuraChunk#triangulateAuraInArea(IWorld, BlockPos, int)

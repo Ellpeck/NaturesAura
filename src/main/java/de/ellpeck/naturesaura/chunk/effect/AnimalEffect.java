@@ -22,6 +22,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Comparator;
 import java.util.List;
@@ -37,10 +38,11 @@ public class AnimalEffect implements IDrainSpotEffect {
     private boolean calcValues(World world, BlockPos pos, Integer spot) {
         if (spot <= 0)
             return false;
-        int aura = IAuraChunk.getAuraInArea(world, pos, 30);
+        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(world, pos, 30);
+        int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
-        this.chance = Math.min(50, MathHelper.ceil(Math.abs(aura) / 500000F / IAuraChunk.getSpotAmountInArea(world, pos, 30)));
+        this.chance = Math.min(50, MathHelper.ceil(Math.abs(aura) / 500000F / auraAndSpots.getRight()));
         if (this.chance <= 0)
             return false;
         int dist = MathHelper.clamp(Math.abs(aura) / 150000, 5, 35);

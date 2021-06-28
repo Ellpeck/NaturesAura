@@ -18,12 +18,14 @@ import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
 public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
+
     @Override
     public boolean extractAuraFromPlayer(PlayerEntity player, int amount, boolean simulate) {
         return this.auraPlayerInteraction(player, amount, true, simulate);
@@ -125,6 +127,17 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
         MutableInt result = new MutableInt(IAuraChunk.DEFAULT_AURA);
         this.getAuraSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> result.add(drainSpot));
         return result.intValue();
+    }
+
+    @Override
+    public Pair<Integer, Integer> getAuraAndSpotAmountInArea(World world, BlockPos pos, int radius) {
+        MutableInt spots = new MutableInt();
+        MutableInt aura = new MutableInt(IAuraChunk.DEFAULT_AURA);
+        this.getAuraSpotsInArea(world, pos, radius, (blockPos, drainSpot) -> {
+            aura.add(drainSpot);
+            spots.increment();
+        });
+        return Pair.of(aura.intValue(), spots.intValue());
     }
 
     @Override

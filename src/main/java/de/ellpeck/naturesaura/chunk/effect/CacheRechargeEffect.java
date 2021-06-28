@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
@@ -28,12 +29,13 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
     private boolean calcValues(World world, BlockPos pos, Integer spot) {
         if (spot < 100000)
             return false;
-        int aura = IAuraChunk.getAuraInArea(world, pos, 20);
+        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(world, pos, 20);
+        int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
         int dist = MathHelper.clamp(aura / 3500, 3, 15);
         this.bb = new AxisAlignedBB(pos).grow(dist);
-        this.amount = MathHelper.ceil(aura / 250F / IAuraChunk.getSpotAmountInArea(world, pos, 20));
+        this.amount = MathHelper.ceil(aura / 250F / auraAndSpots.getRight());
         return true;
     }
 

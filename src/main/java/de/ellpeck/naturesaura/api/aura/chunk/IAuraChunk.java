@@ -8,6 +8,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.INBTSerializable;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.function.BiConsumer;
 
@@ -20,6 +21,7 @@ import java.util.function.BiConsumer;
  * class.
  */
 public interface IAuraChunk extends INBTSerializable<CompoundNBT> {
+
     /**
      * The default amount of Aura that a chunk has stored
      */
@@ -80,6 +82,22 @@ public interface IAuraChunk extends INBTSerializable<CompoundNBT> {
      */
     static int getAuraInArea(IWorld world, BlockPos pos, int radius) {
         return NaturesAuraAPI.instance().getAuraInArea((World) world, pos, radius);
+    }
+
+    /**
+     * Convenience method that combines {@link #getAuraInArea(IWorld, BlockPos,
+     * int)} and {@link #getSpotAmountInArea(IWorld, BlockPos, int)} to increase
+     * performance.
+     *
+     * @param world  The world
+     * @param pos    The center position
+     * @param radius The radius around the center to search for spots in
+     * @return A pair of the amount of aura in the area as the {@link
+     * Pair#getLeft()} entry, and the amount of aura spots in the area as the
+     * {@link Pair#getRight()} entry
+     */
+    static Pair<Integer, Integer> getAuraAndSpotAmountInArea(World world, BlockPos pos, int radius) {
+        return NaturesAuraAPI.instance().getAuraAndSpotAmountInArea(world, pos, radius);
     }
 
     /**

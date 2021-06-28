@@ -20,6 +20,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.Tags;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class NetherGrassEffect implements IDrainSpotEffect {
 
@@ -31,10 +32,11 @@ public class NetherGrassEffect implements IDrainSpotEffect {
     private boolean calcValues(World world, BlockPos pos, Integer spot) {
         if (spot <= 0)
             return false;
-        int aura = IAuraChunk.getAuraInArea(world, pos, 30);
+        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(world, pos, 30);
+        int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
-        this.amount = Math.min(20, MathHelper.ceil(Math.abs(aura) / 100000F / IAuraChunk.getSpotAmountInArea(world, pos, 30)));
+        this.amount = Math.min(20, MathHelper.ceil(Math.abs(aura) / 100000F / auraAndSpots.getRight()));
         if (this.amount <= 1)
             return false;
         this.dist = MathHelper.clamp(Math.abs(aura) / 100000, 5, 35);
