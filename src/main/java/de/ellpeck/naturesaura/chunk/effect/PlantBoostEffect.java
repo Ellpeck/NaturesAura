@@ -61,8 +61,8 @@ public class PlantBoostEffect implements IDrainSpotEffect {
         if (!this.calcValues(world, pos, spot))
             return;
         for (int i = this.amount / 2 + world.rand.nextInt(this.amount / 2); i >= 0; i--) {
-            int x = MathHelper.floor(pos.getX() + world.rand.nextGaussian() * this.dist);
-            int z = MathHelper.floor(pos.getZ() + world.rand.nextGaussian() * this.dist);
+            int x = MathHelper.floor(pos.getX() + (2 * world.rand.nextFloat() - 1) * this.dist);
+            int z = MathHelper.floor(pos.getZ() + (2 * world.rand.nextFloat() - 1) * this.dist);
             BlockPos plantPos = new BlockPos(x, world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z), z).down();
             if (plantPos.distanceSq(pos) <= this.dist * this.dist && world.isBlockLoaded(plantPos)) {
                 if (NaturesAuraAPI.instance().isEffectPowderActive(world, plantPos, NAME))
