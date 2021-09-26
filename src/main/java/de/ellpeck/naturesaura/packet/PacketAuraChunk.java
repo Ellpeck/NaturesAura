@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.packet;
 
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.events.ClientEvents;
@@ -63,13 +64,18 @@ public class PacketAuraChunk {
     }
 
     public boolean tryHandle(World world) {
-        Chunk chunk = world.getChunk(this.chunkX, this.chunkZ);
-        if (chunk.isEmpty())
-            return false;
-        AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk).orElse(null);
-        if (auraChunk == null)
-            return false;
-        auraChunk.setSpots(this.drainSpots);
-        return true;
+        try {
+            Chunk chunk = world.getChunk(this.chunkX, this.chunkZ);
+            if (chunk.isEmpty())
+                return false;
+            AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk).orElse(null);
+            if (auraChunk == null)
+                return false;
+            auraChunk.setSpots(this.drainSpots);
+            return true;
+        } catch (Exception e) {
+            NaturesAura.LOGGER.error("There was an error handling an aura chunk packet", e);
+            return true;
+        }
     }
 }
