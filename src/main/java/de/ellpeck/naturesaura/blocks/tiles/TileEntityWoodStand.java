@@ -78,11 +78,11 @@ public class TileEntityWoodStand extends TileEntityImpl implements ITickableTile
                                 new PacketParticles(this.ritualPos.getX(), this.ritualPos.getY(), this.ritualPos.getZ(), PacketParticles.Type.TR_GOLD_POWDER));
 
                         if (this.timer >= this.recipe.time) {
-                            recurseTreeDestruction(this.world, this.ritualPos, this.ritualPos, true, false);
                             Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'G', (pos, matcher) -> {
                                 this.world.setBlockState(pos, Blocks.AIR.getDefaultState());
                                 return true;
                             });
+                            recurseTreeDestruction(this.world, this.ritualPos, this.ritualPos, true, false);
 
                             ItemEntity item = new ItemEntity(this.world,
                                     this.ritualPos.getX() + 0.5, this.ritualPos.getY() + 4.5, this.ritualPos.getZ() + 0.5,
