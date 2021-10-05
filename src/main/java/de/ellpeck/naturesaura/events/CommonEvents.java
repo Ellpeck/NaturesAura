@@ -14,8 +14,11 @@ import de.ellpeck.naturesaura.commands.CommandAura;
 import de.ellpeck.naturesaura.gen.ModFeatures;
 import de.ellpeck.naturesaura.misc.WorldData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
@@ -45,6 +48,9 @@ public class CommonEvents {
 
     private static final Method GET_LOADED_CHUNKS_METHOD = ObfuscationReflectionHelper.findMethod(ChunkManager.class, "func_223491_f");
     private static final ListMultimap<UUID, ChunkPos> PENDING_AURA_CHUNKS = ArrayListMultimap.create();
+
+    private static final ResourceLocation POSITIVE_ADVANCEMENT_KEY = new ResourceLocation(NaturesAura.MOD_ID, "negative_imbalance");
+    private static final ResourceLocation NEGATIVE_ADVANCEMENT_KEY = new ResourceLocation(NaturesAura.MOD_ID, "positive_imbalance");
 
     @SubscribeEvent
     public void onBiomeLoad(BiomeLoadingEvent event) {
@@ -131,19 +137,28 @@ public class CommonEvents {
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (!event.player.world.isRemote && event.phase == TickEvent.Phase.END) {
-            if (event.player.world.getGameTime() % 10 == 0) {
+            if (event.player.world.getGameTime() % 10 == event.player.getEntityId() % 10) {
                 List<ChunkPos> pending = PENDING_AURA_CHUNKS.get(event.player.getUniqueID());
                 pending.removeIf(p -> this.handleChunkWatchDeferred(event.player, p));
             }
 
-            if (event.player.world.getGameTime() % 200 != 0)
+            if (event.player.world.getGameTime() % 200 != event.player.getEntityId() % 200)
+                return;
+
+            ServerPlayerEntity playerMp = (ServerPlayerEntity) event.player;
+            Advancement negativeAdvancement = playerMp.getServerWorld().getServer().getAdvancementManager().getAdvancement(NEGATIVE_ADVANCEMENT_KEY);
+            Advancement positiveAdvancement = playerMp.getServerWorld().getServer().getAdvancementManager().getAdvancement(POSITIVE_ADVANCEMENT_KEY);
+
+            PlayerAdvancements advancements = playerMp.getAdvancements();
+
+            if(advancements.getProgress(negativeAdvancement).isDone() && advancements.getProgress(positiveAdvancement).isDone())
                 return;
 
             int aura = IAuraChunk.triangulateAuraInArea(event.player.world, event.player.getPosition(), 25);
             if (aura <= 0)
-                Helper.addAdvancement(event.player, new ResourceLocation(NaturesAura.MOD_ID, "negative_imbalance"), "triggered_in_code");
+                advancements.grantCriterion(negativeAdvancement, "triggered_in_code");
             else if (aura >= 1500000)
-                Helper.addAdvancement(event.player, new ResourceLocation(NaturesAura.MOD_ID, "positive_imbalance"), "triggered_in_code");
+                advancements.grantCriterion(positiveAdvancement, "triggered_in_code");
         }
     }
 
