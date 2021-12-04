@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
 import org.apache.commons.lang3.tuple.Pair;
@@ -33,9 +33,9 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
         int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
-        int dist = MathHelper.clamp(aura / 3500, 3, 15);
+        int dist = Mth.clamp(aura / 3500, 3, 15);
         this.bb = new AxisAlignedBB(pos).grow(dist);
-        this.amount = MathHelper.ceil(aura / 250F / auraAndSpots.getRight());
+        this.amount = Mth.ceil(aura / 250F / auraAndSpots.getRight());
         return true;
     }
 

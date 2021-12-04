@@ -19,7 +19,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
@@ -47,10 +47,10 @@ public class OreSpawnEffect implements IDrainSpotEffect {
         int aura = auraAndSpots.getLeft();
         if (aura <= 2000000)
             return false;
-        this.amount = Math.min(20, MathHelper.ceil(Math.abs(aura) / 300000F / auraAndSpots.getRight()));
+        this.amount = Math.min(20, Mth.ceil(Math.abs(aura) / 300000F / auraAndSpots.getRight()));
         if (this.amount <= 0)
             return false;
-        this.dist = MathHelper.clamp(Math.abs(aura) / 150000, 5, 20);
+        this.dist = Mth.clamp(Math.abs(aura) / 150000, 5, 20);
         return true;
     }
 
@@ -96,9 +96,9 @@ public class OreSpawnEffect implements IDrainSpotEffect {
             Tuple<Vector3d, Integer> powder = powders.get(i % powders.size());
             Vector3d powderPos = powder.getA();
             int range = powder.getB();
-            int x = MathHelper.floor(powderPos.x + level.rand.nextGaussian() * range);
-            int y = MathHelper.floor(powderPos.y + level.rand.nextGaussian() * range);
-            int z = MathHelper.floor(powderPos.z + level.rand.nextGaussian() * range);
+            int x = Mth.floor(powderPos.x + level.rand.nextGaussian() * range);
+            int y = Mth.floor(powderPos.y + level.rand.nextGaussian() * range);
+            int z = Mth.floor(powderPos.z + level.rand.nextGaussian() * range);
             BlockPos orePos = new BlockPos(x, y, z);
             if (orePos.distanceSq(powderPos.x, powderPos.y, powderPos.z, true) <= range * range
                     && orePos.distanceSq(pos) <= this.dist * this.dist && level.isBlockLoaded(orePos)) {

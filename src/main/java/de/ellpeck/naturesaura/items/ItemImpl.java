@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.items;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public class ItemImpl extends Item implements IModItem {
 
@@ -14,7 +14,7 @@ public class ItemImpl extends Item implements IModItem {
     }
 
     public ItemImpl(String baseName, Item.Properties properties) {
-        super(properties.group(NaturesAura.CREATIVE_TAB));
+        super(properties.tab(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
         ModRegistry.add(this);
     }

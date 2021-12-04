@@ -14,7 +14,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.level.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -58,7 +58,7 @@ public class EntityStructureFinder extends EyeOfEnderEntity {
         double d1 = pos.getZ();
         double d2 = d0 - this.getPosX();
         double d3 = d1 - this.getPosZ();
-        float f = MathHelper.sqrt(d2 * d2 + d3 * d3);
+        float f = Mth.sqrt(d2 * d2 + d3 * d3);
         if (f > 12.0F) {
             this.targetX = this.getPosX() + d2 / (double) f * 12.0D;
             this.targetZ = this.getPosZ() + d3 / (double) f * 12.0D;
@@ -81,9 +81,9 @@ public class EntityStructureFinder extends EyeOfEnderEntity {
         double d0 = this.getPosX() + vec3d.x;
         double d1 = this.getPosY() + vec3d.y;
         double d2 = this.getPosZ() + vec3d.z;
-        float f = MathHelper.sqrt(horizontalMag(vec3d));
-        this.rotationYaw = (float) (MathHelper.atan2(vec3d.x, vec3d.z) * (double) (180F / (float) Math.PI));
-        this.rotationPitch = (float) (MathHelper.atan2(vec3d.y, f) * (double) (180F / (float) Math.PI));
+        float f = Mth.sqrt(horizontalMag(vec3d));
+        this.rotationYaw = (float) (Mth.atan2(vec3d.x, vec3d.z) * (double) (180F / (float) Math.PI));
+        this.rotationPitch = (float) (Mth.atan2(vec3d.y, f) * (double) (180F / (float) Math.PI));
         while (this.rotationPitch - this.prevRotationPitch < -180.0F)
             this.prevRotationPitch -= 360.0F;
         while (this.rotationPitch - this.prevRotationPitch >= 180.0F)
@@ -92,14 +92,14 @@ public class EntityStructureFinder extends EyeOfEnderEntity {
             this.prevRotationYaw -= 360.0F;
         while (this.rotationYaw - this.prevRotationYaw >= 180.0F)
             this.prevRotationYaw += 360.0F;
-        this.rotationPitch = MathHelper.lerp(0.2F, this.prevRotationPitch, this.rotationPitch);
-        this.rotationYaw = MathHelper.lerp(0.2F, this.prevRotationYaw, this.rotationYaw);
+        this.rotationPitch = Mth.lerp(0.2F, this.prevRotationPitch, this.rotationPitch);
+        this.rotationYaw = Mth.lerp(0.2F, this.prevRotationYaw, this.rotationYaw);
         if (!this.level.isClientSide) {
             double d3 = this.targetX - d0;
             double d4 = this.targetZ - d2;
             float f1 = (float) Math.sqrt(d3 * d3 + d4 * d4);
-            float f2 = (float) MathHelper.atan2(d4, d3);
-            double d5 = MathHelper.lerp(0.0025D, f, f1);
+            float f2 = (float) Mth.atan2(d4, d3);
+            double d5 = Mth.lerp(0.0025D, f, f1);
             double d6 = vec3d.y;
             if (f1 < 1.0F) {
                 d5 *= 0.8D;

@@ -17,7 +17,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.level.server.ServerLevel;
 import net.minecraftforge.common.MinecraftForge;
@@ -102,12 +102,12 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
             );
             double length = dist.length();
             Vector3d normal = new Vector3d(dist.x / length, dist.y / length, dist.z / length);
-            for (float i = MathHelper.floor(length); i > 0; i -= 0.5F) {
+            for (float i = Mth.floor(length); i > 0; i -= 0.5F) {
                 Vector3d scaled = normal.scale(i);
                 BlockPos pos = connectedPos.add(
-                        MathHelper.floor(scaled.x + 0.5F),
-                        MathHelper.floor(scaled.y + 0.5F),
-                        MathHelper.floor(scaled.z + 0.5F));
+                        Mth.floor(scaled.x + 0.5F),
+                        Mth.floor(scaled.y + 0.5F),
+                        Mth.floor(scaled.z + 0.5F));
 
                 if (pos.equals(this.worldPosition) || pos.equals(connectedPos))
                     continue;

@@ -17,7 +17,7 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -51,7 +51,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
         if (entity.level.isClientSide || !(entity instanceof AnimalEntity) || entity instanceof IMob || entity instanceof INPC)
             return;
         BlockPos pos = entity.getPosition();
-        Helper.getTileEntitiesInArea(entity.level, pos, 5, tile -> {
+        Helper.getBlockEntitiesInArea(entity.level, pos, 5, tile -> {
             if (!(tile instanceof BlockEntityAnimalGenerator))
                 return false;
             BlockEntityAnimalGenerator gen = (BlockEntityAnimalGenerator) tile;
@@ -67,8 +67,8 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
             float amountMod = child ? 0.667F : 1;
 
             int timeAlive = data.getInt(NaturesAura.MOD_ID + ":time_alive");
-            int time = Math.min(MathHelper.floor((timeAlive - 15000) / 500F * timeMod), 200);
-            int amount = Math.min(MathHelper.floor((timeAlive - 8000) / 2F * amountMod), 25000);
+            int time = Math.min(Mth.floor((timeAlive - 15000) / 500F * timeMod), 200);
+            int amount = Math.min(Mth.floor((timeAlive - 8000) / 2F * amountMod), 25000);
             if (time <= 0 || amount <= 0)
                 return false;
             gen.setGenerationValues(time, amount);

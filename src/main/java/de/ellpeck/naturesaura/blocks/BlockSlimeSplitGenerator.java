@@ -54,7 +54,7 @@ public class BlockSlimeSplitGenerator extends BlockContainerImpl implements IVis
             int size = slime.getSlimeSize();
             if (size <= 1)
                 return;
-            Helper.getTileEntitiesInArea(entity.level, entity.getPosition(), 8, tile -> {
+            Helper.getBlockEntitiesInArea(entity.level, entity.getPosition(), 8, tile -> {
                 if (!(tile instanceof BlockEntitySlimeSplitGenerator))
                     return false;
                 BlockEntitySlimeSplitGenerator gen = (BlockEntitySlimeSplitGenerator) tile;

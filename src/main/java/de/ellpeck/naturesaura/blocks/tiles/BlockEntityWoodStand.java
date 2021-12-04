@@ -5,21 +5,20 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -40,8 +39,8 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
     private BlockPos ritualPos;
     private int timer;
 
-    public BlockEntityWoodStand() {
-        super(ModTileEntities.WOOD_STAND);
+    public BlockEntityWoodStand(BlockPos pos, BlockState state) {
+        super(ModTileEntities.WOOD_STAND, pos, state);
     }
 
     public void setRitual(BlockPos pos, TreeRitualRecipe recipe) {
@@ -64,11 +63,11 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
                                 BlockEntity tile = this.level.getBlockEntity(pos);
                                 if (tile instanceof BlockEntityWoodStand && !((BlockEntityWoodStand) tile).items.getStackInSlot(0).isEmpty()) {
                                     PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticleStream(
-                                            (float) pos.getX() + 0.2F + this.level.rand.nextFloat() * 0.6F,
+                                            (float) pos.getX() + 0.2F + this.level.random.nextFloat() * 0.6F,
                                             (float) pos.getY() + 0.85F,
-                                            (float) pos.getZ() + 0.2F + this.level.rand.nextFloat() * 0.6F,
-                                            this.ritualPos.getX() + 0.5F, this.ritualPos.getY() + this.level.rand.nextFloat() * 3F + 2F, this.ritualPos.getZ() + 0.5F,
-                                            this.level.rand.nextFloat() * 0.04F + 0.04F, 0x89cc37, this.level.rand.nextFloat() * 1F + 1F
+                                            (float) pos.getZ() + 0.2F + this.level.random.nextFloat() * 0.6F,
+                                            this.ritualPos.getX() + 0.5F, this.ritualPos.getY() + this.level.random.nextFloat() * 3F + 2F, this.ritualPos.getZ() + 0.5F,
+                                            this.level.random.nextFloat() * 0.04F + 0.04F, 0x89cc37, this.level.random.nextFloat() + 1F
                                     ));
                                 }
                                 return true;
@@ -79,7 +78,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
 
                         if (this.timer >= this.recipe.time) {
                             Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'G', (pos, matcher) -> {
-                                this.level.setBlockState(pos, Blocks.AIR.getDefaultState());
+                                this.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                                 return true;
                             });
                             recurseTreeDestruction(this.level, this.ritualPos, this.ritualPos, true, false);
@@ -87,12 +86,12 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
                             ItemEntity item = new ItemEntity(this.level,
                                     this.ritualPos.getX() + 0.5, this.ritualPos.getY() + 4.5, this.ritualPos.getZ() + 0.5,
                                     this.recipe.result.copy());
-                            this.level.addEntity(item);
+                            this.level.addFreshEntity(item);
 
                             PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
-                                    new PacketParticles((float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.TR_SPAWN_RESULT));
+                                    new PacketParticles((float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.TR_SPAWN_RESULT));
                             this.level.playSound(null, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5,
-                                    SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 0.65F, 1F);
+                                    SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 0.65F, 1F);
 
                             this.ritualPos = null;
                             this.recipe = null;
@@ -100,17 +99,14 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
                         } else if (isOverHalf && !wasOverHalf) {
                             Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'W', (pos, matcher) -> {
                                 BlockEntity tile = this.level.getBlockEntity(pos);
-                                if (tile instanceof BlockEntityWoodStand) {
-                                    BlockEntityWoodStand stand = (BlockEntityWoodStand) tile;
-                                    if (!stand.items.getStackInSlot(0).isEmpty()) {
-                                        PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
-                                                new PacketParticles(stand.pos.getX(), stand.pos.getY(), stand.pos.getZ(), PacketParticles.Type.TR_CONSUME_ITEM));
-                                        this.level.playSound(null, stand.pos.getX() + 0.5, stand.pos.getY() + 0.5, stand.pos.getZ() + 0.5,
-                                                SoundEvents.BLOCK_WOOD_STEP, SoundCategory.BLOCKS, 0.5F, 1F);
+                                if (tile instanceof BlockEntityWoodStand stand && !stand.items.getStackInSlot(0).isEmpty()) {
+                                    PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
+                                            new PacketParticles(stand.worldPosition.getX(), stand.worldPosition.getY(), stand.worldPosition.getZ(), PacketParticles.Type.TR_CONSUME_ITEM));
+                                    this.level.playSound(null, stand.worldPosition.getX() + 0.5, stand.worldPosition.getY() + 0.5, stand.worldPosition.getZ() + 0.5,
+                                            SoundEvents.WOOD_STEP, SoundSource.BLOCKS, 0.5F, 1F);
 
-                                        stand.items.setStackInSlot(0, ItemStack.EMPTY);
-                                        stand.sendToClients();
-                                    }
+                                    stand.items.setStackInSlot(0, ItemStack.EMPTY);
+                                    stand.sendToClients();
                                 }
                                 return true;
                             });
@@ -136,14 +132,14 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
-                    BlockPos offset = pos.add(x, y, z);
+                    BlockPos offset = pos.offset(x, y, z);
                     BlockState state = level.getBlockState(offset);
                     if (state.getBlock().getTags().contains(BlockTags.LOGS.getName()) || includeLeaves && state.getBlock() instanceof LeavesBlock) {
                         if (drop) {
                             level.destroyBlock(offset, true);
                         } else {
                             // in this case we don't want the particles, so we can't use destroyBlock
-                            level.setBlockState(offset, Blocks.AIR.getDefaultState());
+                            level.setBlockAndUpdate(offset, Blocks.AIR.defaultBlockState());
                             PacketHandler.sendToAllAround(level, pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), PacketParticles.Type.TR_DISAPPEAR));
                         }
                         recurseTreeDestruction(level, offset, start, includeLeaves, drop);
@@ -158,7 +154,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
             return false;
         }
         for (int i = 0; i < 2; i++) {
-            BlockState state = this.level.getBlockState(this.ritualPos.up(i));
+            BlockState state = this.level.getBlockState(this.ritualPos.above(i));
             if (!(state.getBlock().getTags().contains(BlockTags.LOGS.getName())))
                 return false;
         }
@@ -194,7 +190,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
 
         if (type == SaveType.TILE) {
             if (this.ritualPos != null && this.recipe != null) {
-                compound.putLong("ritual_pos", this.ritualPos.toLong());
+                compound.putLong("ritual_pos", this.ritualPos.asLong());
                 compound.putInt("timer", this.timer);
                 compound.putString("recipe", this.recipe.name.toString());
             }
@@ -209,10 +205,10 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
 
         if (type == SaveType.TILE) {
             if (compound.contains("recipe")) {
-                this.ritualPos = BlockPos.fromLong(compound.getLong("ritual_pos"));
+                this.ritualPos = BlockPos.of(compound.getLong("ritual_pos"));
                 this.timer = compound.getInt("timer");
                 if (this.hasLevel())
-                    this.recipe = (TreeRitualRecipe) this.level.getRecipeManager().getRecipe(new ResourceLocation(compound.getString("recipe"))).orElse(null);
+                    this.recipe = (TreeRitualRecipe) this.level.getRecipeManager().byKey(new ResourceLocation(compound.getString("recipe"))).orElse(null);
             }
         }
     }

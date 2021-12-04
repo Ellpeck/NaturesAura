@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.ISeedReader;
 import net.minecraft.level.gen.ChunkGenerator;
 import net.minecraft.level.gen.Heightmap;
@@ -36,11 +36,11 @@ public class LevelGenAuraBloom extends Feature<NoFeatureConfig> {
         int startX = pos.getX() + rand.nextInt(16);
         int startZ = pos.getZ() + rand.nextInt(16);
         boolean any = false;
-        for (int i = MathHelper.nextInt(rand, 3, 8); i > 0; i--) {
-            int offX = startX + MathHelper.nextInt(rand, -5, 5);
-            int offZ = startZ + MathHelper.nextInt(rand, -5, 5);
+        for (int i = Mth.nextInt(rand, 3, 8); i > 0; i--) {
+            int offX = startX + Mth.nextInt(rand, -5, 5);
+            int offZ = startZ + Mth.nextInt(rand, -5, 5);
             if (this.nether) {
-                int y = MathHelper.nextInt(rand, 0, 128);
+                int y = Mth.nextInt(rand, 0, 128);
                 for (int off = 0; off < 64; off++) {
                     // try to find a good location in both directions of the random pos
                     if (this.tryPlace(levelIn, new BlockPos(offX, y - off, offZ)) || this.tryPlace(levelIn, new BlockPos(offX, y + off, offZ))) {

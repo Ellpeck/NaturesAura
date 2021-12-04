@@ -9,7 +9,7 @@ import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.ISeedReader;
 import net.minecraft.level.gen.ChunkGenerator;
 import net.minecraft.level.gen.ILevelGenerationReader;
@@ -120,7 +120,7 @@ public class LevelGenAncientTree extends Feature<BaseTreeFeatureConfig> {
     }
 
     private int getHighestCoord(BlockPos pos) {
-        return Math.max(MathHelper.abs(pos.getX()), Math.max(MathHelper.abs(pos.getY()), MathHelper.abs(pos.getZ())));
+        return Math.max(Mth.abs(pos.getX()), Math.max(Mth.abs(pos.getY()), Mth.abs(pos.getZ())));
     }
 
     private Axis getLogAxis(BlockPos pos, BlockPos goal) {

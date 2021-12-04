@@ -1,9 +1,10 @@
 package de.ellpeck.naturesaura.items;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 @SuppressWarnings("FieldNamingConvention")
 public final class ModItems {
+
     public static Item INFUSED_IRON_PICKAXE;
     public static Item INFUSED_IRON_AXE;
     public static Item INFUSED_IRON_SHOVEL;

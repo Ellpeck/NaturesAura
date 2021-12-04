@@ -8,12 +8,12 @@ import de.ellpeck.naturesaura.blocks.BlockNatureAltar;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.data.BlockTagProvider;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SaplingBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.material.Material;
 
 public final class Multiblocks {
 
@@ -38,23 +38,23 @@ public final class Multiblocks {
             'B', Blocks.NETHER_BRICKS,
             'W', Matcher.tag(Blocks.CRIMSON_PLANKS, BlockTagProvider.NETHER_ALTAR_WOOD),
             'M', ModBlocks.GOLD_NETHER_BRICK,
-            '0', ModBlocks.NATURE_ALTAR.getDefaultState().with(BlockNatureAltar.NETHER, true),
+            '0', ModBlocks.NATURE_ALTAR.defaultBlockState().setValue(BlockNatureAltar.NETHER, true),
             ' ', Matcher.wildcard());
     public static final IMultiblock TREE_RITUAL = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "tree_ritual"),
             new String[][]{
                     {"    W    ", " W     W ", "   GGG   ", "  GG GG  ", "W G 0 G W", "  GG GG  ", "   GGG   ", " W     W ", "    W    "}},
-            'W', new Matcher(ModBlocks.WOOD_STAND.getDefaultState(),
+            'W', new Matcher(ModBlocks.WOOD_STAND.defaultBlockState(),
                     (level, start, offset, pos, state, c) -> level != null || state.getBlock() == ModBlocks.WOOD_STAND),
             'G', ModBlocks.GOLD_POWDER,
-            '0', new Matcher(Blocks.OAK_SAPLING.getDefaultState(),
+            '0', new Matcher(Blocks.OAK_SAPLING.defaultBlockState(),
                     (level, start, offset, pos, state, c) -> {
                         if (state.getBlock() instanceof SaplingBlock || state.getMaterial() == Material.WOOD)
                             return true;
                         // try-catch to prevent blocks that need to have been placed crashing here
                         try {
-                            ItemStack stack = state.getBlock().getItem(level, pos, state);
-                            return !stack.isEmpty() && level.getRecipeManager().getRecipes(ModRecipes.TREE_RITUAL_TYPE, null, null).stream().anyMatch(r -> r.saplingType.test(stack));
+                            ItemStack stack = state.getBlock().getCloneItemStack(level, pos, state);
+                            return !stack.isEmpty() && level.getRecipeManager().getRecipesFor(ModRecipes.TREE_RITUAL_TYPE, null, null).stream().anyMatch(r -> r.saplingType.test(stack));
                         } catch (Exception e) {
                             return false;
                         }
@@ -76,7 +76,7 @@ public final class Multiblocks {
             new ResourceLocation(NaturesAura.MOD_ID, "offering_table"),
             new String[][]{
                     {"  RRRRR  ", " R     R ", "R  RRR  R", "R R   R R", "R R 0 R R", "R R   R R", "R  RRR  R", " R     R ", "  RRRRR  "}},
-            'R', new Matcher(Blocks.POPPY.getDefaultState(),
+            'R', new Matcher(Blocks.POPPY.defaultBlockState(),
                     (level, start, offset, pos, state, c) -> BlockTags.SMALL_FLOWERS.contains(state.getBlock())),
             '0', ModBlocks.OFFERING_TABLE,
             ' ', Matcher.wildcard());

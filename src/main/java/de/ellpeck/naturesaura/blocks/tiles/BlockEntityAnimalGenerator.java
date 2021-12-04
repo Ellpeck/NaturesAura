@@ -1,18 +1,17 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockEntityAnimalGenerator extends BlockEntityImpl implements ITickableBlockEntity {
 
     private int timeRemaining;
     private int amountToRelease;
 
-    public BlockEntityAnimalGenerator() {
-        super(ModTileEntities.ANIMAL_GENERATOR);
+    public BlockEntityAnimalGenerator(BlockPos pos, BlockState state) {
+        super(ModTileEntities.ANIMAL_GENERATOR, pos, state);
     }
 
     @Override

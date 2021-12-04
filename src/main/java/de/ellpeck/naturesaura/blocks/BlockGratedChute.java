@@ -19,7 +19,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -135,7 +135,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
             ItemStack stack = handler.getStackInSlot(0);
             if (stack.isEmpty())
                 return 0;
-            return MathHelper.ceil(stack.getCount() / (float) stack.getMaxStackSize() * 15);
+            return Mth.ceil(stack.getCount() / (float) stack.getMaxStackSize() * 15);
         } else
             return 0;
     }

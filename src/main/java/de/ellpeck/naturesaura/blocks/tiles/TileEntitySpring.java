@@ -14,7 +14,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraftforge.common.FarmlandWaterManager;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.ticket.AABBTicket;
@@ -171,7 +171,7 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
             int drain = Math.min(maxDrain, 1000);
             if (action.execute())
-                BlockEntitySpring.this.consumeAura(MathHelper.ceil(drain / 2F));
+                BlockEntitySpring.this.consumeAura(Mth.ceil(drain / 2F));
             return new FluidStack(Fluids.WATER, drain);
         }
 

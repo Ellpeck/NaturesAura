@@ -7,7 +7,7 @@ import net.minecraft.block.NetherWartBlock;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.InteractionResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.Level;
 import net.minecraft.level.gen.feature.IFeatureConfig;
 import net.minecraft.level.server.ServerLevel;
@@ -39,7 +39,7 @@ public class ItemCrimsonMeal extends ItemImpl {
         } else if (level.getBlockState(pos.up()).isAir(level, pos.up()) && level.getBlockState(pos).getBlock() == Blocks.SOUL_SAND) {
             if (!level.isClientSide) {
                 for (int i = level.rand.nextInt(5); i >= 0; i--) {
-                    BlockPos offset = pos.add(MathHelper.nextInt(level.rand, -3, 3), 1, MathHelper.nextInt(level.rand, -3, 3));
+                    BlockPos offset = pos.add(Mth.nextInt(level.rand, -3, 3), 1, Mth.nextInt(level.rand, -3, 3));
                     if (level.getBlockState(offset.down()).getBlock() == Blocks.SOUL_SAND && level.getBlockState(offset).isAir(level, offset)) {
                         level.setBlockState(offset, Blocks.NETHER_WART.getDefaultState());
                     }

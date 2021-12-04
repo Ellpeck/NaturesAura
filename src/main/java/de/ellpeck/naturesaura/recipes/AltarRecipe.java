@@ -6,13 +6,13 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ModItems;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -38,59 +38,59 @@ public class AltarRecipe extends ModRecipe {
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return this.output;
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.ALTAR_SERIAIZER;
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return ModRecipes.ALTAR_TYPE;
     }
 
     public ItemStack getDimensionBottle() {
         ItemStack bottle = ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), this.requiredType);
-        bottle.setDisplayName(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".required_aura_type." + this.requiredType.getName()));
+        bottle.setHoverName(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".required_aura_type." + this.requiredType.getName()));
         return bottle;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<AltarRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<AltarRecipe> {
 
         @Override
-        public AltarRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public AltarRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new AltarRecipe(
                     recipeId,
-                    Ingredient.deserialize(json.getAsJsonObject("input")),
+                    Ingredient.fromJson(json.getAsJsonObject("input")),
                     CraftingHelper.getItemStack(json.getAsJsonObject("output"), true),
                     NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(json.get("aura_type").getAsString())),
-                    json.has("catalyst") ? Ingredient.deserialize(json.getAsJsonObject("catalyst")) : Ingredient.EMPTY,
+                    json.has("catalyst") ? Ingredient.fromJson(json.getAsJsonObject("catalyst")) : Ingredient.EMPTY,
                     json.get("aura").getAsInt(),
                     json.get("time").getAsInt());
         }
 
         @Nullable
         @Override
-        public AltarRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public AltarRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             return new AltarRecipe(
                     recipeId,
-                    Ingredient.read(buffer),
-                    buffer.readItemStack(),
+                    Ingredient.fromNetwork(buffer),
+                    buffer.readItem(),
                     NaturesAuraAPI.AURA_TYPES.get(buffer.readResourceLocation()),
-                    Ingredient.read(buffer),
+                    Ingredient.fromNetwork(buffer),
                     buffer.readInt(),
                     buffer.readInt());
         }
 
         @Override
-        public void write(PacketBuffer buffer, AltarRecipe recipe) {
-            recipe.input.write(buffer);
-            buffer.writeItemStack(recipe.output);
+        public void toNetwork(FriendlyByteBuf buffer, AltarRecipe recipe) {
+            recipe.input.toNetwork(buffer);
+            buffer.writeItem(recipe.output);
             buffer.writeResourceLocation(recipe.requiredType.getName());
-            recipe.catalyst.write(buffer);
+            recipe.catalyst.toNetwork(buffer);
             buffer.writeInt(recipe.aura);
             buffer.writeInt(recipe.time);
         }

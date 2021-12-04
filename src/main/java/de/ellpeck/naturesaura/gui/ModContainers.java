@@ -1,10 +1,10 @@
 package de.ellpeck.naturesaura.gui;
 
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.world.inventory.MenuType;
 
 @SuppressWarnings("FieldNamingConvention")
 public final class ModContainers {
 
-    public static ContainerType<ContainerEnderCrate> ENDER_CRATE;
-    public static ContainerType<ContainerEnderCrate> ENDER_ACCESS;
+    public static MenuType<ContainerEnderCrate> ENDER_CRATE;
+    public static MenuType<ContainerEnderCrate> ENDER_ACCESS;
 }

@@ -36,7 +36,7 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
         BlockPos pos = event.getPos();
         if (level instanceof Level && !level.isClientSide() && IAuraType.forLevel(level).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD)
                 && level.getBlockState(pos).getBlock() instanceof SaplingBlock) {
-            Helper.getTileEntitiesInArea(level, pos, 10, tile -> {
+            Helper.getBlockEntitiesInArea(level, pos, 10, tile -> {
                 if (!(tile instanceof BlockEntityOakGenerator))
                     return false;
 

@@ -1,11 +1,11 @@
 package de.ellpeck.naturesaura.api.multiblock;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class Matcher {
 
@@ -18,11 +18,11 @@ public class Matcher {
     }
 
     public static Matcher wildcard() {
-        return new Matcher(Blocks.AIR.getDefaultState(), null);
+        return new Matcher(Blocks.AIR.defaultBlockState(), null);
     }
 
-    public static Matcher tag(Block defaultBlock, ITag.INamedTag tag) {
-        return new Matcher(defaultBlock.getDefaultState(), (level, start, offset, pos, state, c) -> state.getBlock().getTags().contains(tag.getName()));
+    public static Matcher tag(Block defaultBlock, Tag.Named<?> tag) {
+        return new Matcher(defaultBlock.defaultBlockState(), (level, start, offset, pos, state, c) -> state.getBlock().getTags().contains(tag.getName()));
     }
 
     public BlockState getDefaultState() {
@@ -34,6 +34,7 @@ public class Matcher {
     }
 
     public interface ICheck {
+
         boolean matches(Level level, BlockPos start, BlockPos offset, BlockPos pos, BlockState state, char c);
     }
 }

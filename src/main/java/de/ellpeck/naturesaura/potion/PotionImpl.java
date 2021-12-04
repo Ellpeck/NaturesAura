@@ -2,14 +2,14 @@ package de.ellpeck.naturesaura.potion;
 
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 
-public class PotionImpl extends Effect implements IModItem {
+public class PotionImpl extends MobEffect implements IModItem {
 
     protected final String baseName;
 
-    protected PotionImpl(String baseName, EffectType type, int liquidColorIn) {
+    protected PotionImpl(String baseName, MobEffectCategory type, int liquidColorIn) {
         super(type, liquidColorIn);
         this.baseName = baseName;
 

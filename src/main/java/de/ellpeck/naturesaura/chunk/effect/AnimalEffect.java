@@ -18,7 +18,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -42,10 +42,10 @@ public class AnimalEffect implements IDrainSpotEffect {
         int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
-        this.chance = Math.min(50, MathHelper.ceil(Math.abs(aura) / 500000F / auraAndSpots.getRight()));
+        this.chance = Math.min(50, Mth.ceil(Math.abs(aura) / 500000F / auraAndSpots.getRight()));
         if (this.chance <= 0)
             return false;
-        int dist = MathHelper.clamp(Math.abs(aura) / 150000, 5, 35);
+        int dist = Mth.clamp(Math.abs(aura) / 150000, 5, 35);
         this.bb = new AxisAlignedBB(pos).grow(dist);
         return true;
     }

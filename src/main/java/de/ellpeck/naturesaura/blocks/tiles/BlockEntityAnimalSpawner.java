@@ -9,16 +9,16 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.recipes.AnimalSpawnerRecipe;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +32,8 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
     private int time;
     private Entity entityClient;
 
-    public BlockEntityAnimalSpawner() {
-        super(ModTileEntities.ANIMAL_SPAWNER);
+    public BlockEntityAnimalSpawner(BlockPos pos, BlockState state) {
+        super(ModTileEntities.ANIMAL_SPAWNER, pos, state);
     }
 
     @Override
@@ -51,29 +51,29 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
             }
 
             if (this.currentRecipe != null) {
-                int drain = MathHelper.ceil(this.currentRecipe.aura / (float) this.currentRecipe.time * 10F);
+                int drain = Mth.ceil(this.currentRecipe.aura / (float) this.currentRecipe.time * 10F);
                 BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
                 IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, drain);
 
                 this.time += 10;
                 if (this.time >= this.currentRecipe.time) {
                     Entity entity = this.currentRecipe.makeEntity(this.level, new BlockPos(this.spawnX, this.worldPosition.getY() + 1, this.spawnZ));
-                    this.level.addEntity(entity);
+                    this.level.addFreshEntity(entity);
 
                     this.currentRecipe = null;
                     this.time = 0;
                     this.sendToClients();
                 }
             } else {
-                List<ItemEntity> items = this.level.getEntitiesWithinAABB(ItemEntity.class,
-                        new AxisAlignedBB(this.worldPosition).grow(2));
+                List<ItemEntity> items = this.level.getEntitiesOfClass(ItemEntity.class,
+                        new AABB(this.worldPosition).inflate(2));
 
-                for (AnimalSpawnerRecipe recipe : this.level.getRecipeManager().getRecipes(ModRecipes.ANIMAL_SPAWNER_TYPE, null, null)) {
+                for (AnimalSpawnerRecipe recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.ANIMAL_SPAWNER_TYPE, null, null)) {
                     if (recipe.ingredients.length != items.size())
                         continue;
                     List<Ingredient> required = new ArrayList<>(Arrays.asList(recipe.ingredients));
                     for (ItemEntity item : items) {
-                        if (!item.isAlive() || item.cannotPickup())
+                        if (!item.isAlive() || item.hasPickUpDelay())
                             break;
                         ItemStack stack = item.getItem();
                         if (stack.isEmpty())
@@ -89,14 +89,14 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
                         continue;
 
                     for (ItemEntity item : items) {
-                        item.remove();
+                        item.remove(Entity.RemovalReason.KILLED);
                         PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
-                                new PacketParticles((float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.ANIMAL_SPAWNER));
+                                new PacketParticles((float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.ANIMAL_SPAWNER));
                     }
 
                     this.currentRecipe = recipe;
-                    this.spawnX = this.worldPosition.getX() + 0.5 + this.level.rand.nextFloat() * 4 - 2;
-                    this.spawnZ = this.worldPosition.getZ() + 0.5 + this.level.rand.nextFloat() * 4 - 2;
+                    this.spawnX = this.worldPosition.getX() + 0.5 + this.level.random.nextFloat() * 4 - 2;
+                    this.spawnZ = this.worldPosition.getZ() + 0.5 + this.level.random.nextFloat() * 4 - 2;
                     this.sendToClients();
                     break;
                 }
@@ -110,26 +110,26 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
             }
 
             NaturesAuraAPI.instance().spawnParticleStream(
-                    this.worldPosition.getX() + (float) this.level.rand.nextGaussian() * 5F,
-                    this.worldPosition.getY() + 1 + this.level.rand.nextFloat() * 5F,
-                    this.worldPosition.getZ() + (float) this.level.rand.nextGaussian() * 5F,
-                    this.worldPosition.getX() + this.level.rand.nextFloat(),
-                    this.worldPosition.getY() + this.level.rand.nextFloat(),
-                    this.worldPosition.getZ() + this.level.rand.nextFloat(),
-                    this.level.rand.nextFloat() * 0.07F + 0.07F,
+                    this.worldPosition.getX() + (float) this.level.random.nextGaussian() * 5F,
+                    this.worldPosition.getY() + 1 + this.level.random.nextFloat() * 5F,
+                    this.worldPosition.getZ() + (float) this.level.random.nextGaussian() * 5F,
+                    this.worldPosition.getX() + this.level.random.nextFloat(),
+                    this.worldPosition.getY() + this.level.random.nextFloat(),
+                    this.worldPosition.getZ() + this.level.random.nextFloat(),
+                    this.level.random.nextFloat() * 0.07F + 0.07F,
                     IAuraType.forLevel(this.level).getColor(),
-                    this.level.rand.nextFloat() + 0.5F);
+                    this.level.random.nextFloat() + 0.5F);
 
             if (this.entityClient == null) {
                 this.entityClient = this.currentRecipe.makeEntity(this.level, BlockPos.ZERO);
-                this.entityClient.setPosition(this.spawnX, this.worldPosition.getY() + 1, this.spawnZ);
+                this.entityClient.setPos(this.spawnX, this.worldPosition.getY() + 1, this.spawnZ);
             }
-            AxisAlignedBB bounds = this.entityClient.getBoundingBox();
-            for (int i = this.level.rand.nextInt(5) + 5; i >= 0; i--)
+            AABB bounds = this.entityClient.getBoundingBox();
+            for (int i = this.level.random.nextInt(5) + 5; i >= 0; i--)
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        bounds.minX + this.level.rand.nextFloat() * (bounds.maxX - bounds.minX),
-                        bounds.minY + this.level.rand.nextFloat() * (bounds.maxY - bounds.minY),
-                        bounds.minZ + this.level.rand.nextFloat() * (bounds.maxZ - bounds.minZ),
+                        bounds.minX + this.level.random.nextFloat() * (bounds.maxX - bounds.minX),
+                        bounds.minY + this.level.random.nextFloat() * (bounds.maxY - bounds.minY),
+                        bounds.minZ + this.level.random.nextFloat() * (bounds.maxZ - bounds.minZ),
                         0F, 0F, 0F, 0x2fd8d3, 2F, 60, 0F, false, true);
         }
     }
@@ -154,7 +154,7 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
             if (compound.contains("recipe")) {
                 if (this.hasLevel()) {
                     ResourceLocation name = new ResourceLocation(compound.getString("recipe"));
-                    this.currentRecipe = (AnimalSpawnerRecipe) this.level.getRecipeManager().getRecipe(name).orElse(null);
+                    this.currentRecipe = (AnimalSpawnerRecipe) this.level.getRecipeManager().byKey(name).orElse(null);
                 }
                 this.spawnX = compound.getDouble("spawn_x");
                 this.spawnZ = compound.getDouble("spawn_z");

@@ -1,26 +1,26 @@
 package de.ellpeck.naturesaura.enchant;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.Enchantments;
 
 public class AuraMendingEnchantment extends ModEnchantment {
 
     public AuraMendingEnchantment() {
-        super("aura_mending", Rarity.RARE, EnchantmentType.BREAKABLE, EquipmentSlotType.values());
+        super("aura_mending", Rarity.RARE, EnchantmentCategory.BREAKABLE, EquipmentSlot.values());
     }
 
     @Override
-    protected boolean canApplyTogether(Enchantment ench) {
-        return super.canApplyTogether(ench) && ench != Enchantments.MENDING;
+    protected boolean checkCompatibility(Enchantment ench) {
+        return super.checkCompatibility(ench) && ench != Enchantments.MENDING;
     }
 
     @Override
-    public boolean canApply(ItemStack stack) {
-        return super.canApply(stack) && !stack.getCapability(NaturesAuraAPI.capAuraRecharge).isPresent();
+    public boolean canEnchant(ItemStack stack) {
+        return super.canEnchant(stack) && !stack.getCapability(NaturesAuraAPI.capAuraRecharge).isPresent();
     }
 
     @Override

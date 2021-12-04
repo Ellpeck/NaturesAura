@@ -16,7 +16,7 @@ import net.minecraft.tileentity.*;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
@@ -71,7 +71,7 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
 
                     BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 20, this.worldPosition);
                     IAuraChunk chunk = IAuraChunk.getAuraChunk(this.level, spot);
-                    chunk.drainAura(spot, MathHelper.ceil((200 - burnTime) * 16.6F));
+                    chunk.drainAura(spot, Mth.ceil((200 - burnTime) * 16.6F));
                     did = true;
 
                     if (this.level.getGameTime() % 15 == 0) {

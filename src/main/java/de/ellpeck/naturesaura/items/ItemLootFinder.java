@@ -32,7 +32,7 @@ public class ItemLootFinder extends ItemImpl {
             inst.setParticleCulling(false);
 
             BlockPos pos = playerIn.getPosition();
-            Helper.getTileEntitiesInArea(levelIn, pos, 64, tile -> {
+            Helper.getBlockEntitiesInArea(levelIn, pos, 64, tile -> {
                 if (tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent() || tile instanceof MobSpawnerBlockEntity) {
                     inst.spawnMagicParticle(
                             tile.getPos().getX() + 0.5F, tile.getPos().getY() + 0.5F, tile.getPos().getZ() + 0.5F,

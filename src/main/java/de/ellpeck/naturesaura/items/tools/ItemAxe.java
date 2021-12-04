@@ -8,24 +8,25 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
 public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
+
     private final String baseName;
 
-    public ItemAxe(String baseName, IItemTier material, float damage, float speed) {
-        super(material, damage, speed, new Properties().group(NaturesAura.CREATIVE_TAB));
+    public ItemAxe(String baseName, Tier material, float damage, float speed) {
+        super(material, damage, speed, new Properties().tab(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
         ModRegistry.add(this);
     }
@@ -38,7 +39,7 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
         if (state.getMaterial() == Material.LEAVES) {
-            return this.efficiency;
+            return this.speed;
         } else {
             return super.getDestroySpeed(stack, state);
         }

@@ -20,7 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -143,7 +143,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
                             this.currentRecipe = null;
                             this.timer = 0;
                         } else {
-                            int req = MathHelper.ceil(this.currentRecipe.aura / (double) this.currentRecipe.time);
+                            int req = Mth.ceil(this.currentRecipe.aura / (double) this.currentRecipe.time);
                             if (this.container.getStoredAura() >= req) {
                                 this.container.drainAura(req, false);
 

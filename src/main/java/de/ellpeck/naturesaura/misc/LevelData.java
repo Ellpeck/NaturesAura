@@ -5,23 +5,22 @@ import com.google.common.collect.ListMultimap;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
-import de.ellpeck.naturesaura.blocks.tiles.ItemStackHandlerNA;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntitySpawnLamp;
+import de.ellpeck.naturesaura.blocks.tiles.ItemStackHandlerNA;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.LongNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
@@ -30,7 +29,7 @@ import java.util.*;
 
 public class LevelData implements ILevelData {
 
-    public final ListMultimap<ResourceLocation, Tuple<Vector3d, Integer>> effectPowders = ArrayListMultimap.create();
+    public final ListMultimap<ResourceLocation, Tuple<Vec3, Integer>> effectPowders = ArrayListMultimap.create();
     public final Long2ObjectOpenHashMap<AuraChunk> auraChunksWithSpots = new Long2ObjectOpenHashMap<>();
     public final List<BlockPos> recentlyConvertedMossStones = new ArrayList<>();
     public final Set<BlockEntitySpawnLamp> spawnLamps = new HashSet<>();
@@ -47,7 +46,7 @@ public class LevelData implements ILevelData {
     public CompoundTag serializeNBT() {
         CompoundTag compound = new CompoundTag();
 
-        ListNBT storages = new ListNBT();
+        ListTag storages = new ListTag();
         for (Map.Entry<String, ItemStackHandlerNA> entry : this.enderStorages.entrySet()) {
             ItemStackHandlerNA handler = entry.getValue();
             if (Helper.isEmpty(handler))
@@ -58,9 +57,9 @@ public class LevelData implements ILevelData {
         }
         compound.put("storages", storages);
 
-        ListNBT moss = new ListNBT();
+        ListTag moss = new ListTag();
         for (BlockPos pos : this.recentlyConvertedMossStones)
-            moss.add(LongNBT.valueOf(pos.toLong()));
+            moss.add(LongTag.valueOf(pos.asLong()));
         compound.put("converted_moss", moss);
 
         return compound;
@@ -69,15 +68,15 @@ public class LevelData implements ILevelData {
     @Override
     public void deserializeNBT(CompoundTag compound) {
         this.enderStorages.clear();
-        for (INBT base : compound.getList("storages", 10)) {
+        for (Tag base : compound.getList("storages", 10)) {
             CompoundTag storageComp = (CompoundTag) base;
             ItemStackHandlerNA storage = this.getEnderStorage(storageComp.getString("name"));
             storage.deserializeNBT(storageComp);
         }
 
         this.recentlyConvertedMossStones.clear();
-        for (INBT base : compound.getList("converted_moss", Constants.NBT.TAG_LONG))
-            this.recentlyConvertedMossStones.add(BlockPos.fromLong(((LongNBT) base).getLong()));
+        for (Tag base : compound.getList("converted_moss", Tag.TAG_LONG))
+            this.recentlyConvertedMossStones.add(BlockPos.of(((LongTag) base).getAsLong()));
     }
 
     @Override

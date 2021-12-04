@@ -1,12 +1,12 @@
 package de.ellpeck.naturesaura.recipes;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -26,45 +26,46 @@ public class OfferingRecipe extends ModRecipe {
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return this.output;
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.OFFERING_SERIALIZER;
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return ModRecipes.OFFERING_TYPE;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<OfferingRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<OfferingRecipe> {
+
         @Override
-        public OfferingRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public OfferingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new OfferingRecipe(
                     recipeId,
-                    Ingredient.deserialize(json.get("input")),
-                    Ingredient.deserialize(json.get("start_item")),
+                    Ingredient.fromJson(json.get("input")),
+                    Ingredient.fromJson(json.get("start_item")),
                     CraftingHelper.getItemStack(json.getAsJsonObject("output"), true));
         }
 
         @Nullable
         @Override
-        public OfferingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public OfferingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             return new OfferingRecipe(
                     recipeId,
-                    Ingredient.read(buffer),
-                    Ingredient.read(buffer),
-                    buffer.readItemStack());
+                    Ingredient.fromNetwork(buffer),
+                    Ingredient.fromNetwork(buffer),
+                    buffer.readItem());
         }
 
         @Override
-        public void write(PacketBuffer buffer, OfferingRecipe recipe) {
-            recipe.input.write(buffer);
-            recipe.startItem.write(buffer);
-            buffer.writeItemStack(recipe.output);
+        public void toNetwork(FriendlyByteBuf buffer, OfferingRecipe recipe) {
+            recipe.input.toNetwork(buffer);
+            recipe.startItem.toNetwork(buffer);
+            buffer.writeItem(recipe.output);
         }
     }
 }

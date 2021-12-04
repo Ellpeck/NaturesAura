@@ -33,7 +33,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.level.Level;
@@ -109,10 +109,10 @@ public class ClientEvents {
 
                 if (!mc.isGamePaused()) {
                     if (mc.level.getGameTime() % 20 == 0) {
-                        int amount = MathHelper.floor(190 * ModConfig.instance.excessParticleAmount.get());
+                        int amount = Mth.floor(190 * ModConfig.instance.excessParticleAmount.get());
                         for (int i = 0; i < amount; i++) {
-                            int x = MathHelper.floor(mc.player.getPosX()) + mc.level.rand.nextInt(64) - 32;
-                            int z = MathHelper.floor(mc.player.getPosZ()) + mc.level.rand.nextInt(64) - 32;
+                            int x = Mth.floor(mc.player.getPosX()) + mc.level.rand.nextInt(64) - 32;
+                            int z = Mth.floor(mc.player.getPosZ()) + mc.level.rand.nextInt(64) - 32;
                             BlockPos pos = new BlockPos(x, mc.level.getHeight(Heightmap.Type.WORLD_SURFACE, x, z) - 1, z);
                             BlockState state = mc.level.getBlockState(pos);
                             Block block = state.getBlock();
@@ -262,7 +262,7 @@ public class ClientEvents {
             if (mc.player != null) {
                 if (!heldCache.isEmpty()) {
                     IAuraContainer container = heldCache.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
-                    int width = MathHelper.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
+                    int width = Mth.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
 
                     int conf = ModConfig.instance.cacheBarLocation.get();
                     int x = res.getScaledWidth() / 2 + (conf == 0 ? -173 - (mc.player.getHeldItemOffhand().isEmpty() ? 0 : 29) : 93);
@@ -307,7 +307,7 @@ public class ClientEvents {
                         float textX = conf % 2 == 0 ? 3 : res.getScaledWidth() - 3 - mc.fontRenderer.getStringWidth(text) * textScale;
                         float textY = conf < 2 ? 3 : res.getScaledHeight() - 3 - 6;
 
-                        int tHeight = MathHelper.ceil(MathHelper.clamp(totalPercentage, 0F, 1F) * 50);
+                        int tHeight = Mth.ceil(Mth.clamp(totalPercentage, 0F, 1F) * 50);
                         int y = !heldOcular.isEmpty() && totalPercentage > 1F ? startY + 26 : startY;
                         if (tHeight < 50)
                             AbstractGui.blit(stack, startX, y, 6, 12, 6, 50 - tHeight, 256, 256);
@@ -315,13 +315,13 @@ public class ClientEvents {
                             AbstractGui.blit(stack, startX, y + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
 
                         if (!heldOcular.isEmpty()) {
-                            int topHeight = MathHelper.ceil(MathHelper.clamp((totalPercentage - 1F) * 2F, 0F, 1F) * 25);
+                            int topHeight = Mth.ceil(Mth.clamp((totalPercentage - 1F) * 2F, 0F, 1F) * 25);
                             if (topHeight > 0) {
                                 if (topHeight < 25)
                                     AbstractGui.blit(stack, startX, startY, 18, 12, 6, 25 - topHeight, 256, 256);
                                 AbstractGui.blit(stack, startX, startY + 25 - topHeight, 12, 12 + 25 - topHeight, 6, topHeight, 256, 256);
                             }
-                            int bottomHeight = MathHelper.floor(MathHelper.clamp((totalPercentage + 1F) * 2F - 1F, 0F, 1F) * 25);
+                            int bottomHeight = Mth.floor(Mth.clamp((totalPercentage + 1F) * 2F - 1F, 0F, 1F) * 25);
                             if (bottomHeight < 25) {
                                 AbstractGui.blit(stack, startX, startY + 51, 18, 12, 6, 25 - bottomHeight, 256, 256);
                                 if (bottomHeight > 0)
@@ -447,7 +447,7 @@ public class ClientEvents {
 
         int x = res.getScaledWidth() / 2 - 40;
         int y = res.getScaledHeight() / 2 + yOffset;
-        int width = MathHelper.ceil(stored / (float) max * 80);
+        int width = Mth.ceil(stored / (float) max * 80);
 
         mc.getTextureManager().bindTexture(OVERLAYS);
         if (width < 80)

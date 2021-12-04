@@ -10,7 +10,7 @@ import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -78,7 +78,7 @@ public class BlockEntityRFConverter extends BlockEntityImpl implements ITickable
             if (aura <= IAuraChunk.DEFAULT_AURA)
                 return;
             int amountToGen = Math.min(Math.min(10000, aura / 1000), emptyPart);
-            int amountToUse = MathHelper.ceil(amountToGen / ModConfig.instance.auraToRFRatio.get());
+            int amountToUse = Mth.ceil(amountToGen / ModConfig.instance.auraToRFRatio.get());
 
             this.storage.setEnergy(this.storage.getEnergyStored() + amountToGen);
             BlockPos pos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 45, this.worldPosition);

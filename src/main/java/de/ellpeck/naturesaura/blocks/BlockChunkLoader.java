@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.text.ITextComponent;
@@ -68,7 +68,7 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
         BlockEntity tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityChunkLoader) {
             int range = ((BlockEntityChunkLoader) tile).range();
-            for (int i = MathHelper.ceil(range / 8F); i > 0; i--) {
+            for (int i = Mth.ceil(range / 8F); i > 0; i--) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
                         pos.getX() + levelIn.rand.nextFloat(), pos.getY() + levelIn.rand.nextFloat(), pos.getZ() + levelIn.rand.nextFloat(),
                         0, 0, 0, 0xa12dff, 1F + levelIn.rand.nextFloat(), 100, 0, false, true);

@@ -16,7 +16,7 @@ import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.GameRules;
 import net.minecraft.level.server.ServerLevel;
 import net.minecraft.level.storage.IServerLevelInfo;
@@ -74,7 +74,7 @@ public class BlockEntityTimeChanger extends BlockEntityImpl implements ITickable
                     if (stack.isEmpty() || stack.getItem() != Items.CLOCK)
                         continue;
 
-                    int dayGoal = MathHelper.floor((frame.getRotation() / 8F) * 24000F) + 18000;
+                    int dayGoal = Mth.floor((frame.getRotation() / 8F) * 24000F) + 18000;
                     long current = this.level.getDayTime();
                     long toMove = (24000 - current % 24000 + dayGoal) % 24000;
                     this.goalTime = current + toMove;

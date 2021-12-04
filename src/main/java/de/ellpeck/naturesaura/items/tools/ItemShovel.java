@@ -7,58 +7,66 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.level.Level;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
 public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel {
+
     private final String baseName;
 
-    public ItemShovel(String baseName, IItemTier material, float damage, float speed) {
-        super(material, damage, speed, new Properties().group(NaturesAura.CREATIVE_TAB));
+    public ItemShovel(String baseName, Tier material, float damage, float speed) {
+        super(material, damage, speed, new Properties().tab(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
         ModRegistry.add(this);
     }
 
     @Override
-    public InteractionResult onItemUse(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         Player player = context.getPlayer();
-        ItemStack stack = player.getHeldItem(context.getHand());
-        BlockPos pos = context.getPos();
+        ItemStack stack = player.getItemInHand(context.getHand());
+        BlockPos pos = context.getClickedPos();
         BlockState state = level.getBlockState(pos);
         if (this == ModItems.INFUSED_IRON_SHOVEL) {
             int damage = 0;
             if (state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.MYCELIUM) {
-                if (level.getBlockState(pos.up()).getMaterial() == Material.AIR) {
-                    level.setBlockState(pos, Blocks.GRASS_BLOCK.getDefaultState());
+                if (level.getBlockState(pos.above()).getMaterial() == Material.AIR) {
+                    level.setBlockAndUpdate(pos, Blocks.GRASS_BLOCK.defaultBlockState());
                     damage = 5;
                 }
             } else {
-                int range = player.isSneaking() ? 0 : 1;
+                int range = player.isCrouching() ? 0 : 1;
                 for (int x = -range; x <= range; x++) {
                     for (int y = -range; y <= range; y++) {
-                        BlockPos actualPos = pos.add(x, 0, y);
-                        Direction facing = context.getFace();
-                        if (player.canPlayerEdit(actualPos.offset(facing), facing, stack)) {
+                        BlockPos actualPos = pos.offset(x, 0, y);
+                        Direction facing = context.getClickedFace();
+                        if (player.mayUseItemAt(actualPos.relative(facing), facing, stack)) {
                             if (facing != Direction.DOWN
-                                    && level.getBlockState(actualPos.up()).getMaterial() == Material.AIR
+                                    && level.getBlockState(actualPos.above()).getMaterial() == Material.AIR
                                     && level.getBlockState(actualPos).getBlock() == Blocks.GRASS_BLOCK) {
-                                if (!level.isClientSide) {
-                                    level.setBlockState(actualPos, Blocks.GRASS_PATH.getDefaultState(), 11);
-                                }
+                                if (!level.isClientSide)
+                                    level.setBlock(actualPos, Blocks.DIRT_PATH.defaultBlockState(), 11);
                                 damage = 1;
                             }
                         }
@@ -67,23 +75,23 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
             }
 
             if (damage > 0) {
-                level.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                stack.damageItem(damage, player, Player -> Player.sendBreakAnimation(context.getHand()));
+                level.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
+                stack.hurtAndBreak(damage, player, p -> p.broadcastBreakEvent(context.getHand()));
                 return InteractionResult.SUCCESS;
             }
         } else if (this == ModItems.SKY_SHOVEL) {
             if (this.getDestroySpeed(stack, state) <= 1)
-                return super.onItemUse(context);
-            Hand otherHand = context.getHand() == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND;
-            ItemStack other = player.getHeldItem(otherHand);
+                return super.useOn(context);
+            InteractionHand otherHand = context.getHand() == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+            ItemStack other = player.getItemInHand(otherHand);
             if (other.isEmpty() || !(other.getItem() instanceof BlockItem))
-                return super.onItemUse(context);
+                return super.useOn(context);
             level.removeBlock(pos, false);
             BlockEntity tile = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
-            Block.spawnDrops(state, level, pos, tile, null, ItemStack.EMPTY);
-            ItemUseContext newContext = new ItemUseContext(player, otherHand, new BlockRayTraceResult(context.getHitVec(), context.getFace(), context.getPos(), context.isInside()));
-            other.onItemUse(newContext);
-            stack.damageItem(1, player, p -> p.sendBreakAnimation(context.getHand()));
+            Block.dropResources(state, level, pos, tile, null, ItemStack.EMPTY);
+            UseOnContext newContext = new UseOnContext(player, otherHand, new BlockHitResult(context.getClickLocation(), context.getClickedFace(), context.getClickedPos(), context.isInside()));
+            other.useOn(newContext);
+            stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;

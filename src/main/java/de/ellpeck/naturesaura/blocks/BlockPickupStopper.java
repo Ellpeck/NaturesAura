@@ -34,7 +34,7 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
         if (player != null && !player.isSneaking()) {
             ItemEntity item = event.getItem();
             BlockPos pos = item.getPosition();
-            Helper.getTileEntitiesInArea(item.level, pos, 8, tile -> {
+            Helper.getBlockEntitiesInArea(item.level, pos, 8, tile -> {
                 if (!(tile instanceof BlockEntityPickupStopper))
                     return false;
                 BlockEntityPickupStopper stopper = (BlockEntityPickupStopper) tile;

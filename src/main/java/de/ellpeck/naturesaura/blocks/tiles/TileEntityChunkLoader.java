@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.server.ServerLevel;
 
 import java.util.ArrayList;
@@ -88,7 +88,7 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
 
             if (this.level.getGameTime() % 20 != 0)
                 return;
-            int toUse = MathHelper.ceil(this.range() / 2F);
+            int toUse = Mth.ceil(this.range() / 2F);
             if (toUse > 0) {
                 BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
                 IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, toUse);

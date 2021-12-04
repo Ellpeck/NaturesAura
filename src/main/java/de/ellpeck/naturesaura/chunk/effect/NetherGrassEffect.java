@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraftforge.common.Tags;
@@ -36,10 +36,10 @@ public class NetherGrassEffect implements IDrainSpotEffect {
         int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
-        this.amount = Math.min(20, MathHelper.ceil(Math.abs(aura) / 100000F / auraAndSpots.getRight()));
+        this.amount = Math.min(20, Mth.ceil(Math.abs(aura) / 100000F / auraAndSpots.getRight()));
         if (this.amount <= 1)
             return false;
-        this.dist = MathHelper.clamp(Math.abs(aura) / 100000, 5, 35);
+        this.dist = Mth.clamp(Math.abs(aura) / 100000, 5, 35);
         return true;
     }
 
@@ -66,9 +66,9 @@ public class NetherGrassEffect implements IDrainSpotEffect {
         if (!this.calcValues(level, pos, spot))
             return;
         for (int i = this.amount / 2 + level.rand.nextInt(this.amount / 2); i >= 0; i--) {
-            int x = MathHelper.floor(pos.getX() + level.rand.nextGaussian() * this.dist);
-            int y = MathHelper.floor(pos.getY() + level.rand.nextGaussian() * this.dist);
-            int z = MathHelper.floor(pos.getZ() + level.rand.nextGaussian() * this.dist);
+            int x = Mth.floor(pos.getX() + level.rand.nextGaussian() * this.dist);
+            int y = Mth.floor(pos.getY() + level.rand.nextGaussian() * this.dist);
+            int z = Mth.floor(pos.getZ() + level.rand.nextGaussian() * this.dist);
 
             for (int yOff = -5; yOff <= 5; yOff++) {
                 BlockPos goalPos = new BlockPos(x, y + yOff, z);

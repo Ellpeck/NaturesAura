@@ -10,7 +10,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.Explosion;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
@@ -35,7 +35,7 @@ public class ExplosionEffect implements IDrainSpotEffect {
         this.strength = Math.min(Math.abs(aura) / 5000000F, 5F);
         if (this.strength <= 0)
             return false;
-        this.dist = MathHelper.clamp(Math.abs(aura) / 200000, 25, 100);
+        this.dist = Mth.clamp(Math.abs(aura) / 200000, 25, 100);
         return true;
     }
 
@@ -60,8 +60,8 @@ public class ExplosionEffect implements IDrainSpotEffect {
         if (!this.calcValues(level, pos, spot))
             return;
 
-        int x = MathHelper.floor(pos.getX() + level.rand.nextGaussian() * this.dist);
-        int z = MathHelper.floor(pos.getZ() + level.rand.nextGaussian() * this.dist);
+        int x = Mth.floor(pos.getX() + level.rand.nextGaussian() * this.dist);
+        int z = Mth.floor(pos.getZ() + level.rand.nextGaussian() * this.dist);
         BlockPos chosenPos = new BlockPos(x, level.getHeight(Heightmap.Type.WORLD_SURFACE, x, z), z);
         if (chosenPos.distanceSq(pos) <= this.dist * this.dist && level.isBlockLoaded(chosenPos)) {
             level.createExplosion(null,

@@ -13,7 +13,7 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.gen.Heightmap;
 
 public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickableBlockEntity {
@@ -81,7 +81,7 @@ public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickable
                 double angle = this.level.rand.nextFloat() * Math.PI * 2;
                 BlockPos pos = this.worldPosition.add(
                         Math.cos(angle) * range * this.level.rand.nextFloat(),
-                        MathHelper.nextInt(this.level.rand, range / 2, range),
+                        Mth.nextInt(this.level.rand, range / 2, range),
                         Math.sin(angle) * range * this.level.rand.nextFloat());
                 NaturesAuraAPI.instance().spawnMagicParticle(
                         pos.getX() + this.level.rand.nextFloat(), pos.getY() + 1, pos.getZ() + this.level.rand.nextFloat(),

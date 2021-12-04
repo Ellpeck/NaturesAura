@@ -17,7 +17,7 @@ import net.minecraft.nbt.LongNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.level.GameRules;
@@ -55,7 +55,7 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
         if (!this.spotOffsets.isEmpty() && this.level.getGameTime() % 10 == 0)
             PacketHandler.sendToAllAround(this.level, pos, 32, new PacketParticles(
                     (float) this.getPosX(), (float) this.getPosY(), (float) this.getPosZ(), PacketParticles.Type.MOVER_CART,
-                    MathHelper.floor(this.getMotion().getX() * 100F), MathHelper.floor(this.getMotion().getY() * 100F), MathHelper.floor(this.getMotion().getZ() * 100F)));
+                    Mth.floor(this.getMotion().getX() * 100F), Mth.floor(this.getMotion().getY() * 100F), Mth.floor(this.getMotion().getZ() * 100F)));
 
         if (pos.distanceSq(this.lastPosition) < 8 * 8)
             return;
@@ -75,7 +75,7 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
             int drained = chunk.drainAura(spot, toMove, false, false);
             if (drained <= 0)
                 continue;
-            int toLose = MathHelper.ceil(drained / 250F);
+            int toLose = Mth.ceil(drained / 250F);
             BlockPos newSpot = newPos.add(offset);
             IAuraChunk.getAuraChunk(newLevel, newSpot).storeAura(newSpot, drained - toLose, false, false);
         }

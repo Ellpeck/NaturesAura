@@ -4,19 +4,19 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.*;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraBloom;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEnderCrate;
+import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
 import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import de.ellpeck.naturesaura.entities.*;
 import de.ellpeck.naturesaura.entities.render.RenderEffectInhibitor;
 import de.ellpeck.naturesaura.entities.render.RenderMoverMinecart;
 import de.ellpeck.naturesaura.entities.render.RenderStub;
-import de.ellpeck.naturesaura.gen.ModFeatures;
 import de.ellpeck.naturesaura.gen.LevelGenAncientTree;
 import de.ellpeck.naturesaura.gen.LevelGenAuraBloom;
 import de.ellpeck.naturesaura.gen.LevelGenNetherWartMushroom;
+import de.ellpeck.naturesaura.gen.ModFeatures;
 import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
 import de.ellpeck.naturesaura.items.*;
@@ -25,7 +25,6 @@ import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
 import de.ellpeck.naturesaura.recipes.EnabledCondition;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.block.SoundType;
@@ -38,21 +37,24 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.potion.Effect;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.tileentity.BlockEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.LevelGenRegistries;
 import net.minecraft.level.Level;
 import net.minecraft.level.gen.feature.Feature;
 import net.minecraft.level.gen.feature.structure.Structure;
+import net.minecraft.tileentity.BlockEntityType;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.LevelGenRegistries;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -158,7 +160,7 @@ public final class ModRegistry {
     public static void registerItems(RegistryEvent.Register<Item> event) {
         for (IModItem block : ALL_ITEMS) {
             if (block instanceof Block && !(block instanceof INoItemBlock)) {
-                BlockItem item = new BlockItem((Block) block, new Item.Properties().group(NaturesAura.CREATIVE_TAB));
+                BlockItem item = new BlockItem((Block) block, new Item.Properties().tab(NaturesAura.CREATIVE_TAB));
                 item.setRegistryName(block.getBaseName());
                 event.getRegistry().register(item);
             }
@@ -243,7 +245,7 @@ public final class ModRegistry {
     }
 
     @SubscribeEvent
-    public static void registerPotions(RegistryEvent.Register<Effect> event) {
+    public static void registerPotions(RegistryEvent.Register<MobEffect> event) {
         event.getRegistry().registerAll(
                 new PotionBreathless()
         );
@@ -251,16 +253,16 @@ public final class ModRegistry {
     }
 
     @SubscribeEvent
-    public static void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
+    public static void registerContainers(RegistryEvent.Register<MenuType<?>> event) {
         event.getRegistry().registerAll(
-                IForgeContainerType.create((windowId, inv, data) -> {
+                IForgeMenuType.create((windowId, inv, data) -> {
                     BlockEntity tile = inv.player.level.getBlockEntity(data.readBlockPos());
-                    if (tile instanceof BlockEntityEnderCrate)
-                        return new ContainerEnderCrate(ModContainers.ENDER_CRATE, windowId, inv.player, ((BlockEntityEnderCrate) tile).getItemHandler());
+                    if (tile instanceof BlockEntityEnderCrate crate)
+                        return new ContainerEnderCrate(ModContainers.ENDER_CRATE, windowId, inv.player, crate.getItemHandler());
                     return null;
                 }).setRegistryName("ender_crate"),
-                IForgeContainerType.create((windowId, inv, data) -> {
-                    IItemHandler handler = ILevelData.getOverworldData(inv.player.level).getEnderStorage(data.readString());
+                IForgeMenuType.create((windowId, inv, data) -> {
+                    IItemHandler handler = ILevelData.getOverworldData(inv.player.level).getEnderStorage(data.readUtf());
                     return new ContainerEnderCrate(ModContainers.ENDER_ACCESS, windowId, inv.player, handler);
                 }).setRegistryName("ender_access")
         );

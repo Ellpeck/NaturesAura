@@ -7,37 +7,36 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.misc.WeatherType;
 import de.ellpeck.naturesaura.api.misc.WeightedOre;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.NBTDynamicOps;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.List;
 
 public final class ModRecipes {
 
-    public static final IRecipeType<AltarRecipe> ALTAR_TYPE = new RecipeType<>();
-    public static final IRecipeSerializer<AltarRecipe> ALTAR_SERIAIZER = new AltarRecipe.Serializer();
+    public static final RecipeType<AltarRecipe> ALTAR_TYPE = new RecipeType<>();
+    public static final RecipeSerializer<AltarRecipe> ALTAR_SERIAIZER = new AltarRecipe.Serializer();
 
-    public static final IRecipeType<AnimalSpawnerRecipe> ANIMAL_SPAWNER_TYPE = new RecipeType<>();
-    public static final IRecipeSerializer<AnimalSpawnerRecipe> ANIMAL_SPAWNER_SERIALIZER = new AnimalSpawnerRecipe.Serializer();
+    public static final RecipeType<AnimalSpawnerRecipe> ANIMAL_SPAWNER_TYPE = new RecipeType<>();
+    public static final RecipeSerializer<AnimalSpawnerRecipe> ANIMAL_SPAWNER_SERIALIZER = new AnimalSpawnerRecipe.Serializer();
 
-    public static final IRecipeType<OfferingRecipe> OFFERING_TYPE = new RecipeType<>();
-    public static final IRecipeSerializer<OfferingRecipe> OFFERING_SERIALIZER = new OfferingRecipe.Serializer();
+    public static final RecipeType<OfferingRecipe> OFFERING_TYPE = new RecipeType<>();
+    public static final RecipeSerializer<OfferingRecipe> OFFERING_SERIALIZER = new OfferingRecipe.Serializer();
 
-    public static final IRecipeType<TreeRitualRecipe> TREE_RITUAL_TYPE = new RecipeType<>();
-    public static final IRecipeSerializer<TreeRitualRecipe> TREE_RITUAL_SERIALIZER = new TreeRitualRecipe.Serializer();
+    public static final RecipeType<TreeRitualRecipe> TREE_RITUAL_TYPE = new RecipeType<>();
+    public static final RecipeSerializer<TreeRitualRecipe> TREE_RITUAL_SERIALIZER = new TreeRitualRecipe.Serializer();
 
-    public static void register(IForgeRegistry<IRecipeSerializer<?>> registry) {
+    public static void register(IForgeRegistry<RecipeSerializer<?>> registry) {
         register(registry, "altar", ALTAR_TYPE, ALTAR_SERIAIZER);
         register(registry, "animal_spawner", ANIMAL_SPAWNER_TYPE, ANIMAL_SPAWNER_SERIALIZER);
         register(registry, "offering", OFFERING_TYPE, OFFERING_SERIALIZER);
@@ -46,17 +45,17 @@ public final class ModRecipes {
 
     public static void init() {
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
-                Blocks.COBBLESTONE.getDefaultState(),
-                Blocks.MOSSY_COBBLESTONE.getDefaultState());
+                Blocks.COBBLESTONE.defaultBlockState(),
+                Blocks.MOSSY_COBBLESTONE.defaultBlockState());
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
-                Blocks.STONE_BRICKS.getDefaultState(),
-                Blocks.MOSSY_STONE_BRICKS.getDefaultState());
+                Blocks.STONE_BRICKS.defaultBlockState(),
+                Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
-                Blocks.COBBLESTONE_WALL.getDefaultState(),
-                Blocks.MOSSY_COBBLESTONE_WALL.getDefaultState());
+                Blocks.COBBLESTONE_WALL.defaultBlockState(),
+                Blocks.MOSSY_COBBLESTONE_WALL.defaultBlockState());
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
-                Blocks.STONE_BRICK_WALL.getDefaultState(),
-                Blocks.MOSSY_STONE_BRICK_WALL.getDefaultState());
+                Blocks.STONE_BRICK_WALL.defaultBlockState(),
+                Blocks.MOSSY_STONE_BRICK_WALL.defaultBlockState());
 
         ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/coal", 5000);
         ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/coal", 5000);
@@ -131,14 +130,14 @@ public final class ModRecipes {
         list.add(new WeightedOre(res, weight));
     }
 
-    private static void register(IForgeRegistry<IRecipeSerializer<?>> registry, String name, IRecipeType<?> type, IRecipeSerializer<?> serializer) {
+    private static void register(IForgeRegistry<RecipeSerializer<?>> registry, String name, RecipeType<?> type, RecipeSerializer<?> serializer) {
         ResourceLocation res = new ResourceLocation(NaturesAura.MOD_ID, name);
         Registry.register(Registry.RECIPE_TYPE, res, type);
         registry.register(serializer.setRegistryName(res));
     }
 
     public static JsonObject serializeStack(ItemStack stack) {
-        CompoundTag nbt = stack.write(new CompoundTag());
+        CompoundTag nbt = stack.save(new CompoundTag());
         byte c = nbt.getByte("Count");
         if (c != 1) {
             nbt.putByte("count", c);
@@ -146,19 +145,20 @@ public final class ModRecipes {
         nbt.remove("Count");
         renameTag(nbt, "id", "item");
         renameTag(nbt, "tag", "nbt");
-        Dynamic<INBT> dyn = new Dynamic<>(NBTDynamicOps.INSTANCE, nbt);
+        Dynamic<Tag> dyn = new Dynamic<>(NbtOps.INSTANCE, nbt);
         return dyn.convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
     }
 
     private static void renameTag(CompoundTag nbt, String oldName, String newName) {
-        INBT tag = nbt.get(oldName);
+        Tag tag = nbt.get(oldName);
         if (tag != null) {
             nbt.remove(oldName);
             nbt.put(newName, tag);
         }
     }
 
-    private static class RecipeType<T extends IRecipe<?>> implements IRecipeType<T> {
+    private static class RecipeType<T extends Recipe<?>> implements net.minecraft.world.item.crafting.RecipeType<T> {
+
         @Override
         public String toString() {
             return Registry.RECIPE_TYPE.getKey(this).toString();

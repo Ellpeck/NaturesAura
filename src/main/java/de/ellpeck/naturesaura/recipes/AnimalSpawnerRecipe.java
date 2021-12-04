@@ -2,18 +2,21 @@ package de.ellpeck.naturesaura.recipes;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
-import net.minecraft.level.server.ServerLevel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -40,30 +43,31 @@ public class AnimalSpawnerRecipe extends ModRecipe {
         // passed position is zero on the client, so we don't want to do initialization stuff for the entity
         if (pos == BlockPos.ZERO)
             return this.entity.create(level);
-        return this.entity.create((ServerLevel) level, null, null, null, pos, SpawnReason.SPAWNER, false, false);
+        return this.entity.create((ServerLevel) level, null, null, null, pos, MobSpawnType.SPAWNER, false, false);
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.ANIMAL_SPAWNER_SERIALIZER;
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return ModRecipes.ANIMAL_SPAWNER_TYPE;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<AnimalSpawnerRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<AnimalSpawnerRecipe> {
+
         @Override
-        public AnimalSpawnerRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public AnimalSpawnerRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             List<Ingredient> ingredients = new ArrayList<>();
             for (JsonElement e : json.getAsJsonArray("ingredients"))
-                ingredients.add(Ingredient.deserialize(e));
+                ingredients.add(Ingredient.fromJson(e));
             return new AnimalSpawnerRecipe(recipeId,
                     ForgeRegistries.ENTITIES.getValue(new ResourceLocation(json.get("entity").getAsString())),
                     json.get("aura").getAsInt(),
@@ -73,10 +77,10 @@ public class AnimalSpawnerRecipe extends ModRecipe {
 
         @Nullable
         @Override
-        public AnimalSpawnerRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public AnimalSpawnerRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             Ingredient[] ings = new Ingredient[buffer.readInt()];
             for (int i = 0; i < ings.length; i++)
-                ings[i] = Ingredient.read(buffer);
+                ings[i] = Ingredient.fromNetwork(buffer);
             return new AnimalSpawnerRecipe(
                     recipeId,
                     ForgeRegistries.ENTITIES.getValue(buffer.readResourceLocation()),
@@ -86,10 +90,10 @@ public class AnimalSpawnerRecipe extends ModRecipe {
         }
 
         @Override
-        public void write(PacketBuffer buffer, AnimalSpawnerRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, AnimalSpawnerRecipe recipe) {
             buffer.writeInt(recipe.ingredients.length);
             for (Ingredient ing : recipe.ingredients)
-                ing.write(buffer);
+                ing.toNetwork(buffer);
             buffer.writeResourceLocation(recipe.entity.getRegistryName());
             buffer.writeInt(recipe.aura);
             buffer.writeInt(recipe.time);

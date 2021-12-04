@@ -17,11 +17,10 @@ import de.ellpeck.naturesaura.proxy.IProxy;
 import de.ellpeck.naturesaura.proxy.ServerProxy;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -37,9 +36,9 @@ public final class NaturesAura {
     public static final String MOD_NAME = "Nature's Aura";
 
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static final ItemGroup CREATIVE_TAB = new ItemGroup(MOD_ID) {
+    public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(MOD_ID) {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(ModItems.GOLD_LEAF);
         }
     };

@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.tileentity.BlockEntityRendererDispatcher;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.util.math.vector.Vector3f;
 
 import java.util.Random;
@@ -29,7 +29,7 @@ public class RenderOfferingTable extends BlockEntityRenderer<BlockEntityOffering
         if (!stack.isEmpty()) {
             this.rand.setSeed(Item.getIdFromItem(stack.getItem()) + stack.getDamage());
 
-            int amount = MathHelper.ceil(stack.getCount() / 2F);
+            int amount = Mth.ceil(stack.getCount() / 2F);
             for (int i = 0; i < amount; i++) {
                 matrixStack.push();
                 Item item = stack.getItem();

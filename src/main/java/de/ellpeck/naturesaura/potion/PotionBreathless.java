@@ -1,9 +1,9 @@
 package de.ellpeck.naturesaura.potion;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.EffectType;
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,13 +15,13 @@ public class PotionBreathless extends PotionImpl {
     private final Random random = new Random();
 
     public PotionBreathless() {
-        super("breathless", EffectType.HARMFUL, 0);
+        super("breathless", MobEffectCategory.HARMFUL, 0);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
     public void onHeal(LivingHealEvent event) {
-        EffectInstance effect = event.getEntityLiving().getActivePotionEffect(this);
+        MobEffectInstance effect = event.getEntityLiving().getEffect(this);
         if (effect == null)
             return;
         float chance = (effect.getAmplifier() + 1) / 15F;
@@ -31,13 +31,13 @@ public class PotionBreathless extends PotionImpl {
     }
 
     @Override
-    public boolean isReady(int duration, int amplifier) {
+    public boolean isDurationEffectTick(int duration, int amplifier) {
         int mod = 200 >> amplifier;
         return mod > 0 && duration % mod == 0 && this.random.nextBoolean();
     }
 
     @Override
-    public void performEffect(LivingEntity entity, int amplifier) {
-        entity.attackEntityFrom(DamageSource.MAGIC, 1F);
+    public void applyEffectTick(LivingEntity entity, int amplifier) {
+        entity.hurt(DamageSource.MAGIC, 1F);
     }
 }

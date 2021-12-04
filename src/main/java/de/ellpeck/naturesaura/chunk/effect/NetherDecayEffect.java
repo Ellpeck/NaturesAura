@@ -17,7 +17,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
 import org.apache.commons.lang3.tuple.Pair;
@@ -36,10 +36,10 @@ public class NetherDecayEffect implements IDrainSpotEffect {
         int aura = auraAndSpots.getLeft();
         if (aura >= 0)
             return false;
-        this.amount = Math.min(300, MathHelper.ceil(Math.abs(aura) / 50000F / auraAndSpots.getRight()));
+        this.amount = Math.min(300, Mth.ceil(Math.abs(aura) / 50000F / auraAndSpots.getRight()));
         if (this.amount <= 1)
             return false;
-        this.dist = MathHelper.clamp(Math.abs(aura) / 50000, 5, 75);
+        this.dist = Mth.clamp(Math.abs(aura) / 50000, 5, 75);
         return true;
     }
 

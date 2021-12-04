@@ -15,7 +15,7 @@ import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -97,7 +97,7 @@ public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITi
                     }
 
                     if (generateFactor > 0) {
-                        int toAdd = MathHelper.ceil(generateFactor * 10000F);
+                        int toAdd = Mth.ceil(generateFactor * 10000F);
                         if (this.canGenerateRightNow(toAdd)) {
                             this.toRelease = toAdd;
                             this.releaseTimer = 15 * flightTime + 40;

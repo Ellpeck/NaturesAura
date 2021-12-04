@@ -9,7 +9,7 @@ import net.minecraft.client.level.ClientLevel;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.ReuseableStream;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
@@ -97,9 +97,9 @@ public class ParticleMagic extends Particle {
     @Override
     public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
         Vector3d vec3d = renderInfo.getProjectedView();
-        float f = (float) (MathHelper.lerp(partialTicks, this.prevPosX, this.posX) - vec3d.getX());
-        float f1 = (float) (MathHelper.lerp(partialTicks, this.prevPosY, this.posY) - vec3d.getY());
-        float f2 = (float) (MathHelper.lerp(partialTicks, this.prevPosZ, this.posZ) - vec3d.getZ());
+        float f = (float) (Mth.lerp(partialTicks, this.prevPosX, this.posX) - vec3d.getX());
+        float f1 = (float) (Mth.lerp(partialTicks, this.prevPosY, this.posY) - vec3d.getY());
+        float f2 = (float) (Mth.lerp(partialTicks, this.prevPosZ, this.posZ) - vec3d.getZ());
         Quaternion quaternion = renderInfo.getRotation();
         Vector3f[] avector3f = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
         float f4 = 0.1F * this.particleScale;

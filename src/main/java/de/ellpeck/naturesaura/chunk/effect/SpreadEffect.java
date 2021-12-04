@@ -7,7 +7,7 @@ import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
 
@@ -20,7 +20,7 @@ public class SpreadEffect implements IDrainSpotEffect {
         if (Math.abs(spot) < 500000 || Math.abs(IAuraChunk.getAuraInArea(level, pos, 25)) < 2000000)
             return;
         boolean drain = spot > 0;
-        int toMove = MathHelper.ceil(Math.abs(spot) * 0.72F);
+        int toMove = Mth.ceil(Math.abs(spot) * 0.72F);
         int perSide = toMove / 6;
         while (toMove > 0) {
             BlockPos bestOffset = null;

@@ -14,7 +14,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
 
@@ -36,7 +36,7 @@ public class BreathlessEffect implements IDrainSpotEffect {
         int dist = Math.min(Math.abs(aura) / 50000, 75);
         if (dist < 10)
             return false;
-        this.amp = Math.min(MathHelper.floor(Math.abs(aura) / 2500000F), 3);
+        this.amp = Math.min(Mth.floor(Math.abs(aura) / 2500000F), 3);
         this.bb = new AxisAlignedBB(pos).grow(dist);
         return true;
     }

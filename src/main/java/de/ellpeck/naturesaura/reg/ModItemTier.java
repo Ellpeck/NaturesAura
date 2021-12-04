@@ -1,22 +1,22 @@
 package de.ellpeck.naturesaura.reg;
 
 import de.ellpeck.naturesaura.items.ModItems;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyValue;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.util.Lazy;
 
 import java.util.function.Supplier;
 
-public enum ModItemTier implements IItemTier {
-    INFUSED(2, 250, 6, 2, 16, () -> Ingredient.fromItems(ModItems.INFUSED_IRON)),
-    SKY(3, 1500, 8, 3, 12, () -> Ingredient.fromItems(ModItems.SKY_INGOT));
+public enum ModItemTier implements Tier {
+    INFUSED(2, 250, 6, 2, 16, () -> Ingredient.of(ModItems.INFUSED_IRON)),
+    SKY(3, 1500, 8, 3, 12, () -> Ingredient.of(ModItems.SKY_INGOT));
 
     private final int harvestLevel;
     private final int maxUses;
     private final float efficiency;
     private final float attackDamage;
     private final int enchantability;
-    private final LazyValue<Ingredient> repairMaterial;
+    private final Lazy<Ingredient> repairMaterial;
 
     ModItemTier(int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn, int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
         this.harvestLevel = harvestLevelIn;
@@ -24,36 +24,36 @@ public enum ModItemTier implements IItemTier {
         this.efficiency = efficiencyIn;
         this.attackDamage = attackDamageIn;
         this.enchantability = enchantabilityIn;
-        this.repairMaterial = new LazyValue<>(repairMaterialIn);
+        this.repairMaterial = Lazy.of(repairMaterialIn);
     }
 
     @Override
-    public int getMaxUses() {
+    public int getUses() {
         return this.maxUses;
     }
 
     @Override
-    public float getEfficiency() {
+    public float getSpeed() {
         return this.efficiency;
     }
 
     @Override
-    public float getAttackDamage() {
+    public float getAttackDamageBonus() {
         return this.attackDamage;
     }
 
     @Override
-    public int getHarvestLevel() {
+    public int getLevel() {
         return this.harvestLevel;
     }
 
     @Override
-    public int getEnchantability() {
+    public int getEnchantmentValue() {
         return this.enchantability;
     }
 
     @Override
-    public Ingredient getRepairMaterial() {
-        return this.repairMaterial.getValue();
+    public Ingredient getRepairIngredient() {
+        return this.repairMaterial.get();
     }
 }

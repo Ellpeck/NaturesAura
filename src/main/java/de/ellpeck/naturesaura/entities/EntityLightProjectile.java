@@ -27,9 +27,9 @@ public class EntityLightProjectile extends ThrowableEntity {
         if (this.level.isClientSide && this.ticksExisted > 1) {
             for (float i = 0; i <= 1; i += 0.2F) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        MathHelper.lerp(i, this.prevPosX, this.getPosX()),
-                        MathHelper.lerp(i, this.prevPosY, this.getPosY()),
-                        MathHelper.lerp(i, this.prevPosZ, this.getPosZ()),
+                        Mth.lerp(i, this.prevPosX, this.getPosX()),
+                        Mth.lerp(i, this.prevPosY, this.getPosY()),
+                        Mth.lerp(i, this.prevPosZ, this.getPosZ()),
                         this.rand.nextGaussian() * 0.01F, this.rand.nextGaussian() * 0.01F, this.rand.nextGaussian() * 0.01F,
                         0xffcb5c, this.rand.nextFloat() * 0.5F + 1, 20, 0, false, true);
             }

@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Mth;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.gen.Heightmap;
@@ -35,10 +35,10 @@ public class PlantBoostEffect implements IDrainSpotEffect {
         int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
-        this.amount = Math.min(45, MathHelper.ceil(Math.abs(aura) / 100000F / auraAndSpots.getRight()));
+        this.amount = Math.min(45, Mth.ceil(Math.abs(aura) / 100000F / auraAndSpots.getRight()));
         if (this.amount <= 1)
             return false;
-        this.dist = MathHelper.clamp(Math.abs(aura) / 150000, 5, 35);
+        this.dist = Mth.clamp(Math.abs(aura) / 150000, 5, 35);
         return true;
     }
 
@@ -63,8 +63,8 @@ public class PlantBoostEffect implements IDrainSpotEffect {
         if (!this.calcValues(level, pos, spot))
             return;
         for (int i = this.amount / 2 + level.rand.nextInt(this.amount / 2); i >= 0; i--) {
-            int x = MathHelper.floor(pos.getX() + (2 * level.rand.nextFloat() - 1) * this.dist);
-            int z = MathHelper.floor(pos.getZ() + (2 * level.rand.nextFloat() - 1) * this.dist);
+            int x = Mth.floor(pos.getX() + (2 * level.rand.nextFloat() - 1) * this.dist);
+            int z = Mth.floor(pos.getZ() + (2 * level.rand.nextFloat() - 1) * this.dist);
             BlockPos plantPos = new BlockPos(x, level.getHeight(Heightmap.Type.WORLD_SURFACE, x, z), z).down();
             if (plantPos.distanceSq(pos) <= this.dist * this.dist && level.isBlockLoaded(plantPos)) {
                 if (NaturesAuraAPI.instance().isEffectPowderActive(level, plantPos, NAME))
