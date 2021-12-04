@@ -8,15 +8,15 @@ import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.potion.ModPotions;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.level.Level;
+import net.minecraft.level.chunk.Chunk;
 
 import java.util.List;
 
@@ -27,10 +27,10 @@ public class BreathlessEffect implements IDrainSpotEffect {
     private int amp;
     private AxisAlignedBB bb;
 
-    private boolean calcValues(World world, BlockPos pos, Integer spot) {
+    private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot >= 0)
             return false;
-        int aura = IAuraChunk.getAuraInArea(world, pos, 50);
+        int aura = IAuraChunk.getAuraInArea(level, pos, 50);
         if (aura > 0)
             return false;
         int dist = Math.min(Math.abs(aura) / 50000, 75);
@@ -42,8 +42,8 @@ public class BreathlessEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public ActiveType isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (!this.calcValues(player.world, pos, spot))
+    public ActiveType isActiveHere(Player player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (!this.calcValues(player.level, pos, spot))
             return ActiveType.INACTIVE;
         if (!this.bb.contains(player.getPositionVec()))
             return ActiveType.INACTIVE;
@@ -56,12 +56,12 @@ public class BreathlessEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (world.getGameTime() % 100 != 0)
+    public void update(Level level, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (level.getGameTime() % 100 != 0)
             return;
-        if (!this.calcValues(world, pos, spot))
+        if (!this.calcValues(level, pos, spot))
             return;
-        List<LivingEntity> entities = world.getEntitiesWithinAABB(LivingEntity.class, this.bb);
+        List<LivingEntity> entities = level.getEntitiesWithinAABB(LivingEntity.class, this.bb);
         for (LivingEntity entity : entities)
             entity.addPotionEffect(new EffectInstance(ModPotions.BREATHLESS, 300, this.amp));
     }

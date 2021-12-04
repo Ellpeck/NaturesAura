@@ -5,29 +5,29 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.monster.MagmaCubeEntity;
 import net.minecraft.entity.monster.SlimeEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntitySlimeSplitGenerator extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntitySlimeSplitGenerator extends BlockEntityImpl implements ITickableBlockEntity {
 
     private int generationTimer;
     private int amountToRelease;
     private int color;
 
-    public TileEntitySlimeSplitGenerator() {
+    public BlockEntitySlimeSplitGenerator() {
         super(ModTileEntities.SLIME_SPLIT_GENERATOR);
     }
 
     @Override
     public void tick() {
-        if (this.world.isRemote || this.world.getGameTime() % 10 != 0)
+        if (this.level.isClientSide || this.level.getGameTime() % 10 != 0)
             return;
         if (this.generationTimer > 0) {
             int amount = this.amountToRelease * 10;
             if (this.canGenerateRightNow(amount)) {
                 this.generateAura(amount);
-                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.SLIME_SPLIT_GEN_CREATE, this.color));
+                PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.SLIME_SPLIT_GEN_CREATE, this.color));
             }
             this.generationTimer -= 10;
         }
@@ -48,12 +48,12 @@ public class TileEntitySlimeSplitGenerator extends TileEntityImpl implements ITi
         this.amountToRelease = (size * this.getGenerationAmount(slime)) / this.generationTimer;
         this.color = this.getSlimeColor(slime);
 
-        PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles((float) slime.getPosX(), (float) slime.getPosY(), (float) slime.getPosZ(), PacketParticles.Type.SLIME_SPLIT_GEN_START,
-                this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.color));
+        PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles((float) slime.getPosX(), (float) slime.getPosY(), (float) slime.getPosZ(), PacketParticles.Type.SLIME_SPLIT_GEN_START,
+                this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), this.color));
     }
 
     @Override
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type == SaveType.TILE) {
             compound.putInt("timer", this.generationTimer);
@@ -63,7 +63,7 @@ public class TileEntitySlimeSplitGenerator extends TileEntityImpl implements ITi
     }
 
     @Override
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
         if (type == SaveType.TILE) {
             this.generationTimer = compound.getInt("timer");

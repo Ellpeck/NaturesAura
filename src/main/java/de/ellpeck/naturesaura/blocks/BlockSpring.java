@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.blocks.tiles.TileEntitySpring;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntitySpring;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
@@ -13,14 +13,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.biome.BiomeColors;
+import net.minecraft.level.ILevel;
+import net.minecraft.level.biome.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -28,13 +28,13 @@ import java.util.function.Supplier;
 
 public class BlockSpring extends BlockContainerImpl implements ICustomBlockState, IColorProvidingBlock, IColorProvidingItem, IBucketPickupHandler, ICustomRenderType {
     public BlockSpring() {
-        super("spring", TileEntitySpring::new, Properties.from(Blocks.STONE_BRICKS));
+        super("spring", BlockEntitySpring::new, Properties.from(Blocks.STONE_BRICKS));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public IBlockColor getBlockColor() {
-        return (state, world, pos, i) -> BiomeColors.getWaterColor(world, pos);
+        return (state, level, pos, i) -> BiomeColors.getWaterColor(level, pos);
     }
 
     @Override
@@ -44,8 +44,8 @@ public class BlockSpring extends BlockContainerImpl implements ICustomBlockState
         return new IItemColor() {
             @Override
             public int getColor(ItemStack stack, int i) {
-                PlayerEntity player = Minecraft.getInstance().player;
-                return BiomeColors.getWaterColor(player.world, player.getPosition());
+                Player player = Minecraft.getInstance().player;
+                return BiomeColors.getWaterColor(player.level, player.getPosition());
             }
         };
     }
@@ -56,10 +56,10 @@ public class BlockSpring extends BlockContainerImpl implements ICustomBlockState
     }
 
     @Override
-    public Fluid pickupFluid(IWorld worldIn, BlockPos pos, BlockState state) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileEntitySpring)
-            ((TileEntitySpring) tile).consumeAura(2500);
+    public Fluid pickupFluid(ILevel levelIn, BlockPos pos, BlockState state) {
+        BlockEntity tile = levelIn.getBlockEntity(pos);
+        if (tile instanceof BlockEntitySpring)
+            ((BlockEntitySpring) tile).consumeAura(2500);
         return Fluids.WATER;
     }
 

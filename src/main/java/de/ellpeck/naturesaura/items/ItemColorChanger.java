@@ -7,13 +7,13 @@ import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -25,8 +25,8 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
         super("color_changer", new Properties().maxStackSize(1));
     }
 
-    private static boolean changeOrCopyColor(PlayerEntity player, ItemStack stack, World world, BlockPos pos, DyeColor firstColor) {
-        Block block = world.getBlockState(pos).getBlock();
+    private static boolean changeOrCopyColor(Player player, ItemStack stack, Level level, BlockPos pos, DyeColor firstColor) {
+        Block block = level.getBlockState(pos).getBlock();
         List<Block> blocks = ColoredBlockHelper.getBlocksContaining(block);
         if (blocks == null)
             return false;
@@ -35,25 +35,25 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
             DyeColor stored = getStoredColor(stack);
             if (player.isSneaking()) {
                 if (stored != color) {
-                    world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                    level.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                             SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 0.65F, 1F);
-                    if (!world.isRemote)
+                    if (!level.isClientSide)
                         storeColor(stack, color);
                     return true;
                 }
             } else {
                 if (stored != null && stored != color) {
-                    if (NaturesAuraAPI.instance().extractAuraFromPlayer(player, 1000, world.isRemote)) {
+                    if (NaturesAuraAPI.instance().extractAuraFromPlayer(player, 1000, level.isClientSide)) {
                         if (firstColor == null) {
-                            world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                            level.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                                     SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 0.65F, 1F);
                         }
-                        if (!world.isRemote) {
-                            world.setBlockState(pos, blocks.get(stored.getId()).getDefaultState());
+                        if (!level.isClientSide) {
+                            level.setBlockState(pos, blocks.get(stored.getId()).getDefaultState());
 
                             if (isFillMode(stack)) {
                                 for (Direction off : Direction.values()) {
-                                    changeOrCopyColor(player, stack, world, pos.offset(off), color);
+                                    changeOrCopyColor(player, stack, level, pos.offset(off), color);
                                 }
                             }
                         }
@@ -91,26 +91,26 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public InteractionResult onItemUse(ItemUseContext context) {
         ItemStack stack = context.getPlayer().getHeldItem(context.getHand());
-        if (changeOrCopyColor(context.getPlayer(), stack, context.getWorld(), context.getPos(), null)) {
-            return ActionResultType.SUCCESS;
+        if (changeOrCopyColor(context.getPlayer(), stack, context.getLevel(), context.getPos(), null)) {
+            return InteractionResult.SUCCESS;
         } else {
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
         }
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(Level levelIn, Player playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
         if (playerIn.isSneaking() && getStoredColor(stack) != null) {
-            worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundCategory.PLAYERS, 0.65F, 1F);
-            if (!worldIn.isRemote) {
+            levelIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundCategory.PLAYERS, 0.65F, 1F);
+            if (!levelIn.isClientSide) {
                 setFillMode(stack, !isFillMode(stack));
             }
-            return new ActionResult<>(ActionResultType.SUCCESS, stack);
+            return new ActionResult<>(InteractionResult.SUCCESS, stack);
         } else {
-            return new ActionResult<>(ActionResultType.PASS, stack);
+            return new ActionResult<>(InteractionResult.PASS, stack);
         }
     }
 

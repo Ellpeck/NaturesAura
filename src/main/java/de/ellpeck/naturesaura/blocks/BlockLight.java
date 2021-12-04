@@ -12,8 +12,8 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -30,7 +30,7 @@ public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemB
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 2; i++)
             NaturesAuraAPI.instance().spawnMagicParticle(
                     pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
@@ -39,7 +39,7 @@ public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemB
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
 

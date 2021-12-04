@@ -45,16 +45,16 @@ public final class Multiblocks {
             new String[][]{
                     {"    W    ", " W     W ", "   GGG   ", "  GG GG  ", "W G 0 G W", "  GG GG  ", "   GGG   ", " W     W ", "    W    "}},
             'W', new Matcher(ModBlocks.WOOD_STAND.getDefaultState(),
-                    (world, start, offset, pos, state, c) -> world != null || state.getBlock() == ModBlocks.WOOD_STAND),
+                    (level, start, offset, pos, state, c) -> level != null || state.getBlock() == ModBlocks.WOOD_STAND),
             'G', ModBlocks.GOLD_POWDER,
             '0', new Matcher(Blocks.OAK_SAPLING.getDefaultState(),
-                    (world, start, offset, pos, state, c) -> {
+                    (level, start, offset, pos, state, c) -> {
                         if (state.getBlock() instanceof SaplingBlock || state.getMaterial() == Material.WOOD)
                             return true;
                         // try-catch to prevent blocks that need to have been placed crashing here
                         try {
-                            ItemStack stack = state.getBlock().getItem(world, pos, state);
-                            return !stack.isEmpty() && world.getRecipeManager().getRecipes(ModRecipes.TREE_RITUAL_TYPE, null, null).stream().anyMatch(r -> r.saplingType.test(stack));
+                            ItemStack stack = state.getBlock().getItem(level, pos, state);
+                            return !stack.isEmpty() && level.getRecipeManager().getRecipes(ModRecipes.TREE_RITUAL_TYPE, null, null).stream().anyMatch(r -> r.saplingType.test(stack));
                         } catch (Exception e) {
                             return false;
                         }
@@ -77,7 +77,7 @@ public final class Multiblocks {
             new String[][]{
                     {"  RRRRR  ", " R     R ", "R  RRR  R", "R R   R R", "R R 0 R R", "R R   R R", "R  RRR  R", " R     R ", "  RRRRR  "}},
             'R', new Matcher(Blocks.POPPY.getDefaultState(),
-                    (world, start, offset, pos, state, c) -> BlockTags.SMALL_FLOWERS.contains(state.getBlock())),
+                    (level, start, offset, pos, state, c) -> BlockTags.SMALL_FLOWERS.contains(state.getBlock())),
             '0', ModBlocks.OFFERING_TABLE,
             ' ', Matcher.wildcard());
     public static final IMultiblock ANIMAL_SPAWNER = NaturesAuraAPI.instance().createMultiblock(

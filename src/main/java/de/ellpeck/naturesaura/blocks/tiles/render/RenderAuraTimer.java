@@ -4,27 +4,27 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityAuraTimer;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraTimer;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.tileentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.tileentity.BlockEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderAuraTimer extends TileEntityRenderer<TileEntityAuraTimer> {
+public class RenderAuraTimer extends BlockEntityRenderer<BlockEntityAuraTimer> {
     private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/aura_timer_aura.png");
     private final AuraModel model = new AuraModel();
 
-    public RenderAuraTimer(TileEntityRendererDispatcher disp) {
+    public RenderAuraTimer(BlockEntityRendererDispatcher disp) {
         super(disp);
     }
 
     @Override
-    public void render(TileEntityAuraTimer tile, float partialTicks, MatrixStack stack, IRenderTypeBuffer buffer, int combinedLightIn, int combinedOverlayIn) {
+    public void render(BlockEntityAuraTimer tile, float partialTicks, MatrixStack stack, IRenderTypeBuffer buffer, int combinedLightIn, int combinedOverlayIn) {
         ItemStack bottle = tile.getItemHandler().getStackInSlot(0);
         if (bottle.isEmpty())
             return;

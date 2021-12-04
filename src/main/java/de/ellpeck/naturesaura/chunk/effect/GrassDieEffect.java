@@ -8,13 +8,13 @@ import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.block.*;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.level.Level;
+import net.minecraft.level.chunk.Chunk;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class GrassDieEffect implements IDrainSpotEffect {
@@ -24,9 +24,9 @@ public class GrassDieEffect implements IDrainSpotEffect {
     private int amount;
     private int dist;
 
-    private boolean calcValues(World world, BlockPos pos, Integer spot) {
+    private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot < 0) {
-            Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(world, pos, 50);
+            Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 50);
             int aura = auraAndSpots.getLeft();
             if (aura < 0) {
                 this.amount = Math.min(300, MathHelper.ceil(Math.abs(aura) / 100000F / auraAndSpots.getRight()));
@@ -40,8 +40,8 @@ public class GrassDieEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public ActiveType isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (!this.calcValues(player.world, pos, spot))
+    public ActiveType isActiveHere(Player player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (!this.calcValues(player.level, pos, spot))
             return ActiveType.INACTIVE;
         if (player.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return ActiveType.INACTIVE;
@@ -54,17 +54,17 @@ public class GrassDieEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (!this.calcValues(world, pos, spot))
+    public void update(Level level, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (!this.calcValues(level, pos, spot))
             return;
-        for (int i = this.amount / 2 + world.rand.nextInt(this.amount / 2); i >= 0; i--) {
+        for (int i = this.amount / 2 + level.rand.nextInt(this.amount / 2); i >= 0; i--) {
             BlockPos grassPos = new BlockPos(
-                    pos.getX() + world.rand.nextGaussian() * this.dist,
-                    pos.getY() + world.rand.nextGaussian() * this.dist,
-                    pos.getZ() + world.rand.nextGaussian() * this.dist
+                    pos.getX() + level.rand.nextGaussian() * this.dist,
+                    pos.getY() + level.rand.nextGaussian() * this.dist,
+                    pos.getZ() + level.rand.nextGaussian() * this.dist
             );
-            if (grassPos.distanceSq(pos) <= this.dist * this.dist && world.isBlockLoaded(grassPos)) {
-                BlockState state = world.getBlockState(grassPos);
+            if (grassPos.distanceSq(pos) <= this.dist * this.dist && level.isBlockLoaded(grassPos)) {
+                BlockState state = level.getBlockState(grassPos);
                 Block block = state.getBlock();
 
                 BlockState newState = null;
@@ -78,7 +78,7 @@ public class GrassDieEffect implements IDrainSpotEffect {
                     newState = Blocks.NETHERRACK.getDefaultState();
                 }
                 if (newState != null)
-                    world.setBlockState(grassPos, newState);
+                    level.setBlockState(grassPos, newState);
             }
         }
     }

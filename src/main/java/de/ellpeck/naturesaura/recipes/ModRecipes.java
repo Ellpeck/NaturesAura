@@ -14,7 +14,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.util.ResourceLocation;
@@ -138,7 +138,7 @@ public final class ModRecipes {
     }
 
     public static JsonObject serializeStack(ItemStack stack) {
-        CompoundNBT nbt = stack.write(new CompoundNBT());
+        CompoundTag nbt = stack.write(new CompoundTag());
         byte c = nbt.getByte("Count");
         if (c != 1) {
             nbt.putByte("count", c);
@@ -150,7 +150,7 @@ public final class ModRecipes {
         return dyn.convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
     }
 
-    private static void renameTag(CompoundNBT nbt, String oldName, String newName) {
+    private static void renameTag(CompoundTag nbt, String oldName, String newName) {
         INBT tag = nbt.get(oldName);
         if (tag != null) {
             nbt.remove(oldName);

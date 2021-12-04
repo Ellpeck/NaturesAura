@@ -2,19 +2,23 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.entity.passive.Animal;
+import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class TileEntityAnimalContainer extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityAnimalContainer extends BlockEntityImpl implements ITickableBlockEntity {
 
-    public TileEntityAnimalContainer() {
-        super(ModTileEntities.ANIMAL_CONTAINER);
+    public BlockEntityAnimalContainer(BlockPos pos, BlockState state) {
+        super(ModTileEntities.ANIMAL_CONTAINER, pos, state);
     }
 
     public int getRadius() {
@@ -29,23 +33,23 @@ public class TileEntityAnimalContainer extends TileEntityImpl implements ITickab
 
     @Override
     public void tick() {
-        if (this.world.isRemote)
+        if (this.level.isClientSide)
             return;
         int radius = this.getRadius();
-        Set<AnimalEntity> animalsInRange = new HashSet<>(this.world.getEntitiesWithinAABB(AnimalEntity.class, new AxisAlignedBB(this.pos).grow(radius - 1)));
-        List<AnimalEntity> animalsOutRange = this.world.getEntitiesWithinAABB(AnimalEntity.class, new AxisAlignedBB(this.pos).grow(radius + 1));
-        for (AnimalEntity animal : animalsOutRange) {
+        Set<Animal> animalsInRange = new HashSet<>(this.level.getEntitiesWithinAABB(Animal.class, new AxisAlignedBB(this.worldPosition).grow(radius - 1)));
+        List<Animal> animalsOutRange = this.level.getEntitiesWithinAABB(Animal.class, new AxisAlignedBB(this.worldPosition).grow(radius + 1));
+        for (Animal animal : animalsOutRange) {
             if (animalsInRange.contains(animal))
                 continue;
-            Vector3d pos = animal.getPositionVec();
-            Vector3d distance = pos.subtract(this.pos.getX(), pos.getY(), this.pos.getZ());
+            Vec3 pos = animal.position();
+            Vec3 distance = pos.subtract(this.worldPosition.getX(), pos.y, this.worldPosition.getZ());
             distance = distance.normalize().scale(-0.15F);
             animal.setMotion(distance);
 
-            if (this.world.rand.nextBoolean()) {
-                Vector3d eye = animal.getEyePosition(1).add(animal.getLookVec());
-                PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                        new PacketParticles((float) eye.getX(), (float) eye.getY(), (float) eye.getZ(), PacketParticles.Type.ANIMAL_CONTAINER));
+            if (this.level.rand.nextBoolean()) {
+                Vec3 eye = animal.getEyePosition(1).add(animal.getLookAngle());
+                PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
+                        new PacketParticles((float) eye.x, (float) eye.y, (float) eye.z, PacketParticles.Type.ANIMAL_CONTAINER));
             }
         }
     }

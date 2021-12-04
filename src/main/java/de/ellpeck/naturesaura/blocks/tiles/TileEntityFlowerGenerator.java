@@ -9,11 +9,11 @@ import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -24,24 +24,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITickableBlockEntity {
 
     private final Map<BlockState, MutableInt> consumedRecently = new HashMap<>();
 
-    public TileEntityFlowerGenerator() {
+    public BlockEntityFlowerGenerator() {
         super(ModTileEntities.FLOWER_GENERATOR);
     }
 
     @Override
     public void tick() {
-        if (!this.world.isRemote && this.world.getGameTime() % 10 == 0) {
+        if (!this.level.isClientSide && this.level.getGameTime() % 10 == 0) {
             List<BlockPos> possible = new ArrayList<>();
             int range = 3;
             for (int x = -range; x <= range; x++) {
                 for (int y = -1; y <= 1; y++) {
                     for (int z = -range; z <= range; z++) {
-                        BlockPos offset = this.pos.add(x, y, z);
-                        BlockState state = this.world.getBlockState(offset);
+                        BlockPos offset = this.worldPosition.add(x, y, z);
+                        BlockState state = this.level.getBlockState(offset);
                         if (BlockTags.SMALL_FLOWERS.contains(state.getBlock()))
                             possible.add(offset);
                     }
@@ -51,14 +51,14 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
             if (possible.isEmpty())
                 return;
 
-            BlockPos pos = possible.get(this.world.rand.nextInt(possible.size()));
-            BlockState state = this.world.getBlockState(pos);
+            BlockPos pos = possible.get(this.level.rand.nextInt(possible.size()));
+            BlockState state = this.level.getBlockState(pos);
             MutableInt curr = this.consumedRecently.computeIfAbsent(state, s -> new MutableInt());
 
             int addAmount = 25000;
             int toAdd = Math.max(0, addAmount - curr.getValue() * 100);
             if (toAdd > 0) {
-                if (IAuraType.forWorld(this.world).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD) && this.canGenerateRightNow(toAdd)) {
+                if (IAuraType.forLevel(this.level).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD) && this.canGenerateRightNow(toAdd)) {
                     this.generateAura(toAdd);
                 } else {
                     toAdd = 0;
@@ -74,23 +74,23 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
             }
             curr.add(5);
 
-            this.world.removeBlock(pos, false);
+            this.level.removeBlock(pos, false);
 
             int color = Helper.blendColors(0x5ccc30, 0xe53c16, toAdd / (float) addAmount);
             if (toAdd > 0) {
-                for (int i = this.world.rand.nextInt(5) + 5; i >= 0; i--)
-                    PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticleStream(
-                            pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F,
-                            pos.getY() + 0.25F + this.world.rand.nextFloat() * 0.5F,
-                            pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F,
-                            this.pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F,
-                            this.pos.getY() + 0.25F + this.world.rand.nextFloat() * 0.5F,
-                            this.pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F,
-                            this.world.rand.nextFloat() * 0.02F + 0.1F, color, 1F
+                for (int i = this.level.rand.nextInt(5) + 5; i >= 0; i--)
+                    PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticleStream(
+                            pos.getX() + 0.25F + this.level.rand.nextFloat() * 0.5F,
+                            pos.getY() + 0.25F + this.level.rand.nextFloat() * 0.5F,
+                            pos.getZ() + 0.25F + this.level.rand.nextFloat() * 0.5F,
+                            this.worldPosition.getX() + 0.25F + this.level.rand.nextFloat() * 0.5F,
+                            this.worldPosition.getY() + 0.25F + this.level.rand.nextFloat() * 0.5F,
+                            this.worldPosition.getZ() + 0.25F + this.level.rand.nextFloat() * 0.5F,
+                            this.level.rand.nextFloat() * 0.02F + 0.1F, color, 1F
                     ));
-                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.FLOWER_GEN_AURA_CREATION));
+                PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.FLOWER_GEN_AURA_CREATION));
             }
-            PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), PacketParticles.Type.FLOWER_GEN_CONSUME, color));
+            PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), PacketParticles.Type.FLOWER_GEN_CONSUME, color));
         }
     }
 
@@ -100,7 +100,7 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
     }
 
     @Override
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
 
         if (type != SaveType.SYNC && !this.consumedRecently.isEmpty()) {
@@ -109,7 +109,7 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
                 BlockState state = entry.getKey();
                 Block block = state.getBlock();
 
-                CompoundNBT tag = new CompoundNBT();
+                CompoundTag tag = new CompoundTag();
                 tag.putString("block", block.getRegistryName().toString());
                 tag.putInt("amount", entry.getValue().intValue());
                 list.add(tag);
@@ -119,13 +119,13 @@ public class TileEntityFlowerGenerator extends TileEntityImpl implements ITickab
     }
 
     @Override
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.SYNC) {
             this.consumedRecently.clear();
             ListNBT list = compound.getList("consumed_recently", 10);
             for (INBT base : list) {
-                CompoundNBT tag = (CompoundNBT) base;
+                CompoundTag tag = (CompoundTag) base;
                 Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tag.getString("block")));
                 if (block != null)
                     this.consumedRecently.put(block.getDefaultState(), new MutableInt(tag.getInt("amount")));

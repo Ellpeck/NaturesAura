@@ -5,7 +5,7 @@ import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.util.InteractionResult;
 
 public class ItemGoldFiber extends ItemImpl implements IColorProvidingItem {
 
@@ -19,14 +19,14 @@ public class ItemGoldFiber extends ItemImpl implements IColorProvidingItem {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public InteractionResult onItemUse(ItemUseContext context) {
         ItemStack stack = context.getPlayer().getHeldItem(context.getHand());
-        if (BlockGoldenLeaves.convert(context.getWorld(), context.getPos())) {
-            if (!context.getWorld().isRemote) {
+        if (BlockGoldenLeaves.convert(context.getLevel(), context.getPos())) {
+            if (!context.getLevel().isClientSide) {
                 stack.shrink(1);
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 }

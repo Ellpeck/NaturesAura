@@ -6,31 +6,31 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.misc.WeatherType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.server.ServerLevel;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.Map;
 
-public class TileEntityWeatherChanger extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITickableBlockEntity {
 
     private int processTime;
     private WeatherType type;
     private int itemAmount;
 
-    public TileEntityWeatherChanger() {
+    public BlockEntityWeatherChanger() {
         super(ModTileEntities.WEATHER_CHANGER);
     }
 
     @Override
     public void tick() {
-        if (this.world.isRemote) {
-            if (this.world.getGameTime() % 10 != 0)
+        if (this.level.isClientSide) {
+            if (this.level.getGameTime() % 10 != 0)
                 return;
             if (this.processTime <= 0)
                 return;
@@ -38,15 +38,15 @@ public class TileEntityWeatherChanger extends TileEntityImpl implements ITickabl
             for (int r = 0; r < 360; r += 20) {
                 double xOff = Math.cos(Math.toRadians(r)) * 3F;
                 double zOff = Math.sin(Math.toRadians(r)) * 3F;
-                for (int i = this.world.rand.nextInt(3); i > 0; i--) {
+                for (int i = this.level.rand.nextInt(3); i > 0; i--) {
                     NaturesAuraAPI.instance().spawnMagicParticle(
-                            this.pos.getX() + 0.5F + xOff,
-                            this.pos.getY(),
-                            this.pos.getZ() + 0.5F + zOff,
-                            this.world.rand.nextGaussian() * 0.02F,
-                            this.world.rand.nextFloat() * 0.1F + 0.1F,
-                            this.world.rand.nextGaussian() * 0.02F,
-                            color, this.world.rand.nextFloat() * 2 + 1, this.world.rand.nextInt(80) + 80, 0, false, true);
+                            this.worldPosition.getX() + 0.5F + xOff,
+                            this.worldPosition.getY(),
+                            this.worldPosition.getZ() + 0.5F + zOff,
+                            this.level.rand.nextGaussian() * 0.02F,
+                            this.level.rand.nextFloat() * 0.1F + 0.1F,
+                            this.level.rand.nextGaussian() * 0.02F,
+                            color, this.level.rand.nextFloat() * 2 + 1, this.level.rand.nextInt(80) + 80, 0, false, true);
                 }
             }
             return;
@@ -54,15 +54,15 @@ public class TileEntityWeatherChanger extends TileEntityImpl implements ITickabl
 
         if (this.processTime > 0) {
             if (this.processTime % 20 == 0) {
-                BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 35, this.pos);
-                IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 30000 * this.itemAmount);
+                BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
+                IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, 30000 * this.itemAmount);
             }
 
             this.processTime--;
             if (this.processTime <= 0) {
                 this.sendToClients();
                 int time = 6000 * this.itemAmount;
-                ServerWorld server = (ServerWorld) this.world;
+                ServerLevel server = (ServerLevel) this.level;
                 switch (this.type) {
                     case SUN:
                         server.func_241113_a_(time, 0, false, false);
@@ -76,7 +76,7 @@ public class TileEntityWeatherChanger extends TileEntityImpl implements ITickabl
                 }
             }
         } else {
-            if (this.world.getGameTime() % 20 != 0)
+            if (this.level.getGameTime() % 20 != 0)
                 return;
             Pair<WeatherType, Integer> type = this.getNextWeatherType();
             if (type == null)
@@ -89,7 +89,7 @@ public class TileEntityWeatherChanger extends TileEntityImpl implements ITickabl
     }
 
     @Override
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             compound.putInt("time", this.processTime);
@@ -100,7 +100,7 @@ public class TileEntityWeatherChanger extends TileEntityImpl implements ITickabl
     }
 
     @Override
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.processTime = compound.getInt("time");
@@ -110,8 +110,8 @@ public class TileEntityWeatherChanger extends TileEntityImpl implements ITickabl
     }
 
     private Pair<WeatherType, Integer> getNextWeatherType() {
-        AxisAlignedBB area = new AxisAlignedBB(this.pos).grow(2);
-        List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class, area, EntityPredicates.IS_ALIVE);
+        AxisAlignedBB area = new AxisAlignedBB(this.worldPosition).grow(2);
+        List<ItemEntity> items = this.level.getEntitiesWithinAABB(ItemEntity.class, area, EntityPredicates.IS_ALIVE);
         for (ItemEntity entity : items) {
             if (entity.cannotPickup())
                 continue;

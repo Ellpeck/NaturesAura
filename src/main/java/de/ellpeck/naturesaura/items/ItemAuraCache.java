@@ -14,15 +14,15 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -42,9 +42,9 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stackIn, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (!worldIn.isRemote && entityIn instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) entityIn;
+    public void inventoryTick(ItemStack stackIn, Level levelIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if (!levelIn.isClientSide && entityIn instanceof Player) {
+            Player player = (Player) entityIn;
             if (player.isSneaking() && stackIn.getCapability(NaturesAuraAPI.capAuraContainer).isPresent()) {
                 IAuraContainer container = stackIn.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
                 if (container.getStoredAura() <= 0) {
@@ -96,7 +96,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new ICapabilityProvider() {
             private final LazyOptional<ItemAuraContainer> container = LazyOptional.of(() -> new ItemAuraContainer(stack, null, ItemAuraCache.this.capacity));
 
@@ -114,7 +114,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(ItemStack stack, PlayerEntity player, RenderType type, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight, boolean isHolding) {
+    public void render(ItemStack stack, Player player, RenderType type, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight, boolean isHolding) {
         if (type == RenderType.BODY && !isHolding) {
             boolean chest = !player.inventory.armorInventory.get(EquipmentSlotType.CHEST.getIndex()).isEmpty();
             boolean legs = !player.inventory.armorInventory.get(EquipmentSlotType.LEGS.getIndex()).isEmpty();

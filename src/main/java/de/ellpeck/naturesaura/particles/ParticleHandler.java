@@ -71,12 +71,12 @@ public final class ParticleHandler {
                 if (ModConfig.instance.respectVanillaParticleSettings.get()) {
                     ParticleStatus setting = mc.gameSettings.particles;
                     if (setting != ParticleStatus.ALL &&
-                            (setting != ParticleStatus.DECREASED || mc.world.rand.nextInt(3) != 0) &&
-                            (setting != ParticleStatus.MINIMAL || mc.world.rand.nextInt(10) != 0))
+                            (setting != ParticleStatus.DECREASED || mc.level.rand.nextInt(3) != 0) &&
+                            (setting != ParticleStatus.MINIMAL || mc.level.rand.nextInt(10) != 0))
                         return;
                 }
                 double setting = ModConfig.instance.particleAmount.get();
-                if (setting < 1 && mc.world.rand.nextDouble() > setting)
+                if (setting < 1 && mc.level.rand.nextDouble() > setting)
                     return;
             }
             mc.particles.addEffect(particle.get());

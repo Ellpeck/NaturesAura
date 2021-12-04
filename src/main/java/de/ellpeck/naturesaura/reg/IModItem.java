@@ -6,7 +6,7 @@ public interface IModItem {
 
     String getBaseName();
 
-    default ForgeRegistryEntry getRegistryEntry() {
-        return (ForgeRegistryEntry) this;
+    default ForgeRegistryEntry<?> getRegistryEntry() {
+        return (ForgeRegistryEntry<?>) this;
     }
 }

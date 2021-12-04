@@ -5,7 +5,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
-import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.chunk.effect.DrainSpotEffects;
 import de.ellpeck.naturesaura.compat.Compat;
@@ -65,7 +65,7 @@ public final class NaturesAura {
         Helper.registerCap(IAuraContainer.class);
         Helper.registerCap(IAuraRecharge.class);
         Helper.registerCap(IAuraChunk.class);
-        Helper.registerCap(IWorldData.class);
+        Helper.registerCap(ILevelData.class);
 
         Compat.setup(event);
         PacketHandler.init();

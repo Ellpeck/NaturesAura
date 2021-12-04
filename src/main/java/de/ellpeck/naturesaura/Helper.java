@@ -5,34 +5,34 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
-import de.ellpeck.naturesaura.api.misc.IWorldData;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
+import de.ellpeck.naturesaura.api.misc.ILevelData;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.compat.Compat;
-import de.ellpeck.naturesaura.misc.WorldData;
+import de.ellpeck.naturesaura.misc.LevelData;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.ItemFrameEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.entity.player.ServerPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.INBT;
 import net.minecraft.state.Property;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.AbstractChunkProvider;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.level.ILevel;
+import net.minecraft.level.Level;
+import net.minecraft.level.chunk.AbstractChunkProvider;
+import net.minecraft.level.chunk.Chunk;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -61,14 +61,14 @@ import java.util.function.Predicate;
 
 public final class Helper {
 
-    public static boolean getTileEntitiesInArea(IWorld world, BlockPos pos, int radius, Function<TileEntity, Boolean> consumer) {
+    public static boolean getTileEntitiesInArea(ILevel level, BlockPos pos, int radius, Function<BlockEntity, Boolean> consumer) {
         for (int x = pos.getX() - radius >> 4; x <= pos.getX() + radius >> 4; x++) {
             for (int z = pos.getZ() - radius >> 4; z <= pos.getZ() + radius >> 4; z++) {
-                Chunk chunk = getLoadedChunk(world, x, z);
+                Chunk chunk = getLoadedChunk(level, x, z);
                 if (chunk != null) {
                     for (BlockPos tilePos : chunk.getTileEntitiesPos()) {
                         if (tilePos.distanceSq(pos) <= radius * radius)
-                            if (consumer.apply(chunk.getTileEntity(tilePos)))
+                            if (consumer.apply(chunk.getBlockEntity(tilePos)))
                                 return true;
                     }
                 }
@@ -77,8 +77,8 @@ public final class Helper {
         return false;
     }
 
-    public static void getAuraChunksWithSpotsInArea(World world, BlockPos pos, int radius, Consumer<AuraChunk> consumer) {
-        WorldData data = (WorldData) IWorldData.getWorldData(world);
+    public static void getAuraChunksWithSpotsInArea(Level level, BlockPos pos, int radius, Consumer<AuraChunk> consumer) {
+        LevelData data = (LevelData) ILevelData.getLevelData(level);
         for (int x = pos.getX() - radius >> 4; x <= pos.getX() + radius >> 4; x++) {
             for (int z = pos.getZ() - radius >> 4; z <= pos.getZ() + radius >> 4; z++) {
                 AuraChunk chunk = data.auraChunksWithSpots.get(ChunkPos.asLong(x, z));
@@ -88,8 +88,8 @@ public final class Helper {
         }
     }
 
-    public static List<ItemFrameEntity> getAttachedItemFrames(World world, BlockPos pos) {
-        List<ItemFrameEntity> frames = world.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(pos).grow(0.25));
+    public static List<ItemFrameEntity> getAttachedItemFrames(Level level, BlockPos pos) {
+        List<ItemFrameEntity> frames = level.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(pos).grow(0.25));
         for (int i = frames.size() - 1; i >= 0; i--) {
             ItemFrameEntity frame = frames.get(i);
             BlockPos framePos = frame.getHangingPosition().offset(frame.getHorizontalFacing().getOpposite());
@@ -99,10 +99,10 @@ public final class Helper {
         return frames;
     }
 
-    public static Chunk getLoadedChunk(IWorld world, int x, int z) {
+    public static Chunk getLoadedChunk(ILevel level, int x, int z) {
         // DO NOT EDIT PLEASE FOR THE LOVE OF GOD
         // This is very finicky and easily causes the game to hang for some reason
-        AbstractChunkProvider provider = world.getChunkProvider();
+        AbstractChunkProvider provider = level.getChunkProvider();
         if (provider.isChunkLoaded(new ChunkPos(x, z)))
             return provider.getChunk(x, z, false);
         return null;
@@ -135,41 +135,41 @@ public final class Helper {
         RenderSystem.popMatrix();
     }
 
-    public static ActionResultType putStackOnTile(PlayerEntity player, Hand hand, BlockPos pos, int slot, boolean sound) {
-        TileEntity tile = player.world.getTileEntity(pos);
-        if (tile instanceof TileEntityImpl) {
-            IItemHandlerModifiable handler = ((TileEntityImpl) tile).getItemHandler();
+    public static InteractionResult putStackOnTile(Player player, Hand hand, BlockPos pos, int slot, boolean sound) {
+        BlockEntity tile = player.level.getBlockEntity(pos);
+        if (tile instanceof BlockEntityImpl) {
+            IItemHandlerModifiable handler = ((BlockEntityImpl) tile).getItemHandler();
             if (handler != null) {
                 ItemStack handStack = player.getHeldItem(hand);
                 if (!handStack.isEmpty()) {
-                    ItemStack remain = handler.insertItem(slot, handStack, player.world.isRemote);
+                    ItemStack remain = handler.insertItem(slot, handStack, player.level.isClientSide);
                     if (!ItemStack.areItemStacksEqual(remain, handStack)) {
                         if (sound)
-                            player.world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                            player.level.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                                     SoundEvents.ENTITY_ITEM_FRAME_ADD_ITEM, SoundCategory.PLAYERS, 0.75F, 1F);
-                        if (!player.world.isRemote)
+                        if (!player.level.isClientSide)
                             player.setHeldItem(hand, remain);
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
                 }
 
                 if (!handler.getStackInSlot(slot).isEmpty()) {
                     if (sound)
-                        player.world.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                        player.level.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                                 SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM, SoundCategory.PLAYERS, 0.75F, 1F);
-                    if (!player.world.isRemote) {
+                    if (!player.level.isClientSide) {
                         ItemStack stack = handler.getStackInSlot(slot);
                         if (!player.addItemStackToInventory(stack)) {
-                            ItemEntity item = new ItemEntity(player.world, player.getPosX(), player.getPosY(), player.getPosZ(), stack);
-                            player.world.addEntity(item);
+                            ItemEntity item = new ItemEntity(player.level, player.getPosX(), player.getPosY(), player.getPosZ(), stack);
+                            player.level.addEntity(item);
                         }
                         handler.setStackInSlot(slot, ItemStack.EMPTY);
                     }
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             }
         }
-        return ActionResultType.CONSUME;
+        return InteractionResult.CONSUME;
     }
 
     public static ICapabilityProvider makeRechargeProvider(ItemStack stack, boolean needsSelected) {
@@ -244,11 +244,11 @@ public final class Helper {
         }, () -> null);
     }
 
-    public static void addAdvancement(PlayerEntity player, ResourceLocation advancement, String criterion) {
-        if (!(player instanceof ServerPlayerEntity))
+    public static void addAdvancement(Player player, ResourceLocation advancement, String criterion) {
+        if (!(player instanceof ServerPlayer))
             return;
-        ServerPlayerEntity playerMp = (ServerPlayerEntity) player;
-        Advancement adv = playerMp.getServerWorld().getServer().getAdvancementManager().getAdvancement(advancement);
+        ServerPlayer playerMp = (ServerPlayer) player;
+        Advancement adv = playerMp.getServerLevel().getServer().getAdvancementManager().getAdvancement(advancement);
         if (adv != null)
             playerMp.getAdvancements().grantCriterion(adv, criterion);
     }
@@ -289,7 +289,7 @@ public final class Helper {
         GL11.glVertex3d(x, y, z);
     }
 
-    public static boolean isHoldingItem(PlayerEntity player, Item item) {
+    public static boolean isHoldingItem(Player player, Item item) {
         for (Hand hand : Hand.values()) {
             ItemStack stack = player.getHeldItem(hand);
             if (!stack.isEmpty() && stack.getItem() == item)
@@ -327,7 +327,7 @@ public final class Helper {
         }
     }
 
-    public static ItemStack getEquippedItem(Predicate<ItemStack> predicate, PlayerEntity player) {
+    public static ItemStack getEquippedItem(Predicate<ItemStack> predicate, Player player) {
         if (Compat.hasCompat("curios")) {
             Optional<ItemStack> stack = CuriosApi.getCuriosHelper().findEquippedCurio(predicate, player).map(ImmutableTriple::getRight);
             if (stack.isPresent())

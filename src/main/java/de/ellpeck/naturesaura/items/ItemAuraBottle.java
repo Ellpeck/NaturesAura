@@ -9,7 +9,7 @@ import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -19,7 +19,7 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,23 +35,23 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
         MinecraftForge.EVENT_BUS.register(new EventHandler());
 
         DispenserBlock.registerDispenseBehavior(emptyBottle, (source, stack) -> {
-            World world = source.getWorld();
+            Level level = source.getLevel();
             BlockState state = source.getBlockState();
             Direction facing = state.get(DispenserBlock.FACING);
             BlockPos offset = source.getBlockPos().offset(facing);
-            BlockState offsetState = world.getBlockState(offset);
+            BlockState offsetState = level.getBlockState(offset);
 
             ItemStack dispense = stack.split(1);
-            if (offsetState.getBlock().isAir(offsetState, world, offset)) {
-                if (IAuraChunk.getAuraInArea(world, offset, 30) >= 100000) {
-                    dispense = setType(new ItemStack(ItemAuraBottle.this), IAuraType.forWorld(world));
+            if (offsetState.getBlock().isAir(offsetState, level, offset)) {
+                if (IAuraChunk.getAuraInArea(level, offset, 30) >= 100000) {
+                    dispense = setType(new ItemStack(ItemAuraBottle.this), IAuraType.forLevel(level));
 
-                    BlockPos spot = IAuraChunk.getHighestSpot(world, offset, 30, offset);
-                    IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 20000);
+                    BlockPos spot = IAuraChunk.getHighestSpot(level, offset, 30, offset);
+                    IAuraChunk.getAuraChunk(level, spot).drainAura(spot, 20000);
                 }
             }
 
-            doDispense(world, dispense, 6, facing, DispenserBlock.getDispensePosition(source));
+            doDispense(level, dispense, 6, facing, DispenserBlock.getDispensePosition(source));
             return stack;
         });
     }
@@ -106,24 +106,24 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
             ItemStack held = event.getItemStack();
             if (held.isEmpty() || held.getItem() != ModItems.BOTTLE_TWO_THE_REBOTTLING)
                 return;
-            PlayerEntity player = event.getPlayer();
-            RayTraceResult ray = rayTrace(player.world, player, RayTraceContext.FluidMode.NONE);
+            Player player = event.getPlayer();
+            RayTraceResult ray = rayTrace(player.level, player, RayTraceContext.FluidMode.NONE);
             if (ray.getType() == RayTraceResult.Type.BLOCK)
                 return;
             BlockPos pos = player.getPosition();
-            if (IAuraChunk.getAuraInArea(player.world, pos, 30) < 100000)
+            if (IAuraChunk.getAuraInArea(player.level, pos, 30) < 100000)
                 return;
 
-            if (!player.world.isRemote) {
+            if (!player.level.isClientSide) {
                 held.shrink(1);
 
                 player.inventory.addItemStackToInventory(
-                        setType(new ItemStack(ItemAuraBottle.this), IAuraType.forWorld(player.world)));
+                        setType(new ItemStack(ItemAuraBottle.this), IAuraType.forLevel(player.level)));
 
-                BlockPos spot = IAuraChunk.getHighestSpot(player.world, pos, 30, pos);
-                IAuraChunk.getAuraChunk(player.world, spot).drainAura(spot, 20000);
+                BlockPos spot = IAuraChunk.getHighestSpot(player.level, pos, 30, pos);
+                IAuraChunk.getAuraChunk(player.level, spot).drainAura(spot, 20000);
 
-                player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(),
+                player.level.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(),
                         SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.PLAYERS, 1F, 1F);
             }
             player.swingArm(event.getHand());

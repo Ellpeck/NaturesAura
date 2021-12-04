@@ -8,7 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,11 +83,11 @@ public class Multiblock implements IMultiblock {
             if (value instanceof BlockState) {
                 BlockState state = (BlockState) value;
                 matchers.put(c, new Matcher(state,
-                        (world, start, offset, pos, other, otherC) -> other == state));
+                        (level, start, offset, pos, other, otherC) -> other == state));
             } else if (value instanceof Block) {
                 Block block = (Block) value;
                 matchers.put(c, new Matcher(block.getDefaultState(),
-                        (world, start, offset, pos, state, otherC) -> state.getBlock() == block));
+                        (level, start, offset, pos, state, otherC) -> state.getBlock() == block));
             } else
                 matchers.put(c, (Matcher) value);
         }
@@ -107,11 +107,11 @@ public class Multiblock implements IMultiblock {
     }
 
     @Override
-    public boolean isComplete(World world, BlockPos center) {
+    public boolean isComplete(Level level, BlockPos center) {
         BlockPos start = this.getStart(center);
         return this.forEach(center, (char) 0, (pos, matcher) -> {
             BlockPos offset = pos.subtract(start);
-            return matcher.getCheck().matches(world, start, offset, pos, world.getBlockState(pos), this.getChar(offset));
+            return matcher.getCheck().matches(level, start, offset, pos, level.getBlockState(pos), this.getChar(offset));
         });
     }
 

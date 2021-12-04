@@ -1,20 +1,20 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityGratedChute;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityGratedChute;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.IHopper;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.tileentity.BlockEntity;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -23,9 +23,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.util.math.shapes.Shapes;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.Level;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
@@ -35,21 +35,21 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     public static final DirectionProperty FACING = HopperBlock.FACING;
     private static final VoxelShape INPUT_SHAPE = Block.makeCuboidShape(0.0D, 10.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     private static final VoxelShape MIDDLE_SHAPE = Block.makeCuboidShape(4.0D, 4.0D, 4.0D, 12.0D, 10.0D, 12.0D);
-    private static final VoxelShape INPUT_MIDDLE_SHAPE = VoxelShapes.or(MIDDLE_SHAPE, INPUT_SHAPE);
-    private static final VoxelShape COMBINED_SHAPE = VoxelShapes.combineAndSimplify(INPUT_MIDDLE_SHAPE, IHopper.INSIDE_BOWL_SHAPE, IBooleanFunction.ONLY_FIRST);
-    private static final VoxelShape DOWN_SHAPE = VoxelShapes.or(COMBINED_SHAPE, Block.makeCuboidShape(6.0D, 0.0D, 6.0D, 10.0D, 4.0D, 10.0D));
-    private static final VoxelShape EAST_SHAPE = VoxelShapes.or(COMBINED_SHAPE, Block.makeCuboidShape(12.0D, 4.0D, 6.0D, 16.0D, 8.0D, 10.0D));
-    private static final VoxelShape NORTH_SHAPE = VoxelShapes.or(COMBINED_SHAPE, Block.makeCuboidShape(6.0D, 4.0D, 0.0D, 10.0D, 8.0D, 4.0D));
-    private static final VoxelShape SOUTH_SHAPE = VoxelShapes.or(COMBINED_SHAPE, Block.makeCuboidShape(6.0D, 4.0D, 12.0D, 10.0D, 8.0D, 16.0D));
-    private static final VoxelShape WEST_SHAPE = VoxelShapes.or(COMBINED_SHAPE, Block.makeCuboidShape(0.0D, 4.0D, 6.0D, 4.0D, 8.0D, 10.0D));
+    private static final VoxelShape INPUT_MIDDLE_SHAPE = Shapes.or(MIDDLE_SHAPE, INPUT_SHAPE);
+    private static final VoxelShape COMBINED_SHAPE = Shapes.combineAndSimplify(INPUT_MIDDLE_SHAPE, IHopper.INSIDE_BOWL_SHAPE, IBooleanFunction.ONLY_FIRST);
+    private static final VoxelShape DOWN_SHAPE = Shapes.or(COMBINED_SHAPE, Block.makeCuboidShape(6.0D, 0.0D, 6.0D, 10.0D, 4.0D, 10.0D));
+    private static final VoxelShape EAST_SHAPE = Shapes.or(COMBINED_SHAPE, Block.makeCuboidShape(12.0D, 4.0D, 6.0D, 16.0D, 8.0D, 10.0D));
+    private static final VoxelShape NORTH_SHAPE = Shapes.or(COMBINED_SHAPE, Block.makeCuboidShape(6.0D, 4.0D, 0.0D, 10.0D, 8.0D, 4.0D));
+    private static final VoxelShape SOUTH_SHAPE = Shapes.or(COMBINED_SHAPE, Block.makeCuboidShape(6.0D, 4.0D, 12.0D, 10.0D, 8.0D, 16.0D));
+    private static final VoxelShape WEST_SHAPE = Shapes.or(COMBINED_SHAPE, Block.makeCuboidShape(0.0D, 4.0D, 6.0D, 4.0D, 8.0D, 10.0D));
     private static final VoxelShape DOWN_RAYTRACE_SHAPE = IHopper.INSIDE_BOWL_SHAPE;
-    private static final VoxelShape EAST_RAYTRACE_SHAPE = VoxelShapes.or(IHopper.INSIDE_BOWL_SHAPE, Block.makeCuboidShape(12.0D, 8.0D, 6.0D, 16.0D, 10.0D, 10.0D));
-    private static final VoxelShape NORTH_RAYTRACE_SHAPE = VoxelShapes.or(IHopper.INSIDE_BOWL_SHAPE, Block.makeCuboidShape(6.0D, 8.0D, 0.0D, 10.0D, 10.0D, 4.0D));
-    private static final VoxelShape SOUTH_RAYTRACE_SHAPE = VoxelShapes.or(IHopper.INSIDE_BOWL_SHAPE, Block.makeCuboidShape(6.0D, 8.0D, 12.0D, 10.0D, 10.0D, 16.0D));
-    private static final VoxelShape WEST_RAYTRACE_SHAPE = VoxelShapes.or(IHopper.INSIDE_BOWL_SHAPE, Block.makeCuboidShape(0.0D, 8.0D, 6.0D, 4.0D, 10.0D, 10.0D));
+    private static final VoxelShape EAST_RAYTRACE_SHAPE = Shapes.or(IHopper.INSIDE_BOWL_SHAPE, Block.makeCuboidShape(12.0D, 8.0D, 6.0D, 16.0D, 10.0D, 10.0D));
+    private static final VoxelShape NORTH_RAYTRACE_SHAPE = Shapes.or(IHopper.INSIDE_BOWL_SHAPE, Block.makeCuboidShape(6.0D, 8.0D, 0.0D, 10.0D, 10.0D, 4.0D));
+    private static final VoxelShape SOUTH_RAYTRACE_SHAPE = Shapes.or(IHopper.INSIDE_BOWL_SHAPE, Block.makeCuboidShape(6.0D, 8.0D, 12.0D, 10.0D, 10.0D, 16.0D));
+    private static final VoxelShape WEST_RAYTRACE_SHAPE = Shapes.or(IHopper.INSIDE_BOWL_SHAPE, Block.makeCuboidShape(0.0D, 8.0D, 6.0D, 4.0D, 10.0D, 10.0D));
 
     public BlockGratedChute() {
-        super("grated_chute", TileEntityGratedChute::new, Properties.create(Material.IRON).hardnessAndResistance(3.0F, 8.0F).sound(SoundType.METAL));
+        super("grated_chute", BlockEntityGratedChute::new, Properties.create(Material.IRON).hardnessAndResistance(3.0F, 8.0F).sound(SoundType.METAL));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
         switch (state.get(FACING)) {
             case DOWN:
                 return DOWN_SHAPE;
@@ -76,7 +76,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     }
 
     @Override
-    public VoxelShape getRaytraceShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    public VoxelShape getRaytraceShape(BlockState state, IBlockReader levelIn, BlockPos pos) {
         switch (state.get(FACING)) {
             case DOWN:
                 return DOWN_RAYTRACE_SHAPE;
@@ -94,18 +94,18 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public InteractionResult onBlockActivated(BlockState state, Level levelIn, BlockPos pos, Player player, Hand handIn, BlockRayTraceResult hit) {
         if (!player.isSneaking())
-            return ActionResultType.FAIL;
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (!(tile instanceof TileEntityGratedChute))
-            return ActionResultType.FAIL;
-        if (!worldIn.isRemote) {
-            TileEntityGratedChute chute = (TileEntityGratedChute) tile;
+            return InteractionResult.FAIL;
+        BlockEntity tile = levelIn.getBlockEntity(pos);
+        if (!(tile instanceof BlockEntityGratedChute))
+            return InteractionResult.FAIL;
+        if (!levelIn.isClientSide) {
+            BlockEntityGratedChute chute = (BlockEntityGratedChute) tile;
             chute.isBlacklist = !chute.isBlacklist;
             chute.sendToClients();
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Nullable
@@ -128,10 +128,10 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     }
 
     @Override
-    public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileEntityGratedChute) {
-            IItemHandler handler = ((TileEntityGratedChute) tile).getItemHandler();
+    public int getComparatorInputOverride(BlockState blockState, Level levelIn, BlockPos pos) {
+        BlockEntity tile = levelIn.getBlockEntity(pos);
+        if (tile instanceof BlockEntityGratedChute) {
+            IItemHandler handler = ((BlockEntityGratedChute) tile).getItemHandler();
             ItemStack stack = handler.getStackInSlot(0);
             if (stack.isEmpty())
                 return 0;

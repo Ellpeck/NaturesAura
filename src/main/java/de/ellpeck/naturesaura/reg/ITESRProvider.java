@@ -1,19 +1,19 @@
 package de.ellpeck.naturesaura.reg;
 
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public interface ITESRProvider<T extends TileEntity> {
+public interface ITESRProvider<T extends BlockEntity> {
 
     @OnlyIn(Dist.CLIENT)
-    Tuple<TileEntityType<T>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super T>>>> getTESR();
+    Tuple<BlockEntityType<T>, Supplier<Function<? super BlockEntityRenderDispatcher, ? extends BlockEntityRenderer<? super T>>>> getTESR();
 
 }

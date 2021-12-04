@@ -17,8 +17,8 @@ public final class CommandAura {
                     CommandSource source = context.getSource();
                     BlockPos pos = new BlockPos(source.getPos());
                     while (amount > 0) {
-                        BlockPos spot = IAuraChunk.getLowestSpot(source.getWorld(), pos, 35, pos);
-                        amount -= IAuraChunk.getAuraChunk(source.getWorld(), spot).storeAura(spot, amount);
+                        BlockPos spot = IAuraChunk.getLowestSpot(source.getLevel(), pos, 35, pos);
+                        amount -= IAuraChunk.getAuraChunk(source.getLevel(), spot).storeAura(spot, amount);
                     }
                     source.sendFeedback(new StringTextComponent("Added aura to area"), true);
                     return 0;
@@ -28,8 +28,8 @@ public final class CommandAura {
                     CommandSource source = context.getSource();
                     BlockPos pos = new BlockPos(source.getPos());
                     while (amount > 0) {
-                        BlockPos spot = IAuraChunk.getHighestSpot(source.getWorld(), pos, 35, pos);
-                        amount -= IAuraChunk.getAuraChunk(source.getWorld(), spot).drainAura(spot, amount);
+                        BlockPos spot = IAuraChunk.getHighestSpot(source.getLevel(), pos, 35, pos);
+                        amount -= IAuraChunk.getAuraChunk(source.getLevel(), spot).drainAura(spot, amount);
                     }
                     source.sendFeedback(new StringTextComponent("Removed aura from area"), true);
                     return 0;
@@ -37,8 +37,8 @@ public final class CommandAura {
                 .then(Commands.literal("reset").executes(context -> {
                     CommandSource source = context.getSource();
                     BlockPos pos = new BlockPos(source.getPos());
-                    IAuraChunk.getSpotsInArea(source.getWorld(), pos, 35, (spot, amount) -> {
-                        IAuraChunk chunk = IAuraChunk.getAuraChunk(source.getWorld(), spot);
+                    IAuraChunk.getSpotsInArea(source.getLevel(), pos, 35, (spot, amount) -> {
+                        IAuraChunk chunk = IAuraChunk.getAuraChunk(source.getLevel(), spot);
                         if (amount > 0)
                             chunk.drainAura(spot, amount);
                         else

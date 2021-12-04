@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityAuraBloom;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraBloom;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.*;
@@ -11,15 +11,15 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.ILevelReader;
+import net.minecraft.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -39,25 +39,25 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+    public boolean isValidPosition(BlockState state, ILevelReader levelIn, BlockPos pos) {
         BlockPos down = pos.down();
-        return this.isValidGround(worldIn.getBlockState(down), worldIn, down);
+        return this.isValidGround(levelIn.getBlockState(down), levelIn, down);
     }
 
     @Override
-    protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    protected boolean isValidGround(BlockState state, IBlockReader levelIn, BlockPos pos) {
         return Arrays.stream(this.allowedGround).anyMatch(state::isIn);
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+    public void onEntityCollision(BlockState state, Level levelIn, BlockPos pos, Entity entityIn) {
         if (this == ModBlocks.AURA_CACTUS)
             entityIn.attackEntityFrom(DamageSource.CACTUS, 1);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        Vector3d vec3d = state.getOffset(worldIn, pos);
+    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
+        Vector3d vec3d = state.getOffset(levelIn, pos);
         return SHAPE.withOffset(vec3d.x, vec3d.y, vec3d.z);
     }
 
@@ -83,12 +83,12 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileEntityAuraBloom();
+    public BlockEntity createBlockEntity(BlockState state, IBlockReader level) {
+        return new BlockEntityAuraBloom();
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
+    public boolean hasBlockEntity(BlockState state) {
         return true;
     }
 }

@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -35,7 +35,7 @@ public class PacketParticleStream {
     private PacketParticleStream() {
     }
 
-    public static PacketParticleStream fromBytes(PacketBuffer buf) {
+    public static PacketParticleStream fromBytes(FriendlyByteBuf buf) {
         PacketParticleStream packet = new PacketParticleStream();
 
         packet.startX = buf.readFloat();
@@ -51,7 +51,7 @@ public class PacketParticleStream {
         return packet;
     }
 
-    public static void toBytes(PacketParticleStream packet, PacketBuffer buf) {
+    public static void toBytes(PacketParticleStream packet, FriendlyByteBuf buf) {
         buf.writeFloat(packet.startX);
         buf.writeFloat(packet.startY);
         buf.writeFloat(packet.startZ);

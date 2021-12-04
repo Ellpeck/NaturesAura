@@ -12,8 +12,8 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.Level;
+import net.minecraft.level.server.ServerLevel;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -36,11 +36,11 @@ public class AnimalSpawnerRecipe extends ModRecipe {
         this.time = time;
     }
 
-    public Entity makeEntity(World world, BlockPos pos) {
+    public Entity makeEntity(Level level, BlockPos pos) {
         // passed position is zero on the client, so we don't want to do initialization stuff for the entity
         if (pos == BlockPos.ZERO)
-            return this.entity.create(world);
-        return this.entity.create((ServerWorld) world, null, null, null, pos, SpawnReason.SPAWNER, false, false);
+            return this.entity.create(level);
+        return this.entity.create((ServerLevel) level, null, null, null, pos, SpawnReason.SPAWNER, false, false);
     }
 
     @Override

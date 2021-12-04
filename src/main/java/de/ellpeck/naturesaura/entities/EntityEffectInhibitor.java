@@ -3,15 +3,15 @@ package de.ellpeck.naturesaura.entities;
 import com.google.common.collect.ListMultimap;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
-import de.ellpeck.naturesaura.misc.WorldData;
+import de.ellpeck.naturesaura.misc.LevelData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -23,7 +23,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -41,29 +41,29 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     @OnlyIn(Dist.CLIENT)
     public int renderTicks;
 
-    public EntityEffectInhibitor(EntityType<?> entityTypeIn, World worldIn) {
-        super(entityTypeIn, worldIn);
+    public EntityEffectInhibitor(EntityType<?> entityTypeIn, Level levelIn) {
+        super(entityTypeIn, levelIn);
     }
 
-    public static void place(World world, ItemStack stack, double posX, double posY, double posZ) {
+    public static void place(Level level, ItemStack stack, double posX, double posY, double posZ) {
         ResourceLocation effect = ItemEffectPowder.getEffect(stack);
-        EntityEffectInhibitor entity = new EntityEffectInhibitor(ModEntities.EFFECT_INHIBITOR, world);
+        EntityEffectInhibitor entity = new EntityEffectInhibitor(ModEntities.EFFECT_INHIBITOR, level);
         entity.setInhibitedEffect(effect);
         entity.setColor(NaturesAuraAPI.EFFECT_POWDERS.get(effect));
         entity.setAmount(stack.getCount());
         entity.setPosition(posX, posY, posZ);
-        world.addEntity(entity);
+        level.addEntity(entity);
     }
 
     @Override
-    public void onAddedToWorld() {
-        super.onAddedToWorld();
+    public void onAddedToLevel() {
+        super.onAddedToLevel();
         this.powderListDirty = true;
     }
 
     @Override
-    public void onRemovedFromWorld() {
-        super.onRemovedFromWorld();
+    public void onRemovedFromLevel() {
+        super.onRemovedFromLevel();
         this.setInhibitedEffect(null);
         this.updatePowderListStatus();
     }
@@ -96,16 +96,16 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
         if (this.powderListDirty)
             this.updatePowderListStatus();
 
-        if (this.world.isRemote) {
-            if (this.world.getGameTime() % 5 == 0) {
+        if (this.level.isClientSide) {
+            if (this.level.getGameTime() % 5 == 0) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        this.getPosX() + this.world.rand.nextGaussian() * 0.1F,
+                        this.getPosX() + this.level.rand.nextGaussian() * 0.1F,
                         this.getPosY(),
-                        this.getPosZ() + this.world.rand.nextGaussian() * 0.1F,
-                        this.world.rand.nextGaussian() * 0.005F,
-                        this.world.rand.nextFloat() * 0.03F,
-                        this.world.rand.nextGaussian() * 0.005F,
-                        this.getColor(), this.world.rand.nextFloat() * 3F + 1F, 120, 0F, true, true);
+                        this.getPosZ() + this.level.rand.nextGaussian() * 0.1F,
+                        this.level.rand.nextGaussian() * 0.005F,
+                        this.level.rand.nextFloat() * 0.03F,
+                        this.level.rand.nextGaussian() * 0.005F,
+                        this.getColor(), this.level.rand.nextFloat() * 3F + 1F, 120, 0F, true, true);
             }
             this.renderTicks++;
         }
@@ -117,14 +117,14 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     @Override
-    protected void readAdditional(CompoundNBT compound) {
+    protected void readAdditional(CompoundTag compound) {
         this.setInhibitedEffect(new ResourceLocation(compound.getString("effect")));
         this.setColor(compound.getInt("color"));
         this.setAmount(compound.contains("amount") ? compound.getInt("amount") : 24);
     }
 
     @Override
-    protected void writeAdditional(CompoundNBT compound) {
+    protected void writeAdditional(CompoundTag compound) {
         compound.putString("effect", this.getInhibitedEffect().toString());
         compound.putInt("color", this.getColor());
         compound.putInt("amount", this.getAmount());
@@ -137,7 +137,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source instanceof EntityDamageSource && !this.world.isRemote) {
+        if (source instanceof EntityDamageSource && !this.level.isClientSide) {
             this.remove();
             this.entityDropItem(this.getDrop(), 0F);
             return true;
@@ -178,18 +178,18 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
+    public AxisAlignedBB getVisualizationBounds(Level level, BlockPos pos) {
         return Helper.aabb(this.getPositionVec()).grow(this.getAmount());
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public int getVisualizationColor(World world, BlockPos pos) {
+    public int getVisualizationColor(Level level, BlockPos pos) {
         return this.getColor();
     }
 
     private void updatePowderListStatus() {
-        ListMultimap<ResourceLocation, Tuple<Vector3d, Integer>> powders = ((WorldData) IWorldData.getWorldData(this.world)).effectPowders;
+        ListMultimap<ResourceLocation, Tuple<Vector3d, Integer>> powders = ((LevelData) ILevelData.getLevelData(this.level)).effectPowders;
         if (this.lastEffect != null) {
             List<Tuple<Vector3d, Integer>> oldList = powders.get(this.lastEffect);
             oldList.removeIf(t -> this.getPositionVec().equals(t.getA()));

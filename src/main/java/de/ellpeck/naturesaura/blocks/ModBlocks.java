@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 @SuppressWarnings("FieldNamingConvention")
 public final class ModBlocks {

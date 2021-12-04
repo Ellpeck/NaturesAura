@@ -2,16 +2,16 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.BlockEnderCrate;
 import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -21,7 +21,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileEntityEnderCrate extends TileEntityImpl implements INamedContainerProvider {
+public class BlockEntityEnderCrate extends BlockEntityImpl implements INamedContainerProvider {
 
     public String name;
     private final IItemHandlerModifiable wrappedEnderStorage = new IItemHandlerModifiable() {
@@ -46,7 +46,7 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
             ItemStack remain = this.getStorage().insertItem(slot, stack, simulate);
             if (!simulate)
-                TileEntityEnderCrate.this.drainAura((stack.getCount() - remain.getCount()) * 20);
+                BlockEntityEnderCrate.this.drainAura((stack.getCount() - remain.getCount()) * 20);
             return remain;
         }
 
@@ -55,7 +55,7 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
             ItemStack extracted = this.getStorage().extractItem(slot, amount, simulate);
             if (!simulate)
-                TileEntityEnderCrate.this.drainAura(extracted.getCount() * 20);
+                BlockEntityEnderCrate.this.drainAura(extracted.getCount() * 20);
             return extracted;
         }
 
@@ -70,11 +70,11 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
         }
 
         private IItemHandlerModifiable getStorage() {
-            return IWorldData.getOverworldData(TileEntityEnderCrate.this.world).getEnderStorage(TileEntityEnderCrate.this.name);
+            return ILevelData.getOverworldData(BlockEntityEnderCrate.this.level).getEnderStorage(BlockEntityEnderCrate.this.name);
         }
     };
 
-    public TileEntityEnderCrate() {
+    public BlockEntityEnderCrate() {
         super(ModTileEntities.ENDER_CRATE);
     }
 
@@ -97,7 +97,7 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
     public void modifyDrop(ItemStack regularItem) {
         if (this.name != null) {
             if (!regularItem.hasTag())
-                regularItem.setTag(new CompoundNBT());
+                regularItem.setTag(new CompoundTag());
             regularItem.getTag().putString(NaturesAura.MOD_ID + ":ender_name", this.name);
         }
     }
@@ -105,7 +105,7 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
     @Override
     public void loadDataOnPlace(ItemStack stack) {
         super.loadDataOnPlace(stack);
-        if (!this.world.isRemote) {
+        if (!this.level.isClientSide) {
             String name = BlockEnderCrate.getEnderName(stack);
             if (name != null && !name.isEmpty())
                 this.name = name;
@@ -113,7 +113,7 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
     }
 
     @Override
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (this.name != null)
@@ -122,7 +122,7 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
     }
 
     @Override
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (compound.contains("name"))
@@ -132,8 +132,8 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
 
     public void drainAura(int amount) {
         if (amount > 0) {
-            BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 35, this.pos);
-            IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, amount);
+            BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
+            IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, amount);
         }
     }
 
@@ -144,7 +144,7 @@ public class TileEntityEnderCrate extends TileEntityImpl implements INamedContai
 
     @Nullable
     @Override
-    public Container createMenu(int window, PlayerInventory inv, PlayerEntity player) {
+    public Container createMenu(int window, PlayerInventory inv, Player player) {
         return new ContainerEnderCrate(ModContainers.ENDER_CRATE, window, player, this.getItemHandler());
     }
 }

@@ -1,11 +1,11 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.api.misc.IWorldData;
-import de.ellpeck.naturesaura.misc.WorldData;
+import de.ellpeck.naturesaura.api.misc.ILevelData;
+import de.ellpeck.naturesaura.misc.LevelData;
 
-public class TileEntitySpawnLamp extends TileEntityImpl {
+public class BlockEntitySpawnLamp extends BlockEntityImpl {
 
-    public TileEntitySpawnLamp() {
+    public BlockEntitySpawnLamp() {
         super(ModTileEntities.SPAWN_LAMP);
     }
 
@@ -16,8 +16,8 @@ public class TileEntitySpawnLamp extends TileEntityImpl {
     @Override
     public void validate() {
         super.validate();
-        if (!this.world.isRemote) {
-            WorldData data = (WorldData) IWorldData.getWorldData(this.world);
+        if (!this.level.isClientSide) {
+            LevelData data = (LevelData) ILevelData.getLevelData(this.level);
             data.spawnLamps.add(this);
         }
     }
@@ -25,8 +25,8 @@ public class TileEntitySpawnLamp extends TileEntityImpl {
     @Override
     public void remove() {
         super.remove();
-        if (!this.world.isRemote) {
-            WorldData data = (WorldData) IWorldData.getWorldData(this.world);
+        if (!this.level.isClientSide) {
+            LevelData data = (LevelData) ILevelData.getLevelData(this.level);
             data.spawnLamps.remove(this);
         }
     }
@@ -34,7 +34,7 @@ public class TileEntitySpawnLamp extends TileEntityImpl {
     @Override
     public void onRedstonePowerChange(int newPower) {
         super.onRedstonePowerChange(newPower);
-        if (!this.world.isRemote)
+        if (!this.level.isClientSide)
             this.sendToClients();
     }
 }

@@ -9,14 +9,14 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import java.util.Map;
 
-public class TileEntityAuraTimer extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBlockEntity {
 
     private static final Map<IAuraType, Integer> TIMES = ImmutableMap.<IAuraType, Integer>builder()
             .put(NaturesAuraAPI.TYPE_OVERWORLD, 20)
@@ -30,7 +30,7 @@ public class TileEntityAuraTimer extends TileEntityImpl implements ITickableTile
     };
     private int timer;
 
-    public TileEntityAuraTimer() {
+    public BlockEntityAuraTimer() {
         super(ModTileEntities.AURA_TIMER);
     }
 
@@ -39,7 +39,7 @@ public class TileEntityAuraTimer extends TileEntityImpl implements ITickableTile
         if (this.redstonePower <= 0 && newPower > 0) {
             this.timer = 0;
             int color = ItemAuraBottle.getType(this.itemHandler.getStackInSlot(0)).getColor();
-            PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.TIMER_RESET, color));
+            PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.TIMER_RESET, color));
             this.sendToClients();
         }
         super.onRedstonePowerChange(newPower);
@@ -53,14 +53,14 @@ public class TileEntityAuraTimer extends TileEntityImpl implements ITickableTile
             return;
         }
 
-        if (this.world.isRemote) {
-            if (this.world.getGameTime() % 8 == 0) {
+        if (this.level.isClientSide) {
+            if (this.level.getGameTime() % 8 == 0) {
                 int color = ItemAuraBottle.getType(this.itemHandler.getStackInSlot(0)).getColor();
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        this.pos.getX() + 1 / 16F + this.world.rand.nextFloat() * 14 / 16F,
-                        this.pos.getY() + 1 / 16F + this.world.rand.nextFloat() * 14 / 16F,
-                        this.pos.getZ() + 1 / 16F + this.world.rand.nextFloat() * 14 / 16F,
-                        0, 0, 0, color, 1, 80 + this.world.rand.nextInt(50), 0, false, true);
+                        this.worldPosition.getX() + 1 / 16F + this.level.rand.nextFloat() * 14 / 16F,
+                        this.worldPosition.getY() + 1 / 16F + this.level.rand.nextFloat() * 14 / 16F,
+                        this.worldPosition.getZ() + 1 / 16F + this.level.rand.nextFloat() * 14 / 16F,
+                        0, 0, 0, color, 1, 80 + this.level.rand.nextInt(50), 0, false, true);
             }
             return;
         }
@@ -70,11 +70,11 @@ public class TileEntityAuraTimer extends TileEntityImpl implements ITickableTile
             this.timer = 0;
 
             BlockState state = this.getBlockState();
-            this.world.setBlockState(this.pos, state.with(BlockStateProperties.POWERED, true), 1);
-            this.world.getPendingBlockTicks().scheduleTick(this.pos, state.getBlock(), 4);
+            this.level.setBlockState(this.worldPosition, state.with(BlockStateProperties.POWERED, true), 1);
+            this.level.getPendingBlockTicks().scheduleTick(this.worldPosition, state.getBlock(), 4);
 
             int color = ItemAuraBottle.getType(this.itemHandler.getStackInSlot(0)).getColor();
-            PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.TIMER_RESET, color));
+            PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.TIMER_RESET, color));
         }
         if (this.timer % 2 == 0)
             this.sendToClients();
@@ -104,7 +104,7 @@ public class TileEntityAuraTimer extends TileEntityImpl implements ITickableTile
     }
 
     @Override
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             compound.put("items", this.itemHandler.serializeNBT());
@@ -113,7 +113,7 @@ public class TileEntityAuraTimer extends TileEntityImpl implements ITickableTile
     }
 
     @Override
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.itemHandler.deserializeNBT(compound.getCompound("items"));

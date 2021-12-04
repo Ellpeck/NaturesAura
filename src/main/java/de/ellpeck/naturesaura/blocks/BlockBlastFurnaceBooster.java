@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityBlastFurnaceBooster;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityBlastFurnaceBooster;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.Block;
@@ -13,15 +13,15 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.util.math.shapes.Shapes;
+import net.minecraft.level.IBlockReader;
 
 public class BlockBlastFurnaceBooster extends BlockContainerImpl implements ICustomBlockState {
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
-    private static final VoxelShape SHAPE = VoxelShapes.create(1 / 16F, 0, 1 / 16F, 15 / 16F, 1, 15 / 16F);
+    private static final VoxelShape SHAPE = Shapes.create(1 / 16F, 0, 1 / 16F, 15 / 16F, 1, 15 / 16F);
 
     public BlockBlastFurnaceBooster() {
-        super("blast_furnace_booster", TileEntityBlastFurnaceBooster::new, Block.Properties.from(Blocks.BLAST_FURNACE).setLightLevel(s -> 0));
+        super("blast_furnace_booster", BlockEntityBlastFurnaceBooster::new, Block.Properties.from(Blocks.BLAST_FURNACE).setLightLevel(s -> 0));
     }
 
     @Override
@@ -30,7 +30,7 @@ public class BlockBlastFurnaceBooster extends BlockContainerImpl implements ICus
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
 

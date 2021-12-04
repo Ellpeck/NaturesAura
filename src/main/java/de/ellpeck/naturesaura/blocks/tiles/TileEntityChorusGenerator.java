@@ -5,10 +5,10 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -19,32 +19,32 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-public class TileEntityChorusGenerator extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITickableBlockEntity {
 
     private final Deque<BlockPos> currentlyBreaking = new ArrayDeque<>();
     private int auraPerBlock;
 
-    public TileEntityChorusGenerator() {
+    public BlockEntityChorusGenerator() {
         super(ModTileEntities.CHORUS_GENERATOR);
     }
 
     @Override
     public void tick() {
-        if (this.world.isRemote)
+        if (this.level.isClientSide)
             return;
-        if (this.world.getGameTime() % 5 != 0)
+        if (this.level.getGameTime() % 5 != 0)
             return;
         if (this.currentlyBreaking.isEmpty())
             return;
         BlockPos pos = this.currentlyBreaking.removeLast();
-        BlockState state = this.world.getBlockState(pos);
+        BlockState state = this.level.getBlockState(pos);
         if (state.getBlock() != Blocks.CHORUS_PLANT && state.getBlock() != Blocks.CHORUS_FLOWER) {
             this.currentlyBreaking.clear();
             return;
         }
-        PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.CHORUS_GENERATOR, pos.getX(), pos.getY(), pos.getZ()));
-        this.world.removeBlock(pos, false);
-        this.world.playSound(null, this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5,
+        PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.CHORUS_GENERATOR, pos.getX(), pos.getY(), pos.getZ()));
+        this.level.removeBlock(pos, false);
+        this.level.playSound(null, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5,
                 SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.BLOCKS, 0.5F, 1F);
         this.generateAura(this.auraPerBlock);
     }
@@ -57,11 +57,11 @@ public class TileEntityChorusGenerator extends TileEntityImpl implements ITickab
             for (int x = -range; x <= range; x++) {
                 for (int y = -range; y <= range; y++) {
                     for (int z = -range; z <= range; z++) {
-                        BlockPos offset = this.pos.add(x, y, z);
-                        BlockState below = this.world.getBlockState(offset.down());
+                        BlockPos offset = this.worldPosition.add(x, y, z);
+                        BlockState below = this.level.getBlockState(offset.down());
                         if (below.getBlock() != Blocks.END_STONE)
                             continue;
-                        BlockState state = this.world.getBlockState(offset);
+                        BlockState state = this.level.getBlockState(offset);
                         if (state.getBlock() != Blocks.CHORUS_PLANT)
                             continue;
 
@@ -90,7 +90,7 @@ public class TileEntityChorusGenerator extends TileEntityImpl implements ITickab
             BlockPos offset = pos.offset(dir);
             if (blocks.contains(offset))
                 continue;
-            BlockState state = this.world.getBlockState(offset);
+            BlockState state = this.level.getBlockState(offset);
             if (state.getBlock() != Blocks.CHORUS_PLANT && state.getBlock() != Blocks.CHORUS_FLOWER)
                 continue;
             blocks.add(offset);
@@ -99,7 +99,7 @@ public class TileEntityChorusGenerator extends TileEntityImpl implements ITickab
     }
 
     @Override
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type == SaveType.TILE) {
             ListNBT list = new ListNBT();
@@ -111,7 +111,7 @@ public class TileEntityChorusGenerator extends TileEntityImpl implements ITickab
     }
 
     @Override
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
         if (type == SaveType.TILE) {
             this.currentlyBreaking.clear();

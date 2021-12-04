@@ -1,26 +1,25 @@
 package de.ellpeck.naturesaura.reg;
 
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Arrays;
-import java.util.function.Supplier;
 
-public class ModTileType<T extends TileEntity> implements IModItem {
+public class ModTileType<T extends BlockEntity> implements IModItem {
 
-    public final TileEntityType<T> type;
+    public final BlockEntityType<T> type;
     public final String name;
 
-    public ModTileType(Supplier<T> supplier, IModItem item) {
+    public ModTileType(BlockEntityType.BlockEntitySupplier<T> supplier, IModItem item) {
         this(supplier, item.getBaseName(), item);
     }
 
-    public ModTileType(Supplier<T> supplier, String name, IModItem... items) {
+    public ModTileType(BlockEntityType.BlockEntitySupplier<T> supplier, String name, IModItem... items) {
         this.name = name;
         Block[] blocks = Arrays.stream(items).map(i -> (Block) i).toArray(Block[]::new);
-        this.type = TileEntityType.Builder.create(supplier, blocks).build(null);
+        this.type = BlockEntityType.Builder.of(supplier, blocks).build(null);
     }
 
     @Override
@@ -29,7 +28,7 @@ public class ModTileType<T extends TileEntity> implements IModItem {
     }
 
     @Override
-    public ForgeRegistryEntry getRegistryEntry() {
+    public ForgeRegistryEntry<?> getRegistryEntry() {
         return this.type;
     }
 }

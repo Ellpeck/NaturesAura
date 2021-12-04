@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.gen;
 
-import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.placement.IPlacementConfig;
-import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.level.gen.feature.*;
+import net.minecraft.level.gen.placement.IPlacementConfig;
+import net.minecraft.level.gen.placement.Placement;
 
 @SuppressWarnings("FieldNamingConvention")
 public final class ModFeatures {

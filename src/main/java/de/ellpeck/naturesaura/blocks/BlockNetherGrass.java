@@ -7,9 +7,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.IGrowable;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.Level;
+import net.minecraft.level.server.ServerLevel;
 
 import java.util.Random;
 
@@ -20,11 +20,11 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, IG
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
         BlockPos up = pos.up();
-        BlockState upState = worldIn.getBlockState(up);
-        if (upState.isSolidSide(worldIn, up, Direction.DOWN))
-            worldIn.setBlockState(pos, Blocks.NETHERRACK.getDefaultState());
+        BlockState upState = levelIn.getBlockState(up);
+        if (upState.isSolidSide(levelIn, up, Direction.DOWN))
+            levelIn.setBlockState(pos, Blocks.NETHERRACK.getDefaultState());
     }
 
     @Override
@@ -36,17 +36,17 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, IG
     }
 
     @Override
-    public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
-        return worldIn.getBlockState(pos.up()).isAir(worldIn, pos.up());
+    public boolean canGrow(IBlockReader levelIn, BlockPos pos, BlockState state, boolean isClient) {
+        return levelIn.getBlockState(pos.up()).isAir(levelIn, pos.up());
     }
 
     @Override
-    public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean canUseBonemeal(Level levelIn, Random rand, BlockPos pos, BlockState state) {
         return true;
     }
 
     @Override
-    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
+    public void grow(ServerLevel level, Random rand, BlockPos pos, BlockState state) {
         BlockPos blockpos = pos.up();
         BlockState blockstate = Blocks.GRASS.getDefaultState();
 
@@ -56,23 +56,23 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, IG
 
             while (true) {
                 if (j >= i / 16) {
-                    BlockState blockstate2 = world.getBlockState(blockpos1);
+                    BlockState blockstate2 = level.getBlockState(blockpos1);
                     if (blockstate2.getBlock() == blockstate.getBlock() && rand.nextInt(10) == 0) {
-                        ((IGrowable) blockstate.getBlock()).grow(world, rand, blockpos1, blockstate2);
+                        ((IGrowable) blockstate.getBlock()).grow(level, rand, blockpos1, blockstate2);
                     }
 
                     if (!blockstate2.isAir()) {
                         break;
                     }
 
-                    if (blockstate.isValidPosition(world, blockpos1)) {
-                        world.setBlockState(blockpos1, blockstate, 3);
+                    if (blockstate.isValidPosition(level, blockpos1)) {
+                        level.setBlockState(blockpos1, blockstate, 3);
                     }
                     break;
                 }
 
                 blockpos1 = blockpos1.add(rand.nextInt(3) - 1, (rand.nextInt(3) - 1) * rand.nextInt(3) / 2, rand.nextInt(3) - 1);
-                if (world.getBlockState(blockpos1.down()).getBlock() != this || world.getBlockState(blockpos1).hasOpaqueCollisionShape(world, blockpos1)) {
+                if (level.getBlockState(blockpos1.down()).getBlock() != this || level.getBlockState(blockpos1).hasOpaqueCollisionShape(level, blockpos1)) {
                     break;
                 }
 

@@ -10,15 +10,15 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
-public class TileEntityEndFlower extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBlockEntity {
 
     private final BasicAuraContainer container = new BasicAuraContainer(null, 500000) {
         {
@@ -34,7 +34,7 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
         public int drainAura(int amountToDrain, boolean simulate) {
             int amount = super.drainAura(amountToDrain, simulate);
             if (amount > 0 && !simulate)
-                TileEntityEndFlower.this.sendToClients();
+                BlockEntityEndFlower.this.sendToClients();
             return amount;
         }
 
@@ -46,19 +46,19 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
 
     public boolean isDrainMode;
 
-    public TileEntityEndFlower() {
+    public BlockEntityEndFlower() {
         super(ModTileEntities.END_FLOWER);
     }
 
     @Override
     public void tick() {
-        if (!this.world.isRemote) {
-            if (this.world.getGameTime() % 10 != 0)
+        if (!this.level.isClientSide) {
+            if (this.level.getGameTime() % 10 != 0)
                 return;
 
             if (!this.isDrainMode) {
-                List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class,
-                        new AxisAlignedBB(this.pos).grow(1), EntityPredicates.IS_ALIVE);
+                List<ItemEntity> items = this.level.getEntitiesWithinAABB(ItemEntity.class,
+                        new AxisAlignedBB(this.worldPosition).grow(1), EntityPredicates.IS_ALIVE);
                 for (ItemEntity item : items) {
                     if (item.cannotPickup())
                         continue;
@@ -71,7 +71,7 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
                     this.isDrainMode = true;
                     item.remove();
 
-                    PacketHandler.sendToAllAround(this.world, this.pos, 32,
+                    PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
                             new PacketParticles((float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.END_FLOWER_CONSUME, this.container.getAuraColor()));
                     break;
                 }
@@ -81,21 +81,21 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
                 this.generateAura(toDrain);
 
                 if (this.container.getStoredAura() <= 0) {
-                    this.world.setBlockState(this.pos, Blocks.DEAD_BUSH.getDefaultState());
-                    PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.END_FLOWER_DECAY, this.container.getAuraColor()));
+                    this.level.setBlockState(this.worldPosition, Blocks.DEAD_BUSH.getDefaultState());
+                    PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
+                            new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.END_FLOWER_DECAY, this.container.getAuraColor()));
                 }
             }
         } else {
-            if (this.isDrainMode && this.world.getGameTime() % 5 == 0)
+            if (this.isDrainMode && this.level.getGameTime() % 5 == 0)
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        this.pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F,
-                        this.pos.getY() + 0.25F + this.world.rand.nextFloat() * 0.5F,
-                        this.pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F,
-                        this.world.rand.nextGaussian() * 0.05F,
-                        this.world.rand.nextFloat() * 0.1F,
-                        this.world.rand.nextGaussian() * 0.05F,
-                        this.container.getAuraColor(), this.world.rand.nextFloat() * 2F + 1F, 50, 0F, false, true);
+                        this.worldPosition.getX() + 0.25F + this.level.rand.nextFloat() * 0.5F,
+                        this.worldPosition.getY() + 0.25F + this.level.rand.nextFloat() * 0.5F,
+                        this.worldPosition.getZ() + 0.25F + this.level.rand.nextFloat() * 0.5F,
+                        this.level.rand.nextGaussian() * 0.05F,
+                        this.level.rand.nextFloat() * 0.1F,
+                        this.level.rand.nextGaussian() * 0.05F,
+                        this.container.getAuraColor(), this.level.rand.nextFloat() * 2F + 1F, 50, 0F, false, true);
         }
     }
 
@@ -105,7 +105,7 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
     }
 
     @Override
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.container.writeNBT(compound);
@@ -114,7 +114,7 @@ public class TileEntityEndFlower extends TileEntityImpl implements ITickableTile
     }
 
     @Override
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.container.readNBT(compound);

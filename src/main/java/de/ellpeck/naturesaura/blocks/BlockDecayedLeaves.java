@@ -9,8 +9,8 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.server.ServerLevel;
 
 import java.util.Random;
 import java.util.function.Supplier;
@@ -22,9 +22,9 @@ public class BlockDecayedLeaves extends BlockImpl implements ICustomBlockState, 
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (!world.isRemote) {
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
+        if (!level.isClientSide) {
+            level.setBlockState(pos, Blocks.AIR.getDefaultState());
         }
     }
 
@@ -34,7 +34,7 @@ public class BlockDecayedLeaves extends BlockImpl implements ICustomBlockState, 
     }
 
     @Override
-    public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    public int getOpacity(BlockState state, IBlockReader levelIn, BlockPos pos) {
         return 1;
     }
 

@@ -19,14 +19,14 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.tileentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.tileentity.BlockEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.tileentity.BlockEntity;
+import net.minecraft.tileentity.BlockEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
@@ -49,9 +49,9 @@ public class ClientProxy implements IProxy {
         ScreenManager.registerFactory(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
 
         ItemModelsProperties.func_239418_a_(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "fill_mode"),
-                (stack, worldIn, entityIn) -> ItemColorChanger.isFillMode(stack) ? 1F : 0F);
+                (stack, levelIn, entityIn) -> ItemColorChanger.isFillMode(stack) ? 1F : 0F);
         ItemModelsProperties.func_239418_a_(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "has_color"),
-                (stack, worldIn, entityIn) -> ItemColorChanger.getStoredColor(stack) != null ? 1F : 0F);
+                (stack, levelIn, entityIn) -> ItemColorChanger.getStoredColor(stack) != null ? 1F : 0F);
     }
 
     @Override
@@ -91,13 +91,13 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void registerTESR(ITESRProvider provider) {
-        Tuple<TileEntityType<TileEntity>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntity>>>> tesr = provider.getTESR();
-        ClientRegistry.bindTileEntityRenderer(tesr.getA(), tesr.getB().get());
+        Tuple<BlockEntityType<BlockEntity>, Supplier<Function<? super BlockEntityRendererDispatcher, ? extends BlockEntityRenderer<? super BlockEntity>>>> tesr = provider.getTESR();
+        ClientRegistry.bindBlockEntityRenderer(tesr.getA(), tesr.getB().get());
     }
 
     @Override
     public void spawnMagicParticle(double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade) {
-        ParticleHandler.spawnParticle(() -> new ParticleMagic(Minecraft.getInstance().world,
+        ParticleHandler.spawnParticle(() -> new ParticleMagic(Minecraft.getInstance().level,
                 posX, posY, posZ,
                 motionX, motionY, motionZ,
                 color, scale, maxAge, gravity, collision, fade, ParticleHandler.depthEnabled), posX, posY, posZ);

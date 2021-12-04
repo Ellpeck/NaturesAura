@@ -9,26 +9,26 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.util.List;
 
-public class TileEntityPotionGenerator extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITickableBlockEntity {
 
-    public TileEntityPotionGenerator() {
+    public BlockEntityPotionGenerator() {
         super(ModTileEntities.POTION_GENERATOR);
     }
 
     @Override
     public void tick() {
-        if (!this.world.isRemote && this.world.getGameTime() % 10 == 0) {
-            if (Multiblocks.POTION_GENERATOR.isComplete(this.world, this.pos)) {
+        if (!this.level.isClientSide && this.level.getGameTime() % 10 == 0) {
+            if (Multiblocks.POTION_GENERATOR.isComplete(this.level, this.worldPosition)) {
                 boolean addedOne = false;
 
-                List<AreaEffectCloudEntity> clouds = this.world.getEntitiesWithinAABB(AreaEffectCloudEntity.class, new AxisAlignedBB(this.pos).grow(2));
+                List<AreaEffectCloudEntity> clouds = this.level.getEntitiesWithinAABB(AreaEffectCloudEntity.class, new AxisAlignedBB(this.worldPosition).grow(2));
                 for (AreaEffectCloudEntity cloud : clouds) {
                     if (!cloud.isAlive())
                         continue;
@@ -49,8 +49,8 @@ public class TileEntityPotionGenerator extends TileEntityImpl implements ITickab
                             if (canGen)
                                 this.generateAura(toAdd);
 
-                            PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
-                                    this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.POTION_GEN,
+                            PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(
+                                    this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.POTION_GEN,
                                     PotionUtils.getPotionColor(type), canGen ? 1 : 0));
 
                             addedOne = true;

@@ -10,7 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.LongNBT;
@@ -20,9 +20,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.GameRules;
+import net.minecraft.level.Level;
+import net.minecraft.level.server.ServerLevel;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -37,12 +37,12 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
     public boolean isActive;
     private BlockPos lastPosition = BlockPos.ZERO;
 
-    public EntityMoverMinecart(EntityType<?> type, World world) {
-        super(type, world);
+    public EntityMoverMinecart(EntityType<?> type, Level level) {
+        super(type, level);
     }
 
-    public EntityMoverMinecart(EntityType<?> type, World world, double x, double y, double z) {
-        super(type, world, x, y, z);
+    public EntityMoverMinecart(EntityType<?> type, Level level, double x, double y, double z) {
+        super(type, level, x, y, z);
     }
 
     @Override
@@ -52,22 +52,22 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
             return;
         BlockPos pos = this.getPosition();
 
-        if (!this.spotOffsets.isEmpty() && this.world.getGameTime() % 10 == 0)
-            PacketHandler.sendToAllAround(this.world, pos, 32, new PacketParticles(
+        if (!this.spotOffsets.isEmpty() && this.level.getGameTime() % 10 == 0)
+            PacketHandler.sendToAllAround(this.level, pos, 32, new PacketParticles(
                     (float) this.getPosX(), (float) this.getPosY(), (float) this.getPosZ(), PacketParticles.Type.MOVER_CART,
                     MathHelper.floor(this.getMotion().getX() * 100F), MathHelper.floor(this.getMotion().getY() * 100F), MathHelper.floor(this.getMotion().getZ() * 100F)));
 
         if (pos.distanceSq(this.lastPosition) < 8 * 8)
             return;
 
-        this.moveAura(this.world, this.lastPosition, this.world, pos);
+        this.moveAura(this.level, this.lastPosition, this.level, pos);
         this.lastPosition = pos;
     }
 
-    private void moveAura(World oldWorld, BlockPos oldPos, World newWorld, BlockPos newPos) {
+    private void moveAura(Level oldLevel, BlockPos oldPos, Level newLevel, BlockPos newPos) {
         for (BlockPos offset : this.spotOffsets) {
             BlockPos spot = oldPos.add(offset);
-            IAuraChunk chunk = IAuraChunk.getAuraChunk(oldWorld, spot);
+            IAuraChunk chunk = IAuraChunk.getAuraChunk(oldLevel, spot);
             int amount = chunk.getDrainSpot(spot);
             if (amount <= 0)
                 continue;
@@ -77,7 +77,7 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
                 continue;
             int toLose = MathHelper.ceil(drained / 250F);
             BlockPos newSpot = newPos.add(offset);
-            IAuraChunk.getAuraChunk(newWorld, newSpot).storeAura(newSpot, drained - toLose, false, false);
+            IAuraChunk.getAuraChunk(newLevel, newSpot).storeAura(newSpot, drained - toLose, false, false);
         }
     }
 
@@ -88,13 +88,13 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
 
             BlockPos pos = this.getPosition();
             if (!this.isActive) {
-                this.moveAura(this.world, this.lastPosition, this.world, pos);
+                this.moveAura(this.level, this.lastPosition, this.level, pos);
                 this.spotOffsets.clear();
                 this.lastPosition = BlockPos.ZERO;
                 return;
             }
 
-            IAuraChunk.getSpotsInArea(this.world, pos, 25, (spot, amount) -> {
+            IAuraChunk.getSpotsInArea(this.level, pos, 25, (spot, amount) -> {
                 if (amount > 0)
                     this.spotOffsets.add(spot.subtract(pos));
             });
@@ -105,13 +105,13 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
     @Override
     public void killMinecart(DamageSource source) {
         this.remove();
-        if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS))
+        if (this.level.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS))
             this.entityDropItem(new ItemStack(ModItems.MOVER_CART), 0);
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT compound = super.serializeNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag compound = super.serializeNBT();
         compound.putBoolean("active", this.isActive);
         compound.putLong("last_pos", this.lastPosition.toLong());
 
@@ -123,7 +123,7 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT compound) {
+    public void deserializeNBT(CompoundTag compound) {
         super.deserializeNBT(compound);
         this.isActive = compound.getBoolean("active");
         this.lastPosition = BlockPos.fromLong(compound.getLong("last_pos"));
@@ -136,11 +136,11 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
 
     @Nullable
     @Override
-    public Entity changeDimension(ServerWorld destination, ITeleporter teleporter) {
+    public Entity changeDimension(ServerLevel destination, ITeleporter teleporter) {
         Entity entity = super.changeDimension(destination, teleporter);
         if (entity instanceof EntityMoverMinecart) {
             BlockPos pos = entity.getPosition();
-            this.moveAura(this.world, this.lastPosition, entity.world, pos);
+            this.moveAura(this.level, this.lastPosition, entity.level, pos);
             ((EntityMoverMinecart) entity).lastPosition = pos;
         }
         return entity;

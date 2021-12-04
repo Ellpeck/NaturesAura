@@ -6,7 +6,7 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.projectile.EyeOfEnderEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -16,7 +16,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityStructureFinder extends EyeOfEnderEntity {
@@ -29,8 +29,8 @@ public class EntityStructureFinder extends EyeOfEnderEntity {
     private int despawnTimer;
     private boolean shatterOrDrop;
 
-    public EntityStructureFinder(EntityType<? extends EyeOfEnderEntity> type, World world) {
-        super(type, world);
+    public EntityStructureFinder(EntityType<? extends EyeOfEnderEntity> type, Level level) {
+        super(type, level);
     }
 
     @Override
@@ -40,13 +40,13 @@ public class EntityStructureFinder extends EyeOfEnderEntity {
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
+    public void writeAdditional(CompoundTag compound) {
         super.writeAdditional(compound);
         compound.putInt("color", this.dataManager.get(COLOR));
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
+    public void readAdditional(CompoundTag compound) {
         super.readAdditional(compound);
         this.dataManager.set(COLOR, compound.getInt("color"));
     }
@@ -94,7 +94,7 @@ public class EntityStructureFinder extends EyeOfEnderEntity {
             this.prevRotationYaw += 360.0F;
         this.rotationPitch = MathHelper.lerp(0.2F, this.prevRotationPitch, this.rotationPitch);
         this.rotationYaw = MathHelper.lerp(0.2F, this.prevRotationYaw, this.rotationYaw);
-        if (!this.world.isRemote) {
+        if (!this.level.isClientSide) {
             double d3 = this.targetX - d0;
             double d4 = this.targetZ - d2;
             float f1 = (float) Math.sqrt(d3 * d3 + d4 * d4);
@@ -113,21 +113,21 @@ public class EntityStructureFinder extends EyeOfEnderEntity {
 
         if (this.isInWater()) {
             for (int i = 0; i < 4; ++i)
-                this.world.addParticle(ParticleTypes.BUBBLE, d0 - vec3d.x * 0.25D, d1 - vec3d.y * 0.25D, d2 - vec3d.z * 0.25D, vec3d.x, vec3d.y, vec3d.z);
-        } else if (this.world.isRemote) {
+                this.level.addParticle(ParticleTypes.BUBBLE, d0 - vec3d.x * 0.25D, d1 - vec3d.y * 0.25D, d2 - vec3d.z * 0.25D, vec3d.x, vec3d.y, vec3d.z);
+        } else if (this.level.isClientSide) {
             NaturesAuraAPI.instance().spawnMagicParticle(d0 - vec3d.x * 0.25D + this.rand.nextDouble() * 0.6D - 0.3D, d1 - vec3d.y * 0.25D - 0.5D, d2 - vec3d.z * 0.25D + this.rand.nextDouble() * 0.6D - 0.3D, vec3d.x * 0.25F, vec3d.y * 0.25F, vec3d.z * 0.25F, this.dataManager.get(COLOR), 1, 50, 0, false, true);
         }
 
-        if (!this.world.isRemote) {
+        if (!this.level.isClientSide) {
             this.setPosition(d0, d1, d2);
             ++this.despawnTimer;
-            if (this.despawnTimer > 80 && !this.world.isRemote) {
+            if (this.despawnTimer > 80 && !this.level.isClientSide) {
                 this.playSound(SoundEvents.ENTITY_ENDER_EYE_DEATH, 1.0F, 1.0F);
                 this.remove();
                 if (this.shatterOrDrop) {
-                    this.world.addEntity(new ItemEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), this.getItem()));
+                    this.level.addEntity(new ItemEntity(this.level, this.getPosX(), this.getPosY(), this.getPosZ(), this.getItem()));
                 } else {
-                    PacketHandler.sendToAllAround(this.world, this.getPosition(), 32, new PacketParticles((float) this.getPosX(), (float) this.getPosY(), (float) this.getPosZ(), PacketParticles.Type.STRUCTURE_FINDER, this.getEntityId()));
+                    PacketHandler.sendToAllAround(this.level, this.getPosition(), 32, new PacketParticles((float) this.getPosX(), (float) this.getPosY(), (float) this.getPosZ(), PacketParticles.Type.STRUCTURE_FINDER, this.getEntityId()));
                 }
             }
         } else {

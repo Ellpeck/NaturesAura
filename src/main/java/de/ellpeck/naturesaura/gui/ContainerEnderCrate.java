@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
@@ -10,7 +10,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerEnderCrate extends Container {
 
-    public ContainerEnderCrate(ContainerType<ContainerEnderCrate> type, int id, PlayerEntity player, IItemHandler handler) {
+    public ContainerEnderCrate(ContainerType<ContainerEnderCrate> type, int id, Player player, IItemHandler handler) {
         super(type, id);
         int i = (3 - 4) * 18;
         for (int j = 0; j < 3; ++j)
@@ -24,12 +24,12 @@ public class ContainerEnderCrate extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean canInteractWith(Player playerIn) {
         return true;
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack transferStackInSlot(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
 

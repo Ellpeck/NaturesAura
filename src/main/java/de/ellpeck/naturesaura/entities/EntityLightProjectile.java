@@ -9,22 +9,22 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.math.*;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityLightProjectile extends ThrowableEntity {
-    public EntityLightProjectile(EntityType<? extends ThrowableEntity> type, World worldIn) {
-        super(type, worldIn);
+    public EntityLightProjectile(EntityType<? extends ThrowableEntity> type, Level levelIn) {
+        super(type, levelIn);
     }
 
-    public EntityLightProjectile(EntityType<? extends ThrowableEntity> type, LivingEntity livingEntityIn, World worldIn) {
-        super(type, livingEntityIn, worldIn);
+    public EntityLightProjectile(EntityType<? extends ThrowableEntity> type, LivingEntity livingEntityIn, Level levelIn) {
+        super(type, livingEntityIn, levelIn);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.world.isRemote && this.ticksExisted > 1) {
+        if (this.level.isClientSide && this.ticksExisted > 1) {
             for (float i = 0; i <= 1; i += 0.2F) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
                         MathHelper.lerp(i, this.prevPosX, this.getPosX()),
@@ -38,13 +38,13 @@ public class EntityLightProjectile extends ThrowableEntity {
 
     @Override
     protected void onImpact(RayTraceResult result) {
-        if (!this.world.isRemote) {
+        if (!this.level.isClientSide) {
             if (result instanceof BlockRayTraceResult) {
                 BlockRayTraceResult res = (BlockRayTraceResult) result;
                 BlockPos pos = res.getPos().offset(res.getFace());
-                BlockState state = this.world.getBlockState(pos);
+                BlockState state = this.level.getBlockState(pos);
                 if (state.getMaterial().isReplaceable())
-                    this.world.setBlockState(pos, ModBlocks.LIGHT.getDefaultState());
+                    this.level.setBlockState(pos, ModBlocks.LIGHT.getDefaultState());
             } else if (result instanceof EntityRayTraceResult) {
                 Entity entity = ((EntityRayTraceResult) result).getEntity();
                 entity.setFire(5);

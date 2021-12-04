@@ -10,17 +10,17 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.level.gen.Heightmap;
 
-public class TileEntitySnowCreator extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickableBlockEntity {
 
     private int snowmanCount;
 
-    public TileEntitySnowCreator() {
+    public BlockEntitySnowCreator() {
         super(ModTileEntities.SNOW_CREATOR);
     }
 
@@ -40,67 +40,67 @@ public class TileEntitySnowCreator extends TileEntityImpl implements ITickableTi
         if (range <= 0)
             return;
 
-        if (!this.world.isRemote) {
-            if (this.world.getGameTime() % 10 != 0)
+        if (!this.level.isClientSide) {
+            if (this.level.getGameTime() % 10 != 0)
                 return;
 
             for (int i = 0; i < 10; i++) {
-                double angle = this.world.rand.nextFloat() * Math.PI * 2;
-                BlockPos pos = this.pos.add(Math.cos(angle) * range * this.world.rand.nextFloat(), 0, Math.sin(angle) * range * this.world.rand.nextFloat());
-                pos = this.world.getHeight(Heightmap.Type.MOTION_BLOCKING, pos);
+                double angle = this.level.rand.nextFloat() * Math.PI * 2;
+                BlockPos pos = this.worldPosition.add(Math.cos(angle) * range * this.level.rand.nextFloat(), 0, Math.sin(angle) * range * this.level.rand.nextFloat());
+                pos = this.level.getHeight(Heightmap.Type.MOTION_BLOCKING, pos);
                 BlockPos down = pos.down();
 
-                Fluid fluid = this.world.getFluidState(down).getFluid();
+                Fluid fluid = this.level.getFluidState(down).getFluid();
                 if (fluid == Fluids.WATER) {
-                    if (this.world.getBlockState(down).getMaterial().isReplaceable())
-                        this.world.setBlockState(down, Blocks.ICE.getDefaultState());
-                } else if (Blocks.SNOW.getDefaultState().isValidPosition(this.world, pos) && this.world.getBlockState(pos).getBlock() != Blocks.SNOW && this.world.getBlockState(pos).getMaterial().isReplaceable()) {
-                    this.world.setBlockState(pos, Blocks.SNOW.getDefaultState());
+                    if (this.level.getBlockState(down).getMaterial().isReplaceable())
+                        this.level.setBlockState(down, Blocks.ICE.getDefaultState());
+                } else if (Blocks.SNOW.getDefaultState().isValidPosition(this.level, pos) && this.level.getBlockState(pos).getBlock() != Blocks.SNOW && this.level.getBlockState(pos).getMaterial().isReplaceable()) {
+                    this.level.setBlockState(pos, Blocks.SNOW.getDefaultState());
 
-                    if (this.snowmanCount < range / 2 && this.world.rand.nextFloat() >= 0.995F) {
+                    if (this.snowmanCount < range / 2 && this.level.rand.nextFloat() >= 0.995F) {
                         this.snowmanCount++;
-                        Entity golem = new SnowGolemEntity(EntityType.SNOW_GOLEM, this.world);
+                        Entity golem = new SnowGolemEntity(EntityType.SNOW_GOLEM, this.level);
                         golem.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
-                        this.world.addEntity(golem);
+                        this.level.addEntity(golem);
                     }
                 } else {
                     continue;
                 }
 
-                BlockPos auraPos = IAuraChunk.getHighestSpot(this.world, this.pos, 30, this.pos);
-                IAuraChunk.getAuraChunk(this.world, auraPos).drainAura(auraPos, 300);
+                BlockPos auraPos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 30, this.worldPosition);
+                IAuraChunk.getAuraChunk(this.level, auraPos).drainAura(auraPos, 300);
 
-                PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                        new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.SNOW_CREATOR));
+                PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
+                        new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.SNOW_CREATOR));
                 break;
             }
         } else {
-            if (this.world.getGameTime() % 30 != 0)
+            if (this.level.getGameTime() % 30 != 0)
                 return;
             for (int i = range * 4; i >= 0; i--) {
-                double angle = this.world.rand.nextFloat() * Math.PI * 2;
-                BlockPos pos = this.pos.add(
-                        Math.cos(angle) * range * this.world.rand.nextFloat(),
-                        MathHelper.nextInt(this.world.rand, range / 2, range),
-                        Math.sin(angle) * range * this.world.rand.nextFloat());
+                double angle = this.level.rand.nextFloat() * Math.PI * 2;
+                BlockPos pos = this.worldPosition.add(
+                        Math.cos(angle) * range * this.level.rand.nextFloat(),
+                        MathHelper.nextInt(this.level.rand, range / 2, range),
+                        Math.sin(angle) * range * this.level.rand.nextFloat());
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        pos.getX() + this.world.rand.nextFloat(), pos.getY() + 1, pos.getZ() + this.world.rand.nextFloat(),
-                        this.world.rand.nextGaussian() * 0.05, 0, this.world.rand.nextGaussian() * 0.05,
-                        0xdbe9ff, 1 + this.world.rand.nextFloat() * 1.5F, 10 * range, 0.05F + this.world.rand.nextFloat() * 0.05F, true, true
+                        pos.getX() + this.level.rand.nextFloat(), pos.getY() + 1, pos.getZ() + this.level.rand.nextFloat(),
+                        this.level.rand.nextGaussian() * 0.05, 0, this.level.rand.nextGaussian() * 0.05,
+                        0xdbe9ff, 1 + this.level.rand.nextFloat() * 1.5F, 10 * range, 0.05F + this.level.rand.nextFloat() * 0.05F, true, true
                 );
             }
         }
     }
 
     @Override
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type == SaveType.TILE)
             compound.putInt("snowman_count", this.snowmanCount);
     }
 
     @Override
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
         if (type == SaveType.TILE)
             this.snowmanCount = compound.getInt("snowman_count");

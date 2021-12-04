@@ -58,7 +58,7 @@ public class PatchouliCompat implements ICompat {
     }
 
     public static <T extends IRecipe<?>> T getRecipe(String type, String name) {
-        RecipeManager manager = Minecraft.getInstance().world.getRecipeManager();
+        RecipeManager manager = Minecraft.getInstance().level.getRecipeManager();
         ResourceLocation res = new ResourceLocation(name);
         ResourceLocation pre = new ResourceLocation(res.getNamespace(), type + "/" + res.getPath());
         return (T) manager.getRecipe(pre).orElse(null);

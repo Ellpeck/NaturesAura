@@ -1,15 +1,15 @@
 package de.ellpeck.naturesaura.api.multiblock;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import java.util.Map;
 import java.util.function.BiFunction;
 
 public interface IMultiblock {
 
-    boolean isComplete(World world, BlockPos center);
+    boolean isComplete(Level level, BlockPos center);
 
     boolean forEach(BlockPos center, char c, BiFunction<BlockPos, Matcher, Boolean> function);
 

@@ -1,18 +1,18 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Direction;
 
-public class TileEntityProjectileGenerator extends TileEntityImpl {
+public class BlockEntityProjectileGenerator extends BlockEntityImpl {
 
     public Direction nextSide = Direction.NORTH;
 
-    public TileEntityProjectileGenerator() {
+    public BlockEntityProjectileGenerator() {
         super(ModTileEntities.PROJECTILE_GENERATOR);
     }
 
     @Override
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             compound.putInt("next_side", this.nextSide.getHorizontalIndex());
@@ -20,7 +20,7 @@ public class TileEntityProjectileGenerator extends TileEntityImpl {
     }
 
     @Override
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.nextSide = Direction.byHorizontalIndex(compound.getInt("next_side"));

@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.items.tools;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityWoodStand;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityWoodStand;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
@@ -10,11 +10,11 @@ import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -45,10 +45,10 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
+    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
         if (itemstack.getItem() == ModItems.SKY_AXE) {
-            if (player.world.getBlockState(pos).getBlock().getTags().contains(BlockTags.LOGS.getName())) {
-                TileEntityWoodStand.recurseTreeDestruction(player.world, pos, pos, false, true);
+            if (player.level.getBlockState(pos).getBlock().getTags().contains(BlockTags.LOGS.getName())) {
+                BlockEntityWoodStand.recurseTreeDestruction(player.level, pos, pos, false, true);
                 return true;
             }
         }
@@ -57,7 +57,7 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return Helper.makeRechargeProvider(stack, true);
     }
 

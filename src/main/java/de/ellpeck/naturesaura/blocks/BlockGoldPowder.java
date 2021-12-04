@@ -21,11 +21,11 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.util.math.shapes.Shapes;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.ILevel;
+import net.minecraft.level.ILevelReader;
+import net.minecraft.level.Level;
 
 import java.util.function.Supplier;
 
@@ -71,39 +71,39 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
 
     @Override
     public IBlockColor getBlockColor() {
-        return (state, worldIn, pos, tintIndex) -> 0xf4cb42;
+        return (state, levelIn, pos, tintIndex) -> 0xf4cb42;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
         return SHAPES[getShapeIndex(state)];
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        IBlockReader iblockreader = context.getWorld();
+        IBlockReader iblockreader = context.getLevel();
         BlockPos blockpos = context.getPos();
         return this.getDefaultState().with(WEST, this.getSide(iblockreader, blockpos, Direction.WEST)).with(EAST, this.getSide(iblockreader, blockpos, Direction.EAST)).with(NORTH, this.getSide(iblockreader, blockpos, Direction.NORTH)).with(SOUTH, this.getSide(iblockreader, blockpos, Direction.SOUTH));
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, ILevel levelIn, BlockPos currentPos, BlockPos facingPos) {
         if (facing == Direction.DOWN) {
             return stateIn;
         } else {
-            return facing == Direction.UP ? stateIn.with(WEST, this.getSide(worldIn, currentPos, Direction.WEST)).with(EAST, this.getSide(worldIn, currentPos, Direction.EAST)).with(NORTH, this.getSide(worldIn, currentPos, Direction.NORTH)).with(SOUTH, this.getSide(worldIn, currentPos, Direction.SOUTH)) : stateIn.with(RedstoneWireBlock.FACING_PROPERTY_MAP.get(facing), this.getSide(worldIn, currentPos, facing));
+            return facing == Direction.UP ? stateIn.with(WEST, this.getSide(levelIn, currentPos, Direction.WEST)).with(EAST, this.getSide(levelIn, currentPos, Direction.EAST)).with(NORTH, this.getSide(levelIn, currentPos, Direction.NORTH)).with(SOUTH, this.getSide(levelIn, currentPos, Direction.SOUTH)) : stateIn.with(RedstoneWireBlock.FACING_PROPERTY_MAP.get(facing), this.getSide(levelIn, currentPos, facing));
         }
     }
 
-    private RedstoneSide getSide(IBlockReader worldIn, BlockPos pos, Direction face) {
+    private RedstoneSide getSide(IBlockReader levelIn, BlockPos pos, Direction face) {
         BlockPos blockpos = pos.offset(face);
-        BlockState blockstate = worldIn.getBlockState(blockpos);
+        BlockState blockstate = levelIn.getBlockState(blockpos);
         BlockPos blockpos1 = pos.up();
-        BlockState blockstate1 = worldIn.getBlockState(blockpos1);
-        if (!blockstate1.isNormalCube(worldIn, blockpos1)) {
-            boolean flag = blockstate.isSolidSide(worldIn, blockpos, Direction.UP) || blockstate.getBlock() == Blocks.HOPPER;
-            if (flag && this.canConnectTo(worldIn.getBlockState(blockpos.up()))) {
-                if (blockstate.hasOpaqueCollisionShape(worldIn, blockpos)) {
+        BlockState blockstate1 = levelIn.getBlockState(blockpos1);
+        if (!blockstate1.isNormalCube(levelIn, blockpos1)) {
+            boolean flag = blockstate.isSolidSide(levelIn, blockpos, Direction.UP) || blockstate.getBlock() == Blocks.HOPPER;
+            if (flag && this.canConnectTo(levelIn.getBlockState(blockpos.up()))) {
+                if (blockstate.hasOpaqueCollisionShape(levelIn, blockpos)) {
                     return RedstoneSide.UP;
                 }
 
@@ -111,7 +111,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
             }
         }
 
-        return !this.canConnectTo(blockstate) && (blockstate.isNormalCube(worldIn, blockpos) || !this.canConnectTo(worldIn.getBlockState(blockpos.down()))) ? RedstoneSide.NONE : RedstoneSide.SIDE;
+        return !this.canConnectTo(blockstate) && (blockstate.isNormalCube(levelIn, blockpos) || !this.canConnectTo(levelIn.getBlockState(blockpos.down()))) ? RedstoneSide.NONE : RedstoneSide.SIDE;
     }
 
     protected boolean canConnectTo(BlockState blockState) {
@@ -120,32 +120,32 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+    public boolean isValidPosition(BlockState state, ILevelReader levelIn, BlockPos pos) {
         BlockPos blockpos = pos.down();
-        BlockState blockstate = worldIn.getBlockState(blockpos);
-        return blockstate.isSolidSide(worldIn, blockpos, Direction.UP) || blockstate.getBlock() == Blocks.HOPPER;
+        BlockState blockstate = levelIn.getBlockState(blockpos);
+        return blockstate.isSolidSide(levelIn, blockpos, Direction.UP) || blockstate.getBlock() == Blocks.HOPPER;
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return VoxelShapes.empty();
+    public VoxelShape getCollisionShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
+        return Shapes.empty();
     }
 
     @Override
-    public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-        if (oldState.getBlock() != state.getBlock() && !worldIn.isRemote) {
+    public void onBlockAdded(BlockState state, Level levelIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+        if (oldState.getBlock() != state.getBlock() && !levelIn.isClientSide) {
             for (Direction direction : Direction.Plane.VERTICAL) {
-                worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
+                levelIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
             }
             for (Direction direction1 : Direction.Plane.HORIZONTAL) {
-                this.notifyWireNeighborsOfStateChange(worldIn, pos.offset(direction1));
+                this.notifyWireNeighborsOfStateChange(levelIn, pos.offset(direction1));
             }
             for (Direction direction2 : Direction.Plane.HORIZONTAL) {
                 BlockPos blockpos = pos.offset(direction2);
-                if (worldIn.getBlockState(blockpos).isNormalCube(worldIn, blockpos)) {
-                    this.notifyWireNeighborsOfStateChange(worldIn, blockpos.up());
+                if (levelIn.getBlockState(blockpos).isNormalCube(levelIn, blockpos)) {
+                    this.notifyWireNeighborsOfStateChange(levelIn, blockpos.up());
                 } else {
-                    this.notifyWireNeighborsOfStateChange(worldIn, blockpos.down());
+                    this.notifyWireNeighborsOfStateChange(levelIn, blockpos.down());
                 }
             }
 
@@ -153,22 +153,22 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onReplaced(BlockState state, Level levelIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!isMoving && state.getBlock() != newState.getBlock()) {
-            super.onReplaced(state, worldIn, pos, newState, isMoving);
-            if (!worldIn.isRemote) {
+            super.onReplaced(state, levelIn, pos, newState, isMoving);
+            if (!levelIn.isClientSide) {
                 for (Direction direction : Direction.values()) {
-                    worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
+                    levelIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
                 }
                 for (Direction direction1 : Direction.Plane.HORIZONTAL) {
-                    this.notifyWireNeighborsOfStateChange(worldIn, pos.offset(direction1));
+                    this.notifyWireNeighborsOfStateChange(levelIn, pos.offset(direction1));
                 }
                 for (Direction direction2 : Direction.Plane.HORIZONTAL) {
                     BlockPos blockpos = pos.offset(direction2);
-                    if (worldIn.getBlockState(blockpos).isNormalCube(worldIn, blockpos)) {
-                        this.notifyWireNeighborsOfStateChange(worldIn, blockpos.up());
+                    if (levelIn.getBlockState(blockpos).isNormalCube(levelIn, blockpos)) {
+                        this.notifyWireNeighborsOfStateChange(levelIn, blockpos.up());
                     } else {
-                        this.notifyWireNeighborsOfStateChange(worldIn, blockpos.down());
+                        this.notifyWireNeighborsOfStateChange(levelIn, blockpos.down());
                     }
                 }
 
@@ -177,47 +177,47 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     @Override
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        if (!worldIn.isRemote) {
-            if (!state.isValidPosition(worldIn, pos)) {
-                spawnDrops(state, worldIn, pos);
-                worldIn.removeBlock(pos, false);
+    public void neighborChanged(BlockState state, Level levelIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+        if (!levelIn.isClientSide) {
+            if (!state.isValidPosition(levelIn, pos)) {
+                spawnDrops(state, levelIn, pos);
+                levelIn.removeBlock(pos, false);
             }
         }
     }
 
     @Override
-    public void updateDiagonalNeighbors(BlockState state, IWorld worldIn, BlockPos pos, int flags, int recursionLeft) {
+    public void updateDiagonalNeighbors(BlockState state, ILevel levelIn, BlockPos pos, int flags, int recursionLeft) {
         BlockPos.Mutable pool = new BlockPos.Mutable();
         for (Direction direction : Direction.Plane.HORIZONTAL) {
             RedstoneSide redstoneside = state.get(RedstoneWireBlock.FACING_PROPERTY_MAP.get(direction));
-            if (redstoneside != RedstoneSide.NONE && worldIn.getBlockState(pool.setPos(pos).move(direction)).getBlock() != this) {
+            if (redstoneside != RedstoneSide.NONE && levelIn.getBlockState(pool.setPos(pos).move(direction)).getBlock() != this) {
                 pool.move(Direction.DOWN);
-                BlockState blockstate = worldIn.getBlockState(pool);
+                BlockState blockstate = levelIn.getBlockState(pool);
                 if (blockstate.getBlock() != Blocks.OBSERVER) {
                     BlockPos blockpos = pool.offset(direction.getOpposite());
-                    BlockState blockstate1 = blockstate.updatePostPlacement(direction.getOpposite(), worldIn.getBlockState(blockpos), worldIn, pool, blockpos);
-                    replaceBlock(blockstate, blockstate1, worldIn, pool, flags);
+                    BlockState blockstate1 = blockstate.updatePostPlacement(direction.getOpposite(), levelIn.getBlockState(blockpos), levelIn, pool, blockpos);
+                    replaceBlock(blockstate, blockstate1, levelIn, pool, flags);
                 }
 
                 pool.setPos(pos).move(direction).move(Direction.UP);
-                BlockState blockstate3 = worldIn.getBlockState(pool);
+                BlockState blockstate3 = levelIn.getBlockState(pool);
                 if (blockstate3.getBlock() != Blocks.OBSERVER) {
                     BlockPos blockpos1 = pool.offset(direction.getOpposite());
-                    BlockState blockstate2 = blockstate3.updatePostPlacement(direction.getOpposite(), worldIn.getBlockState(blockpos1), worldIn, pool, blockpos1);
-                    replaceBlock(blockstate3, blockstate2, worldIn, pool, flags);
+                    BlockState blockstate2 = blockstate3.updatePostPlacement(direction.getOpposite(), levelIn.getBlockState(blockpos1), levelIn, pool, blockpos1);
+                    replaceBlock(blockstate3, blockstate2, levelIn, pool, flags);
                 }
             }
         }
 
     }
 
-    private void notifyWireNeighborsOfStateChange(World worldIn, BlockPos pos) {
-        if (worldIn.getBlockState(pos).getBlock() == this) {
-            worldIn.notifyNeighborsOfStateChange(pos, this);
+    private void notifyWireNeighborsOfStateChange(Level levelIn, BlockPos pos) {
+        if (levelIn.getBlockState(pos).getBlock() == this) {
+            levelIn.notifyNeighborsOfStateChange(pos, this);
 
             for (Direction direction : Direction.values()) {
-                worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
+                levelIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
             }
         }
     }

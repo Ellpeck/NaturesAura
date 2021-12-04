@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityAncientLeaves;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAncientLeaves;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.BlockState;
@@ -11,11 +11,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.Level;
+import net.minecraft.level.server.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,7 +27,7 @@ public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorP
     public BlockAncientLeaves() {
         super(Properties.create(Material.LEAVES, MaterialColor.PINK).hardnessAndResistance(0.2F).tickRandomly().notSolid().sound(SoundType.PLANT));
         ModRegistry.add(this);
-        ModRegistry.add(new ModTileType<>(TileEntityAncientLeaves::new, this));
+        ModRegistry.add(new ModTileType<>(BlockEntityAncientLeaves::new, this));
     }
 
     @Override
@@ -37,19 +37,19 @@ public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorP
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileEntityAncientLeaves();
+    public BlockEntity createBlockEntity(BlockState state, IBlockReader level) {
+        return new BlockEntityAncientLeaves();
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
+    public boolean hasBlockEntity(BlockState state) {
         return true;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public IBlockColor getBlockColor() {
-        return (state, worldIn, pos, tintIndex) -> 0xE55B97;
+        return (state, levelIn, pos, tintIndex) -> 0xE55B97;
     }
 
     @Override
@@ -60,12 +60,12 @@ public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorP
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        super.animateTick(stateIn, worldIn, pos, rand);
-        if (rand.nextFloat() >= 0.95F && !worldIn.getBlockState(pos.down()).isOpaqueCube(worldIn, pos)) {
-            TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TileEntityAncientLeaves) {
-                if (((TileEntityAncientLeaves) tile).getAuraContainer().getStoredAura() > 0) {
+    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
+        super.animateTick(stateIn, levelIn, pos, rand);
+        if (rand.nextFloat() >= 0.95F && !levelIn.getBlockState(pos.down()).isOpaqueCube(levelIn, pos)) {
+            BlockEntity tile = levelIn.getBlockEntity(pos);
+            if (tile instanceof BlockEntityAncientLeaves) {
+                if (((BlockEntityAncientLeaves) tile).getAuraContainer().getStoredAura() > 0) {
                     NaturesAuraAPI.instance().spawnMagicParticle(
                             pos.getX() + rand.nextDouble(), pos.getY(), pos.getZ() + rand.nextDouble(),
                             0F, 0F, 0F, 0xCC4780,
@@ -79,13 +79,13 @@ public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorP
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        super.randomTick(state, worldIn, pos, random);
-        if (!worldIn.isRemote) {
-            TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TileEntityAncientLeaves) {
-                if (((TileEntityAncientLeaves) tile).getAuraContainer().getStoredAura() <= 0) {
-                    worldIn.setBlockState(pos, ModBlocks.DECAYED_LEAVES.getDefaultState());
+    public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
+        super.randomTick(state, levelIn, pos, random);
+        if (!levelIn.isClientSide) {
+            BlockEntity tile = levelIn.getBlockEntity(pos);
+            if (tile instanceof BlockEntityAncientLeaves) {
+                if (((BlockEntityAncientLeaves) tile).getAuraContainer().getStoredAura() <= 0) {
+                    levelIn.setBlockState(pos, ModBlocks.DECAYED_LEAVES.getDefaultState());
                 }
             }
         }

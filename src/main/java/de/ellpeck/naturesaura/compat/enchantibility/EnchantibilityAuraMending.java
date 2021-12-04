@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.compat.enchantibility;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
@@ -13,14 +13,14 @@ public class EnchantibilityAuraMending extends AbstractEnchantEffect {
 
     public static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "aura_mending");
 
-    public EnchantibilityAuraMending(PlayerEntity player, Enchantment enchantment, int level) {
+    public EnchantibilityAuraMending(Player player, Enchantment enchantment, int level) {
         super(player, enchantment, level);
     }
 
     public static void onPlayerTick(EnchantibilityAuraMending enchant, PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END)
             return;
-        if (event.player.world.isRemote || event.player.world.getGameTime() % 10 != 0)
+        if (event.player.level.isClientSide || event.player.level.getGameTime() % 10 != 0)
             return;
         if (!event.player.isSneaking() || event.player.getHealth() >= event.player.getMaxHealth())
             return;

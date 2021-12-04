@@ -46,7 +46,7 @@ public final class ModConfig {
     public ConfigValue<Integer> auraBarLocation;
     public ConfigValue<Integer> cacheBarLocation;
     public ConfigValue<Boolean> debugText;
-    public ConfigValue<Boolean> debugWorld;
+    public ConfigValue<Boolean> debugLevel;
     public ConfigValue<Boolean> renderItemsOnPlayer;
 
     public ModConfig(ForgeConfigSpec.Builder builder) {
@@ -131,7 +131,7 @@ public final class ModConfig {
                 .translation("config." + NaturesAura.MOD_ID + ".oreEffect")
                 .define("oreEffect", true);
         this.auraBlooms = builder
-                .comment("If Aura Blooms and Aura Cacti should generate in the world")
+                .comment("If Aura Blooms and Aura Cacti should generate in the level")
                 .translation("config." + NaturesAura.MOD_ID + ".auraBlooms")
                 .define("auraBlooms", true);
         this.netherGrassEffect = builder
@@ -165,10 +165,10 @@ public final class ModConfig {
                 .comment("If debug information about Aura around the player should be displayed in the F3 debug menu if the player is in creative mode")
                 .translation("config." + NaturesAura.MOD_ID + ".debugText")
                 .define("debugText", true);
-        this.debugWorld = builder
-                .comment("If, when the F3 debug menu is open and the player is in creative mode, every Aura spot should be highlighted in the world for debug purposes")
-                .translation("config." + NaturesAura.MOD_ID + ".debugWorld")
-                .define("debugWorld", false);
+        this.debugLevel = builder
+                .comment("If, when the F3 debug menu is open and the player is in creative mode, every Aura spot should be highlighted in the level for debug purposes")
+                .translation("config." + NaturesAura.MOD_ID + ".debugLevel")
+                .define("debugLevel", false);
         this.renderItemsOnPlayer = builder
                 .comment("If certain equippable items, like the Environmental Eye, should be rendered on the player")
                 .translation("config." + NaturesAura.MOD_ID + ".renderItemsOnPlayer")

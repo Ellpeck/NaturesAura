@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityFieldCreator;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityFieldCreator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ICustomRenderType;
@@ -10,15 +10,15 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tileentity.BlockEntity;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,28 +27,28 @@ import java.util.function.Supplier;
 
 public class BlockFieldCreator extends BlockContainerImpl implements ICustomBlockState, ICustomRenderType {
     public BlockFieldCreator() {
-        super("field_creator", TileEntityFieldCreator::new, Properties.create(Material.ROCK).hardnessAndResistance(2F).notSolid().sound(SoundType.STONE));
+        super("field_creator", BlockEntityFieldCreator::new, Properties.create(Material.ROCK).hardnessAndResistance(2F).notSolid().sound(SoundType.STONE));
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult p_225533_6_) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileEntityFieldCreator) {
-            if (!worldIn.isRemote) {
+    public InteractionResult onBlockActivated(BlockState state, Level levelIn, BlockPos pos, Player player, Hand handIn, BlockRayTraceResult p_225533_6_) {
+        BlockEntity tile = levelIn.getBlockEntity(pos);
+        if (tile instanceof BlockEntityFieldCreator) {
+            if (!levelIn.isClientSide) {
                 String key = NaturesAura.MOD_ID + ":field_creator_pos";
-                CompoundNBT compound = player.getPersistentData();
+                CompoundTag compound = player.getPersistentData();
                 if (!player.isSneaking() && compound.contains(key)) {
                     BlockPos stored = BlockPos.fromLong(compound.getLong(key));
-                    TileEntityFieldCreator creator = (TileEntityFieldCreator) tile;
+                    BlockEntityFieldCreator creator = (BlockEntityFieldCreator) tile;
                     if (!pos.equals(stored)) {
                         if (creator.isCloseEnough(stored)) {
-                            TileEntity otherTile = worldIn.getTileEntity(stored);
-                            if (otherTile instanceof TileEntityFieldCreator) {
+                            BlockEntity otherTile = levelIn.getBlockEntity(stored);
+                            if (otherTile instanceof BlockEntityFieldCreator) {
                                 creator.connectionOffset = stored.subtract(pos);
                                 creator.isMain = true;
                                 creator.sendToClients();
 
-                                TileEntityFieldCreator otherCreator = (TileEntityFieldCreator) otherTile;
+                                BlockEntityFieldCreator otherCreator = (BlockEntityFieldCreator) otherTile;
                                 otherCreator.connectionOffset = pos.subtract(stored);
                                 otherCreator.isMain = false;
                                 otherCreator.sendToClients();
@@ -66,17 +66,17 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
                     player.sendStatusMessage(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".stored_pos"), true);
                 }
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileEntityFieldCreator) {
-            TileEntityFieldCreator creator = (TileEntityFieldCreator) tile;
+    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
+        BlockEntity tile = levelIn.getBlockEntity(pos);
+        if (tile instanceof BlockEntityFieldCreator) {
+            BlockEntityFieldCreator creator = (BlockEntityFieldCreator) tile;
             if (creator.isCharged) {
                 BlockPos connected = creator.getConnectedPos();
                 if (connected != null)

@@ -71,7 +71,7 @@ public class JEINaturesAuraPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        RecipeManager manager = Minecraft.getInstance().world.getRecipeManager();
+        RecipeManager manager = Minecraft.getInstance().level.getRecipeManager();
         registration.addRecipes(manager.getRecipes(ModRecipes.TREE_RITUAL_TYPE, null, null), TREE_RITUAL);
         registration.addRecipes(manager.getRecipes(ModRecipes.ALTAR_TYPE, null, null), ALTAR);
         registration.addRecipes(manager.getRecipes(ModRecipes.OFFERING_TYPE, null, null), OFFERING);

@@ -3,22 +3,22 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityAnimalGenerator extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityAnimalGenerator extends BlockEntityImpl implements ITickableBlockEntity {
 
     private int timeRemaining;
     private int amountToRelease;
 
-    public TileEntityAnimalGenerator() {
+    public BlockEntityAnimalGenerator() {
         super(ModTileEntities.ANIMAL_GENERATOR);
     }
 
     @Override
     public void tick() {
-        if (!this.world.isRemote) {
-            if (this.world.getGameTime() % 10 != 0)
+        if (!this.level.isClientSide) {
+            if (this.level.getGameTime() % 10 != 0)
                 return;
             if (this.timeRemaining <= 0)
                 return;
@@ -26,8 +26,8 @@ public class TileEntityAnimalGenerator extends TileEntityImpl implements ITickab
             int remain = this.amountToRelease;
             if (this.canGenerateRightNow(remain)) {
                 this.generateAura(remain);
-                PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                        new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.ANIMAL_GEN_CREATE));
+                PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
+                        new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.ANIMAL_GEN_CREATE));
             }
 
             this.timeRemaining -= 10;

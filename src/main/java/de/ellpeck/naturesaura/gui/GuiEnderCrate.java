@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class GuiEnderCrate extends ContainerScreen<ContainerEnderCrate> {
     private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
-    private final PlayerEntity player;
+    private final Player player;
 
     public GuiEnderCrate(ContainerEnderCrate container, PlayerInventory inv, ITextComponent title) {
         super(container, inv, title);

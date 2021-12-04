@@ -3,9 +3,9 @@ package de.ellpeck.naturesaura.chunk;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Direction;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.level.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -14,7 +14,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AuraChunkProvider implements ICapabilityProvider, INBTSerializable<CompoundNBT> {
+public class AuraChunkProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
     private final Chunk chunk;
     private final LazyOptional<IAuraChunk> lazyChunk = LazyOptional.of(this::getAuraChunk);
@@ -26,7 +26,7 @@ public class AuraChunkProvider implements ICapabilityProvider, INBTSerializable<
 
     private IAuraChunk getAuraChunk() {
         if (this.auraChunk == null)
-            this.auraChunk = new AuraChunk(this.chunk, IAuraType.forWorld(this.chunk.getWorld()));
+            this.auraChunk = new AuraChunk(this.chunk, IAuraType.forLevel(this.chunk.getLevel()));
         return this.auraChunk;
     }
 
@@ -37,12 +37,12 @@ public class AuraChunkProvider implements ICapabilityProvider, INBTSerializable<
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
+    public CompoundTag serializeNBT() {
         return this.getAuraChunk().serializeNBT();
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         this.getAuraChunk().deserializeNBT(nbt);
     }
 }

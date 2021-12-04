@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityPickupStopper;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityPickupStopper;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
@@ -10,11 +10,11 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,21 +23,21 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
     public BlockPickupStopper() {
-        super("pickup_stopper", TileEntityPickupStopper::new, Properties.create(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
+        super("pickup_stopper", BlockEntityPickupStopper::new, Properties.create(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
     public void onPickup(EntityItemPickupEvent event) {
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
         if (player != null && !player.isSneaking()) {
             ItemEntity item = event.getItem();
             BlockPos pos = item.getPosition();
-            Helper.getTileEntitiesInArea(item.world, pos, 8, tile -> {
-                if (!(tile instanceof TileEntityPickupStopper))
+            Helper.getTileEntitiesInArea(item.level, pos, 8, tile -> {
+                if (!(tile instanceof BlockEntityPickupStopper))
                     return false;
-                TileEntityPickupStopper stopper = (TileEntityPickupStopper) tile;
+                BlockEntityPickupStopper stopper = (BlockEntityPickupStopper) tile;
                 float radius = stopper.getRadius();
                 if (radius <= 0F)
                     return false;
@@ -47,8 +47,8 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
 
                 event.setCanceled(true);
 
-                if (item.world.getGameTime() % 3 == 0)
-                    PacketHandler.sendToAllAround(item.world, pos, 32,
+                if (item.level.getGameTime() % 3 == 0)
+                    PacketHandler.sendToAllAround(item.level, pos, 32,
                             new PacketParticles((float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.PICKUP_STOPPER));
                 return true;
             });
@@ -57,10 +57,10 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getVisualizationBounds(World world, BlockPos pos) {
-        TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileEntityPickupStopper) {
-            double radius = ((TileEntityPickupStopper) tile).getRadius();
+    public AxisAlignedBB getVisualizationBounds(Level level, BlockPos pos) {
+        BlockEntity tile = level.getBlockEntity(pos);
+        if (tile instanceof BlockEntityPickupStopper) {
+            double radius = ((BlockEntityPickupStopper) tile).getRadius();
             if (radius > 0)
                 return new AxisAlignedBB(pos).grow(radius);
         }
@@ -69,7 +69,7 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public int getVisualizationColor(World world, BlockPos pos) {
+    public int getVisualizationColor(Level level, BlockPos pos) {
         return 0xf4aa42;
     }
 

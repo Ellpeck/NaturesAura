@@ -10,14 +10,14 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.ITickableBlockEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.server.ServerLevel;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -27,24 +27,24 @@ import net.minecraftforge.items.IItemHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileEntityPlacer extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityPlacer extends BlockEntityImpl implements ITickableBlockEntity {
 
-    public TileEntityPlacer() {
+    public BlockEntityPlacer() {
         super(ModTileEntities.PLACER);
     }
 
     @Override
     public void tick() {
-        if (!this.world.isRemote && this.world.getGameTime() % 15 == 0) {
+        if (!this.level.isClientSide && this.level.getGameTime() % 15 == 0) {
             if (this.redstonePower > 0)
                 return;
-            TileEntity tileUp = this.world.getTileEntity(this.pos.up());
+            BlockEntity tileUp = this.level.getBlockEntity(this.worldPosition.up());
             if (tileUp == null)
                 return;
             IItemHandler handler = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN).orElse(null);
             if (handler == null)
                 return;
-            List<ItemFrameEntity> frames = Helper.getAttachedItemFrames(this.world, this.pos);
+            List<ItemFrameEntity> frames = Helper.getAttachedItemFrames(this.level, this.worldPosition);
             if (frames.isEmpty())
                 return;
 
@@ -53,12 +53,12 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickableTileEnt
             for (int x = -range; x <= range; x++)
                 for (int y = -range; y <= range; y++)
                     for (int z = -range; z <= range; z++) {
-                        BlockPos pos = this.pos.add(x, y, z);
-                        if (!this.framesContain(frames, pos, this.world.getBlockState(pos)))
+                        BlockPos pos = this.worldPosition.add(x, y, z);
+                        if (!this.framesContain(frames, pos, this.level.getBlockState(pos)))
                             continue;
 
                         BlockPos up = pos.up();
-                        BlockState state = this.world.getBlockState(up);
+                        BlockState state = this.level.getBlockState(up);
                         if (state.getMaterial().isReplaceable())
                             validPositions.add(up);
                     }
@@ -70,16 +70,16 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickableTileEnt
                 if (stack.isEmpty())
                     continue;
 
-                BlockPos pos = validPositions.get(this.world.rand.nextInt(validPositions.size()));
+                BlockPos pos = validPositions.get(this.level.rand.nextInt(validPositions.size()));
                 ItemStack left = this.tryPlace(stack.copy(), pos);
                 if (ItemStack.areItemStacksEqual(stack, left))
                     continue;
 
                 handler.extractItem(i, 1, false);
-                BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 10, this.pos);
-                IAuraChunk.getAuraChunk(this.world, spot).drainAura(spot, 1000);
+                BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 10, this.worldPosition);
+                IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, 1000);
 
-                PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), PacketParticles.Type.PLACER_PLACING));
+                PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), PacketParticles.Type.PLACER_PLACING));
 
                 return;
             }
@@ -87,7 +87,7 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickableTileEnt
     }
 
     private boolean framesContain(List<ItemFrameEntity> frames, BlockPos pos, BlockState state) {
-        ItemStack stack = state.getBlock().getItem(this.world, pos, state);
+        ItemStack stack = state.getBlock().getItem(this.level, pos, state);
         if (stack.isEmpty())
             return false;
 
@@ -105,12 +105,12 @@ public class TileEntityPlacer extends TileEntityImpl implements ITickableTileEnt
     }
 
     private ItemStack tryPlace(ItemStack stack, BlockPos pos) {
-        if (!(this.world instanceof ServerWorld))
+        if (!(this.level instanceof ServerLevel))
             return stack;
-        FakePlayer fake = FakePlayerFactory.getMinecraft((ServerWorld) this.world);
+        FakePlayer fake = FakePlayerFactory.getMinecraft((ServerLevel) this.level);
         fake.inventory.mainInventory.set(fake.inventory.currentItem, stack);
         BlockRayTraceResult ray = new BlockRayTraceResult(Vector3d.copyCentered(pos), Direction.UP, pos, false);
-        ForgeHooks.onPlaceItemIntoWorld(new ItemUseContext(fake, Hand.MAIN_HAND, ray));
+        ForgeHooks.onPlaceItemIntoLevel(new ItemUseContext(fake, Hand.MAIN_HAND, ray));
         return fake.getHeldItemMainhand().copy();
     }
 }

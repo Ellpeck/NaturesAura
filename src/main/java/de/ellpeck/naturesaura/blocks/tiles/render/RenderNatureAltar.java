@@ -1,22 +1,22 @@
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityNatureAltar;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityNatureAltar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.tileentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.tileentity.BlockEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Vector3f;
 
-public class RenderNatureAltar extends TileEntityRenderer<TileEntityNatureAltar> {
-    public RenderNatureAltar(TileEntityRendererDispatcher rendererDispatcherIn) {
+public class RenderNatureAltar extends BlockEntityRenderer<BlockEntityNatureAltar> {
+    public RenderNatureAltar(BlockEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);
     }
 
     @Override
-    public void render(TileEntityNatureAltar tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(BlockEntityNatureAltar tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         ItemStack stack = tileEntityIn.items.getStackInSlot(0);
         if (!stack.isEmpty()) {
             matrixStackIn.push();

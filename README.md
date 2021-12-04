@@ -1,7 +1,7 @@
 # NaturesAura
 
 Nature's Aura is a mod about collecting, using and replenishing the Aura
-naturally present in the world to create useful devices and unique mechanics.
+naturally present in the level to create useful devices and unique mechanics.
 
 ## Maven
 

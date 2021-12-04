@@ -12,10 +12,10 @@ import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -25,7 +25,7 @@ import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Queue;
 
-public class TileEntityOfferingTable extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickableBlockEntity {
     public final ItemStackHandler items = new ItemStackHandlerNA(1, this, true) {
         @Override
         public int getSlotLimit(int slot) {
@@ -34,12 +34,12 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
     };
     private final Queue<ItemStack> itemsToSpawn = new ArrayDeque<>();
 
-    public TileEntityOfferingTable() {
+    public BlockEntityOfferingTable() {
         super(ModTileEntities.OFFERING_TABLE);
     }
 
     private OfferingRecipe getRecipe(ItemStack input) {
-        for (OfferingRecipe recipe : this.world.getRecipeManager().getRecipes(ModRecipes.OFFERING_TYPE, null, null))
+        for (OfferingRecipe recipe : this.level.getRecipeManager().getRecipes(ModRecipes.OFFERING_TYPE, null, null))
             if (recipe.input.test(input))
                 return recipe;
         return null;
@@ -47,16 +47,16 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
 
     @Override
     public void tick() {
-        if (!this.world.isRemote) {
-            if (this.world.getGameTime() % 20 == 0) {
-                if (!Multiblocks.OFFERING_TABLE.isComplete(this.world, this.pos))
+        if (!this.level.isClientSide) {
+            if (this.level.getGameTime() % 20 == 0) {
+                if (!Multiblocks.OFFERING_TABLE.isComplete(this.level, this.worldPosition))
                     return;
 
                 ItemStack stack = this.items.getStackInSlot(0);
                 if (stack.isEmpty())
                     return;
 
-                List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(this.pos).grow(1));
+                List<ItemEntity> items = this.level.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(this.worldPosition).grow(1));
                 if (items.isEmpty())
                     return;
 
@@ -84,33 +84,33 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
                     for (int i = 0; i < recipeCount; i++)
                         this.itemsToSpawn.add(recipe.output.copy());
 
-                    if (Multiblocks.OFFERING_TABLE.forEach(this.pos, 'R', (pos, m) -> this.world.getBlockState(pos).getBlock() == Blocks.WITHER_ROSE)) {
-                        for (int i = this.world.rand.nextInt(5) + 3; i >= 0; i--)
+                    if (Multiblocks.OFFERING_TABLE.forEach(this.worldPosition, 'R', (pos, m) -> this.level.getBlockState(pos).getBlock() == Blocks.WITHER_ROSE)) {
+                        for (int i = this.level.rand.nextInt(5) + 3; i >= 0; i--)
                             this.itemsToSpawn.add(new ItemStack(Items.BLACK_DYE));
                     }
 
-                    LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.world);
+                    LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level);
                     lightningboltentity.setEffectOnly(true);
-                    lightningboltentity.moveForced(Vector3d.copyCenteredHorizontally(this.pos));
-                    this.world.addEntity(lightningboltentity);
-                    PacketHandler.sendToAllAround(this.world, this.pos, 32, new PacketParticles(
+                    lightningboltentity.moveForced(Vector3d.copyCenteredHorizontally(this.worldPosition));
+                    this.level.addEntity(lightningboltentity);
+                    PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(
                             (float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.OFFERING_TABLE,
-                            this.pos.getX(), this.pos.getY(), this.pos.getZ()));
+                            this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()));
 
                     break;
                 }
-            } else if (this.world.getGameTime() % 3 == 0) {
+            } else if (this.level.getGameTime() % 3 == 0) {
                 if (!this.itemsToSpawn.isEmpty())
-                    this.world.addEntity(new ItemEntity(
-                            this.world,
-                            this.pos.getX() + 0.5F, 256, this.pos.getZ() + 0.5F,
+                    this.level.addEntity(new ItemEntity(
+                            this.level,
+                            this.worldPosition.getX() + 0.5F, 256, this.worldPosition.getZ() + 0.5F,
                             this.itemsToSpawn.remove()));
             }
         }
     }
 
     @Override
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             compound.put("items", this.items.serializeNBT());
@@ -126,7 +126,7 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
     }
 
     @Override
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.items.deserializeNBT(compound.getCompound("items"));
@@ -135,7 +135,7 @@ public class TileEntityOfferingTable extends TileEntityImpl implements ITickable
                 this.itemsToSpawn.clear();
                 ListNBT list = compound.getList("items_to_spawn", 10);
                 for (INBT base : list) {
-                    this.itemsToSpawn.add(ItemStack.read((CompoundNBT) base));
+                    this.itemsToSpawn.add(ItemStack.read((CompoundTag) base));
                 }
             }
         }

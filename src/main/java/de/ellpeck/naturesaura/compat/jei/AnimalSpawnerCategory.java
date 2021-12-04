@@ -126,7 +126,7 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
         Minecraft minecraft = Minecraft.getInstance();
         Entity entity = this.entityCache.get(recipe.entity);
         if (entity == null) {
-            entity = recipe.makeEntity(minecraft.world, BlockPos.ZERO);
+            entity = recipe.makeEntity(minecraft.level, BlockPos.ZERO);
             this.entityCache.put(recipe.entity, entity);
         }
 

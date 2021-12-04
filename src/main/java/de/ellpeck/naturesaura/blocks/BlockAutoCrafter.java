@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityAutoCrafter;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAutoCrafter;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.Block;
@@ -16,7 +16,7 @@ public class BlockAutoCrafter extends BlockContainerImpl implements ICustomBlock
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockAutoCrafter() {
-        super("auto_crafter", TileEntityAutoCrafter::new, Properties.create(Material.WOOD).hardnessAndResistance(1.5F).sound(SoundType.WOOD));
+        super("auto_crafter", BlockEntityAutoCrafter::new, Properties.create(Material.WOOD).hardnessAndResistance(1.5F).sound(SoundType.WOOD));
     }
 
     @Override

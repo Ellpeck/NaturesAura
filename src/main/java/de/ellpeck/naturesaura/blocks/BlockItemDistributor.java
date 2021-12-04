@@ -1,37 +1,37 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityItemDistributor;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityItemDistributor;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.entity.player.Player;
+import net.minecraft.tileentity.BlockEntity;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 
 public class BlockItemDistributor extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockItemDistributor() {
-        super("item_distributor", TileEntityItemDistributor::new, Properties.from(Blocks.STONE_BRICKS));
+        super("item_distributor", BlockEntityItemDistributor::new, Properties.from(Blocks.STONE_BRICKS));
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public InteractionResult onBlockActivated(BlockState state, Level levelIn, BlockPos pos, Player player, Hand handIn, BlockRayTraceResult hit) {
         if (!player.isSneaking())
-            return ActionResultType.FAIL;
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (!(tile instanceof TileEntityItemDistributor))
-            return ActionResultType.FAIL;
-        if (!worldIn.isRemote) {
-            TileEntityItemDistributor distributor = (TileEntityItemDistributor) tile;
+            return InteractionResult.FAIL;
+        BlockEntity tile = levelIn.getBlockEntity(pos);
+        if (!(tile instanceof BlockEntityItemDistributor))
+            return InteractionResult.FAIL;
+        if (!levelIn.isClientSide) {
+            BlockEntityItemDistributor distributor = (BlockEntityItemDistributor) tile;
             distributor.isRandomMode = !distributor.isRandomMode;
             distributor.sendToClients();
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override

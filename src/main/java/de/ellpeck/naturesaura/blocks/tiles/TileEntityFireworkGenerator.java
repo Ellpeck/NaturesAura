@@ -8,10 +8,10 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -22,23 +22,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class TileEntityFireworkGenerator extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITickableBlockEntity {
 
     private FireworkRocketEntity trackedEntity;
     private ItemStack trackedItem;
     private int toRelease;
     private int releaseTimer;
 
-    public TileEntityFireworkGenerator() {
+    public BlockEntityFireworkGenerator() {
         super(ModTileEntities.FIREWORK_GENERATOR);
     }
 
     @Override
     public void tick() {
-        if (!this.world.isRemote) {
-            if (this.world.getGameTime() % 10 == 0) {
-                List<ItemEntity> items = this.world.getEntitiesWithinAABB(ItemEntity.class,
-                        new AxisAlignedBB(this.pos).grow(4), EntityPredicates.IS_ALIVE);
+        if (!this.level.isClientSide) {
+            if (this.level.getGameTime() % 10 == 0) {
+                List<ItemEntity> items = this.level.getEntitiesWithinAABB(ItemEntity.class,
+                        new AxisAlignedBB(this.worldPosition).grow(4), EntityPredicates.IS_ALIVE);
                 for (ItemEntity item : items) {
                     if (item.cannotPickup())
                         continue;
@@ -46,10 +46,10 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                     if (stack.isEmpty() || stack.getItem() != Items.FIREWORK_ROCKET)
                         continue;
                     if (this.trackedEntity == null && this.releaseTimer <= 0) {
-                        FireworkRocketEntity entity = new FireworkRocketEntity(this.world, item.getPosX(), item.getPosY(), item.getPosZ(), stack);
+                        FireworkRocketEntity entity = new FireworkRocketEntity(this.level, item.getPosX(), item.getPosY(), item.getPosZ(), stack);
                         this.trackedEntity = entity;
                         this.trackedItem = stack.copy();
-                        this.world.addEntity(entity);
+                        this.level.addEntity(entity);
                     }
                     stack.shrink(1);
                     if (stack.isEmpty())
@@ -64,8 +64,8 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                     float generateFactor = 0;
                     Set<Integer> usedColors = new HashSet<>();
 
-                    CompoundNBT compound = this.trackedItem.getTag();
-                    CompoundNBT fireworks = compound.getCompound("Fireworks");
+                    CompoundTag compound = this.trackedItem.getTag();
+                    CompoundTag fireworks = compound.getCompound("Fireworks");
 
                     int flightTime = fireworks.getInt("Flight");
                     ListNBT explosions = fireworks.getList("Explosions", 10);
@@ -73,7 +73,7 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                         generateFactor += flightTime;
 
                         for (INBT base : explosions) {
-                            CompoundNBT explosion = (CompoundNBT) base;
+                            CompoundTag explosion = (CompoundTag) base;
                             generateFactor += 1.5F;
 
                             boolean flicker = explosion.getBoolean("Flicker");
@@ -104,11 +104,11 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                         }
 
                         List<Integer> data = new ArrayList<>();
-                        data.add(this.pos.getX());
-                        data.add(this.pos.getY());
-                        data.add(this.pos.getZ());
+                        data.add(this.worldPosition.getX());
+                        data.add(this.worldPosition.getY());
+                        data.add(this.worldPosition.getZ());
                         data.addAll(usedColors);
-                        PacketHandler.sendToAllLoaded(this.world, this.pos, new PacketParticles(
+                        PacketHandler.sendToAllLoaded(this.level, this.worldPosition, new PacketParticles(
                                 (float) this.trackedEntity.getPosX(), (float) this.trackedEntity.getPosY(), (float) this.trackedEntity.getPosZ(),
                                 PacketParticles.Type.FIREWORK_GEN, Ints.toArray(data)));
                     }
@@ -124,8 +124,8 @@ public class TileEntityFireworkGenerator extends TileEntityImpl implements ITick
                     this.generateAura(this.toRelease);
                     this.toRelease = 0;
 
-                    PacketHandler.sendToAllLoaded(this.world, this.pos,
-                            new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.FLOWER_GEN_AURA_CREATION));
+                    PacketHandler.sendToAllLoaded(this.level, this.worldPosition,
+                            new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.FLOWER_GEN_AURA_CREATION));
                 }
             }
         }

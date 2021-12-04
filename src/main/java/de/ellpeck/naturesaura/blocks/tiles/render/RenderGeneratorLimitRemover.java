@@ -3,33 +3,33 @@ package de.ellpeck.naturesaura.blocks.tiles.render;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityGeneratorLimitRemover;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityGeneratorLimitRemover;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.client.renderer.tileentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.tileentity.BlockEntityRendererDispatcher;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderGeneratorLimitRemover extends TileEntityRenderer<TileEntityGeneratorLimitRemover> {
+public class RenderGeneratorLimitRemover extends BlockEntityRenderer<BlockEntityGeneratorLimitRemover> {
     private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/generator_limit_remover_glint.png");
     private final ModelLimitRemoverGlint model = new ModelLimitRemoverGlint();
 
-    public RenderGeneratorLimitRemover(TileEntityRendererDispatcher disp) {
+    public RenderGeneratorLimitRemover(BlockEntityRendererDispatcher disp) {
         super(disp);
     }
 
     @Override
-    public void render(TileEntityGeneratorLimitRemover te, float v, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
-        TileEntity above = te.getWorld().getTileEntity(te.getPos().up());
-        if (above instanceof TileEntityImpl && ((TileEntityImpl) above).wantsLimitRemover()) {
+    public void render(BlockEntityGeneratorLimitRemover te, float v, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
+        BlockEntity above = te.getLevel().getBlockEntity(te.getPos().up());
+        if (above instanceof BlockEntityImpl && ((BlockEntityImpl) above).wantsLimitRemover()) {
             this.renderGlint(matrixStack, iRenderTypeBuffer, 1, combinedOverlayIn);
             this.renderGlint(matrixStack, iRenderTypeBuffer, 0, combinedOverlayIn);
         }

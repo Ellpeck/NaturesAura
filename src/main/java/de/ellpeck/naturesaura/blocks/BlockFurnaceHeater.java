@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityFurnaceHeater;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityFurnaceHeater;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.Block;
@@ -11,13 +11,13 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
@@ -38,7 +38,7 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
     };
 
     public BlockFurnaceHeater() {
-        super("furnace_heater", TileEntityFurnaceHeater::new, Properties.create(Material.ROCK).hardnessAndResistance(3F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
+        super("furnace_heater", BlockEntityFurnaceHeater::new, Properties.create(Material.ROCK).hardnessAndResistance(3F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
     }
 
     @Override
@@ -48,9 +48,9 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileEntityFurnaceHeater && ((TileEntityFurnaceHeater) tile).isActive) {
+    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
+        BlockEntity tile = levelIn.getBlockEntity(pos);
+        if (tile instanceof BlockEntityFurnaceHeater && ((BlockEntityFurnaceHeater) tile).isActive) {
             Direction facing = stateIn.get(FACING);
 
             float x;
@@ -80,7 +80,7 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
         return SHAPES[state.get(FACING).getIndex()];
     }
 

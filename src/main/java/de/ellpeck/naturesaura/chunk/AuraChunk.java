@@ -5,21 +5,21 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect.ActiveType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.api.misc.IWorldData;
-import de.ellpeck.naturesaura.misc.WorldData;
+import de.ellpeck.naturesaura.api.misc.ILevelData;
+import de.ellpeck.naturesaura.misc.LevelData;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.LevelChunk;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.ArrayList;
@@ -31,13 +31,13 @@ import java.util.function.Supplier;
 
 public class AuraChunk implements IAuraChunk {
 
-    private final Chunk chunk;
+    private final LevelChunk chunk;
     private final IAuraType type;
     private final Map<BlockPos, MutableInt> drainSpots = new ConcurrentHashMap<>();
     private final List<IDrainSpotEffect> effects = new ArrayList<>();
     private boolean needsSync;
 
-    public AuraChunk(Chunk chunk, IAuraType type) {
+    public AuraChunk(LevelChunk chunk, IAuraType type) {
         this.chunk = chunk;
         this.type = type;
 
@@ -55,7 +55,7 @@ public class AuraChunk implements IAuraChunk {
         MutableInt spot = this.getActualDrainSpot(pos, !simulate);
         int curr = spot != null ? spot.intValue() : 0;
         if (curr < 0 && curr - amount > 0) // Underflow protection
-            return this.drainAura(pos.up(), amount, aimForZero, simulate);
+            return this.drainAura(pos.above(), amount, aimForZero, simulate);
         if (aimForZero) {
             if (curr > 0 && curr - amount < 0)
                 amount = curr;
@@ -81,7 +81,7 @@ public class AuraChunk implements IAuraChunk {
         MutableInt spot = this.getActualDrainSpot(pos, !simulate);
         int curr = spot != null ? spot.intValue() : 0;
         if (curr > 0 && curr + amount < 0) // Overflow protection
-            return this.storeAura(pos.up(), amount, aimForZero, simulate);
+            return this.storeAura(pos.above(), amount, aimForZero, simulate);
         if (aimForZero) {
             if (curr < 0 && curr + amount > 0) {
                 amount = -curr;
@@ -146,18 +146,18 @@ public class AuraChunk implements IAuraChunk {
     }
 
     public void update() {
-        World world = this.chunk.getWorld();
+        Level level = this.chunk.getLevel();
 
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
             BlockPos pos = entry.getKey();
             MutableInt amount = entry.getValue();
             for (IDrainSpotEffect effect : this.effects)
-                effect.update(world, this.chunk, this, pos, amount.intValue());
+                effect.update(level, this.chunk, this, pos, amount.intValue());
         }
 
         if (this.needsSync) {
             ChunkPos pos = this.chunk.getPos();
-            PacketHandler.sendToAllLoaded(world,
+            PacketHandler.sendToAllLoaded(level,
                     new BlockPos(pos.x * 16, 0, pos.z * 16),
                     this.makePacket());
             this.needsSync = false;
@@ -172,13 +172,13 @@ public class AuraChunk implements IAuraChunk {
     public void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
             BlockPos drainPos = entry.getKey();
-            if (drainPos.distanceSq(pos) <= radius * radius) {
+            if (drainPos.distSqr(pos) <= radius * radius) {
                 consumer.accept(drainPos, entry.getValue().intValue());
             }
         }
     }
 
-    public void getActiveEffectIcons(PlayerEntity player, Map<ResourceLocation, Tuple<ItemStack, Boolean>> icons) {
+    public void getActiveEffectIcons(Player player, Map<ResourceLocation, Tuple<ItemStack, Boolean>> icons) {
         for (IDrainSpotEffect effect : this.effects) {
             Tuple<ItemStack, Boolean> alreadyThere = icons.get(effect.getName());
             if (alreadyThere != null && alreadyThere.getB())
@@ -198,28 +198,28 @@ public class AuraChunk implements IAuraChunk {
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        ListNBT list = new ListNBT();
+    public CompoundTag serializeNBT() {
+        ListTag list = new ListTag();
         for (Map.Entry<BlockPos, MutableInt> entry : this.drainSpots.entrySet()) {
-            CompoundNBT tag = new CompoundNBT();
-            tag.putLong("pos", entry.getKey().toLong());
+            CompoundTag tag = new CompoundTag();
+            tag.putLong("pos", entry.getKey().asLong());
             tag.putInt("amount", entry.getValue().intValue());
             list.add(tag);
         }
 
-        CompoundNBT compound = new CompoundNBT();
+        CompoundTag compound = new CompoundTag();
         compound.put("drain_spots", list);
         return compound;
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT compound) {
+    public void deserializeNBT(CompoundTag compound) {
         this.drainSpots.clear();
-        ListNBT list = compound.getList("drain_spots", 10);
-        for (INBT base : list) {
-            CompoundNBT tag = (CompoundNBT) base;
+        ListTag list = compound.getList("drain_spots", 10);
+        for (Tag base : list) {
+            CompoundTag tag = (CompoundTag) base;
             this.addDrainSpot(
-                    BlockPos.fromLong(tag.getLong("pos")),
+                    BlockPos.of(tag.getLong("pos")),
                     new MutableInt(tag.getInt("amount")));
         }
         this.addOrRemoveAsActive();
@@ -227,7 +227,7 @@ public class AuraChunk implements IAuraChunk {
 
     private void addOrRemoveAsActive() {
         long chunkPos = this.chunk.getPos().asLong();
-        WorldData data = (WorldData) IWorldData.getWorldData(this.chunk.getWorld());
+        LevelData data = (LevelData) ILevelData.getLevelData(this.chunk.getLevel());
         if (this.drainSpots.size() > 0) {
             data.auraChunksWithSpots.put(chunkPos, this);
         } else {

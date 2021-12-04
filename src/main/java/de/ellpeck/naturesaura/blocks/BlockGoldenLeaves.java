@@ -16,9 +16,9 @@ import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeColors;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.Level;
+import net.minecraft.level.biome.BiomeColors;
+import net.minecraft.level.server.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -34,11 +34,11 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
         ModRegistry.add(this);
     }
 
-    public static boolean convert(World world, BlockPos pos) {
-        BlockState state = world.getBlockState(pos);
+    public static boolean convert(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
         if (state.getBlock() instanceof LeavesBlock && !(state.getBlock() instanceof BlockAncientLeaves || state.getBlock() instanceof BlockGoldenLeaves)) {
-            if (!world.isRemote) {
-                world.setBlockState(pos, ModBlocks.GOLDEN_LEAVES.getDefaultState()
+            if (!level.isClientSide) {
+                level.setBlockState(pos, ModBlocks.GOLDEN_LEAVES.getDefaultState()
                         .with(DISTANCE, state.hasProperty(DISTANCE) ? state.get(DISTANCE) : 1)
                         .with(PERSISTENT, state.hasProperty(PERSISTENT) ? state.get(PERSISTENT) : false));
             }
@@ -54,7 +54,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
         if (stateIn.get(STAGE) == HIGHEST_STAGE && rand.nextFloat() >= 0.75F)
             NaturesAuraAPI.instance().spawnMagicParticle(
                     pos.getX() + rand.nextFloat(),
@@ -73,10 +73,10 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
     @Override
     @OnlyIn(Dist.CLIENT)
     public IBlockColor getBlockColor() {
-        return (state, worldIn, pos, tintIndex) -> {
+        return (state, levelIn, pos, tintIndex) -> {
             int color = 0xF2FF00;
-            if (state != null && worldIn != null && pos != null) {
-                int foliage = BiomeColors.getFoliageColor(worldIn, pos);
+            if (state != null && levelIn != null && pos != null) {
+                int foliage = BiomeColors.getFoliageColor(levelIn, pos);
                 return Helper.blendColors(color, foliage, state.get(STAGE) / (float) HIGHEST_STAGE);
             } else {
                 return color;
@@ -91,18 +91,18 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        super.randomTick(state, worldIn, pos, random);
-        if (!worldIn.isRemote) {
+    public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
+        super.randomTick(state, levelIn, pos, random);
+        if (!levelIn.isClientSide) {
             int stage = state.get(STAGE);
             if (stage < HIGHEST_STAGE) {
-                worldIn.setBlockState(pos, state.with(STAGE, stage + 1));
+                levelIn.setBlockState(pos, state.with(STAGE, stage + 1));
             }
 
             if (stage > 1) {
                 BlockPos offset = pos.offset(Direction.func_239631_a_(random));
-                if (worldIn.isBlockLoaded(offset))
-                    convert(worldIn, offset);
+                if (levelIn.isBlockLoaded(offset))
+                    convert(levelIn, offset);
             }
         }
     }

@@ -15,9 +15,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.Property;
@@ -28,10 +28,10 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.Level;
+import net.minecraft.level.gen.Heightmap;
+import net.minecraft.level.server.ServerLevel;
 import net.minecraftforge.common.util.ITeleporter;
 
 import java.util.function.Function;
@@ -42,10 +42,10 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE;
 
     private final String name;
-    private final RegistryKey<World> goalDim;
-    private final RegistryKey<World>[] canUseDims;
+    private final RegistryKey<Level> goalDim;
+    private final RegistryKey<Level>[] canUseDims;
 
-    public BlockDimensionRail(String name, RegistryKey<World> goalDim, RegistryKey<World>... canUseDims) {
+    public BlockDimensionRail(String name, RegistryKey<Level> goalDim, RegistryKey<Level>... canUseDims) {
         super(false, Properties.from(Blocks.RAIL));
         this.name = name;
         this.goalDim = goalDim;
@@ -54,77 +54,77 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
         ModRegistry.add(this);
     }
 
-    private boolean canUseHere(RegistryKey<World> dimension) {
-        for (RegistryKey<World> dim : this.canUseDims)
+    private boolean canUseHere(RegistryKey<Level> dimension) {
+        for (RegistryKey<Level> dim : this.canUseDims)
             if (dim == dimension)
                 return true;
         return false;
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public InteractionResult onBlockActivated(BlockState state, Level levelIn, BlockPos pos, Player player, Hand hand, BlockRayTraceResult hit) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack.getItem() == ModItems.RANGE_VISUALIZER) {
-            if (!worldIn.isRemote) {
-                BlockPos goalPos = this.getGoalCoords(worldIn, pos);
-                CompoundNBT data = new CompoundNBT();
+            if (!levelIn.isClientSide) {
+                BlockPos goalPos = this.getGoalCoords(levelIn, pos);
+                CompoundTag data = new CompoundTag();
                 data.putString("dim", this.goalDim.func_240901_a_().toString());
                 data.putLong("pos", goalPos.toLong());
                 PacketHandler.sendTo(player, new PacketClient(0, data));
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
     @Override
-    public void onMinecartPass(BlockState state, World world, BlockPos pos, AbstractMinecartEntity cart) {
-        if (world.isRemote)
+    public void onMinecartPass(BlockState state, Level level, BlockPos pos, AbstractMinecartEntity cart) {
+        if (level.isClientSide)
             return;
         if (cart.isBeingRidden())
             return;
-        if (!this.canUseHere(world.func_234923_W_()))
+        if (!this.canUseHere(level.func_234923_W_()))
             return;
 
         AxisAlignedBB box = cart.getBoundingBox();
-        PacketHandler.sendToAllAround(world, pos, 32, new PacketParticles((float) box.minX, (float) box.minY, (float) box.minZ, PacketParticles.Type.DIMENSION_RAIL, (int) ((box.maxX - box.minX) * 100F), (int) ((box.maxY - box.minY) * 100F), (int) ((box.maxZ - box.minZ) * 100F)));
-        world.playSound(null, pos, SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 1F, 1F);
+        PacketHandler.sendToAllAround(level, pos, 32, new PacketParticles((float) box.minX, (float) box.minY, (float) box.minZ, PacketParticles.Type.DIMENSION_RAIL, (int) ((box.maxX - box.minX) * 100F), (int) ((box.maxY - box.minY) * 100F), (int) ((box.maxZ - box.minZ) * 100F)));
+        level.playSound(null, pos, SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 1F, 1F);
 
-        BlockPos goalCoords = this.getGoalCoords(world, pos);
-        cart.changeDimension(world.getServer().getWorld(this.goalDim), new ITeleporter() {
+        BlockPos goalCoords = this.getGoalCoords(level, pos);
+        cart.changeDimension(level.getServer().getLevel(this.goalDim), new ITeleporter() {
             @Override
-            public Entity placeEntity(Entity entity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
+            public Entity placeEntity(Entity entity, ServerLevel currentLevel, ServerLevel destLevel, float yaw, Function<Boolean, Entity> repositionEntity) {
                 // repositionEntity always causes a NPE because why wouldn't it, so this is a fixed copy
-                entity.world.getProfiler().endStartSection("reloading");
-                Entity result = entity.getType().create(destWorld);
+                entity.level.getProfiler().endStartSection("reloading");
+                Entity result = entity.getType().create(destLevel);
                 if (result != null) {
                     result.copyDataFromOld(entity);
-                    destWorld.addFromAnotherDimension(result);
+                    destLevel.addFromAnotherDimension(result);
                     result.moveToBlockPosAndAngles(goalCoords, yaw, result.rotationPitch);
                 }
                 return result;
             }
         });
 
-        BlockPos spot = IAuraChunk.getHighestSpot(world, pos, 35, pos);
-        IAuraChunk.getAuraChunk(world, spot).drainAura(spot, 50000);
+        BlockPos spot = IAuraChunk.getHighestSpot(level, pos, 35, pos);
+        IAuraChunk.getAuraChunk(level, spot).drainAura(spot, 50000);
     }
 
-    private BlockPos getGoalCoords(World world, BlockPos pos) {
-        MinecraftServer server = world.getServer();
+    private BlockPos getGoalCoords(Level level, BlockPos pos) {
+        MinecraftServer server = level.getServer();
         if (this == ModBlocks.DIMENSION_RAIL_NETHER) {
             // travel to the nether from the overworld
             return new BlockPos(pos.getX() / 8, pos.getY() / 2, pos.getZ() / 8);
         } else if (this == ModBlocks.DIMENSION_RAIL_END) {
             // travel to the end from the overworld
-            return ServerWorld.field_241108_a_.up(8);
+            return ServerLevel.field_241108_a_.up(8);
         } else {
-            if (world.func_234923_W_() == World.field_234919_h_) {
+            if (level.func_234923_W_() == Level.field_234919_h_) {
                 // travel to the overworld from the nether
                 return new BlockPos(pos.getX() * 8, pos.getY() * 2, pos.getZ() * 8);
             } else {
                 // travel to the overworld from the end
-                ServerWorld overworld = server.getWorld(this.goalDim);
+                ServerLevel overworld = server.getLevel(this.goalDim);
                 BlockPos spawn = overworld.func_241135_u_();
                 BlockPos ret = new BlockPos(spawn.getX(), 0, spawn.getZ());
                 return ret.up(overworld.getHeight(Heightmap.Type.WORLD_SURFACE, spawn.getX(), spawn.getZ()));
@@ -138,12 +138,12 @@ public class BlockDimensionRail extends AbstractRailBlock implements IModItem, I
     }
 
     @Override
-    public boolean isFlexibleRail(BlockState state, IBlockReader world, BlockPos pos) {
+    public boolean isFlexibleRail(BlockState state, IBlockReader level, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean canMakeSlopes(BlockState state, IBlockReader world, BlockPos pos) {
+    public boolean canMakeSlopes(BlockState state, IBlockReader level, BlockPos pos) {
         return false;
     }
 

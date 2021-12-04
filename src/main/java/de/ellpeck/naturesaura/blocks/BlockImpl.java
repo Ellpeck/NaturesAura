@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 public class BlockImpl extends Block implements IModItem {
 

@@ -6,9 +6,9 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tileentity.BlastFurnaceTileEntity;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlastFurnaceBlockEntity;
+import net.minecraft.tileentity.ITickableBlockEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
@@ -19,35 +19,35 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class TileEntityBlastFurnaceBooster extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements ITickableBlockEntity {
 
-    public TileEntityBlastFurnaceBooster() {
+    public BlockEntityBlastFurnaceBooster() {
         super(ModTileEntities.BLAST_FURNACE_BOOSTER);
     }
 
     @Override
     public void tick() {
-        if (this.world.isRemote)
+        if (this.level.isClientSide)
             return;
 
-        TileEntity below = this.world.getTileEntity(this.pos.down());
-        if (!(below instanceof BlastFurnaceTileEntity))
+        BlockEntity below = this.level.getBlockEntity(this.worldPosition.down());
+        if (!(below instanceof BlastFurnaceBlockEntity))
             return;
-        BlastFurnaceTileEntity tile = (BlastFurnaceTileEntity) below;
-        IRecipe<?> recipe = this.world.getRecipeManager().getRecipe(TileEntityFurnaceHeater.getRecipeType(tile), tile, this.world).orElse(null);
+        BlastFurnaceBlockEntity tile = (BlastFurnaceBlockEntity) below;
+        IRecipe<?> recipe = this.level.getRecipeManager().getRecipe(BlockEntityFurnaceHeater.getRecipeType(tile), tile, this.level).orElse(null);
         if (recipe == null)
             return;
         if (!this.isApplicable(recipe.getIngredients()))
             return;
 
-        IIntArray data = TileEntityFurnaceHeater.getFurnaceData(tile);
+        IIntArray data = BlockEntityFurnaceHeater.getFurnaceData(tile);
         int doneDiff = data.get(3) - data.get(2);
         if (doneDiff > 1)
             return;
 
-        if (this.world.rand.nextFloat() > 0.45F) {
-            PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                    new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.BLAST_FURNACE_BOOSTER, 0));
+        if (this.level.rand.nextFloat() > 0.45F) {
+            PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
+                    new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.BLAST_FURNACE_BOOSTER, 0));
             return;
         }
 
@@ -62,11 +62,11 @@ public class TileEntityBlastFurnaceBooster extends TileEntityImpl implements ITi
             output.grow(1);
         }
 
-        BlockPos pos = IAuraChunk.getHighestSpot(this.world, this.pos, 30, this.pos);
-        IAuraChunk.getAuraChunk(this.world, pos).drainAura(pos, 6500);
+        BlockPos pos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 30, this.worldPosition);
+        IAuraChunk.getAuraChunk(this.level, pos).drainAura(pos, 6500);
 
-        PacketHandler.sendToAllAround(this.world, this.pos, 32,
-                new PacketParticles(this.pos.getX(), this.pos.getY(), this.pos.getZ(), PacketParticles.Type.BLAST_FURNACE_BOOSTER, 1));
+        PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
+                new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.BLAST_FURNACE_BOOSTER, 1));
     }
 
     private boolean isApplicable(List<Ingredient> ingredients) {
@@ -81,8 +81,8 @@ public class TileEntityBlastFurnaceBooster extends TileEntityImpl implements ITi
 
     @Override
     public IItemHandlerModifiable getItemHandler() {
-        TileEntity below = this.world.getTileEntity(this.pos.down());
-        if (!(below instanceof BlastFurnaceTileEntity))
+        BlockEntity below = this.level.getBlockEntity(this.worldPosition.down());
+        if (!(below instanceof BlastFurnaceBlockEntity))
             return null;
         IItemHandler handler = below.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
         if (handler == null)

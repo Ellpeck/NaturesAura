@@ -1,40 +1,42 @@
 package de.ellpeck.naturesaura.blocks;
 
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityImpl;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import de.ellpeck.naturesaura.reg.ModTileType;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.ILevel;
+import net.minecraft.level.Level;
+import net.minecraft.level.server.ServerLevel;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
-public class BlockContainerImpl extends ContainerBlock implements IModItem {
+public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
 
     private final String baseName;
-    private final ModTileType<? extends TileEntity> tileType;
+    private final ModTileType<? extends BlockEntity> tileType;
 
-    public BlockContainerImpl(String baseName, Supplier<TileEntity> tileSupplier, Block.Properties properties) {
+    public BlockContainerImpl(String baseName, Supplier<BlockEntity> tileSupplier, Block.Properties properties) {
         super(properties);
 
         this.baseName = baseName;
@@ -63,17 +65,17 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem {
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, ILevel levelIn, BlockPos currentPos, BlockPos facingPos) {
         if (this.hasWaterlogging() && stateIn.get(BlockStateProperties.WATERLOGGED))
-            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
-        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+            levelIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(levelIn));
+        return super.updatePostPlacement(stateIn, facing, facingState, levelIn, currentPos, facingPos);
     }
 
     @Override
     @Nullable
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         if (this.hasWaterlogging()) {
-            FluidState state = context.getWorld().getFluidState(context.getPos());
+            FluidState state = context.getLevel().getFluidState(context.getPos());
             return this.getDefaultState().with(BlockStateProperties.WATERLOGGED, state.isTagged(FluidTags.WATER) && state.getLevel() == 8);
         }
         return super.getStateForPlacement(context);
@@ -81,7 +83,7 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem {
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public BlockEntity createNewBlockEntity(IBlockReader levelIn) {
         return this.tileType.type.create();
     }
 
@@ -96,20 +98,20 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem {
     }
 
     @Override
-    public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
-        super.onPlayerDestroy(worldIn, pos, state);
+    public void onPlayerDestroy(ILevel levelIn, BlockPos pos, BlockState state) {
+        super.onPlayerDestroy(levelIn, pos, state);
     }
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> drops = super.getDrops(state, builder);
 
-        TileEntity tile = builder.get(LootParameters.BLOCK_ENTITY);
-        if (tile instanceof TileEntityImpl) {
+        BlockEntity tile = builder.get(LootParameters.BLOCK_ENTITY);
+        if (tile instanceof BlockEntityImpl) {
             for (ItemStack stack : drops) {
                 if (stack.getItem() != this.asItem())
                     continue;
-                ((TileEntityImpl) tile).modifyDrop(stack);
+                ((BlockEntityImpl) tile).modifyDrop(stack);
                 break;
             }
         }
@@ -117,57 +119,57 @@ public class BlockContainerImpl extends ContainerBlock implements IModItem {
     }
 
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onReplaced(BlockState state, Level levelIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
-            TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TileEntityImpl)
-                ((TileEntityImpl) tile).dropInventory();
+            BlockEntity tile = levelIn.getBlockEntity(pos);
+            if (tile instanceof BlockEntityImpl)
+                ((BlockEntityImpl) tile).dropInventory();
         }
-        super.onReplaced(state, worldIn, pos, newState, isMoving);
+        super.onReplaced(state, levelIn, pos, newState, isMoving);
     }
 
     @Override
-    public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
-        super.harvestBlock(worldIn, player, pos, state, te, stack);
-        worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+    public void harvestBlock(Level levelIn, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
+        super.harvestBlock(levelIn, player, pos, state, te, stack);
+        levelIn.setBlockState(pos, Blocks.AIR.getDefaultState());
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileEntityImpl)
-            ((TileEntityImpl) tile).loadDataOnPlace(stack);
+    public void onBlockPlacedBy(Level levelIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        BlockEntity tile = levelIn.getBlockEntity(pos);
+        if (tile instanceof BlockEntityImpl)
+            ((BlockEntityImpl) tile).loadDataOnPlace(stack);
     }
 
     @Override
-    public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-        this.updateRedstoneState(worldIn, pos);
+    public void onBlockAdded(BlockState state, Level levelIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+        this.updateRedstoneState(levelIn, pos);
     }
 
     @Override
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        this.updateRedstoneState(worldIn, pos);
+    public void neighborChanged(BlockState state, Level levelIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+        this.updateRedstoneState(levelIn, pos);
     }
 
-    private void updateRedstoneState(World world, BlockPos pos) {
-        if (!world.isRemote) {
-            TileEntity tile = world.getTileEntity(pos);
-            if (tile instanceof TileEntityImpl) {
-                TileEntityImpl impl = (TileEntityImpl) tile;
-                int newPower = world.getRedstonePowerFromNeighbors(pos);
+    private void updateRedstoneState(Level level, BlockPos pos) {
+        if (!level.isClientSide) {
+            BlockEntity tile = level.getBlockEntity(pos);
+            if (tile instanceof BlockEntityImpl) {
+                BlockEntityImpl impl = (BlockEntityImpl) tile;
+                int newPower = level.getRedstonePowerFromNeighbors(pos);
                 if (impl.redstonePower != newPower)
-                    world.getPendingBlockTicks().scheduleTick(pos, this, 4);
+                    level.getPendingBlockTicks().scheduleTick(pos, this, 4);
             }
         }
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        if (!worldIn.isRemote) {
-            TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TileEntityImpl) {
-                TileEntityImpl impl = (TileEntityImpl) tile;
-                int newPower = worldIn.getRedstonePowerFromNeighbors(pos);
+    public void tick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
+        if (!levelIn.isClientSide) {
+            BlockEntity tile = levelIn.getBlockEntity(pos);
+            if (tile instanceof BlockEntityImpl) {
+                BlockEntityImpl impl = (BlockEntityImpl) tile;
+                int newPower = levelIn.getRedstonePowerFromNeighbors(pos);
                 if (impl.redstonePower != newPower)
                     impl.onRedstonePowerChange(newPower);
             }

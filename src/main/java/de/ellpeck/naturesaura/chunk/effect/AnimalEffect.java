@@ -10,7 +10,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.ChickenEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.EggItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -19,8 +19,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.level.Level;
+import net.minecraft.level.chunk.Chunk;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -35,10 +35,10 @@ public class AnimalEffect implements IDrainSpotEffect {
     private int chance;
     private AxisAlignedBB bb;
 
-    private boolean calcValues(World world, BlockPos pos, Integer spot) {
+    private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot <= 0)
             return false;
-        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(world, pos, 30);
+        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 30);
         int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
@@ -51,12 +51,12 @@ public class AnimalEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public ActiveType isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (!this.calcValues(player.world, pos, spot))
+    public ActiveType isActiveHere(Player player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (!this.calcValues(player.level, pos, spot))
             return ActiveType.INACTIVE;
         if (!this.bb.contains(player.getPositionVec()))
             return ActiveType.INACTIVE;
-        if (!NaturesAuraAPI.instance().isEffectPowderActive(player.world, player.getPosition(), NAME))
+        if (!NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.getPosition(), NAME))
             return ActiveType.INHIBITED;
         return ActiveType.ACTIVE;
     }
@@ -67,21 +67,21 @@ public class AnimalEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (world.getGameTime() % 200 != 0)
+    public void update(Level level, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (level.getGameTime() % 200 != 0)
             return;
-        if (!this.calcValues(world, pos, spot))
+        if (!this.calcValues(level, pos, spot))
             return;
 
-        List<AnimalEntity> animals = world.getEntitiesWithinAABB(AnimalEntity.class, this.bb);
+        List<AnimalEntity> animals = level.getEntitiesWithinAABB(AnimalEntity.class, this.bb);
         if (animals.size() >= ModConfig.instance.maxAnimalsAroundPowder.get())
             return;
 
-        List<ItemEntity> items = world.getEntitiesWithinAABB(ItemEntity.class, this.bb);
+        List<ItemEntity> items = level.getEntitiesWithinAABB(ItemEntity.class, this.bb);
         for (ItemEntity item : items) {
             if (!item.isAlive())
                 continue;
-            if (!NaturesAuraAPI.instance().isEffectPowderActive(world, item.getPosition(), NAME))
+            if (!NaturesAuraAPI.instance().isEffectPowderActive(level, item.getPosition(), NAME))
                 continue;
 
             ItemStack stack = item.getItem();
@@ -99,22 +99,22 @@ public class AnimalEffect implements IDrainSpotEffect {
                 item.setItem(stack);
             }
 
-            ChickenEntity chicken = new ChickenEntity(EntityType.CHICKEN, world);
+            ChickenEntity chicken = new ChickenEntity(EntityType.CHICKEN, level);
             chicken.setGrowingAge(-24000);
             chicken.setPosition(item.getPosX(), item.getPosY(), item.getPosZ());
-            world.addEntity(chicken);
+            level.addEntity(chicken);
 
-            BlockPos closestSpot = IAuraChunk.getHighestSpot(world, item.getPosition(), 35, pos);
-            IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 2000);
+            BlockPos closestSpot = IAuraChunk.getHighestSpot(level, item.getPosition(), 35, pos);
+            IAuraChunk.getAuraChunk(level, closestSpot).drainAura(closestSpot, 2000);
         }
 
-        if (world.rand.nextInt(20) <= this.chance) {
+        if (level.rand.nextInt(20) <= this.chance) {
             if (animals.size() < 2)
                 return;
-            AnimalEntity first = animals.get(world.rand.nextInt(animals.size()));
+            AnimalEntity first = animals.get(level.rand.nextInt(animals.size()));
             if (first.isChild() || first.isInLove())
                 return;
-            if (!NaturesAuraAPI.instance().isEffectPowderActive(world, first.getPosition(), NAME))
+            if (!NaturesAuraAPI.instance().isEffectPowderActive(level, first.getPosition(), NAME))
                 return;
 
             Optional<AnimalEntity> secondOptional = animals.stream()
@@ -129,21 +129,21 @@ public class AnimalEffect implements IDrainSpotEffect {
             this.setInLove(first);
             this.setInLove(second);
 
-            BlockPos closestSpot = IAuraChunk.getHighestSpot(world, first.getPosition(), 35, pos);
-            IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 3500);
+            BlockPos closestSpot = IAuraChunk.getHighestSpot(level, first.getPosition(), 35, pos);
+            IAuraChunk.getAuraChunk(level, closestSpot).drainAura(closestSpot, 3500);
         }
     }
 
     private void setInLove(AnimalEntity animal) {
         animal.setInLove(null);
         for (int j = 0; j < 7; j++)
-            animal.world.addParticle(ParticleTypes.HEART,
-                    animal.getPosX() + (double) (animal.world.rand.nextFloat() * animal.getWidth() * 2.0F) - animal.getWidth(),
-                    animal.getPosY() + 0.5D + (double) (animal.world.rand.nextFloat() * animal.getHeight()),
-                    animal.getPosZ() + (double) (animal.world.rand.nextFloat() * animal.getWidth() * 2.0F) - animal.getWidth(),
-                    animal.world.rand.nextGaussian() * 0.02D,
-                    animal.world.rand.nextGaussian() * 0.02D,
-                    animal.world.rand.nextGaussian() * 0.02D);
+            animal.level.addParticle(ParticleTypes.HEART,
+                    animal.getPosX() + (double) (animal.level.rand.nextFloat() * animal.getWidth() * 2.0F) - animal.getWidth(),
+                    animal.getPosY() + 0.5D + (double) (animal.level.rand.nextFloat() * animal.getHeight()),
+                    animal.getPosZ() + (double) (animal.level.rand.nextFloat() * animal.getWidth() * 2.0F) - animal.getWidth(),
+                    animal.level.rand.nextGaussian() * 0.02D,
+                    animal.level.rand.nextGaussian() * 0.02D,
+                    animal.level.rand.nextGaussian() * 0.02D);
     }
 
     @Override

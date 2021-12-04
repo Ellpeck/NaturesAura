@@ -3,9 +3,11 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.NaturalAuraContainer;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class TileEntityAncientLeaves extends TileEntityImpl {
+public class BlockEntityAncientLeaves extends BlockEntityImpl {
 
     private final NaturalAuraContainer container = new NaturalAuraContainer(NaturesAuraAPI.TYPE_OVERWORLD, 2000, 500) {
         @Override
@@ -17,14 +19,14 @@ public class TileEntityAncientLeaves extends TileEntityImpl {
         public int drainAura(int amountToDrain, boolean simulate) {
             int amount = super.drainAura(amountToDrain, simulate);
             if (amount > 0 && !simulate) {
-                TileEntityAncientLeaves.this.sendToClients();
+                BlockEntityAncientLeaves.this.sendToClients();
             }
             return amount;
         }
     };
 
-    public TileEntityAncientLeaves() {
-        super(ModTileEntities.ANCIENT_LEAVES);
+    public BlockEntityAncientLeaves(BlockPos pos, BlockState state) {
+        super(ModTileEntities.ANCIENT_LEAVES, pos, state);
     }
 
     @Override
@@ -33,14 +35,14 @@ public class TileEntityAncientLeaves extends TileEntityImpl {
     }
 
     @Override
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK)
             this.container.writeNBT(compound);
     }
 
     @Override
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK)
             this.container.readNBT(compound);

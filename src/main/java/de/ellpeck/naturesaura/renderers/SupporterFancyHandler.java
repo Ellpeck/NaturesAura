@@ -8,10 +8,10 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.PointOfView;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.entity.player.PlayerModelPart;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.BiomeColors;
+import net.minecraft.level.biome.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -38,8 +38,8 @@ public class SupporterFancyHandler {
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END)
             return;
-        PlayerEntity player = event.player;
-        if (!player.world.isRemote)
+        Player player = event.player;
+        if (!player.level.isClientSide)
             return;
         if (player.isInvisible() || !player.isWearing(PlayerModelPart.CAPE))
             return;
@@ -50,12 +50,12 @@ public class SupporterFancyHandler {
         if (info == null)
             return;
 
-        Random rand = player.world.rand;
+        Random rand = player.level.rand;
         if (rand.nextFloat() >= 0.75F) {
             int color;
             if (info.tier == 1) {
                 BlockPos pos = player.getPosition();
-                color = BiomeColors.getGrassColor(player.world, pos);
+                color = BiomeColors.getGrassColor(player.level, pos);
             } else {
                 color = info.color;
             }

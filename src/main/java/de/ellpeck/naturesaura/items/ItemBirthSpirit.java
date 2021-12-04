@@ -19,19 +19,19 @@ public class ItemBirthSpirit extends ItemGlowing {
         @SubscribeEvent
         public void onBabyBorn(BabyEntitySpawnEvent event) {
             LivingEntity parent = event.getParentA();
-            if (!parent.world.isRemote && event.getCausedByPlayer() != null) {
+            if (!parent.level.isClientSide && event.getCausedByPlayer() != null) {
                 BlockPos pos = parent.getPosition();
-                int aura = IAuraChunk.getAuraInArea(parent.world, pos, 30);
+                int aura = IAuraChunk.getAuraInArea(parent.level, pos, 30);
                 if (aura < 1200000)
                     return;
 
-                int amount = parent.world.rand.nextInt(3) + 1;
-                ItemEntity item = new ItemEntity(parent.world, parent.getPosX(), parent.getPosY(), parent.getPosZ(),
+                int amount = parent.level.rand.nextInt(3) + 1;
+                ItemEntity item = new ItemEntity(parent.level, parent.getPosX(), parent.getPosY(), parent.getPosZ(),
                         new ItemStack(ModItems.BIRTH_SPIRIT, amount));
-                parent.world.addEntity(item);
+                parent.level.addEntity(item);
 
-                BlockPos spot = IAuraChunk.getHighestSpot(parent.world, pos, 30, pos);
-                IAuraChunk.getAuraChunk(parent.world, spot).drainAura(spot, 800 * amount);
+                BlockPos spot = IAuraChunk.getHighestSpot(parent.level, pos, 30, pos);
+                IAuraChunk.getAuraChunk(parent.level, spot).drainAura(spot, 800 * amount);
             }
         }
     }

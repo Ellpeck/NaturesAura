@@ -5,7 +5,7 @@ import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.level.ClientLevel;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.ReuseableStream;
@@ -29,8 +29,8 @@ public class ParticleMagic extends Particle {
     private final boolean depth;
     private float particleScale;
 
-    public ParticleMagic(ClientWorld world, double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade, boolean depth) {
-        super(world, posX, posY, posZ);
+    public ParticleMagic(ClientLevel level, double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade, boolean depth) {
+        super(level, posX, posY, posZ);
         this.desiredScale = scale;
         this.maxAge = maxAge;
         this.canCollide = collision;
@@ -78,7 +78,7 @@ public class ParticleMagic extends Particle {
     public void move(double x, double y, double z) {
         double lastY = y;
         if (this.canCollide && (x != 0 || y != 0 || z != 0)) {
-            Vector3d motion = Entity.collideBoundingBoxHeuristically(null, new Vector3d(x, y, z), this.getBoundingBox(), this.world, ISelectionContext.dummy(), new ReuseableStream<>(Stream.empty()));
+            Vector3d motion = Entity.collideBoundingBoxHeuristically(null, new Vector3d(x, y, z), this.getBoundingBox(), this.level, ISelectionContext.dummy(), new ReuseableStream<>(Stream.empty()));
             x = motion.x;
             y = motion.y;
             z = motion.z;

@@ -10,13 +10,13 @@ import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BushBlock;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -33,13 +33,13 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public InteractionResult onItemUse(ItemUseContext context) {
         if (this == ModItems.INFUSED_IRON_HOE) {
-            World world = context.getWorld();
-            ActionResultType result = super.onItemUse(context);
-            if (!world.isRemote && result.isSuccessOrConsume()) {
+            Level level = context.getLevel();
+            InteractionResult result = super.onItemUse(context);
+            if (!level.isClientSide && result.isSuccessOrConsume()) {
                 ItemStack seed = ItemStack.EMPTY;
-                Random random = world.getRandom();
+                Random random = level.getRandom();
                 BlockPos pos = context.getPos();
                 if (random.nextInt(5) == 0) {
                     seed = new ItemStack(Items.WHEAT_SEEDS);
@@ -55,8 +55,8 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
                 }
 
                 if (!seed.isEmpty()) {
-                    ItemEntity item = new ItemEntity(world, pos.getX() + random.nextFloat(), pos.getY() + 1F, pos.getZ() + random.nextFloat(), seed);
-                    world.addEntity(item);
+                    ItemEntity item = new ItemEntity(level, pos.getX() + random.nextFloat(), pos.getY() + 1F, pos.getZ() + random.nextFloat(), seed);
+                    level.addEntity(item);
                 }
             }
             return result;
@@ -67,20 +67,20 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
                     BlockPos offset = context.getPos().add(x, 0, z);
                     BlockRayTraceResult newResult = new BlockRayTraceResult(context.getHitVec(), context.getFace(), offset, context.isInside());
                     ItemUseContext newContext = new ItemUseContext(context.getPlayer(), context.getHand(), newResult);
-                    success |= super.onItemUse(newContext) == ActionResultType.SUCCESS;
+                    success |= super.onItemUse(newContext) == InteractionResult.SUCCESS;
                 }
             }
-            return success ? ActionResultType.SUCCESS : ActionResultType.PASS;
+            return success ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
         return super.onItemUse(context);
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, PlayerEntity player) {
+    public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
         if (stack.getItem() == ModItems.SKY_HOE) {
-            if (!(player.world.getBlockState(pos).getBlock() instanceof BushBlock))
+            if (!(player.level.getBlockState(pos).getBlock() instanceof BushBlock))
                 return false;
-            if (!player.world.isRemote) {
+            if (!player.level.isClientSide) {
                 int range = 3;
                 for (int x = -range; x <= range; x++) {
                     for (int y = -range; y <= range; y++) {
@@ -88,9 +88,9 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
                             if (x == 0 && y == 0 && z == 0)
                                 continue;
                             BlockPos offset = pos.add(x, y, z);
-                            BlockState otherState = player.world.getBlockState(offset);
+                            BlockState otherState = player.level.getBlockState(offset);
                             if (otherState.getBlock() instanceof BushBlock)
-                                player.world.destroyBlock(offset, true);
+                                player.level.destroyBlock(offset, true);
                         }
                     }
                 }
@@ -106,7 +106,7 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return Helper.makeRechargeProvider(stack, true);
     }
 

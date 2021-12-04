@@ -1,9 +1,9 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEnderCrate;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderEnderCrate;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
@@ -13,19 +13,19 @@ import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.tileentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.tileentity.BlockEntityRendererDispatcher;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.Player;
+import net.minecraft.entity.player.ServerPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.tileentity.BlockEntity;
+import net.minecraft.tileentity.BlockEntityType;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
@@ -33,8 +33,8 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -50,13 +50,13 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider<TileEntityEnderCrate>, ICustomBlockState {
+public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider<BlockEntityEnderCrate>, ICustomBlockState {
 
     // This is terrible but I can't see a better solution right now so oh well
-    private static final ThreadLocal<WeakReference<World>> CACHED_WORLD = new ThreadLocal<>();
+    private static final ThreadLocal<WeakReference<Level>> CACHED_WORLD = new ThreadLocal<>();
 
     public BlockEnderCrate() {
-        super("ender_crate", TileEntityEnderCrate::new, Properties.create(Material.ROCK).hardnessAndResistance(5F).setLightLevel(s -> 7).sound(SoundType.STONE));
+        super("ender_crate", BlockEntityEnderCrate::new, Properties.create(Material.ROCK).hardnessAndResistance(5F).setLightLevel(s -> 7).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -79,18 +79,18 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
 
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent.RightClickBlock event) {
-        World world = event.getWorld();
+        Level level = event.getLevel();
         BlockPos pos = event.getPos();
-        BlockState state = world.getBlockState(pos);
+        BlockState state = level.getBlockState(pos);
         if (state.getBlock() instanceof AnvilBlock) {
-            CACHED_WORLD.set(new WeakReference<>(world));
+            CACHED_WORLD.set(new WeakReference<>(level));
         }
     }
 
     @SubscribeEvent
     public void onAnvilUpdate(AnvilUpdateEvent event) {
-        WeakReference<World> world = CACHED_WORLD.get();
-        if (world == null || world.get() == null)
+        WeakReference<Level> level = CACHED_WORLD.get();
+        if (level == null || level.get() == null)
             return;
         ItemStack stack = event.getLeft();
         if (stack.getItem() != Item.getItemFromBlock(this) && stack.getItem() != ModItems.ENDER_ACCESS)
@@ -101,7 +101,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
         String name = event.getName();
         if (name == null || name.isEmpty())
             return;
-        if (IWorldData.getOverworldData(world.get()).isEnderStorageLocked(name))
+        if (ILevelData.getOverworldData(level.get()).isEnderStorageLocked(name))
             return;
         ItemStack output = stack.copy();
         output.getOrCreateTag().putString(NaturesAura.MOD_ID + ":ender_name", name);
@@ -111,29 +111,29 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (!worldIn.isRemote) {
-            TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TileEntityEnderCrate) {
-                TileEntityEnderCrate crate = (TileEntityEnderCrate) tile;
+    public InteractionResult onBlockActivated(BlockState state, Level levelIn, BlockPos pos, Player player, Hand handIn, BlockRayTraceResult hit) {
+        if (!levelIn.isClientSide) {
+            BlockEntity tile = levelIn.getBlockEntity(pos);
+            if (tile instanceof BlockEntityEnderCrate) {
+                BlockEntityEnderCrate crate = (BlockEntityEnderCrate) tile;
                 if (crate.canOpen()) {
                     crate.drainAura(2500);
-                    NetworkHooks.openGui((ServerPlayerEntity) player, crate, pos);
+                    NetworkHooks.openGui((ServerPlayer) player, crate, pos);
                 }
             }
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable IBlockReader levelIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         addEnderNameInfo(stack, tooltip);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
@@ -143,12 +143,12 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
             double d3 = rand.nextFloat() * (float) j;
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = rand.nextFloat() * (float) k;
-            worldIn.addParticle(ParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
+            levelIn.addParticle(ParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
         }
     }
 
     @Override
-    public Tuple<TileEntityType<TileEntityEnderCrate>, Supplier<Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super TileEntityEnderCrate>>>> getTESR() {
+    public Tuple<BlockEntityType<BlockEntityEnderCrate>, Supplier<Function<? super BlockEntityRendererDispatcher, ? extends BlockEntityRenderer<? super BlockEntityEnderCrate>>>> getTESR() {
         return new Tuple<>(ModTileEntities.ENDER_CRATE, () -> RenderEnderCrate::new);
     }
 

@@ -5,7 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 
 public class Matcher {
 
@@ -22,7 +22,7 @@ public class Matcher {
     }
 
     public static Matcher tag(Block defaultBlock, ITag.INamedTag tag) {
-        return new Matcher(defaultBlock.getDefaultState(), (world, start, offset, pos, state, c) -> state.getBlock().getTags().contains(tag.getName()));
+        return new Matcher(defaultBlock.getDefaultState(), (level, start, offset, pos, state, c) -> state.getBlock().getTags().contains(tag.getName()));
     }
 
     public BlockState getDefaultState() {
@@ -34,6 +34,6 @@ public class Matcher {
     }
 
     public interface ICheck {
-        boolean matches(World world, BlockPos start, BlockPos offset, BlockPos pos, BlockState state, char c);
+        boolean matches(Level level, BlockPos start, BlockPos offset, BlockPos pos, BlockState state, char c);
     }
 }

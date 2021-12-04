@@ -16,10 +16,10 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
@@ -27,7 +27,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -40,12 +40,12 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (worldIn.isRemote || !(entityIn instanceof LivingEntity))
+    public void inventoryTick(ItemStack stack, Level levelIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if (levelIn.isClientSide || !(entityIn instanceof LivingEntity))
             return;
         LivingEntity living = (LivingEntity) entityIn;
         if (!living.isOnGround()) {
-            CompoundNBT compound = stack.getOrCreateTag();
+            CompoundTag compound = stack.getOrCreateTag();
             if (compound.getBoolean("air"))
                 return;
 
@@ -56,7 +56,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
         } else {
             if (!stack.hasTag())
                 return;
-            CompoundNBT compound = stack.getTag();
+            CompoundTag compound = stack.getTag();
             if (!compound.getBoolean("air"))
                 return;
 
@@ -66,18 +66,18 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                 return;
             if (living.getDistanceSq(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z")) > 0.75F)
                 return;
-            if (living instanceof PlayerEntity && !NaturesAuraAPI.instance().extractAuraFromPlayer((PlayerEntity) living, 1000, false))
+            if (living instanceof Player && !NaturesAuraAPI.instance().extractAuraFromPlayer((Player) living, 1000, false))
                 return;
 
             DamageSource source;
-            if (living instanceof PlayerEntity)
-                source = DamageSource.causePlayerDamage((PlayerEntity) living);
+            if (living instanceof Player)
+                source = DamageSource.causePlayerDamage((Player) living);
             else
                 source = DamageSource.MAGIC;
             boolean infusedSet = ItemArmor.isFullSetEquipped(living, ModArmorMaterial.INFUSED);
 
             int range = 5;
-            List<LivingEntity> mobs = worldIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(
+            List<LivingEntity> mobs = levelIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(
                     living.getPosX() - range, living.getPosY() - 0.5, living.getPosZ() - range,
                     living.getPosX() + range, living.getPosY() + 0.5, living.getPosZ() + range));
             for (LivingEntity mob : mobs) {
@@ -85,7 +85,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                     continue;
                 if (living.getDistanceSq(mob) > range * range)
                     continue;
-                if (living instanceof PlayerEntity && !NaturesAuraAPI.instance().extractAuraFromPlayer((PlayerEntity) living, 500, false))
+                if (living instanceof Player && !NaturesAuraAPI.instance().extractAuraFromPlayer((Player) living, 500, false))
                     break;
                 mob.attackEntityFrom(source, 4F);
 
@@ -95,20 +95,20 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
 
             BlockPos pos = living.getPosition();
             BlockPos down = pos.down();
-            BlockState downState = worldIn.getBlockState(down);
+            BlockState downState = levelIn.getBlockState(down);
 
             if (downState.getMaterial() != Material.AIR) {
-                SoundType type = downState.getBlock().getSoundType(downState, worldIn, down, null);
-                worldIn.playSound(null, pos, type.getBreakSound(), SoundCategory.BLOCKS, type.getVolume() * 0.5F, type.getPitch() * 0.8F);
+                SoundType type = downState.getBlock().getSoundType(downState, levelIn, down, null);
+                levelIn.playSound(null, pos, type.getBreakSound(), SoundCategory.BLOCKS, type.getVolume() * 0.5F, type.getPitch() * 0.8F);
             }
 
-            PacketHandler.sendToAllAround(worldIn, pos, 32, new PacketParticles((float) living.getPosX(), (float) living.getPosY(), (float) living.getPosZ(), PacketParticles.Type.SHOCKWAVE_CREATOR));
+            PacketHandler.sendToAllAround(levelIn, pos, 32, new PacketParticles((float) living.getPosX(), (float) living.getPosY(), (float) living.getPosZ(), PacketParticles.Type.SHOCKWAVE_CREATOR));
         }
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(ItemStack stack, PlayerEntity player, RenderType type, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight, boolean isHolding) {
+    public void render(ItemStack stack, Player player, RenderType type, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight, boolean isHolding) {
         if (type == RenderType.BODY && !isHolding) {
             boolean armor = !player.inventory.armorInventory.get(EquipmentSlotType.CHEST.getIndex()).isEmpty();
             matrices.translate(0, 0.125F, armor ? -0.195F : -0.1475F);

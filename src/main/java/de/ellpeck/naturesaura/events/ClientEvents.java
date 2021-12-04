@@ -26,7 +26,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
@@ -36,14 +36,14 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeColors;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.level.Level;
+import net.minecraft.level.biome.BiomeColors;
+import net.minecraft.level.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.event.TickEvent;
@@ -81,14 +81,14 @@ public class ClientEvents {
                 MutableInt amount = new MutableInt(IAuraChunk.DEFAULT_AURA);
                 MutableInt spots = new MutableInt();
                 MutableInt chunks = new MutableInt();
-                IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 35, (blockPos, drainSpot) -> {
+                IAuraChunk.getSpotsInArea(mc.level, mc.player.getPosition(), 35, (blockPos, drainSpot) -> {
                     spots.increment();
                     amount.add(drainSpot);
                 });
-                Helper.getAuraChunksWithSpotsInArea(mc.world, mc.player.getPosition(), 35, c -> chunks.increment());
+                Helper.getAuraChunksWithSpotsInArea(mc.level, mc.player.getPosition(), 35, c -> chunks.increment());
                 NumberFormat format = NumberFormat.getInstance();
                 left.add(prefix + "A: " + format.format(amount.intValue()) + " (S: " + spots.intValue() + ", C: " + chunks.intValue() + ")");
-                left.add(prefix + "AT: " + IAuraType.forWorld(mc.world).getName());
+                left.add(prefix + "AT: " + IAuraType.forLevel(mc.level).getName());
             }
         }
     }
@@ -101,52 +101,52 @@ public class ClientEvents {
             heldOcular = ItemStack.EMPTY;
 
             Minecraft mc = Minecraft.getInstance();
-            if (mc.world == null) {
+            if (mc.level == null) {
                 ItemRangeVisualizer.clear();
                 PENDING_AURA_CHUNKS.clear();
             } else {
-                PENDING_AURA_CHUNKS.removeIf(next -> next.tryHandle(mc.world));
+                PENDING_AURA_CHUNKS.removeIf(next -> next.tryHandle(mc.level));
 
                 if (!mc.isGamePaused()) {
-                    if (mc.world.getGameTime() % 20 == 0) {
+                    if (mc.level.getGameTime() % 20 == 0) {
                         int amount = MathHelper.floor(190 * ModConfig.instance.excessParticleAmount.get());
                         for (int i = 0; i < amount; i++) {
-                            int x = MathHelper.floor(mc.player.getPosX()) + mc.world.rand.nextInt(64) - 32;
-                            int z = MathHelper.floor(mc.player.getPosZ()) + mc.world.rand.nextInt(64) - 32;
-                            BlockPos pos = new BlockPos(x, mc.world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z) - 1, z);
-                            BlockState state = mc.world.getBlockState(pos);
+                            int x = MathHelper.floor(mc.player.getPosX()) + mc.level.rand.nextInt(64) - 32;
+                            int z = MathHelper.floor(mc.player.getPosZ()) + mc.level.rand.nextInt(64) - 32;
+                            BlockPos pos = new BlockPos(x, mc.level.getHeight(Heightmap.Type.WORLD_SURFACE, x, z) - 1, z);
+                            BlockState state = mc.level.getBlockState(pos);
                             Block block = state.getBlock();
                             if (block instanceof IGrowable || block instanceof IPlantable || block instanceof LeavesBlock || block instanceof MyceliumBlock) {
-                                int excess = IAuraChunk.triangulateAuraInArea(mc.world, pos, 45) - IAuraChunk.DEFAULT_AURA;
+                                int excess = IAuraChunk.triangulateAuraInArea(mc.level, pos, 45) - IAuraChunk.DEFAULT_AURA;
                                 if (excess > 0) {
                                     int chance = Math.max(10, 50 - excess / 25000);
-                                    if (mc.world.rand.nextInt(chance) <= 0)
+                                    if (mc.level.rand.nextInt(chance) <= 0)
                                         NaturesAuraAPI.instance().spawnMagicParticle(
-                                                pos.getX() + mc.world.rand.nextFloat(),
+                                                pos.getX() + mc.level.rand.nextFloat(),
                                                 pos.getY() + 0.5F,
-                                                pos.getZ() + mc.world.rand.nextFloat(),
-                                                mc.world.rand.nextGaussian() * 0.01F,
-                                                mc.world.rand.nextFloat() * 0.025F,
-                                                mc.world.rand.nextGaussian() * 0.01F,
-                                                block instanceof MyceliumBlock ? 0x875ca1 : BiomeColors.getGrassColor(mc.world, pos),
-                                                Math.min(2F, 1F + mc.world.rand.nextFloat() * (excess / 30000F)),
-                                                Math.min(300, 100 + mc.world.rand.nextInt(excess / 3000 + 1)),
+                                                pos.getZ() + mc.level.rand.nextFloat(),
+                                                mc.level.rand.nextGaussian() * 0.01F,
+                                                mc.level.rand.nextFloat() * 0.025F,
+                                                mc.level.rand.nextGaussian() * 0.01F,
+                                                block instanceof MyceliumBlock ? 0x875ca1 : BiomeColors.getGrassColor(mc.level, pos),
+                                                Math.min(2F, 1F + mc.level.rand.nextFloat() * (excess / 30000F)),
+                                                Math.min(300, 100 + mc.level.rand.nextInt(excess / 3000 + 1)),
                                                 0F, false, true);
                                 }
                             }
                         }
                     }
 
-                    if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER) && mc.world.getGameTime() % 5 == 0) {
+                    if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER) && mc.level.getGameTime() % 5 == 0) {
                         NaturesAuraAPI.IInternalHooks inst = NaturesAuraAPI.instance();
                         inst.setParticleSpawnRange(512);
                         inst.setParticleDepth(false);
-                        for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_RAILS.get(mc.world.func_234923_W_().func_240901_a_())) {
+                        for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_RAILS.get(mc.level.func_234923_W_().func_240901_a_())) {
                             NaturesAuraAPI.instance().spawnMagicParticle(
-                                    pos.getX() + mc.world.rand.nextFloat(),
-                                    pos.getY() + mc.world.rand.nextFloat(),
-                                    pos.getZ() + mc.world.rand.nextFloat(),
-                                    0F, 0F, 0F, 0xe0faff, mc.world.rand.nextFloat() * 5 + 1, 100, 0F, false, true);
+                                    pos.getX() + mc.level.rand.nextFloat(),
+                                    pos.getY() + mc.level.rand.nextFloat(),
+                                    pos.getZ() + mc.level.rand.nextFloat(),
+                                    0F, 0F, 0F, 0xe0faff, mc.level.rand.nextFloat() * 5 + 1, 100, 0F, false, true);
                         }
                         inst.setParticleDepth(true);
                         inst.setParticleSpawnRange(32);
@@ -156,9 +156,9 @@ public class ClientEvents {
                     heldEye = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE, mc.player);
                     heldOcular = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE_IMPROVED, mc.player);
 
-                    if (!heldOcular.isEmpty() && mc.world.getGameTime() % 20 == 0) {
+                    if (!heldOcular.isEmpty() && mc.level.getGameTime() % 20 == 0) {
                         SHOWING_EFFECTS.clear();
-                        Helper.getAuraChunksWithSpotsInArea(mc.world, mc.player.getPosition(), 100,
+                        Helper.getAuraChunksWithSpotsInArea(mc.level, mc.player.getPosition(), 100,
                                 chunk -> chunk.getActiveEffectIcons(mc.player, SHOWING_EFFECTS));
                     }
                 }
@@ -167,7 +167,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void onWorldRender(RenderWorldLastEvent event) {
+    public void onLevelRender(RenderLevelLastEvent event) {
         Minecraft mc = Minecraft.getInstance();
 
         RenderSystem.pushMatrix();
@@ -177,7 +177,7 @@ public class ClientEvents {
         Vector3d view = info.getProjectedView();
         GL11.glTranslated(-view.getX(), -view.getY(), -view.getZ());
 
-        if (mc.gameSettings.showDebugInfo && mc.player.isCreative() && ModConfig.instance.debugWorld.get()) {
+        if (mc.gameSettings.showDebugInfo && mc.player.isCreative() && ModConfig.instance.debugLevel.get()) {
             Map<BlockPos, Integer> spots = new HashMap<>();
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -185,7 +185,7 @@ public class ClientEvents {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBegin(GL11.GL_QUADS);
-            IAuraChunk.getSpotsInArea(mc.world, mc.player.getPosition(), 64, (pos, spot) -> {
+            IAuraChunk.getSpotsInArea(mc.level, mc.player.getPosition(), 64, (pos, spot) -> {
                 spots.put(pos, spot);
 
                 RenderSystem.color4f(spot > 0 ? 0F : 1F, spot > 0 ? 1F : 0F, 0F, 0.35F);
@@ -212,7 +212,7 @@ public class ClientEvents {
         }
 
         if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER)) {
-            RegistryKey<World> dim = mc.world.func_234923_W_();
+            RegistryKey<Level> dim = mc.level.func_234923_W_();
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_CULL_FACE);
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -220,18 +220,18 @@ public class ClientEvents {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBegin(GL11.GL_QUADS);
             for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_BLOCKS.get(dim.func_240901_a_())) {
-                if (!mc.world.isBlockLoaded(pos))
+                if (!mc.level.isBlockLoaded(pos))
                     continue;
-                BlockState state = mc.world.getBlockState(pos);
+                BlockState state = mc.level.getBlockState(pos);
                 Block block = state.getBlock();
                 if (!(block instanceof IVisualizable))
                     continue;
-                this.renderVisualize((IVisualizable) block, mc.world, pos);
+                this.renderVisualize((IVisualizable) block, mc.level, pos);
             }
             for (Entity entity : ItemRangeVisualizer.VISUALIZED_ENTITIES.get(dim.func_240901_a_())) {
                 if (!entity.isAlive() || !(entity instanceof IVisualizable))
                     continue;
-                this.renderVisualize((IVisualizable) entity, mc.world, entity.getPosition());
+                this.renderVisualize((IVisualizable) entity, mc.level, entity.getPosition());
             }
             GL11.glEnd();
             GL11.glPopAttrib();
@@ -242,13 +242,13 @@ public class ClientEvents {
         GL11.glPopMatrix();
     }
 
-    private void renderVisualize(IVisualizable visualize, World
-            world, BlockPos pos) {
-        AxisAlignedBB box = visualize.getVisualizationBounds(world, pos);
+    private void renderVisualize(IVisualizable visualize, Level
+            level, BlockPos pos) {
+        AxisAlignedBB box = visualize.getVisualizationBounds(level, pos);
         if (box == null)
             return;
         box = box.grow(0.05F);
-        int color = visualize.getVisualizationColor(world, pos);
+        int color = visualize.getVisualizationColor(level, pos);
         RenderSystem.color4f((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 0.5F);
         Helper.renderWeirdBox(box.minX, box.minY, box.minZ, box.maxX - box.minX, box.maxY - box.minY, box.maxZ - box.minZ);
     }
@@ -293,10 +293,10 @@ public class ClientEvents {
 
                     int conf = ModConfig.instance.auraBarLocation.get();
                     if (!mc.gameSettings.showDebugInfo && (conf != 2 || !(mc.currentScreen instanceof ChatScreen))) {
-                        int color = IAuraType.forWorld(mc.world).getColor();
+                        int color = IAuraType.forLevel(mc.level).getColor();
                         RenderSystem.color4f((color >> 16 & 0xFF) / 255F, (color >> 8 & 0xFF) / 255F, (color & 0xFF) / 255F, 1);
 
-                        int totalAmount = IAuraChunk.triangulateAuraInArea(mc.world, mc.player.getPosition(), 35);
+                        int totalAmount = IAuraChunk.triangulateAuraInArea(mc.level, mc.player.getPosition(), 35);
                         float totalPercentage = totalAmount / (IAuraChunk.DEFAULT_AURA * 2F);
                         String text = I18n.format("info." + NaturesAura.MOD_ID + ".aura_in_area");
                         float textScale = 0.75F;
@@ -365,18 +365,18 @@ public class ClientEvents {
                     if (mc.objectMouseOver instanceof BlockRayTraceResult) {
                         BlockPos pos = ((BlockRayTraceResult) mc.objectMouseOver).getPos();
                         if (pos != null) {
-                            TileEntity tile = mc.world.getTileEntity(pos);
+                            BlockEntity tile = mc.level.getBlockEntity(pos);
                             IAuraContainer container;
                             int x = res.getScaledWidth() / 2;
                             int y = res.getScaledHeight() / 2;
                             if (tile != null && (container = tile.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null)) != null) {
-                                BlockState state = mc.world.getBlockState(pos);
-                                ItemStack blockStack = state.getBlock().getPickBlock(state, mc.objectMouseOver, mc.world, pos, mc.player);
+                                BlockState state = mc.level.getBlockState(pos);
+                                ItemStack blockStack = state.getBlock().getPickBlock(state, mc.objectMouseOver, mc.level, pos, mc.player);
                                 this.drawContainerInfo(stack, container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
                                         mc, res, 35, blockStack.getDisplayName().getString(), null);
 
-                                if (tile instanceof TileEntityNatureAltar) {
-                                    ItemStack tileStack = ((TileEntityNatureAltar) tile).getItemHandler().getStackInSlot(0);
+                                if (tile instanceof BlockEntityNatureAltar) {
+                                    ItemStack tileStack = ((BlockEntityNatureAltar) tile).getItemHandler().getStackInSlot(0);
                                     if (!tileStack.isEmpty()) {
                                         IAuraContainer stackCont = tileStack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
                                         if (stackCont != null) {
@@ -385,13 +385,13 @@ public class ClientEvents {
                                         }
                                     }
                                 }
-                            } else if (tile instanceof TileEntityRFConverter) {
-                                EnergyStorage storage = ((TileEntityRFConverter) tile).storage;
+                            } else if (tile instanceof BlockEntityRFConverter) {
+                                EnergyStorage storage = ((BlockEntityRFConverter) tile).storage;
                                 this.drawContainerInfo(stack, storage.getEnergyStored(), storage.getMaxEnergyStored(), 0xcc4916,
                                         mc, res, 35, I18n.format("block.naturesaura.rf_converter"),
                                         storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
-                            } else if (tile instanceof TileEntityGratedChute) {
-                                TileEntityGratedChute chute = (TileEntityGratedChute) tile;
+                            } else if (tile instanceof BlockEntityGratedChute) {
+                                BlockEntityGratedChute chute = (BlockEntityGratedChute) tile;
                                 ItemStack itemStack = chute.getItemHandler().getStackInSlot(0);
 
                                 if (itemStack.isEmpty())
@@ -407,16 +407,16 @@ public class ClientEvents {
                                 GlStateManager.disableDepthTest();
                                 AbstractGui.blit(stack, x - 18, y - 18, u, 0, 16, 16, 256, 256);
                                 GlStateManager.enableDepthTest();
-                            } else if (tile instanceof TileEntityItemDistributor) {
-                                TileEntityItemDistributor distributor = (TileEntityItemDistributor) tile;
+                            } else if (tile instanceof BlockEntityItemDistributor) {
+                                BlockEntityItemDistributor distributor = (BlockEntityItemDistributor) tile;
                                 Helper.renderItemInGui(DISPENSER, x - 24, y - 24, 1F);
                                 mc.getTextureManager().bindTexture(OVERLAYS);
                                 int u = !distributor.isRandomMode ? 240 : 224;
                                 GlStateManager.disableDepthTest();
                                 AbstractGui.blit(stack, x - 18, y - 18, u, 0, 16, 16, 256, 256);
                                 GlStateManager.enableDepthTest();
-                            } else if (tile instanceof TileEntityAuraTimer) {
-                                TileEntityAuraTimer timer = (TileEntityAuraTimer) tile;
+                            } else if (tile instanceof BlockEntityAuraTimer) {
+                                BlockEntityAuraTimer timer = (BlockEntityAuraTimer) tile;
                                 ItemStack itemStack = timer.getItemHandler().getStackInSlot(0);
                                 if (!itemStack.isEmpty()) {
                                     Helper.renderItemInGui(itemStack, x - 20, y - 20, 1);

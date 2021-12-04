@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-public class TileEntityPickupStopper extends TileEntityImpl {
+public class BlockEntityPickupStopper extends BlockEntityImpl {
 
-    public TileEntityPickupStopper() {
+    public BlockEntityPickupStopper() {
         super(ModTileEntities.PICKUP_STOPPER);
     }
 
@@ -13,7 +13,7 @@ public class TileEntityPickupStopper extends TileEntityImpl {
     @Override
     public void onRedstonePowerChange(int newPower) {
         super.onRedstonePowerChange(newPower);
-        if (!this.world.isRemote)
+        if (!this.level.isClientSide)
             this.sendToClients();
     }
 }

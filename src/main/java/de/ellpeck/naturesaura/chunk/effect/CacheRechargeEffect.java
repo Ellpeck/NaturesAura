@@ -7,14 +7,14 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.items.ModItems;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.level.Level;
+import net.minecraft.level.chunk.Chunk;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -26,10 +26,10 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
     private int amount;
     private AxisAlignedBB bb;
 
-    private boolean calcValues(World world, BlockPos pos, Integer spot) {
+    private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot < 100000)
             return false;
-        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(world, pos, 20);
+        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 20);
         int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
@@ -40,12 +40,12 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public ActiveType isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (!this.calcValues(player.world, pos, spot))
+    public ActiveType isActiveHere(Player player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (!this.calcValues(player.level, pos, spot))
             return ActiveType.INACTIVE;
         if (!this.bb.contains(player.getPositionVec()))
             return ActiveType.INACTIVE;
-        if (NaturesAuraAPI.instance().isEffectPowderActive(player.world, player.getPosition(), NAME))
+        if (NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.getPosition(), NAME))
             return ActiveType.INHIBITED;
         return ActiveType.ACTIVE;
     }
@@ -56,12 +56,12 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (!this.calcValues(world, pos, spot))
+    public void update(Level level, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (!this.calcValues(level, pos, spot))
             return;
-        List<PlayerEntity> players = world.getEntitiesWithinAABB(PlayerEntity.class, this.bb);
-        for (PlayerEntity player : players) {
-            if (NaturesAuraAPI.instance().isEffectPowderActive(world, player.getPosition(), NAME))
+        List<Player> players = level.getEntitiesWithinAABB(Player.class, this.bb);
+        for (Player player : players) {
+            if (NaturesAuraAPI.instance().isEffectPowderActive(level, player.getPosition(), NAME))
                 continue;
             if (NaturesAuraAPI.instance().insertAuraIntoPlayer(player, this.amount, true)) {
                 NaturesAuraAPI.instance().insertAuraIntoPlayer(player, this.amount, false);

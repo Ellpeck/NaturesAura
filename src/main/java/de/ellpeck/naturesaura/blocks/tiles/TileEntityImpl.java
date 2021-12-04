@@ -4,19 +4,18 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -24,40 +23,37 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nullable;
-import java.util.stream.Stream;
 
-public class TileEntityImpl extends TileEntity {
+public class BlockEntityImpl extends BlockEntity {
 
     public int redstonePower;
     private LazyOptional<IItemHandler> itemHandler;
     private LazyOptional<IAuraContainer> auraContainer;
 
-    public TileEntityImpl(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public BlockEntityImpl(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public void saveAdditional(CompoundTag compound) {
         this.writeNBT(compound, SaveType.TILE);
-        return compound;
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
+    public void load(CompoundTag compound) {
         this.readNBT(compound, SaveType.TILE);
     }
 
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         if (type != SaveType.BLOCK) {
-            super.write(compound);
+            super.saveAdditional(compound);
             compound.putInt("redstone", this.redstonePower);
         }
     }
 
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         if (type != SaveType.BLOCK) {
-            // looks like the block state isn't used in the super
-            super.read(null, compound);
+            super.load(compound);
             this.redstonePower = compound.getInt("redstone");
         }
     }
@@ -67,36 +63,38 @@ public class TileEntityImpl extends TileEntity {
     }
 
     @Override
-    public final SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT compound = new CompoundNBT();
-        this.writeNBT(compound, SaveType.SYNC);
-        return new SUpdateTileEntityPacket(this.pos, 0, compound);
+    public final ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this, e -> {
+            CompoundTag compound = new CompoundTag();
+            this.writeNBT(compound, SaveType.SYNC);
+            return compound;
+        });
     }
 
     @Override
-    public final CompoundNBT getUpdateTag() {
-        CompoundNBT compound = new CompoundNBT();
+    public final CompoundTag getUpdateTag() {
+        CompoundTag compound = new CompoundTag();
         this.writeNBT(compound, SaveType.SYNC);
         return compound;
     }
 
     @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(CompoundTag tag) {
         this.readNBT(tag, SaveType.SYNC);
-
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        super.onDataPacket(net, packet);
-        this.readNBT(packet.getNbtCompound(), SaveType.SYNC);
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        super.onDataPacket(net, pkt);
+        this.readNBT(pkt.getTag(), SaveType.SYNC);
     }
 
     public void sendToClients() {
-        ServerWorld world = (ServerWorld) this.getWorld();
-        Stream<ServerPlayerEntity> entities = world.getChunkProvider().chunkManager.getTrackingPlayers(new ChunkPos(this.getPos()), false);
-        SUpdateTileEntityPacket packet = this.getUpdatePacket();
-        entities.forEach(e -> e.connection.sendPacket(packet));
+        var world = (ServerLevel) this.getLevel();
+        var entities = world.getChunkSource().chunkMap.getPlayers(new ChunkPos(this.getBlockPos()), false);
+        ClientboundBlockEntityDataPacket packet = this.getUpdatePacket();
+        for (var e : entities)
+            e.connection.send(packet);
     }
 
     public IItemHandlerModifiable getItemHandler() {
@@ -128,8 +126,8 @@ public class TileEntityImpl extends TileEntity {
     }
 
     @Override
-    public void remove() {
-        super.remove();
+    public void setRemoved() {
+        super.setRemoved();
         if (this.itemHandler != null)
             this.itemHandler.invalidate();
         if (this.auraContainer != null)
@@ -142,40 +140,36 @@ public class TileEntityImpl extends TileEntity {
             for (int i = 0; i < handler.getSlots(); i++) {
                 ItemStack stack = handler.getStackInSlot(i);
                 if (!stack.isEmpty()) {
-                    ItemEntity item = new ItemEntity(this.world,
-                            this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5,
-                            stack);
-                    this.world.addEntity(item);
+                    ItemEntity item = new ItemEntity(this.level, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5, stack);
+                    this.level.addFreshEntity(item);
                 }
             }
         }
     }
 
     public void modifyDrop(ItemStack regularItem) {
-        CompoundNBT compound = new CompoundNBT();
+        CompoundTag compound = new CompoundTag();
         this.writeNBT(compound, SaveType.BLOCK);
         if (!compound.isEmpty()) {
-            if (!regularItem.hasTag())
-                regularItem.setTag(new CompoundNBT());
+            if (!regularItem.hasTag()) regularItem.setTag(new CompoundTag());
             regularItem.getTag().put("data", compound);
         }
     }
 
     public void loadDataOnPlace(ItemStack stack) {
         if (stack.hasTag()) {
-            CompoundNBT compound = stack.getTag().getCompound("data");
-            if (compound != null)
-                this.readNBT(compound, SaveType.BLOCK);
+            CompoundTag compound = stack.getTag().getCompound("data");
+            if (compound != null) this.readNBT(compound, SaveType.BLOCK);
         }
     }
 
     public boolean canGenerateRightNow(int toAdd) {
         if (this.wantsLimitRemover()) {
-            BlockState below = this.world.getBlockState(this.pos.down());
+            BlockState below = this.level.getBlockState(this.worldPosition.below());
             if (below.getBlock() == ModBlocks.GENERATOR_LIMIT_REMOVER)
                 return true;
         }
-        int aura = IAuraChunk.getAuraInArea(this.world, this.pos, 35);
+        int aura = IAuraChunk.getAuraInArea(this.level, this.worldPosition, 35);
         return aura + toAdd <= IAuraChunk.DEFAULT_AURA * 2;
     }
 
@@ -185,14 +179,12 @@ public class TileEntityImpl extends TileEntity {
 
     public void generateAura(int amount) {
         while (amount > 0) {
-            BlockPos spot = IAuraChunk.getLowestSpot(this.world, this.pos, 35, this.pos);
-            amount -= IAuraChunk.getAuraChunk(this.world, spot).storeAura(spot, amount);
+            BlockPos spot = IAuraChunk.getLowestSpot(this.level, this.worldPosition, 35, this.worldPosition);
+            amount -= IAuraChunk.getAuraChunk(this.level, spot).storeAura(spot, amount);
         }
     }
 
     public enum SaveType {
-        TILE,
-        SYNC,
-        BLOCK
+        TILE, SYNC, BLOCK
     }
 }

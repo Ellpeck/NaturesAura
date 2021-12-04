@@ -7,8 +7,8 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 public class BlockCatalyst extends BlockImpl implements ICustomBlockState {
     public static final BooleanProperty NETHER = BlockNatureAltar.NETHER;
@@ -20,7 +20,7 @@ public class BlockCatalyst extends BlockImpl implements ICustomBlockState {
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        boolean nether = IAuraType.forWorld(context.getWorld()).isSimilar(NaturesAuraAPI.TYPE_NETHER);
+        boolean nether = IAuraType.forLevel(context.getLevel()).isSimilar(NaturesAuraAPI.TYPE_NETHER);
         return super.getStateForPlacement(context).with(NETHER, nether);
     }
 

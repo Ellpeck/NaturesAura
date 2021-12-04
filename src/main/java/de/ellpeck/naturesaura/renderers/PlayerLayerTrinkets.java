@@ -5,13 +5,13 @@ import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.api.render.ITrinketItem.RenderType;
 import de.ellpeck.naturesaura.compat.Compat;
-import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
+import net.minecraft.client.entity.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
@@ -25,16 +25,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 @OnlyIn(Dist.CLIENT)
-public class PlayerLayerTrinkets extends LayerRenderer<AbstractClientPlayerEntity, PlayerModel<AbstractClientPlayerEntity>> {
+public class PlayerLayerTrinkets extends LayerRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
     private final Set<Item> alreadyRendered = new HashSet<>();
 
-    public PlayerLayerTrinkets(IEntityRenderer<AbstractClientPlayerEntity, PlayerModel<AbstractClientPlayerEntity>> entityRendererIn) {
+    public PlayerLayerTrinkets(IEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> entityRendererIn) {
         super(entityRendererIn);
     }
 
     @Override
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, AbstractClientPlayerEntity player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, AbstractClientPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!ModConfig.instance.renderItemsOnPlayer.get())
             return;
         if (player.getActivePotionEffect(Effects.INVISIBILITY) != null)
@@ -55,7 +55,7 @@ public class PlayerLayerTrinkets extends LayerRenderer<AbstractClientPlayerEntit
         matrixStackIn.pop();
     }
 
-    private void render(PlayerEntity player, RenderType type, ItemStack main, ItemStack second, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight) {
+    private void render(Player player, RenderType type, ItemStack main, ItemStack second, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight) {
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
             this.renderStack(player.inventory.getStackInSlot(i), player, type, main, second, matrices, buffer, packedLight);
         }
@@ -69,7 +69,7 @@ public class PlayerLayerTrinkets extends LayerRenderer<AbstractClientPlayerEntit
         }
     }
 
-    private void renderStack(ItemStack stack, PlayerEntity player, RenderType type, ItemStack main, ItemStack second, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight) {
+    private void renderStack(ItemStack stack, Player player, RenderType type, ItemStack main, ItemStack second, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight) {
         if (!stack.isEmpty()) {
             Item item = stack.getItem();
             if (item instanceof ITrinketItem && !this.alreadyRendered.contains(item)) {

@@ -7,14 +7,14 @@ import javax.annotation.Nonnull;
 
 public class ItemStackHandlerNA extends ItemStackHandler {
 
-    private final TileEntityImpl tile;
+    private final BlockEntityImpl tile;
     private final boolean sendToClients;
 
     public ItemStackHandlerNA(int size) {
         this(size, null, false);
     }
 
-    public ItemStackHandlerNA(int size, TileEntityImpl tile, boolean sendToClients) {
+    public ItemStackHandlerNA(int size, BlockEntityImpl tile, boolean sendToClients) {
         super(size);
         this.tile = tile;
         this.sendToClients = sendToClients;
@@ -24,7 +24,7 @@ public class ItemStackHandlerNA extends ItemStackHandler {
     protected void onContentsChanged(int slot) {
         if (this.tile != null) {
             this.tile.markDirty();
-            if (this.sendToClients && !this.tile.getWorld().isRemote)
+            if (this.sendToClients && !this.tile.getLevel().isClientSide)
                 this.tile.sendToClients();
         }
     }

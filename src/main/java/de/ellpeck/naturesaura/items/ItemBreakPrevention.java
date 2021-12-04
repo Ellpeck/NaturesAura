@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.*;
@@ -39,7 +39,7 @@ public class ItemBreakPrevention extends ItemImpl {
 
         @SubscribeEvent
         public void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-            PlayerEntity player = event.getPlayer();
+            Player player = event.getPlayer();
             if (player == null)
                 return;
             ItemStack stack = player.getHeldItemMainhand();

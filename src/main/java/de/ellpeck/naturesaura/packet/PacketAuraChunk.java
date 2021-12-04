@@ -4,11 +4,12 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.events.ClientEvents;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.level.chunk.Chunk;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraftforge.network.NetworkEvent;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.HashMap;
@@ -30,7 +31,7 @@ public class PacketAuraChunk {
     private PacketAuraChunk() {
     }
 
-    public static PacketAuraChunk fromBytes(PacketBuffer buf) {
+    public static PacketAuraChunk fromBytes(FriendlyByteBuf buf) {
         PacketAuraChunk packet = new PacketAuraChunk();
         packet.chunkX = buf.readInt();
         packet.chunkZ = buf.readInt();
@@ -47,7 +48,7 @@ public class PacketAuraChunk {
         return packet;
     }
 
-    public static void toBytes(PacketAuraChunk packet, PacketBuffer buf) {
+    public static void toBytes(PacketAuraChunk packet, FriendlyByteBuf buf) {
         buf.writeInt(packet.chunkX);
         buf.writeInt(packet.chunkZ);
 
@@ -63,9 +64,9 @@ public class PacketAuraChunk {
         ctx.get().setPacketHandled(true);
     }
 
-    public boolean tryHandle(World world) {
+    public boolean tryHandle(Level level) {
         try {
-            Chunk chunk = world.getChunk(this.chunkX, this.chunkZ);
+            LevelChunk chunk = level.getChunk(this.chunkX, this.chunkZ);
             if (chunk.isEmpty())
                 return false;
             AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk).orElse(null);

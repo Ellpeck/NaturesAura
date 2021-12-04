@@ -4,14 +4,14 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.tiles.ItemStackHandlerNA;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntitySpawnLamp;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntitySpawnLamp;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.LongNBT;
@@ -28,30 +28,31 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class WorldData implements IWorldData {
+public class LevelData implements ILevelData {
+
     public final ListMultimap<ResourceLocation, Tuple<Vector3d, Integer>> effectPowders = ArrayListMultimap.create();
     public final Long2ObjectOpenHashMap<AuraChunk> auraChunksWithSpots = new Long2ObjectOpenHashMap<>();
     public final List<BlockPos> recentlyConvertedMossStones = new ArrayList<>();
-    public final Set<TileEntitySpawnLamp> spawnLamps = new HashSet<>();
+    public final Set<BlockEntitySpawnLamp> spawnLamps = new HashSet<>();
     private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();
-    private final LazyOptional<WorldData> lazyThis = LazyOptional.of(() -> this);
+    private final LazyOptional<LevelData> lazyThis = LazyOptional.of(() -> this);
 
     @Nullable
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-        return capability == NaturesAuraAPI.capWorldData ? this.lazyThis.cast() : LazyOptional.empty();
+        return capability == NaturesAuraAPI.capLevelData ? this.lazyThis.cast() : LazyOptional.empty();
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT compound = new CompoundNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag compound = new CompoundTag();
 
         ListNBT storages = new ListNBT();
         for (Map.Entry<String, ItemStackHandlerNA> entry : this.enderStorages.entrySet()) {
             ItemStackHandlerNA handler = entry.getValue();
             if (Helper.isEmpty(handler))
                 continue;
-            CompoundNBT storageComp = handler.serializeNBT();
+            CompoundTag storageComp = handler.serializeNBT();
             storageComp.putString("name", entry.getKey());
             storages.add(storageComp);
         }
@@ -66,10 +67,10 @@ public class WorldData implements IWorldData {
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT compound) {
+    public void deserializeNBT(CompoundTag compound) {
         this.enderStorages.clear();
         for (INBT base : compound.getList("storages", 10)) {
-            CompoundNBT storageComp = (CompoundNBT) base;
+            CompoundTag storageComp = (CompoundTag) base;
             ItemStackHandlerNA storage = this.getEnderStorage(storageComp.getString("name"));
             storage.deserializeNBT(storageComp);
         }

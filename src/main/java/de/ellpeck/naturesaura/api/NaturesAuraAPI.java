@@ -8,24 +8,24 @@ import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.api.misc.WeatherType;
 import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -46,34 +46,34 @@ public final class NaturesAuraAPI {
     public static final String API_ID = MOD_ID + "api";
     public static final String VERSION = "9";
     /**
-     * A map of all of the block states that the Botanist's Pickaxe can convert
+     * A map of all the block states that the Botanist's Pickaxe can convert
      * into their mossy variations. Contains mossy brick and mossy cobblestone
      * by default, along with all blocks specified in the config file
      */
     public static final BiMap<BlockState, BlockState> BOTANIST_PICKAXE_CONVERSIONS = HashBiMap.create();
     /**
      * A map of all {@link IAuraType} instances which are types of Aura present
-     * in different types of worlds. {@link BasicAuraType} instances can be
+     * in different types of levels. {@link BasicAuraType} instances can be
      * easily registered using {@link BasicAuraType#register()}.
      */
     public static final Map<ResourceLocation, IAuraType> AURA_TYPES = new HashMap<>();
-    public static final BasicAuraType TYPE_OVERWORLD = new BasicAuraType(new ResourceLocation(MOD_ID, "overworld"), World.field_234918_g_, 0x89cc37, 0).register();
-    public static final BasicAuraType TYPE_NETHER = new BasicAuraType(new ResourceLocation(MOD_ID, "nether"), World.field_234919_h_, 0x871c0c, 0).register();
-    public static final BasicAuraType TYPE_END = new BasicAuraType(new ResourceLocation(MOD_ID, "end"), World.field_234920_i_, 0x302624, 0).register();
+    public static final BasicAuraType TYPE_OVERWORLD = new BasicAuraType(new ResourceLocation(MOD_ID, "overworld"), Level.OVERWORLD, 0x89cc37, 0).register();
+    public static final BasicAuraType TYPE_NETHER = new BasicAuraType(new ResourceLocation(MOD_ID, "nether"), Level.NETHER, 0x871c0c, 0).register();
+    public static final BasicAuraType TYPE_END = new BasicAuraType(new ResourceLocation(MOD_ID, "end"), Level.END, 0x302624, 0).register();
     public static final BasicAuraType TYPE_OTHER = new BasicAuraType(new ResourceLocation(MOD_ID, "other"), null, 0x2fa8a0, Integer.MIN_VALUE).register();
     /**
      * A map of all {@link IDrainSpotEffect} suppliers which are effects that
      * happen passively at every spot that Aura has been drained from in the
-     * world. These effects include things like vegetational increase and
+     * level. These effects include things like vegetational increase and
      * natural decay. To register your own drain spot effects, just add a
-     * supplier for them to this map and they will automatically be executed
+     * supplier for them to this map, and they will automatically be executed
      * once a second for every drain spot currently loaded.
      */
     public static final Map<ResourceLocation, Supplier<IDrainSpotEffect>> DRAIN_SPOT_EFFECTS = new HashMap<>();
     /**
      * A map of all effect powder type. The integer the effect is registered to
      * is the color that the powder and its effect should have. To check if a
-     * powder is active in any given area, use {@link IInternalHooks#isEffectPowderActive(World,
+     * powder is active in any given area, use {@link IInternalHooks#isEffectPowderActive(Level,
      * BlockPos, ResourceLocation)}
      */
     public static final Map<ResourceLocation, Integer> EFFECT_POWDERS = new HashMap<>();
@@ -90,48 +90,50 @@ public final class NaturesAuraAPI {
     public static final List<WeightedOre> OVERWORLD_ORES = new ArrayList<>();
     /**
      * A list of all {@link WeightedOre} objects that represent ores that can
-     * spawn inside of netherrack blocks in the nether
+     * spawn inside netherrack blocks in the nether
      */
     public static final List<WeightedOre> NETHER_ORES = new ArrayList<>();
     /**
-     * A map of all of the entities' registry names to the amounts of aura they
+     * A map of all the entities' registry names to the amounts of aura they
      * each generate in the projectile generator
      */
-    public static final Map<EntityType, Integer> PROJECTILE_GENERATIONS = new HashMap<>();
+    public static final Map<EntityType<?>, Integer> PROJECTILE_GENERATIONS = new HashMap<>();
     /**
-     * A map of all of the items that cause the {@link WeatherType} to be
-     * changed using the weather changer
+     * A map of all the items that cause the {@link WeatherType} to be changed
+     * using the weather changer
      */
     public static final Map<ItemStack, WeatherType> WEATHER_CHANGER_CONVERSIONS = new HashMap<>();
     /**
      * The capability for any item or block that stores Aura in the form of an
      * {@link IAuraContainer}
      */
-    @CapabilityInject(IAuraContainer.class)
-    public static Capability<IAuraContainer> capAuraContainer;
+    public static Capability<IAuraContainer> capAuraContainer = CapabilityManager.get(new CapabilityToken<>() {
+    });
     /**
      * The capability for any item that can be recharged from an Aura storage
      * container like the Aura Cache in the form of {@link IAuraRecharge} by a
      * player holding it in their hand
      */
-    @CapabilityInject(IAuraRecharge.class)
-    public static Capability<IAuraRecharge> capAuraRecharge;
+    public static Capability<IAuraRecharge> capAuraRecharge = CapabilityManager.get(new CapabilityToken<>() {
+    });
     /**
-     * The capability that any chunk in a world has to store Aura in it. As this
-     * is only applicable to chunks and all chunks in the world automatically
+     * The capability that any chunk in a level has to store Aura in it. As this
+     * is only applicable to chunks and all chunks in the level automatically
      * get assigned this capability, using it directly is not necessary for
      * addon developers. To retrieve this capability from any chunk, use the
-     * helper method {@link IAuraChunk#getAuraChunk(IWorld, BlockPos)}.
+     * helper method {@link IAuraChunk#getAuraChunk(net.minecraft.world.level.Level,
+     * BlockPos)}.
      */
-    @CapabilityInject(IAuraChunk.class)
-    public static Capability<IAuraChunk> capAuraChunk;
+    public static Capability<IAuraChunk> capAuraChunk = CapabilityManager.get(new CapabilityToken<>() {
+    });
     /**
-     * The capability that any world has to store Nature's Aura specific data in
-     * it. To retrieve this capability from any world, use the helper methods
-     * {@link IWorldData#getWorldData(World)} or {@link IWorldData#getOverworldData(World)}.
+     * The capability that any level has to store Nature's Aura specific data in
+     * it. To retrieve this capability from any level, use the helper methods
+     * {@link ILevelData#getLevelData(net.minecraft.world.level.Level)} or
+     * {@link ILevelData#getOverworldData(net.minecraft.world.level.Level)}.
      */
-    @CapabilityInject(IWorldData.class)
-    public static Capability<IWorldData> capWorldData;
+    public static Capability<ILevelData> capLevelData = CapabilityManager.get(new CapabilityToken<>() {
+    });
     private static final IInternalHooks INSTANCE;
 
     static {
@@ -169,7 +171,7 @@ public final class NaturesAuraAPI {
          * @param simulate If the extraction should be simulated
          * @return If the extraction was successful
          */
-        boolean extractAuraFromPlayer(PlayerEntity player, int amount, boolean simulate);
+        boolean extractAuraFromPlayer(Player player, int amount, boolean simulate);
 
         /**
          * Helper method to insert aura into an {@link IAuraContainer} in the
@@ -181,7 +183,7 @@ public final class NaturesAuraAPI {
          * @param simulate If the insertion should be simulated
          * @return If the insertion was successful
          */
-        boolean insertAuraIntoPlayer(PlayerEntity player, int amount, boolean simulate);
+        boolean insertAuraIntoPlayer(Player player, int amount, boolean simulate);
 
         /**
          * This method can be used to spawn the magic particle effect used by
@@ -262,65 +264,65 @@ public final class NaturesAuraAPI {
         IMultiblock createMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers);
 
         /**
-         * Get all of the active effect powders in the given area and consume
-         * the position and the range that they have. To register a powder with
-         * the supplied name, use {@link #EFFECT_POWDERS}
+         * Get all the active effect powders in the given area and consume the
+         * position and the range that they have. To register a powder with the
+         * supplied name, use {@link #EFFECT_POWDERS}
          *
-         * @param world The world
+         * @param level The level
          * @param area  The area to find powders in
          * @param name  The registry name of the powder
          * @return A list of powders' positions and ranges
          */
-        List<Tuple<Vector3d, Integer>> getActiveEffectPowders(World world, AxisAlignedBB area, ResourceLocation name);
+        List<Tuple<Vec3, Integer>> getActiveEffectPowders(Level level, AABB area, ResourceLocation name);
 
         /**
          * Returns true if there is an effect powder entity active anywhere
          * around the given position based on the radius it has. This is a
-         * shorthand function of {@link #getActiveEffectPowders(World,
-         * AxisAlignedBB, ResourceLocation)} that returns true if the list is
-         * non-empty
+         * shorthand function of {@link #getActiveEffectPowders(Level,
+         * net.minecraft.world.phys.AABB, ResourceLocation)} that returns true
+         * if the list is non-empty
          *
-         * @param world The world
+         * @param level The level
          * @param pos   The center position
          * @param name  The registry name of the powder
          * @return If the effect is currently inhibited by any inhibitors
          */
-        boolean isEffectPowderActive(World world, BlockPos pos, ResourceLocation name);
+        boolean isEffectPowderActive(Level level, BlockPos pos, ResourceLocation name);
 
         /**
-         * @see IAuraChunk#getSpotsInArea(IWorld, BlockPos, int, BiConsumer)
+         * @see IAuraChunk#getSpotsInArea(Level, BlockPos, int, BiConsumer)
          */
-        void getAuraSpotsInArea(World world, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer);
+        void getAuraSpotsInArea(Level level, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer);
 
         /**
-         * @see IAuraChunk#getSpotAmountInArea(IWorld, BlockPos, int)
+         * @see IAuraChunk#getSpotAmountInArea(Level, BlockPos, int)
          */
-        int getSpotAmountInArea(World world, BlockPos pos, int radius);
+        int getSpotAmountInArea(Level level, BlockPos pos, int radius);
 
         /**
-         * @see IAuraChunk#getAuraInArea(IWorld, BlockPos, int)
+         * @see IAuraChunk#getAuraInArea(Level, BlockPos, int)
          */
-        int getAuraInArea(World world, BlockPos pos, int radius);
+        int getAuraInArea(Level level, BlockPos pos, int radius);
 
         /**
-         * @see IAuraChunk#getAuraAndSpotAmountInArea(World, BlockPos, int)
+         * @see IAuraChunk#getAuraAndSpotAmountInArea(Level, BlockPos, int)
          */
-        Pair<Integer, Integer> getAuraAndSpotAmountInArea(World world, BlockPos pos, int radius);
+        Pair<Integer, Integer> getAuraAndSpotAmountInArea(Level level, BlockPos pos, int radius);
 
         /**
-         * @see IAuraChunk#triangulateAuraInArea(IWorld, BlockPos, int)
+         * @see IAuraChunk#triangulateAuraInArea(Level, BlockPos, int)
          */
-        int triangulateAuraInArea(World world, BlockPos pos, int radius);
+        int triangulateAuraInArea(Level level, BlockPos pos, int radius);
 
         /**
-         * @see IAuraChunk#getLowestSpot(IWorld, BlockPos, int, BlockPos)
+         * @see IAuraChunk#getLowestSpot(Level, BlockPos, int, BlockPos)
          */
-        BlockPos getLowestAuraDrainSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot);
+        BlockPos getLowestAuraDrainSpot(Level level, BlockPos pos, int radius, BlockPos defaultSpot);
 
         /**
-         * @see IAuraChunk#getHighestSpot(IWorld, BlockPos, int, BlockPos)
+         * @see IAuraChunk#getHighestSpot(Level, BlockPos, int, BlockPos)
          */
-        BlockPos getHighestAuraDrainSpot(World world, BlockPos pos, int radius, BlockPos defaultSpot);
+        BlockPos getHighestAuraDrainSpot(Level level, BlockPos pos, int radius, BlockPos defaultSpot);
     }
 
 }

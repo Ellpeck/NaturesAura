@@ -2,11 +2,11 @@ package de.ellpeck.naturesaura.reg;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.api.misc.IWorldData;
+import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.*;
 import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityAuraBloom;
-import de.ellpeck.naturesaura.blocks.tiles.TileEntityEnderCrate;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraBloom;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEnderCrate;
 import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import de.ellpeck.naturesaura.entities.*;
@@ -14,9 +14,9 @@ import de.ellpeck.naturesaura.entities.render.RenderEffectInhibitor;
 import de.ellpeck.naturesaura.entities.render.RenderMoverMinecart;
 import de.ellpeck.naturesaura.entities.render.RenderStub;
 import de.ellpeck.naturesaura.gen.ModFeatures;
-import de.ellpeck.naturesaura.gen.WorldGenAncientTree;
-import de.ellpeck.naturesaura.gen.WorldGenAuraBloom;
-import de.ellpeck.naturesaura.gen.WorldGenNetherWartMushroom;
+import de.ellpeck.naturesaura.gen.LevelGenAncientTree;
+import de.ellpeck.naturesaura.gen.LevelGenAuraBloom;
+import de.ellpeck.naturesaura.gen.LevelGenNetherWartMushroom;
 import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
 import de.ellpeck.naturesaura.items.*;
@@ -43,14 +43,14 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.tileentity.BlockEntity;
+import net.minecraft.tileentity.BlockEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.util.registry.LevelGenRegistries;
+import net.minecraft.level.Level;
+import net.minecraft.level.gen.feature.Feature;
+import net.minecraft.level.gen.feature.structure.Structure;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
@@ -122,9 +122,9 @@ public final class ModRegistry {
                 new BlockPowderPlacer(),
                 new BlockFireworkGenerator(),
                 new BlockProjectileGenerator(),
-                new BlockDimensionRail("overworld", World.field_234918_g_, World.field_234919_h_, World.field_234920_i_),
-                new BlockDimensionRail("nether", World.field_234919_h_, World.field_234918_g_),
-                new BlockDimensionRail("end", World.field_234920_i_, World.field_234918_g_),
+                new BlockDimensionRail("overworld", Level.field_234918_g_, Level.field_234919_h_, Level.field_234920_i_),
+                new BlockDimensionRail("nether", Level.field_234919_h_, Level.field_234918_g_),
+                new BlockDimensionRail("end", Level.field_234920_i_, Level.field_234918_g_),
                 new BlockBlastFurnaceBooster(),
                 new BlockImpl("nether_wart_mushroom", Block.Properties.from(Blocks.RED_MUSHROOM_BLOCK)),
                 new BlockAnimalContainer(),
@@ -231,9 +231,9 @@ public final class ModRegistry {
     }
 
     @SubscribeEvent
-    public static void registerTiles(RegistryEvent.Register<TileEntityType<?>> event) {
+    public static void registerTiles(RegistryEvent.Register<BlockEntityType<?>> event) {
         // add tile entities that support multiple blocks
-        add(new ModTileType<>(TileEntityAuraBloom::new, "aura_bloom", ALL_ITEMS.stream().filter(i -> i instanceof BlockAuraBloom).toArray(IModItem[]::new)));
+        add(new ModTileType<>(BlockEntityAuraBloom::new, "aura_bloom", ALL_ITEMS.stream().filter(i -> i instanceof BlockAuraBloom).toArray(IModItem[]::new)));
 
         for (IModItem item : ALL_ITEMS) {
             if (item instanceof ModTileType)
@@ -254,13 +254,13 @@ public final class ModRegistry {
     public static void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
         event.getRegistry().registerAll(
                 IForgeContainerType.create((windowId, inv, data) -> {
-                    TileEntity tile = inv.player.world.getTileEntity(data.readBlockPos());
-                    if (tile instanceof TileEntityEnderCrate)
-                        return new ContainerEnderCrate(ModContainers.ENDER_CRATE, windowId, inv.player, ((TileEntityEnderCrate) tile).getItemHandler());
+                    BlockEntity tile = inv.player.level.getBlockEntity(data.readBlockPos());
+                    if (tile instanceof BlockEntityEnderCrate)
+                        return new ContainerEnderCrate(ModContainers.ENDER_CRATE, windowId, inv.player, ((BlockEntityEnderCrate) tile).getItemHandler());
                     return null;
                 }).setRegistryName("ender_crate"),
                 IForgeContainerType.create((windowId, inv, data) -> {
-                    IItemHandler handler = IWorldData.getOverworldData(inv.player.world).getEnderStorage(data.readString());
+                    IItemHandler handler = ILevelData.getOverworldData(inv.player.level).getEnderStorage(data.readString());
                     return new ContainerEnderCrate(ModContainers.ENDER_ACCESS, windowId, inv.player, handler);
                 }).setRegistryName("ender_access")
         );
@@ -313,13 +313,13 @@ public final class ModRegistry {
     @SubscribeEvent
     public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
         event.getRegistry().registerAll(
-                new WorldGenAuraBloom(ModBlocks.AURA_BLOOM, 60, false).setRegistryName("aura_bloom"),
-                new WorldGenAuraBloom(ModBlocks.AURA_CACTUS, 60, false).setRegistryName("aura_cactus"),
-                new WorldGenAuraBloom(ModBlocks.WARPED_AURA_MUSHROOM, 10, true).setRegistryName("warped_aura_mushroom"),
-                new WorldGenAuraBloom(ModBlocks.CRIMSON_AURA_MUSHROOM, 10, true).setRegistryName("crimson_aura_mushroom"),
-                new WorldGenAuraBloom(ModBlocks.AURA_MUSHROOM, 20, false).setRegistryName("aura_mushroom"),
-                new WorldGenAncientTree().setRegistryName("ancient_tree"),
-                new WorldGenNetherWartMushroom().setRegistryName("nether_wart_mushroom")
+                new LevelGenAuraBloom(ModBlocks.AURA_BLOOM, 60, false).setRegistryName("aura_bloom"),
+                new LevelGenAuraBloom(ModBlocks.AURA_CACTUS, 60, false).setRegistryName("aura_cactus"),
+                new LevelGenAuraBloom(ModBlocks.WARPED_AURA_MUSHROOM, 10, true).setRegistryName("warped_aura_mushroom"),
+                new LevelGenAuraBloom(ModBlocks.CRIMSON_AURA_MUSHROOM, 10, true).setRegistryName("crimson_aura_mushroom"),
+                new LevelGenAuraBloom(ModBlocks.AURA_MUSHROOM, 20, false).setRegistryName("aura_mushroom"),
+                new LevelGenAncientTree().setRegistryName("ancient_tree"),
+                new LevelGenNetherWartMushroom().setRegistryName("nether_wart_mushroom")
         );
         Helper.populateObjectHolders(ModFeatures.class, event.getRegistry());
     }
@@ -341,11 +341,11 @@ public final class ModRegistry {
         }
 
         // register features again for some reason
-        Registry.register(WorldGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "aura_bloom"), ModFeatures.Configured.AURA_BLOOM);
-        Registry.register(WorldGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "aura_cactus"), ModFeatures.Configured.AURA_CACTUS);
-        Registry.register(WorldGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "crimson_aura_mushroom"), ModFeatures.Configured.CRIMSON_AURA_MUSHROOM);
-        Registry.register(WorldGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "warped_aura_mushroom"), ModFeatures.Configured.WARPED_AURA_MUSHROOM);
-        Registry.register(WorldGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "aura_mushroom"), ModFeatures.Configured.AURA_MUSHROOM);
+        Registry.register(LevelGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "aura_bloom"), ModFeatures.Configured.AURA_BLOOM);
+        Registry.register(LevelGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "aura_cactus"), ModFeatures.Configured.AURA_CACTUS);
+        Registry.register(LevelGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "crimson_aura_mushroom"), ModFeatures.Configured.CRIMSON_AURA_MUSHROOM);
+        Registry.register(LevelGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "warped_aura_mushroom"), ModFeatures.Configured.WARPED_AURA_MUSHROOM);
+        Registry.register(LevelGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "aura_mushroom"), ModFeatures.Configured.AURA_MUSHROOM);
     }
 
     public static Block createFlowerPot(Block block) {

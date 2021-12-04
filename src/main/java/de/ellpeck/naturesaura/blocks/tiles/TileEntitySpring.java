@@ -8,7 +8,7 @@ import net.minecraft.block.CauldronBlock;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.ITickableBlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -25,29 +25,29 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-public class TileEntitySpring extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlockEntity {
 
     private final LazyOptional<IFluidHandler> tank = LazyOptional.of(InfiniteTank::new);
     private AABBTicket waterTicket;
 
-    public TileEntitySpring() {
+    public BlockEntitySpring() {
         super(ModTileEntities.SPRING);
     }
 
     @Override
     public void validate() {
         super.validate();
-        if (!this.world.isRemote) {
+        if (!this.level.isClientSide) {
             // add a ticket to water crops
-            AxisAlignedBB area = new AxisAlignedBB(this.pos).grow(5, 1, 5);
-            this.waterTicket = FarmlandWaterManager.addAABBTicket(this.world, area);
+            AxisAlignedBB area = new AxisAlignedBB(this.worldPosition).grow(5, 1, 5);
+            this.waterTicket = FarmlandWaterManager.addAABBTicket(this.level, area);
         }
     }
 
     @Override
     public void remove() {
         super.remove();
-        if (!this.world.isRemote && this.waterTicket != null && this.waterTicket.isValid()) {
+        if (!this.level.isClientSide && this.waterTicket != null && this.waterTicket.isValid()) {
             this.waterTicket.invalidate();
             this.waterTicket = null;
         }
@@ -56,17 +56,17 @@ public class TileEntitySpring extends TileEntityImpl implements ITickableTileEnt
 
     @Override
     public void tick() {
-        if (this.world.isRemote || this.world.getGameTime() % 35 != 0)
+        if (this.level.isClientSide || this.level.getGameTime() % 35 != 0)
             return;
 
         // fill cauldrons
-        BlockPos up = this.pos.up();
-        BlockState upState = this.world.getBlockState(up);
+        BlockPos up = this.worldPosition.up();
+        BlockState upState = this.level.getBlockState(up);
         if (upState.hasProperty(CauldronBlock.LEVEL)) {
             int level = upState.get(CauldronBlock.LEVEL);
             if (level < 3) {
-                this.world.setBlockState(up, upState.with(CauldronBlock.LEVEL, level + 1));
-                this.world.playSound(null, up, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1, 1);
+                this.level.setBlockState(up, upState.with(CauldronBlock.LEVEL, level + 1));
+                this.level.playSound(null, up, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1, 1);
                 this.consumeAura(2500);
                 return;
             }
@@ -77,11 +77,11 @@ public class TileEntitySpring extends TileEntityImpl implements ITickableTileEnt
         for (int x = -spongeRadius; x <= spongeRadius; x++) {
             for (int y = -spongeRadius; y <= spongeRadius; y++) {
                 for (int z = -spongeRadius; z <= spongeRadius; z++) {
-                    BlockPos pos = this.pos.add(x, y, z);
-                    BlockState state = this.world.getBlockState(pos);
+                    BlockPos pos = this.worldPosition.add(x, y, z);
+                    BlockState state = this.level.getBlockState(pos);
                     if (state.getBlock() == Blocks.SPONGE) {
-                        this.world.setBlockState(pos, Blocks.WET_SPONGE.getDefaultState(), 2);
-                        this.world.playEvent(2001, pos, Block.getStateId(Blocks.WATER.getDefaultState()));
+                        this.level.setBlockState(pos, Blocks.WET_SPONGE.getDefaultState(), 2);
+                        this.level.playEvent(2001, pos, Block.getStateId(Blocks.WATER.getDefaultState()));
                         this.consumeAura(2500);
                         return;
                     }
@@ -91,31 +91,31 @@ public class TileEntitySpring extends TileEntityImpl implements ITickableTileEnt
 
         // generate obsidian
         for (Direction dir : Direction.Plane.HORIZONTAL) {
-            BlockPos side = this.pos.offset(dir);
+            BlockPos side = this.worldPosition.offset(dir);
             if (this.isLava(side, true)) {
-                this.world.setBlockState(side, ForgeEventFactory.fireFluidPlaceBlockEvent(this.world, side, side, Blocks.OBSIDIAN.getDefaultState()));
-                this.world.playEvent(1501, side, 0);
+                this.level.setBlockState(side, ForgeEventFactory.fireFluidPlaceBlockEvent(this.level, side, side, Blocks.OBSIDIAN.getDefaultState()));
+                this.level.playEvent(1501, side, 0);
                 this.consumeAura(1500);
                 return;
             }
         }
 
         // generate stone
-        BlockPos twoUp = this.pos.up(2);
-        if (this.isLava(twoUp, false) && (this.world.getBlockState(up).isAir(this.world, up) || this.isLava(up, false))) {
-            this.world.setBlockState(up, ForgeEventFactory.fireFluidPlaceBlockEvent(this.world, up, twoUp, Blocks.STONE.getDefaultState()));
-            this.world.playEvent(1501, up, 0);
+        BlockPos twoUp = this.worldPosition.up(2);
+        if (this.isLava(twoUp, false) && (this.level.getBlockState(up).isAir(this.level, up) || this.isLava(up, false))) {
+            this.level.setBlockState(up, ForgeEventFactory.fireFluidPlaceBlockEvent(this.level, up, twoUp, Blocks.STONE.getDefaultState()));
+            this.level.playEvent(1501, up, 0);
             this.consumeAura(150);
             return;
         }
 
         // generate cobblestone
         for (Direction dir : Direction.Plane.HORIZONTAL) {
-            BlockPos twoSide = this.pos.offset(dir, 2);
-            BlockPos side = this.pos.offset(dir);
-            if (this.isLava(twoSide, false) && (this.world.getBlockState(side).isAir(this.world, side) || this.isLava(side, false))) {
-                this.world.setBlockState(side, ForgeEventFactory.fireFluidPlaceBlockEvent(this.world, side, twoSide, Blocks.COBBLESTONE.getDefaultState()));
-                this.world.playEvent(1501, side, 0);
+            BlockPos twoSide = this.worldPosition.offset(dir, 2);
+            BlockPos side = this.worldPosition.offset(dir);
+            if (this.isLava(twoSide, false) && (this.level.getBlockState(side).isAir(this.level, side) || this.isLava(side, false))) {
+                this.level.setBlockState(side, ForgeEventFactory.fireFluidPlaceBlockEvent(this.level, side, twoSide, Blocks.COBBLESTONE.getDefaultState()));
+                this.level.playEvent(1501, side, 0);
                 this.consumeAura(100);
                 return;
             }
@@ -131,13 +131,13 @@ public class TileEntitySpring extends TileEntityImpl implements ITickableTileEnt
 
     public void consumeAura(int amount) {
         while (amount > 0) {
-            BlockPos pos = IAuraChunk.getHighestSpot(this.world, this.pos, 35, this.pos);
-            amount -= IAuraChunk.getAuraChunk(this.world, pos).drainAura(pos, amount);
+            BlockPos pos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
+            amount -= IAuraChunk.getAuraChunk(this.level, pos).drainAura(pos, amount);
         }
     }
 
     private boolean isLava(BlockPos offset, boolean source) {
-        FluidState state = this.world.getFluidState(offset);
+        FluidState state = this.level.getFluidState(offset);
         return (!source || state.isSource()) && state.getFluid().isIn(FluidTags.LAVA);
     }
 
@@ -171,7 +171,7 @@ public class TileEntitySpring extends TileEntityImpl implements ITickableTileEnt
         public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
             int drain = Math.min(maxDrain, 1000);
             if (action.execute())
-                TileEntitySpring.this.consumeAura(MathHelper.ceil(drain / 2F));
+                BlockEntitySpring.this.consumeAura(MathHelper.ceil(drain / 2F));
             return new FluidStack(Fluids.WATER, drain);
         }
 

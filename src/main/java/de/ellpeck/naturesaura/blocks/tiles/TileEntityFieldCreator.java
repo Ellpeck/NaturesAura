@@ -13,44 +13,44 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tileentity.ITickableBlockEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.server.ServerLevel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 
 import java.util.List;
 
-public class TileEntityFieldCreator extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickableBlockEntity {
 
     public BlockPos connectionOffset;
     public boolean isMain;
     public boolean isCharged;
     private int chargeTimer;
 
-    public TileEntityFieldCreator() {
+    public BlockEntityFieldCreator() {
         super(ModTileEntities.FIELD_CREATOR);
     }
 
     @Override
     public void tick() {
-        if (this.world.isRemote || this.world.getGameTime() % 10 != 0)
+        if (this.level.isClientSide || this.level.getGameTime() % 10 != 0)
             return;
 
         BlockPos connectedPos = this.getConnectedPos();
-        if (connectedPos == null || !this.world.isBlockLoaded(connectedPos))
+        if (connectedPos == null || !this.level.isBlockLoaded(connectedPos))
             return;
 
-        TileEntity other = this.world.getTileEntity(connectedPos);
+        BlockEntity other = this.level.getBlockEntity(connectedPos);
         if (!this.isCloseEnough(connectedPos)
-                || !(other instanceof TileEntityFieldCreator)
-                || !this.pos.equals(((TileEntityFieldCreator) other).getConnectedPos())) {
+                || !(other instanceof BlockEntityFieldCreator)
+                || !this.worldPosition.equals(((BlockEntityFieldCreator) other).getConnectedPos())) {
             this.connectionOffset = null;
             this.chargeTimer = 0;
             this.isCharged = false;
@@ -62,7 +62,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
         if (!this.isMain)
             return;
 
-        TileEntityFieldCreator creator = (TileEntityFieldCreator) other;
+        BlockEntityFieldCreator creator = (BlockEntityFieldCreator) other;
         if (this.redstonePower <= 0 && creator.redstonePower <= 0) {
             this.chargeTimer = 0;
             if (this.isCharged) {
@@ -74,8 +74,8 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
             return;
         }
 
-        BlockPos spot = IAuraChunk.getHighestSpot(this.world, this.pos, 32, this.pos);
-        IAuraChunk chunk = IAuraChunk.getAuraChunk(this.world, spot);
+        BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 32, this.worldPosition);
+        IAuraChunk chunk = IAuraChunk.getAuraChunk(this.level, spot);
 
         if (!this.isCharged) {
             this.chargeTimer += 10;
@@ -91,14 +91,14 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
             chunk.drainAura(spot, 300);
             this.sendParticles();
         } else {
-            if (this.world.getGameTime() % 40 == 0)
+            if (this.level.getGameTime() % 40 == 0)
                 chunk.drainAura(spot, 20);
 
             ItemStack tool = this.getToolUsed(creator);
             Vector3d dist = new Vector3d(
-                    this.pos.getX() - connectedPos.getX(),
-                    this.pos.getY() - connectedPos.getY(),
-                    this.pos.getZ() - connectedPos.getZ()
+                    this.worldPosition.getX() - connectedPos.getX(),
+                    this.worldPosition.getY() - connectedPos.getY(),
+                    this.worldPosition.getZ() - connectedPos.getZ()
             );
             double length = dist.length();
             Vector3d normal = new Vector3d(dist.x / length, dist.y / length, dist.z / length);
@@ -109,23 +109,23 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
                         MathHelper.floor(scaled.y + 0.5F),
                         MathHelper.floor(scaled.z + 0.5F));
 
-                if (pos.equals(this.pos) || pos.equals(connectedPos))
+                if (pos.equals(this.worldPosition) || pos.equals(connectedPos))
                     continue;
 
-                BlockState state = this.world.getBlockState(pos);
+                BlockState state = this.level.getBlockState(pos);
                 Block block = state.getBlock();
-                if (!block.isAir(state, this.world, pos) && state.getBlockHardness(this.world, pos) >= 0F) {
-                    FakePlayer fake = FakePlayerFactory.getMinecraft((ServerWorld) this.world);
-                    if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.world, pos, state, fake))) {
-                        List<ItemStack> drops = state.getDrops(new LootContext.Builder((ServerWorld) this.world)
+                if (!block.isAir(state, this.level, pos) && state.getBlockHardness(this.level, pos) >= 0F) {
+                    FakePlayer fake = FakePlayerFactory.getMinecraft((ServerLevel) this.level);
+                    if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.level, pos, state, fake))) {
+                        List<ItemStack> drops = state.getDrops(new LootContext.Builder((ServerLevel) this.level)
                                 .withParameter(LootParameters.THIS_ENTITY, fake)
                                 .withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(pos))
                                 .withParameter(LootParameters.BLOCK_STATE, state)
                                 .withParameter(LootParameters.TOOL, tool.isEmpty() ? new ItemStack(Items.DIAMOND_PICKAXE) : tool)
-                                .withNullableParameter(LootParameters.BLOCK_ENTITY, this.world.getTileEntity(pos)));
-                        this.world.destroyBlock(pos, false);
+                                .withNullableParameter(LootParameters.BLOCK_ENTITY, this.level.getBlockEntity(pos)));
+                        this.level.destroyBlock(pos, false);
                         for (ItemStack stack : drops)
-                            Block.spawnAsEntity(this.world, pos, stack);
+                            Block.spawnAsEntity(this.level, pos, stack);
                         chunk.drainAura(spot, !tool.isEmpty() ? 300 : 100);
                         this.sendParticles();
                     }
@@ -134,20 +134,20 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
         }
     }
 
-    private ItemStack getToolUsed(TileEntityFieldCreator other) {
+    private ItemStack getToolUsed(BlockEntityFieldCreator other) {
         ItemStack myTool = this.getMyTool();
         ItemStack otherTool = other.getMyTool();
         if (!myTool.isEmpty()) {
             // if both have tools, choose randomly
             if (!otherTool.isEmpty())
-                return this.world.rand.nextBoolean() ? myTool : otherTool;
+                return this.level.rand.nextBoolean() ? myTool : otherTool;
             return myTool;
         }
         return otherTool;
     }
 
     private ItemStack getMyTool() {
-        List<ItemFrameEntity> frames = Helper.getAttachedItemFrames(this.world, this.pos);
+        List<ItemFrameEntity> frames = Helper.getAttachedItemFrames(this.level, this.worldPosition);
         for (ItemFrameEntity frame : frames) {
             ItemStack stack = frame.getDisplayedItem();
             if (!stack.isEmpty())
@@ -158,32 +158,32 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
 
     private void sendParticles() {
         for (int j = 0; j < 2; j++) {
-            BlockPos p = j == 0 ? this.pos : this.getConnectedPos();
-            PacketHandler.sendToAllAround(this.world, p, 32, new PacketParticleStream(
-                    p.getX() + (float) this.world.rand.nextGaussian() * 3F,
-                    p.getY() + 1 + this.world.rand.nextFloat() * 3F,
-                    p.getZ() + (float) this.world.rand.nextGaussian() * 3F,
+            BlockPos p = j == 0 ? this.worldPosition : this.getConnectedPos();
+            PacketHandler.sendToAllAround(this.level, p, 32, new PacketParticleStream(
+                    p.getX() + (float) this.level.rand.nextGaussian() * 3F,
+                    p.getY() + 1 + this.level.rand.nextFloat() * 3F,
+                    p.getZ() + (float) this.level.rand.nextGaussian() * 3F,
                     p.getX() + 0.5F,
                     p.getY() + 0.5F,
                     p.getZ() + 0.5F,
-                    this.world.rand.nextFloat() * 0.07F + 0.07F, IAuraType.forWorld(this.world).getColor(), this.world.rand.nextFloat() + 0.5F
+                    this.level.rand.nextFloat() * 0.07F + 0.07F, IAuraType.forLevel(this.level).getColor(), this.level.rand.nextFloat() + 0.5F
             ));
         }
     }
 
     public boolean isCloseEnough(BlockPos pos) {
         int range = ModConfig.instance.fieldCreatorRange.get() + 1;
-        return this.pos.distanceSq(pos) <= range * range;
+        return this.worldPosition.distanceSq(pos) <= range * range;
     }
 
     public BlockPos getConnectedPos() {
         if (this.connectionOffset == null)
             return null;
-        return this.pos.add(this.connectionOffset);
+        return this.worldPosition.add(this.connectionOffset);
     }
 
     @Override
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (this.connectionOffset != null)
@@ -197,7 +197,7 @@ public class TileEntityFieldCreator extends TileEntityImpl implements ITickableT
     }
 
     @Override
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (compound.contains("connection"))

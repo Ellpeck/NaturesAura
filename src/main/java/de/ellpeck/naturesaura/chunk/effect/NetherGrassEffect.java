@@ -11,14 +11,14 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.level.Level;
+import net.minecraft.level.chunk.Chunk;
 import net.minecraftforge.common.Tags;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -29,10 +29,10 @@ public class NetherGrassEffect implements IDrainSpotEffect {
     private int amount;
     private int dist;
 
-    private boolean calcValues(World world, BlockPos pos, Integer spot) {
+    private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot <= 0)
             return false;
-        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(world, pos, 30);
+        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 30);
         int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
@@ -44,12 +44,12 @@ public class NetherGrassEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public ActiveType isActiveHere(PlayerEntity player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (!this.calcValues(player.world, pos, spot))
+    public ActiveType isActiveHere(Player player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (!this.calcValues(player.level, pos, spot))
             return ActiveType.INACTIVE;
         if (player.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return ActiveType.INACTIVE;
-        if (NaturesAuraAPI.instance().isEffectPowderActive(player.world, player.getPosition(), NAME))
+        if (NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.getPosition(), NAME))
             return ActiveType.INHIBITED;
         return ActiveType.ACTIVE;
     }
@@ -60,34 +60,34 @@ public class NetherGrassEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public void update(World world, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (world.getGameTime() % 40 != 0)
+    public void update(Level level, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+        if (level.getGameTime() % 40 != 0)
             return;
-        if (!this.calcValues(world, pos, spot))
+        if (!this.calcValues(level, pos, spot))
             return;
-        for (int i = this.amount / 2 + world.rand.nextInt(this.amount / 2); i >= 0; i--) {
-            int x = MathHelper.floor(pos.getX() + world.rand.nextGaussian() * this.dist);
-            int y = MathHelper.floor(pos.getY() + world.rand.nextGaussian() * this.dist);
-            int z = MathHelper.floor(pos.getZ() + world.rand.nextGaussian() * this.dist);
+        for (int i = this.amount / 2 + level.rand.nextInt(this.amount / 2); i >= 0; i--) {
+            int x = MathHelper.floor(pos.getX() + level.rand.nextGaussian() * this.dist);
+            int y = MathHelper.floor(pos.getY() + level.rand.nextGaussian() * this.dist);
+            int z = MathHelper.floor(pos.getZ() + level.rand.nextGaussian() * this.dist);
 
             for (int yOff = -5; yOff <= 5; yOff++) {
                 BlockPos goalPos = new BlockPos(x, y + yOff, z);
-                if (goalPos.distanceSq(pos) <= this.dist * this.dist && world.isBlockLoaded(goalPos)) {
-                    if (NaturesAuraAPI.instance().isEffectPowderActive(world, goalPos, NAME))
+                if (goalPos.distanceSq(pos) <= this.dist * this.dist && level.isBlockLoaded(goalPos)) {
+                    if (NaturesAuraAPI.instance().isEffectPowderActive(level, goalPos, NAME))
                         continue;
                     BlockPos up = goalPos.up();
-                    if (world.getBlockState(up).isSolidSide(world, up, Direction.DOWN))
+                    if (level.getBlockState(up).isSolidSide(level, up, Direction.DOWN))
                         continue;
 
-                    BlockState state = world.getBlockState(goalPos);
+                    BlockState state = level.getBlockState(goalPos);
                     Block block = state.getBlock();
                     if (Tags.Blocks.NETHERRACK.contains(block)) {
-                        world.setBlockState(goalPos, ModBlocks.NETHER_GRASS.getDefaultState());
+                        level.setBlockState(goalPos, ModBlocks.NETHER_GRASS.getDefaultState());
 
-                        BlockPos closestSpot = IAuraChunk.getHighestSpot(world, goalPos, 25, pos);
-                        IAuraChunk.getAuraChunk(world, closestSpot).drainAura(closestSpot, 500);
+                        BlockPos closestSpot = IAuraChunk.getHighestSpot(level, goalPos, 25, pos);
+                        IAuraChunk.getAuraChunk(level, closestSpot).drainAura(closestSpot, 500);
 
-                        PacketHandler.sendToAllAround(world, goalPos, 32,
+                        PacketHandler.sendToAllAround(level, goalPos, 32,
                                 new PacketParticles(goalPos.getX(), goalPos.getY() + 0.5F, goalPos.getZ(), PacketParticles.Type.PLANT_BOOST));
                         break;
                     }

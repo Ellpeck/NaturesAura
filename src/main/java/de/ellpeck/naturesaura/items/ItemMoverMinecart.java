@@ -5,9 +5,9 @@ import de.ellpeck.naturesaura.entities.ModEntities;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 
 import javax.annotation.Nonnull;
 
@@ -19,17 +19,17 @@ public class ItemMoverMinecart extends ItemImpl {
 
     @Nonnull
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        World world = context.getWorld();
+    public InteractionResult onItemUse(ItemUseContext context) {
+        Level level = context.getLevel();
         BlockPos pos = context.getPos();
-        if (AbstractRailBlock.isRail(world.getBlockState(pos))) {
-            if (!world.isRemote) {
-                AbstractMinecartEntity cart = new EntityMoverMinecart(ModEntities.MOVER_CART, world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-                world.addEntity(cart);
+        if (AbstractRailBlock.isRail(level.getBlockState(pos))) {
+            if (!level.isClientSide) {
+                AbstractMinecartEntity cart = new EntityMoverMinecart(ModEntities.MOVER_CART, level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                level.addEntity(cart);
             }
             context.getPlayer().getHeldItem(context.getHand()).shrink(1);
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 }

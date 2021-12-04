@@ -1,9 +1,9 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tileentity.ITickableBlockEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -12,19 +12,19 @@ import net.minecraftforge.items.IItemHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileEntityItemDistributor extends TileEntityImpl implements ITickableTileEntity {
+public class BlockEntityItemDistributor extends BlockEntityImpl implements ITickableBlockEntity {
 
     private int cooldown;
     private Direction currentSide = Direction.NORTH;
     public boolean isRandomMode;
 
-    public TileEntityItemDistributor() {
+    public BlockEntityItemDistributor() {
         super(ModTileEntities.ITEM_DISTRIBUTOR);
     }
 
     @Override
     public void tick() {
-        if (this.world.isRemote)
+        if (this.level.isClientSide)
             return;
         if (this.cooldown > 0) {
             this.cooldown--;
@@ -54,8 +54,8 @@ public class TileEntityItemDistributor extends TileEntityImpl implements ITickab
     }
 
     private IItemHandler getHandler(Direction direction) {
-        BlockPos offset = this.pos.offset(direction);
-        TileEntity tile = this.world.getTileEntity(offset);
+        BlockPos offset = this.worldPosition.offset(direction);
+        BlockEntity tile = this.level.getBlockEntity(offset);
         if (tile == null)
             return null;
         return tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, direction.getOpposite()).orElse(null);
@@ -71,7 +71,7 @@ public class TileEntityItemDistributor extends TileEntityImpl implements ITickab
             }
             if (handlers.isEmpty())
                 return null;
-            return handlers.get(this.world.rand.nextInt(handlers.size()));
+            return handlers.get(this.level.rand.nextInt(handlers.size()));
         } else {
             for (int i = 0; i < 4; i++) {
                 this.currentSide = this.currentSide.rotateY();
@@ -84,7 +84,7 @@ public class TileEntityItemDistributor extends TileEntityImpl implements ITickab
     }
 
     @Override
-    public void writeNBT(CompoundNBT compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type == SaveType.TILE) {
             compound.putInt("cooldown", this.cooldown);
@@ -95,7 +95,7 @@ public class TileEntityItemDistributor extends TileEntityImpl implements ITickab
     }
 
     @Override
-    public void readNBT(CompoundNBT compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
         if (type == SaveType.TILE) {
             this.cooldown = compound.getInt("cooldown");

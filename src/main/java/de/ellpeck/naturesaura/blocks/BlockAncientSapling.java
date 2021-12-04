@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.gen.ModFeatures;
-import de.ellpeck.naturesaura.gen.WorldGenAncientTree;
+import de.ellpeck.naturesaura.gen.LevelGenAncientTree;
 import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -12,9 +12,9 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.Level;
+import net.minecraft.level.server.ServerLevel;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Random;
@@ -29,17 +29,17 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (!world.isRemote) {
-            super.randomTick(state, world, pos, random);
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
+        if (!level.isClientSide) {
+            super.randomTick(state, level, pos, random);
 
-            if (world.getLight(pos.up()) >= 9 && random.nextInt(7) == 0) {
-                this.grow(world, random, pos, state);
+            if (level.getLight(pos.up()) >= 9 && random.nextInt(7) == 0) {
+                this.grow(level, random, pos, state);
             }
         }
     }
@@ -55,21 +55,21 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
     }
 
     @Override
-    public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean canGrow(IBlockReader levelIn, BlockPos pos, BlockState state, boolean isClient) {
         return true;
     }
 
     @Override
-    public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state) {
-        return world.rand.nextFloat() < 0.45F;
+    public boolean canUseBonemeal(Level level, Random rand, BlockPos pos, BlockState state) {
+        return level.rand.nextFloat() < 0.45F;
     }
 
     @Override
-    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
+    public void grow(ServerLevel level, Random rand, BlockPos pos, BlockState state) {
         if (state.get(SaplingBlock.STAGE) == 0) {
-            world.setBlockState(pos, state.func_235896_a_(SaplingBlock.STAGE), 4);
-        } else if (ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
-            ModFeatures.ANCIENT_TREE.func_241855_a(world, world.getChunkProvider().getChunkGenerator(), rand, pos, WorldGenAncientTree.CONFIG);
+            level.setBlockState(pos, state.func_235896_a_(SaplingBlock.STAGE), 4);
+        } else if (ForgeEventFactory.saplingGrowTree(level, rand, pos)) {
+            ModFeatures.ANCIENT_TREE.func_241855_a(level, level.getChunkProvider().getChunkGenerator(), rand, pos, LevelGenAncientTree.CONFIG);
         }
     }
 

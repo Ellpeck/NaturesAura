@@ -1,14 +1,15 @@
 package de.ellpeck.naturesaura.packet;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 public final class PacketHandler {
 
@@ -23,15 +24,15 @@ public final class PacketHandler {
         network.registerMessage(3, PacketClient.class, PacketClient::toBytes, PacketClient::fromBytes, PacketClient::onMessage);
     }
 
-    public static void sendToAllLoaded(World world, BlockPos pos, Object message) {
-        network.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)), message);
+    public static void sendToAllLoaded(Level level, BlockPos pos, Object message) {
+        network.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(pos)), message);
     }
 
-    public static void sendToAllAround(World world, BlockPos pos, int range, Object message) {
-        network.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, world.func_234923_W_())), message);
+    public static void sendToAllAround(Level level, BlockPos pos, int range, Object message) {
+        network.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, level.func_234923_W_())), message);
     }
 
-    public static void sendTo(PlayerEntity player, Object message) {
-        network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), message);
+    public static void sendTo(Player player, Object message) {
+        network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), message);
     }
 }
