@@ -7,16 +7,20 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BushBlock;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.*;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.InteractionResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.level.Level;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -26,21 +30,21 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
 
     private final String baseName;
 
-    public ItemHoe(String baseName, IItemTier material, int speed) {
-        super(material, speed, 0, new Properties().group(NaturesAura.CREATIVE_TAB));
+    public ItemHoe(String baseName, Tier material, int speed) {
+        super(material, speed, 0, new Properties().tab(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
         ModRegistry.add(this);
     }
 
     @Override
-    public InteractionResult onItemUse(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         if (this == ModItems.INFUSED_IRON_HOE) {
             Level level = context.getLevel();
-            InteractionResult result = super.onItemUse(context);
-            if (!level.isClientSide && result.isSuccessOrConsume()) {
+            InteractionResult result = super.useOn(context);
+            if (!level.isClientSide && result.consumesAction()) {
                 ItemStack seed = ItemStack.EMPTY;
                 Random random = level.getRandom();
-                BlockPos pos = context.getPos();
+                BlockPos pos = context.getClickedPos();
                 if (random.nextInt(5) == 0) {
                     seed = new ItemStack(Items.WHEAT_SEEDS);
                 } else if (random.nextInt(10) == 0) {
@@ -56,7 +60,7 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
 
                 if (!seed.isEmpty()) {
                     ItemEntity item = new ItemEntity(level, pos.getX() + random.nextFloat(), pos.getY() + 1F, pos.getZ() + random.nextFloat(), seed);
-                    level.addEntity(item);
+                    level.addFreshEntity(item);
                 }
             }
             return result;
@@ -64,15 +68,15 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
             boolean success = false;
             for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
-                    BlockPos offset = context.getPos().add(x, 0, z);
-                    BlockRayTraceResult newResult = new BlockRayTraceResult(context.getHitVec(), context.getFace(), offset, context.isInside());
-                    ItemUseContext newContext = new ItemUseContext(context.getPlayer(), context.getHand(), newResult);
-                    success |= super.onItemUse(newContext) == InteractionResult.SUCCESS;
+                    BlockPos offset = context.getClickedPos().offset(x, 0, z);
+                    BlockHitResult newResult = new BlockHitResult(context.getClickLocation(), context.getClickedFace(), offset, context.isInside());
+                    UseOnContext newContext = new UseOnContext(context.getPlayer(), context.getHand(), newResult);
+                    success |= super.useOn(newContext) == InteractionResult.SUCCESS;
                 }
             }
             return success ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
-        return super.onItemUse(context);
+        return super.useOn(context);
     }
 
     @Override
@@ -87,7 +91,7 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
                         for (int z = -range; z <= range; z++) {
                             if (x == 0 && y == 0 && z == 0)
                                 continue;
-                            BlockPos offset = pos.add(x, y, z);
+                            BlockPos offset = pos.offset(x, y, z);
                             BlockState otherState = player.level.getBlockState(offset);
                             if (otherState.getBlock() instanceof BushBlock)
                                 player.level.destroyBlock(offset, true);

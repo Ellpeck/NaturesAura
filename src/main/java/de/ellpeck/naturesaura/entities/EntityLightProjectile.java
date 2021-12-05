@@ -2,64 +2,60 @@ package de.ellpeck.naturesaura.entities;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.math.*;
-import net.minecraft.level.Level;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 
-public class EntityLightProjectile extends ThrowableEntity {
-    public EntityLightProjectile(EntityType<? extends ThrowableEntity> type, Level levelIn) {
+public class EntityLightProjectile extends ThrowableProjectile {
+
+    public EntityLightProjectile(EntityType<? extends ThrowableProjectile> type, Level levelIn) {
         super(type, levelIn);
     }
 
-    public EntityLightProjectile(EntityType<? extends ThrowableEntity> type, LivingEntity livingEntityIn, Level levelIn) {
+    public EntityLightProjectile(EntityType<? extends ThrowableProjectile> type, LivingEntity livingEntityIn, Level levelIn) {
         super(type, livingEntityIn, levelIn);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide && this.ticksExisted > 1) {
+        if (this.level.isClientSide && this.tickCount > 1) {
             for (float i = 0; i <= 1; i += 0.2F) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        Mth.lerp(i, this.prevPosX, this.getPosX()),
-                        Mth.lerp(i, this.prevPosY, this.getPosY()),
-                        Mth.lerp(i, this.prevPosZ, this.getPosZ()),
-                        this.rand.nextGaussian() * 0.01F, this.rand.nextGaussian() * 0.01F, this.rand.nextGaussian() * 0.01F,
-                        0xffcb5c, this.rand.nextFloat() * 0.5F + 1, 20, 0, false, true);
+                        Mth.lerp(i, this.xOld, this.getX()),
+                        Mth.lerp(i, this.yOld, this.getY()),
+                        Mth.lerp(i, this.zOld, this.getZ()),
+                        this.random.nextGaussian() * 0.01F, this.random.nextGaussian() * 0.01F, this.random.nextGaussian() * 0.01F,
+                        0xffcb5c, this.random.nextFloat() * 0.5F + 1, 20, 0, false, true);
             }
         }
     }
 
     @Override
-    protected void onImpact(RayTraceResult result) {
+    protected void onHit(HitResult result) {
         if (!this.level.isClientSide) {
-            if (result instanceof BlockRayTraceResult) {
-                BlockRayTraceResult res = (BlockRayTraceResult) result;
-                BlockPos pos = res.getPos().offset(res.getFace());
+            if (result instanceof BlockHitResult res) {
+                BlockPos pos = res.getBlockPos().relative(res.getDirection());
                 BlockState state = this.level.getBlockState(pos);
                 if (state.getMaterial().isReplaceable())
-                    this.level.setBlockState(pos, ModBlocks.LIGHT.getDefaultState());
-            } else if (result instanceof EntityRayTraceResult) {
-                Entity entity = ((EntityRayTraceResult) result).getEntity();
-                entity.setFire(5);
+                    this.level.setBlockAndUpdate(pos, ModBlocks.LIGHT.defaultBlockState());
+            } else if (result instanceof EntityHitResult entity) {
+                entity.getEntity().setRemainingFireTicks(5);
             }
         }
-        this.remove();
+        this.discard();
     }
 
-    @Override
-    protected void registerData() {
-
-    }
-
-    @Override
-    public IPacket<?> createSpawnPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
 }

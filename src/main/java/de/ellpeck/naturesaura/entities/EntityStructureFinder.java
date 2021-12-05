@@ -3,25 +3,23 @@ package de.ellpeck.naturesaura.entities;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.projectile.EyeOfEnderEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Mth;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.level.Level;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.projectile.EyeOfEnder;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
-public class EntityStructureFinder extends EyeOfEnderEntity {
+public class EntityStructureFinder extends EyeOfEnder {
 
-    public static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityStructureFinder.class, DataSerializers.VARINT);
+    public static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(EntityStructureFinder.class, EntityDataSerializers.INT);
 
     private double targetX;
     private double targetY;
@@ -29,40 +27,40 @@ public class EntityStructureFinder extends EyeOfEnderEntity {
     private int despawnTimer;
     private boolean shatterOrDrop;
 
-    public EntityStructureFinder(EntityType<? extends EyeOfEnderEntity> type, Level level) {
+    public EntityStructureFinder(EntityType<? extends EyeOfEnder> type, Level level) {
         super(type, level);
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(COLOR, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(COLOR, 0);
     }
 
     @Override
-    public void writeAdditional(CompoundTag compound) {
-        super.writeAdditional(compound);
-        compound.putInt("color", this.dataManager.get(COLOR));
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("color", this.entityData.get(COLOR));
     }
 
     @Override
-    public void readAdditional(CompoundTag compound) {
-        super.readAdditional(compound);
-        this.dataManager.set(COLOR, compound.getInt("color"));
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.entityData.set(COLOR, compound.getInt("color"));
     }
 
     @Override
-    public void moveTowards(BlockPos pos) {
+    public void signalTo(BlockPos pos) {
         double d0 = pos.getX();
         int i = pos.getY();
         double d1 = pos.getZ();
-        double d2 = d0 - this.getPosX();
-        double d3 = d1 - this.getPosZ();
-        float f = Mth.sqrt(d2 * d2 + d3 * d3);
+        double d2 = d0 - this.getX();
+        double d3 = d1 - this.getZ();
+        var f = Math.sqrt(d2 * d2 + d3 * d3);
         if (f > 12.0F) {
-            this.targetX = this.getPosX() + d2 / (double) f * 12.0D;
-            this.targetZ = this.getPosZ() + d3 / (double) f * 12.0D;
-            this.targetY = this.getPosY() + 8.0D;
+            this.targetX = this.getX() + d2 / (double) f * 12.0D;
+            this.targetZ = this.getZ() + d3 / (double) f * 12.0D;
+            this.targetY = this.getY() + 8.0D;
         } else {
             this.targetX = d0;
             this.targetY = i;
@@ -70,30 +68,30 @@ public class EntityStructureFinder extends EyeOfEnderEntity {
         }
 
         this.despawnTimer = 0;
-        this.shatterOrDrop = this.rand.nextInt(4) > 0;
+        this.shatterOrDrop = this.random.nextInt(4) > 0;
     }
 
     @Override
     public void tick() {
         this.baseTick();
 
-        Vector3d vec3d = this.getMotion();
-        double d0 = this.getPosX() + vec3d.x;
-        double d1 = this.getPosY() + vec3d.y;
-        double d2 = this.getPosZ() + vec3d.z;
-        float f = Mth.sqrt(horizontalMag(vec3d));
-        this.rotationYaw = (float) (Mth.atan2(vec3d.x, vec3d.z) * (double) (180F / (float) Math.PI));
-        this.rotationPitch = (float) (Mth.atan2(vec3d.y, f) * (double) (180F / (float) Math.PI));
-        while (this.rotationPitch - this.prevRotationPitch < -180.0F)
-            this.prevRotationPitch -= 360.0F;
-        while (this.rotationPitch - this.prevRotationPitch >= 180.0F)
-            this.prevRotationPitch += 360.0F;
-        while (this.rotationYaw - this.prevRotationYaw < -180.0F)
-            this.prevRotationYaw -= 360.0F;
-        while (this.rotationYaw - this.prevRotationYaw >= 180.0F)
-            this.prevRotationYaw += 360.0F;
-        this.rotationPitch = Mth.lerp(0.2F, this.prevRotationPitch, this.rotationPitch);
-        this.rotationYaw = Mth.lerp(0.2F, this.prevRotationYaw, this.rotationYaw);
+        Vec3 vec3d = this.getDeltaMovement();
+        double d0 = this.getX() + vec3d.x;
+        double d1 = this.getY() + vec3d.y;
+        double d2 = this.getZ() + vec3d.z;
+        var f = Math.sqrt(vec3d.horizontalDistance());
+        this.setYRot((float) (Mth.atan2(vec3d.x, vec3d.z) * (double) (180F / (float) Math.PI)));
+        this.setXRot((float) (Mth.atan2(vec3d.y, f) * (double) (180F / (float) Math.PI)));
+        while (this.getXRot() - this.xRotO < -180.0F)
+            this.xRotO -= 360.0F;
+        while (this.getXRot() - this.xRotO >= 180.0F)
+            this.xRotO += 360.0F;
+        while (this.getYRot() - this.yRotO < -180.0F)
+            this.yRotO -= 360.0F;
+        while (this.getYRot() - this.yRotO >= 180.0F)
+            this.yRotO += 360.0F;
+        this.setXRot(Mth.lerp(0.2F, this.xRotO, this.getXRot()));
+        this.setYRot(Mth.lerp(0.2F, this.yRotO, this.getYRot()));
         if (!this.level.isClientSide) {
             double d3 = this.targetX - d0;
             double d4 = this.targetZ - d2;
@@ -106,38 +104,34 @@ public class EntityStructureFinder extends EyeOfEnderEntity {
                 d6 *= 0.8D;
             }
 
-            int j = this.getPosY() < this.targetY ? 1 : -1;
-            vec3d = new Vector3d(Math.cos(f2) * d5, d6 + ((double) j - d6) * (double) 0.015F, Math.sin(f2) * d5);
-            this.setMotion(vec3d);
+            int j = this.getY() < this.targetY ? 1 : -1;
+            vec3d = new Vec3(Math.cos(f2) * d5, d6 + ((double) j - d6) * (double) 0.015F, Math.sin(f2) * d5);
+            this.setDeltaMovement(vec3d);
         }
 
         if (this.isInWater()) {
             for (int i = 0; i < 4; ++i)
                 this.level.addParticle(ParticleTypes.BUBBLE, d0 - vec3d.x * 0.25D, d1 - vec3d.y * 0.25D, d2 - vec3d.z * 0.25D, vec3d.x, vec3d.y, vec3d.z);
         } else if (this.level.isClientSide) {
-            NaturesAuraAPI.instance().spawnMagicParticle(d0 - vec3d.x * 0.25D + this.rand.nextDouble() * 0.6D - 0.3D, d1 - vec3d.y * 0.25D - 0.5D, d2 - vec3d.z * 0.25D + this.rand.nextDouble() * 0.6D - 0.3D, vec3d.x * 0.25F, vec3d.y * 0.25F, vec3d.z * 0.25F, this.dataManager.get(COLOR), 1, 50, 0, false, true);
+            NaturesAuraAPI.instance().spawnMagicParticle(d0 - vec3d.x * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, d1 - vec3d.y * 0.25D - 0.5D, d2 - vec3d.z * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, vec3d.x * 0.25F, vec3d.y * 0.25F, vec3d.z * 0.25F, this.entityData.get(COLOR), 1, 50, 0, false, true);
         }
 
         if (!this.level.isClientSide) {
-            this.setPosition(d0, d1, d2);
+            this.setPos(d0, d1, d2);
             ++this.despawnTimer;
             if (this.despawnTimer > 80 && !this.level.isClientSide) {
-                this.playSound(SoundEvents.ENTITY_ENDER_EYE_DEATH, 1.0F, 1.0F);
-                this.remove();
+                this.playSound(SoundEvents.ENDER_EYE_DEATH, 1.0F, 1.0F);
+                this.remove(RemovalReason.DISCARDED);
                 if (this.shatterOrDrop) {
-                    this.level.addEntity(new ItemEntity(this.level, this.getPosX(), this.getPosY(), this.getPosZ(), this.getItem()));
+                    this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.getItem()));
                 } else {
-                    PacketHandler.sendToAllAround(this.level, this.getPosition(), 32, new PacketParticles((float) this.getPosX(), (float) this.getPosY(), (float) this.getPosZ(), PacketParticles.Type.STRUCTURE_FINDER, this.getEntityId()));
+                    PacketHandler.sendToAllAround(this.level, this.getOnPos(), 32, new PacketParticles((float) this.getX(), (float) this.getY(), (float) this.getZ(), PacketParticles.Type.STRUCTURE_FINDER, this.getId()));
                 }
             }
         } else {
-            this.setRawPosition(d0, d1, d2);
+            this.setPosRaw(d0, d1, d2);
         }
 
     }
 
-    @Override
-    public IPacket<?> createSpawnPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
 }

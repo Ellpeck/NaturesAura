@@ -5,17 +5,14 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModArmorMaterial;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.Player;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.*;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -32,24 +29,24 @@ import java.util.UUID;
 public class ItemArmor extends ArmorItem implements IModItem {
 
     private static final AttributeModifier SKY_MOVEMENT_MODIFIER = new AttributeModifier(UUID.fromString("c1f96acc-e117-4dc1-a351-e196a4de6071"), NaturesAura.MOD_ID + ":sky_movement_speed", 0.15F, AttributeModifier.Operation.MULTIPLY_TOTAL);
-    private static final Map<IArmorMaterial, Item[]> SETS = new HashMap<>();
+    private static final Map<ArmorMaterial, Item[]> SETS = new HashMap<>();
     private final String baseName;
 
-    public ItemArmor(String baseName, IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn) {
-        super(materialIn, equipmentSlotIn, new Properties().group(NaturesAura.CREATIVE_TAB));
+    public ItemArmor(String baseName, ArmorMaterial materialIn, EquipmentSlot equipmentSlotIn) {
+        super(materialIn, equipmentSlotIn, new Properties().tab(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
         ModRegistry.add(this);
     }
 
-    public static boolean isFullSetEquipped(LivingEntity entity, IArmorMaterial material) {
-        Item[] set = SETS.computeIfAbsent(material, m -> ForgeRegistries.ITEMS.getValues().stream()
-                .filter(i -> i instanceof ItemArmor && ((ItemArmor) i).getArmorMaterial() == material)
-                .sorted(Comparator.comparingInt(i -> ((ItemArmor) i).getEquipmentSlot().ordinal()))
+    public static boolean isFullSetEquipped(LivingEntity entity, ArmorMaterial material) {
+        var set = SETS.computeIfAbsent(material, m -> ForgeRegistries.ITEMS.getValues().stream()
+                .filter(i -> i instanceof ItemArmor && ((ItemArmor) i).getMaterial() == material)
+                .sorted(Comparator.comparingInt(i -> ((ItemArmor) i).getSlot().ordinal()))
                 .toArray(Item[]::new));
-        for (int i = 0; i < 4; i++) {
-            EquipmentSlotType slot = EquipmentSlotType.values()[i + 2];
-            ItemStack stack = entity.getItemStackFromSlot(slot);
-            if (stack.getItem() != set[i] && (slot != EquipmentSlotType.CHEST || stack.getItem() != Items.ELYTRA))
+        for (var i = 0; i < 4; i++) {
+            var slot = EquipmentSlot.values()[i + 2];
+            var stack = entity.getItemBySlot(slot);
+            if (stack.getItem() != set[i] && (slot != EquipmentSlot.CHEST || stack.getItem() != Items.ELYTRA))
                 return false;
         }
         return true;
@@ -71,33 +68,33 @@ public class ItemArmor extends ArmorItem implements IModItem {
 
         @SubscribeEvent
         public static void onAttack(LivingAttackEvent event) {
-            LivingEntity entity = event.getEntityLiving();
+            var entity = event.getEntityLiving();
             if (!entity.level.isClientSide) {
                 if (!isFullSetEquipped(entity, ModArmorMaterial.INFUSED))
                     return;
-                Entity source = event.getSource().getTrueSource();
+                var source = event.getSource().getEntity();
                 if (source instanceof LivingEntity)
-                    ((LivingEntity) source).addPotionEffect(new EffectInstance(Effects.WITHER, 40));
+                    ((LivingEntity) source).addEffect(new MobEffectInstance(MobEffects.WITHER, 40));
             }
         }
 
         @SubscribeEvent
         public static void update(TickEvent.PlayerTickEvent event) {
-            Player player = event.player;
-            ModifiableAttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
-            String key = NaturesAura.MOD_ID + ":sky_equipped";
-            CompoundTag nbt = player.getPersistentData();
-            boolean equipped = isFullSetEquipped(player, ModArmorMaterial.SKY);
+            var player = event.player;
+            var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
+            var key = NaturesAura.MOD_ID + ":sky_equipped";
+            var nbt = player.getPersistentData();
+            var equipped = isFullSetEquipped(player, ModArmorMaterial.SKY);
             if (equipped && !nbt.getBoolean(key)) {
                 // we just equipped it
                 nbt.putBoolean(key, true);
-                player.stepHeight = 1.1F;
+                player.maxUpStep = 1.1F;
                 if (!speed.hasModifier(SKY_MOVEMENT_MODIFIER))
-                    speed.applyNonPersistentModifier(SKY_MOVEMENT_MODIFIER);
+                    speed.addPermanentModifier(SKY_MOVEMENT_MODIFIER);
             } else if (!equipped && nbt.getBoolean(key)) {
                 // we just unequipped it
                 nbt.putBoolean(key, false);
-                player.stepHeight = 0.6F;
+                player.maxUpStep = 0.6F;
                 speed.removeModifier(SKY_MOVEMENT_MODIFIER);
             }
         }

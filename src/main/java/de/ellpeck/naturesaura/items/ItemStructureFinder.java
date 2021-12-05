@@ -2,22 +2,24 @@ package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.entities.EntityStructureFinder;
 import de.ellpeck.naturesaura.entities.ModEntities;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.InteractionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
-import net.minecraft.level.gen.feature.structure.Structure;
-import net.minecraft.level.server.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 
 public class ItemStructureFinder extends ItemImpl {
-    private final Structure structureName;
+
+    private final StructureFeature<?> structureName;
     private final int color;
     private final int radius;
 
-    public ItemStructureFinder(String baseName, Structure structureName, int color, int radius) {
+    public ItemStructureFinder(String baseName, StructureFeature<?> structureName, int color, int radius) {
         super(baseName);
         this.structureName = structureName;
         this.color = color;
@@ -25,11 +27,10 @@ public class ItemStructureFinder extends ItemImpl {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(Level levelIn, Player playerIn, Hand handIn) {
-        ItemStack stack = playerIn.getHeldItem(handIn);
-        // ServerLevel.getStructureManager().doesGenerateFeatures()
-        if (!levelIn.isClientSide && ((ServerLevel) levelIn).func_241112_a_().func_235005_a_()) {
-            BlockPos pos = ((ServerLevel) levelIn).getChunkProvider().getChunkGenerator().func_235956_a_((ServerLevel) levelIn, this.structureName, playerIn.getPosition(), this.radius, false);
+    public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
+        ItemStack stack = playerIn.getItemInHand(handIn);
+        if (!levelIn.isClientSide && ((ServerLevel) levelIn).structureFeatureManager().shouldGenerateFeatures()) {
+            BlockPos pos = ((ServerLevel) levelIn).getChunkSource().getGenerator().findNearestMapFeature((ServerLevel) levelIn, this.structureName, playerIn.getPosition(), this.radius, false);
             if (pos != null) {
                 EntityStructureFinder entity = new EntityStructureFinder(ModEntities.STRUCTURE_FINDER, levelIn);
                 entity.setPosition(playerIn.getPosX(), playerIn.getPosYHeight(0.5D), playerIn.getPosZ());

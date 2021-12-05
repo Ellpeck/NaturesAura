@@ -1,20 +1,20 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.tileentity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockEntityAuraBloom extends BlockEntityImpl implements ITickableBlockEntity {
 
     public boolean justGenerated;
 
-    public BlockEntityAuraBloom() {
-        this(ModTileEntities.AURA_BLOOM);
+    public BlockEntityAuraBloom(BlockPos pos, BlockState state) {
+        this(ModTileEntities.AURA_BLOOM, pos, state);
     }
 
-    protected BlockEntityAuraBloom(BlockEntityType<BlockEntityAuraBloom> type) {
-        super(type);
+    protected BlockEntityAuraBloom(BlockEntityType<BlockEntityAuraBloom> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     // Doing this in validate() creates a loading deadlock for some reason...
