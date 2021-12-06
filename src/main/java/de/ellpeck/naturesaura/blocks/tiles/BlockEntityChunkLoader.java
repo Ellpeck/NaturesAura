@@ -2,12 +2,12 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Mth;
-import net.minecraft.level.server.ServerLevel;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,13 +19,13 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
     private final List<ChunkPos> forcedChunks = new ArrayList<>();
     private boolean firstTick = true;
 
-    public BlockEntityChunkLoader() {
-        super(ModTileEntities.CHUNK_LOADER);
+    public BlockEntityChunkLoader(BlockPos pos, BlockState state) {
+        super(ModTileEntities.CHUNK_LOADER, pos, state);
     }
 
     @Override
-    public void remove() {
-        super.remove();
+    public void setRemoved() {
+        super.setRemoved();
         this.loadChunks(true);
     }
 
@@ -55,23 +55,23 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
                     for (int z = (this.worldPosition.getZ() - range) >> 4; z <= (this.worldPosition.getZ() + range) >> 4; z++) {
                         ChunkPos pos = new ChunkPos(x, z);
                         // Only force chunks that we're already forcing or that nobody else is forcing
-                        if (this.forcedChunks.contains(pos) || !level.getForcedChunks().contains(pos.asLong()))
+                        if (this.forcedChunks.contains(pos) || !level.getForcedChunks().contains(pos.toLong()))
                             shouldBeForced.add(pos);
                     }
                 }
             }
         }
 
-        // Unforce all of the chunks that shouldn't be forced anymore
+        // Unforce all the chunks that shouldn't be forced anymore
         for (ChunkPos pos : this.forcedChunks) {
             if (!shouldBeForced.contains(pos))
-                level.forceChunk(pos.x, pos.z, false);
+                level.setChunkForced(pos.x, pos.z, false);
         }
         this.forcedChunks.clear();
 
         // Force all chunks that should be forced
         for (ChunkPos pos : shouldBeForced) {
-            level.forceChunk(pos.x, pos.z, true);
+            level.setChunkForced(pos.x, pos.z, true);
             this.forcedChunks.add(pos);
         }
     }
@@ -100,7 +100,7 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
     public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type == SaveType.TILE)
-            compound.putLongArray("forced_chunks", this.forcedChunks.stream().map(ChunkPos::asLong).collect(Collectors.toList()));
+            compound.putLongArray("forced_chunks", this.forcedChunks.stream().map(ChunkPos::toLong).collect(Collectors.toList()));
     }
 
     @Override

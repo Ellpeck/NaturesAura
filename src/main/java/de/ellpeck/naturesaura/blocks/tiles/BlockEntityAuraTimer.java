@@ -7,11 +7,11 @@ import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.ITickableBlockEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import java.util.Map;
@@ -30,8 +30,8 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
     };
     private int timer;
 
-    public BlockEntityAuraTimer() {
-        super(ModTileEntities.AURA_TIMER);
+    public BlockEntityAuraTimer(BlockPos pos, BlockState state) {
+        super(ModTileEntities.AURA_TIMER, pos, state);
     }
 
     @Override
@@ -57,10 +57,10 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
             if (this.level.getGameTime() % 8 == 0) {
                 int color = ItemAuraBottle.getType(this.itemHandler.getStackInSlot(0)).getColor();
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        this.worldPosition.getX() + 1 / 16F + this.level.rand.nextFloat() * 14 / 16F,
-                        this.worldPosition.getY() + 1 / 16F + this.level.rand.nextFloat() * 14 / 16F,
-                        this.worldPosition.getZ() + 1 / 16F + this.level.rand.nextFloat() * 14 / 16F,
-                        0, 0, 0, color, 1, 80 + this.level.rand.nextInt(50), 0, false, true);
+                        this.worldPosition.getX() + 1 / 16F + this.level.random.nextFloat() * 14 / 16F,
+                        this.worldPosition.getY() + 1 / 16F + this.level.random.nextFloat() * 14 / 16F,
+                        this.worldPosition.getZ() + 1 / 16F + this.level.random.nextFloat() * 14 / 16F,
+                        0, 0, 0, color, 1, 80 + this.level.random.nextInt(50), 0, false, true);
             }
             return;
         }
@@ -70,8 +70,8 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
             this.timer = 0;
 
             BlockState state = this.getBlockState();
-            this.level.setBlockState(this.worldPosition, state.with(BlockStateProperties.POWERED, true), 1);
-            this.level.getPendingBlockTicks().scheduleTick(this.worldPosition, state.getBlock(), 4);
+            this.level.setBlock(this.worldPosition, state.setValue(BlockStateProperties.POWERED, true), 1);
+            this.level.scheduleTick(this.worldPosition, state.getBlock(), 4);
 
             int color = ItemAuraBottle.getType(this.itemHandler.getStackInSlot(0)).getColor();
             PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.TIMER_RESET, color));

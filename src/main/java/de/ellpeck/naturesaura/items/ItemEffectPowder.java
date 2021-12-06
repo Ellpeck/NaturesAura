@@ -3,17 +3,17 @@ package de.ellpeck.naturesaura.items;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.InteractionResult;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.level.Level;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -38,11 +38,11 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
     }
 
     @Override
-    public InteractionResult onItemUse(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         if (!level.isClientSide) {
-            Vector3d hit = context.getHitVec();
-            ItemStack stack = context.getPlayer().getHeldItem(context.getHand());
+            Vec3 hit = context.getClickLocation();
+            ItemStack stack = context.getPlayer().getItemInHand(context.getHand());
             EntityEffectInhibitor.place(level, stack, hit.x, hit.y + 1, hit.z);
             stack.setCount(0);
         }
@@ -50,8 +50,8 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> items) {
-        if (this.isInGroup(tab)) {
+    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
+        if (this.allowdedIn(tab)) {
             for (ResourceLocation effect : NaturesAuraAPI.EFFECT_POWDERS.keySet()) {
                 ItemStack stack = new ItemStack(this);
                 setEffect(stack, effect);
@@ -61,13 +61,13 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
-        return new TranslationTextComponent(this.getTranslationKey(stack) + "." + getEffect(stack));
+    public Component getName(ItemStack stack) {
+        return new TranslatableComponent(this.getDescriptionId(stack) + "." + getEffect(stack));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public IItemColor getItemColor() {
+    public ItemColor getItemColor() {
         return (stack, tintIndex) -> NaturesAuraAPI.EFFECT_POWDERS.getOrDefault(getEffect(stack), 0xFFFFFF);
     }
 }

@@ -2,10 +2,10 @@ package de.ellpeck.naturesaura.particles;
 
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.ellpeck.naturesaura.NaturesAura;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.level.ClientLevel;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.ReuseableStream;

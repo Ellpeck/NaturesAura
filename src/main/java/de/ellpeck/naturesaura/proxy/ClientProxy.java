@@ -12,31 +12,25 @@ import de.ellpeck.naturesaura.particles.ParticleMagic;
 import de.ellpeck.naturesaura.reg.*;
 import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.client.renderer.entity.PlayerRenderer;
-import net.minecraft.client.renderer.tileentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.tileentity.BlockEntityRendererDispatcher;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.tileentity.BlockEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ClientProxy implements IProxy {
@@ -45,20 +39,22 @@ public class ClientProxy implements IProxy {
     public void preInit(FMLCommonSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
         Compat.setupClient();
-        ScreenManager.registerFactory(ModContainers.ENDER_CRATE, GuiEnderCrate::new);
-        ScreenManager.registerFactory(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
+        MenuScreens.register(ModContainers.ENDER_CRATE, GuiEnderCrate::new);
+        MenuScreens.register(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
 
-        ItemModelsProperties.func_239418_a_(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "fill_mode"),
+        ItemProperties.register(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "fill_mode"),
                 (stack, levelIn, entityIn) -> ItemColorChanger.isFillMode(stack) ? 1F : 0F);
-        ItemModelsProperties.func_239418_a_(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "has_color"),
+        ItemProperties.register(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "has_color"),
                 (stack, levelIn, entityIn) -> ItemColorChanger.getStoredColor(stack) != null ? 1F : 0F);
     }
 
     @Override
     public void init(FMLCommonSetupEvent event) {
-        Map<String, PlayerRenderer> skinMap = Minecraft.getInstance().getRenderManager().getSkinMap();
-        for (PlayerRenderer render : new PlayerRenderer[]{skinMap.get("default"), skinMap.get("slim")})
-            render.addLayer(new PlayerLayerTrinkets(render));
+        var skinMap = Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap();
+        for (var render : new EntityRenderer[]{skinMap.get("default"), skinMap.get("slim")}) {
+            if (render instanceof PlayerRenderer living)
+                living.addLayer(new PlayerLayerTrinkets(living));
+        }
         new SupporterFancyHandler();
     }
 
@@ -66,14 +62,14 @@ public class ClientProxy implements IProxy {
     public void postInit(FMLCommonSetupEvent event) {
         for (IModItem item : ModRegistry.ALL_ITEMS) {
             if (item instanceof ICustomRenderType)
-                RenderTypeLookup.setRenderLayer((Block) item, ((ICustomRenderType) item).getRenderType().get());
+                ItemBlockRenderTypes.setRenderLayer((Block) item, ((ICustomRenderType) item).getRenderType().get());
         }
     }
 
     @Override
     public void addColorProvidingItem(IColorProvidingItem item) {
         ItemColors colors = Minecraft.getInstance().getItemColors();
-        IItemColor color = item.getItemColor();
+        ItemColor color = item.getItemColor();
 
         if (item instanceof Item) {
             colors.register(color, (Item) item);
@@ -84,15 +80,14 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void addColorProvidingBlock(IColorProvidingBlock block) {
-        if (block instanceof Block) {
+        if (block instanceof Block)
             Minecraft.getInstance().getBlockColors().register(block.getBlockColor(), (Block) block);
-        }
     }
 
     @Override
-    public void registerTESR(ITESRProvider provider) {
-        Tuple<BlockEntityType<BlockEntity>, Supplier<Function<? super BlockEntityRendererDispatcher, ? extends BlockEntityRenderer<? super BlockEntity>>>> tesr = provider.getTESR();
-        ClientRegistry.bindBlockEntityRenderer(tesr.getA(), tesr.getB().get());
+    public void registerTESR(ITESRProvider<?> provider) {
+        var tesr = provider.getTESR();
+        BlockEntityRenderers.register(tesr.getA(), tesr.getB().get());
     }
 
     @Override
@@ -119,8 +114,8 @@ public class ClientProxy implements IProxy {
     }
 
     @Override
-    public <T extends Entity> void registerEntityRenderer(EntityType<T> entityClass, Supplier<IRenderFactory<T>> renderFactory) {
-        RenderingRegistry.registerEntityRenderingHandler(entityClass, renderFactory.get());
+    public <T extends Entity> void registerEntityRenderer(EntityType<T> entityClass, Supplier<EntityRendererProvider<T>> renderFactory) {
+        EntityRenderers.register(entityClass, renderFactory.get());
     }
 
 }

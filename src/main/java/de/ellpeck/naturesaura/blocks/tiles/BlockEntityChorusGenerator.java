@@ -1,18 +1,16 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -24,8 +22,8 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
     private final Deque<BlockPos> currentlyBreaking = new ArrayDeque<>();
     private int auraPerBlock;
 
-    public BlockEntityChorusGenerator() {
-        super(ModTileEntities.CHORUS_GENERATOR);
+    public BlockEntityChorusGenerator(BlockPos pos, BlockState state) {
+        super(ModTileEntities.CHORUS_GENERATOR, pos, state);
     }
 
     @Override
@@ -45,7 +43,7 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
         PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.CHORUS_GENERATOR, pos.getX(), pos.getY(), pos.getZ()));
         this.level.removeBlock(pos, false);
         this.level.playSound(null, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5,
-                SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.BLOCKS, 0.5F, 1F);
+                SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.BLOCKS, 0.5F, 1F);
         this.generateAura(this.auraPerBlock);
     }
 
@@ -57,8 +55,8 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
             for (int x = -range; x <= range; x++) {
                 for (int y = -range; y <= range; y++) {
                     for (int z = -range; z <= range; z++) {
-                        BlockPos offset = this.worldPosition.add(x, y, z);
-                        BlockState below = this.level.getBlockState(offset.down());
+                        BlockPos offset = this.worldPosition.offset(x, y, z);
+                        BlockState below = this.level.getBlockState(offset.below());
                         if (below.getBlock() != Blocks.END_STONE)
                             continue;
                         BlockState state = this.level.getBlockState(offset);
@@ -87,7 +85,7 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
         for (Direction dir : Direction.values()) {
             if (dir == Direction.DOWN)
                 continue;
-            BlockPos offset = pos.offset(dir);
+            BlockPos offset = pos.relative(dir);
             if (blocks.contains(offset))
                 continue;
             BlockState state = this.level.getBlockState(offset);
@@ -102,9 +100,9 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
     public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type == SaveType.TILE) {
-            ListNBT list = new ListNBT();
+            ListTag list = new ListTag();
             for (BlockPos pos : this.currentlyBreaking)
-                list.add(NBTUtil.writeBlockPos(pos));
+                list.add(NbtUtils.writeBlockPos(pos));
             compound.put("breaking", list);
             compound.putInt("aura", this.auraPerBlock);
         }
@@ -115,9 +113,9 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
         super.readNBT(compound, type);
         if (type == SaveType.TILE) {
             this.currentlyBreaking.clear();
-            ListNBT list = compound.getList("breaking", 10);
+            ListTag list = compound.getList("breaking", 10);
             for (int i = 0; i < list.size(); i++)
-                this.currentlyBreaking.add(NBTUtil.readBlockPos(list.getCompound(i)));
+                this.currentlyBreaking.add(NbtUtils.readBlockPos(list.getCompound(i)));
             this.auraPerBlock = compound.getInt("aura");
         }
     }

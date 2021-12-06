@@ -4,34 +4,33 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.LongNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Mth;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.level.GameRules;
-import net.minecraft.level.Level;
-import net.minecraft.level.server.ServerLevel;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.ITeleporter;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityMoverMinecart extends AbstractMinecartEntity {
+public class EntityMoverMinecart extends AbstractMinecart {
 
     private final List<BlockPos> spotOffsets = new ArrayList<>();
     public boolean isActive;
@@ -50,14 +49,14 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
         super.moveMinecartOnRail(railPos);
         if (!this.isActive)
             return;
-        BlockPos pos = this.getPosition();
+        BlockPos pos = this.getOnPos();
 
         if (!this.spotOffsets.isEmpty() && this.level.getGameTime() % 10 == 0)
             PacketHandler.sendToAllAround(this.level, pos, 32, new PacketParticles(
-                    (float) this.getPosX(), (float) this.getPosY(), (float) this.getPosZ(), PacketParticles.Type.MOVER_CART,
-                    Mth.floor(this.getMotion().getX() * 100F), Mth.floor(this.getMotion().getY() * 100F), Mth.floor(this.getMotion().getZ() * 100F)));
+                    (float) this.getX(), (float) this.getY(), (float) this.getZ(), PacketParticles.Type.MOVER_CART,
+                    Mth.floor(this.getDeltaMovement().x * 100F), Mth.floor(this.getDeltaMovement().y * 100F), Mth.floor(this.getDeltaMovement().z * 100F)));
 
-        if (pos.distanceSq(this.lastPosition) < 8 * 8)
+        if (pos.distSqr(this.lastPosition) < 8 * 8)
             return;
 
         this.moveAura(this.level, this.lastPosition, this.level, pos);
@@ -66,7 +65,7 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
 
     private void moveAura(Level oldLevel, BlockPos oldPos, Level newLevel, BlockPos newPos) {
         for (BlockPos offset : this.spotOffsets) {
-            BlockPos spot = oldPos.add(offset);
+            BlockPos spot = oldPos.offset(offset);
             IAuraChunk chunk = IAuraChunk.getAuraChunk(oldLevel, spot);
             int amount = chunk.getDrainSpot(spot);
             if (amount <= 0)
@@ -76,17 +75,17 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
             if (drained <= 0)
                 continue;
             int toLose = Mth.ceil(drained / 250F);
-            BlockPos newSpot = newPos.add(offset);
+            BlockPos newSpot = newPos.offset(offset);
             IAuraChunk.getAuraChunk(newLevel, newSpot).storeAura(newSpot, drained - toLose, false, false);
         }
     }
 
     @Override
-    public void onActivatorRailPass(int x, int y, int z, boolean receivingPower) {
+    public void activateMinecart(int x, int y, int z, boolean receivingPower) {
         if (this.isActive != receivingPower) {
             this.isActive = receivingPower;
 
-            BlockPos pos = this.getPosition();
+            BlockPos pos = this.getOnPos();
             if (!this.isActive) {
                 this.moveAura(this.level, this.lastPosition, this.level, pos);
                 this.spotOffsets.clear();
@@ -103,21 +102,21 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
     }
 
     @Override
-    public void killMinecart(DamageSource source) {
-        this.remove();
-        if (this.level.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS))
-            this.entityDropItem(new ItemStack(ModItems.MOVER_CART), 0);
+    public void destroy(DamageSource source) {
+        this.kill();
+        if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS))
+            this.spawnAtLocation(new ItemStack(ModItems.MOVER_CART), 0);
     }
 
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag compound = super.serializeNBT();
         compound.putBoolean("active", this.isActive);
-        compound.putLong("last_pos", this.lastPosition.toLong());
+        compound.putLong("last_pos", this.lastPosition.asLong());
 
-        ListNBT list = new ListNBT();
+        ListTag list = new ListTag();
         for (BlockPos offset : this.spotOffsets)
-            list.add(LongNBT.valueOf(offset.toLong()));
+            list.add(LongTag.valueOf(offset.asLong()));
         compound.put("offsets", list);
         return compound;
     }
@@ -126,12 +125,12 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
     public void deserializeNBT(CompoundTag compound) {
         super.deserializeNBT(compound);
         this.isActive = compound.getBoolean("active");
-        this.lastPosition = BlockPos.fromLong(compound.getLong("last_pos"));
+        this.lastPosition = BlockPos.of(compound.getLong("last_pos"));
 
         this.spotOffsets.clear();
-        ListNBT list = compound.getList("offsets", Constants.NBT.TAG_LONG);
-        for (INBT base : list)
-            this.spotOffsets.add(BlockPos.fromLong(((LongNBT) base).getLong()));
+        ListTag list = compound.getList("offsets", Tag.TAG_LONG);
+        for (Tag base : list)
+            this.spotOffsets.add(BlockPos.of(((LongTag) base).getAsLong()));
     }
 
     @Nullable
@@ -139,7 +138,7 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
     public Entity changeDimension(ServerLevel destination, ITeleporter teleporter) {
         Entity entity = super.changeDimension(destination, teleporter);
         if (entity instanceof EntityMoverMinecart) {
-            BlockPos pos = entity.getPosition();
+            BlockPos pos = entity.getOnPos();
             this.moveAura(this.level, this.lastPosition, entity.level, pos);
             ((EntityMoverMinecart) entity).lastPosition = pos;
         }
@@ -147,8 +146,8 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
     }
 
     @Override
-    public BlockState getDisplayTile() {
-        return Blocks.STONE.getDefaultState();
+    public BlockState getDisplayBlockState() {
+        return Blocks.STONE.defaultBlockState();
     }
 
     @Override
@@ -162,7 +161,7 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
     }
 
     @Override
-    public ItemStack getPickedResult(RayTraceResult target) {
+    public ItemStack getPickedResult(HitResult target) {
         return new ItemStack(ModItems.MOVER_CART);
     }
 
@@ -172,13 +171,13 @@ public class EntityMoverMinecart extends AbstractMinecartEntity {
     }
 
     @Override
-    protected void applyDrag() {
-        Vector3d motion = this.getMotion();
-        this.setMotion(motion.x * 0.99F, 0, motion.z * 0.99F);
+    protected void applyNaturalSlowdown() {
+        Vec3 motion = this.getDeltaMovement();
+        this.setDeltaMovement(motion.x * 0.99F, 0, motion.z * 0.99F);
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

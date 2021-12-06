@@ -4,39 +4,40 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import de.ellpeck.naturesaura.reg.ModTileType;
-import net.minecraft.block.*;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.level.IBlockReader;
-import net.minecraft.level.ILevel;
-import net.minecraft.level.Level;
-import net.minecraft.level.server.ServerLevel;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Supplier;
 
 public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
 
     private final String baseName;
-    private final ModTileType<? extends BlockEntity> tileType;
+    private final ModTileType<BlockEntity> tileType;
 
-    public BlockContainerImpl(String baseName, Supplier<BlockEntity> tileSupplier, Block.Properties properties) {
+    public BlockContainerImpl(String baseName, BlockEntityType.BlockEntitySupplier<BlockEntity> tileSupplier, Block.Properties properties) {
         super(properties);
 
         this.baseName = baseName;
@@ -46,7 +47,7 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
         ModRegistry.add(this.tileType);
 
         if (this.hasWaterlogging())
-            this.setDefaultState(this.stateContainer.getBaseState().with(BlockStateProperties.WATERLOGGED, false));
+            this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
     }
 
     protected boolean hasWaterlogging() {
@@ -54,37 +55,37 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         if (this.hasWaterlogging())
             builder.add(BlockStateProperties.WATERLOGGED);
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return this.hasWaterlogging() && state.get(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return this.hasWaterlogging() && state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, ILevel levelIn, BlockPos currentPos, BlockPos facingPos) {
-        if (this.hasWaterlogging() && stateIn.get(BlockStateProperties.WATERLOGGED))
-            levelIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(levelIn));
-        return super.updatePostPlacement(stateIn, facing, facingState, levelIn, currentPos, facingPos);
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor levelIn, BlockPos currentPos, BlockPos facingPos) {
+        if (this.hasWaterlogging() && stateIn.getValue(BlockStateProperties.WATERLOGGED))
+            levelIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelIn));
+        return super.updateShape(stateIn, facing, facingState, levelIn, currentPos, facingPos);
     }
 
     @Override
     @Nullable
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         if (this.hasWaterlogging()) {
-            FluidState state = context.getLevel().getFluidState(context.getPos());
-            return this.getDefaultState().with(BlockStateProperties.WATERLOGGED, state.isTagged(FluidTags.WATER) && state.getLevel() == 8);
+            FluidState state = context.getLevel().getFluidState(context.getClickedPos());
+            return this.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, state.is(FluidTags.WATER) && state.getAmount() == 8);
         }
         return super.getStateForPlacement(context);
     }
 
-    @Nullable
+    @org.jetbrains.annotations.Nullable
     @Override
-    public BlockEntity createNewBlockEntity(IBlockReader levelIn) {
-        return this.tileType.type.create();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return this.tileType.type.create(pos, state);
     }
 
     @Override
@@ -93,20 +94,15 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
-    }
-
-    @Override
-    public void onPlayerDestroy(ILevel levelIn, BlockPos pos, BlockState state) {
-        super.onPlayerDestroy(levelIn, pos, state);
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> drops = super.getDrops(state, builder);
 
-        BlockEntity tile = builder.get(LootParameters.BLOCK_ENTITY);
+        BlockEntity tile = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         if (tile instanceof BlockEntityImpl) {
             for (ItemStack stack : drops) {
                 if (stack.getItem() != this.asItem())
@@ -119,31 +115,26 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     }
 
     @Override
-    public void onReplaced(BlockState state, Level levelIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onPlace(BlockState state, Level levelIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity tile = levelIn.getBlockEntity(pos);
             if (tile instanceof BlockEntityImpl)
                 ((BlockEntityImpl) tile).dropInventory();
         }
-        super.onReplaced(state, levelIn, pos, newState, isMoving);
+        super.onPlace(state, levelIn, pos, newState, isMoving);
     }
 
     @Override
-    public void harvestBlock(Level levelIn, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
-        super.harvestBlock(levelIn, player, pos, state, te, stack);
-        levelIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+    public void playerDestroy(Level levelIn, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
+        super.playerDestroy(levelIn, player, pos, state, te, stack);
+        levelIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
     }
 
     @Override
-    public void onBlockPlacedBy(Level levelIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level levelIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         BlockEntity tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityImpl)
             ((BlockEntityImpl) tile).loadDataOnPlace(stack);
-    }
-
-    @Override
-    public void onBlockAdded(BlockState state, Level levelIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-        this.updateRedstoneState(levelIn, pos);
     }
 
     @Override
@@ -154,11 +145,10 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     private void updateRedstoneState(Level level, BlockPos pos) {
         if (!level.isClientSide) {
             BlockEntity tile = level.getBlockEntity(pos);
-            if (tile instanceof BlockEntityImpl) {
-                BlockEntityImpl impl = (BlockEntityImpl) tile;
-                int newPower = level.getRedstonePowerFromNeighbors(pos);
+            if (tile instanceof BlockEntityImpl impl) {
+                int newPower = level.getBestNeighborSignal(pos);
                 if (impl.redstonePower != newPower)
-                    level.getPendingBlockTicks().scheduleTick(pos, this, 4);
+                    level.scheduleTick(pos, this, 4);
             }
         }
     }
@@ -167,9 +157,8 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     public void tick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
         if (!levelIn.isClientSide) {
             BlockEntity tile = levelIn.getBlockEntity(pos);
-            if (tile instanceof BlockEntityImpl) {
-                BlockEntityImpl impl = (BlockEntityImpl) tile;
-                int newPower = levelIn.getRedstonePowerFromNeighbors(pos);
+            if (tile instanceof BlockEntityImpl impl) {
+                int newPower = levelIn.getBestNeighborSignal(pos);
                 if (impl.redstonePower != newPower)
                     impl.onRedstonePowerChange(newPower);
             }

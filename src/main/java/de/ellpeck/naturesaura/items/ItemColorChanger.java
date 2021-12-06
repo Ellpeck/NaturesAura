@@ -8,12 +8,11 @@ import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.Player;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.level.Level;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

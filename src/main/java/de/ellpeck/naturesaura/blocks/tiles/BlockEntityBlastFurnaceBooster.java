@@ -3,15 +3,15 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tileentity.BlastFurnaceBlockEntity;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -21,8 +21,8 @@ import java.util.List;
 
 public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements ITickableBlockEntity {
 
-    public BlockEntityBlastFurnaceBooster() {
-        super(ModTileEntities.BLAST_FURNACE_BOOSTER);
+    public BlockEntityBlastFurnaceBooster(BlockPos pos, BlockState state) {
+        super(ModTileEntities.BLAST_FURNACE_BOOSTER, pos, state);
     }
 
     @Override
@@ -30,34 +30,33 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
         if (this.level.isClientSide)
             return;
 
-        BlockEntity below = this.level.getBlockEntity(this.worldPosition.down());
-        if (!(below instanceof BlastFurnaceBlockEntity))
+        BlockEntity below = this.level.getBlockEntity(this.worldPosition.below());
+        if (!(below instanceof BlastFurnaceBlockEntity tile))
             return;
-        BlastFurnaceBlockEntity tile = (BlastFurnaceBlockEntity) below;
-        IRecipe<?> recipe = this.level.getRecipeManager().getRecipe(BlockEntityFurnaceHeater.getRecipeType(tile), tile, this.level).orElse(null);
+        Recipe<?> recipe = this.level.getRecipeManager().getRecipeFor(BlockEntityFurnaceHeater.getRecipeType(tile), tile, this.level).orElse(null);
         if (recipe == null)
             return;
         if (!this.isApplicable(recipe.getIngredients()))
             return;
 
-        IIntArray data = BlockEntityFurnaceHeater.getFurnaceData(tile);
+        ContainerData data = BlockEntityFurnaceHeater.getFurnaceData(tile);
         int doneDiff = data.get(3) - data.get(2);
         if (doneDiff > 1)
             return;
 
-        if (this.level.rand.nextFloat() > 0.45F) {
+        if (this.level.random.nextFloat() > 0.45F) {
             PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
                     new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.BLAST_FURNACE_BOOSTER, 0));
             return;
         }
 
-        ItemStack output = tile.getStackInSlot(2);
+        ItemStack output = tile.getItem(2);
         if (output.getCount() >= output.getMaxStackSize())
             return;
 
         if (output.isEmpty()) {
-            ItemStack result = recipe.getRecipeOutput();
-            tile.setInventorySlotContents(2, result.copy());
+            ItemStack result = recipe.getResultItem();
+            tile.setItem(2, result.copy());
         } else {
             output.grow(1);
         }
@@ -71,7 +70,7 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
 
     private boolean isApplicable(List<Ingredient> ingredients) {
         for (Ingredient ing : ingredients) {
-            for (ItemStack stack : ing.getMatchingStacks()) {
+            for (ItemStack stack : ing.getItems()) {
                 if (stack.getItem().getTags().stream().anyMatch(t -> t.getPath().startsWith("ores/")))
                     return true;
             }
@@ -81,7 +80,7 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
 
     @Override
     public IItemHandlerModifiable getItemHandler() {
-        BlockEntity below = this.level.getBlockEntity(this.worldPosition.down());
+        BlockEntity below = this.level.getBlockEntity(this.worldPosition.below());
         if (!(below instanceof BlastFurnaceBlockEntity))
             return null;
         IItemHandler handler = below.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);

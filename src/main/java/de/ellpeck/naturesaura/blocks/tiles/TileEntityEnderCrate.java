@@ -6,22 +6,27 @@ import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.BlockEnderCrate;
 import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.MenuConstructor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockEntityEnderCrate extends BlockEntityImpl implements INamedContainerProvider {
+public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvider {
 
     public String name;
     private final IItemHandlerModifiable wrappedEnderStorage = new IItemHandlerModifiable() {
@@ -74,8 +79,8 @@ public class BlockEntityEnderCrate extends BlockEntityImpl implements INamedCont
         }
     };
 
-    public BlockEntityEnderCrate() {
-        super(ModTileEntities.ENDER_CRATE);
+    public BlockEntityEnderCrate(BlockPos pos, BlockState state) {
+        super(ModTileEntities.ENDER_CRATE, pos, state);
     }
 
     @Override

@@ -1,15 +1,16 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.math.Mth;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockEntityAuraDetector extends BlockEntityImpl implements ITickableBlockEntity {
 
     public int redstonePower;
 
-    public BlockEntityAuraDetector() {
-        super(ModTileEntities.AURA_DETECTOR);
+    public BlockEntityAuraDetector(BlockPos pos, BlockState state) {
+        super(ModTileEntities.AURA_DETECTOR, pos, state);
     }
 
     @Override
@@ -19,7 +20,7 @@ public class BlockEntityAuraDetector extends BlockEntityImpl implements ITickabl
             int power = Mth.clamp(Mth.ceil(totalAmount / (IAuraChunk.DEFAULT_AURA * 2F) * 15F), 0, 15);
             if (this.redstonePower != power) {
                 this.redstonePower = power;
-                this.level.updateComparatorOutputLevel(this.worldPosition, this.getBlockState().getBlock());
+                this.level.updateNeighbourForOutputSignal(this.worldPosition, this.getBlockState().getBlock());
             }
         }
     }

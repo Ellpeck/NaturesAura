@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -23,7 +23,7 @@ public class ItemStackHandlerNA extends ItemStackHandler {
     @Override
     protected void onContentsChanged(int slot) {
         if (this.tile != null) {
-            this.tile.markDirty();
+            this.tile.setChanged();
             if (this.sendToClients && !this.tile.getLevel().isClientSide)
                 this.tile.sendToClients();
         }
