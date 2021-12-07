@@ -2,19 +2,20 @@ package de.ellpeck.naturesaura.particles;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.ParticleStatus;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.settings.ParticleStatus;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Locale;
 import java.util.function.Supplier;
@@ -22,17 +23,18 @@ import java.util.function.Supplier;
 @OnlyIn(Dist.CLIENT)
 public final class ParticleHandler {
 
-    public static final IParticleRenderType MAGIC = new IParticleRenderType() {
+    public static final ParticleRenderType MAGIC = new ParticleRenderType() {
+
         @Override
-        public void beginRender(BufferBuilder buffer, TextureManager textureManager) {
-            setupRendering(textureManager);
+        public void begin(BufferBuilder buffer, TextureManager textureManager) {
+            setupRendering();
             RenderSystem.enableDepthTest();
-            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
         }
 
         @Override
-        public void finishRender(Tessellator tessellator) {
-            tessellator.draw();
+        public void end(Tesselator tessellator) {
+            tessellator.end();
         }
 
         @Override
@@ -41,17 +43,17 @@ public final class ParticleHandler {
         }
     };
 
-    public static final IParticleRenderType MAGIC_NO_DEPTH = new IParticleRenderType() {
+    public static final ParticleRenderType MAGIC_NO_DEPTH = new ParticleRenderType() {
         @Override
-        public void beginRender(BufferBuilder buffer, TextureManager textureManager) {
-            setupRendering(textureManager);
+        public void begin(BufferBuilder buffer, TextureManager textureManager) {
+            setupRendering();
             RenderSystem.disableDepthTest();
-            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
         }
 
         @Override
-        public void finishRender(Tessellator tessellator) {
-            tessellator.draw();
+        public void end(Tesselator tessellator) {
+            tessellator.end();
         }
 
         @Override
@@ -66,32 +68,30 @@ public final class ParticleHandler {
 
     public static void spawnParticle(Supplier<Particle> particle, double x, double y, double z) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player.getDistanceSq(x, y, z) <= range * range) {
+        if (mc.player.distanceToSqr(x, y, z) <= range * range) {
             if (culling) {
                 if (ModConfig.instance.respectVanillaParticleSettings.get()) {
-                    ParticleStatus setting = mc.gameSettings.particles;
+                    ParticleStatus setting = mc.options.particles;
                     if (setting != ParticleStatus.ALL &&
-                            (setting != ParticleStatus.DECREASED || mc.level.rand.nextInt(3) != 0) &&
-                            (setting != ParticleStatus.MINIMAL || mc.level.rand.nextInt(10) != 0))
+                            (setting != ParticleStatus.DECREASED || mc.level.random.nextInt(3) != 0) &&
+                            (setting != ParticleStatus.MINIMAL || mc.level.random.nextInt(10) != 0))
                         return;
                 }
                 double setting = ModConfig.instance.particleAmount.get();
-                if (setting < 1 && mc.level.rand.nextDouble() > setting)
+                if (setting < 1 && mc.level.random.nextDouble() > setting)
                     return;
             }
-            mc.particles.addEffect(particle.get());
+            mc.particleEngine.add(particle.get());
         }
     }
 
-    private static void setupRendering(TextureManager textureManager) {
-        RenderSystem.enableAlphaTest();
+    private static void setupRendering() {
         RenderSystem.enableBlend();
-        RenderSystem.alphaFunc(516, 0.003921569F);
         RenderSystem.disableCull();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-        RenderSystem.enableFog();
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.depthMask(false);
-        textureManager.bindTexture(ParticleMagic.TEXTURE);
+        RenderSystem.setShader(GameRenderer::getParticleShader);
+        RenderSystem.setShaderTexture(0, ParticleMagic.TEXTURE);
     }
 }

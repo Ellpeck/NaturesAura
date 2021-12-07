@@ -7,14 +7,14 @@ import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.blocks.multi.Multiblock;
 import de.ellpeck.naturesaura.misc.LevelData;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.level.Level;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
@@ -59,7 +59,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public void spawnParticleStream(float startX, float startY, float startZ, float endX, float endY, float endZ, float speed, int color, float scale) {
-        Vector3d dir = new Vector3d(endX - startX, endY - startY, endZ - startZ);
+        Vec3 dir = new Vec3(endX - startX, endY - startY, endZ - startZ);
         double length = dir.length();
         if (length > 0) {
             dir = dir.normalize();
@@ -90,9 +90,9 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     }
 
     @Override
-    public List<Tuple<Vector3d, Integer>> getActiveEffectPowders(Level level, AxisAlignedBB area, ResourceLocation name) {
-        List<Tuple<Vector3d, Integer>> found = new ArrayList<>();
-        for (Tuple<Vector3d, Integer> powder : ((LevelData) ILevelData.getLevelData(level)).effectPowders.get(name))
+    public List<Tuple<Vec3, Integer>> getActiveEffectPowders(Level level, AABB area, ResourceLocation name) {
+        List<Tuple<Vec3, Integer>> found = new ArrayList<>();
+        for (Tuple<Vec3, Integer> powder : ((LevelData) ILevelData.getLevelData(level)).effectPowders.get(name))
             if (area.contains(powder.getA()))
                 found.add(powder);
         return found;
@@ -100,10 +100,10 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public boolean isEffectPowderActive(Level level, BlockPos pos, ResourceLocation name) {
-        Vector3d posVec = new Vector3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-        List<Tuple<Vector3d, Integer>> powders = this.getActiveEffectPowders(level, new AxisAlignedBB(pos).grow(64), name);
-        for (Tuple<Vector3d, Integer> powder : powders) {
-            AxisAlignedBB bounds = Helper.aabb(powder.getA()).grow(powder.getB());
+        Vec3 posVec = new Vec3(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+        List<Tuple<Vec3, Integer>> powders = this.getActiveEffectPowders(level, new AABB(pos).inflate(64), name);
+        for (Tuple<Vec3, Integer> powder : powders) {
+            AABB bounds = Helper.aabb(powder.getA()).inflate(powder.getB());
             if (bounds.contains(posVec))
                 return true;
         }
@@ -144,7 +144,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     public int triangulateAuraInArea(Level level, BlockPos pos, int radius) {
         MutableFloat result = new MutableFloat(IAuraChunk.DEFAULT_AURA);
         IAuraChunk.getSpotsInArea(level, pos, radius, (blockPos, spot) -> {
-            float percentage = 1F - (float) Math.sqrt(pos.distanceSq(blockPos)) / radius;
+            float percentage = 1F - (float) Math.sqrt(pos.distSqr(blockPos)) / radius;
             result.add(spot * percentage);
         });
         return result.intValue();

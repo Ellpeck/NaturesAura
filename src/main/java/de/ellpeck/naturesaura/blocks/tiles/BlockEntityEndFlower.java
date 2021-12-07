@@ -1,20 +1,19 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.BasicAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
@@ -46,8 +45,8 @@ public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBl
 
     public boolean isDrainMode;
 
-    public BlockEntityEndFlower() {
-        super(ModTileEntities.END_FLOWER);
+    public BlockEntityEndFlower(BlockPos pos, BlockState state) {
+        super(ModTileEntities.END_FLOWER, pos, state);
     }
 
     @Override
@@ -57,10 +56,9 @@ public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBl
                 return;
 
             if (!this.isDrainMode) {
-                List<ItemEntity> items = this.level.getEntitiesWithinAABB(ItemEntity.class,
-                        new AxisAlignedBB(this.worldPosition).grow(1), EntityPredicates.IS_ALIVE);
+                List<ItemEntity> items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(this.worldPosition).inflate(1), Entity::isAlive);
                 for (ItemEntity item : items) {
-                    if (item.cannotPickup())
+                    if (item.hasPickUpDelay())
                         continue;
                     ItemStack stack = item.getItem();
                     if (stack.getCount() != 1)
@@ -69,10 +67,10 @@ public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBl
                         continue;
 
                     this.isDrainMode = true;
-                    item.remove();
+                    item.kill();
 
                     PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
-                            new PacketParticles((float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.END_FLOWER_CONSUME, this.container.getAuraColor()));
+                            new PacketParticles((float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.END_FLOWER_CONSUME, this.container.getAuraColor()));
                     break;
                 }
             } else {
@@ -81,7 +79,7 @@ public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBl
                 this.generateAura(toDrain);
 
                 if (this.container.getStoredAura() <= 0) {
-                    this.level.setBlockState(this.worldPosition, Blocks.DEAD_BUSH.getDefaultState());
+                    this.level.setBlockAndUpdate(this.worldPosition, Blocks.DEAD_BUSH.defaultBlockState());
                     PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
                             new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.END_FLOWER_DECAY, this.container.getAuraColor()));
                 }
@@ -89,13 +87,13 @@ public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBl
         } else {
             if (this.isDrainMode && this.level.getGameTime() % 5 == 0)
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        this.worldPosition.getX() + 0.25F + this.level.rand.nextFloat() * 0.5F,
-                        this.worldPosition.getY() + 0.25F + this.level.rand.nextFloat() * 0.5F,
-                        this.worldPosition.getZ() + 0.25F + this.level.rand.nextFloat() * 0.5F,
-                        this.level.rand.nextGaussian() * 0.05F,
-                        this.level.rand.nextFloat() * 0.1F,
-                        this.level.rand.nextGaussian() * 0.05F,
-                        this.container.getAuraColor(), this.level.rand.nextFloat() * 2F + 1F, 50, 0F, false, true);
+                        this.worldPosition.getX() + 0.25F + this.level.random.nextFloat() * 0.5F,
+                        this.worldPosition.getY() + 0.25F + this.level.random.nextFloat() * 0.5F,
+                        this.worldPosition.getZ() + 0.25F + this.level.random.nextFloat() * 0.5F,
+                        this.level.random.nextGaussian() * 0.05F,
+                        this.level.random.nextFloat() * 0.1F,
+                        this.level.random.nextGaussian() * 0.05F,
+                        this.container.getAuraColor(), this.level.random.nextFloat() * 2F + 1F, 50, 0F, false, true);
         }
     }
 

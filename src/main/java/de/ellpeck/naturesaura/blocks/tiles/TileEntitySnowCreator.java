@@ -4,24 +4,24 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.SnowGolemEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Mth;
-import net.minecraft.level.gen.Heightmap;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 
 public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickableBlockEntity {
 
     private int snowmanCount;
 
-    public BlockEntitySnowCreator() {
-        super(ModTileEntities.SNOW_CREATOR);
+    public BlockEntitySnowCreator(BlockPos pos, BlockState state) {
+        super(ModTileEntities.SNOW_CREATOR, pos, state);
     }
 
     public int getRange() {
@@ -45,23 +45,23 @@ public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickable
                 return;
 
             for (int i = 0; i < 10; i++) {
-                double angle = this.level.rand.nextFloat() * Math.PI * 2;
-                BlockPos pos = this.worldPosition.add(Math.cos(angle) * range * this.level.rand.nextFloat(), 0, Math.sin(angle) * range * this.level.rand.nextFloat());
-                pos = this.level.getHeight(Heightmap.Type.MOTION_BLOCKING, pos);
-                BlockPos down = pos.down();
+                double angle = this.level.random.nextFloat() * Math.PI * 2;
+                BlockPos pos = this.worldPosition.offset(Math.cos(angle) * range * this.level.random.nextFloat(), 0, Math.sin(angle) * range * this.level.random.nextFloat());
+                pos = this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, pos);
+                BlockPos down = pos.below();
 
-                Fluid fluid = this.level.getFluidState(down).getFluid();
+                Fluid fluid = this.level.getFluidState(down).getType();
                 if (fluid == Fluids.WATER) {
                     if (this.level.getBlockState(down).getMaterial().isReplaceable())
-                        this.level.setBlockState(down, Blocks.ICE.getDefaultState());
-                } else if (Blocks.SNOW.getDefaultState().isValidPosition(this.level, pos) && this.level.getBlockState(pos).getBlock() != Blocks.SNOW && this.level.getBlockState(pos).getMaterial().isReplaceable()) {
-                    this.level.setBlockState(pos, Blocks.SNOW.getDefaultState());
+                        this.level.setBlockAndUpdate(down, Blocks.ICE.defaultBlockState());
+                } else if (Blocks.SNOW.defaultBlockState().canSurvive(this.level, pos) && this.level.getBlockState(pos).getBlock() != Blocks.SNOW && this.level.getBlockState(pos).getMaterial().isReplaceable()) {
+                    this.level.setBlockAndUpdate(pos, Blocks.SNOW.defaultBlockState());
 
-                    if (this.snowmanCount < range / 2 && this.level.rand.nextFloat() >= 0.995F) {
+                    if (this.snowmanCount < range / 2 && this.level.random.nextFloat() >= 0.995F) {
                         this.snowmanCount++;
-                        Entity golem = new SnowGolemEntity(EntityType.SNOW_GOLEM, this.level);
-                        golem.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
-                        this.level.addEntity(golem);
+                        Entity golem = new SnowGolem(EntityType.SNOW_GOLEM, this.level);
+                        golem.setPos(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
+                        this.level.addFreshEntity(golem);
                     }
                 } else {
                     continue;
@@ -78,15 +78,15 @@ public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickable
             if (this.level.getGameTime() % 30 != 0)
                 return;
             for (int i = range * 4; i >= 0; i--) {
-                double angle = this.level.rand.nextFloat() * Math.PI * 2;
-                BlockPos pos = this.worldPosition.add(
-                        Math.cos(angle) * range * this.level.rand.nextFloat(),
-                        Mth.nextInt(this.level.rand, range / 2, range),
-                        Math.sin(angle) * range * this.level.rand.nextFloat());
+                double angle = this.level.random.nextFloat() * Math.PI * 2;
+                BlockPos pos = this.worldPosition.offset(
+                        Math.cos(angle) * range * this.level.random.nextFloat(),
+                        Mth.nextInt(this.level.random, range / 2, range),
+                        Math.sin(angle) * range * this.level.random.nextFloat());
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        pos.getX() + this.level.rand.nextFloat(), pos.getY() + 1, pos.getZ() + this.level.rand.nextFloat(),
-                        this.level.rand.nextGaussian() * 0.05, 0, this.level.rand.nextGaussian() * 0.05,
-                        0xdbe9ff, 1 + this.level.rand.nextFloat() * 1.5F, 10 * range, 0.05F + this.level.rand.nextFloat() * 0.05F, true, true
+                        pos.getX() + this.level.random.nextFloat(), pos.getY() + 1, pos.getZ() + this.level.random.nextFloat(),
+                        this.level.random.nextGaussian() * 0.05, 0, this.level.random.nextGaussian() * 0.05,
+                        0xdbe9ff, 1 + this.level.random.nextFloat() * 1.5F, 10 * range, 0.05F + this.level.random.nextFloat() * 0.05F, true, true
                 );
             }
         }

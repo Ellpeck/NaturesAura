@@ -1,9 +1,12 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+
 public class BlockEntityPickupStopper extends BlockEntityImpl {
 
-    public BlockEntityPickupStopper() {
-        super(ModTileEntities.PICKUP_STOPPER);
+    public BlockEntityPickupStopper(BlockPos pos, BlockState state) {
+        super(ModTileEntities.PICKUP_STOPPER, pos, state);
     }
 
     public float getRadius() {

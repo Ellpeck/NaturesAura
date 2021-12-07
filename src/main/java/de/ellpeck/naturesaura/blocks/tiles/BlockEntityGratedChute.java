@@ -2,15 +2,15 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.BlockGratedChute;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.item.ItemFrameEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -33,8 +33,8 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
     };
     private int cooldown;
 
-    public BlockEntityGratedChute() {
-        super(ModTileEntities.GRATED_CHUTE);
+    public BlockEntityGratedChute(BlockPos pos, BlockState state) {
+        super(ModTileEntities.GRATED_CHUTE, pos, state);
     }
 
     @Override
@@ -49,8 +49,8 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
                 push:
                 if (!curr.isEmpty()) {
                     BlockState state = this.level.getBlockState(this.worldPosition);
-                    Direction facing = state.get(BlockGratedChute.FACING);
-                    BlockEntity tile = this.level.getBlockEntity(this.worldPosition.offset(facing));
+                    Direction facing = state.getValue(BlockGratedChute.FACING);
+                    BlockEntity tile = this.level.getBlockEntity(this.worldPosition.relative(facing));
                     if (tile == null)
                         break push;
                     IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
@@ -70,7 +70,7 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
                 }
                 pull:
                 if (curr.isEmpty() || curr.getCount() < curr.getMaxStackSize()) {
-                    List<ItemEntity> items = this.level.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(
+                    List<ItemEntity> items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(
                             this.worldPosition.getX(), this.worldPosition.getY() + 0.5, this.worldPosition.getZ(),
                             this.worldPosition.getX() + 1, this.worldPosition.getY() + 2, this.worldPosition.getZ() + 1));
                     for (ItemEntity item : items) {
@@ -80,16 +80,17 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
                         if (stack.isEmpty())
                             continue;
                         ItemStack left = this.items.insertItem(0, stack, false);
-                        if (!ItemStack.areItemStacksEqual(stack, left)) {
-                            if (left.isEmpty())
-                                item.remove();
-                            else
+                        if (!ItemStack.isSame(stack, left)) {
+                            if (left.isEmpty()) {
+                                item.kill();
+                            } else {
                                 item.setItem(left);
+                            }
                             break pull;
                         }
                     }
 
-                    BlockEntity tileUp = this.level.getBlockEntity(this.worldPosition.up());
+                    BlockEntity tileUp = this.level.getBlockEntity(this.worldPosition.above());
                     if (tileUp == null)
                         break pull;
                     IItemHandler handlerUp = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN).orElse(null);
@@ -112,11 +113,11 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
     }
 
     private boolean isItemInFrame(ItemStack stack) {
-        List<ItemFrameEntity> frames = Helper.getAttachedItemFrames(this.level, this.worldPosition);
+        List<ItemFrame> frames = Helper.getAttachedItemFrames(this.level, this.worldPosition);
         if (frames.isEmpty())
             return false;
-        for (ItemFrameEntity frame : frames) {
-            ItemStack frameStack = frame.getDisplayedItem();
+        for (ItemFrame frame : frames) {
+            ItemStack frameStack = frame.getItem();
             if (Helper.areItemsEqual(stack, frameStack, true)) {
                 return true;
             }

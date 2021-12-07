@@ -7,23 +7,28 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.misc.WeightedOre;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Mth;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.level.Level;
-import net.minecraft.level.chunk.Chunk;
-import net.minecraft.level.server.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.Tag;
+import net.minecraft.util.Mth;
+import net.minecraft.util.Tuple;
+import net.minecraft.util.random.WeightedRandom;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import org.apache.commons.lang3.tuple.Pair;
@@ -55,12 +60,12 @@ public class OreSpawnEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public ActiveType isActiveHere(Player player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public ActiveType isActiveHere(Player player, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.level, pos, spot))
             return ActiveType.INACTIVE;
-        if (player.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
+        if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return ActiveType.INACTIVE;
-        if (!NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.getPosition(), NAME))
+        if (!NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.getOnPos(), NAME))
             return ActiveType.INHIBITED;
         return ActiveType.ACTIVE;
     }
@@ -71,7 +76,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public void update(Level level, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (level.getGameTime() % 40 != 0)
             return;
         if (!this.calcValues(level, pos, spot))
@@ -88,46 +93,48 @@ public class OreSpawnEffect implements IDrainSpotEffect {
         }
         int totalWeight = WeightedRandom.getTotalWeight(ores);
 
-        List<Tuple<Vector3d, Integer>> powders = NaturesAuraAPI.instance().getActiveEffectPowders(level,
-                new AxisAlignedBB(pos).grow(this.dist), NAME);
+        List<Tuple<Vec3, Integer>> powders = NaturesAuraAPI.instance().getActiveEffectPowders(level,
+                new AABB(pos).inflate(this.dist), NAME);
         if (powders.isEmpty())
             return;
         for (int i = 0; i < this.amount; i++) {
-            Tuple<Vector3d, Integer> powder = powders.get(i % powders.size());
-            Vector3d powderPos = powder.getA();
+            Tuple<Vec3, Integer> powder = powders.get(i % powders.size());
+            Vec3 powderPos = powder.getA();
             int range = powder.getB();
-            int x = Mth.floor(powderPos.x + level.rand.nextGaussian() * range);
-            int y = Mth.floor(powderPos.y + level.rand.nextGaussian() * range);
-            int z = Mth.floor(powderPos.z + level.rand.nextGaussian() * range);
+            int x = Mth.floor(powderPos.x + level.random.nextGaussian() * range);
+            int y = Mth.floor(powderPos.y + level.random.nextGaussian() * range);
+            int z = Mth.floor(powderPos.z + level.random.nextGaussian() * range);
             BlockPos orePos = new BlockPos(x, y, z);
-            if (orePos.distanceSq(powderPos.x, powderPos.y, powderPos.z, true) <= range * range
-                    && orePos.distanceSq(pos) <= this.dist * this.dist && level.isBlockLoaded(orePos)) {
+            if (orePos.distSqr(powderPos.x, powderPos.y, powderPos.z, true) <= range * range
+                    && orePos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(orePos)) {
                 BlockState state = level.getBlockState(orePos);
                 if (state.getBlock() != requiredBlock)
                     continue;
 
                 outer:
                 while (true) {
-                    WeightedOre ore = WeightedRandom.getRandomItem(level.rand, ores, totalWeight);
-                    ITag<Block> tag = level.getTags().func_241835_a().get(ore.tag);
+                    WeightedOre ore = WeightedRandom.getRandomItem(level.random, ores, totalWeight).orElse(null);
+                    if (ore == null)
+                        continue;
+                    Tag<Block> tag = level.getTagManager().getOrEmpty(Registry.BLOCK_REGISTRY).getTag(ore.tag);
                     if (tag == null)
                         continue;
-                    for (Block toPlace : tag.getAllElements()) {
+                    for (Block toPlace : tag.getValues()) {
                         if (toPlace == null || toPlace == Blocks.AIR)
                             continue;
 
                         FakePlayer player = FakePlayerFactory.getMinecraft((ServerLevel) level);
-                        player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-                        BlockRayTraceResult ray = new BlockRayTraceResult(Vector3d.copyCentered(pos), Direction.UP, pos, false);
-                        BlockItemUseContext context = new BlockItemUseContext(new ItemUseContext(player, Hand.MAIN_HAND, ray));
+                        player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+                        BlockHitResult ray = new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false);
+                        BlockPlaceContext context = new BlockPlaceContext(new UseOnContext(player, InteractionHand.MAIN_HAND, ray));
                         BlockState stateToPlace = toPlace.getStateForPlacement(context);
                         if (SPAWN_EXCEPTIONS.contains(stateToPlace))
                             continue;
 
-                        level.setBlockState(orePos, stateToPlace);
-                        level.playEvent(2001, orePos, Block.getStateId(stateToPlace));
+                        level.setBlockAndUpdate(orePos, stateToPlace);
+                        level.levelEvent(2001, orePos, Block.getId(stateToPlace));
 
-                        int toDrain = (20000 - ore.itemWeight * 2) * 2;
+                        int toDrain = (20000 - ore.getWeight().asInt() * 2) * 2;
                         BlockPos highestSpot = IAuraChunk.getHighestSpot(level, orePos, 30, pos);
                         IAuraChunk.getAuraChunk(level, highestSpot).drainAura(highestSpot, toDrain);
                         break outer;
@@ -138,7 +145,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
+    public boolean appliesHere(LevelChunk chunk, IAuraChunk auraChunk, IAuraType type) {
         return ModConfig.instance.oreEffect.get() &&
                 (type.isSimilar(NaturesAuraAPI.TYPE_OVERWORLD) || type.isSimilar(NaturesAuraAPI.TYPE_NETHER));
     }

@@ -1,11 +1,10 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -14,8 +13,8 @@ public class BlockEntityOakGenerator extends BlockEntityImpl implements ITickabl
 
     public Queue<BlockPos> scheduledBigTrees = new ArrayDeque<>();
 
-    public BlockEntityOakGenerator() {
-        super(ModTileEntities.OAK_GENERATOR);
+    public BlockEntityOakGenerator(BlockPos pos, BlockState state) {
+        super(ModTileEntities.OAK_GENERATOR, pos, state);
     }
 
     @Override

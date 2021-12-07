@@ -1,49 +1,25 @@
 package de.ellpeck.naturesaura.compat.patchouli;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.compat.ICompat;
 import de.ellpeck.naturesaura.data.ItemTagProvider;
-import de.ellpeck.naturesaura.events.ClientEvents;
-import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
-import de.ellpeck.naturesaura.renderers.SupporterFancyHandler.FancyInfo;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DeferredWorkQueue;
-import net.minecraftforge.fml.client.gui.GuiUtils;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import vazkii.patchouli.api.BookDrawScreenEvent;
-import vazkii.patchouli.api.IMultiblock;
-import vazkii.patchouli.api.IVariable;
-import vazkii.patchouli.api.PatchouliAPI;
 
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.*;
-import java.util.stream.Collectors;
-
+// TODO Patchouli
 public class PatchouliCompat implements ICompat {
 
     private static final ResourceLocation BOOK = new ResourceLocation(NaturesAura.MOD_ID, "book");
+/*
     private static final Map<ResourceLocation, IMultiblock> MULTIBLOCKS = new HashMap<>();
+*/
 
     public static void addPatchouliMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
-        for (int i = 1; i < rawMatchers.length; i += 2) {
+     /*   for (int i = 1; i < rawMatchers.length; i += 2) {
             if (rawMatchers[i] instanceof Matcher) {
                 Matcher matcher = (Matcher) rawMatchers[i];
                 Matcher.ICheck check = matcher.getCheck();
@@ -54,30 +30,31 @@ public class PatchouliCompat implements ICompat {
                             state -> check.matches(null, null, null, null, state, (char) 0));
             }
         }
-        MULTIBLOCKS.put(name, PatchouliAPI.get().makeMultiblock(pattern, rawMatchers));
+        MULTIBLOCKS.put(name, PatchouliAPI.get().makeMultiblock(pattern, rawMatchers));*/
     }
 
-    public static <T extends IRecipe<?>> T getRecipe(String type, String name) {
+    @SuppressWarnings("unchecked")
+    public static <T extends Recipe<?>> T getRecipe(String type, String name) {
         RecipeManager manager = Minecraft.getInstance().level.getRecipeManager();
         ResourceLocation res = new ResourceLocation(name);
         ResourceLocation pre = new ResourceLocation(res.getNamespace(), type + "/" + res.getPath());
-        return (T) manager.getRecipe(pre).orElse(null);
+        return (T) manager.byKey(pre).orElse(null);
     }
 
-    public static IVariable ingredientVariable(Ingredient ingredient) {
+/*    public static IVariable ingredientVariable(Ingredient ingredient) {
         return IVariable.wrapList(Arrays.stream(ingredient.getMatchingStacks())
                 .map(IVariable::from).collect(Collectors.toList()));
-    }
+    }*/
 
     @Override
     public void setup(FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
+      /*  event.enqueueWork(() -> {
             for (Map.Entry<ResourceLocation, IMultiblock> entry : MULTIBLOCKS.entrySet())
                 PatchouliAPI.get().registerMultiblock(entry.getKey(), entry.getValue());
 
             PatchouliAPI.get().setConfigFlag(NaturesAura.MOD_ID + ":rf_converter", ModConfig.instance.rfConverter.get());
             PatchouliAPI.get().setConfigFlag(NaturesAura.MOD_ID + ":chunk_loader", ModConfig.instance.chunkLoader.get());
-        });
+        });*/
     }
 
     @Override
@@ -90,7 +67,7 @@ public class PatchouliCompat implements ICompat {
 
     }
 
-    @SubscribeEvent
+ /*   @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void onBookDraw(BookDrawScreenEvent event) {
         if (event.book == null || !event.book.equals(BOOK))
@@ -151,5 +128,5 @@ public class PatchouliCompat implements ICompat {
                         event.mouseX, event.mouseY, event.gui.width, event.gui.height, 0, event.gui.getMinecraft().fontRenderer);
 
         }
-    }
+    }*/
 }

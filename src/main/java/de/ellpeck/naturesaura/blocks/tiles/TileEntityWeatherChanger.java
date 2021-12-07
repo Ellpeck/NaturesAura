@@ -4,14 +4,14 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.misc.WeatherType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.server.ServerLevel;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -23,8 +23,8 @@ public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITicka
     private WeatherType type;
     private int itemAmount;
 
-    public BlockEntityWeatherChanger() {
-        super(ModTileEntities.WEATHER_CHANGER);
+    public BlockEntityWeatherChanger(BlockPos pos, BlockState state) {
+        super(ModTileEntities.WEATHER_CHANGER, pos, state);
     }
 
     @Override
@@ -38,15 +38,15 @@ public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITicka
             for (int r = 0; r < 360; r += 20) {
                 double xOff = Math.cos(Math.toRadians(r)) * 3F;
                 double zOff = Math.sin(Math.toRadians(r)) * 3F;
-                for (int i = this.level.rand.nextInt(3); i > 0; i--) {
+                for (int i = this.level.random.nextInt(3); i > 0; i--) {
                     NaturesAuraAPI.instance().spawnMagicParticle(
                             this.worldPosition.getX() + 0.5F + xOff,
                             this.worldPosition.getY(),
                             this.worldPosition.getZ() + 0.5F + zOff,
-                            this.level.rand.nextGaussian() * 0.02F,
-                            this.level.rand.nextFloat() * 0.1F + 0.1F,
-                            this.level.rand.nextGaussian() * 0.02F,
-                            color, this.level.rand.nextFloat() * 2 + 1, this.level.rand.nextInt(80) + 80, 0, false, true);
+                            this.level.random.nextGaussian() * 0.02F,
+                            this.level.random.nextFloat() * 0.1F + 0.1F,
+                            this.level.random.nextGaussian() * 0.02F,
+                            color, this.level.random.nextFloat() * 2 + 1, this.level.random.nextInt(80) + 80, 0, false, true);
                 }
             }
             return;
@@ -64,15 +64,9 @@ public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITicka
                 int time = 6000 * this.itemAmount;
                 ServerLevel server = (ServerLevel) this.level;
                 switch (this.type) {
-                    case SUN:
-                        server.func_241113_a_(time, 0, false, false);
-                        break;
-                    case RAIN:
-                        server.func_241113_a_(0, time, true, false);
-                        break;
-                    case THUNDERSTORM:
-                        server.func_241113_a_(0, time, true, true);
-                        break;
+                    case SUN -> server.setWeatherParameters(time, 0, false, false);
+                    case RAIN -> server.setWeatherParameters(0, time, true, false);
+                    case THUNDERSTORM -> server.setWeatherParameters(0, time, true, true);
                 }
             }
         } else {
@@ -110,17 +104,17 @@ public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITicka
     }
 
     private Pair<WeatherType, Integer> getNextWeatherType() {
-        AxisAlignedBB area = new AxisAlignedBB(this.worldPosition).grow(2);
-        List<ItemEntity> items = this.level.getEntitiesWithinAABB(ItemEntity.class, area, EntityPredicates.IS_ALIVE);
+        AABB area = new AABB(this.worldPosition).inflate(2);
+        List<ItemEntity> items = this.level.getEntitiesOfClass(ItemEntity.class, area, Entity::isAlive);
         for (ItemEntity entity : items) {
-            if (entity.cannotPickup())
+            if (entity.hasPickUpDelay())
                 continue;
             ItemStack stack = entity.getItem();
             for (Map.Entry<ItemStack, WeatherType> entry : NaturesAuraAPI.WEATHER_CHANGER_CONVERSIONS.entrySet()) {
                 if (!Helper.areItemsEqual(stack, entry.getKey(), true))
                     continue;
                 entity.setItem(ItemStack.EMPTY);
-                entity.remove();
+                entity.kill();
                 return Pair.of(entry.getValue(), stack.getCount());
             }
         }

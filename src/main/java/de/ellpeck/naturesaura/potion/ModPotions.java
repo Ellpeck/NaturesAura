@@ -1,10 +1,10 @@
 package de.ellpeck.naturesaura.potion;
 
-import net.minecraft.potion.Effect;
+import net.minecraft.world.effect.MobEffect;
 
 @SuppressWarnings("FieldNamingConvention")
 public final class ModPotions {
 
-    public static Effect BREATHLESS;
+    public static MobEffect BREATHLESS;
 
 }

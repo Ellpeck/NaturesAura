@@ -108,7 +108,7 @@ dependencies {
 /*    compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.6.1.75:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.6.1.75")*/
 
-    // TDOO Patchouli
+    // TODO Patchouli
 /*    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50")*/
 

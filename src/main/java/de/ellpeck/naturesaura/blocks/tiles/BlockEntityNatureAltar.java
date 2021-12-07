@@ -11,16 +11,15 @@ import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Mth;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -67,21 +66,21 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
     private int lastAura;
     private boolean firstTick = true;
 
-    public BlockEntityNatureAltar() {
-        super(ModTileEntities.NATURE_ALTAR);
+    public BlockEntityNatureAltar(BlockPos pos, BlockState state) {
+        super(ModTileEntities.NATURE_ALTAR, pos, state);
     }
 
     @Override
     public void tick() {
-        Random rand = this.level.rand;
+        Random rand = this.level.random;
 
         if (this.level.getGameTime() % 40 == 0) {
             int index = 0;
             for (int x = -2; x <= 2; x += 4) {
                 for (int z = -2; z <= 2; z += 4) {
-                    BlockPos offset = this.worldPosition.add(x, 1, z);
+                    BlockPos offset = this.worldPosition.offset(x, 1, z);
                     BlockState state = this.level.getBlockState(offset);
-                    this.catalysts[index] = state.getBlock().getItem(this.level, offset, state);
+                    this.catalysts[index] = state.getBlock().getCloneItemStack(this.level, offset, state);
                     index++;
                 }
             }
@@ -156,8 +155,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
                                     this.currentRecipe = null;
                                     this.timer = 0;
 
-                                    this.level.playSound(null, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5,
-                                            SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.BLOCKS, 0.65F, 1F);
+                                    this.level.playSound(null, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5, SoundEvents.ARROW_HIT_PLAYER, SoundSource.BLOCKS, 0.65F, 1F);
                                 }
                             }
                         }
@@ -203,7 +201,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
 
     private AltarRecipe getRecipeForInput(ItemStack input) {
         IAuraType type = IAuraType.forLevel(this.level);
-        for (AltarRecipe recipe : this.level.getRecipeManager().getRecipes(ModRecipes.ALTAR_TYPE, null, null)) {
+        for (AltarRecipe recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.ALTAR_TYPE, null, null)) {
             if (recipe.input.test(input) && (recipe.requiredType == null || type.isSimilar(recipe.requiredType))) {
                 if (recipe.catalyst == Ingredient.EMPTY)
                     return recipe;
@@ -251,7 +249,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
         if (type == SaveType.TILE) {
             if (compound.contains("recipe")) {
                 if (this.hasLevel())
-                    this.currentRecipe = (AltarRecipe) this.level.getRecipeManager().getRecipe(new ResourceLocation(compound.getString("recipe"))).orElse(null);
+                    this.currentRecipe = (AltarRecipe) this.level.getRecipeManager().byKey(new ResourceLocation(compound.getString("recipe"))).orElse(null);
                 this.timer = compound.getInt("timer");
             }
         }

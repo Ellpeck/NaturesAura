@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.api.aura.container;
 
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemAuraContainer implements IAuraContainer {
 

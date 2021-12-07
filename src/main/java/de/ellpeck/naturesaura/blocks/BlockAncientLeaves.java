@@ -5,17 +5,18 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAncientLeaves;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.level.IBlockReader;
 import net.minecraft.level.Level;
 import net.minecraft.level.server.ServerLevel;
+import net.minecraft.tileentity.BlockEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -25,7 +26,7 @@ import java.util.Random;
 public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorProvidingBlock, IColorProvidingItem, ICustomBlockState {
 
     public BlockAncientLeaves() {
-        super(Properties.create(Material.LEAVES, MaterialColor.PINK).hardnessAndResistance(0.2F).tickRandomly().notSolid().sound(SoundType.PLANT));
+        super(Block.Properties.of(Material.LEAVES, MaterialColor.COLOR_PINK).strength(0.2F).randomTicks().noOcclusion().sound(SoundType.GRASS));
         ModRegistry.add(this);
         ModRegistry.add(new ModTileType<>(BlockEntityAncientLeaves::new, this));
     }

@@ -6,18 +6,19 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.recipes.OfferingRecipe;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Queue;
 
 public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickableBlockEntity {
+
     public final ItemStackHandler items = new ItemStackHandlerNA(1, this, true) {
         @Override
         public int getSlotLimit(int slot) {
@@ -34,12 +36,12 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
     };
     private final Queue<ItemStack> itemsToSpawn = new ArrayDeque<>();
 
-    public BlockEntityOfferingTable() {
-        super(ModTileEntities.OFFERING_TABLE);
+    public BlockEntityOfferingTable(BlockPos pos, BlockState state) {
+        super(ModTileEntities.OFFERING_TABLE, pos, state);
     }
 
     private OfferingRecipe getRecipe(ItemStack input) {
-        for (OfferingRecipe recipe : this.level.getRecipeManager().getRecipes(ModRecipes.OFFERING_TYPE, null, null))
+        for (OfferingRecipe recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.OFFERING_TYPE, null, null))
             if (recipe.input.test(input))
                 return recipe;
         return null;
@@ -56,7 +58,7 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
                 if (stack.isEmpty())
                     return;
 
-                List<ItemEntity> items = this.level.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(this.worldPosition).grow(1));
+                List<ItemEntity> items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(this.worldPosition).inflate(1));
                 if (items.isEmpty())
                     return;
 
@@ -65,7 +67,7 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
                     return;
 
                 for (ItemEntity item : items) {
-                    if (!item.isAlive() || item.cannotPickup())
+                    if (!item.isAlive() || item.hasPickUpDelay())
                         continue;
 
                     ItemStack itemStack = item.getItem();
@@ -78,33 +80,30 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
                     int amount = Helper.getIngredientAmount(recipe.input);
                     int recipeCount = stack.getCount() / amount;
                     stack.shrink(recipeCount * amount);
-                    item.remove();
+                    item.kill();
                     this.sendToClients();
 
                     for (int i = 0; i < recipeCount; i++)
                         this.itemsToSpawn.add(recipe.output.copy());
 
                     if (Multiblocks.OFFERING_TABLE.forEach(this.worldPosition, 'R', (pos, m) -> this.level.getBlockState(pos).getBlock() == Blocks.WITHER_ROSE)) {
-                        for (int i = this.level.rand.nextInt(5) + 3; i >= 0; i--)
+                        for (int i = this.level.random.nextInt(5) + 3; i >= 0; i--)
                             this.itemsToSpawn.add(new ItemStack(Items.BLACK_DYE));
                     }
 
-                    LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level);
-                    lightningboltentity.setEffectOnly(true);
-                    lightningboltentity.moveForced(Vector3d.copyCenteredHorizontally(this.worldPosition));
-                    this.level.addEntity(lightningboltentity);
+                    LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level);
+                    lightningboltentity.setVisualOnly(true);
+                    lightningboltentity.moveTo(Vec3.atCenterOf(this.worldPosition));
+                    this.level.addFreshEntity(lightningboltentity);
                     PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(
-                            (float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.OFFERING_TABLE,
+                            (float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.OFFERING_TABLE,
                             this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()));
 
                     break;
                 }
             } else if (this.level.getGameTime() % 3 == 0) {
                 if (!this.itemsToSpawn.isEmpty())
-                    this.level.addEntity(new ItemEntity(
-                            this.level,
-                            this.worldPosition.getX() + 0.5F, 256, this.worldPosition.getZ() + 0.5F,
-                            this.itemsToSpawn.remove()));
+                    this.level.addFreshEntity(new ItemEntity(this.level, this.worldPosition.getX() + 0.5F, 256, this.worldPosition.getZ() + 0.5F, this.itemsToSpawn.remove()));
             }
         }
     }
@@ -116,10 +115,9 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
             compound.put("items", this.items.serializeNBT());
 
             if (type != SaveType.SYNC) {
-                ListNBT list = new ListNBT();
-                for (ItemStack stack : this.itemsToSpawn) {
+                ListTag list = new ListTag();
+                for (ItemStack stack : this.itemsToSpawn)
                     list.add(stack.serializeNBT());
-                }
                 compound.put("items_to_spawn", list);
             }
         }
@@ -133,10 +131,9 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
 
             if (type != SaveType.SYNC) {
                 this.itemsToSpawn.clear();
-                ListNBT list = compound.getList("items_to_spawn", 10);
-                for (INBT base : list) {
-                    this.itemsToSpawn.add(ItemStack.read((CompoundTag) base));
-                }
+                ListTag list = compound.getList("items_to_spawn", 10);
+                for (Tag base : list)
+                    this.itemsToSpawn.add(ItemStack.of((CompoundTag) base));
             }
         }
     }

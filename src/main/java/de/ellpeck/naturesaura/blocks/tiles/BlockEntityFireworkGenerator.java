@@ -1,21 +1,20 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import com.google.common.primitives.Ints;
-import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Mth;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,33 +28,33 @@ public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITi
     private int toRelease;
     private int releaseTimer;
 
-    public BlockEntityFireworkGenerator() {
-        super(ModTileEntities.FIREWORK_GENERATOR);
+    public BlockEntityFireworkGenerator(BlockPos pos, BlockState state) {
+        super(ModTileEntities.FIREWORK_GENERATOR, pos, state);
     }
 
     @Override
     public void tick() {
         if (!this.level.isClientSide) {
             if (this.level.getGameTime() % 10 == 0) {
-                List<ItemEntity> items = this.level.getEntitiesWithinAABB(ItemEntity.class,
-                        new AxisAlignedBB(this.worldPosition).grow(4), EntityPredicates.IS_ALIVE);
+                List<ItemEntity> items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(this.worldPosition).inflate(4), Entity::isAlive);
                 for (ItemEntity item : items) {
-                    if (item.cannotPickup())
+                    if (item.hasPickUpDelay())
                         continue;
                     ItemStack stack = item.getItem();
                     if (stack.isEmpty() || stack.getItem() != Items.FIREWORK_ROCKET)
                         continue;
                     if (this.trackedEntity == null && this.releaseTimer <= 0) {
-                        FireworkRocketEntity entity = new FireworkRocketEntity(this.level, item.getPosX(), item.getPosY(), item.getPosZ(), stack);
+                        FireworkRocketEntity entity = new FireworkRocketEntity(this.level, item.getX(), item.getY(), item.getZ(), stack);
                         this.trackedEntity = entity;
                         this.trackedItem = stack.copy();
-                        this.level.addEntity(entity);
+                        this.level.addFreshEntity(entity);
                     }
                     stack.shrink(1);
-                    if (stack.isEmpty())
-                        item.remove();
-                    else
+                    if (stack.isEmpty()) {
+                        item.kill();
+                    } else {
                         item.setItem(stack);
+                    }
                 }
             }
 
@@ -68,11 +67,11 @@ public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITi
                     CompoundTag fireworks = compound.getCompound("Fireworks");
 
                     int flightTime = fireworks.getInt("Flight");
-                    ListNBT explosions = fireworks.getList("Explosions", 10);
+                    ListTag explosions = fireworks.getList("Explosions", 10);
                     if (!explosions.isEmpty()) {
                         generateFactor += flightTime;
 
-                        for (INBT base : explosions) {
+                        for (Tag base : explosions) {
                             CompoundTag explosion = (CompoundTag) base;
                             generateFactor += 1.5F;
 
@@ -109,7 +108,7 @@ public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITi
                         data.add(this.worldPosition.getZ());
                         data.addAll(usedColors);
                         PacketHandler.sendToAllLoaded(this.level, this.worldPosition, new PacketParticles(
-                                (float) this.trackedEntity.getPosX(), (float) this.trackedEntity.getPosY(), (float) this.trackedEntity.getPosZ(),
+                                (float) this.trackedEntity.getX(), (float) this.trackedEntity.getY(), (float) this.trackedEntity.getZ(),
                                 PacketParticles.Type.FIREWORK_GEN, Ints.toArray(data)));
                     }
                 }

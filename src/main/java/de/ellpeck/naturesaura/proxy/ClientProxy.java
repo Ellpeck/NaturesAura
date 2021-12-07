@@ -43,9 +43,9 @@ public class ClientProxy implements IProxy {
         MenuScreens.register(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
 
         ItemProperties.register(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "fill_mode"),
-                (stack, levelIn, entityIn) -> ItemColorChanger.isFillMode(stack) ? 1F : 0F);
+                (stack, levelIn, entityIn, i) -> ItemColorChanger.isFillMode(stack) ? 1F : 0F);
         ItemProperties.register(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "has_color"),
-                (stack, levelIn, entityIn) -> ItemColorChanger.getStoredColor(stack) != null ? 1F : 0F);
+                (stack, levelIn, entityIn, i) -> ItemColorChanger.getStoredColor(stack) != null ? 1F : 0F);
     }
 
     @Override

@@ -1,25 +1,23 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.AreaEffectCloud;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
 public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITickableBlockEntity {
 
-    public BlockEntityPotionGenerator() {
-        super(ModTileEntities.POTION_GENERATOR);
+    public BlockEntityPotionGenerator(BlockPos pos, BlockState state) {
+        super(ModTileEntities.POTION_GENERATOR, pos, state);
     }
 
     @Override
@@ -28,19 +26,19 @@ public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITick
             if (Multiblocks.POTION_GENERATOR.isComplete(this.level, this.worldPosition)) {
                 boolean addedOne = false;
 
-                List<AreaEffectCloudEntity> clouds = this.level.getEntitiesWithinAABB(AreaEffectCloudEntity.class, new AxisAlignedBB(this.worldPosition).grow(2));
-                for (AreaEffectCloudEntity cloud : clouds) {
+                List<AreaEffectCloud> clouds = this.level.getEntitiesOfClass(AreaEffectCloud.class, new AABB(this.worldPosition).inflate(2));
+                for (AreaEffectCloud cloud : clouds) {
                     if (!cloud.isAlive())
                         continue;
 
                     if (!addedOne) {
-                        Potion type = ObfuscationReflectionHelper.getPrivateValue(AreaEffectCloudEntity.class, cloud, "field_184502_e");
+                        Potion type = cloud.getPotion();
                         if (type == null)
                             continue;
 
-                        for (EffectInstance effect : type.getEffects()) {
-                            Effect potion = effect.getPotion();
-                            if (!potion.isBeneficial() || potion.isInstant()) {
+                        for (MobEffectInstance effect : type.getEffects()) {
+                            MobEffect potion = effect.getEffect();
+                            if (!potion.isBeneficial() || potion.isInstantenous()) {
                                 continue;
                             }
 
@@ -51,7 +49,7 @@ public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITick
 
                             PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(
                                     this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.POTION_GEN,
-                                    PotionUtils.getPotionColor(type), canGen ? 1 : 0));
+                                    PotionUtils.getColor(type), canGen ? 1 : 0));
 
                             addedOne = true;
                             break;
@@ -59,10 +57,11 @@ public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITick
                     }
 
                     float newRadius = cloud.getRadius() - 0.25F;
-                    if (newRadius < 0.5F)
-                        cloud.remove();
-                    else
+                    if (newRadius < 0.5F) {
+                        cloud.kill();
+                    } else {
                         cloud.setRadius(newRadius);
+                    }
                 }
             }
         }

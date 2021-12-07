@@ -4,11 +4,11 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -80,13 +80,11 @@ public class Multiblock implements IMultiblock {
                 continue;
 
             Object value = rawMatchers[i + 1];
-            if (value instanceof BlockState) {
-                BlockState state = (BlockState) value;
+            if (value instanceof BlockState state) {
                 matchers.put(c, new Matcher(state,
                         (level, start, offset, pos, other, otherC) -> other == state));
-            } else if (value instanceof Block) {
-                Block block = (Block) value;
-                matchers.put(c, new Matcher(block.getDefaultState(),
+            } else if (value instanceof Block block) {
+                matchers.put(c, new Matcher(block.defaultBlockState(),
                         (level, start, offset, pos, state, otherC) -> state.getBlock() == block));
             } else
                 matchers.put(c, (Matcher) value);
@@ -121,7 +119,7 @@ public class Multiblock implements IMultiblock {
         for (Map.Entry<BlockPos, Matcher> entry : this.matchers.entrySet()) {
             BlockPos offset = entry.getKey();
             if (c == 0 || this.getChar(offset) == c)
-                if (!function.apply(start.add(offset), entry.getValue()))
+                if (!function.apply(start.offset(offset), entry.getValue()))
                     return false;
         }
         return true;
@@ -129,7 +127,7 @@ public class Multiblock implements IMultiblock {
 
     @Override
     public BlockPos getStart(BlockPos center) {
-        return center.add(-this.xOffset, -this.yOffset, -this.zOffset);
+        return center.offset(-this.xOffset, -this.yOffset, -this.zOffset);
     }
 
     @Override

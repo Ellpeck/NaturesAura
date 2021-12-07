@@ -2,11 +2,13 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.misc.LevelData;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockEntitySpawnLamp extends BlockEntityImpl {
 
-    public BlockEntitySpawnLamp() {
-        super(ModTileEntities.SPAWN_LAMP);
+    public BlockEntitySpawnLamp(BlockPos pos, BlockState state) {
+        super(ModTileEntities.SPAWN_LAMP, pos, state);
     }
 
     public int getRadius() {
@@ -14,8 +16,8 @@ public class BlockEntitySpawnLamp extends BlockEntityImpl {
     }
 
     @Override
-    public void validate() {
-        super.validate();
+    public void onLoad() {
+        super.onLoad();
         if (!this.level.isClientSide) {
             LevelData data = (LevelData) ILevelData.getLevelData(this.level);
             data.spawnLamps.add(this);
@@ -23,8 +25,8 @@ public class BlockEntitySpawnLamp extends BlockEntityImpl {
     }
 
     @Override
-    public void remove() {
-        super.remove();
+    public void setRemoved() {
+        super.setRemoved();
         if (!this.level.isClientSide) {
             LevelData data = (LevelData) ILevelData.getLevelData(this.level);
             data.spawnLamps.remove(this);

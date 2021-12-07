@@ -2,11 +2,13 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.items.ModItems;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -14,19 +16,18 @@ import java.util.List;
 
 public class BlockEntityPowderPlacer extends BlockEntityImpl {
 
-    public BlockEntityPowderPlacer() {
-        super(ModTileEntities.POWDER_PLACER);
+    public BlockEntityPowderPlacer(BlockPos pos, BlockState state) {
+        super(ModTileEntities.POWDER_PLACER, pos, state);
     }
 
     @Override
     public void onRedstonePowerChange(int newPower) {
         if (this.redstonePower <= 0 && newPower > 0) {
-            List<EntityEffectInhibitor> powders = this.level.getEntitiesWithinAABB(EntityEffectInhibitor.class,
-                    new AxisAlignedBB(this.worldPosition, this.worldPosition.add(1, 2, 1)), EntityPredicates.IS_ALIVE);
+            List<EntityEffectInhibitor> powders = this.level.getEntitiesOfClass(EntityEffectInhibitor.class, new AABB(this.worldPosition, this.worldPosition.offset(1, 2, 1)), Entity::isAlive);
             for (Direction facing : Direction.values()) {
                 if (!facing.getAxis().isHorizontal())
                     continue;
-                BlockEntity tile = this.level.getBlockEntity(this.worldPosition.offset(facing));
+                BlockEntity tile = this.level.getBlockEntity(this.worldPosition.relative(facing));
                 if (tile == null)
                     continue;
                 IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite()).orElse(null);
@@ -39,7 +40,7 @@ public class BlockEntityPowderPlacer extends BlockEntityImpl {
                         for (int i = 0; i < handler.getSlots(); i++) {
                             ItemStack remain = handler.insertItem(i, drop, false);
                             if (remain.isEmpty()) {
-                                powder.remove();
+                                powder.kill();
                                 break;
                             } else if (remain.getCount() != drop.getCount()) {
                                 powder.setAmount(remain.getCount());

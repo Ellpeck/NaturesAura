@@ -6,19 +6,15 @@ import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.BlockEnderCrate;
 import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.WorldlyContainer;
-import net.minecraft.world.inventory.MenuConstructor;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -143,13 +139,13 @@ public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvid
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".ender_crate", TextFormatting.ITALIC + this.name + TextFormatting.RESET);
+    public Component getDisplayName() {
+        return new TranslatableComponent("info." + NaturesAura.MOD_ID + ".ender_crate", ChatFormatting.ITALIC + this.name + ChatFormatting.RESET);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int window, PlayerInventory inv, Player player) {
+    public AbstractContainerMenu createMenu(int window, Inventory inv, Player player) {
         return new ContainerEnderCrate(ModContainers.ENDER_CRATE, window, player, this.getItemHandler());
     }
 }

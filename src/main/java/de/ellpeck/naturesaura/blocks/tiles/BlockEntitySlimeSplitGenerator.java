@@ -1,13 +1,12 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.entity.monster.MagmaCubeEntity;
-import net.minecraft.entity.monster.SlimeEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.monster.MagmaCube;
+import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockEntitySlimeSplitGenerator extends BlockEntityImpl implements ITickableBlockEntity {
 
@@ -15,8 +14,8 @@ public class BlockEntitySlimeSplitGenerator extends BlockEntityImpl implements I
     private int amountToRelease;
     private int color;
 
-    public BlockEntitySlimeSplitGenerator() {
-        super(ModTileEntities.SLIME_SPLIT_GENERATOR);
+    public BlockEntitySlimeSplitGenerator(BlockPos pos, BlockState state) {
+        super(ModTileEntities.SLIME_SPLIT_GENERATOR, pos, state);
     }
 
     @Override
@@ -42,13 +41,13 @@ public class BlockEntitySlimeSplitGenerator extends BlockEntityImpl implements I
         return this.generationTimer > 0;
     }
 
-    public void startGenerating(SlimeEntity slime) {
-        int size = slime.getSlimeSize();
+    public void startGenerating(Slime slime) {
+        int size = slime.getSize();
         this.generationTimer = size * 30;
         this.amountToRelease = (size * this.getGenerationAmount(slime)) / this.generationTimer;
         this.color = this.getSlimeColor(slime);
 
-        PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles((float) slime.getPosX(), (float) slime.getPosY(), (float) slime.getPosZ(), PacketParticles.Type.SLIME_SPLIT_GEN_START,
+        PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles((float) slime.getX(), (float) slime.getY(), (float) slime.getZ(), PacketParticles.Type.SLIME_SPLIT_GEN_START,
                 this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), this.color));
     }
 
@@ -72,16 +71,16 @@ public class BlockEntitySlimeSplitGenerator extends BlockEntityImpl implements I
         }
     }
 
-    private int getSlimeColor(SlimeEntity slime) {
-        if (slime instanceof MagmaCubeEntity) {
+    private int getSlimeColor(Slime slime) {
+        if (slime instanceof MagmaCube) {
             return 0x942516;
         } else {
             return 0x4da84f;
         }
     }
 
-    private int getGenerationAmount(SlimeEntity slime) {
-        if (slime instanceof MagmaCubeEntity) {
+    private int getGenerationAmount(Slime slime) {
+        if (slime instanceof MagmaCube) {
             return 45000;
         } else {
             return 25000;

@@ -5,12 +5,12 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ITickableBlockEntity;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Mth;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -25,8 +25,8 @@ public class BlockEntityRFConverter extends BlockEntityImpl implements ITickable
     private final LazyOptional<IEnergyStorage> storageOptional = LazyOptional.of(() -> this.storage);
     private int lastEnergy;
 
-    public BlockEntityRFConverter() {
-        super(ModTileEntities.RF_CONVERTER);
+    public BlockEntityRFConverter(BlockPos pos, BlockState state) {
+        super(ModTileEntities.RF_CONVERTER, pos, state);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class BlockEntityRFConverter extends BlockEntityImpl implements ITickable
             }
 
             for (Direction facing : Direction.values()) {
-                BlockEntity tile = this.level.getBlockEntity(this.worldPosition.offset(facing));
+                BlockEntity tile = this.level.getBlockEntity(this.worldPosition.relative(facing));
                 if (tile == null)
                     continue;
                 IEnergyStorage storage = tile.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).orElse(null);
@@ -99,8 +99,8 @@ public class BlockEntityRFConverter extends BlockEntityImpl implements ITickable
     }
 
     @Override
-    public void remove() {
-        super.remove();
+    public void setRemoved() {
+        super.setRemoved();
         this.storageOptional.invalidate();
     }
 
