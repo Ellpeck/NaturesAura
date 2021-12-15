@@ -4,26 +4,30 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEndFlower;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.*;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.level.IBlockReader;
-import net.minecraft.level.ILevelReader;
-import net.minecraft.level.Level;
-import net.minecraft.level.gen.Heightmap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -32,52 +36,46 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockState, ICustomItemModel, ICustomRenderType {
+public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockState, ICustomItemModel, ICustomRenderType, EntityBlock {
 
-    protected static final VoxelShape SHAPE = Block.makeCuboidShape(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
+    protected static final VoxelShape SHAPE = box(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 
     public BlockEndFlower() {
-        super(Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0.5F).sound(SoundType.PLANT));
+        super(Properties.of(Material.GRASS).noCollission().strength(0.5F).sound(SoundType.GRASS));
         MinecraftForge.EVENT_BUS.register(this);
         ModRegistry.add(this);
         ModRegistry.add(new ModTileType<>(BlockEntityEndFlower::new, this));
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
-        Vector3d vec3d = state.getOffset(levelIn, pos);
-        return SHAPE.withOffset(vec3d.x, vec3d.y, vec3d.z);
+    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
+        Vec3 vec3d = state.getOffset(levelIn, pos);
+        return SHAPE.move(vec3d.x, vec3d.y, vec3d.z);
     }
 
     @SubscribeEvent
     public void onDragonTick(LivingUpdateEvent event) {
         LivingEntity living = event.getEntityLiving();
-        if (living.level.isClientSide || !(living instanceof EnderDragonEntity))
+        if (living.level.isClientSide || !(living instanceof EnderDragon dragon))
             return;
-        EnderDragonEntity dragon = (EnderDragonEntity) living;
-        if (dragon.deathTicks < 150 || dragon.deathTicks % 10 != 0)
+        if (dragon.deathTime < 150 || dragon.deathTime % 10 != 0)
             return;
 
         for (int i = 0; i < 6; i++) {
-            int x = dragon.level.rand.nextInt(256) - 128;
-            int z = dragon.level.rand.nextInt(256) - 128;
-            BlockPos pos = new BlockPos(x, dragon.level.getHeight(Heightmap.Type.WORLD_SURFACE, x, z), z);
-            if (!dragon.level.isBlockLoaded(pos))
+            int x = dragon.level.random.nextInt(256) - 128;
+            int z = dragon.level.random.nextInt(256) - 128;
+            BlockPos pos = new BlockPos(x, dragon.level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z);
+            if (!dragon.level.isLoaded(pos))
                 continue;
-            if (dragon.level.getBlockState(pos.down()).getBlock() != Blocks.END_STONE)
+            if (dragon.level.getBlockState(pos.below()).getBlock() != Blocks.END_STONE)
                 continue;
-            dragon.level.setBlockState(pos, this.getDefaultState());
+            dragon.level.setBlockAndUpdate(pos, this.defaultBlockState());
         }
     }
 
     @Override
-    protected boolean isValidGround(BlockState state, IBlockReader levelIn, BlockPos pos) {
-        return state.getBlock() == Blocks.END_STONE;
-    }
-
-    @Override
-    public boolean isValidPosition(BlockState state, ILevelReader levelIn, BlockPos pos) {
-        return levelIn.getBlockState(pos.down()).getBlock() == Blocks.END_STONE;
+    public boolean canSurvive(BlockState state, LevelReader levelIn, BlockPos pos) {
+        return levelIn.getBlockState(pos.below()).getBlock() == Blocks.END_STONE;
     }
 
     @Override
@@ -87,29 +85,24 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
 
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockState state, IBlockReader level) {
-        return new BlockEntityEndFlower();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new BlockEntityEndFlower(pos, state);
     }
 
     @Override
-    public boolean hasBlockEntity(BlockState state) {
-        return true;
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        return willHarvest || super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
     }
 
     @Override
-    public boolean removedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-        return willHarvest || super.removedByPlayer(state, level, pos, player, willHarvest, fluid);
-    }
-
-    @Override
-    public void harvestBlock(Level levelIn, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
-        super.harvestBlock(levelIn, player, pos, state, te, stack);
-        levelIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+    public void playerDestroy(Level levelIn, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
+        super.playerDestroy(levelIn, player, pos, state, te, stack);
+        levelIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
     }
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        BlockEntity tile = builder.get(LootParameters.BLOCK_ENTITY);
+        BlockEntity tile = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         if (tile instanceof BlockEntityEndFlower && ((BlockEntityEndFlower) tile).isDrainMode)
             return NonNullList.create();
         return super.getDrops(state, builder);
@@ -127,6 +120,6 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
 
     @Override
     public Supplier<RenderType> getRenderType() {
-        return RenderType::getCutout;
+        return RenderType::cutout;
     }
 }

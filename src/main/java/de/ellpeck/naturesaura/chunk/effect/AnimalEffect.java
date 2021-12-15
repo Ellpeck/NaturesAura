@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Mth;
 import net.minecraft.level.Level;
@@ -33,7 +33,7 @@ public class AnimalEffect implements IDrainSpotEffect {
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "animal");
 
     private int chance;
-    private AxisAlignedBB bb;
+    private AABB bb;
 
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot <= 0)
@@ -46,7 +46,7 @@ public class AnimalEffect implements IDrainSpotEffect {
         if (this.chance <= 0)
             return false;
         int dist = Mth.clamp(Math.abs(aura) / 150000, 5, 35);
-        this.bb = new AxisAlignedBB(pos).grow(dist);
+        this.bb = new AABB(pos).grow(dist);
         return true;
     }
 

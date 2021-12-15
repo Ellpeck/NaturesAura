@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.Shapes;
-import net.minecraft.level.IBlockReader;
+import net.minecraft.level.BlockGetter;
 
 public class BlockPowderPlacer extends BlockContainerImpl implements ICustomBlockState {
 
@@ -26,7 +26,7 @@ public class BlockPowderPlacer extends BlockContainerImpl implements ICustomBloc
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
 

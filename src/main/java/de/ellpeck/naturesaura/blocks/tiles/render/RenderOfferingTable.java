@@ -1,37 +1,32 @@
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityOfferingTable;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.tileentity.BlockEntityRendererDispatcher;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Mth;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Random;
 
-public class RenderOfferingTable extends BlockEntityRenderer<BlockEntityOfferingTable> {
+public class RenderOfferingTable implements BlockEntityRenderer<BlockEntityOfferingTable> {
 
     private final Random rand = new Random();
 
-    public RenderOfferingTable(BlockEntityRendererDispatcher disp) {
-        super(disp);
-    }
-
     @Override
-    public void render(BlockEntityOfferingTable tileEntityOfferingTable, float v, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
+    public void render(BlockEntityOfferingTable tileEntityOfferingTable, float v, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
         ItemStack stack = tileEntityOfferingTable.items.getStackInSlot(0);
         if (!stack.isEmpty()) {
-            this.rand.setSeed(Item.getIdFromItem(stack.getItem()) + stack.getDamage());
+            this.rand.setSeed(Item.getId(stack.getItem()) + stack.getDamageValue());
 
             int amount = Mth.ceil(stack.getCount() / 2F);
             for (int i = 0; i < amount; i++) {
-                matrixStack.push();
+                matrixStack.pushPose();
                 Item item = stack.getItem();
 
                 float scale;
@@ -48,12 +43,12 @@ public class RenderOfferingTable extends BlockEntityRenderer<BlockEntityOffering
                         0.35F + this.rand.nextFloat() * 0.3F,
                         0.9F + yOff + i * 0.001F,
                         0.35F + this.rand.nextFloat() * 0.3F);
-                matrixStack.rotate(Vector3f.YP.rotationDegrees(this.rand.nextFloat() * 360));
-                matrixStack.rotate(Vector3f.XP.rotationDegrees(90F));
+                matrixStack.mulPose(Vector3f.YP.rotationDegrees(this.rand.nextFloat() * 360));
+                matrixStack.mulPose(Vector3f.XP.rotationDegrees(90F));
                 matrixStack.scale(scale, scale, scale);
 
-                Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, combinedLightIn, combinedOverlayIn, matrixStack, iRenderTypeBuffer);
-                matrixStack.pop();
+                Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, combinedLightIn, combinedOverlayIn, matrixStack, iRenderTypeBuffer, 0);
+                matrixStack.popPose();
             }
         }
     }

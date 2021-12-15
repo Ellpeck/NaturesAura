@@ -12,7 +12,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.Player;
 import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -42,7 +42,7 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
                 if (radius <= 0F)
                     return false;
                 BlockPos stopperPos = stopper.getPos();
-                if (!new AxisAlignedBB(stopperPos).grow(radius).intersects(item.getBoundingBox()))
+                if (!new AABB(stopperPos).grow(radius).intersects(item.getBoundingBox()))
                     return false;
 
                 event.setCanceled(true);
@@ -57,12 +57,12 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getVisualizationBounds(Level level, BlockPos pos) {
+    public AABB getVisualizationBounds(Level level, BlockPos pos) {
         BlockEntity tile = level.getBlockEntity(pos);
         if (tile instanceof BlockEntityPickupStopper) {
             double radius = ((BlockEntityPickupStopper) tile).getRadius();
             if (radius > 0)
-                return new AxisAlignedBB(pos).grow(radius);
+                return new AABB(pos).grow(radius);
         }
         return null;
     }

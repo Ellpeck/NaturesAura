@@ -8,17 +8,17 @@ import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.INPC;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Mth;
-import net.minecraft.level.Level;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.npc.Npc;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,8 +29,9 @@ import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
+
     public BlockAnimalGenerator() {
-        super("animal_generator", BlockEntityAnimalGenerator::new, Properties.create(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
+        super("animal_generator", BlockEntityAnimalGenerator::new, Properties.of(Material.STONE).strength(3F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -38,7 +39,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         LivingEntity entity = event.getEntityLiving();
-        if (entity.level.isClientSide || entity.level.getGameTime() % 40 != 0 || !(entity instanceof AnimalEntity) || entity instanceof IMob || entity instanceof INPC)
+        if (entity.level.isClientSide || entity.level.getGameTime() % 40 != 0 || !(entity instanceof Animal) || entity instanceof Mob || entity instanceof Npc)
             return;
         CompoundTag data = entity.getPersistentData();
         int timeAlive = data.getInt(NaturesAura.MOD_ID + ":time_alive");
@@ -48,13 +49,12 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
         LivingEntity entity = event.getEntityLiving();
-        if (entity.level.isClientSide || !(entity instanceof AnimalEntity) || entity instanceof IMob || entity instanceof INPC)
+        if (entity.level.isClientSide || !(entity instanceof Animal) || entity instanceof Mob || entity instanceof Npc)
             return;
-        BlockPos pos = entity.getPosition();
+        BlockPos pos = entity.getOnPos();
         Helper.getBlockEntitiesInArea(entity.level, pos, 5, tile -> {
-            if (!(tile instanceof BlockEntityAnimalGenerator))
+            if (!(tile instanceof BlockEntityAnimalGenerator gen))
                 return false;
-            BlockEntityAnimalGenerator gen = (BlockEntityAnimalGenerator) tile;
 
             CompoundTag data = entity.getPersistentData();
             data.putBoolean(NaturesAura.MOD_ID + ":no_drops", true);
@@ -62,7 +62,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
             if (gen.isBusy())
                 return false;
 
-            boolean child = entity.isChild();
+            boolean child = entity.isBaby();
             float timeMod = child ? 0.5F : 1;
             float amountMod = child ? 0.667F : 1;
 
@@ -73,9 +73,9 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
                 return false;
             gen.setGenerationValues(time, amount);
 
-            BlockPos genPos = gen.getPos();
+            BlockPos genPos = gen.getBlockPos();
             PacketHandler.sendToAllAround(entity.level, pos, 32, new PacketParticles(
-                    (float) entity.getPosX(), (float) entity.getPosY(), (float) entity.getPosZ(), PacketParticles.Type.ANIMAL_GEN_CONSUME,
+                    (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), PacketParticles.Type.ANIMAL_GEN_CONSUME,
                     child ? 1 : 0,
                     (int) (entity.getEyeHeight() * 10F),
                     genPos.getX(), genPos.getY(), genPos.getZ()));
@@ -100,8 +100,8 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getVisualizationBounds(Level level, BlockPos pos) {
-        return new AxisAlignedBB(pos).grow(5);
+    public AABB getVisualizationBounds(Level level, BlockPos pos) {
+        return new AABB(pos).inflate(5);
     }
 
     @Override

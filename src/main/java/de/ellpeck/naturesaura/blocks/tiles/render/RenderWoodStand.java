@@ -1,30 +1,30 @@
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityWoodStand;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.tileentity.BlockEntityRendererDispatcher;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
-public class RenderWoodStand extends BlockEntityRenderer<BlockEntityWoodStand> {
+public class RenderWoodStand implements BlockEntityRenderer<BlockEntityWoodStand> {
 
-    public RenderWoodStand(BlockEntityRendererDispatcher disp) {
-        super(disp);
+    public RenderWoodStand(BlockEntityRendererProvider.Context context) {
+
     }
 
     @Override
-    public void render(BlockEntityWoodStand tileEntityWoodStand, float v, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
+    public void render(BlockEntityWoodStand tileEntityWoodStand, float v, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int i, int i1) {
         ItemStack stack = tileEntityWoodStand.items.getStackInSlot(0);
         if (!stack.isEmpty()) {
-            matrixStack.push();
+            matrixStack.pushPose();
             Item item = stack.getItem();
-            if (item instanceof BlockItem && ((BlockItem) item).getBlock().getDefaultState().getMaterial().isSolid()) {
+            if (item instanceof BlockItem blockItem && blockItem.getBlock().defaultBlockState().getMaterial().isSolid()) {
                 matrixStack.translate(0.5F, 0.755F, 0.5F);
                 float scale = 0.95F;
                 matrixStack.scale(scale, scale, scale);
@@ -32,10 +32,10 @@ public class RenderWoodStand extends BlockEntityRenderer<BlockEntityWoodStand> {
                 matrixStack.translate(0.5F, 0.825F, 0.4F);
                 float scale = 0.75F;
                 matrixStack.scale(scale, scale, scale);
-                matrixStack.rotate(Vector3f.XP.rotationDegrees(90));
+                matrixStack.mulPose(Vector3f.XP.rotationDegrees(90));
             }
-            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, i, i1, matrixStack, iRenderTypeBuffer);
-            matrixStack.pop();
+            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, i, i1, matrixStack, iRenderTypeBuffer, 0);
+            matrixStack.popPose();
         }
     }
 }

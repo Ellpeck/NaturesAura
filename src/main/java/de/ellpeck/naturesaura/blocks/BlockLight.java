@@ -12,7 +12,7 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.level.IBlockReader;
+import net.minecraft.level.BlockGetter;
 import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -39,7 +39,7 @@ public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemB
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
 

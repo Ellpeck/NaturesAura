@@ -4,21 +4,21 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.*;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
-import net.minecraft.level.biome.BiomeColors;
-import net.minecraft.level.server.ServerLevel;
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -30,7 +30,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
     public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, HIGHEST_STAGE);
 
     public BlockGoldenLeaves() {
-        super(Properties.create(Material.LEAVES, MaterialColor.GOLD).hardnessAndResistance(0.2F).tickRandomly().notSolid().sound(SoundType.PLANT));
+        super(Properties.of(Material.LEAVES, MaterialColor.GOLD).strength(0.2F).randomTicks().noCollission().sound(SoundType.GRASS));
         ModRegistry.add(this);
     }
 
@@ -38,9 +38,9 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
         BlockState state = level.getBlockState(pos);
         if (state.getBlock() instanceof LeavesBlock && !(state.getBlock() instanceof BlockAncientLeaves || state.getBlock() instanceof BlockGoldenLeaves)) {
             if (!level.isClientSide) {
-                level.setBlockState(pos, ModBlocks.GOLDEN_LEAVES.getDefaultState()
-                        .with(DISTANCE, state.hasProperty(DISTANCE) ? state.get(DISTANCE) : 1)
-                        .with(PERSISTENT, state.hasProperty(PERSISTENT) ? state.get(PERSISTENT) : false));
+                level.setBlockAndUpdate(pos, ModBlocks.GOLDEN_LEAVES.defaultBlockState()
+                        .setValue(DISTANCE, state.hasProperty(DISTANCE) ? state.getValue(DISTANCE) : 1)
+                        .setValue(PERSISTENT, state.hasProperty(PERSISTENT) ? state.getValue(PERSISTENT) : false));
             }
             return true;
         }
@@ -55,7 +55,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
-        if (stateIn.get(STAGE) == HIGHEST_STAGE && rand.nextFloat() >= 0.75F)
+        if (stateIn.getValue(STAGE) == HIGHEST_STAGE && rand.nextFloat() >= 0.75F)
             NaturesAuraAPI.instance().spawnMagicParticle(
                     pos.getX() + rand.nextFloat(),
                     pos.getY() + rand.nextFloat(),
@@ -65,19 +65,19 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(STAGE);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public IBlockColor getBlockColor() {
+    public BlockColor getBlockColor() {
         return (state, levelIn, pos, tintIndex) -> {
             int color = 0xF2FF00;
             if (state != null && levelIn != null && pos != null) {
-                int foliage = BiomeColors.getFoliageColor(levelIn, pos);
-                return Helper.blendColors(color, foliage, state.get(STAGE) / (float) HIGHEST_STAGE);
+                int foliage = BiomeColors.getAverageFoliageColor(levelIn, pos);
+                return Helper.blendColors(color, foliage, state.getValue(STAGE) / (float) HIGHEST_STAGE);
             } else {
                 return color;
             }
@@ -86,7 +86,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public IItemColor getItemColor() {
+    public ItemColor getItemColor() {
         return (stack, tintIndex) -> 0xF2FF00;
     }
 
@@ -94,21 +94,21 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
     public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
         super.randomTick(state, levelIn, pos, random);
         if (!levelIn.isClientSide) {
-            int stage = state.get(STAGE);
+            int stage = state.getValue(STAGE);
             if (stage < HIGHEST_STAGE) {
-                levelIn.setBlockState(pos, state.with(STAGE, stage + 1));
+                levelIn.setBlockAndUpdate(pos, state.setValue(STAGE, stage + 1));
             }
 
             if (stage > 1) {
-                BlockPos offset = pos.offset(Direction.func_239631_a_(random));
-                if (levelIn.isBlockLoaded(offset))
+                BlockPos offset = pos.relative(Direction.getRandom(random));
+                if (levelIn.isLoaded(offset))
                     convert(levelIn, offset);
             }
         }
     }
 
     @Override
-    public boolean ticksRandomly(BlockState state) {
+    public boolean isRandomlyTicking(BlockState p_54449_) {
         return true;
     }
 

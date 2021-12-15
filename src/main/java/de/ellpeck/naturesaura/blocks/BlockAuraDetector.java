@@ -1,29 +1,29 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraDetector;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 public class BlockAuraDetector extends BlockContainerImpl {
 
     public BlockAuraDetector() {
-        super("aura_detector", BlockEntityAuraDetector::new, Properties.create(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
+        super("aura_detector", BlockEntityAuraDetector::new, Properties.of(Material.STONE).strength(2F).sound(SoundType.STONE));
     }
 
     @Override
-    public boolean hasComparatorInputOverride(BlockState state) {
+    public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
     @Override
-    public int getComparatorInputOverride(BlockState blockState, Level levelIn, BlockPos pos) {
+    public int getAnalogOutputSignal(BlockState blockState, Level levelIn, BlockPos pos) {
         BlockEntity tile = levelIn.getBlockEntity(pos);
-        if (tile instanceof BlockEntityAuraDetector)
-            return ((BlockEntityAuraDetector) tile).redstonePower;
+        if (tile instanceof BlockEntityAuraDetector detector)
+            return detector.redstonePower;
         else
             return 0;
     }

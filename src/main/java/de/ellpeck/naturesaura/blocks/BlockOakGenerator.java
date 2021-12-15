@@ -10,7 +10,7 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.SaplingBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.level.ILevel;
 import net.minecraft.level.Level;
@@ -59,8 +59,8 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getVisualizationBounds(Level level, BlockPos pos) {
-        return new AxisAlignedBB(pos).grow(10);
+    public AABB getVisualizationBounds(Level level, BlockPos pos) {
+        return new AABB(pos).grow(10);
     }
 
     @Override

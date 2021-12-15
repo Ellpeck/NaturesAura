@@ -11,7 +11,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.level.Level;
 import net.minecraft.level.chunk.Chunk;
@@ -22,7 +22,7 @@ public class AngerEffect implements IDrainSpotEffect {
 
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "anger");
 
-    private AxisAlignedBB bb;
+    private AABB bb;
 
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot >= 0)
@@ -33,7 +33,7 @@ public class AngerEffect implements IDrainSpotEffect {
         int dist = Math.min(Math.abs(aura) / 50000, 75);
         if (dist < 10)
             return false;
-        this.bb = new AxisAlignedBB(pos).grow(dist);
+        this.bb = new AABB(pos).grow(dist);
         return true;
     }
 

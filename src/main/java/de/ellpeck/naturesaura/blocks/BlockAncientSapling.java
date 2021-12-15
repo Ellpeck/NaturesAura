@@ -3,33 +3,34 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.gen.ModFeatures;
-import de.ellpeck.naturesaura.gen.LevelGenAncientTree;
 import de.ellpeck.naturesaura.reg.*;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.level.IBlockReader;
-import net.minecraft.level.Level;
-import net.minecraft.level.server.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Random;
 import java.util.function.Supplier;
 
-public class BlockAncientSapling extends BushBlock implements IGrowable, IModItem, ICustomBlockState, ICustomItemModel, ICustomRenderType {
-    protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
+public class BlockAncientSapling extends BushBlock implements BonemealableBlock, IModItem, ICustomBlockState, ICustomItemModel, ICustomRenderType {
+
+    protected static final VoxelShape SHAPE = box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
     public BlockAncientSapling() {
-        super(Properties.create(Material.PLANTS).hardnessAndResistance(0.0F).sound(SoundType.PLANT));
+        super(Properties.of(Material.GRASS).strength(0.0F).sound(SoundType.GRASS));
         ModRegistry.add(this);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
@@ -38,9 +39,8 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
         if (!level.isClientSide) {
             super.randomTick(state, level, pos, random);
 
-            if (level.getLight(pos.up()) >= 9 && random.nextInt(7) == 0) {
-                this.grow(level, random, pos, state);
-            }
+            if (level.getLightEmission(pos.above()) >= 9 && random.nextInt(7) == 0)
+                this.performBonemeal(level, random, pos, state);
         }
     }
 
@@ -50,26 +50,26 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(SaplingBlock.STAGE);
     }
 
     @Override
-    public boolean canGrow(IBlockReader levelIn, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(BlockGetter p_50897_, BlockPos p_50898_, BlockState p_50899_, boolean p_50900_) {
         return true;
     }
 
     @Override
-    public boolean canUseBonemeal(Level level, Random rand, BlockPos pos, BlockState state) {
-        return level.rand.nextFloat() < 0.45F;
+    public boolean isBonemealSuccess(Level level, Random rand, BlockPos pos, BlockState state) {
+        return level.random.nextFloat() < 0.45F;
     }
 
     @Override
-    public void grow(ServerLevel level, Random rand, BlockPos pos, BlockState state) {
-        if (state.get(SaplingBlock.STAGE) == 0) {
-            level.setBlockState(pos, state.func_235896_a_(SaplingBlock.STAGE), 4);
+    public void performBonemeal(ServerLevel level, Random rand, BlockPos pos, BlockState state) {
+        if (state.getValue(SaplingBlock.STAGE) == 0) {
+            level.setBlock(pos, state.cycle(SaplingBlock.STAGE), 4);
         } else if (ForgeEventFactory.saplingGrowTree(level, rand, pos)) {
-            ModFeatures.ANCIENT_TREE.func_241855_a(level, level.getChunkProvider().getChunkGenerator(), rand, pos, LevelGenAncientTree.CONFIG);
+            ModFeatures.Configured.ANCIENT_TREE.place(level, level.getChunkSource().getGenerator(), rand, pos);
         }
     }
 
@@ -85,6 +85,6 @@ public class BlockAncientSapling extends BushBlock implements IGrowable, IModIte
 
     @Override
     public Supplier<RenderType> getRenderType() {
-        return RenderType::getCutoutMipped;
+        return RenderType::cutoutMipped;
     }
 }

@@ -1,52 +1,50 @@
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityGeneratorLimitRemover;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.client.renderer.tileentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.tileentity.BlockEntityRendererDispatcher;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderGeneratorLimitRemover extends BlockEntityRenderer<BlockEntityGeneratorLimitRemover> {
-    private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/generator_limit_remover_glint.png");
-    private final ModelLimitRemoverGlint model = new ModelLimitRemoverGlint();
+public class RenderGeneratorLimitRemover implements BlockEntityRenderer<BlockEntityGeneratorLimitRemover> {
 
-    public RenderGeneratorLimitRemover(BlockEntityRendererDispatcher disp) {
-        super(disp);
+    private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/generator_limit_remover_glint.png");
+    //private final ModelLimitRemoverGlint model = new ModelLimitRemoverGlint();
+
+    public RenderGeneratorLimitRemover(BlockEntityRendererProvider.Context context) {
+
     }
 
     @Override
-    public void render(BlockEntityGeneratorLimitRemover te, float v, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
-        BlockEntity above = te.getLevel().getBlockEntity(te.getPos().up());
+    public void render(BlockEntityGeneratorLimitRemover te, float v, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
+        BlockEntity above = te.getLevel().getBlockEntity(te.getBlockPos().above());
         if (above instanceof BlockEntityImpl && ((BlockEntityImpl) above).wantsLimitRemover()) {
             this.renderGlint(matrixStack, iRenderTypeBuffer, 1, combinedOverlayIn);
             this.renderGlint(matrixStack, iRenderTypeBuffer, 0, combinedOverlayIn);
         }
     }
 
-    private void renderGlint(MatrixStack stack, IRenderTypeBuffer buffer, double yOff, int combinedOverlayIn) {
-        stack.push();
+    private void renderGlint(PoseStack stack, MultiBufferSource buffer, double yOff, int combinedOverlayIn) {
+        stack.pushPose();
         int brightness = 15 << 20 | 15 << 4;
         float alpha = ((float) Math.sin(System.currentTimeMillis() / 800D) + 1F) / 2F;
         stack.translate(-0.001F, yOff + 1 + 0.001F, 1 + 0.001F);
-        stack.rotate(Vector3f.XP.rotationDegrees(180F));
+        stack.mulPose(Vector3f.XP.rotationDegrees(180F));
         stack.scale(1.002F, 1.002F, 1.002F);
-        this.model.render(stack, buffer.getBuffer(this.model.getRenderType(RES)), brightness, combinedOverlayIn, 1, 1, 1, alpha);
-        stack.pop();
+        //this.model.render(stack, buffer.getBuffer(this.model.getRenderType(RES)), brightness, combinedOverlayIn, 1, 1, 1, alpha);
+        stack.popPose();
     }
 
-    private static class ModelLimitRemoverGlint extends Model {
+    // TODO model rendering
+   /* private static class ModelLimitRemoverGlint extends Model {
 
         private final ModelRenderer box;
 
@@ -61,5 +59,5 @@ public class RenderGeneratorLimitRemover extends BlockEntityRenderer<BlockEntity
         public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
             this.box.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         }
-    }
+    }*/
 }

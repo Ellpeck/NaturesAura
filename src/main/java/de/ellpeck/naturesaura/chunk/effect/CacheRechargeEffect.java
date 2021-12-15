@@ -10,7 +10,7 @@ import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Mth;
 import net.minecraft.level.Level;
@@ -24,7 +24,7 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "cache_recharge");
 
     private int amount;
-    private AxisAlignedBB bb;
+    private AABB bb;
 
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot < 100000)
@@ -34,7 +34,7 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
         if (aura < 1500000)
             return false;
         int dist = Mth.clamp(aura / 3500, 3, 15);
-        this.bb = new AxisAlignedBB(pos).grow(dist);
+        this.bb = new AABB(pos).grow(dist);
         this.amount = Mth.ceil(aura / 250F / auraAndSpots.getRight());
         return true;
     }

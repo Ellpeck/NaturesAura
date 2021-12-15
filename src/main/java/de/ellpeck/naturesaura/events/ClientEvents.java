@@ -30,7 +30,7 @@ import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.Mth;
@@ -244,7 +244,7 @@ public class ClientEvents {
 
     private void renderVisualize(IVisualizable visualize, Level
             level, BlockPos pos) {
-        AxisAlignedBB box = visualize.getVisualizationBounds(level, pos);
+        AABB box = visualize.getVisualizationBounds(level, pos);
         if (box == null)
             return;
         box = box.grow(0.05F);

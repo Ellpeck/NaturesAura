@@ -8,7 +8,7 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.SlimeEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -33,8 +33,8 @@ public class BlockSlimeSplitGenerator extends BlockContainerImpl implements IVis
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getVisualizationBounds(Level level, BlockPos pos) {
-        return new AxisAlignedBB(pos).grow(8);
+    public AABB getVisualizationBounds(Level level, BlockPos pos) {
+        return new AABB(pos).grow(8);
     }
 
     @Override

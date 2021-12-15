@@ -4,24 +4,24 @@ import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityFlowerGenerator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockFlowerGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockFlowerGenerator() {
-        super("flower_generator", BlockEntityFlowerGenerator::new, Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2F));
+        super("flower_generator", BlockEntityFlowerGenerator::new, Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(2F));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getVisualizationBounds(Level level, BlockPos pos) {
-        return new AxisAlignedBB(pos).grow(3, 1, 3);
+    public AABB getVisualizationBounds(Level level, BlockPos pos) {
+        return new AABB(pos).inflate(3, 1, 3);
     }
 
     @Override

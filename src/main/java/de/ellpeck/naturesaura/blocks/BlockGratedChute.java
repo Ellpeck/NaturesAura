@@ -5,27 +5,31 @@ import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.IHopper;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.InteractionResult;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Mth;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.Shapes;
-import net.minecraft.level.IBlockReader;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HopperBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.Hopper;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
@@ -33,23 +37,23 @@ import javax.annotation.Nullable;
 public class BlockGratedChute extends BlockContainerImpl implements ICustomBlockState, ICustomItemModel {
 
     public static final DirectionProperty FACING = HopperBlock.FACING;
-    private static final VoxelShape INPUT_SHAPE = Block.makeCuboidShape(0.0D, 10.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    private static final VoxelShape MIDDLE_SHAPE = Block.makeCuboidShape(4.0D, 4.0D, 4.0D, 12.0D, 10.0D, 12.0D);
+    private static final VoxelShape INPUT_SHAPE = box(0.0D, 10.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    private static final VoxelShape MIDDLE_SHAPE = box(4.0D, 4.0D, 4.0D, 12.0D, 10.0D, 12.0D);
     private static final VoxelShape INPUT_MIDDLE_SHAPE = Shapes.or(MIDDLE_SHAPE, INPUT_SHAPE);
-    private static final VoxelShape COMBINED_SHAPE = Shapes.combineAndSimplify(INPUT_MIDDLE_SHAPE, IHopper.INSIDE_BOWL_SHAPE, IBooleanFunction.ONLY_FIRST);
-    private static final VoxelShape DOWN_SHAPE = Shapes.or(COMBINED_SHAPE, Block.makeCuboidShape(6.0D, 0.0D, 6.0D, 10.0D, 4.0D, 10.0D));
-    private static final VoxelShape EAST_SHAPE = Shapes.or(COMBINED_SHAPE, Block.makeCuboidShape(12.0D, 4.0D, 6.0D, 16.0D, 8.0D, 10.0D));
-    private static final VoxelShape NORTH_SHAPE = Shapes.or(COMBINED_SHAPE, Block.makeCuboidShape(6.0D, 4.0D, 0.0D, 10.0D, 8.0D, 4.0D));
-    private static final VoxelShape SOUTH_SHAPE = Shapes.or(COMBINED_SHAPE, Block.makeCuboidShape(6.0D, 4.0D, 12.0D, 10.0D, 8.0D, 16.0D));
-    private static final VoxelShape WEST_SHAPE = Shapes.or(COMBINED_SHAPE, Block.makeCuboidShape(0.0D, 4.0D, 6.0D, 4.0D, 8.0D, 10.0D));
-    private static final VoxelShape DOWN_RAYTRACE_SHAPE = IHopper.INSIDE_BOWL_SHAPE;
-    private static final VoxelShape EAST_RAYTRACE_SHAPE = Shapes.or(IHopper.INSIDE_BOWL_SHAPE, Block.makeCuboidShape(12.0D, 8.0D, 6.0D, 16.0D, 10.0D, 10.0D));
-    private static final VoxelShape NORTH_RAYTRACE_SHAPE = Shapes.or(IHopper.INSIDE_BOWL_SHAPE, Block.makeCuboidShape(6.0D, 8.0D, 0.0D, 10.0D, 10.0D, 4.0D));
-    private static final VoxelShape SOUTH_RAYTRACE_SHAPE = Shapes.or(IHopper.INSIDE_BOWL_SHAPE, Block.makeCuboidShape(6.0D, 8.0D, 12.0D, 10.0D, 10.0D, 16.0D));
-    private static final VoxelShape WEST_RAYTRACE_SHAPE = Shapes.or(IHopper.INSIDE_BOWL_SHAPE, Block.makeCuboidShape(0.0D, 8.0D, 6.0D, 4.0D, 10.0D, 10.0D));
+    private static final VoxelShape COMBINED_SHAPE = Shapes.join(INPUT_MIDDLE_SHAPE, Hopper.INSIDE, BooleanOp.ONLY_FIRST);
+    private static final VoxelShape DOWN_SHAPE = Shapes.or(COMBINED_SHAPE, box(6.0D, 0.0D, 6.0D, 10.0D, 4.0D, 10.0D));
+    private static final VoxelShape EAST_SHAPE = Shapes.or(COMBINED_SHAPE, box(12.0D, 4.0D, 6.0D, 16.0D, 8.0D, 10.0D));
+    private static final VoxelShape NORTH_SHAPE = Shapes.or(COMBINED_SHAPE, box(6.0D, 4.0D, 0.0D, 10.0D, 8.0D, 4.0D));
+    private static final VoxelShape SOUTH_SHAPE = Shapes.or(COMBINED_SHAPE, box(6.0D, 4.0D, 12.0D, 10.0D, 8.0D, 16.0D));
+    private static final VoxelShape WEST_SHAPE = Shapes.or(COMBINED_SHAPE, box(0.0D, 4.0D, 6.0D, 4.0D, 8.0D, 10.0D));
+    private static final VoxelShape DOWN_RAYTRACE_SHAPE = Hopper.INSIDE;
+    private static final VoxelShape EAST_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, box(12.0D, 8.0D, 6.0D, 16.0D, 10.0D, 10.0D));
+    private static final VoxelShape NORTH_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, box(6.0D, 8.0D, 0.0D, 10.0D, 10.0D, 4.0D));
+    private static final VoxelShape SOUTH_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, box(6.0D, 8.0D, 12.0D, 10.0D, 10.0D, 16.0D));
+    private static final VoxelShape WEST_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, box(0.0D, 8.0D, 6.0D, 4.0D, 10.0D, 10.0D));
 
     public BlockGratedChute() {
-        super("grated_chute", BlockEntityGratedChute::new, Properties.create(Material.IRON).hardnessAndResistance(3.0F, 8.0F).sound(SoundType.METAL));
+        super("grated_chute", BlockEntityGratedChute::new, Properties.of(Material.METAL).strength(3.0F, 8.0F).sound(SoundType.METAL));
     }
 
     @Override
@@ -58,50 +62,37 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
-        switch (state.get(FACING)) {
-            case DOWN:
-                return DOWN_SHAPE;
-            case NORTH:
-                return NORTH_SHAPE;
-            case SOUTH:
-                return SOUTH_SHAPE;
-            case WEST:
-                return WEST_SHAPE;
-            case EAST:
-                return EAST_SHAPE;
-            default:
-                return COMBINED_SHAPE;
-        }
+    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
+        return switch (state.getValue(FACING)) {
+            case DOWN -> DOWN_SHAPE;
+            case NORTH -> NORTH_SHAPE;
+            case SOUTH -> SOUTH_SHAPE;
+            case WEST -> WEST_SHAPE;
+            case EAST -> EAST_SHAPE;
+            default -> COMBINED_SHAPE;
+        };
     }
 
     @Override
-    public VoxelShape getRaytraceShape(BlockState state, IBlockReader levelIn, BlockPos pos) {
-        switch (state.get(FACING)) {
-            case DOWN:
-                return DOWN_RAYTRACE_SHAPE;
-            case NORTH:
-                return NORTH_RAYTRACE_SHAPE;
-            case SOUTH:
-                return SOUTH_RAYTRACE_SHAPE;
-            case WEST:
-                return WEST_RAYTRACE_SHAPE;
-            case EAST:
-                return EAST_RAYTRACE_SHAPE;
-            default:
-                return IHopper.INSIDE_BOWL_SHAPE;
-        }
+    public VoxelShape getInteractionShape(BlockState state, BlockGetter levelIn, BlockPos pos) {
+        return switch (state.getValue(FACING)) {
+            case DOWN -> DOWN_RAYTRACE_SHAPE;
+            case NORTH -> NORTH_RAYTRACE_SHAPE;
+            case SOUTH -> SOUTH_RAYTRACE_SHAPE;
+            case WEST -> WEST_RAYTRACE_SHAPE;
+            case EAST -> EAST_RAYTRACE_SHAPE;
+            default -> Hopper.INSIDE;
+        };
     }
 
     @Override
-    public InteractionResult onBlockActivated(BlockState state, Level levelIn, BlockPos pos, Player player, Hand handIn, BlockRayTraceResult hit) {
-        if (!player.isSneaking())
+    public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+        if (!player.isCrouching())
             return InteractionResult.FAIL;
         BlockEntity tile = levelIn.getBlockEntity(pos);
-        if (!(tile instanceof BlockEntityGratedChute))
+        if (!(tile instanceof BlockEntityGratedChute chute))
             return InteractionResult.FAIL;
         if (!levelIn.isClientSide) {
-            BlockEntityGratedChute chute = (BlockEntityGratedChute) tile;
             chute.isBlacklist = !chute.isBlacklist;
             chute.sendToClients();
         }
@@ -110,25 +101,25 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        Direction newFacing = context.getFace().getOpposite();
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        Direction newFacing = context.getClickedFace().getOpposite();
         if (newFacing == Direction.UP)
             newFacing = Direction.DOWN;
-        return super.getStateForPlacement(context).with(FACING, newFacing);
+        return super.getStateForPlacement(context).setValue(FACING, newFacing);
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
-    public boolean hasComparatorInputOverride(BlockState state) {
+    public boolean hasAnalogOutputSignal(BlockState p_60457_) {
         return true;
     }
 
     @Override
-    public int getComparatorInputOverride(BlockState blockState, Level levelIn, BlockPos pos) {
+    public int getAnalogOutputSignal(BlockState blockState, Level levelIn, BlockPos pos) {
         BlockEntity tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityGratedChute) {
             IItemHandler handler = ((BlockEntityGratedChute) tile).getItemHandler();
@@ -141,8 +132,8 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(FACING);
     }
 

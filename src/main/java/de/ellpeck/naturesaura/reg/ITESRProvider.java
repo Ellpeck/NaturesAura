@@ -12,6 +12,5 @@ import java.util.function.Supplier;
 public interface ITESRProvider<T extends BlockEntity> {
 
     @OnlyIn(Dist.CLIENT)
-    Tuple<BlockEntityType<BlockEntity>, Supplier<BlockEntityRendererProvider<BlockEntity>>> getTESR();
-
+    Tuple<BlockEntityType<? extends T>, Supplier<BlockEntityRendererProvider<T>>> getTESR();
 }

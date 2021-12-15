@@ -4,7 +4,7 @@ import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityMossGenerator;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -17,8 +17,8 @@ public class BlockMossGenerator extends BlockContainerImpl implements IVisualiza
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getVisualizationBounds(Level level, BlockPos pos) {
-        return new AxisAlignedBB(pos).grow(2);
+    public AABB getVisualizationBounds(Level level, BlockPos pos) {
+        return new AABB(pos).grow(2);
     }
 
     @Override

@@ -6,7 +6,7 @@ import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,12 +19,12 @@ public class BlockSnowCreator extends BlockContainerImpl implements IVisualizabl
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getVisualizationBounds(Level level, BlockPos pos) {
+    public AABB getVisualizationBounds(Level level, BlockPos pos) {
         BlockEntity tile = level.getBlockEntity(pos);
         if (tile instanceof BlockEntitySnowCreator) {
             int radius = ((BlockEntitySnowCreator) tile).getRange();
             if (radius > 0)
-                return new AxisAlignedBB(pos).grow(radius);
+                return new AABB(pos).grow(radius);
         }
         return null;
     }

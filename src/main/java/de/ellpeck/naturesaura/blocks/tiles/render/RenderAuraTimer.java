@@ -1,34 +1,31 @@
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraTimer;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.client.renderer.tileentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.tileentity.BlockEntityRendererDispatcher;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
-public class RenderAuraTimer extends BlockEntityRenderer<BlockEntityAuraTimer> {
+public class RenderAuraTimer implements BlockEntityRenderer<BlockEntityAuraTimer> {
+
     private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/aura_timer_aura.png");
-    private final AuraModel model = new AuraModel();
+    // private final AuraModel model = new AuraModel();
 
-    public RenderAuraTimer(BlockEntityRendererDispatcher disp) {
-        super(disp);
+    public RenderAuraTimer(BlockEntityRendererProvider.Context context) {
+
     }
 
     @Override
-    public void render(BlockEntityAuraTimer tile, float partialTicks, MatrixStack stack, IRenderTypeBuffer buffer, int combinedLightIn, int combinedOverlayIn) {
+    public void render(BlockEntityAuraTimer tile, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
         ItemStack bottle = tile.getItemHandler().getStackInSlot(0);
         if (bottle.isEmpty())
             return;
-        stack.push();
+        stack.pushPose();
         stack.translate(4 / 16F, 2.001F / 16, 4 / 16F);
 
         float percentage = 1 - tile.getTimerPercentage();
@@ -38,11 +35,13 @@ public class RenderAuraTimer extends BlockEntityRenderer<BlockEntityAuraTimer> {
         float r = (type.getColor() >> 16 & 255) / 255F;
         float g = (type.getColor() >> 8 & 255) / 255F;
         float b = (type.getColor() & 255) / 255F;
-        this.model.render(stack, buffer.getBuffer(this.model.getRenderType(RES)), combinedLightIn, combinedOverlayIn, r, g, b, 0.75F);
-        stack.pop();
+        //this.model.render(stack, buffer.getBuffer(this.model.getRenderType(RES)), combinedLightIn, combinedOverlayIn, r, g, b, 0.75F);
+        stack.popPose();
+
     }
 
-    private static class AuraModel extends Model {
+    // TODO model rendering
+/*    private static class AuraModel extends Model {
 
         private final ModelRenderer box;
 
@@ -57,5 +56,5 @@ public class RenderAuraTimer extends BlockEntityRenderer<BlockEntityAuraTimer> {
         public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
             this.box.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         }
-    }
+    }*/
 }

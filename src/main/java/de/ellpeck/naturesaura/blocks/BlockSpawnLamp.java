@@ -16,13 +16,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.Shapes;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.level.IBlockReader;
+import net.minecraft.level.BlockGetter;
 import net.minecraft.level.ILevel;
 import net.minecraft.level.Level;
 import net.minecraft.level.server.ServerLevel;
@@ -67,7 +67,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
                 continue;
 
             BlockPos lampPos = lamp.getPos();
-            if (!new AxisAlignedBB(lampPos).grow(range).contains(new Vector3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)))
+            if (!new AABB(lampPos).grow(range).contains(new Vector3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)))
                 continue;
 
             MobEntity entity = (MobEntity) event.getEntityLiving();
@@ -85,18 +85,18 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getVisualizationBounds(Level level, BlockPos pos) {
+    public AABB getVisualizationBounds(Level level, BlockPos pos) {
         BlockEntity tile = level.getBlockEntity(pos);
         if (tile instanceof BlockEntitySpawnLamp) {
             int radius = ((BlockEntitySpawnLamp) tile).getRadius();
             if (radius > 0)
-                return new AxisAlignedBB(pos).grow(radius);
+                return new AABB(pos).grow(radius);
         }
         return null;
     }

@@ -4,19 +4,19 @@ import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.StairsBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Supplier;
 
-public class BlockStairsNA extends StairsBlock implements IModItem, ICustomBlockState {
+public class BlockStairsNA extends StairBlock implements IModItem, ICustomBlockState {
 
     public final String textureName;
     private final String baseName;
 
     public BlockStairsNA(String baseName, String textureName, Supplier<BlockState> modelState, Block.Properties properties) {
-        super(modelState, properties.variableOpacity());
+        super(modelState, properties.dynamicShape());
         this.baseName = baseName;
         this.textureName = textureName;
         ModRegistry.add(this);

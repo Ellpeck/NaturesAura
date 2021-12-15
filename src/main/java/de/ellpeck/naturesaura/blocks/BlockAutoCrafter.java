@@ -3,31 +3,32 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAutoCrafter;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.Material;
 
 public class BlockAutoCrafter extends BlockContainerImpl implements ICustomBlockState {
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockAutoCrafter() {
-        super("auto_crafter", BlockEntityAutoCrafter::new, Properties.create(Material.WOOD).hardnessAndResistance(1.5F).sound(SoundType.WOOD));
+        super("auto_crafter", BlockEntityAutoCrafter::new, Properties.of(Material.WOOD).strength(1.5F).sound(SoundType.WOOD));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(FACING);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return super.getStateForPlacement(context).with(FACING, context.getPlayer().getHorizontalFacing());
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return super.getStateForPlacement(context).setValue(FACING, context.getPlayer().getDirection());
     }
 
     @Override

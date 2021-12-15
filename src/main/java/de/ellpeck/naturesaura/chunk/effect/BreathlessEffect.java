@@ -12,7 +12,7 @@ import net.minecraft.entity.player.Player;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Mth;
 import net.minecraft.level.Level;
@@ -25,7 +25,7 @@ public class BreathlessEffect implements IDrainSpotEffect {
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "breathless");
 
     private int amp;
-    private AxisAlignedBB bb;
+    private AABB bb;
 
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot >= 0)
@@ -37,7 +37,7 @@ public class BreathlessEffect implements IDrainSpotEffect {
         if (dist < 10)
             return false;
         this.amp = Math.min(Mth.floor(Math.abs(aura) / 2500000F), 3);
-        this.bb = new AxisAlignedBB(pos).grow(dist);
+        this.bb = new AABB(pos).grow(dist);
         return true;
     }
 

@@ -4,41 +4,41 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityFurnaceHeater;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.level.IBlockReader;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlockState {
+
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     private static final VoxelShape[] SHAPES = new VoxelShape[]{
-            Block.makeCuboidShape(2, 12, 2, 14, 16, 14),    // Down
-            Block.makeCuboidShape(2, 0, 2, 14, 4, 14),      // Up
-            Block.makeCuboidShape(2, 2, 12, 14, 14, 16),    // North
-            Block.makeCuboidShape(2, 2, 0, 14, 14, 4),      // South
-            Block.makeCuboidShape(12, 2, 2, 16, 14, 14),    // West
-            Block.makeCuboidShape(0, 2, 2, 4, 14, 14)       // East
+            box(2, 12, 2, 14, 16, 14),    // Down
+            box(2, 0, 2, 14, 4, 14),      // Up
+            box(2, 2, 12, 14, 14, 16),    // North
+            box(2, 2, 0, 14, 14, 4),      // South
+            box(12, 2, 2, 16, 14, 14),    // West
+            box(0, 2, 2, 4, 14, 14)       // East
     };
 
     public BlockFurnaceHeater() {
-        super("furnace_heater", BlockEntityFurnaceHeater::new, Properties.create(Material.ROCK).hardnessAndResistance(3F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
+        super("furnace_heater", BlockEntityFurnaceHeater::new, Properties.of(Material.STONE).strength(3F));
     }
 
     @Override
@@ -50,8 +50,8 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
         BlockEntity tile = levelIn.getBlockEntity(pos);
-        if (tile instanceof BlockEntityFurnaceHeater && ((BlockEntityFurnaceHeater) tile).isActive) {
-            Direction facing = stateIn.get(FACING);
+        if (tile instanceof BlockEntityFurnaceHeater heater && heater.isActive) {
+            Direction facing = stateIn.getValue(FACING);
 
             float x;
             float y;
@@ -65,35 +65,35 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
                 y = 1F;
                 z = 0.35F + rand.nextFloat() * 0.3F;
             } else {
-                x = facing.getZOffset() != 0 ? (0.35F + rand.nextFloat() * 0.3F) : facing.getXOffset() < 0 ? 1 : 0;
+                x = facing.getStepZ() != 0 ? (0.35F + rand.nextFloat() * 0.3F) : facing.getStepX() < 0 ? 1 : 0;
                 y = 0.35F + rand.nextFloat() * 0.3F;
-                z = facing.getXOffset() != 0 ? (0.35F + rand.nextFloat() * 0.3F) : facing.getZOffset() < 0 ? 1 : 0;
+                z = facing.getStepX() != 0 ? (0.35F + rand.nextFloat() * 0.3F) : facing.getStepZ() < 0 ? 1 : 0;
             }
 
             NaturesAuraAPI.instance().spawnMagicParticle(
                     pos.getX() + x, pos.getY() + y, pos.getZ() + z,
-                    (rand.nextFloat() * 0.016F + 0.01F) * facing.getXOffset(),
-                    (rand.nextFloat() * 0.016F + 0.01F) * facing.getYOffset(),
-                    (rand.nextFloat() * 0.016F + 0.01F) * facing.getZOffset(),
+                    (rand.nextFloat() * 0.016F + 0.01F) * facing.getStepX(),
+                    (rand.nextFloat() * 0.016F + 0.01F) * facing.getStepY(),
+                    (rand.nextFloat() * 0.016F + 0.01F) * facing.getStepZ(),
                     0xf46e42, rand.nextFloat() + 0.5F, 55, 0F, true, true);
         }
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
-        return SHAPES[state.get(FACING).getIndex()];
+    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
+        return SHAPES[state.getValue(FACING).ordinal()];
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(FACING);
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return super.getStateForPlacement(context).with(FACING, context.getFace());
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return super.getStateForPlacement(context).setValue(FACING, context.getClickedFace());
     }
 
     @Override

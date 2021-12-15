@@ -7,7 +7,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.IGrowable;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.IBlockReader;
+import net.minecraft.level.BlockGetter;
 import net.minecraft.level.Level;
 import net.minecraft.level.server.ServerLevel;
 
@@ -36,7 +36,7 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, IG
     }
 
     @Override
-    public boolean canGrow(IBlockReader levelIn, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean canGrow(BlockGetter levelIn, BlockPos pos, BlockState state, boolean isClient) {
         return levelIn.getBlockState(pos.up()).isAir(levelIn, pos.up());
     }
 

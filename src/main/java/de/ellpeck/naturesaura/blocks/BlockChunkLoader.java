@@ -7,33 +7,28 @@ import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityChunkLoader;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Mth;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.level.IBlockReader;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Random;
 
 public class BlockChunkLoader extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
-    private static final VoxelShape SHAPE = makeCuboidShape(4, 4, 4, 12, 12, 12);
+    private static final VoxelShape SHAPE = box(4, 4, 4, 12, 12, 12);
 
     public BlockChunkLoader() {
-        super("chunk_loader", BlockEntityChunkLoader::new, Properties.create(Material.ROCK).hardnessAndResistance(3F).sound(SoundType.STONE));
+        super("chunk_loader", BlockEntityChunkLoader::new, Properties.of(Material.STONE).strength(3F).sound(SoundType.STONE));
     }
 
     @Override
@@ -43,12 +38,12 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getVisualizationBounds(Level level, BlockPos pos) {
+    public AABB getVisualizationBounds(Level level, BlockPos pos) {
         BlockEntity tile = level.getBlockEntity(pos);
         if (tile instanceof BlockEntityChunkLoader) {
             int range = ((BlockEntityChunkLoader) tile).range();
             if (range > 0) {
-                return new AxisAlignedBB(
+                return new AABB(
                         (pos.getX() - range) >> 4 << 4,
                         0,
                         (pos.getZ() - range) >> 4 << 4,
@@ -70,8 +65,8 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
             int range = ((BlockEntityChunkLoader) tile).range();
             for (int i = Mth.ceil(range / 8F); i > 0; i--) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        pos.getX() + levelIn.rand.nextFloat(), pos.getY() + levelIn.rand.nextFloat(), pos.getZ() + levelIn.rand.nextFloat(),
-                        0, 0, 0, 0xa12dff, 1F + levelIn.rand.nextFloat(), 100, 0, false, true);
+                        pos.getX() + levelIn.random.nextFloat(), pos.getY() + levelIn.random.nextFloat(), pos.getZ() + levelIn.random.nextFloat(),
+                        0, 0, 0, 0xa12dff, 1F + levelIn.random.nextFloat(), 100, 0, false, true);
             }
         }
     }
@@ -83,18 +78,13 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
     @Override
-    public String getTranslationKey() {
-        return ModConfig.instance.chunkLoader.get() ? super.getTranslationKey() : "block." + NaturesAura.MOD_ID + "." + this.getBaseName() + ".disabled";
-    }
-
-    @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader levelIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, levelIn, tooltip, flagIn);
+    public String getDescriptionId() {
+        return ModConfig.instance.chunkLoader.get() ? super.getDescriptionId() : "block." + NaturesAura.MOD_ID + "." + this.getBaseName() + ".disabled";
     }
 
     @Override

@@ -22,7 +22,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.Shapes;
-import net.minecraft.level.IBlockReader;
+import net.minecraft.level.BlockGetter;
 import net.minecraft.level.Level;
 
 import java.util.function.Function;
@@ -47,7 +47,7 @@ public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvi
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
 

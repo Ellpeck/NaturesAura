@@ -10,7 +10,7 @@ import net.minecraft.tileentity.MobSpawnerBlockEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.InteractionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.level.Level;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -40,7 +40,7 @@ public class ItemLootFinder extends ItemImpl {
                 }
                 return false;
             });
-            for (Entity entity : levelIn.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos).grow(64))) {
+            for (Entity entity : levelIn.getEntitiesWithinAABB(Entity.class, new AABB(pos).grow(64))) {
                 if (!(entity instanceof LivingEntity) && entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
                     inst.spawnMagicParticle(
                             entity.getPosX(), entity.getPosYEye(), entity.getPosZ(),

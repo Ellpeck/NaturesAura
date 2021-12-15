@@ -24,7 +24,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.level.Level;
@@ -77,7 +77,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
             boolean infusedSet = ItemArmor.isFullSetEquipped(living, ModArmorMaterial.INFUSED);
 
             int range = 5;
-            List<LivingEntity> mobs = levelIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(
+            List<LivingEntity> mobs = levelIn.getEntitiesWithinAABB(LivingEntity.class, new AABB(
                     living.getPosX() - range, living.getPosY() - 0.5, living.getPosZ() - range,
                     living.getPosX() + range, living.getPosY() + 0.5, living.getPosZ() + range));
             for (LivingEntity mob : mobs) {

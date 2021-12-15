@@ -6,7 +6,7 @@ import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.AABB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,8 +20,8 @@ public class BlockPlacer extends BlockContainerImpl implements IVisualizable, IC
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getVisualizationBounds(Level level, BlockPos pos) {
-        return new AxisAlignedBB(pos).grow(5);
+    public AABB getVisualizationBounds(Level level, BlockPos pos) {
+        return new AABB(pos).grow(5);
     }
 
     @Override

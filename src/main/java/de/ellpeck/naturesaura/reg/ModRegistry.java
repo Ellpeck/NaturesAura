@@ -25,17 +25,12 @@ import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
 import de.ellpeck.naturesaura.recipes.EnabledCondition;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
-import net.minecraft.block.FlowerPotBlock;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.SpriteRenderer;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.level.gen.feature.Feature;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.LevelGenRegistries;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -43,20 +38,21 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
 
@@ -79,8 +75,8 @@ public final class ModRegistry {
         event.getRegistry().registerAll(
                 new BlockAncientLog("ancient_log"),
                 new BlockAncientLog("ancient_bark"),
-                temp = new BlockImpl("ancient_planks", Block.Properties.of(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2F)),
-                new BlockStairsNA("ancient_stairs", "ancient_planks", temp::defaultBlockState, Block.Properties.from(temp)),
+                temp = new BlockImpl("ancient_planks", Block.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(2F)),
+                new BlockStairsNA("ancient_stairs", "ancient_planks", temp::defaultBlockState, Block.Properties.copy(temp)),
                 new Slab("ancient_slab", "ancient_planks", Block.Properties.copy(temp)),
                 new BlockAncientLeaves(),
                 new BlockAncientSapling(),
@@ -89,23 +85,23 @@ public final class ModRegistry {
                 new BlockGoldenLeaves(),
                 new BlockGoldPowder(),
                 new BlockWoodStand(),
-                temp = new BlockImpl("infused_stone", Block.Properties.of(Material.STONE).sound(SoundType.STONE).hardnessAndResistance(1.75F)),
-                new BlockStairsNA("infused_stairs", "infused_stone", temp::defaultBlockState, Block.Properties.from(temp)),
-                new Slab("infused_slab", "infused_stone", Block.Properties.from(temp)),
-                temp = new BlockImpl("infused_brick", Block.Properties.of(Material.STONE).sound(SoundType.STONE).hardnessAndResistance(1.5F)),
-                new BlockStairsNA("infused_brick_stairs", "infused_brick", temp::defaultBlockState, Block.Properties.from(temp)),
-                new Slab("infused_brick_slab", "infused_brick", Block.Properties.from(temp)),
+                temp = new BlockImpl("infused_stone", Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(1.75F)),
+                new BlockStairsNA("infused_stairs", "infused_stone", temp::defaultBlockState, Block.Properties.copy(temp)),
+                new Slab("infused_slab", "infused_stone", Block.Properties.copy(temp)),
+                temp = new BlockImpl("infused_brick", Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(1.5F)),
+                new BlockStairsNA("infused_brick_stairs", "infused_brick", temp::defaultBlockState, Block.Properties.copy(temp)),
+                new Slab("infused_brick_slab", "infused_brick", Block.Properties.copy(temp)),
                 new BlockFurnaceHeater(),
                 new BlockPotionGenerator(),
                 new BlockAuraDetector(),
-                new BlockCatalyst("conversion_catalyst", Block.Properties.of(Material.STONE).sound(SoundType.STONE).hardnessAndResistance(2.5F)),
-                new BlockCatalyst("crushing_catalyst", Block.Properties.of(Material.STONE).sound(SoundType.STONE).hardnessAndResistance(2.5F)),
+                new BlockCatalyst("conversion_catalyst", Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2.5F)),
+                new BlockCatalyst("crushing_catalyst", Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2.5F)),
                 new BlockFlowerGenerator(),
                 new BlockPlacer(),
                 new BlockHopperUpgrade(),
                 new BlockFieldCreator(),
                 new BlockOakGenerator(),
-                new BlockImpl("infused_iron_block", Block.Properties.of(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(3F)),
+                new BlockImpl("infused_iron_block", Block.Properties.of(Material.METAL).sound(SoundType.METAL).strength(3F)),
                 new BlockOfferingTable(),
                 new BlockPickupStopper(),
                 new BlockSpawnLamp(),
@@ -157,9 +153,9 @@ public final class ModRegistry {
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        for (IModItem block : ALL_ITEMS) {
+        for (var block : ALL_ITEMS) {
             if (block instanceof Block && !(block instanceof INoItemBlock)) {
-                BlockItem item = new BlockItem((Block) block, new Item.Properties().tab(NaturesAura.CREATIVE_TAB));
+                var item = new BlockItem((Block) block, new Item.Properties().tab(NaturesAura.CREATIVE_TAB));
                 item.setRegistryName(block.getBaseName());
                 event.getRegistry().register(item);
             }
@@ -236,7 +232,7 @@ public final class ModRegistry {
         // add tile entities that support multiple blocks
         add(new ModTileType<>(BlockEntityAuraBloom::new, "aura_bloom", ALL_ITEMS.stream().filter(i -> i instanceof BlockAuraBloom).toArray(IModItem[]::new)));
 
-        for (IModItem item : ALL_ITEMS) {
+        for (var item : ALL_ITEMS) {
             if (item instanceof ModTileType type)
                 event.getRegistry().register(type.type);
         }
@@ -255,7 +251,7 @@ public final class ModRegistry {
     public static void registerContainers(RegistryEvent.Register<MenuType<?>> event) {
         event.getRegistry().registerAll(
                 IForgeMenuType.create((windowId, inv, data) -> {
-                    BlockEntity tile = inv.player.level.getBlockEntity(data.readBlockPos());
+                    var tile = inv.player.level.getBlockEntity(data.readBlockPos());
                     if (tile instanceof BlockEntityEnderCrate crate)
                         return new ContainerEnderCrate(ModContainers.ENDER_CRATE, windowId, inv.player, crate.getItemHandler());
                     return null;
@@ -303,10 +299,10 @@ public final class ModRegistry {
         NaturesAura.proxy.registerEntityRenderer(ModEntities.EFFECT_INHIBITOR, () -> RenderEffectInhibitor::new);
         NaturesAura.proxy.registerEntityRenderer(ModEntities.LIGHT_PROJECTILE, () -> RenderStub::new);
         // for some reason, only this one causes classloading issues if shortened to a lambda, what
-        NaturesAura.proxy.registerEntityRenderer(ModEntities.STRUCTURE_FINDER, () -> new IRenderFactory<EntityStructureFinder>() {
+        NaturesAura.proxy.registerEntityRenderer(ModEntities.STRUCTURE_FINDER, () -> new EntityRendererProvider<>() {
             @Override
-            public EntityRenderer<? super EntityStructureFinder> createRenderFor(EntityRendererManager m) {
-                return new SpriteRenderer<>(m, Minecraft.getInstance().getItemRenderer());
+            public EntityRenderer<EntityStructureFinder> create(Context context) {
+                return new ThrownItemRenderer<>(context, 1, true);
             }
         });
     }
@@ -326,32 +322,32 @@ public final class ModRegistry {
     }
 
     @SubscribeEvent
-    public static void registerRecipes(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+    public static void registerRecipes(RegistryEvent.Register<RecipeSerializer<?>> event) {
         ModRecipes.register(event.getRegistry());
         CraftingHelper.register(new EnabledCondition.Serializer());
     }
 
     public static void init() {
-        for (IModItem item : ALL_ITEMS) {
+        for (var item : ALL_ITEMS) {
             if (item instanceof IColorProvidingBlock)
                 NaturesAura.proxy.addColorProvidingBlock((IColorProvidingBlock) item);
             if (item instanceof IColorProvidingItem)
                 NaturesAura.proxy.addColorProvidingItem((IColorProvidingItem) item);
-            if (item instanceof ITESRProvider)
-                NaturesAura.proxy.registerTESR((ITESRProvider) item);
+            if (item instanceof ITESRProvider provider)
+                NaturesAura.proxy.registerTESR(provider);
         }
 
         // register features again for some reason
-        Registry.register(LevelGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "aura_bloom"), ModFeatures.Configured.AURA_BLOOM);
-        Registry.register(LevelGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "aura_cactus"), ModFeatures.Configured.AURA_CACTUS);
-        Registry.register(LevelGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "crimson_aura_mushroom"), ModFeatures.Configured.CRIMSON_AURA_MUSHROOM);
-        Registry.register(LevelGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "warped_aura_mushroom"), ModFeatures.Configured.WARPED_AURA_MUSHROOM);
-        Registry.register(LevelGenRegistries.field_243653_e, new ResourceLocation(NaturesAura.MOD_ID, "aura_mushroom"), ModFeatures.Configured.AURA_MUSHROOM);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(NaturesAura.MOD_ID, "aura_bloom"), ModFeatures.Configured.AURA_BLOOM);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(NaturesAura.MOD_ID, "aura_cactus"), ModFeatures.Configured.AURA_CACTUS);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(NaturesAura.MOD_ID, "crimson_aura_mushroom"), ModFeatures.Configured.CRIMSON_AURA_MUSHROOM);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(NaturesAura.MOD_ID, "warped_aura_mushroom"), ModFeatures.Configured.WARPED_AURA_MUSHROOM);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(NaturesAura.MOD_ID, "aura_mushroom"), ModFeatures.Configured.AURA_MUSHROOM);
     }
 
     public static Block createFlowerPot(Block block) {
-        Block.Properties props = Block.Properties.of(Material.MISCELLANEOUS).hardnessAndResistance(0F);
-        Block potted = new BlockFlowerPot(() -> (FlowerPotBlock) Blocks.FLOWER_POT, block::getBlock, props);
+        var props = Block.Properties.of(Material.DECORATION).strength(0F);
+        Block potted = new BlockFlowerPot(() -> (FlowerPotBlock) Blocks.FLOWER_POT, () -> block, props);
         ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(block.getRegistryName(), () -> potted);
         return potted;
     }
