@@ -75,7 +75,7 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
                 return;
             if (!isSelected || levelIn.isClientSide)
                 return;
-            AABB bounds = new AABB(entityIn.getOnPos()).inflate(3.5F);
+            AABB bounds = new AABB(entityIn.blockPosition()).inflate(3.5F);
             for (ItemEntity item : levelIn.getEntitiesOfClass(ItemEntity.class, bounds)) {
                 // only pick up freshly dropped items
                 if (item.tickCount >= 5 || !item.isAlive())

@@ -2,32 +2,32 @@ package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
 import de.ellpeck.naturesaura.entities.ModEntities;
-import net.minecraft.block.AbstractRailBlock;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.InteractionResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseRailBlock;
 
 import javax.annotation.Nonnull;
 
 public class ItemMoverMinecart extends ItemImpl {
 
     public ItemMoverMinecart() {
-        super("mover_cart", new Properties().maxStackSize(1));
+        super("mover_cart", new Properties().stacksTo(1));
     }
 
     @Nonnull
     @Override
-    public InteractionResult onItemUse(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
-        BlockPos pos = context.getPos();
-        if (AbstractRailBlock.isRail(level.getBlockState(pos))) {
+        BlockPos pos = context.getClickedPos();
+        if (BaseRailBlock.isRail(level.getBlockState(pos))) {
             if (!level.isClientSide) {
-                AbstractMinecartEntity cart = new EntityMoverMinecart(ModEntities.MOVER_CART, level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-                level.addEntity(cart);
+                AbstractMinecart cart = new EntityMoverMinecart(ModEntities.MOVER_CART, level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                level.addFreshEntity(cart);
             }
-            context.getPlayer().getHeldItem(context.getHand()).shrink(1);
+            context.getPlayer().getItemInHand(context.getHand()).shrink(1);
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;

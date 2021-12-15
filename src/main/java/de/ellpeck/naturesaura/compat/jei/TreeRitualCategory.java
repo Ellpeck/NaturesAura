@@ -1,3 +1,4 @@
+/*
 package de.ellpeck.naturesaura.compat.jei;
 
 import com.google.common.collect.ImmutableList;
@@ -77,3 +78,4 @@ public class TreeRitualCategory implements IRecipeCategory<TreeRitualRecipe> {
         }
     }
 }
+*/

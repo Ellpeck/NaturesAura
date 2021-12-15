@@ -25,8 +25,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
-import java.util.Random;
-
 public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickableBlockEntity {
 
     private final BasicAuraContainer container = new BasicAuraContainer(null, 500000) {
@@ -49,7 +47,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
 
         @Override
         protected boolean canExtract(ItemStack stack, int slot, int amount) {
-            IAuraContainer cap = stack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
+            var cap = stack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
             if (cap != null)
                 return cap.storeAura(1, true) <= 0;
             else
@@ -72,14 +70,14 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
 
     @Override
     public void tick() {
-        Random rand = this.level.random;
+        var rand = this.level.random;
 
         if (this.level.getGameTime() % 40 == 0) {
-            int index = 0;
-            for (int x = -2; x <= 2; x += 4) {
-                for (int z = -2; z <= 2; z += 4) {
-                    BlockPos offset = this.worldPosition.offset(x, 1, z);
-                    BlockState state = this.level.getBlockState(offset);
+            var index = 0;
+            for (var x = -2; x <= 2; x += 4) {
+                for (var z = -2; z <= 2; z += 4) {
+                    var offset = this.worldPosition.offset(x, 1, z);
+                    var state = this.level.getBlockState(offset);
                     this.catalysts[index] = state.getBlock().getCloneItemStack(this.level, offset, state);
                     index++;
                 }
@@ -88,7 +86,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
 
         if (!this.level.isClientSide) {
             if (this.level.getGameTime() % 40 == 0 || this.firstTick) {
-                StructureState newState = this.getNewState();
+                var newState = this.getNewState();
                 if (newState != this.structureState) {
                     this.structureState = newState;
                     this.sendToClients();
@@ -97,13 +95,13 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
             }
 
             if (this.structureState != StructureState.INVALID) {
-                int space = this.container.storeAura(300, true);
+                var space = this.container.storeAura(300, true);
                 IAuraType expectedType = this.structureState == StructureState.NETHER ? NaturesAuraAPI.TYPE_NETHER : NaturesAuraAPI.TYPE_OVERWORLD;
                 if (space > 0 && IAuraType.forLevel(this.level).isSimilar(expectedType)) {
-                    int toStore = Math.min(IAuraChunk.getAuraInArea(this.level, this.worldPosition, 20), space);
+                    var toStore = Math.min(IAuraChunk.getAuraInArea(this.level, this.worldPosition, 20), space);
                     if (toStore > 0) {
-                        BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 20, this.worldPosition);
-                        IAuraChunk chunk = IAuraChunk.getAuraChunk(this.level, spot);
+                        var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 20, this.worldPosition);
+                        var chunk = IAuraChunk.getAuraChunk(this.level, spot);
 
                         chunk.drainAura(spot, toStore);
                         this.container.storeAura(toStore, false);
@@ -114,17 +112,17 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
                                     this.worldPosition.getY() + rand.nextFloat() * 10F,
                                     this.worldPosition.getZ() + (float) rand.nextGaussian() * 10F,
                                     this.worldPosition.getX() + 0.5F, this.worldPosition.getY() + 0.5F, this.worldPosition.getZ() + 0.5F,
-                                    rand.nextFloat() * 0.1F + 0.1F, this.container.getAuraColor(), rand.nextFloat() * 1F + 1F
+                                    rand.nextFloat() * 0.1F + 0.1F, this.container.getAuraColor(), rand.nextFloat() + 1F
                             ));
                     }
                 }
 
-                ItemStack stack = this.items.getStackInSlot(0);
-                IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
+                var stack = this.items.getStackInSlot(0);
+                var container = stack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
                 if (!stack.isEmpty() && container != null) {
-                    int theoreticalDrain = this.container.drainAura(1000, true);
+                    var theoreticalDrain = this.container.drainAura(1000, true);
                     if (theoreticalDrain > 0) {
-                        int stored = container.storeAura(theoreticalDrain, false);
+                        var stored = container.storeAura(theoreticalDrain, false);
                         if (stored > 0) {
                             this.container.drainAura(stored, false);
 
@@ -142,7 +140,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
                             this.currentRecipe = null;
                             this.timer = 0;
                         } else {
-                            int req = Mth.ceil(this.currentRecipe.aura / (double) this.currentRecipe.time);
+                            var req = Mth.ceil(this.currentRecipe.aura / (double) this.currentRecipe.time);
                             if (this.container.getStoredAura() >= req) {
                                 this.container.drainAura(req, false);
 
@@ -170,7 +168,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
         } else {
             if (this.structureState != StructureState.INVALID) {
                 if (rand.nextFloat() >= 0.7F) {
-                    int fourths = this.container.getMaxAura() / 4;
+                    var fourths = this.container.getMaxAura() / 4;
                     if (this.container.getStoredAura() > 0) {
                         NaturesAuraAPI.instance().spawnMagicParticle(
                                 this.worldPosition.getX() - 4F + rand.nextFloat(), this.worldPosition.getY() + 3F, this.worldPosition.getZ() + rand.nextFloat(),
@@ -200,12 +198,12 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
     }
 
     private AltarRecipe getRecipeForInput(ItemStack input) {
-        IAuraType type = IAuraType.forLevel(this.level);
-        for (AltarRecipe recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.ALTAR_TYPE, null, null)) {
+        var type = IAuraType.forLevel(this.level);
+        for (var recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.ALTAR_TYPE, null, null)) {
             if (recipe.input.test(input) && (recipe.requiredType == null || type.isSimilar(recipe.requiredType))) {
                 if (recipe.catalyst == Ingredient.EMPTY)
                     return recipe;
-                for (ItemStack stack : this.catalysts)
+                for (var stack : this.catalysts)
                     if (recipe.catalyst.test(stack))
                         return recipe;
             }

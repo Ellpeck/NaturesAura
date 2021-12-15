@@ -9,11 +9,10 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ICustomRenderType;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -49,11 +47,6 @@ public class BlockAuraTimer extends BlockContainerImpl implements ICustomBlockSt
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return SHAPE;
-    }
-
-    @Override
-    public Tuple<BlockEntityType<? extends BlockEntityAuraTimer>, Supplier<BlockEntityRendererProvider<BlockEntityAuraTimer>>> getTESR() {
-        return new Tuple<>(ModTileEntities.AURA_TIMER, () -> RenderAuraTimer::new);
     }
 
     @Override
@@ -88,4 +81,8 @@ public class BlockAuraTimer extends BlockContainerImpl implements ICustomBlockSt
             levelIn.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, false));
     }
 
+    @Override
+    public void registerTESR() {
+        BlockEntityRenderers.register(ModTileEntities.AURA_TIMER, RenderAuraTimer::new);
+    }
 }

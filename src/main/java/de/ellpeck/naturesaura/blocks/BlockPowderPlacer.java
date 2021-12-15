@@ -3,21 +3,21 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityPowderPlacer;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.Shapes;
-import net.minecraft.level.BlockGetter;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BlockPowderPlacer extends BlockContainerImpl implements ICustomBlockState {
 
     private static final VoxelShape SHAPE = Shapes.create(0F, 0F, 0F, 1F, 4 / 16F, 1F);
 
     public BlockPowderPlacer() {
-        super("powder_placer", BlockEntityPowderPlacer::new, Properties.create(Material.ROCK).hardnessAndResistance(2, 5F).sound(SoundType.STONE));
+        super("powder_placer", BlockEntityPowderPlacer::new, Properties.of(Material.STONE).strength(2, 5F).sound(SoundType.STONE));
     }
 
     @Override
@@ -26,7 +26,7 @@ public class BlockPowderPlacer extends BlockContainerImpl implements ICustomBloc
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 

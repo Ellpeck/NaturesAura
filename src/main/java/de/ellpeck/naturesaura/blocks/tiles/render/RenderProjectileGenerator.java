@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityProjectileGenerator;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,6 +17,10 @@ public class RenderProjectileGenerator implements BlockEntityRenderer<BlockEntit
 
     private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/projectile_generator_overlay.png");
     //private final ModelOverlay model = new ModelOverlay();
+
+    public RenderProjectileGenerator(BlockEntityRendererProvider.Context context) {
+
+    }
 
     @Override
     public void render(BlockEntityProjectileGenerator te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {

@@ -5,16 +5,16 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.entity.IAngerable;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AABB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
-import net.minecraft.level.chunk.Chunk;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
@@ -33,43 +33,44 @@ public class AngerEffect implements IDrainSpotEffect {
         int dist = Math.min(Math.abs(aura) / 50000, 75);
         if (dist < 10)
             return false;
-        this.bb = new AABB(pos).grow(dist);
+        this.bb = new AABB(pos).inflate(dist);
         return true;
     }
 
     @Override
-    public ActiveType isActiveHere(Player player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public ActiveType isActiveHere(Player player, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.level, pos, spot))
             return ActiveType.INACTIVE;
-        if (!this.bb.contains(player.getPositionVec()))
+        if (!this.bb.contains(player.getEyePosition()))
             return ActiveType.INACTIVE;
         return ActiveType.ACTIVE;
     }
 
     @Override
+
     public ItemStack getDisplayIcon() {
         return new ItemStack(Items.FIRE_CHARGE);
     }
 
     @Override
-    public void update(Level level, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (level.getGameTime() % 100 != 0)
             return;
         if (!this.calcValues(level, pos, spot))
             return;
-        List<LivingEntity> entities = level.getEntitiesWithinAABB(LivingEntity.class, this.bb);
+        List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, this.bb);
         for (LivingEntity entity : entities) {
-            if (!(entity instanceof IAngerable))
+            if (!(entity instanceof NeutralMob))
                 continue;
-            Player player = level.getClosestPlayer(entity, 25);
+            Player player = level.getNearestPlayer(entity, 25);
             if (player == null)
                 continue;
-            ((IAngerable) entity).setAttackTarget(player);
+            ((NeutralMob) entity).setTarget(player);
         }
     }
 
     @Override
-    public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
+    public boolean appliesHere(LevelChunk chunk, IAuraChunk auraChunk, IAuraType type) {
         return ModConfig.instance.angerEffect.get();
     }
 

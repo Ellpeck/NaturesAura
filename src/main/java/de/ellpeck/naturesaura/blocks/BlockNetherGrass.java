@@ -2,29 +2,29 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.IGrowable;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.BlockGetter;
-import net.minecraft.level.Level;
-import net.minecraft.level.server.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Random;
 
-public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, IGrowable {
+public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, BonemealableBlock {
 
     public BlockNetherGrass() {
-        super("nether_grass", Properties.from(Blocks.NETHERRACK).tickRandomly());
+        super("nether_grass", Properties.copy(Blocks.NETHERRACK).randomTicks());
     }
 
     @Override
     public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
-        BlockPos up = pos.up();
+        BlockPos up = pos.above();
         BlockState upState = levelIn.getBlockState(up);
-        if (upState.isSolidSide(levelIn, up, Direction.DOWN))
-            levelIn.setBlockState(pos, Blocks.NETHERRACK.getDefaultState());
+        if (upState.isFaceSturdy(levelIn, up, Direction.DOWN))
+            levelIn.setBlockAndUpdate(pos, Blocks.NETHERRACK.defaultBlockState());
     }
 
     @Override
@@ -36,19 +36,19 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, IG
     }
 
     @Override
-    public boolean canGrow(BlockGetter levelIn, BlockPos pos, BlockState state, boolean isClient) {
-        return levelIn.getBlockState(pos.up()).isAir(levelIn, pos.up());
+    public boolean isValidBonemealTarget(BlockGetter levelIn, BlockPos pos, BlockState state, boolean isClient) {
+        return levelIn.getBlockState(pos.above()).isAir();
     }
 
     @Override
-    public boolean canUseBonemeal(Level levelIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level levelIn, Random rand, BlockPos pos, BlockState state) {
         return true;
     }
 
     @Override
-    public void grow(ServerLevel level, Random rand, BlockPos pos, BlockState state) {
-        BlockPos blockpos = pos.up();
-        BlockState blockstate = Blocks.GRASS.getDefaultState();
+    public void performBonemeal(ServerLevel level, Random rand, BlockPos pos, BlockState state) {
+        BlockPos blockpos = pos.above();
+        BlockState blockstate = Blocks.GRASS.defaultBlockState();
 
         for (int i = 0; i < 128; ++i) {
             BlockPos blockpos1 = blockpos;
@@ -58,21 +58,21 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, IG
                 if (j >= i / 16) {
                     BlockState blockstate2 = level.getBlockState(blockpos1);
                     if (blockstate2.getBlock() == blockstate.getBlock() && rand.nextInt(10) == 0) {
-                        ((IGrowable) blockstate.getBlock()).grow(level, rand, blockpos1, blockstate2);
+                        ((BonemealableBlock) blockstate.getBlock()).performBonemeal(level, rand, blockpos1, blockstate2);
                     }
 
                     if (!blockstate2.isAir()) {
                         break;
                     }
 
-                    if (blockstate.isValidPosition(level, blockpos1)) {
-                        level.setBlockState(blockpos1, blockstate, 3);
+                    if (blockstate.canSurvive(level, blockpos1)) {
+                        level.setBlock(blockpos1, blockstate, 3);
                     }
                     break;
                 }
 
-                blockpos1 = blockpos1.add(rand.nextInt(3) - 1, (rand.nextInt(3) - 1) * rand.nextInt(3) / 2, rand.nextInt(3) - 1);
-                if (level.getBlockState(blockpos1.down()).getBlock() != this || level.getBlockState(blockpos1).hasOpaqueCollisionShape(level, blockpos1)) {
+                blockpos1 = blockpos1.offset(rand.nextInt(3) - 1, (rand.nextInt(3) - 1) * rand.nextInt(3) / 2, rand.nextInt(3) - 1);
+                if (level.getBlockState(blockpos1.below()).getBlock() != this || level.getBlockState(blockpos1).isCollisionShapeFullBlock(level, blockpos1)) {
                     break;
                 }
 

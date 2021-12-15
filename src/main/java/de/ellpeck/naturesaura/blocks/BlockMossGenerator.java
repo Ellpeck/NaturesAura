@@ -2,23 +2,24 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityMossGenerator;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.AABB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockMossGenerator extends BlockContainerImpl implements IVisualizable {
+
     public BlockMossGenerator() {
-        super("moss_generator", BlockEntityMossGenerator::new, Properties.create(Material.ROCK).hardnessAndResistance(2.5F).sound(SoundType.STONE));
+        super("moss_generator", BlockEntityMossGenerator::new, Properties.of(Material.STONE).strength(2.5F).sound(SoundType.STONE));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public AABB getVisualizationBounds(Level level, BlockPos pos) {
-        return new AABB(pos).grow(2);
+        return new AABB(pos).inflate(2);
     }
 
     @Override

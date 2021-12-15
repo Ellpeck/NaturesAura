@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.items;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
@@ -9,20 +10,19 @@ import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.level.Level;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -37,29 +37,28 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     private final int capacity;
 
     public ItemAuraCache(String name, int capacity) {
-        super(name, new Properties().maxStackSize(1));
+        super(name, new Properties().stacksTo(1));
         this.capacity = capacity;
     }
 
     @Override
     public void inventoryTick(ItemStack stackIn, Level levelIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (!levelIn.isClientSide && entityIn instanceof Player) {
-            Player player = (Player) entityIn;
-            if (player.isSneaking() && stackIn.getCapability(NaturesAuraAPI.capAuraContainer).isPresent()) {
+        if (!levelIn.isClientSide && entityIn instanceof Player player) {
+            if (player.isCrouching() && stackIn.getCapability(NaturesAuraAPI.capAuraContainer).isPresent()) {
                 IAuraContainer container = stackIn.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
                 if (container.getStoredAura() <= 0) {
                     return;
                 }
-                for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-                    ItemStack stack = player.inventory.getStackInSlot(i);
+                for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+                    ItemStack stack = player.getInventory().getItem(i);
                     IAuraRecharge recharge = stack.getCapability(NaturesAuraAPI.capAuraRecharge).orElse(null);
                     if (recharge != null) {
-                        if (recharge.rechargeFromContainer(container, itemSlot, i, player.inventory.currentItem == i))
+                        if (recharge.rechargeFromContainer(container, itemSlot, i, player.getInventory().selected == i))
                             break;
-                    } else if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.AURA_MENDING, stack) > 0) {
-                        int mainSize = player.inventory.mainInventory.size();
-                        boolean isArmor = i >= mainSize && i < mainSize + player.inventory.armorInventory.size();
-                        if ((isArmor || player.inventory.currentItem == i) && Helper.rechargeAuraItem(stack, container, 1000))
+                    } else if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.AURA_MENDING, stack) > 0) {
+                        int mainSize = player.getInventory().items.size();
+                        boolean isArmor = i >= mainSize && i < mainSize + player.getInventory().armor.size();
+                        if ((isArmor || player.getInventory().selected == i) && Helper.rechargeAuraItem(stack, container, 1000))
                             break;
                     }
                 }
@@ -68,8 +67,8 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> items) {
-        if (this.isInGroup(tab)) {
+    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
+        if (this.allowdedIn(tab)) {
             items.add(new ItemStack(this));
 
             ItemStack stack = new ItemStack(this);
@@ -81,15 +80,15 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return true;
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
+    public int getBarColor(ItemStack stack) {
         if (stack.getCapability(NaturesAuraAPI.capAuraContainer).isPresent()) {
             IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
-            return 1 - container.getStoredAura() / (double) container.getMaxAura();
+            return (int) (1 - container.getStoredAura() / (double) container.getMaxAura());
         }
         return 0;
     }
@@ -114,14 +113,14 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(ItemStack stack, Player player, RenderType type, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight, boolean isHolding) {
+    public void render(ItemStack stack, Player player, RenderType type, PoseStack matrices, MultiBufferSource buffer, int packedLight, boolean isHolding) {
         if (type == RenderType.BODY && !isHolding) {
-            boolean chest = !player.inventory.armorInventory.get(EquipmentSlotType.CHEST.getIndex()).isEmpty();
-            boolean legs = !player.inventory.armorInventory.get(EquipmentSlotType.LEGS.getIndex()).isEmpty();
+            boolean chest = !player.getInventory().armor.get(EquipmentSlot.CHEST.getIndex()).isEmpty();
+            boolean legs = !player.getInventory().armor.get(EquipmentSlot.LEGS.getIndex()).isEmpty();
             matrices.translate(-0.15F, 0.65F, chest ? -0.195F : legs ? -0.165F : -0.1475F);
             matrices.scale(0.5F, 0.5F, 0.5F);
-            matrices.rotate(Vector3f.XP.rotationDegrees(180F));
-            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, packedLight, OverlayTexture.NO_OVERLAY, matrices, buffer);
+            matrices.mulPose(Vector3f.XP.rotationDegrees(180F));
+            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, packedLight, OverlayTexture.NO_OVERLAY, matrices, buffer, 0);
         }
     }
 }

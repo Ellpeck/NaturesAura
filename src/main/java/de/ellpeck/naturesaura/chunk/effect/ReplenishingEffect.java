@@ -8,10 +8,10 @@ import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.chunk.ISpotDrainable;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
-import net.minecraft.level.chunk.Chunk;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.LevelChunk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class ReplenishingEffect implements IDrainSpotEffect {
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "replenishing");
 
     @Override
-    public void update(Level level, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (spot < 0) {
             List<ISpotDrainable> tiles = new ArrayList<>();
             Helper.getBlockEntitiesInArea(level, pos, 25, tile -> {
@@ -32,8 +32,8 @@ public class ReplenishingEffect implements IDrainSpotEffect {
             });
             if (!tiles.isEmpty()) {
                 IAuraType type = IAuraType.forLevel(level);
-                for (int i = level.rand.nextInt(6); i >= 0; i--) {
-                    ISpotDrainable tile = tiles.get(level.rand.nextInt(tiles.size()));
+                for (int i = level.random.nextInt(6); i >= 0; i--) {
+                    ISpotDrainable tile = tiles.get(level.random.nextInt(tiles.size()));
                     if (!tile.isAcceptableType(type))
                         continue;
                     int drained = tile.drainAuraPassively(-spot, false);
@@ -50,7 +50,7 @@ public class ReplenishingEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
+    public boolean appliesHere(LevelChunk chunk, IAuraChunk auraChunk, IAuraType type) {
         return true;
     }
 

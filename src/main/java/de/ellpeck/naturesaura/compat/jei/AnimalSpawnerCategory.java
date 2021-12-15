@@ -1,3 +1,4 @@
+/*
 package de.ellpeck.naturesaura.compat.jei;
 
 import com.google.common.collect.ImmutableList;
@@ -140,3 +141,4 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
 
     }
 }
+*/

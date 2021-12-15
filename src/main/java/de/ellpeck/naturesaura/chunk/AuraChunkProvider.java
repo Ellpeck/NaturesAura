@@ -3,9 +3,9 @@ package de.ellpeck.naturesaura.chunk;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Direction;
-import net.minecraft.level.chunk.Chunk;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -16,11 +16,11 @@ import javax.annotation.Nullable;
 
 public class AuraChunkProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-    private final Chunk chunk;
+    private final LevelChunk chunk;
     private final LazyOptional<IAuraChunk> lazyChunk = LazyOptional.of(this::getAuraChunk);
     private IAuraChunk auraChunk;
 
-    public AuraChunkProvider(Chunk chunk) {
+    public AuraChunkProvider(LevelChunk chunk) {
         this.chunk = chunk;
     }
 

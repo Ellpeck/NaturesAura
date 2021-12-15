@@ -84,6 +84,6 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
     @org.jetbrains.annotations.Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new BlockEntityAuraBloom();
+        return new BlockEntityAuraBloom(pos, state);
     }
 }

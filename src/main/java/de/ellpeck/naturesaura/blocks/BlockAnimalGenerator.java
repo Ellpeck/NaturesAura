@@ -51,7 +51,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
         LivingEntity entity = event.getEntityLiving();
         if (entity.level.isClientSide || !(entity instanceof Animal) || entity instanceof Mob || entity instanceof Npc)
             return;
-        BlockPos pos = entity.getOnPos();
+        BlockPos pos = entity.blockPosition();
         Helper.getBlockEntitiesInArea(entity.level, pos, 5, tile -> {
             if (!(tile instanceof BlockEntityAnimalGenerator gen))
                 return false;

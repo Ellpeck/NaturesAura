@@ -1,3 +1,4 @@
+/*
 package de.ellpeck.naturesaura.compat.patchouli;
 
 import de.ellpeck.naturesaura.recipes.AltarRecipe;
@@ -46,3 +47,4 @@ public class ProcessorAltar implements IComponentProcessor {
         return group.isEmpty() || group.equals(this.recipe.catalyst == Ingredient.EMPTY ? "altar" : "catalyst");
     }
 }
+*/

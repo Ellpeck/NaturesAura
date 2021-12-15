@@ -1,17 +1,15 @@
 package de.ellpeck.naturesaura.items;
 
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemGlowing extends ItemImpl {
+
     public ItemGlowing(String baseName) {
         super(baseName);
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return true;
     }
 }

@@ -1,10 +1,14 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.NaturesAura;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ElytraItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.*;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ElytraItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -16,16 +20,18 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.List;
 
 public class ItemBreakPrevention extends ItemImpl {
+
     public ItemBreakPrevention() {
         super("break_prevention");
         MinecraftForge.EVENT_BUS.register(new Events());
     }
 
     public static class Events {
+
         @SubscribeEvent
         public void onAnvilUpdate(AnvilUpdateEvent event) {
             ItemStack stack = event.getLeft();
-            if (stack.getToolTypes().isEmpty() || !stack.isDamageable())
+            if (!stack.isDamageableItem())
                 return;
             ItemStack second = event.getRight();
             if (second.getItem() != ModItems.BREAK_PREVENTION)
@@ -42,10 +48,10 @@ public class ItemBreakPrevention extends ItemImpl {
             Player player = event.getPlayer();
             if (player == null)
                 return;
-            ItemStack stack = player.getHeldItemMainhand();
+            ItemStack stack = player.getMainHandItem();
             if (!stack.hasTag() || !stack.getTag().getBoolean(NaturesAura.MOD_ID + ":break_prevention"))
                 return;
-            if (ElytraItem.isUsable(stack))
+            if (ElytraItem.isFlyEnabled(stack))
                 return;
             event.setNewSpeed(0);
         }
@@ -56,15 +62,15 @@ public class ItemBreakPrevention extends ItemImpl {
             ItemStack stack = event.getItemStack();
             if (!stack.hasTag() || !stack.getTag().getBoolean(NaturesAura.MOD_ID + ":break_prevention"))
                 return;
-            List<ITextComponent> tooltip = event.getToolTip();
-            tooltip.add(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".break_prevention").setStyle(Style.EMPTY.setFormatting(TextFormatting.GRAY)));
-            if (ElytraItem.isUsable(stack))
+            List<Component> tooltip = event.getToolTip();
+            tooltip.add(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".break_prevention").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GRAY)));
+            if (ElytraItem.isFlyEnabled(stack))
                 return;
             if (tooltip.size() < 1)
                 return;
-            ITextComponent head = tooltip.get(0);
-            if (head instanceof TextComponent)
-                ((TextComponent) head).append(new TranslationTextComponent("info." + NaturesAura.MOD_ID + ".broken").setStyle(Style.EMPTY.setFormatting(TextFormatting.GRAY)));
+            Component head = tooltip.get(0);
+            if (head instanceof MutableComponent)
+                ((MutableComponent) head).append(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".broken").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GRAY)));
         }
     }
 }

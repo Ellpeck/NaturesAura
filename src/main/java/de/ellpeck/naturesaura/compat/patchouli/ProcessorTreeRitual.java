@@ -1,3 +1,4 @@
+/*
 package de.ellpeck.naturesaura.compat.patchouli;
 
 import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
@@ -38,3 +39,4 @@ public class ProcessorTreeRitual implements IComponentProcessor {
         }
     }
 }
+*/

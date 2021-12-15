@@ -7,11 +7,16 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEnderCrate;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderEnderCrate implements BlockEntityRenderer<BlockEntityEnderCrate> {
+
+    public RenderEnderCrate(BlockEntityRendererProvider.Context context) {
+
+    }
 
     @Override
     public void render(BlockEntityEnderCrate tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {

@@ -1,33 +1,33 @@
 package de.ellpeck.naturesaura.items;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.items.tools.ItemArmor;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ModArmorMaterial;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AABB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.level.Level;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -36,23 +36,22 @@ import java.util.List;
 public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
 
     public ItemShockwaveCreator() {
-        super("shockwave_creator", new Properties().maxStackSize(1));
+        super("shockwave_creator", new Properties().stacksTo(1));
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level levelIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (levelIn.isClientSide || !(entityIn instanceof LivingEntity))
+        if (levelIn.isClientSide || !(entityIn instanceof LivingEntity living))
             return;
-        LivingEntity living = (LivingEntity) entityIn;
         if (!living.isOnGround()) {
             CompoundTag compound = stack.getOrCreateTag();
             if (compound.getBoolean("air"))
                 return;
 
             compound.putBoolean("air", true);
-            compound.putDouble("x", living.getPosX());
-            compound.putDouble("y", living.getPosY());
-            compound.putDouble("z", living.getPosZ());
+            compound.putDouble("x", living.getX());
+            compound.putDouble("y", living.getY());
+            compound.putDouble("z", living.getZ());
         } else {
             if (!stack.hasTag())
                 return;
@@ -62,59 +61,59 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
 
             compound.putBoolean("air", false);
 
-            if (!living.isSneaking())
+            if (!living.isCrouching())
                 return;
-            if (living.getDistanceSq(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z")) > 0.75F)
+            if (living.distanceToSqr(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z")) > 0.75F)
                 return;
             if (living instanceof Player && !NaturesAuraAPI.instance().extractAuraFromPlayer((Player) living, 1000, false))
                 return;
 
             DamageSource source;
             if (living instanceof Player)
-                source = DamageSource.causePlayerDamage((Player) living);
+                source = DamageSource.playerAttack((Player) living);
             else
                 source = DamageSource.MAGIC;
             boolean infusedSet = ItemArmor.isFullSetEquipped(living, ModArmorMaterial.INFUSED);
 
             int range = 5;
-            List<LivingEntity> mobs = levelIn.getEntitiesWithinAABB(LivingEntity.class, new AABB(
-                    living.getPosX() - range, living.getPosY() - 0.5, living.getPosZ() - range,
-                    living.getPosX() + range, living.getPosY() + 0.5, living.getPosZ() + range));
+            List<LivingEntity> mobs = levelIn.getEntitiesOfClass(LivingEntity.class, new AABB(
+                    living.getX() - range, living.getY() - 0.5, living.getZ() - range,
+                    living.getX() + range, living.getY() + 0.5, living.getZ() + range));
             for (LivingEntity mob : mobs) {
                 if (!mob.isAlive() || mob == living)
                     continue;
-                if (living.getDistanceSq(mob) > range * range)
+                if (living.distanceToSqr(mob) > range * range)
                     continue;
                 if (living instanceof Player && !NaturesAuraAPI.instance().extractAuraFromPlayer((Player) living, 500, false))
                     break;
-                mob.attackEntityFrom(source, 4F);
+                mob.hurt(source, 4F);
 
                 if (infusedSet)
-                    mob.addPotionEffect(new EffectInstance(Effects.WITHER, 120));
+                    mob.addEffect(new MobEffectInstance(MobEffects.WITHER, 120));
             }
 
-            BlockPos pos = living.getPosition();
-            BlockPos down = pos.down();
+            BlockPos pos = living.blockPosition();
+            BlockPos down = pos.below();
             BlockState downState = levelIn.getBlockState(down);
 
             if (downState.getMaterial() != Material.AIR) {
                 SoundType type = downState.getBlock().getSoundType(downState, levelIn, down, null);
-                levelIn.playSound(null, pos, type.getBreakSound(), SoundCategory.BLOCKS, type.getVolume() * 0.5F, type.getPitch() * 0.8F);
+                levelIn.playSound(null, pos, type.getBreakSound(), SoundSource.BLOCKS, type.getVolume() * 0.5F, type.getPitch() * 0.8F);
             }
 
-            PacketHandler.sendToAllAround(levelIn, pos, 32, new PacketParticles((float) living.getPosX(), (float) living.getPosY(), (float) living.getPosZ(), PacketParticles.Type.SHOCKWAVE_CREATOR));
+            PacketHandler.sendToAllAround(levelIn, pos, 32, new PacketParticles((float) living.getX(), (float) living.getY(), (float) living.getZ(), PacketParticles.Type.SHOCKWAVE_CREATOR));
         }
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(ItemStack stack, Player player, RenderType type, MatrixStack matrices, IRenderTypeBuffer buffer, int packedLight, boolean isHolding) {
+    public void render(ItemStack stack, Player player, RenderType type, PoseStack matrices, MultiBufferSource buffer, int packedLight, boolean isHolding) {
         if (type == RenderType.BODY && !isHolding) {
-            boolean armor = !player.inventory.armorInventory.get(EquipmentSlotType.CHEST.getIndex()).isEmpty();
+            boolean armor = !player.getInventory().armor.get(EquipmentSlot.CHEST.getIndex()).isEmpty();
             matrices.translate(0, 0.125F, armor ? -0.195F : -0.1475F);
             matrices.scale(0.3F, 0.3F, 0.3F);
-            matrices.rotate(Vector3f.XP.rotationDegrees(180));
-            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, packedLight, OverlayTexture.NO_OVERLAY, matrices, buffer);
+            matrices.mulPose(Vector3f.XP.rotationDegrees(180));
+            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, packedLight, OverlayTexture.NO_OVERLAY, matrices, buffer, 0);
         }
     }
 }

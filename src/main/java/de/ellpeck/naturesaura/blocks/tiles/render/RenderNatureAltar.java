@@ -7,9 +7,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.item.ItemStack;
 
 public class RenderNatureAltar implements BlockEntityRenderer<BlockEntityNatureAltar> {
+
+    public RenderNatureAltar(BlockEntityRendererProvider.Context context) {
+
+    }
 
     @Override
     public void render(BlockEntityNatureAltar tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {

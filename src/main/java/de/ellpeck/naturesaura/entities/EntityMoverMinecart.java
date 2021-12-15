@@ -49,7 +49,7 @@ public class EntityMoverMinecart extends AbstractMinecart {
         super.moveMinecartOnRail(railPos);
         if (!this.isActive)
             return;
-        BlockPos pos = this.getOnPos();
+        BlockPos pos = this.blockPosition();
 
         if (!this.spotOffsets.isEmpty() && this.level.getGameTime() % 10 == 0)
             PacketHandler.sendToAllAround(this.level, pos, 32, new PacketParticles(
@@ -85,7 +85,7 @@ public class EntityMoverMinecart extends AbstractMinecart {
         if (this.isActive != receivingPower) {
             this.isActive = receivingPower;
 
-            BlockPos pos = this.getOnPos();
+            BlockPos pos = this.blockPosition();
             if (!this.isActive) {
                 this.moveAura(this.level, this.lastPosition, this.level, pos);
                 this.spotOffsets.clear();
@@ -138,7 +138,7 @@ public class EntityMoverMinecart extends AbstractMinecart {
     public Entity changeDimension(ServerLevel destination, ITeleporter teleporter) {
         Entity entity = super.changeDimension(destination, teleporter);
         if (entity instanceof EntityMoverMinecart) {
-            BlockPos pos = entity.getOnPos();
+            BlockPos pos = entity.blockPosition();
             this.moveAura(this.level, this.lastPosition, entity.level, pos);
             ((EntityMoverMinecart) entity).lastPosition = pos;
         }

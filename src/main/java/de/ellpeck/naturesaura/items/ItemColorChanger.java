@@ -5,14 +5,20 @@ import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.misc.ColoredBlockHelper;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.level.Level;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -21,7 +27,7 @@ import java.util.List;
 public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, ICustomItemModel {
 
     public ItemColorChanger() {
-        super("color_changer", new Properties().maxStackSize(1));
+        super("color_changer", new Properties().stacksTo(1));
     }
 
     private static boolean changeOrCopyColor(Player player, ItemStack stack, Level level, BlockPos pos, DyeColor firstColor) {
@@ -32,10 +38,10 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
         DyeColor color = DyeColor.byId(blocks.indexOf(block));
         if (firstColor == null || color == firstColor) {
             DyeColor stored = getStoredColor(stack);
-            if (player.isSneaking()) {
+            if (player.isCrouching()) {
                 if (stored != color) {
                     level.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                            SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 0.65F, 1F);
+                            SoundEvents.BUCKET_FILL, SoundSource.PLAYERS, 0.65F, 1F);
                     if (!level.isClientSide)
                         storeColor(stack, color);
                     return true;
@@ -45,14 +51,14 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
                     if (NaturesAuraAPI.instance().extractAuraFromPlayer(player, 1000, level.isClientSide)) {
                         if (firstColor == null) {
                             level.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                                    SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 0.65F, 1F);
+                                    SoundEvents.BUCKET_EMPTY, SoundSource.PLAYERS, 0.65F, 1F);
                         }
                         if (!level.isClientSide) {
-                            level.setBlockState(pos, blocks.get(stored.getId()).getDefaultState());
+                            level.setBlockAndUpdate(pos, blocks.get(stored.getId()).defaultBlockState());
 
                             if (isFillMode(stack)) {
                                 for (Direction off : Direction.values()) {
-                                    changeOrCopyColor(player, stack, level, pos.offset(off), color);
+                                    changeOrCopyColor(player, stack, level, pos.relative(off), color);
                                 }
                             }
                         }
@@ -90,9 +96,9 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
     }
 
     @Override
-    public InteractionResult onItemUse(ItemUseContext context) {
-        ItemStack stack = context.getPlayer().getHeldItem(context.getHand());
-        if (changeOrCopyColor(context.getPlayer(), stack, context.getLevel(), context.getPos(), null)) {
+    public InteractionResult useOn(UseOnContext context) {
+        ItemStack stack = context.getPlayer().getItemInHand(context.getHand());
+        if (changeOrCopyColor(context.getPlayer(), stack, context.getLevel(), context.getClickedPos(), null)) {
             return InteractionResult.SUCCESS;
         } else {
             return InteractionResult.PASS;
@@ -100,27 +106,27 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(Level levelIn, Player playerIn, Hand handIn) {
-        ItemStack stack = playerIn.getHeldItem(handIn);
-        if (playerIn.isSneaking() && getStoredColor(stack) != null) {
-            levelIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundCategory.PLAYERS, 0.65F, 1F);
+    public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
+        ItemStack stack = playerIn.getItemInHand(handIn);
+        if (playerIn.isCrouching() && getStoredColor(stack) != null) {
+            levelIn.playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.BUCKET_FILL_LAVA, SoundSource.PLAYERS, 0.65F, 1F);
             if (!levelIn.isClientSide) {
                 setFillMode(stack, !isFillMode(stack));
             }
-            return new ActionResult<>(InteractionResult.SUCCESS, stack);
+            return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
         } else {
-            return new ActionResult<>(InteractionResult.PASS, stack);
+            return new InteractionResultHolder<>(InteractionResult.PASS, stack);
         }
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public IItemColor getItemColor() {
+    public ItemColor getItemColor() {
         return (stack, tintIndex) -> {
             if (tintIndex > 0) {
                 DyeColor color = getStoredColor(stack);
                 if (color != null) {
-                    return color.getColorValue();
+                    return color.getFireworkColor();
                 }
             }
             return 0xFFFFFF;

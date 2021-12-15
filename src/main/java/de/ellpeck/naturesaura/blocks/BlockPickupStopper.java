@@ -7,14 +7,14 @@ import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.math.AABB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,8 +22,9 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
+
     public BlockPickupStopper() {
-        super("pickup_stopper", BlockEntityPickupStopper::new, Properties.create(Material.ROCK).hardnessAndResistance(2F).sound(SoundType.STONE));
+        super("pickup_stopper", BlockEntityPickupStopper::new, Properties.of(Material.STONE).strength(2F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -31,25 +32,24 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
     @SubscribeEvent
     public void onPickup(EntityItemPickupEvent event) {
         Player player = event.getPlayer();
-        if (player != null && !player.isSneaking()) {
+        if (player != null && !player.isCrouching()) {
             ItemEntity item = event.getItem();
-            BlockPos pos = item.getPosition();
+            BlockPos pos = item.blockPosition();
             Helper.getBlockEntitiesInArea(item.level, pos, 8, tile -> {
-                if (!(tile instanceof BlockEntityPickupStopper))
+                if (!(tile instanceof BlockEntityPickupStopper stopper))
                     return false;
-                BlockEntityPickupStopper stopper = (BlockEntityPickupStopper) tile;
                 float radius = stopper.getRadius();
                 if (radius <= 0F)
                     return false;
-                BlockPos stopperPos = stopper.getPos();
-                if (!new AABB(stopperPos).grow(radius).intersects(item.getBoundingBox()))
+                BlockPos stopperPos = stopper.getBlockPos();
+                if (!new AABB(stopperPos).inflate(radius).intersects(item.getBoundingBox()))
                     return false;
 
                 event.setCanceled(true);
 
                 if (item.level.getGameTime() % 3 == 0)
                     PacketHandler.sendToAllAround(item.level, pos, 32,
-                            new PacketParticles((float) item.getPosX(), (float) item.getPosY(), (float) item.getPosZ(), PacketParticles.Type.PICKUP_STOPPER));
+                            new PacketParticles((float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.PICKUP_STOPPER));
                 return true;
             });
         }
@@ -62,7 +62,7 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
         if (tile instanceof BlockEntityPickupStopper) {
             double radius = ((BlockEntityPickupStopper) tile).getRadius();
             if (radius > 0)
-                return new AABB(pos).grow(radius);
+                return new AABB(pos).inflate(radius);
         }
         return null;
     }

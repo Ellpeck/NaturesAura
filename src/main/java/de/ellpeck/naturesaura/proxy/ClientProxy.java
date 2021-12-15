@@ -17,7 +17,6 @@ import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -82,12 +81,6 @@ public class ClientProxy implements IProxy {
     public void addColorProvidingBlock(IColorProvidingBlock block) {
         if (block instanceof Block)
             Minecraft.getInstance().getBlockColors().register(block.getBlockColor(), (Block) block);
-    }
-
-    @Override
-    public void registerTESR(ITESRProvider<?> provider) {
-        var tesr = provider.getTESR();
-        BlockEntityRenderers.register(tesr.getA(), tesr.getB().get());
     }
 
     @Override

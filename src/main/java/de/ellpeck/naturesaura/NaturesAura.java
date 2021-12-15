@@ -2,10 +2,6 @@ package de.ellpeck.naturesaura;
 
 import com.google.common.base.Strings;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
-import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
-import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.chunk.effect.DrainSpotEffects;
 import de.ellpeck.naturesaura.compat.Compat;
@@ -61,11 +57,6 @@ public final class NaturesAura {
     }
 
     private void preInit(FMLCommonSetupEvent event) {
-        Helper.registerCap(IAuraContainer.class);
-        Helper.registerCap(IAuraRecharge.class);
-        Helper.registerCap(IAuraChunk.class);
-        Helper.registerCap(ILevelData.class);
-
         Compat.setup(event);
         PacketHandler.init();
         new Multiblocks();

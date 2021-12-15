@@ -7,14 +7,15 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
-import net.minecraft.block.*;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Mth;
-import net.minecraft.level.Level;
-import net.minecraft.level.chunk.Chunk;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class GrassDieEffect implements IDrainSpotEffect {
@@ -40,10 +41,10 @@ public class GrassDieEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public ActiveType isActiveHere(Player player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public ActiveType isActiveHere(Player player, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.level, pos, spot))
             return ActiveType.INACTIVE;
-        if (player.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
+        if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return ActiveType.INACTIVE;
         return ActiveType.ACTIVE;
     }
@@ -54,37 +55,37 @@ public class GrassDieEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public void update(Level level, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(level, pos, spot))
             return;
-        for (int i = this.amount / 2 + level.rand.nextInt(this.amount / 2); i >= 0; i--) {
+        for (int i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
             BlockPos grassPos = new BlockPos(
-                    pos.getX() + level.rand.nextGaussian() * this.dist,
-                    pos.getY() + level.rand.nextGaussian() * this.dist,
-                    pos.getZ() + level.rand.nextGaussian() * this.dist
+                    pos.getX() + level.random.nextGaussian() * this.dist,
+                    pos.getY() + level.random.nextGaussian() * this.dist,
+                    pos.getZ() + level.random.nextGaussian() * this.dist
             );
-            if (grassPos.distanceSq(pos) <= this.dist * this.dist && level.isBlockLoaded(grassPos)) {
+            if (grassPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(grassPos)) {
                 BlockState state = level.getBlockState(grassPos);
                 Block block = state.getBlock();
 
                 BlockState newState = null;
                 if (block instanceof LeavesBlock) {
-                    newState = ModBlocks.DECAYED_LEAVES.getDefaultState();
+                    newState = ModBlocks.DECAYED_LEAVES.defaultBlockState();
                 } else if (block instanceof GrassBlock) {
-                    newState = Blocks.COARSE_DIRT.getDefaultState();
+                    newState = Blocks.COARSE_DIRT.defaultBlockState();
                 } else if (block instanceof BushBlock) {
-                    newState = Blocks.AIR.getDefaultState();
+                    newState = Blocks.AIR.defaultBlockState();
                 } else if (block == ModBlocks.NETHER_GRASS) {
-                    newState = Blocks.NETHERRACK.getDefaultState();
+                    newState = Blocks.NETHERRACK.defaultBlockState();
                 }
                 if (newState != null)
-                    level.setBlockState(grassPos, newState);
+                    level.setBlockAndUpdate(grassPos, newState);
             }
         }
     }
 
     @Override
-    public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
+    public boolean appliesHere(LevelChunk chunk, IAuraChunk auraChunk, IAuraType type) {
         return ModConfig.instance.grassDieEffect.get() && (type.isSimilar(NaturesAuraAPI.TYPE_OVERWORLD) || type.isSimilar(NaturesAuraAPI.TYPE_NETHER));
     }
 

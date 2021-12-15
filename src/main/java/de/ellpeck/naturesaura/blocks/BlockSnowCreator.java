@@ -4,17 +4,18 @@ import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntitySnowCreator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.math.AABB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockSnowCreator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
+
     public BlockSnowCreator() {
-        super("snow_creator", BlockEntitySnowCreator::new, Properties.from(Blocks.STONE_BRICKS));
+        super("snow_creator", BlockEntitySnowCreator::new, Properties.copy(Blocks.STONE_BRICKS));
     }
 
     @Override
@@ -24,7 +25,7 @@ public class BlockSnowCreator extends BlockContainerImpl implements IVisualizabl
         if (tile instanceof BlockEntitySnowCreator) {
             int radius = ((BlockEntitySnowCreator) tile).getRange();
             if (radius > 0)
-                return new AABB(pos).grow(radius);
+                return new AABB(pos).inflate(radius);
         }
         return null;
     }

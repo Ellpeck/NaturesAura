@@ -6,17 +6,17 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.potion.ModPotions;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AABB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Mth;
-import net.minecraft.level.Level;
-import net.minecraft.level.chunk.Chunk;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
@@ -37,15 +37,15 @@ public class BreathlessEffect implements IDrainSpotEffect {
         if (dist < 10)
             return false;
         this.amp = Math.min(Mth.floor(Math.abs(aura) / 2500000F), 3);
-        this.bb = new AABB(pos).grow(dist);
+        this.bb = new AABB(pos).inflate(dist);
         return true;
     }
 
     @Override
-    public ActiveType isActiveHere(Player player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public ActiveType isActiveHere(Player player, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.level, pos, spot))
             return ActiveType.INACTIVE;
-        if (!this.bb.contains(player.getPositionVec()))
+        if (!this.bb.contains(player.getEyePosition()))
             return ActiveType.INACTIVE;
         return ActiveType.ACTIVE;
     }
@@ -56,18 +56,18 @@ public class BreathlessEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public void update(Level level, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (level.getGameTime() % 100 != 0)
             return;
         if (!this.calcValues(level, pos, spot))
             return;
-        List<LivingEntity> entities = level.getEntitiesWithinAABB(LivingEntity.class, this.bb);
+        List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, this.bb);
         for (LivingEntity entity : entities)
-            entity.addPotionEffect(new EffectInstance(ModPotions.BREATHLESS, 300, this.amp));
+            entity.addEffect(new MobEffectInstance(ModPotions.BREATHLESS, 300, this.amp));
     }
 
     @Override
-    public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
+    public boolean appliesHere(LevelChunk chunk, IAuraChunk auraChunk, IAuraType type) {
         return ModConfig.instance.breathlessEffect.get();
     }
 

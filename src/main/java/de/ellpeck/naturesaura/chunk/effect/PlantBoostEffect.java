@@ -8,17 +8,18 @@ import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import net.minecraft.block.*;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Mth;
-import net.minecraft.level.Level;
-import net.minecraft.level.chunk.Chunk;
-import net.minecraft.level.gen.Heightmap;
-import net.minecraft.level.server.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.levelgen.Heightmap;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class PlantBoostEffect implements IDrainSpotEffect {
@@ -43,12 +44,12 @@ public class PlantBoostEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public ActiveType isActiveHere(Player player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public ActiveType isActiveHere(Player player, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.level, pos, spot))
             return ActiveType.INACTIVE;
-        if (player.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
+        if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return ActiveType.INACTIVE;
-        if (NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.getPosition(), NAME))
+        if (NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), NAME))
             return ActiveType.INHIBITED;
         return ActiveType.ACTIVE;
     }
@@ -59,24 +60,23 @@ public class PlantBoostEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public void update(Level level, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(level, pos, spot))
             return;
-        for (int i = this.amount / 2 + level.rand.nextInt(this.amount / 2); i >= 0; i--) {
-            int x = Mth.floor(pos.getX() + (2 * level.rand.nextFloat() - 1) * this.dist);
-            int z = Mth.floor(pos.getZ() + (2 * level.rand.nextFloat() - 1) * this.dist);
-            BlockPos plantPos = new BlockPos(x, level.getHeight(Heightmap.Type.WORLD_SURFACE, x, z), z).down();
-            if (plantPos.distanceSq(pos) <= this.dist * this.dist && level.isBlockLoaded(plantPos)) {
+        for (int i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
+            int x = Mth.floor(pos.getX() + (2 * level.random.nextFloat() - 1) * this.dist);
+            int z = Mth.floor(pos.getZ() + (2 * level.random.nextFloat() - 1) * this.dist);
+            BlockPos plantPos = new BlockPos(x, level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z).below();
+            if (plantPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(plantPos)) {
                 if (NaturesAuraAPI.instance().isEffectPowderActive(level, plantPos, NAME))
                     continue;
 
                 BlockState state = level.getBlockState(plantPos);
                 Block block = state.getBlock();
-                if (block instanceof IGrowable && !(block instanceof DoublePlantBlock) && !(block instanceof TallGrassBlock) && block != Blocks.GRASS_BLOCK) {
-                    IGrowable growable = (IGrowable) block;
-                    if (growable.canGrow(level, plantPos, state, false)) {
+                if (block instanceof BonemealableBlock growable && !(block instanceof DoublePlantBlock) && !(block instanceof TallGrassBlock) && block != Blocks.GRASS_BLOCK) {
+                    if (growable.isValidBonemealTarget(level, plantPos, state, false)) {
                         try {
-                            growable.grow((ServerLevel) level, level.rand, plantPos, state);
+                            growable.performBonemeal((ServerLevel) level, level.random, plantPos, state);
                         } catch (Exception e) {
                             // a lot of stuff throws here (double plants where generation only caused half of it to exist, bamboo at level height...)
                             // so just catch all, bleh
@@ -93,7 +93,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
+    public boolean appliesHere(LevelChunk chunk, IAuraChunk auraChunk, IAuraType type) {
         return ModConfig.instance.plantBoostEffect.get() && type.isSimilar(NaturesAuraAPI.TYPE_OVERWORLD);
     }
 

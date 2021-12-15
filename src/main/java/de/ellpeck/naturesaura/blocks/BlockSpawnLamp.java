@@ -10,22 +10,22 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ICustomRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.math.AABB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.Shapes;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.level.BlockGetter;
-import net.minecraft.level.ILevel;
-import net.minecraft.level.Level;
-import net.minecraft.level.server.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -40,7 +40,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     private static final VoxelShape SHAPE = Shapes.create(4 / 16F, 0F, 4 / 16F, 12 / 16F, 13 / 16F, 12 / 16F);
 
     public BlockSpawnLamp() {
-        super("spawn_lamp", BlockEntitySpawnLamp::new, Properties.create(Material.IRON).hardnessAndResistance(3F).setLightLevel(s -> 15).sound(SoundType.METAL));
+        super("spawn_lamp", BlockEntitySpawnLamp::new, Properties.of(Material.METAL).strength(3F).lightLevel(s -> 15).sound(SoundType.METAL));
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -53,7 +53,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     public void onSpawn(LivingSpawnEvent.CheckSpawn event) {
         if (event.getSpawner() != null)
             return;
-        ILevel level = event.getLevel();
+        LevelAccessor level = event.getWorld();
         BlockPos pos = new BlockPos(event.getX(), event.getY(), event.getZ());
         if (!(level instanceof Level))
             return;
@@ -66,14 +66,14 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
             if (range <= 0)
                 continue;
 
-            BlockPos lampPos = lamp.getPos();
-            if (!new AABB(lampPos).grow(range).contains(new Vector3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)))
+            BlockPos lampPos = lamp.getBlockPos();
+            if (!new AABB(lampPos).inflate(range).contains(new Vec3(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)))
                 continue;
 
-            MobEntity entity = (MobEntity) event.getEntityLiving();
-            if (entity.canSpawn(level, event.getSpawnReason()) && entity.isNotColliding(level)) {
-                BlockPos spot = IAuraChunk.getHighestSpot(level, lampPos, 32, lampPos);
-                IAuraChunk.getAuraChunk(level, spot).drainAura(spot, 200);
+            Mob entity = (Mob) event.getEntityLiving();
+            if (entity.checkSpawnRules(level, event.getSpawnReason()) && entity.checkSpawnObstruction(level)) {
+                BlockPos spot = IAuraChunk.getHighestSpot((Level) level, lampPos, 32, lampPos);
+                IAuraChunk.getAuraChunk((Level) level, spot).drainAura(spot, 200);
 
                 PacketHandler.sendToAllAround((ServerLevel) level, lampPos, 32,
                         new PacketParticles(lampPos.getX(), lampPos.getY(), lampPos.getZ(), PacketParticles.Type.SPAWN_LAMP));
@@ -85,7 +85,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
@@ -96,7 +96,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
         if (tile instanceof BlockEntitySpawnLamp) {
             int radius = ((BlockEntitySpawnLamp) tile).getRadius();
             if (radius > 0)
-                return new AABB(pos).grow(radius);
+                return new AABB(pos).inflate(radius);
         }
         return null;
     }
@@ -114,6 +114,6 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
 
     @Override
     public Supplier<RenderType> getRenderType() {
-        return RenderType::getCutoutMipped;
+        return RenderType::cutoutMipped;
     }
 }

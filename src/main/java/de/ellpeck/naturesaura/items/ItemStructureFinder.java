@@ -4,9 +4,8 @@ import de.ellpeck.naturesaura.entities.EntityStructureFinder;
 import de.ellpeck.naturesaura.entities.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.InteractionResult;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -30,18 +29,18 @@ public class ItemStructureFinder extends ItemImpl {
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
         ItemStack stack = playerIn.getItemInHand(handIn);
         if (!levelIn.isClientSide && ((ServerLevel) levelIn).structureFeatureManager().shouldGenerateFeatures()) {
-            BlockPos pos = ((ServerLevel) levelIn).getChunkSource().getGenerator().findNearestMapFeature((ServerLevel) levelIn, this.structureName, playerIn.getPosition(), this.radius, false);
+            BlockPos pos = ((ServerLevel) levelIn).getChunkSource().getGenerator().findNearestMapFeature((ServerLevel) levelIn, this.structureName, playerIn.blockPosition(), this.radius, false);
             if (pos != null) {
                 EntityStructureFinder entity = new EntityStructureFinder(ModEntities.STRUCTURE_FINDER, levelIn);
-                entity.setPosition(playerIn.getPosX(), playerIn.getPosYHeight(0.5D), playerIn.getPosZ());
-                entity.func_213863_b(stack);
-                entity.getDataManager().set(EntityStructureFinder.COLOR, this.color);
-                entity.moveTowards(pos.up(64));
-                levelIn.addEntity(entity);
+                entity.setPos(playerIn.getX(), playerIn.getY(0.5D), playerIn.getZ());
+                entity.setItem(stack);
+                entity.getEntityData().set(EntityStructureFinder.COLOR, this.color);
+                entity.signalTo(pos.above(64));
+                levelIn.addFreshEntity(entity);
 
                 stack.shrink(1);
             }
         }
-        return new ActionResult<>(InteractionResult.SUCCESS, stack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
 }

@@ -1,3 +1,4 @@
+/*
 package de.ellpeck.naturesaura.compat.jei;
 
 import de.ellpeck.naturesaura.NaturesAura;
@@ -78,3 +79,4 @@ public class JEINaturesAuraPlugin implements IModPlugin {
         registration.addRecipes(manager.getRecipes(ModRecipes.ANIMAL_SPAWNER_TYPE, null, null), SPAWNER);
     }
 }
+*/

@@ -4,7 +4,6 @@ import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkRegistry;
@@ -29,7 +28,7 @@ public final class PacketHandler {
     }
 
     public static void sendToAllAround(Level level, BlockPos pos, int range, Object message) {
-        network.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, level.func_234923_W_())), message);
+        network.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, level.dimension())), message);
     }
 
     public static void sendTo(Player player, Object message) {

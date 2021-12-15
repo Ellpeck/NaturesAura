@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.compat;
 
 import com.google.common.collect.ImmutableMap;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.compat.enchantibility.EnchantibilityCompat;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import de.ellpeck.naturesaura.data.ItemTagProvider;
 import net.minecraftforge.fml.ModList;
@@ -17,8 +16,8 @@ public final class Compat {
 
     private static final Map<String, Supplier<ICompat>> MODULE_TYPES = ImmutableMap.<String, Supplier<ICompat>>builder()
             .put("patchouli", PatchouliCompat::new)
-            .put("curios", CuriosCompat::new)
-            .put("enchantability", EnchantibilityCompat::new)
+            /* .put("curios", CuriosCompat::new)
+             .put("enchantability", EnchantibilityCompat::new)*/
             .build();
     private static final Map<String, ICompat> MODULES = new HashMap<>();
 

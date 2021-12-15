@@ -5,7 +5,6 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.events.ClientEvents;
 import net.minecraft.core.BlockPos;
-import net.minecraft.level.chunk.Chunk;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -40,7 +39,7 @@ public class PacketAuraChunk {
         int amount = buf.readInt();
         for (int i = 0; i < amount; i++) {
             packet.drainSpots.put(
-                    BlockPos.fromLong(buf.readLong()),
+                    BlockPos.of(buf.readLong()),
                     new MutableInt(buf.readInt())
             );
         }
@@ -54,7 +53,7 @@ public class PacketAuraChunk {
 
         buf.writeInt(packet.drainSpots.size());
         for (Map.Entry<BlockPos, MutableInt> entry : packet.drainSpots.entrySet()) {
-            buf.writeLong(entry.getKey().toLong());
+            buf.writeLong(entry.getKey().asLong());
             buf.writeInt(entry.getValue().intValue());
         }
     }

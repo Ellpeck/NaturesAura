@@ -125,7 +125,7 @@ public class EntityStructureFinder extends EyeOfEnder {
                 if (this.shatterOrDrop) {
                     this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.getItem()));
                 } else {
-                    PacketHandler.sendToAllAround(this.level, this.getOnPos(), 32, new PacketParticles((float) this.getX(), (float) this.getY(), (float) this.getZ(), PacketParticles.Type.STRUCTURE_FINDER, this.getId()));
+                    PacketHandler.sendToAllAround(this.level, this.blockPosition(), 32, new PacketParticles((float) this.getX(), (float) this.getY(), (float) this.getZ(), PacketParticles.Type.STRUCTURE_FINDER, this.getId()));
                 }
             }
         } else {

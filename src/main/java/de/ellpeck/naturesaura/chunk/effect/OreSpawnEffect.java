@@ -65,7 +65,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
             return ActiveType.INACTIVE;
         if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return ActiveType.INACTIVE;
-        if (!NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.getOnPos(), NAME))
+        if (!NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), NAME))
             return ActiveType.INHIBITED;
         return ActiveType.ACTIVE;
     }

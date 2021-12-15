@@ -96,7 +96,7 @@ public class Multiblock implements IMultiblock {
                     Matcher matcher = matchers.get(this.rawPattern[x][y][z]);
                     if (matcher == null)
                         throw new IllegalStateException();
-                    if (matcher.getCheck() != null)
+                    if (matcher.check() != null)
                         this.matchers.put(new BlockPos(x, y, z), matcher);
                 }
 
@@ -109,7 +109,7 @@ public class Multiblock implements IMultiblock {
         BlockPos start = this.getStart(center);
         return this.forEach(center, (char) 0, (pos, matcher) -> {
             BlockPos offset = pos.subtract(start);
-            return matcher.getCheck().matches(level, start, offset, pos, level.getBlockState(pos), this.getChar(offset));
+            return matcher.check().matches(level, start, offset, pos, level.getBlockState(pos), this.getChar(offset));
         });
     }
 

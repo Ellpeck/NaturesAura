@@ -1,3 +1,5 @@
+// TODO Curios
+/*
 package de.ellpeck.naturesaura.compat;
 
 import com.google.common.collect.ImmutableMap;
@@ -96,3 +98,4 @@ public class CuriosCompat implements ICompat {
         }
     }
 }
+*/

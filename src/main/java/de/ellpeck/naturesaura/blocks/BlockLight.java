@@ -5,15 +5,15 @@ import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ICustomRenderType;
 import de.ellpeck.naturesaura.reg.INoItemBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.level.BlockGetter;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -22,10 +22,10 @@ import java.util.function.Supplier;
 
 public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemBlock, ICustomRenderType {
 
-    private static final VoxelShape SHAPE = makeCuboidShape(4, 4, 4, 12, 12, 12);
+    private static final VoxelShape SHAPE = box(4, 4, 4, 12, 12, 12);
 
     public BlockLight() {
-        super("light", Properties.create(Material.WOOL).doesNotBlockMovement().setLightLevel(s -> 15));
+        super("light", Properties.of(Material.WOOL).noCollission().lightLevel(s -> 15));
     }
 
     @Override
@@ -39,12 +39,12 @@ public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemB
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
     @Override
-    public boolean isReplaceable(BlockState state, BlockItemUseContext useContext) {
+    public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
         return true;
     }
 
@@ -56,6 +56,6 @@ public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemB
 
     @Override
     public Supplier<RenderType> getRenderType() {
-        return RenderType::getCutoutMipped;
+        return RenderType::cutoutMipped;
     }
 }

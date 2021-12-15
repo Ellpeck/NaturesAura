@@ -1,3 +1,4 @@
+/*
 package de.ellpeck.naturesaura.compat.jei;
 
 import com.google.common.collect.ImmutableList;
@@ -80,3 +81,4 @@ public class AltarCategory implements IRecipeCategory<AltarRecipe> {
             group.set(3, recipe.getDimensionBottle());
     }
 }
+*/

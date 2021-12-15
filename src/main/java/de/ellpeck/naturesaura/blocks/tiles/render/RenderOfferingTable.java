@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -17,6 +18,10 @@ import java.util.Random;
 public class RenderOfferingTable implements BlockEntityRenderer<BlockEntityOfferingTable> {
 
     private final Random rand = new Random();
+
+    public RenderOfferingTable(BlockEntityRendererProvider.Context context) {
+
+    }
 
     @Override
     public void render(BlockEntityOfferingTable tileEntityOfferingTable, float v, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {

@@ -334,7 +334,7 @@ public final class ModRegistry {
             if (item instanceof IColorProvidingItem)
                 NaturesAura.proxy.addColorProvidingItem((IColorProvidingItem) item);
             if (item instanceof ITESRProvider provider)
-                NaturesAura.proxy.registerTESR(provider);
+                provider.registerTESR();
         }
 
         // register features again for some reason

@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -51,7 +52,7 @@ import java.util.function.Predicate;
 
 public final class Helper {
 
-    public static boolean getBlockEntitiesInArea(Level level, BlockPos pos, int radius, Function<BlockEntity, Boolean> consumer) {
+    public static boolean getBlockEntitiesInArea(LevelAccessor level, BlockPos pos, int radius, Function<BlockEntity, Boolean> consumer) {
         for (var x = pos.getX() - radius >> 4; x <= pos.getX() + radius >> 4; x++) {
             for (var z = pos.getZ() - radius >> 4; z <= pos.getZ() + radius >> 4; z++) {
                 var chunk = getLoadedChunk(level, x, z);
@@ -89,7 +90,7 @@ public final class Helper {
         return frames;
     }
 
-    public static LevelChunk getLoadedChunk(Level level, int x, int z) {
+    public static LevelChunk getLoadedChunk(LevelAccessor level, int x, int z) {
         // DO NOT EDIT PLEASE FOR THE LOVE OF GOD
         // This is very finicky and easily causes the game to hang for some reason
         var provider = level.getChunkSource();

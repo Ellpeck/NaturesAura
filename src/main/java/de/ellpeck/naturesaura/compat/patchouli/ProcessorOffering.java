@@ -1,3 +1,4 @@
+/*
 package de.ellpeck.naturesaura.compat.patchouli;
 
 import de.ellpeck.naturesaura.recipes.OfferingRecipe;
@@ -32,3 +33,4 @@ public class ProcessorOffering implements IComponentProcessor {
         }
     }
 }
+*/

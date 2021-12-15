@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.enchant;
 
-import net.minecraft.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 @SuppressWarnings("FieldNamingConvention")
 public final class ModEnchantments {

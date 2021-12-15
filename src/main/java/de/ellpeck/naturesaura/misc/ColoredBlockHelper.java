@@ -1,8 +1,8 @@
 package de.ellpeck.naturesaura.misc;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.DyeColor;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public final class ColoredBlockHelper {
     private static List<Block> collectBlocks(String name) {
         List<Block> blocks = new ArrayList<>();
         for (DyeColor color : DyeColor.values())
-            blocks.add(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(color.getString() + '_' + name)));
+            blocks.add(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(color.getName() + '_' + name)));
         return Collections.unmodifiableList(blocks);
     }
 

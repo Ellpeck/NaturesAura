@@ -7,17 +7,16 @@ import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityOakGenerator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.block.SaplingBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.AABB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.ILevel;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.SaplingGrowTreeEvent;
+import net.minecraftforge.event.world.SaplingGrowTreeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Random;
@@ -25,16 +24,16 @@ import java.util.Random;
 public class BlockOakGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockOakGenerator() {
-        super("oak_generator", BlockEntityOakGenerator::new, Properties.create(Material.WOOD).hardnessAndResistance(2F).sound(SoundType.WOOD));
+        super("oak_generator", BlockEntityOakGenerator::new, Properties.of(Material.WOOD).strength(2F).sound(SoundType.WOOD));
 
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
     public void onTreeGrow(SaplingGrowTreeEvent event) {
-        ILevel level = event.getLevel();
+        var level = event.getWorld();
         BlockPos pos = event.getPos();
-        if (level instanceof Level && !level.isClientSide() && IAuraType.forLevel(level).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD)
+        if (level instanceof Level && !level.isClientSide() && IAuraType.forLevel((Level) level).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD)
                 && level.getBlockState(pos).getBlock() instanceof SaplingBlock) {
             Helper.getBlockEntitiesInArea(level, pos, 10, tile -> {
                 if (!(tile instanceof BlockEntityOakGenerator))
@@ -60,7 +59,7 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
     @Override
     @OnlyIn(Dist.CLIENT)
     public AABB getVisualizationBounds(Level level, BlockPos pos) {
-        return new AABB(pos).grow(10);
+        return new AABB(pos).inflate(10);
     }
 
     @Override

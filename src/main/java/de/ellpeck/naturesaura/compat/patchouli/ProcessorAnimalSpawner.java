@@ -1,3 +1,4 @@
+/*
 package de.ellpeck.naturesaura.compat.patchouli;
 
 import de.ellpeck.naturesaura.recipes.AnimalSpawnerRecipe;
@@ -46,3 +47,4 @@ public class ProcessorAnimalSpawner implements IComponentProcessor {
         return !"seekrit".equals(group);
     }
 }
+*/

@@ -10,15 +10,13 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -29,7 +27,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
@@ -43,8 +40,6 @@ import net.minecraftforge.network.NetworkHooks;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider<BlockEntityEnderCrate>, ICustomBlockState {
 
@@ -128,15 +123,15 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     }
 
     @Override
-    public Tuple<BlockEntityType<BlockEntityEnderCrate>, Supplier<Function<? super BlockEntityRenderDispatcher, ? extends BlockEntityRenderer<? super BlockEntityEnderCrate>>>> getTESR() {
-        return new Tuple<>(ModTileEntities.ENDER_CRATE, () -> RenderEnderCrate::new);
-    }
-
-    @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().cubeBottomTop(this.getBaseName(),
                 generator.modLoc("block/" + this.getBaseName()),
                 generator.modLoc("block/" + this.getBaseName() + "_bottom"),
                 generator.modLoc("block/" + this.getBaseName() + "_top")));
+    }
+
+    @Override
+    public void registerTESR() {
+        BlockEntityRenderers.register(ModTileEntities.ENDER_CRATE, RenderEnderCrate::new);
     }
 }

@@ -2,10 +2,10 @@ package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.blocks.BlockGoldenLeaves;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.InteractionResult;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 
 public class ItemGoldFiber extends ItemImpl implements IColorProvidingItem {
 
@@ -14,14 +14,14 @@ public class ItemGoldFiber extends ItemImpl implements IColorProvidingItem {
     }
 
     @Override
-    public IItemColor getItemColor() {
+    public ItemColor getItemColor() {
         return (stack, tintIndex) -> 0xF2FF00;
     }
 
     @Override
-    public InteractionResult onItemUse(ItemUseContext context) {
-        ItemStack stack = context.getPlayer().getHeldItem(context.getHand());
-        if (BlockGoldenLeaves.convert(context.getLevel(), context.getPos())) {
+    public InteractionResult useOn(UseOnContext context) {
+        ItemStack stack = context.getPlayer().getItemInHand(context.getHand());
+        if (BlockGoldenLeaves.convert(context.getLevel(), context.getClickedPos())) {
             if (!context.getLevel().isClientSide) {
                 stack.shrink(1);
             }

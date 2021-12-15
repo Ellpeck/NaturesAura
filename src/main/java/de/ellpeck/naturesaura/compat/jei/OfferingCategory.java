@@ -1,3 +1,4 @@
+/*
 package de.ellpeck.naturesaura.compat.jei;
 
 import com.google.common.collect.ImmutableList;
@@ -68,3 +69,4 @@ public class OfferingCategory implements IRecipeCategory<OfferingRecipe> {
         group.set(2, Arrays.asList(recipe.startItem.getMatchingStacks()));
     }
 }
+*/

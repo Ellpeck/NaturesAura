@@ -5,16 +5,16 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Mth;
-import net.minecraft.level.Explosion;
-import net.minecraft.level.Level;
-import net.minecraft.level.chunk.Chunk;
-import net.minecraft.level.gen.Heightmap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 public class ExplosionEffect implements IDrainSpotEffect {
 
@@ -30,7 +30,7 @@ public class ExplosionEffect implements IDrainSpotEffect {
         if (aura > -5000000)
             return false;
         int chance = 140 - Math.abs(aura) / 200000;
-        if (chance > 1 && level.rand.nextInt(chance) != 0)
+        if (chance > 1 && level.random.nextInt(chance) != 0)
             return false;
         this.strength = Math.min(Math.abs(aura) / 5000000F, 5F);
         if (this.strength <= 0)
@@ -40,10 +40,10 @@ public class ExplosionEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public ActiveType isActiveHere(Player player, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public ActiveType isActiveHere(Player player, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(player.level, pos, spot))
             return ActiveType.INACTIVE;
-        if (player.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
+        if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return ActiveType.INACTIVE;
         return ActiveType.ACTIVE;
     }
@@ -54,24 +54,24 @@ public class ExplosionEffect implements IDrainSpotEffect {
     }
 
     @Override
-    public void update(Level level, Chunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (level.getGameTime() % 40 != 0)
             return;
         if (!this.calcValues(level, pos, spot))
             return;
 
-        int x = Mth.floor(pos.getX() + level.rand.nextGaussian() * this.dist);
-        int z = Mth.floor(pos.getZ() + level.rand.nextGaussian() * this.dist);
-        BlockPos chosenPos = new BlockPos(x, level.getHeight(Heightmap.Type.WORLD_SURFACE, x, z), z);
-        if (chosenPos.distanceSq(pos) <= this.dist * this.dist && level.isBlockLoaded(chosenPos)) {
-            level.createExplosion(null,
+        int x = Mth.floor(pos.getX() + level.random.nextGaussian() * this.dist);
+        int z = Mth.floor(pos.getZ() + level.random.nextGaussian() * this.dist);
+        BlockPos chosenPos = new BlockPos(x, level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z);
+        if (chosenPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(chosenPos)) {
+            level.explode(null,
                     chosenPos.getX() + 0.5, chosenPos.getY() + 0.5, chosenPos.getZ() + 0.5,
-                    this.strength, false, Explosion.Mode.DESTROY);
+                    this.strength, false, Explosion.BlockInteraction.DESTROY);
         }
     }
 
     @Override
-    public boolean appliesHere(Chunk chunk, IAuraChunk auraChunk, IAuraType type) {
+    public boolean appliesHere(LevelChunk chunk, IAuraChunk auraChunk, IAuraType type) {
         return ModConfig.instance.explosionEffect.get();
     }
 

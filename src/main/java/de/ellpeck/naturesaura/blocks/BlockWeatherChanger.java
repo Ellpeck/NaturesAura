@@ -3,11 +3,12 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityWeatherChanger;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 
 public class BlockWeatherChanger extends BlockContainerImpl implements ICustomBlockState {
+
     public BlockWeatherChanger() {
-        super("weather_changer", BlockEntityWeatherChanger::new, Properties.from(Blocks.STONE_BRICKS));
+        super("weather_changer", BlockEntityWeatherChanger::new, Properties.copy(Blocks.STONE_BRICKS));
     }
 
     @Override

@@ -49,7 +49,7 @@ public class SupporterFancyHandler {
         if (rand.nextFloat() >= 0.75F) {
             int color;
             if (info.tier == 1) {
-                var pos = player.getOnPos();
+                var pos = player.blockPosition();
                 color = BiomeColors.getAverageGrassColor(player.level, pos);
             } else {
                 color = info.color;

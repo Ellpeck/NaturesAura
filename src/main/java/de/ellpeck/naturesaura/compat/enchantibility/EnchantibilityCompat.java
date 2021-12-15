@@ -1,3 +1,5 @@
+// TODO Enchantability
+/*
 package de.ellpeck.naturesaura.compat.enchantibility;
 
 import de.ellpeck.naturesaura.compat.ICompat;
@@ -30,3 +32,4 @@ public class EnchantibilityCompat implements ICompat {
 
     }
 }
+*/

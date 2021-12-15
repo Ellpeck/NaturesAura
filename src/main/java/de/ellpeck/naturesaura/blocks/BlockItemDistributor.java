@@ -3,25 +3,25 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityItemDistributor;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.Player;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.InteractionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class BlockItemDistributor extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockItemDistributor() {
-        super("item_distributor", BlockEntityItemDistributor::new, Properties.from(Blocks.STONE_BRICKS));
+        super("item_distributor", BlockEntityItemDistributor::new, Properties.copy(Blocks.STONE_BRICKS));
     }
 
     @Override
-    public InteractionResult onBlockActivated(BlockState state, Level levelIn, BlockPos pos, Player player, Hand handIn, BlockRayTraceResult hit) {
-        if (!player.isSneaking())
+    public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+        if (!player.isCrouching())
             return InteractionResult.FAIL;
         BlockEntity tile = levelIn.getBlockEntity(pos);
         if (!(tile instanceof BlockEntityItemDistributor))

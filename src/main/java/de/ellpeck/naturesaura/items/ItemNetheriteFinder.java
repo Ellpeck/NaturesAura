@@ -1,33 +1,34 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.Player;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.InteractionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class ItemNetheriteFinder extends ItemImpl {
+
     public ItemNetheriteFinder() {
-        super("netherite_finder", new Properties().maxStackSize(1));
+        super("netherite_finder", new Properties().stacksTo(1));
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(Level levelIn, Player playerIn, Hand handIn) {
-        ItemStack stack = playerIn.getHeldItem(handIn);
+    public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
+        ItemStack stack = playerIn.getItemInHand(handIn);
         NaturesAuraAPI.IInternalHooks inst = NaturesAuraAPI.instance();
         if (!inst.extractAuraFromPlayer(playerIn, 200000, false))
-            return new ActionResult<>(InteractionResult.FAIL, stack);
+            return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
         if (levelIn.isClientSide) {
             inst.setParticleDepth(false);
             inst.setParticleSpawnRange(64);
             inst.setParticleCulling(false);
 
-            BlockPos pos = playerIn.getPosition();
+            BlockPos pos = playerIn.blockPosition();
             int range = 12;
             for (int x = -range; x <= range; x++) {
                 for (int y = 0; y <= 128; y++) {
@@ -46,9 +47,9 @@ public class ItemNetheriteFinder extends ItemImpl {
             inst.setParticleDepth(true);
             inst.setParticleSpawnRange(32);
             inst.setParticleCulling(true);
-            playerIn.swingArm(handIn);
+            playerIn.swing(handIn);
         }
-        playerIn.getCooldownTracker().setCooldown(this, 20 * 60);
-        return new ActionResult<>(InteractionResult.SUCCESS, stack);
+        playerIn.getCooldowns().addCooldown(this, 20 * 60);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
 }

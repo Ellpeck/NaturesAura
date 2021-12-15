@@ -10,9 +10,8 @@ import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -23,7 +22,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
@@ -38,7 +36,6 @@ import org.apache.commons.lang3.mutable.MutableObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<BlockEntityWoodStand>, ICustomBlockState {
 
@@ -112,13 +109,12 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
     }
 
     @Override
-    public Tuple<BlockEntityType<? extends BlockEntityWoodStand>, Supplier<BlockEntityRendererProvider<BlockEntityWoodStand>>> getTESR() {
-        return new Tuple<>(ModTileEntities.WOOD_STAND, () -> RenderWoodStand::new);
-    }
-
-    @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
     }
 
+    @Override
+    public void registerTESR() {
+        BlockEntityRenderers.register(ModTileEntities.WOOD_STAND, RenderWoodStand::new);
+    }
 }
