@@ -30,13 +30,13 @@ public class ItemBreakPrevention extends ItemImpl {
 
         @SubscribeEvent
         public void onAnvilUpdate(AnvilUpdateEvent event) {
-            ItemStack stack = event.getLeft();
+            var stack = event.getLeft();
             if (!stack.isDamageableItem())
                 return;
-            ItemStack second = event.getRight();
+            var second = event.getRight();
             if (second.getItem() != ModItems.BREAK_PREVENTION)
                 return;
-            ItemStack output = stack.copy();
+            var output = stack.copy();
             output.getOrCreateTag().putBoolean(NaturesAura.MOD_ID + ":break_prevention", true);
             event.setOutput(output);
             event.setMaterialCost(1);
@@ -45,10 +45,10 @@ public class ItemBreakPrevention extends ItemImpl {
 
         @SubscribeEvent
         public void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-            Player player = event.getPlayer();
+            var player = event.getPlayer();
             if (player == null)
                 return;
-            ItemStack stack = player.getMainHandItem();
+            var stack = player.getMainHandItem();
             if (!stack.hasTag() || !stack.getTag().getBoolean(NaturesAura.MOD_ID + ":break_prevention"))
                 return;
             if (ElytraItem.isFlyEnabled(stack))
@@ -59,16 +59,16 @@ public class ItemBreakPrevention extends ItemImpl {
         @SubscribeEvent
         @OnlyIn(Dist.CLIENT)
         public void onTooltip(ItemTooltipEvent event) {
-            ItemStack stack = event.getItemStack();
+            var stack = event.getItemStack();
             if (!stack.hasTag() || !stack.getTag().getBoolean(NaturesAura.MOD_ID + ":break_prevention"))
                 return;
-            List<Component> tooltip = event.getToolTip();
+            var tooltip = event.getToolTip();
             tooltip.add(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".break_prevention").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GRAY)));
             if (ElytraItem.isFlyEnabled(stack))
                 return;
             if (tooltip.size() < 1)
                 return;
-            Component head = tooltip.get(0);
+            var head = tooltip.get(0);
             if (head instanceof MutableComponent)
                 ((MutableComponent) head).append(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".broken").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GRAY)));
         }

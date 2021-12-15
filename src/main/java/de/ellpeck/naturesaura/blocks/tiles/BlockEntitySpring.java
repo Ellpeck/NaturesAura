@@ -38,7 +38,7 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         super.onLoad();
         if (!this.level.isClientSide) {
             // add a ticket to water crops
-            AABB area = new AABB(this.worldPosition).inflate(5, 1, 5);
+            var area = new AABB(this.worldPosition).inflate(5, 1, 5);
             this.waterTicket = FarmlandWaterManager.addAABBTicket(this.level, area);
         }
     }
@@ -59,8 +59,8 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
             return;
 
         // fill cauldrons
-        BlockPos up = this.worldPosition.above();
-        BlockState upState = this.level.getBlockState(up);
+        var up = this.worldPosition.above();
+        var upState = this.level.getBlockState(up);
         if (upState.hasProperty(BlockStateProperties.LEVEL_CAULDRON)) {
             int level = upState.getValue(BlockStateProperties.LEVEL_CAULDRON);
             if (level < 3) {
@@ -72,12 +72,12 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         }
 
         // wet sponges
-        int spongeRadius = 2;
-        for (int x = -spongeRadius; x <= spongeRadius; x++) {
-            for (int y = -spongeRadius; y <= spongeRadius; y++) {
-                for (int z = -spongeRadius; z <= spongeRadius; z++) {
-                    BlockPos pos = this.worldPosition.offset(x, y, z);
-                    BlockState state = this.level.getBlockState(pos);
+        var spongeRadius = 2;
+        for (var x = -spongeRadius; x <= spongeRadius; x++) {
+            for (var y = -spongeRadius; y <= spongeRadius; y++) {
+                for (var z = -spongeRadius; z <= spongeRadius; z++) {
+                    var pos = this.worldPosition.offset(x, y, z);
+                    var state = this.level.getBlockState(pos);
                     if (state.getBlock() == Blocks.SPONGE) {
                         this.level.setBlock(pos, Blocks.WET_SPONGE.defaultBlockState(), 2);
                         this.level.levelEvent(2001, pos, Block.getId(Blocks.WATER.defaultBlockState()));
@@ -89,8 +89,8 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         }
 
         // generate obsidian
-        for (Direction dir : Direction.Plane.HORIZONTAL) {
-            BlockPos side = this.worldPosition.relative(dir);
+        for (var dir : Direction.Plane.HORIZONTAL) {
+            var side = this.worldPosition.relative(dir);
             if (this.isLava(side, true)) {
                 this.level.setBlockAndUpdate(side, ForgeEventFactory.fireFluidPlaceBlockEvent(this.level, side, side, Blocks.OBSIDIAN.defaultBlockState()));
                 this.level.levelEvent(1501, side, 0);
@@ -100,7 +100,7 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         }
 
         // generate stone
-        BlockPos twoUp = this.worldPosition.above(2);
+        var twoUp = this.worldPosition.above(2);
         if (this.isLava(twoUp, false) && (this.level.getBlockState(up).isAir() || this.isLava(up, false))) {
             this.level.setBlockAndUpdate(up, ForgeEventFactory.fireFluidPlaceBlockEvent(this.level, up, twoUp, Blocks.STONE.defaultBlockState()));
             this.level.levelEvent(1501, up, 0);
@@ -109,9 +109,9 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         }
 
         // generate cobblestone
-        for (Direction dir : Direction.Plane.HORIZONTAL) {
-            BlockPos twoSide = this.worldPosition.relative(dir, 2);
-            BlockPos side = this.worldPosition.relative(dir);
+        for (var dir : Direction.Plane.HORIZONTAL) {
+            var twoSide = this.worldPosition.relative(dir, 2);
+            var side = this.worldPosition.relative(dir);
             if (this.isLava(twoSide, false) && (this.level.getBlockState(side).isAir() || this.isLava(side, false))) {
                 this.level.setBlockAndUpdate(side, ForgeEventFactory.fireFluidPlaceBlockEvent(this.level, side, twoSide, Blocks.COBBLESTONE.defaultBlockState()));
                 this.level.levelEvent(1501, side, 0);
@@ -130,13 +130,13 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
 
     public void consumeAura(int amount) {
         while (amount > 0) {
-            BlockPos pos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
+            var pos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
             amount -= IAuraChunk.getAuraChunk(this.level, pos).drainAura(pos, amount);
         }
     }
 
     private boolean isLava(BlockPos offset, boolean source) {
-        FluidState state = this.level.getFluidState(offset);
+        var state = this.level.getFluidState(offset);
         return (!source || state.isSource()) && state.getType().is(FluidTags.LAVA);
     }
 
@@ -169,7 +169,7 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
 
         @Override
         public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
-            int drain = Math.min(maxDrain, 1000);
+            var drain = Math.min(maxDrain, 1000);
             if (action.execute())
                 BlockEntitySpring.this.consumeAura(Mth.ceil(drain / 2F));
             return new FluidStack(Fluids.WATER, drain);

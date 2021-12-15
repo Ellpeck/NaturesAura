@@ -30,7 +30,7 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
         if (this.level.isClientSide)
             return;
 
-        BlockEntity below = this.level.getBlockEntity(this.worldPosition.below());
+        var below = this.level.getBlockEntity(this.worldPosition.below());
         if (!(below instanceof BlastFurnaceBlockEntity tile))
             return;
         Recipe<?> recipe = this.level.getRecipeManager().getRecipeFor(BlockEntityFurnaceHeater.getRecipeType(tile), tile, this.level).orElse(null);
@@ -39,8 +39,8 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
         if (!this.isApplicable(recipe.getIngredients()))
             return;
 
-        ContainerData data = BlockEntityFurnaceHeater.getFurnaceData(tile);
-        int doneDiff = data.get(3) - data.get(2);
+        var data = BlockEntityFurnaceHeater.getFurnaceData(tile);
+        var doneDiff = data.get(3) - data.get(2);
         if (doneDiff > 1)
             return;
 
@@ -50,18 +50,18 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
             return;
         }
 
-        ItemStack output = tile.getItem(2);
+        var output = tile.getItem(2);
         if (output.getCount() >= output.getMaxStackSize())
             return;
 
         if (output.isEmpty()) {
-            ItemStack result = recipe.getResultItem();
+            var result = recipe.getResultItem();
             tile.setItem(2, result.copy());
         } else {
             output.grow(1);
         }
 
-        BlockPos pos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 30, this.worldPosition);
+        var pos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 30, this.worldPosition);
         IAuraChunk.getAuraChunk(this.level, pos).drainAura(pos, 6500);
 
         PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
@@ -69,8 +69,8 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
     }
 
     private boolean isApplicable(List<Ingredient> ingredients) {
-        for (Ingredient ing : ingredients) {
-            for (ItemStack stack : ing.getItems()) {
+        for (var ing : ingredients) {
+            for (var stack : ing.getItems()) {
                 if (stack.getItem().getTags().stream().anyMatch(t -> t.getPath().startsWith("ores/")))
                     return true;
             }
@@ -80,10 +80,10 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
 
     @Override
     public IItemHandlerModifiable getItemHandler() {
-        BlockEntity below = this.level.getBlockEntity(this.worldPosition.below());
+        var below = this.level.getBlockEntity(this.worldPosition.below());
         if (!(below instanceof BlastFurnaceBlockEntity))
             return null;
-        IItemHandler handler = below.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
+        var handler = below.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
         if (handler == null)
             return null;
         return new IItemHandlerModifiable() {

@@ -45,7 +45,7 @@ public final class NaturesAura {
         instance = this;
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        var builder = new ForgeConfigSpec.Builder();
         ModConfig.instance = new ModConfig(builder);
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, builder.build());
     }

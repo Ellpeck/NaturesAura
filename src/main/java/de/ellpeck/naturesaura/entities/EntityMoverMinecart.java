@@ -49,7 +49,7 @@ public class EntityMoverMinecart extends AbstractMinecart {
         super.moveMinecartOnRail(railPos);
         if (!this.isActive)
             return;
-        BlockPos pos = this.blockPosition();
+        var pos = this.blockPosition();
 
         if (!this.spotOffsets.isEmpty() && this.level.getGameTime() % 10 == 0)
             PacketHandler.sendToAllAround(this.level, pos, 32, new PacketParticles(
@@ -64,18 +64,18 @@ public class EntityMoverMinecart extends AbstractMinecart {
     }
 
     private void moveAura(Level oldLevel, BlockPos oldPos, Level newLevel, BlockPos newPos) {
-        for (BlockPos offset : this.spotOffsets) {
-            BlockPos spot = oldPos.offset(offset);
-            IAuraChunk chunk = IAuraChunk.getAuraChunk(oldLevel, spot);
-            int amount = chunk.getDrainSpot(spot);
+        for (var offset : this.spotOffsets) {
+            var spot = oldPos.offset(offset);
+            var chunk = IAuraChunk.getAuraChunk(oldLevel, spot);
+            var amount = chunk.getDrainSpot(spot);
             if (amount <= 0)
                 continue;
-            int toMove = Math.min(amount, 300000);
-            int drained = chunk.drainAura(spot, toMove, false, false);
+            var toMove = Math.min(amount, 300000);
+            var drained = chunk.drainAura(spot, toMove, false, false);
             if (drained <= 0)
                 continue;
-            int toLose = Mth.ceil(drained / 250F);
-            BlockPos newSpot = newPos.offset(offset);
+            var toLose = Mth.ceil(drained / 250F);
+            var newSpot = newPos.offset(offset);
             IAuraChunk.getAuraChunk(newLevel, newSpot).storeAura(newSpot, drained - toLose, false, false);
         }
     }
@@ -85,7 +85,7 @@ public class EntityMoverMinecart extends AbstractMinecart {
         if (this.isActive != receivingPower) {
             this.isActive = receivingPower;
 
-            BlockPos pos = this.blockPosition();
+            var pos = this.blockPosition();
             if (!this.isActive) {
                 this.moveAura(this.level, this.lastPosition, this.level, pos);
                 this.spotOffsets.clear();
@@ -110,12 +110,12 @@ public class EntityMoverMinecart extends AbstractMinecart {
 
     @Override
     public CompoundTag serializeNBT() {
-        CompoundTag compound = super.serializeNBT();
+        var compound = super.serializeNBT();
         compound.putBoolean("active", this.isActive);
         compound.putLong("last_pos", this.lastPosition.asLong());
 
-        ListTag list = new ListTag();
-        for (BlockPos offset : this.spotOffsets)
+        var list = new ListTag();
+        for (var offset : this.spotOffsets)
             list.add(LongTag.valueOf(offset.asLong()));
         compound.put("offsets", list);
         return compound;
@@ -128,17 +128,17 @@ public class EntityMoverMinecart extends AbstractMinecart {
         this.lastPosition = BlockPos.of(compound.getLong("last_pos"));
 
         this.spotOffsets.clear();
-        ListTag list = compound.getList("offsets", Tag.TAG_LONG);
-        for (Tag base : list)
+        var list = compound.getList("offsets", Tag.TAG_LONG);
+        for (var base : list)
             this.spotOffsets.add(BlockPos.of(((LongTag) base).getAsLong()));
     }
 
     @Nullable
     @Override
     public Entity changeDimension(ServerLevel destination, ITeleporter teleporter) {
-        Entity entity = super.changeDimension(destination, teleporter);
+        var entity = super.changeDimension(destination, teleporter);
         if (entity instanceof EntityMoverMinecart) {
-            BlockPos pos = entity.blockPosition();
+            var pos = entity.blockPosition();
             this.moveAura(this.level, this.lastPosition, entity.level, pos);
             ((EntityMoverMinecart) entity).lastPosition = pos;
         }
@@ -172,7 +172,7 @@ public class EntityMoverMinecart extends AbstractMinecart {
 
     @Override
     protected void applyNaturalSlowdown() {
-        Vec3 motion = this.getDeltaMovement();
+        var motion = this.getDeltaMovement();
         this.setDeltaMovement(motion.x * 0.99F, 0, motion.z * 0.99F);
     }
 

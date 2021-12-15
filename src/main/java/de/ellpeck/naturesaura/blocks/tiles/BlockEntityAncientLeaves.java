@@ -17,7 +17,7 @@ public class BlockEntityAncientLeaves extends BlockEntityImpl {
 
         @Override
         public int drainAura(int amountToDrain, boolean simulate) {
-            int amount = super.drainAura(amountToDrain, simulate);
+            var amount = super.drainAura(amountToDrain, simulate);
             if (amount > 0 && !simulate) {
                 BlockEntityAncientLeaves.this.sendToClients();
             }

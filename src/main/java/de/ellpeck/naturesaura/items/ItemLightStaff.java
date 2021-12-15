@@ -18,9 +18,9 @@ public class ItemLightStaff extends ItemImpl {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
-        ItemStack stack = playerIn.getItemInHand(handIn);
+        var stack = playerIn.getItemInHand(handIn);
         if (!levelIn.isClientSide && NaturesAuraAPI.instance().extractAuraFromPlayer(playerIn, 1000, false)) {
-            EntityLightProjectile projectile = new EntityLightProjectile(ModEntities.LIGHT_PROJECTILE, playerIn, levelIn);
+            var projectile = new EntityLightProjectile(ModEntities.LIGHT_PROJECTILE, playerIn, levelIn);
             projectile.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0, 1.5F, 0);
             levelIn.addFreshEntity(projectile);
         }

@@ -35,7 +35,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
     }
 
     public static boolean convert(Level level, BlockPos pos) {
-        BlockState state = level.getBlockState(pos);
+        var state = level.getBlockState(pos);
         if (state.getBlock() instanceof LeavesBlock && !(state.getBlock() instanceof BlockAncientLeaves || state.getBlock() instanceof BlockGoldenLeaves)) {
             if (!level.isClientSide) {
                 level.setBlockAndUpdate(pos, ModBlocks.GOLDEN_LEAVES.defaultBlockState()
@@ -74,9 +74,9 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
     @OnlyIn(Dist.CLIENT)
     public BlockColor getBlockColor() {
         return (state, levelIn, pos, tintIndex) -> {
-            int color = 0xF2FF00;
+            var color = 0xF2FF00;
             if (state != null && levelIn != null && pos != null) {
-                int foliage = BiomeColors.getAverageFoliageColor(levelIn, pos);
+                var foliage = BiomeColors.getAverageFoliageColor(levelIn, pos);
                 return Helper.blendColors(color, foliage, state.getValue(STAGE) / (float) HIGHEST_STAGE);
             } else {
                 return color;
@@ -100,7 +100,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
             }
 
             if (stage > 1) {
-                BlockPos offset = pos.relative(Direction.getRandom(random));
+                var offset = pos.relative(Direction.getRandom(random));
                 if (levelIn.isLoaded(offset))
                     convert(levelIn, offset);
             }

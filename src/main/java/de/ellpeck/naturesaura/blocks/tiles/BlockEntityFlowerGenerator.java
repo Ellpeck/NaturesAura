@@ -34,12 +34,12 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
     public void tick() {
         if (!this.level.isClientSide && this.level.getGameTime() % 10 == 0) {
             List<BlockPos> possible = new ArrayList<>();
-            int range = 3;
-            for (int x = -range; x <= range; x++) {
-                for (int y = -1; y <= 1; y++) {
-                    for (int z = -range; z <= range; z++) {
-                        BlockPos offset = this.worldPosition.offset(x, y, z);
-                        BlockState state = this.level.getBlockState(offset);
+            var range = 3;
+            for (var x = -range; x <= range; x++) {
+                for (var y = -1; y <= 1; y++) {
+                    for (var z = -range; z <= range; z++) {
+                        var offset = this.worldPosition.offset(x, y, z);
+                        var state = this.level.getBlockState(offset);
                         if (BlockTags.SMALL_FLOWERS.contains(state.getBlock()))
                             possible.add(offset);
                     }
@@ -49,12 +49,12 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
             if (possible.isEmpty())
                 return;
 
-            BlockPos pos = possible.get(this.level.random.nextInt(possible.size()));
-            BlockState state = this.level.getBlockState(pos);
-            MutableInt curr = this.consumedRecently.computeIfAbsent(state, s -> new MutableInt());
+            var pos = possible.get(this.level.random.nextInt(possible.size()));
+            var state = this.level.getBlockState(pos);
+            var curr = this.consumedRecently.computeIfAbsent(state, s -> new MutableInt());
 
-            int addAmount = 25000;
-            int toAdd = Math.max(0, addAmount - curr.getValue() * 100);
+            var addAmount = 25000;
+            var toAdd = Math.max(0, addAmount - curr.getValue() * 100);
             if (toAdd > 0) {
                 if (IAuraType.forLevel(this.level).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD) && this.canGenerateRightNow(toAdd)) {
                     this.generateAura(toAdd);
@@ -63,9 +63,9 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
                 }
             }
 
-            for (Map.Entry<BlockState, MutableInt> entry : this.consumedRecently.entrySet()) {
+            for (var entry : this.consumedRecently.entrySet()) {
                 if (entry.getKey() != state) {
-                    MutableInt val = entry.getValue();
+                    var val = entry.getValue();
                     if (val.getValue() > 0)
                         val.subtract(1);
                 }
@@ -74,9 +74,9 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
 
             this.level.removeBlock(pos, false);
 
-            int color = Helper.blendColors(0x5ccc30, 0xe53c16, toAdd / (float) addAmount);
+            var color = Helper.blendColors(0x5ccc30, 0xe53c16, toAdd / (float) addAmount);
             if (toAdd > 0) {
-                for (int i = this.level.random.nextInt(5) + 5; i >= 0; i--)
+                for (var i = this.level.random.nextInt(5) + 5; i >= 0; i--)
                     PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticleStream(
                             pos.getX() + 0.25F + this.level.random.nextFloat() * 0.5F,
                             pos.getY() + 0.25F + this.level.random.nextFloat() * 0.5F,
@@ -102,12 +102,12 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
         super.writeNBT(compound, type);
 
         if (type != SaveType.SYNC && !this.consumedRecently.isEmpty()) {
-            ListTag list = new ListTag();
-            for (Map.Entry<BlockState, MutableInt> entry : this.consumedRecently.entrySet()) {
-                BlockState state = entry.getKey();
-                Block block = state.getBlock();
+            var list = new ListTag();
+            for (var entry : this.consumedRecently.entrySet()) {
+                var state = entry.getKey();
+                var block = state.getBlock();
 
-                CompoundTag tag = new CompoundTag();
+                var tag = new CompoundTag();
                 tag.putString("block", block.getRegistryName().toString());
                 tag.putInt("amount", entry.getValue().intValue());
                 list.add(tag);
@@ -121,10 +121,10 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
         super.readNBT(compound, type);
         if (type != SaveType.SYNC) {
             this.consumedRecently.clear();
-            ListTag list = compound.getList("consumed_recently", 10);
-            for (Tag base : list) {
-                CompoundTag tag = (CompoundTag) base;
-                Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tag.getString("block")));
+            var list = compound.getList("consumed_recently", 10);
+            for (var base : list) {
+                var tag = (CompoundTag) base;
+                var block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tag.getString("block")));
                 if (block != null)
                     this.consumedRecently.put(block.defaultBlockState(), new MutableInt(tag.getInt("amount")));
             }

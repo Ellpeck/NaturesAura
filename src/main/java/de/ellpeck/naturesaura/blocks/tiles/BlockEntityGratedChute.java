@@ -45,22 +45,22 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
                 if (this.redstonePower > 0)
                     return;
 
-                ItemStack curr = this.items.getStackInSlot(0);
+                var curr = this.items.getStackInSlot(0);
                 push:
                 if (!curr.isEmpty()) {
-                    BlockState state = this.level.getBlockState(this.worldPosition);
-                    Direction facing = state.getValue(BlockGratedChute.FACING);
-                    BlockEntity tile = this.level.getBlockEntity(this.worldPosition.relative(facing));
+                    var state = this.level.getBlockState(this.worldPosition);
+                    var facing = state.getValue(BlockGratedChute.FACING);
+                    var tile = this.level.getBlockEntity(this.worldPosition.relative(facing));
                     if (tile == null)
                         break push;
-                    IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
+                    var handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
                             facing.getOpposite()).orElse(null);
                     if (handler == null)
                         break push;
-                    for (int i = 0; i < handler.getSlots(); i++) {
-                        ItemStack theoreticalDrain = this.items.extractItem(0, 1, true);
+                    for (var i = 0; i < handler.getSlots(); i++) {
+                        var theoreticalDrain = this.items.extractItem(0, 1, true);
                         if (!theoreticalDrain.isEmpty()) {
-                            ItemStack left = handler.insertItem(i, theoreticalDrain, false);
+                            var left = handler.insertItem(i, theoreticalDrain, false);
                             if (left.isEmpty()) {
                                 this.items.extractItem(0, 1, false);
                                 break push;
@@ -70,16 +70,16 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
                 }
                 pull:
                 if (curr.isEmpty() || curr.getCount() < curr.getMaxStackSize()) {
-                    List<ItemEntity> items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(
+                    var items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(
                             this.worldPosition.getX(), this.worldPosition.getY() + 0.5, this.worldPosition.getZ(),
                             this.worldPosition.getX() + 1, this.worldPosition.getY() + 2, this.worldPosition.getZ() + 1));
-                    for (ItemEntity item : items) {
+                    for (var item : items) {
                         if (!item.isAlive())
                             continue;
-                        ItemStack stack = item.getItem();
+                        var stack = item.getItem();
                         if (stack.isEmpty())
                             continue;
-                        ItemStack left = this.items.insertItem(0, stack, false);
+                        var left = this.items.insertItem(0, stack, false);
                         if (!ItemStack.isSame(stack, left)) {
                             if (left.isEmpty()) {
                                 item.kill();
@@ -90,16 +90,16 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
                         }
                     }
 
-                    BlockEntity tileUp = this.level.getBlockEntity(this.worldPosition.above());
+                    var tileUp = this.level.getBlockEntity(this.worldPosition.above());
                     if (tileUp == null)
                         break pull;
-                    IItemHandler handlerUp = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN).orElse(null);
+                    var handlerUp = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN).orElse(null);
                     if (handlerUp == null)
                         break pull;
-                    for (int i = 0; i < handlerUp.getSlots(); i++) {
-                        ItemStack theoreticalDrain = handlerUp.extractItem(i, 1, true);
+                    for (var i = 0; i < handlerUp.getSlots(); i++) {
+                        var theoreticalDrain = handlerUp.extractItem(i, 1, true);
                         if (!theoreticalDrain.isEmpty()) {
-                            ItemStack left = this.items.insertItem(0, theoreticalDrain, false);
+                            var left = this.items.insertItem(0, theoreticalDrain, false);
                             if (left.isEmpty()) {
                                 handlerUp.extractItem(i, 1, false);
                                 break pull;
@@ -113,11 +113,11 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
     }
 
     private boolean isItemInFrame(ItemStack stack) {
-        List<ItemFrame> frames = Helper.getAttachedItemFrames(this.level, this.worldPosition);
+        var frames = Helper.getAttachedItemFrames(this.level, this.worldPosition);
         if (frames.isEmpty())
             return false;
-        for (ItemFrame frame : frames) {
-            ItemStack frameStack = frame.getItem();
+        for (var frame : frames) {
+            var frameStack = frame.getItem();
             if (Helper.areItemsEqual(stack, frameStack, true)) {
                 return true;
             }

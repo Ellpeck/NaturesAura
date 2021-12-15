@@ -19,7 +19,7 @@ public class BlockEntitySpawnLamp extends BlockEntityImpl {
     public void onLoad() {
         super.onLoad();
         if (!this.level.isClientSide) {
-            LevelData data = (LevelData) ILevelData.getLevelData(this.level);
+            var data = (LevelData) ILevelData.getLevelData(this.level);
             data.spawnLamps.add(this);
         }
     }
@@ -28,7 +28,7 @@ public class BlockEntitySpawnLamp extends BlockEntityImpl {
     public void setRemoved() {
         super.setRemoved();
         if (!this.level.isClientSide) {
-            LevelData data = (LevelData) ILevelData.getLevelData(this.level);
+            var data = (LevelData) ILevelData.getLevelData(this.level);
             data.spawnLamps.remove(this);
         }
     }

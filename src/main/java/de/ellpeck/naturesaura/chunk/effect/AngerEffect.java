@@ -27,10 +27,10 @@ public class AngerEffect implements IDrainSpotEffect {
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot >= 0)
             return false;
-        int aura = IAuraChunk.getAuraInArea(level, pos, 50);
+        var aura = IAuraChunk.getAuraInArea(level, pos, 50);
         if (aura > 0)
             return false;
-        int dist = Math.min(Math.abs(aura) / 50000, 75);
+        var dist = Math.min(Math.abs(aura) / 50000, 75);
         if (dist < 10)
             return false;
         this.bb = new AABB(pos).inflate(dist);
@@ -58,11 +58,11 @@ public class AngerEffect implements IDrainSpotEffect {
             return;
         if (!this.calcValues(level, pos, spot))
             return;
-        List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, this.bb);
-        for (LivingEntity entity : entities) {
+        var entities = level.getEntitiesOfClass(LivingEntity.class, this.bb);
+        for (var entity : entities) {
             if (!(entity instanceof NeutralMob))
                 continue;
-            Player player = level.getNearestPlayer(entity, 25);
+            var player = level.getNearestPlayer(entity, 25);
             if (player == null)
                 continue;
             ((NeutralMob) entity).setTarget(player);

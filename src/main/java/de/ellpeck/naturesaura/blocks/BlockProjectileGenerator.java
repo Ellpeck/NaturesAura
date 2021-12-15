@@ -45,7 +45,7 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
 
             @Override
             protected Projectile getProjectile(Level levelIn, Position position, ItemStack stackIn) {
-                ThrownEnderpearl ret = new ThrownEnderpearl(EntityType.ENDER_PEARL, levelIn);
+                var ret = new ThrownEnderpearl(EntityType.ENDER_PEARL, levelIn);
                 ret.setPos(position.x(), position.y(), position.z());
                 return ret;
             }
@@ -53,7 +53,7 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
         DispenserBlock.registerBehavior(Items.TRIDENT, new AbstractProjectileDispenseBehavior() {
             @Override
             protected Projectile getProjectile(Level levelIn, Position position, ItemStack stackIn) {
-                ThrownTrident ret = new ThrownTrident(EntityType.TRIDENT, levelIn);
+                var ret = new ThrownTrident(EntityType.TRIDENT, levelIn);
                 ret.setPos(position.x(), position.y(), position.z());
                 ObfuscationReflectionHelper.setPrivateValue(ThrownTrident.class, ret, stackIn.copy(), "tridentItem");
                 ret.pickup = AbstractArrow.Pickup.ALLOWED;
@@ -64,21 +64,21 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
 
     @SubscribeEvent
     public void onProjectileImpact(ProjectileImpactEvent event) {
-        Entity entity = event.getEntity();
+        var entity = event.getEntity();
         if (entity.level.isClientSide)
             return;
-        HitResult ray = event.getRayTraceResult();
+        var ray = event.getRayTraceResult();
         if (!(ray instanceof BlockHitResult blockRay))
             return;
-        BlockPos pos = blockRay.getBlockPos();
+        var pos = blockRay.getBlockPos();
         if (pos == null)
             return;
-        BlockEntity tile = entity.level.getBlockEntity(pos);
+        var tile = entity.level.getBlockEntity(pos);
         if (!(tile instanceof BlockEntityProjectileGenerator generator))
             return;
         if (generator.nextSide != blockRay.getDirection())
             return;
-        Integer amount = NaturesAuraAPI.PROJECTILE_GENERATIONS.get(entity.getType());
+        var amount = NaturesAuraAPI.PROJECTILE_GENERATIONS.get(entity.getType());
         if (amount == null || amount <= 0)
             return;
         if (!generator.canGenerateRightNow(amount))

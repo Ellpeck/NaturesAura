@@ -8,7 +8,7 @@ public interface IAuraType {
 
     static IAuraType forLevel(Level level) {
         IAuraType highestType = NaturesAuraAPI.TYPE_OTHER;
-        for (IAuraType type : NaturesAuraAPI.AURA_TYPES.values())
+        for (var type : NaturesAuraAPI.AURA_TYPES.values())
             if (type.isPresentInLevel(level) && type.getPriority() > highestType.getPriority())
                 highestType = type;
         return highestType;

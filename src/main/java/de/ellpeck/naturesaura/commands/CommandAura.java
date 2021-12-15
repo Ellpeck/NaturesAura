@@ -13,32 +13,32 @@ public final class CommandAura {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("naaura").requires(s -> s.hasPermission(2))
                 .then(Commands.literal("add").then(Commands.argument("amount", IntegerArgumentType.integer(1)).executes(context -> {
-                    int amount = IntegerArgumentType.getInteger(context, "amount");
-                    CommandSourceStack source = context.getSource();
-                    BlockPos pos = new BlockPos(source.getPosition());
+                    var amount = IntegerArgumentType.getInteger(context, "amount");
+                    var source = context.getSource();
+                    var pos = new BlockPos(source.getPosition());
                     while (amount > 0) {
-                        BlockPos spot = IAuraChunk.getLowestSpot(source.getLevel(), pos, 35, pos);
+                        var spot = IAuraChunk.getLowestSpot(source.getLevel(), pos, 35, pos);
                         amount -= IAuraChunk.getAuraChunk(source.getLevel(), spot).storeAura(spot, amount);
                     }
                     source.sendSuccess(new TextComponent("Added aura to area"), true);
                     return 0;
                 })))
                 .then(Commands.literal("remove").then(Commands.argument("amount", IntegerArgumentType.integer(1)).executes(context -> {
-                    int amount = IntegerArgumentType.getInteger(context, "amount");
-                    CommandSourceStack source = context.getSource();
-                    BlockPos pos = new BlockPos(source.getPosition());
+                    var amount = IntegerArgumentType.getInteger(context, "amount");
+                    var source = context.getSource();
+                    var pos = new BlockPos(source.getPosition());
                     while (amount > 0) {
-                        BlockPos spot = IAuraChunk.getHighestSpot(source.getLevel(), pos, 35, pos);
+                        var spot = IAuraChunk.getHighestSpot(source.getLevel(), pos, 35, pos);
                         amount -= IAuraChunk.getAuraChunk(source.getLevel(), spot).drainAura(spot, amount);
                     }
                     source.sendSuccess(new TextComponent("Removed aura from area"), true);
                     return 0;
                 })))
                 .then(Commands.literal("reset").executes(context -> {
-                    CommandSourceStack source = context.getSource();
-                    BlockPos pos = new BlockPos(source.getPosition());
+                    var source = context.getSource();
+                    var pos = new BlockPos(source.getPosition());
                     IAuraChunk.getSpotsInArea(source.getLevel(), pos, 35, (spot, amount) -> {
-                        IAuraChunk chunk = IAuraChunk.getAuraChunk(source.getLevel(), spot);
+                        var chunk = IAuraChunk.getAuraChunk(source.getLevel(), spot);
                         if (amount > 0)
                             chunk.drainAura(spot, amount);
                         else

@@ -45,7 +45,7 @@ public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvid
         @Nonnull
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-            ItemStack remain = this.getStorage().insertItem(slot, stack, simulate);
+            var remain = this.getStorage().insertItem(slot, stack, simulate);
             if (!simulate)
                 BlockEntityEnderCrate.this.drainAura((stack.getCount() - remain.getCount()) * 20);
             return remain;
@@ -54,7 +54,7 @@ public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvid
         @Nonnull
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            ItemStack extracted = this.getStorage().extractItem(slot, amount, simulate);
+            var extracted = this.getStorage().extractItem(slot, amount, simulate);
             if (!simulate)
                 BlockEntityEnderCrate.this.drainAura(extracted.getCount() * 20);
             return extracted;
@@ -107,7 +107,7 @@ public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvid
     public void loadDataOnPlace(ItemStack stack) {
         super.loadDataOnPlace(stack);
         if (!this.level.isClientSide) {
-            String name = BlockEnderCrate.getEnderName(stack);
+            var name = BlockEnderCrate.getEnderName(stack);
             if (name != null && !name.isEmpty())
                 this.name = name;
         }
@@ -133,7 +133,7 @@ public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvid
 
     public void drainAura(int amount) {
         if (amount > 0) {
-            BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
+            var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
             IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, amount);
         }
     }

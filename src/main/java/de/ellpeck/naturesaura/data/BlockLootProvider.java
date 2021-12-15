@@ -48,7 +48,7 @@ public class BlockLootProvider implements DataProvider {
     public BlockLootProvider(DataGenerator generator) {
         this.generator = generator;
 
-        for (IModItem item : ModRegistry.ALL_ITEMS) {
+        for (var item : ModRegistry.ALL_ITEMS) {
             if (!(item instanceof Block block))
                 continue;
             if (block instanceof Slab) {
@@ -73,11 +73,11 @@ public class BlockLootProvider implements DataProvider {
 
     @Override
     public void run(HashCache cache) throws IOException {
-        for (Map.Entry<Block, Function<Block, LootTable.Builder>> function : this.lootFunctions.entrySet()) {
-            Block block = function.getKey();
-            Function<Block, LootTable.Builder> func = function.getValue();
-            LootTable table = func.apply(block).setParamSet(LootContextParamSets.BLOCK).build();
-            Path path = getPath(this.generator.getOutputFolder(), block.getRegistryName());
+        for (var function : this.lootFunctions.entrySet()) {
+            var block = function.getKey();
+            var func = function.getValue();
+            var table = func.apply(block).setParamSet(LootContextParamSets.BLOCK).build();
+            var path = getPath(this.generator.getOutputFolder(), block.getRegistryName());
             DataProvider.save(GSON, cache, LootTables.serialize(table), path);
         }
     }

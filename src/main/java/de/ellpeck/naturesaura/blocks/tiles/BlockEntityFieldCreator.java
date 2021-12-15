@@ -42,11 +42,11 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
         if (this.level.isClientSide || this.level.getGameTime() % 10 != 0)
             return;
 
-        BlockPos connectedPos = this.getConnectedPos();
+        var connectedPos = this.getConnectedPos();
         if (connectedPos == null || !this.level.isLoaded(connectedPos))
             return;
 
-        BlockEntity other = this.level.getBlockEntity(connectedPos);
+        var other = this.level.getBlockEntity(connectedPos);
         if (!this.isCloseEnough(connectedPos)
                 || !(other instanceof BlockEntityFieldCreator)
                 || !this.worldPosition.equals(((BlockEntityFieldCreator) other).getConnectedPos())) {
@@ -61,7 +61,7 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
         if (!this.isMain)
             return;
 
-        BlockEntityFieldCreator creator = (BlockEntityFieldCreator) other;
+        var creator = (BlockEntityFieldCreator) other;
         if (this.redstonePower <= 0 && creator.redstonePower <= 0) {
             this.chargeTimer = 0;
             if (this.isCharged) {
@@ -73,8 +73,8 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
             return;
         }
 
-        BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 32, this.worldPosition);
-        IAuraChunk chunk = IAuraChunk.getAuraChunk(this.level, spot);
+        var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 32, this.worldPosition);
+        var chunk = IAuraChunk.getAuraChunk(this.level, spot);
 
         if (!this.isCharged) {
             this.chargeTimer += 10;
@@ -93,17 +93,17 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
             if (this.level.getGameTime() % 40 == 0)
                 chunk.drainAura(spot, 20);
 
-            ItemStack tool = this.getToolUsed(creator);
-            Vec3 dist = new Vec3(
+            var tool = this.getToolUsed(creator);
+            var dist = new Vec3(
                     this.worldPosition.getX() - connectedPos.getX(),
                     this.worldPosition.getY() - connectedPos.getY(),
                     this.worldPosition.getZ() - connectedPos.getZ()
             );
-            double length = dist.length();
-            Vec3 normal = new Vec3(dist.x / length, dist.y / length, dist.z / length);
+            var length = dist.length();
+            var normal = new Vec3(dist.x / length, dist.y / length, dist.z / length);
             for (float i = Mth.floor(length); i > 0; i -= 0.5F) {
-                Vec3 scaled = normal.scale(i);
-                BlockPos pos = connectedPos.offset(
+                var scaled = normal.scale(i);
+                var pos = connectedPos.offset(
                         Mth.floor(scaled.x + 0.5F),
                         Mth.floor(scaled.y + 0.5F),
                         Mth.floor(scaled.z + 0.5F));
@@ -111,19 +111,19 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
                 if (pos.equals(this.worldPosition) || pos.equals(connectedPos))
                     continue;
 
-                BlockState state = this.level.getBlockState(pos);
-                Block block = state.getBlock();
+                var state = this.level.getBlockState(pos);
+                var block = state.getBlock();
                 if (!state.isAir() && state.getDestroySpeed(this.level, pos) >= 0F) {
-                    FakePlayer fake = FakePlayerFactory.getMinecraft((ServerLevel) this.level);
+                    var fake = FakePlayerFactory.getMinecraft((ServerLevel) this.level);
                     if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.level, pos, state, fake))) {
-                        List<ItemStack> drops = state.getDrops(new LootContext.Builder((ServerLevel) this.level)
+                        var drops = state.getDrops(new LootContext.Builder((ServerLevel) this.level)
                                 .withParameter(LootContextParams.THIS_ENTITY, fake)
                                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
                                 .withParameter(LootContextParams.BLOCK_STATE, state)
                                 .withParameter(LootContextParams.TOOL, tool.isEmpty() ? new ItemStack(Items.DIAMOND_PICKAXE) : tool)
                                 .withOptionalParameter(LootContextParams.BLOCK_ENTITY, this.level.getBlockEntity(pos)));
                         this.level.destroyBlock(pos, false);
-                        for (ItemStack stack : drops)
+                        for (var stack : drops)
                             Block.popResource(this.level, pos, stack);
                         chunk.drainAura(spot, !tool.isEmpty() ? 300 : 100);
                         this.sendParticles();
@@ -134,8 +134,8 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
     }
 
     private ItemStack getToolUsed(BlockEntityFieldCreator other) {
-        ItemStack myTool = this.getMyTool();
-        ItemStack otherTool = other.getMyTool();
+        var myTool = this.getMyTool();
+        var otherTool = other.getMyTool();
         if (!myTool.isEmpty()) {
             // if both have tools, choose randomly
             if (!otherTool.isEmpty())
@@ -146,9 +146,9 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
     }
 
     private ItemStack getMyTool() {
-        List<ItemFrame> frames = Helper.getAttachedItemFrames(this.level, this.worldPosition);
-        for (ItemFrame frame : frames) {
-            ItemStack stack = frame.getItem();
+        var frames = Helper.getAttachedItemFrames(this.level, this.worldPosition);
+        for (var frame : frames) {
+            var stack = frame.getItem();
             if (!stack.isEmpty())
                 return stack;
         }
@@ -156,8 +156,8 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
     }
 
     private void sendParticles() {
-        for (int j = 0; j < 2; j++) {
-            BlockPos p = j == 0 ? this.worldPosition : this.getConnectedPos();
+        for (var j = 0; j < 2; j++) {
+            var p = j == 0 ? this.worldPosition : this.getConnectedPos();
             PacketHandler.sendToAllAround(this.level, p, 32, new PacketParticleStream(
                     p.getX() + (float) this.level.random.nextGaussian() * 3F,
                     p.getY() + 1 + this.level.random.nextFloat() * 3F,
@@ -171,7 +171,7 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
     }
 
     public boolean isCloseEnough(BlockPos pos) {
-        int range = ModConfig.instance.fieldCreatorRange.get() + 1;
+        var range = ModConfig.instance.fieldCreatorRange.get() + 1;
         return this.worldPosition.distSqr(pos) <= range * range;
     }
 

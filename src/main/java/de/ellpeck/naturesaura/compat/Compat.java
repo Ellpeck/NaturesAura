@@ -41,8 +41,8 @@ public final class Compat {
     }
 
     private static void populateModules(Predicate<String> isLoaded) {
-        for (Map.Entry<String, Supplier<ICompat>> entry : MODULE_TYPES.entrySet()) {
-            String id = entry.getKey();
+        for (var entry : MODULE_TYPES.entrySet()) {
+            var id = entry.getKey();
             if (isLoaded.test(id)) {
                 MODULES.put(id, entry.getValue().get());
                 NaturesAura.LOGGER.info("Loading compat module for mod " + id);

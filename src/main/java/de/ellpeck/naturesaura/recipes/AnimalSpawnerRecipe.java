@@ -63,7 +63,7 @@ public class AnimalSpawnerRecipe extends ModRecipe {
         @Override
         public AnimalSpawnerRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             List<Ingredient> ingredients = new ArrayList<>();
-            for (JsonElement e : json.getAsJsonArray("ingredients"))
+            for (var e : json.getAsJsonArray("ingredients"))
                 ingredients.add(Ingredient.fromJson(e));
             return new AnimalSpawnerRecipe(recipeId,
                     ForgeRegistries.ENTITIES.getValue(new ResourceLocation(json.get("entity").getAsString())),
@@ -75,8 +75,8 @@ public class AnimalSpawnerRecipe extends ModRecipe {
         @Nullable
         @Override
         public AnimalSpawnerRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            Ingredient[] ings = new Ingredient[buffer.readInt()];
-            for (int i = 0; i < ings.length; i++)
+            var ings = new Ingredient[buffer.readInt()];
+            for (var i = 0; i < ings.length; i++)
                 ings[i] = Ingredient.fromNetwork(buffer);
             return new AnimalSpawnerRecipe(
                     recipeId,
@@ -89,7 +89,7 @@ public class AnimalSpawnerRecipe extends ModRecipe {
         @Override
         public void toNetwork(FriendlyByteBuf buffer, AnimalSpawnerRecipe recipe) {
             buffer.writeInt(recipe.ingredients.length);
-            for (Ingredient ing : recipe.ingredients)
+            for (var ing : recipe.ingredients)
                 ing.toNetwork(buffer);
             buffer.writeResourceLocation(recipe.entity.getRegistryName());
             buffer.writeInt(recipe.aura);

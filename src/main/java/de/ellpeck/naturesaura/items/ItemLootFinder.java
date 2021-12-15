@@ -23,8 +23,8 @@ public class ItemLootFinder extends ItemImpl {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
-        ItemStack stack = playerIn.getItemInHand(handIn);
-        NaturesAuraAPI.IInternalHooks inst = NaturesAuraAPI.instance();
+        var stack = playerIn.getItemInHand(handIn);
+        var inst = NaturesAuraAPI.instance();
         if (!inst.extractAuraFromPlayer(playerIn, 100000, false))
             return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
         if (levelIn.isClientSide) {
@@ -32,7 +32,7 @@ public class ItemLootFinder extends ItemImpl {
             inst.setParticleSpawnRange(64);
             inst.setParticleCulling(false);
 
-            BlockPos pos = playerIn.blockPosition();
+            var pos = playerIn.blockPosition();
             Helper.getBlockEntitiesInArea(levelIn, pos, 64, tile -> {
                 if (tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent() || tile instanceof SpawnerBlockEntity) {
                     inst.spawnMagicParticle(
@@ -41,7 +41,7 @@ public class ItemLootFinder extends ItemImpl {
                 }
                 return false;
             });
-            for (Entity entity : levelIn.getEntitiesOfClass(Entity.class, new AABB(pos).inflate(64))) {
+            for (var entity : levelIn.getEntitiesOfClass(Entity.class, new AABB(pos).inflate(64))) {
                 if (!(entity instanceof LivingEntity) && entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
                     inst.spawnMagicParticle(
                             entity.getX(), entity.getEyeY(), entity.getZ(),

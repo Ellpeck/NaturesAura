@@ -126,31 +126,31 @@ public final class ModRecipes {
     }
 
     private static void ore(List<WeightedOre> list, String name, int weight) {
-        ResourceLocation res = new ResourceLocation("forge", name);
+        var res = new ResourceLocation("forge", name);
         list.add(new WeightedOre(res, weight));
     }
 
     private static void register(IForgeRegistry<RecipeSerializer<?>> registry, String name, RecipeType<?> type, RecipeSerializer<?> serializer) {
-        ResourceLocation res = new ResourceLocation(NaturesAura.MOD_ID, name);
+        var res = new ResourceLocation(NaturesAura.MOD_ID, name);
         Registry.register(Registry.RECIPE_TYPE, res, type);
         registry.register(serializer.setRegistryName(res));
     }
 
     public static JsonObject serializeStack(ItemStack stack) {
-        CompoundTag nbt = stack.save(new CompoundTag());
-        byte c = nbt.getByte("Count");
+        var nbt = stack.save(new CompoundTag());
+        var c = nbt.getByte("Count");
         if (c != 1) {
             nbt.putByte("count", c);
         }
         nbt.remove("Count");
         renameTag(nbt, "id", "item");
         renameTag(nbt, "tag", "nbt");
-        Dynamic<Tag> dyn = new Dynamic<>(NbtOps.INSTANCE, nbt);
+        var dyn = new Dynamic<Tag>(NbtOps.INSTANCE, nbt);
         return dyn.convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
     }
 
     private static void renameTag(CompoundTag nbt, String oldName, String newName) {
-        Tag tag = nbt.get(oldName);
+        var tag = nbt.get(oldName);
         if (tag != null) {
             nbt.remove(oldName);
             nbt.put(newName, tag);

@@ -23,13 +23,13 @@ public final class ColoredBlockHelper {
 
     private static List<Block> collectBlocks(String name) {
         List<Block> blocks = new ArrayList<>();
-        for (DyeColor color : DyeColor.values())
+        for (var color : DyeColor.values())
             blocks.add(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(color.getName() + '_' + name)));
         return Collections.unmodifiableList(blocks);
     }
 
     public static List<Block> getBlocksContaining(Block block) {
-        for (List<Block> list : LISTS) {
+        for (var list : LISTS) {
             if (list.contains(block))
                 return list;
         }

@@ -59,7 +59,7 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void postInit(FMLCommonSetupEvent event) {
-        for (IModItem item : ModRegistry.ALL_ITEMS) {
+        for (var item : ModRegistry.ALL_ITEMS) {
             if (item instanceof ICustomRenderType)
                 ItemBlockRenderTypes.setRenderLayer((Block) item, ((ICustomRenderType) item).getRenderType().get());
         }
@@ -67,8 +67,8 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void addColorProvidingItem(IColorProvidingItem item) {
-        ItemColors colors = Minecraft.getInstance().getItemColors();
-        ItemColor color = item.getItemColor();
+        var colors = Minecraft.getInstance().getItemColors();
+        var color = item.getItemColor();
 
         if (item instanceof Item) {
             colors.register(color, (Item) item);

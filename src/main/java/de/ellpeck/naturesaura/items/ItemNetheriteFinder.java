@@ -19,8 +19,8 @@ public class ItemNetheriteFinder extends ItemImpl {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
-        ItemStack stack = playerIn.getItemInHand(handIn);
-        NaturesAuraAPI.IInternalHooks inst = NaturesAuraAPI.instance();
+        var stack = playerIn.getItemInHand(handIn);
+        var inst = NaturesAuraAPI.instance();
         if (!inst.extractAuraFromPlayer(playerIn, 200000, false))
             return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
         if (levelIn.isClientSide) {
@@ -28,13 +28,13 @@ public class ItemNetheriteFinder extends ItemImpl {
             inst.setParticleSpawnRange(64);
             inst.setParticleCulling(false);
 
-            BlockPos pos = playerIn.blockPosition();
-            int range = 12;
-            for (int x = -range; x <= range; x++) {
-                for (int y = 0; y <= 128; y++) {
-                    for (int z = -range; z <= range; z++) {
-                        BlockPos offset = new BlockPos(pos.getX() + x, y, pos.getZ() + z);
-                        BlockState state = levelIn.getBlockState(offset);
+            var pos = playerIn.blockPosition();
+            var range = 12;
+            for (var x = -range; x <= range; x++) {
+                for (var y = 0; y <= 128; y++) {
+                    for (var z = -range; z <= range; z++) {
+                        var offset = new BlockPos(pos.getX() + x, y, pos.getZ() + z);
+                        var state = levelIn.getBlockState(offset);
                         if (state.getBlock() == Blocks.ANCIENT_DEBRIS || state.getBlock().getRegistryName().toString().contains("netherite")) {
                             inst.spawnMagicParticle(
                                     offset.getX() + 0.5F, offset.getY() + 0.5F, offset.getZ() + 0.5F,

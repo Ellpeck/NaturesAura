@@ -58,25 +58,25 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
 
     @SubscribeEvent
     public void onTreeGrow(SaplingGrowTreeEvent event) {
-        LevelAccessor level = event.getWorld();
-        BlockPos pos = event.getPos();
+        var level = event.getWorld();
+        var pos = event.getPos();
         if (!level.isClientSide() && level instanceof Level) {
             if (Multiblocks.TREE_RITUAL.isComplete((Level) level, pos)) {
-                BlockState sapling = level.getBlockState(pos);
-                ItemStack saplingStack = sapling.getBlock().getCloneItemStack(level, pos, sapling);
+                var sapling = level.getBlockState(pos);
+                var saplingStack = sapling.getBlock().getCloneItemStack(level, pos, sapling);
                 if (!saplingStack.isEmpty()) {
-                    for (TreeRitualRecipe recipe : ((Level) level).getRecipeManager().getRecipesFor(ModRecipes.TREE_RITUAL_TYPE, null, null)) {
+                    for (var recipe : ((Level) level).getRecipeManager().getRecipesFor(ModRecipes.TREE_RITUAL_TYPE, null, null)) {
                         if (recipe.saplingType.test(saplingStack)) {
                             List<Ingredient> required = new ArrayList<>(Arrays.asList(recipe.ingredients));
-                            MutableObject<BlockEntityWoodStand> toPick = new MutableObject<>();
+                            var toPick = new MutableObject<BlockEntityWoodStand>();
 
-                            boolean fine = Multiblocks.TREE_RITUAL.forEach(pos, 'W', (tilePos, matcher) -> {
-                                BlockEntity tile = level.getBlockEntity(tilePos);
+                            var fine = Multiblocks.TREE_RITUAL.forEach(pos, 'W', (tilePos, matcher) -> {
+                                var tile = level.getBlockEntity(tilePos);
                                 if (tile instanceof BlockEntityWoodStand stand) {
-                                    ItemStack stack = stand.items.getStackInSlot(0);
+                                    var stack = stand.items.getStackInSlot(0);
                                     if (!stack.isEmpty()) {
-                                        for (int i = required.size() - 1; i >= 0; i--) {
-                                            Ingredient req = required.get(i);
+                                        for (var i = required.size() - 1; i >= 0; i--) {
+                                            var req = required.get(i);
                                             if (req.test(stack)) {
                                                 required.remove(i);
 

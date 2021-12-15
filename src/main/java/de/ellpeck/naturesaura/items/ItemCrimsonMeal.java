@@ -19,9 +19,9 @@ public class ItemCrimsonMeal extends ItemImpl {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        Level level = context.getLevel();
-        BlockPos pos = context.getClickedPos();
-        BlockState state = level.getBlockState(pos);
+        var level = context.getLevel();
+        var pos = context.getClickedPos();
+        var state = level.getBlockState(pos);
         if (state.getBlock() == Blocks.NETHER_WART) {
             if (!level.isClientSide) {
                 if (level.random.nextInt(5) == 0) {
@@ -38,8 +38,8 @@ public class ItemCrimsonMeal extends ItemImpl {
             return InteractionResult.SUCCESS;
         } else if (level.getBlockState(pos.above()).isAir() && level.getBlockState(pos).getBlock() == Blocks.SOUL_SAND) {
             if (!level.isClientSide) {
-                for (int i = level.random.nextInt(5); i >= 0; i--) {
-                    BlockPos offset = pos.offset(Mth.nextInt(level.random, -3, 3), 1, Mth.nextInt(level.random, -3, 3));
+                for (var i = level.random.nextInt(5); i >= 0; i--) {
+                    var offset = pos.offset(Mth.nextInt(level.random, -3, 3), 1, Mth.nextInt(level.random, -3, 3));
                     if (level.getBlockState(offset.below()).getBlock() == Blocks.SOUL_SAND && level.getBlockState(offset).isAir()) {
                         level.setBlockAndUpdate(offset, Blocks.NETHER_WART.defaultBlockState());
                     }

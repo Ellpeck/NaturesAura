@@ -23,7 +23,7 @@ public class ItemEye extends ItemImpl implements ITrinketItem {
     @OnlyIn(Dist.CLIENT)
     public void render(ItemStack stack, Player player, RenderType type, PoseStack matrices, MultiBufferSource buffer, int packedLight, boolean isHolding) {
         if (type == RenderType.BODY && !isHolding) {
-            boolean armor = !player.getInventory().armor.get(EquipmentSlot.CHEST.getIndex()).isEmpty();
+            var armor = !player.getInventory().armor.get(EquipmentSlot.CHEST.getIndex()).isEmpty();
             matrices.translate(0.1F, 0.225F, armor ? -0.195F : -0.1475F);
             matrices.scale(0.3F, 0.3F, 0.3F);
             matrices.mulPose(Vector3f.XP.rotationDegrees(180));

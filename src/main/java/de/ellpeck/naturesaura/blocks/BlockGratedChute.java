@@ -89,7 +89,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (!player.isCrouching())
             return InteractionResult.FAIL;
-        BlockEntity tile = levelIn.getBlockEntity(pos);
+        var tile = levelIn.getBlockEntity(pos);
         if (!(tile instanceof BlockEntityGratedChute chute))
             return InteractionResult.FAIL;
         if (!levelIn.isClientSide) {
@@ -102,7 +102,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        Direction newFacing = context.getClickedFace().getOpposite();
+        var newFacing = context.getClickedFace().getOpposite();
         if (newFacing == Direction.UP)
             newFacing = Direction.DOWN;
         return super.getStateForPlacement(context).setValue(FACING, newFacing);
@@ -120,10 +120,10 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
 
     @Override
     public int getAnalogOutputSignal(BlockState blockState, Level levelIn, BlockPos pos) {
-        BlockEntity tile = levelIn.getBlockEntity(pos);
+        var tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityGratedChute) {
             IItemHandler handler = ((BlockEntityGratedChute) tile).getItemHandler();
-            ItemStack stack = handler.getStackInSlot(0);
+            var stack = handler.getStackInSlot(0);
             if (stack.isEmpty())
                 return 0;
             return Mth.ceil(stack.getCount() / (float) stack.getMaxStackSize() * 15);

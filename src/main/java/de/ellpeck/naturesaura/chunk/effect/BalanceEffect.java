@@ -20,17 +20,17 @@ public class BalanceEffect implements IDrainSpotEffect {
             return;
         if (level.getGameTime() % 200 != 0)
             return;
-        int searchRadius = Math.min(45, spot / 10000);
-        MutableInt positiveAura = new MutableInt();
+        var searchRadius = Math.min(45, spot / 10000);
+        var positiveAura = new MutableInt();
         IAuraChunk.getSpotsInArea(level, pos, searchRadius, (otherPos, otherSpot) -> {
             if (otherSpot > 0)
                 positiveAura.add(otherSpot);
         });
-        int radius = Math.min(80, positiveAura.intValue() / 5000);
-        BlockPos lowestPos = IAuraChunk.getLowestSpot(level, pos, radius, null);
+        var radius = Math.min(80, positiveAura.intValue() / 5000);
+        var lowestPos = IAuraChunk.getLowestSpot(level, pos, radius, null);
         if (lowestPos == null)
             return;
-        int stored = IAuraChunk.getAuraChunk(level, lowestPos).storeAura(lowestPos, spot / 50);
+        var stored = IAuraChunk.getAuraChunk(level, lowestPos).storeAura(lowestPos, spot / 50);
         auraChunk.drainAura(pos, stored);
     }
 

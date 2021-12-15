@@ -53,7 +53,7 @@ public final class Multiblocks {
                             return true;
                         // try-catch to prevent blocks that need to have been placed crashing here
                         try {
-                            ItemStack stack = state.getBlock().getCloneItemStack(level, pos, state);
+                            var stack = state.getBlock().getCloneItemStack(level, pos, state);
                             return !stack.isEmpty() && level.getRecipeManager().getRecipesFor(ModRecipes.TREE_RITUAL_TYPE, null, null).stream().anyMatch(r -> r.saplingType.test(stack));
                         } catch (Exception e) {
                             return false;

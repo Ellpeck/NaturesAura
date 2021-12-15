@@ -56,14 +56,14 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
     @Override
     public void tick() {
         if (!this.level.isClientSide && this.level.getGameTime() % 5 == 0) {
-            boolean did = false;
+            var did = false;
 
-            Direction facing = this.level.getBlockState(this.worldPosition).getValue(BlockFurnaceHeater.FACING);
-            BlockPos tilePos = this.worldPosition.relative(facing.getOpposite());
-            BlockEntity tile = this.level.getBlockEntity(tilePos);
+            var facing = this.level.getBlockState(this.worldPosition).getValue(BlockFurnaceHeater.FACING);
+            var tilePos = this.worldPosition.relative(facing.getOpposite());
+            var tile = this.level.getBlockEntity(tilePos);
             if (tile instanceof AbstractFurnaceBlockEntity furnace && this.isReady(furnace)) {
-                ContainerData data = getFurnaceData(furnace);
-                int burnTime = data.get(0);
+                var data = getFurnaceData(furnace);
+                var burnTime = data.get(0);
                 if (burnTime <= 0)
                     this.level.setBlockAndUpdate(tilePos, this.level.getBlockState(tilePos).setValue(AbstractFurnaceBlock.LIT, true));
 
@@ -71,8 +71,8 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
                 //if set higher than 199, it'll never finish because the furnace does ++ and then ==
                 data.set(2, Math.min(data.get(3) - 1, data.get(2) + 5));
 
-                BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 20, this.worldPosition);
-                IAuraChunk chunk = IAuraChunk.getAuraChunk(this.level, spot);
+                var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 20, this.worldPosition);
+                var chunk = IAuraChunk.getAuraChunk(this.level, spot);
                 chunk.drainAura(spot, Mth.ceil((200 - burnTime) * 16.6F));
                 did = true;
 
@@ -100,13 +100,13 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
         if (!furnace.getItem(1).isEmpty())
             return false;
 
-        ItemStack input = furnace.getItem(0);
+        var input = furnace.getItem(0);
         if (!input.isEmpty()) {
-            AbstractCookingRecipe recipe = this.level.getRecipeManager().getRecipeFor(getRecipeType(furnace), furnace, this.level).orElse(null);
+            var recipe = this.level.getRecipeManager().getRecipeFor(getRecipeType(furnace), furnace, this.level).orElse(null);
             if (recipe == null)
                 return false;
-            ItemStack output = recipe.getResultItem();
-            ItemStack currOutput = furnace.getItem(2);
+            var output = recipe.getResultItem();
+            var currOutput = furnace.getItem(2);
             return currOutput.isEmpty() || Helper.areItemsEqual(currOutput, output, true) && currOutput.getCount() + output.getCount() <= output.getMaxStackSize();
         } else
             return false;

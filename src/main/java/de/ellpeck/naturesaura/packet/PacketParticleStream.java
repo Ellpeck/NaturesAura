@@ -36,7 +36,7 @@ public class PacketParticleStream {
     }
 
     public static PacketParticleStream fromBytes(FriendlyByteBuf buf) {
-        PacketParticleStream packet = new PacketParticleStream();
+        var packet = new PacketParticleStream();
 
         packet.startX = buf.readFloat();
         packet.startY = buf.readFloat();

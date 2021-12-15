@@ -69,7 +69,7 @@ public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvide
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        boolean nether = IAuraType.forLevel(context.getLevel()).isSimilar(NaturesAuraAPI.TYPE_NETHER);
+        var nether = IAuraType.forLevel(context.getLevel()).isSimilar(NaturesAuraAPI.TYPE_NETHER);
         return super.getStateForPlacement(context).setValue(NETHER, nether);
     }
 

@@ -65,7 +65,7 @@ public class CommonEvents {
 
     @SubscribeEvent
     public void onChunkCapsAttach(AttachCapabilitiesEvent<LevelChunk> event) {
-        LevelChunk chunk = event.getObject();
+        var chunk = event.getObject();
         event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "aura"), new AuraChunkProvider(chunk));
     }
 
@@ -76,11 +76,11 @@ public class CommonEvents {
 
     @SubscribeEvent
     public void onChunkUnload(ChunkEvent.Unload event) {
-        ChunkAccess iChunk = event.getChunk();
+        var iChunk = event.getChunk();
         if (iChunk instanceof LevelChunk chunk) {
-            IAuraChunk auraChunk = chunk.getCapability(NaturesAuraAPI.capAuraChunk).orElse(null);
+            var auraChunk = chunk.getCapability(NaturesAuraAPI.capAuraChunk).orElse(null);
             if (auraChunk instanceof AuraChunk) {
-                LevelData data = (LevelData) ILevelData.getLevelData(chunk.getLevel());
+                var data = (LevelData) ILevelData.getLevelData(chunk.getLevel());
                 data.auraChunksWithSpots.remove(chunk.getPos().toLong());
             }
         }
@@ -88,14 +88,14 @@ public class CommonEvents {
 
     @SubscribeEvent
     public void onItemUse(PlayerInteractEvent.RightClickBlock event) {
-        Player player = event.getPlayer();
+        var player = event.getPlayer();
         if (player.level.isClientSide)
             return;
-        ItemStack held = event.getItemStack();
+        var held = event.getItemStack();
         if (!held.isEmpty() && held.getItem().getRegistryName().getPath().contains("chisel")) {
-            BlockState state = player.level.getBlockState(event.getPos());
+            var state = player.level.getBlockState(event.getPos());
             if (NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.containsKey(state)) {
-                LevelData data = (LevelData) ILevelData.getLevelData(player.level);
+                var data = (LevelData) ILevelData.getLevelData(player.level);
                 data.addMossStone(event.getPos());
             }
         }
@@ -108,13 +108,13 @@ public class CommonEvents {
             if (event.world.getGameTime() % 20 == 0) {
                 event.world.getProfiler().push(NaturesAura.MOD_ID + ":onLevelTick");
                 try {
-                    ChunkMap manager = ((ServerChunkCache) event.world.getChunkSource()).chunkMap;
-                    Iterable<ChunkHolder> chunks = (Iterable<ChunkHolder>) GET_LOADED_CHUNKS_METHOD.invoke(manager);
-                    for (ChunkHolder holder : chunks) {
-                        LevelChunk chunk = holder.getTickingChunk();
+                    var manager = ((ServerChunkCache) event.world.getChunkSource()).chunkMap;
+                    var chunks = (Iterable<ChunkHolder>) GET_LOADED_CHUNKS_METHOD.invoke(manager);
+                    for (var holder : chunks) {
+                        var chunk = holder.getTickingChunk();
                         if (chunk == null)
                             continue;
-                        AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
+                        var auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
                         if (auraChunk != null)
                             auraChunk.update();
                     }
@@ -130,14 +130,14 @@ public class CommonEvents {
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (!event.player.level.isClientSide && event.phase == TickEvent.Phase.END) {
             if (event.player.level.getGameTime() % 10 == 0) {
-                List<ChunkPos> pending = PENDING_AURA_CHUNKS.get(event.player.getUUID());
+                var pending = PENDING_AURA_CHUNKS.get(event.player.getUUID());
                 pending.removeIf(p -> this.handleChunkWatchDeferred(event.player, p));
             }
 
             if (event.player.level.getGameTime() % 200 != 0)
                 return;
 
-            int aura = IAuraChunk.triangulateAuraInArea(event.player.level, event.player.blockPosition(), 25);
+            var aura = IAuraChunk.triangulateAuraInArea(event.player.level, event.player.blockPosition(), 25);
             if (aura <= 0)
                 Helper.addAdvancement(event.player, new ResourceLocation(NaturesAura.MOD_ID, "negative_imbalance"), "triggered_in_code");
             else if (aura >= 1500000)
@@ -151,10 +151,10 @@ public class CommonEvents {
     }
 
     private boolean handleChunkWatchDeferred(Player player, ChunkPos pos) {
-        LevelChunk chunk = Helper.getLoadedChunk(player.level, pos.x, pos.z);
+        var chunk = Helper.getLoadedChunk(player.level, pos.x, pos.z);
         if (chunk == null)
             return false;
-        AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
+        var auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
         if (auraChunk == null)
             return false;
         PacketHandler.sendTo(player, auraChunk.makePacket());

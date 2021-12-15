@@ -43,11 +43,11 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     private static int getShapeIndex(BlockState state) {
-        int i = 0;
-        boolean n = state.getValue(NORTH) != RedstoneSide.NONE;
-        boolean e = state.getValue(EAST) != RedstoneSide.NONE;
-        boolean s = state.getValue(SOUTH) != RedstoneSide.NONE;
-        boolean w = state.getValue(WEST) != RedstoneSide.NONE;
+        var i = 0;
+        var n = state.getValue(NORTH) != RedstoneSide.NONE;
+        var e = state.getValue(EAST) != RedstoneSide.NONE;
+        var s = state.getValue(SOUTH) != RedstoneSide.NONE;
+        var w = state.getValue(WEST) != RedstoneSide.NONE;
 
         if (n || s && !n && !e && !w) {
             i |= 1 << Direction.NORTH.ordinal();
@@ -82,7 +82,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockGetter iblockreader = context.getLevel();
-        BlockPos blockpos = context.getClickedPos();
+        var blockpos = context.getClickedPos();
         return this.defaultBlockState().setValue(WEST, this.getSide(iblockreader, blockpos, Direction.WEST)).setValue(EAST, this.getSide(iblockreader, blockpos, Direction.EAST)).setValue(NORTH, this.getSide(iblockreader, blockpos, Direction.NORTH)).setValue(SOUTH, this.getSide(iblockreader, blockpos, Direction.SOUTH));
     }
 
@@ -96,12 +96,12 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     private RedstoneSide getSide(BlockGetter levelIn, BlockPos pos, Direction face) {
-        BlockPos blockpos = pos.relative(face);
-        BlockState blockstate = levelIn.getBlockState(blockpos);
-        BlockPos blockpos1 = pos.above();
-        BlockState blockstate1 = levelIn.getBlockState(blockpos1);
+        var blockpos = pos.relative(face);
+        var blockstate = levelIn.getBlockState(blockpos);
+        var blockpos1 = pos.above();
+        var blockstate1 = levelIn.getBlockState(blockpos1);
         if (!blockstate1.isCollisionShapeFullBlock(levelIn, blockpos1)) {
-            boolean flag = blockstate.isFaceSturdy(levelIn, blockpos, Direction.UP) || blockstate.getBlock() == Blocks.HOPPER;
+            var flag = blockstate.isFaceSturdy(levelIn, blockpos, Direction.UP) || blockstate.getBlock() == Blocks.HOPPER;
             if (flag && this.canConnectTo(levelIn.getBlockState(blockpos.above()))) {
                 if (blockstate.isCollisionShapeFullBlock(levelIn, blockpos)) {
                     return RedstoneSide.UP;
@@ -115,14 +115,14 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     protected boolean canConnectTo(BlockState blockState) {
-        Block block = blockState.getBlock();
+        var block = blockState.getBlock();
         return block == this;
     }
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader levelIn, BlockPos pos) {
-        BlockPos blockpos = pos.below();
-        BlockState blockstate = levelIn.getBlockState(blockpos);
+        var blockpos = pos.below();
+        var blockstate = levelIn.getBlockState(blockpos);
         return blockstate.isFaceSturdy(levelIn, blockpos, Direction.UP) || blockstate.getBlock() == Blocks.HOPPER;
     }
 
@@ -134,14 +134,14 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     @Override
     public void onPlace(BlockState state, Level levelIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (oldState.getBlock() != state.getBlock() && !levelIn.isClientSide) {
-            for (Direction direction : Direction.Plane.VERTICAL) {
+            for (var direction : Direction.Plane.VERTICAL) {
                 levelIn.updateNeighborsAt(pos.relative(direction), this);
             }
-            for (Direction direction1 : Direction.Plane.HORIZONTAL) {
+            for (var direction1 : Direction.Plane.HORIZONTAL) {
                 this.notifyWireNeighborsOfStateChange(levelIn, pos.relative(direction1));
             }
-            for (Direction direction2 : Direction.Plane.HORIZONTAL) {
-                BlockPos blockpos = pos.relative(direction2);
+            for (var direction2 : Direction.Plane.HORIZONTAL) {
+                var blockpos = pos.relative(direction2);
                 if (levelIn.getBlockState(blockpos).isCollisionShapeFullBlock(levelIn, blockpos)) {
                     this.notifyWireNeighborsOfStateChange(levelIn, blockpos.above());
                 } else {
@@ -157,14 +157,14 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
         if (!isMoving && state.getBlock() != newState.getBlock()) {
             super.onRemove(state, levelIn, pos, newState, isMoving);
             if (!levelIn.isClientSide) {
-                for (Direction direction : Direction.values()) {
+                for (var direction : Direction.values()) {
                     levelIn.updateNeighborsAt(pos.relative(direction), this);
                 }
-                for (Direction direction1 : Direction.Plane.HORIZONTAL) {
+                for (var direction1 : Direction.Plane.HORIZONTAL) {
                     this.notifyWireNeighborsOfStateChange(levelIn, pos.relative(direction1));
                 }
-                for (Direction direction2 : Direction.Plane.HORIZONTAL) {
-                    BlockPos blockpos = pos.relative(direction2);
+                for (var direction2 : Direction.Plane.HORIZONTAL) {
+                    var blockpos = pos.relative(direction2);
                     if (levelIn.getBlockState(blockpos).isCollisionShapeFullBlock(levelIn, blockpos)) {
                         this.notifyWireNeighborsOfStateChange(levelIn, blockpos.above());
                     } else {
@@ -188,23 +188,23 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
 
     @Override
     public void updateIndirectNeighbourShapes(BlockState state, LevelAccessor levelIn, BlockPos pos, int flags, int recursionLeft) {
-        BlockPos.MutableBlockPos pool = new BlockPos.MutableBlockPos();
-        for (Direction direction : Direction.Plane.HORIZONTAL) {
-            RedstoneSide redstoneside = state.getValue(RedStoneWireBlock.PROPERTY_BY_DIRECTION.get(direction));
+        var pool = new BlockPos.MutableBlockPos();
+        for (var direction : Direction.Plane.HORIZONTAL) {
+            var redstoneside = state.getValue(RedStoneWireBlock.PROPERTY_BY_DIRECTION.get(direction));
             if (redstoneside != RedstoneSide.NONE && levelIn.getBlockState(pool.set(pos).move(direction)).getBlock() != this) {
                 pool.move(Direction.DOWN);
-                BlockState blockstate = levelIn.getBlockState(pool);
+                var blockstate = levelIn.getBlockState(pool);
                 if (blockstate.getBlock() != Blocks.OBSERVER) {
-                    BlockPos blockpos = pool.relative(direction.getOpposite());
-                    BlockState blockstate1 = blockstate.updateShape(direction.getOpposite(), levelIn.getBlockState(blockpos), levelIn, pool, blockpos);
+                    var blockpos = pool.relative(direction.getOpposite());
+                    var blockstate1 = blockstate.updateShape(direction.getOpposite(), levelIn.getBlockState(blockpos), levelIn, pool, blockpos);
                     updateOrDestroy(blockstate, blockstate1, levelIn, pool, flags);
                 }
 
                 pool.set(pos).move(direction).move(Direction.UP);
-                BlockState blockstate3 = levelIn.getBlockState(pool);
+                var blockstate3 = levelIn.getBlockState(pool);
                 if (blockstate3.getBlock() != Blocks.OBSERVER) {
-                    BlockPos blockpos1 = pool.relative(direction.getOpposite());
-                    BlockState blockstate2 = blockstate3.updateShape(direction.getOpposite(), levelIn.getBlockState(blockpos1), levelIn, pool, blockpos1);
+                    var blockpos1 = pool.relative(direction.getOpposite());
+                    var blockstate2 = blockstate3.updateShape(direction.getOpposite(), levelIn.getBlockState(blockpos1), levelIn, pool, blockpos1);
                     updateOrDestroy(blockstate3, blockstate2, levelIn, pool, flags);
                 }
             }
@@ -216,7 +216,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
         if (levelIn.getBlockState(pos).getBlock() == this) {
             levelIn.updateNeighborsAt(pos, this);
 
-            for (Direction direction : Direction.values()) {
+            for (var direction : Direction.values()) {
                 levelIn.updateNeighborsAt(pos.relative(direction), this);
             }
         }

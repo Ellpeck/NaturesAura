@@ -19,8 +19,8 @@ public class ItemModelGenerator extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        for (IModItem modItem : ModRegistry.ALL_ITEMS) {
-            String name = modItem.getBaseName();
+        for (var modItem : ModRegistry.ALL_ITEMS) {
+            var name = modItem.getBaseName();
             if (modItem instanceof ICustomItemModel) {
                 ((ICustomItemModel) modItem).generateCustomItemModel(this);
             } else if (modItem instanceof Item) {

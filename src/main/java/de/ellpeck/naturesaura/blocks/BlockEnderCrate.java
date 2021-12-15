@@ -26,7 +26,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
@@ -57,7 +56,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
 
     @OnlyIn(Dist.CLIENT)
     public static void addEnderNameInfo(ItemStack stack, List<Component> tooltip) {
-        String name = getEnderName(stack);
+        var name = getEnderName(stack);
         if (name != null && !name.isEmpty()) {
             tooltip.add(new TextComponent(ChatFormatting.DARK_PURPLE + I18n.get("info." + NaturesAura.MOD_ID + ".ender_name", ChatFormatting.ITALIC + name + ChatFormatting.RESET)));
         } else {
@@ -70,18 +69,18 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
         var player = event.getPlayer();
         if (player == null)
             return;
-        ItemStack stack = event.getLeft();
+        var stack = event.getLeft();
         if (stack.getItem() != this.asItem() && stack.getItem() != ModItems.ENDER_ACCESS)
             return;
-        ItemStack second = event.getRight();
+        var second = event.getRight();
         if (second.getItem() != Items.ENDER_EYE || second.getCount() < stack.getCount())
             return;
-        String name = event.getName();
+        var name = event.getName();
         if (name == null || name.isEmpty())
             return;
         if (ILevelData.getOverworldData(player.level).isEnderStorageLocked(name))
             return;
-        ItemStack output = stack.copy();
+        var output = stack.copy();
         output.getOrCreateTag().putString(NaturesAura.MOD_ID + ":ender_name", name);
         event.setOutput(output);
         event.setMaterialCost(stack.getCount());
@@ -91,7 +90,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     @Override
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (!levelIn.isClientSide) {
-            BlockEntity tile = levelIn.getBlockEntity(pos);
+            var tile = levelIn.getBlockEntity(pos);
             if (tile instanceof BlockEntityEnderCrate crate && crate.canOpen()) {
                 crate.drainAura(2500);
                 NetworkHooks.openGui((ServerPlayer) player, crate, pos);
@@ -109,14 +108,14 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
-        for (int i = 0; i < 3; ++i) {
-            int j = rand.nextInt(2) * 2 - 1;
-            int k = rand.nextInt(2) * 2 - 1;
-            double d0 = (double) pos.getX() + 0.5D + 0.25D * (double) j;
+        for (var i = 0; i < 3; ++i) {
+            var j = rand.nextInt(2) * 2 - 1;
+            var k = rand.nextInt(2) * 2 - 1;
+            var d0 = (double) pos.getX() + 0.5D + 0.25D * (double) j;
             double d1 = (float) pos.getY() + rand.nextFloat();
-            double d2 = (double) pos.getZ() + 0.5D + 0.25D * (double) k;
+            var d2 = (double) pos.getZ() + 0.5D + 0.25D * (double) k;
             double d3 = rand.nextFloat() * (float) j;
-            double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
+            var d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = rand.nextFloat() * (float) k;
             levelIn.addParticle(ParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
         }

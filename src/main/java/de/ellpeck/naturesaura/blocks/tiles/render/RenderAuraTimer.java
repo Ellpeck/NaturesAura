@@ -22,19 +22,19 @@ public class RenderAuraTimer implements BlockEntityRenderer<BlockEntityAuraTimer
 
     @Override
     public void render(BlockEntityAuraTimer tile, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
-        ItemStack bottle = tile.getItemHandler().getStackInSlot(0);
+        var bottle = tile.getItemHandler().getStackInSlot(0);
         if (bottle.isEmpty())
             return;
         stack.pushPose();
         stack.translate(4 / 16F, 2.001F / 16, 4 / 16F);
 
-        float percentage = 1 - tile.getTimerPercentage();
+        var percentage = 1 - tile.getTimerPercentage();
         stack.scale(8 / 16F, 6.5F / 16 * percentage, 8 / 16F);
 
-        IAuraType type = ItemAuraBottle.getType(bottle);
-        float r = (type.getColor() >> 16 & 255) / 255F;
-        float g = (type.getColor() >> 8 & 255) / 255F;
-        float b = (type.getColor() & 255) / 255F;
+        var type = ItemAuraBottle.getType(bottle);
+        var r = (type.getColor() >> 16 & 255) / 255F;
+        var g = (type.getColor() >> 8 & 255) / 255F;
+        var b = (type.getColor() & 255) / 255F;
         //this.model.render(stack, buffer.getBuffer(this.model.getRenderType(RES)), combinedLightIn, combinedOverlayIn, r, g, b, 0.75F);
         stack.popPose();
 

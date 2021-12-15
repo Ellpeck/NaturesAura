@@ -32,14 +32,14 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
     @SubscribeEvent
     public void onTreeGrow(SaplingGrowTreeEvent event) {
         var level = event.getWorld();
-        BlockPos pos = event.getPos();
+        var pos = event.getPos();
         if (level instanceof Level && !level.isClientSide() && IAuraType.forLevel((Level) level).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD)
                 && level.getBlockState(pos).getBlock() instanceof SaplingBlock) {
             Helper.getBlockEntitiesInArea(level, pos, 10, tile -> {
                 if (!(tile instanceof BlockEntityOakGenerator))
                     return false;
 
-                Random rand = event.getRand();
+                var rand = event.getRand();
                 if (rand.nextInt(10) == 0)
                     ((BlockEntityOakGenerator) tile).scheduledBigTrees.add(pos);
 

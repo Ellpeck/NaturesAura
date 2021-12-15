@@ -40,9 +40,9 @@ public class ParticleMagic extends Particle {
         this.yd = motionY;
         this.zd = motionZ;
 
-        float r = (color >> 16 & 255) / 255F * (1F - this.random.nextFloat() * 0.25F);
-        float g = (color >> 8 & 255) / 255F * (1F - this.random.nextFloat() * 0.25F);
-        float b = (color & 255) / 255F * (1F - this.random.nextFloat() * 0.25F);
+        var r = (color >> 16 & 255) / 255F * (1F - this.random.nextFloat() * 0.25F);
+        var g = (color >> 8 & 255) / 255F * (1F - this.random.nextFloat() * 0.25F);
+        var b = (color & 255) / 255F * (1F - this.random.nextFloat() * 0.25F);
         this.setColor(r, g, b);
 
         this.alpha = 1F;
@@ -62,7 +62,7 @@ public class ParticleMagic extends Particle {
             this.yd -= 0.04D * (double) this.gravity;
             this.move(this.xd, this.yd, this.zd);
 
-            float lifeRatio = (float) this.age / (float) this.lifetime;
+            var lifeRatio = (float) this.age / (float) this.lifetime;
             if (this.fade && lifeRatio > 0.75F)
                 this.alpha = 1F - (lifeRatio - 0.75F) / 0.25F;
             if (lifeRatio <= 0.25F)
@@ -74,9 +74,9 @@ public class ParticleMagic extends Particle {
 
     @Override
     public void move(double x, double y, double z) {
-        double lastY = y;
+        var lastY = y;
         if (this.hasPhysics && (x != 0 || y != 0 || z != 0)) {
-            Vec3 motion = Entity.collideBoundingBox(null, new Vec3(x, y, z), this.getBoundingBox(), this.level, Collections.emptyList());
+            var motion = Entity.collideBoundingBox(null, new Vec3(x, y, z), this.getBoundingBox(), this.level, Collections.emptyList());
             x = motion.x;
             y = motion.y;
             z = motion.z;
@@ -94,22 +94,22 @@ public class ParticleMagic extends Particle {
 
     @Override
     public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
-        Vec3 vec3d = renderInfo.getPosition();
-        float f = (float) (Mth.lerp(partialTicks, this.xo, this.x) - vec3d.x);
-        float f1 = (float) (Mth.lerp(partialTicks, this.yo, this.y) - vec3d.y);
-        float f2 = (float) (Mth.lerp(partialTicks, this.zo, this.z) - vec3d.z);
-        Quaternion quaternion = renderInfo.rotation();
-        Vector3f[] avector3f = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
-        float f4 = 0.1F * this.particleScale;
+        var vec3d = renderInfo.getPosition();
+        var f = (float) (Mth.lerp(partialTicks, this.xo, this.x) - vec3d.x);
+        var f1 = (float) (Mth.lerp(partialTicks, this.yo, this.y) - vec3d.y);
+        var f2 = (float) (Mth.lerp(partialTicks, this.zo, this.z) - vec3d.z);
+        var quaternion = renderInfo.rotation();
+        var avector3f = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
+        var f4 = 0.1F * this.particleScale;
 
-        for (int i = 0; i < 4; ++i) {
-            Vector3f vector3f = avector3f[i];
+        for (var i = 0; i < 4; ++i) {
+            var vector3f = avector3f[i];
             vector3f.transform(quaternion);
             vector3f.mul(f4);
             vector3f.add(f, f1, f2);
         }
 
-        int j = this.getLightColor(partialTicks);
+        var j = this.getLightColor(partialTicks);
         buffer.vertex(avector3f[0].x(), avector3f[0].y(), avector3f[0].z()).uv(0, 1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
         buffer.vertex(avector3f[1].x(), avector3f[1].y(), avector3f[1].z()).uv(1, 1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
         buffer.vertex(avector3f[2].x(), avector3f[2].y(), avector3f[2].z()).uv(1, 0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();

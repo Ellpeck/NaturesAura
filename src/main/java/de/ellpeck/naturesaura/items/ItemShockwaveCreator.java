@@ -44,7 +44,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
         if (levelIn.isClientSide || !(entityIn instanceof LivingEntity living))
             return;
         if (!living.isOnGround()) {
-            CompoundTag compound = stack.getOrCreateTag();
+            var compound = stack.getOrCreateTag();
             if (compound.getBoolean("air"))
                 return;
 
@@ -55,7 +55,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
         } else {
             if (!stack.hasTag())
                 return;
-            CompoundTag compound = stack.getTag();
+            var compound = stack.getTag();
             if (!compound.getBoolean("air"))
                 return;
 
@@ -73,13 +73,13 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                 source = DamageSource.playerAttack((Player) living);
             else
                 source = DamageSource.MAGIC;
-            boolean infusedSet = ItemArmor.isFullSetEquipped(living, ModArmorMaterial.INFUSED);
+            var infusedSet = ItemArmor.isFullSetEquipped(living, ModArmorMaterial.INFUSED);
 
-            int range = 5;
-            List<LivingEntity> mobs = levelIn.getEntitiesOfClass(LivingEntity.class, new AABB(
+            var range = 5;
+            var mobs = levelIn.getEntitiesOfClass(LivingEntity.class, new AABB(
                     living.getX() - range, living.getY() - 0.5, living.getZ() - range,
                     living.getX() + range, living.getY() + 0.5, living.getZ() + range));
-            for (LivingEntity mob : mobs) {
+            for (var mob : mobs) {
                 if (!mob.isAlive() || mob == living)
                     continue;
                 if (living.distanceToSqr(mob) > range * range)
@@ -92,12 +92,12 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
                     mob.addEffect(new MobEffectInstance(MobEffects.WITHER, 120));
             }
 
-            BlockPos pos = living.blockPosition();
-            BlockPos down = pos.below();
-            BlockState downState = levelIn.getBlockState(down);
+            var pos = living.blockPosition();
+            var down = pos.below();
+            var downState = levelIn.getBlockState(down);
 
             if (downState.getMaterial() != Material.AIR) {
-                SoundType type = downState.getBlock().getSoundType(downState, levelIn, down, null);
+                var type = downState.getBlock().getSoundType(downState, levelIn, down, null);
                 levelIn.playSound(null, pos, type.getBreakSound(), SoundSource.BLOCKS, type.getVolume() * 0.5F, type.getPitch() * 0.8F);
             }
 
@@ -109,7 +109,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
     @OnlyIn(Dist.CLIENT)
     public void render(ItemStack stack, Player player, RenderType type, PoseStack matrices, MultiBufferSource buffer, int packedLight, boolean isHolding) {
         if (type == RenderType.BODY && !isHolding) {
-            boolean armor = !player.getInventory().armor.get(EquipmentSlot.CHEST.getIndex()).isEmpty();
+            var armor = !player.getInventory().armor.get(EquipmentSlot.CHEST.getIndex()).isEmpty();
             matrices.translate(0, 0.125F, armor ? -0.195F : -0.1475F);
             matrices.scale(0.3F, 0.3F, 0.3F);
             matrices.mulPose(Vector3f.XP.rotationDegrees(180));

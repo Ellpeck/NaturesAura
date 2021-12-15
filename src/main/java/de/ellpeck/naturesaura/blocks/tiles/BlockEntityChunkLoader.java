@@ -45,15 +45,15 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
     private void loadChunks(boolean unload) {
         if (this.level.isClientSide || !ModConfig.instance.chunkLoader.get())
             return;
-        ServerLevel level = (ServerLevel) this.level;
+        var level = (ServerLevel) this.level;
 
         List<ChunkPos> shouldBeForced = new ArrayList<>();
         if (!unload) {
-            int range = this.range();
+            var range = this.range();
             if (range > 0) {
-                for (int x = (this.worldPosition.getX() - range) >> 4; x <= (this.worldPosition.getX() + range) >> 4; x++) {
-                    for (int z = (this.worldPosition.getZ() - range) >> 4; z <= (this.worldPosition.getZ() + range) >> 4; z++) {
-                        ChunkPos pos = new ChunkPos(x, z);
+                for (var x = (this.worldPosition.getX() - range) >> 4; x <= (this.worldPosition.getX() + range) >> 4; x++) {
+                    for (var z = (this.worldPosition.getZ() - range) >> 4; z <= (this.worldPosition.getZ() + range) >> 4; z++) {
+                        var pos = new ChunkPos(x, z);
                         // Only force chunks that we're already forcing or that nobody else is forcing
                         if (this.forcedChunks.contains(pos) || !level.getForcedChunks().contains(pos.toLong()))
                             shouldBeForced.add(pos);
@@ -63,14 +63,14 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
         }
 
         // Unforce all the chunks that shouldn't be forced anymore
-        for (ChunkPos pos : this.forcedChunks) {
+        for (var pos : this.forcedChunks) {
             if (!shouldBeForced.contains(pos))
                 level.setChunkForced(pos.x, pos.z, false);
         }
         this.forcedChunks.clear();
 
         // Force all chunks that should be forced
-        for (ChunkPos pos : shouldBeForced) {
+        for (var pos : shouldBeForced) {
             level.setChunkForced(pos.x, pos.z, true);
             this.forcedChunks.add(pos);
         }
@@ -88,9 +88,9 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
 
             if (this.level.getGameTime() % 20 != 0)
                 return;
-            int toUse = Mth.ceil(this.range() / 2F);
+            var toUse = Mth.ceil(this.range() / 2F);
             if (toUse > 0) {
-                BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
+                var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
                 IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, toUse);
             }
         }

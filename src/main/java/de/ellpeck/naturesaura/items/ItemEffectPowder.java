@@ -26,7 +26,7 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
     public static ResourceLocation getEffect(ItemStack stack) {
         if (!stack.hasTag())
             return null;
-        String effect = stack.getTag().getString("effect");
+        var effect = stack.getTag().getString("effect");
         if (effect.isEmpty())
             return null;
         return new ResourceLocation(effect);
@@ -39,10 +39,10 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        Level level = context.getLevel();
+        var level = context.getLevel();
         if (!level.isClientSide) {
-            Vec3 hit = context.getClickLocation();
-            ItemStack stack = context.getPlayer().getItemInHand(context.getHand());
+            var hit = context.getClickLocation();
+            var stack = context.getPlayer().getItemInHand(context.getHand());
             EntityEffectInhibitor.place(level, stack, hit.x, hit.y + 1, hit.z);
             stack.setCount(0);
         }
@@ -52,8 +52,8 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
     @Override
     public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
         if (this.allowdedIn(tab)) {
-            for (ResourceLocation effect : NaturesAuraAPI.EFFECT_POWDERS.keySet()) {
-                ItemStack stack = new ItemStack(this);
+            for (var effect : NaturesAuraAPI.EFFECT_POWDERS.keySet()) {
+                var stack = new ItemStack(this);
                 setEffect(stack, effect);
                 items.add(stack);
             }

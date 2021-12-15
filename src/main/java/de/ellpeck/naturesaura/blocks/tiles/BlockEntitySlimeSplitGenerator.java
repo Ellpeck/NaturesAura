@@ -23,7 +23,7 @@ public class BlockEntitySlimeSplitGenerator extends BlockEntityImpl implements I
         if (this.level.isClientSide || this.level.getGameTime() % 10 != 0)
             return;
         if (this.generationTimer > 0) {
-            int amount = this.amountToRelease * 10;
+            var amount = this.amountToRelease * 10;
             if (this.canGenerateRightNow(amount)) {
                 this.generateAura(amount);
                 PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.SLIME_SPLIT_GEN_CREATE, this.color));
@@ -42,7 +42,7 @@ public class BlockEntitySlimeSplitGenerator extends BlockEntityImpl implements I
     }
 
     public void startGenerating(Slime slime) {
-        int size = slime.getSize();
+        var size = slime.getSize();
         this.generationTimer = size * 30;
         this.amountToRelease = (size * this.getGenerationAmount(slime)) / this.generationTimer;
         this.color = this.getSlimeColor(slime);

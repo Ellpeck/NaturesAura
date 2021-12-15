@@ -44,21 +44,21 @@ public class LevelData implements ILevelData {
 
     @Override
     public CompoundTag serializeNBT() {
-        CompoundTag compound = new CompoundTag();
+        var compound = new CompoundTag();
 
-        ListTag storages = new ListTag();
-        for (Map.Entry<String, ItemStackHandlerNA> entry : this.enderStorages.entrySet()) {
-            ItemStackHandlerNA handler = entry.getValue();
+        var storages = new ListTag();
+        for (var entry : this.enderStorages.entrySet()) {
+            var handler = entry.getValue();
             if (Helper.isEmpty(handler))
                 continue;
-            CompoundTag storageComp = handler.serializeNBT();
+            var storageComp = handler.serializeNBT();
             storageComp.putString("name", entry.getKey());
             storages.add(storageComp);
         }
         compound.put("storages", storages);
 
-        ListTag moss = new ListTag();
-        for (BlockPos pos : this.recentlyConvertedMossStones)
+        var moss = new ListTag();
+        for (var pos : this.recentlyConvertedMossStones)
             moss.add(LongTag.valueOf(pos.asLong()));
         compound.put("converted_moss", moss);
 
@@ -68,14 +68,14 @@ public class LevelData implements ILevelData {
     @Override
     public void deserializeNBT(CompoundTag compound) {
         this.enderStorages.clear();
-        for (Tag base : compound.getList("storages", 10)) {
-            CompoundTag storageComp = (CompoundTag) base;
-            ItemStackHandlerNA storage = this.getEnderStorage(storageComp.getString("name"));
+        for (var base : compound.getList("storages", 10)) {
+            var storageComp = (CompoundTag) base;
+            var storage = this.getEnderStorage(storageComp.getString("name"));
             storage.deserializeNBT(storageComp);
         }
 
         this.recentlyConvertedMossStones.clear();
-        for (Tag base : compound.getList("converted_moss", Tag.TAG_LONG))
+        for (var base : compound.getList("converted_moss", Tag.TAG_LONG))
             this.recentlyConvertedMossStones.add(BlockPos.of(((LongTag) base).getAsLong()));
     }
 
@@ -86,9 +86,9 @@ public class LevelData implements ILevelData {
 
     @Override
     public boolean isEnderStorageLocked(String name) {
-        ItemStackHandlerNA handler = this.getEnderStorage(name);
-        for (int i = 0; i < handler.getSlots(); i++) {
-            ItemStack stack = handler.getStackInSlot(i);
+        var handler = this.getEnderStorage(name);
+        for (var i = 0; i < handler.getSlots(); i++) {
+            var stack = handler.getStackInSlot(i);
             if (!stack.isEmpty() && stack.getItem() == ModItems.TOKEN_TERROR)
                 return true;
         }

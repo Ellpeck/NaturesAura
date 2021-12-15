@@ -20,17 +20,17 @@ public class RenderWoodStand implements BlockEntityRenderer<BlockEntityWoodStand
 
     @Override
     public void render(BlockEntityWoodStand tileEntityWoodStand, float v, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int i, int i1) {
-        ItemStack stack = tileEntityWoodStand.items.getStackInSlot(0);
+        var stack = tileEntityWoodStand.items.getStackInSlot(0);
         if (!stack.isEmpty()) {
             matrixStack.pushPose();
-            Item item = stack.getItem();
+            var item = stack.getItem();
             if (item instanceof BlockItem blockItem && blockItem.getBlock().defaultBlockState().getMaterial().isSolid()) {
                 matrixStack.translate(0.5F, 0.755F, 0.5F);
-                float scale = 0.95F;
+                var scale = 0.95F;
                 matrixStack.scale(scale, scale, scale);
             } else {
                 matrixStack.translate(0.5F, 0.825F, 0.4F);
-                float scale = 0.75F;
+                var scale = 0.75F;
                 matrixStack.scale(scale, scale, scale);
                 matrixStack.mulPose(Vector3f.XP.rotationDegrees(90));
             }

@@ -32,7 +32,7 @@ public class NetherGrassEffect implements IDrainSpotEffect {
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot <= 0)
             return false;
-        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 30);
+        var auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 30);
         int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
@@ -65,26 +65,26 @@ public class NetherGrassEffect implements IDrainSpotEffect {
             return;
         if (!this.calcValues(level, pos, spot))
             return;
-        for (int i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
-            int x = Mth.floor(pos.getX() + level.random.nextGaussian() * this.dist);
-            int y = Mth.floor(pos.getY() + level.random.nextGaussian() * this.dist);
-            int z = Mth.floor(pos.getZ() + level.random.nextGaussian() * this.dist);
+        for (var i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
+            var x = Mth.floor(pos.getX() + level.random.nextGaussian() * this.dist);
+            var y = Mth.floor(pos.getY() + level.random.nextGaussian() * this.dist);
+            var z = Mth.floor(pos.getZ() + level.random.nextGaussian() * this.dist);
 
-            for (int yOff = -5; yOff <= 5; yOff++) {
-                BlockPos goalPos = new BlockPos(x, y + yOff, z);
+            for (var yOff = -5; yOff <= 5; yOff++) {
+                var goalPos = new BlockPos(x, y + yOff, z);
                 if (goalPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(goalPos)) {
                     if (NaturesAuraAPI.instance().isEffectPowderActive(level, goalPos, NAME))
                         continue;
-                    BlockPos up = goalPos.above();
+                    var up = goalPos.above();
                     if (level.getBlockState(up).isFaceSturdy(level, up, Direction.DOWN))
                         continue;
 
-                    BlockState state = level.getBlockState(goalPos);
-                    Block block = state.getBlock();
+                    var state = level.getBlockState(goalPos);
+                    var block = state.getBlock();
                     if (Tags.Blocks.NETHERRACK.contains(block)) {
                         level.setBlockAndUpdate(goalPos, ModBlocks.NETHER_GRASS.defaultBlockState());
 
-                        BlockPos closestSpot = IAuraChunk.getHighestSpot(level, goalPos, 25, pos);
+                        var closestSpot = IAuraChunk.getHighestSpot(level, goalPos, 25, pos);
                         IAuraChunk.getAuraChunk(level, closestSpot).drainAura(closestSpot, 500);
 
                         PacketHandler.sendToAllAround(level, goalPos, 32,

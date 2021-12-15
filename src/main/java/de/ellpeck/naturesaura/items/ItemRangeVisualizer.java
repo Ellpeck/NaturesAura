@@ -53,7 +53,7 @@ public class ItemRangeVisualizer extends ItemImpl {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
-        ItemStack stack = playerIn.getItemInHand(handIn);
+        var stack = playerIn.getItemInHand(handIn);
         if (playerIn.isCrouching()) {
             clear();
             playerIn.displayClientMessage(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.end_all"), true);
@@ -64,10 +64,10 @@ public class ItemRangeVisualizer extends ItemImpl {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        Level level = context.getLevel();
-        BlockPos pos = context.getClickedPos();
-        BlockState state = level.getBlockState(pos);
-        Block block = state.getBlock();
+        var level = context.getLevel();
+        var pos = context.getClickedPos();
+        var state = level.getBlockState(pos);
+        var block = state.getBlock();
         if (block instanceof IVisualizable) {
             if (level.isClientSide)
                 visualize(context.getPlayer(), VISUALIZED_BLOCKS, level.dimension().location(), pos);
@@ -80,13 +80,13 @@ public class ItemRangeVisualizer extends ItemImpl {
 
         @SubscribeEvent
         public void onInteract(PlayerInteractEvent.EntityInteractSpecific event) {
-            ItemStack stack = event.getItemStack();
+            var stack = event.getItemStack();
             if (stack.isEmpty() || stack.getItem() != ItemRangeVisualizer.this)
                 return;
-            Entity entity = event.getTarget();
+            var entity = event.getTarget();
             if (entity instanceof IVisualizable) {
                 if (entity.level.isClientSide) {
-                    ResourceLocation dim = entity.level.dimension().location();
+                    var dim = entity.level.dimension().location();
                     visualize(event.getPlayer(), VISUALIZED_ENTITIES, dim, entity);
                 }
                 event.getPlayer().swing(event.getHand());

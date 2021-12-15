@@ -35,7 +35,7 @@ public interface IAuraChunk extends INBTSerializable<CompoundTag> {
      * @return The {@link IAuraChunk} instance belonging to the chunk
      */
     static IAuraChunk getAuraChunk(Level level, BlockPos pos) {
-        LevelChunk chunk = (LevelChunk) level.getChunk(pos);
+        var chunk = (LevelChunk) level.getChunk(pos);
         return chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
     }
 

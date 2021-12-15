@@ -20,8 +20,8 @@ public class RenderEnderCrate implements BlockEntityRenderer<BlockEntityEnderCra
 
     @Override
     public void render(BlockEntityEnderCrate tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        Matrix4f matrix4f = matrixStackIn.last().pose();
-        float f1 = RenderEnderCrate.getOffsetUp();
+        var matrix4f = matrixStackIn.last().pose();
+        var f1 = RenderEnderCrate.getOffsetUp();
         RenderEnderCrate.renderFace(matrix4f, bufferIn.getBuffer(RenderEnderCrate.renderType()), f1, f1);
     }
 

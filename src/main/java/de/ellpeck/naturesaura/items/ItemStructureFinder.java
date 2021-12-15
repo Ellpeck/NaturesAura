@@ -27,11 +27,11 @@ public class ItemStructureFinder extends ItemImpl {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
-        ItemStack stack = playerIn.getItemInHand(handIn);
+        var stack = playerIn.getItemInHand(handIn);
         if (!levelIn.isClientSide && ((ServerLevel) levelIn).structureFeatureManager().shouldGenerateFeatures()) {
-            BlockPos pos = ((ServerLevel) levelIn).getChunkSource().getGenerator().findNearestMapFeature((ServerLevel) levelIn, this.structureName, playerIn.blockPosition(), this.radius, false);
+            var pos = ((ServerLevel) levelIn).getChunkSource().getGenerator().findNearestMapFeature((ServerLevel) levelIn, this.structureName, playerIn.blockPosition(), this.radius, false);
             if (pos != null) {
-                EntityStructureFinder entity = new EntityStructureFinder(ModEntities.STRUCTURE_FINDER, levelIn);
+                var entity = new EntityStructureFinder(ModEntities.STRUCTURE_FINDER, levelIn);
                 entity.setPos(playerIn.getX(), playerIn.getY(0.5D), playerIn.getZ());
                 entity.setItem(stack);
                 entity.getEntityData().set(EntityStructureFinder.COLOR, this.color);

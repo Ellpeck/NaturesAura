@@ -21,9 +21,9 @@ public class BlockSnowCreator extends BlockContainerImpl implements IVisualizabl
     @Override
     @OnlyIn(Dist.CLIENT)
     public AABB getVisualizationBounds(Level level, BlockPos pos) {
-        BlockEntity tile = level.getBlockEntity(pos);
+        var tile = level.getBlockEntity(pos);
         if (tile instanceof BlockEntitySnowCreator) {
-            int radius = ((BlockEntitySnowCreator) tile).getRange();
+            var radius = ((BlockEntitySnowCreator) tile).getRange();
             if (radius > 0)
                 return new AABB(pos).inflate(radius);
         }

@@ -30,7 +30,7 @@ public class PacketClient {
     }
 
     public static PacketClient fromBytes(FriendlyByteBuf buf) {
-        PacketClient client = new PacketClient();
+        var client = new PacketClient();
         client.type = buf.readByte();
         client.data = buf.readNbt();
         return client;
@@ -47,15 +47,15 @@ public class PacketClient {
         ctx.get().enqueueWork(new Runnable() {
             @Override
             public void run() {
-                Minecraft mc = Minecraft.getInstance();
+                var mc = Minecraft.getInstance();
                 if (mc.level != null) {
                     switch (message.type) {
                         case 0: // dimension rail visualization
-                            ResourceLocation goalDim = new ResourceLocation(message.data.getString("dim"));
-                            BlockPos goalPos = BlockPos.of(message.data.getLong("pos"));
+                            var goalDim = new ResourceLocation(message.data.getString("dim"));
+                            var goalPos = BlockPos.of(message.data.getLong("pos"));
                             ItemRangeVisualizer.visualize(mc.player, ItemRangeVisualizer.VISUALIZED_RAILS, goalDim, goalPos);
                         case 1:
-                            Entity entity = mc.level.getEntity(message.data.getInt("id"));
+                            var entity = mc.level.getEntity(message.data.getInt("id"));
                             mc.particleEngine.createTrackingEmitter(entity, ParticleTypes.TOTEM_OF_UNDYING, 30);
                             mc.level.playLocalSound(entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TOTEM_USE, entity.getSoundSource(), 1.0F, 1.0F, false);
                             if (entity == mc.player) {

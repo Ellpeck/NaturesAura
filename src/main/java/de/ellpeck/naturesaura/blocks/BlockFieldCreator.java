@@ -33,17 +33,17 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
 
     @Override
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult p_225533_6_) {
-        BlockEntity tile = levelIn.getBlockEntity(pos);
+        var tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityFieldCreator) {
             if (!levelIn.isClientSide) {
-                String key = NaturesAura.MOD_ID + ":field_creator_pos";
-                CompoundTag compound = player.getPersistentData();
+                var key = NaturesAura.MOD_ID + ":field_creator_pos";
+                var compound = player.getPersistentData();
                 if (!player.isCrouching() && compound.contains(key)) {
-                    BlockPos stored = BlockPos.of(compound.getLong(key));
-                    BlockEntityFieldCreator creator = (BlockEntityFieldCreator) tile;
+                    var stored = BlockPos.of(compound.getLong(key));
+                    var creator = (BlockEntityFieldCreator) tile;
                     if (!pos.equals(stored)) {
                         if (creator.isCloseEnough(stored)) {
-                            BlockEntity otherTile = levelIn.getBlockEntity(stored);
+                            var otherTile = levelIn.getBlockEntity(stored);
                             if (otherTile instanceof BlockEntityFieldCreator otherCreator) {
                                 creator.connectionOffset = stored.subtract(pos);
                                 creator.isMain = true;
@@ -74,9 +74,9 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
-        BlockEntity tile = levelIn.getBlockEntity(pos);
+        var tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityFieldCreator creator && creator.isCharged) {
-            BlockPos connected = creator.getConnectedPos();
+            var connected = creator.getConnectedPos();
             if (connected != null)
                 NaturesAuraAPI.instance().spawnParticleStream(
                         pos.getX() + 0.25F + rand.nextFloat() * 0.5F,

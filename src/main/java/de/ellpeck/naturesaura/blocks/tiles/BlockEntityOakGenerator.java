@@ -21,10 +21,10 @@ public class BlockEntityOakGenerator extends BlockEntityImpl implements ITickabl
     public void tick() {
         if (!this.level.isClientSide)
             while (!this.scheduledBigTrees.isEmpty()) {
-                BlockPos pos = this.scheduledBigTrees.remove();
+                var pos = this.scheduledBigTrees.remove();
                 if (this.level.getBlockState(pos).getBlock().getTags().contains(BlockTags.LOGS.getName())) {
-                    int toAdd = 100000;
-                    boolean canGen = this.canGenerateRightNow(toAdd);
+                    var toAdd = 100000;
+                    var canGen = this.canGenerateRightNow(toAdd);
                     if (canGen)
                         this.generateAura(toAdd);
 

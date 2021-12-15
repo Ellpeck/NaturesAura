@@ -31,7 +31,7 @@ public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemB
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
-        for (int i = 0; i < 2; i++)
+        for (var i = 0; i < 2; i++)
             NaturesAuraAPI.instance().spawnMagicParticle(
                     pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
                     rand.nextGaussian() * 0.015F, 0, rand.nextGaussian() * 0.015F,

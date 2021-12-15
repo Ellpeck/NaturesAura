@@ -38,12 +38,12 @@ public class ItemPetReviver extends ItemImpl {
 
         @SubscribeEvent
         public void onEntityTick(LivingEvent.LivingUpdateEvent event) {
-            LivingEntity entity = event.getEntityLiving();
+            var entity = event.getEntityLiving();
             if (entity.level.isClientSide || entity.level.getGameTime() % 20 != 0 || !(entity instanceof TamableAnimal tameable))
                 return;
             if (!tameable.isTame() || !tameable.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":pet_reviver"))
                 return;
-            LivingEntity owner = tameable.getOwner();
+            var owner = tameable.getOwner();
             if (owner == null || owner.distanceToSqr(tameable) > 5 * 5)
                 return;
             if (entity.level.random.nextFloat() >= 0.65F) {
@@ -58,12 +58,12 @@ public class ItemPetReviver extends ItemImpl {
         // we need to use the event since the item doesn't receive the interaction for tamed pets...
         @SubscribeEvent
         public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
-            Entity target = event.getTarget();
+            var target = event.getTarget();
             if (!(target instanceof TamableAnimal) || !((TamableAnimal) target).isTame())
                 return;
             if (target.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":pet_reviver"))
                 return;
-            ItemStack stack = event.getPlayer().getItemInHand(event.getHand());
+            var stack = event.getPlayer().getItemInHand(event.getHand());
             if (stack.getItem() != ModItems.PET_REVIVER)
                 return;
             target.getPersistentData().putBoolean(NaturesAura.MOD_ID + ":pet_reviver", true);
@@ -76,24 +76,24 @@ public class ItemPetReviver extends ItemImpl {
         // we want to be sure that the pet is really dying, so we want to receive the event last
         @SubscribeEvent(priority = EventPriority.LOWEST)
         public void onLivingDeath(LivingDeathEvent event) {
-            LivingEntity entity = event.getEntityLiving();
+            var entity = event.getEntityLiving();
             if (entity.level.isClientSide || !(entity instanceof TamableAnimal tameable))
                 return;
             if (!tameable.isTame() || !tameable.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":pet_reviver"))
                 return;
 
             // get the overworld, and the overworld's spawn point, by default
-            ServerLevel spawnLevel = tameable.level.getServer().overworld();
-            Vec3 spawn = Vec3.atBottomCenterOf(spawnLevel.getSharedSpawnPos());
+            var spawnLevel = tameable.level.getServer().overworld();
+            var spawn = Vec3.atBottomCenterOf(spawnLevel.getSharedSpawnPos());
 
             // check if the owner is online, and respawn at the bed if they are
-            LivingEntity owner = tameable.getOwner();
+            var owner = tameable.getOwner();
             if (owner instanceof ServerPlayer player) {
-                BlockPos pos = player.getRespawnPosition();
+                var pos = player.getRespawnPosition();
                 if (pos != null) {
-                    float f = player.getRespawnAngle();
-                    boolean b = player.isRespawnForced();
-                    Optional<Vec3> bed = Player.findRespawnPositionAndUseSpawnBlock((ServerLevel) player.level, pos, f, b, false);
+                    var f = player.getRespawnAngle();
+                    var b = player.isRespawnForced();
+                    var bed = Player.findRespawnPositionAndUseSpawnBlock((ServerLevel) player.level, pos, f, b, false);
                     if (bed.isPresent()) {
                         spawnLevel = (ServerLevel) player.level;
                         spawn = bed.get();
@@ -103,7 +103,7 @@ public class ItemPetReviver extends ItemImpl {
 
             PacketHandler.sendToAllAround(tameable.level, tameable.blockPosition(), 32, new PacketParticles((float) tameable.getX(), (float) tameable.getEyeY(), (float) tameable.getZ(), PacketParticles.Type.PET_REVIVER, 0xc2461d));
 
-            TamableAnimal spawnedPet = tameable;
+            var spawnedPet = tameable;
             if (tameable.level != spawnLevel) {
                 ((ServerLevel) tameable.level).removeEntity(tameable, true);
                 spawnedPet = (TamableAnimal) tameable.getType().create(spawnLevel);
@@ -126,7 +126,7 @@ public class ItemPetReviver extends ItemImpl {
             }
 
             // drain aura
-            BlockPos auraPos = IAuraChunk.getHighestSpot(spawnLevel, spawnedPet.blockPosition(), 35, spawnedPet.blockPosition());
+            var auraPos = IAuraChunk.getHighestSpot(spawnLevel, spawnedPet.blockPosition(), 35, spawnedPet.blockPosition());
             IAuraChunk.getAuraChunk(spawnLevel, auraPos).drainAura(auraPos, 200000);
 
             PacketHandler.sendToAllAround(spawnedPet.level, spawnedPet.blockPosition(), 32, new PacketParticles((float) spawnedPet.getX(), (float) spawnedPet.getEyeY(), (float) spawnedPet.getZ(), PacketParticles.Type.PET_REVIVER, 0x4dba2f));

@@ -32,7 +32,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot <= 0)
             return false;
-        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 30);
+        var auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 30);
         int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
@@ -63,16 +63,16 @@ public class PlantBoostEffect implements IDrainSpotEffect {
     public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(level, pos, spot))
             return;
-        for (int i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
-            int x = Mth.floor(pos.getX() + (2 * level.random.nextFloat() - 1) * this.dist);
-            int z = Mth.floor(pos.getZ() + (2 * level.random.nextFloat() - 1) * this.dist);
-            BlockPos plantPos = new BlockPos(x, level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z).below();
+        for (var i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
+            var x = Mth.floor(pos.getX() + (2 * level.random.nextFloat() - 1) * this.dist);
+            var z = Mth.floor(pos.getZ() + (2 * level.random.nextFloat() - 1) * this.dist);
+            var plantPos = new BlockPos(x, level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z).below();
             if (plantPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(plantPos)) {
                 if (NaturesAuraAPI.instance().isEffectPowderActive(level, plantPos, NAME))
                     continue;
 
-                BlockState state = level.getBlockState(plantPos);
-                Block block = state.getBlock();
+                var state = level.getBlockState(plantPos);
+                var block = state.getBlock();
                 if (block instanceof BonemealableBlock growable && !(block instanceof DoublePlantBlock) && !(block instanceof TallGrassBlock) && block != Blocks.GRASS_BLOCK) {
                     if (growable.isValidBonemealTarget(level, plantPos, state, false)) {
                         try {
@@ -81,7 +81,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
                             // a lot of stuff throws here (double plants where generation only caused half of it to exist, bamboo at level height...)
                             // so just catch all, bleh
                         }
-                        BlockPos closestSpot = IAuraChunk.getHighestSpot(level, plantPos, 25, pos);
+                        var closestSpot = IAuraChunk.getHighestSpot(level, plantPos, 25, pos);
                         IAuraChunk.getAuraChunk(level, closestSpot).drainAura(closestSpot, 3500);
 
                         PacketHandler.sendToAllAround(level, plantPos, 32,

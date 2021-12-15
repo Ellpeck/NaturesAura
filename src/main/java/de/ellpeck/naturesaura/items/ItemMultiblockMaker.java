@@ -39,10 +39,10 @@ public class ItemMultiblockMaker extends ItemImpl {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
-        ItemStack stack = playerIn.getItemInHand(handIn);
+        var stack = playerIn.getItemInHand(handIn);
         if (!levelIn.isClientSide && playerIn.isCreative()) {
-            int curr = getMultiblock(stack);
-            int next = (curr + 1) % multiblocks().size();
+            var curr = getMultiblock(stack);
+            var next = (curr + 1) % multiblocks().size();
             stack.getOrCreateTag().putInt("multiblock", next);
         }
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
@@ -50,12 +50,12 @@ public class ItemMultiblockMaker extends ItemImpl {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        Player player = context.getPlayer();
+        var player = context.getPlayer();
         if (player.isCreative()) {
-            int id = getMultiblock(player.getItemInHand(context.getHand()));
+            var id = getMultiblock(player.getItemInHand(context.getHand()));
             if (id < 0)
                 return InteractionResult.PASS;
-            IMultiblock multi = multiblocks().get(id);
+            var multi = multiblocks().get(id);
             if (multi == null)
                 return InteractionResult.PASS;
 
@@ -72,11 +72,11 @@ public class ItemMultiblockMaker extends ItemImpl {
 
     @Override
     public Component getName(ItemStack stack) {
-        MutableComponent name = (MutableComponent) super.getName(stack);
-        int id = getMultiblock(stack);
+        var name = (MutableComponent) super.getName(stack);
+        var id = getMultiblock(stack);
         if (id < 0)
             return name;
-        IMultiblock multi = multiblocks().get(id);
+        var multi = multiblocks().get(id);
         return multi == null ? name : name.append(" (" + multi.getName() + ")");
     }
 

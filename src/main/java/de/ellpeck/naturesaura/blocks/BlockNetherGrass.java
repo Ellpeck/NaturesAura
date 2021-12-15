@@ -21,8 +21,8 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, Bo
 
     @Override
     public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
-        BlockPos up = pos.above();
-        BlockState upState = levelIn.getBlockState(up);
+        var up = pos.above();
+        var upState = levelIn.getBlockState(up);
         if (upState.isFaceSturdy(levelIn, up, Direction.DOWN))
             levelIn.setBlockAndUpdate(pos, Blocks.NETHERRACK.defaultBlockState());
     }
@@ -47,16 +47,16 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, Bo
 
     @Override
     public void performBonemeal(ServerLevel level, Random rand, BlockPos pos, BlockState state) {
-        BlockPos blockpos = pos.above();
-        BlockState blockstate = Blocks.GRASS.defaultBlockState();
+        var blockpos = pos.above();
+        var blockstate = Blocks.GRASS.defaultBlockState();
 
-        for (int i = 0; i < 128; ++i) {
-            BlockPos blockpos1 = blockpos;
-            int j = 0;
+        for (var i = 0; i < 128; ++i) {
+            var blockpos1 = blockpos;
+            var j = 0;
 
             while (true) {
                 if (j >= i / 16) {
-                    BlockState blockstate2 = level.getBlockState(blockpos1);
+                    var blockstate2 = level.getBlockState(blockpos1);
                     if (blockstate2.getBlock() == blockstate.getBlock() && rand.nextInt(10) == 0) {
                         ((BonemealableBlock) blockstate.getBlock()).performBonemeal(level, rand, blockpos1, blockstate2);
                     }

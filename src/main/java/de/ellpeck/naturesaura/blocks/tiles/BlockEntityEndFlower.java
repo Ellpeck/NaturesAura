@@ -31,7 +31,7 @@ public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBl
 
         @Override
         public int drainAura(int amountToDrain, boolean simulate) {
-            int amount = super.drainAura(amountToDrain, simulate);
+            var amount = super.drainAura(amountToDrain, simulate);
             if (amount > 0 && !simulate)
                 BlockEntityEndFlower.this.sendToClients();
             return amount;
@@ -56,11 +56,11 @@ public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBl
                 return;
 
             if (!this.isDrainMode) {
-                List<ItemEntity> items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(this.worldPosition).inflate(1), Entity::isAlive);
-                for (ItemEntity item : items) {
+                var items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(this.worldPosition).inflate(1), Entity::isAlive);
+                for (var item : items) {
                     if (item.hasPickUpDelay())
                         continue;
-                    ItemStack stack = item.getItem();
+                    var stack = item.getItem();
                     if (stack.getCount() != 1)
                         continue;
                     if (stack.getItem() != Items.ENDER_EYE)
@@ -74,7 +74,7 @@ public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBl
                     break;
                 }
             } else {
-                int toDrain = Math.min(5000, this.container.getStoredAura());
+                var toDrain = Math.min(5000, this.container.getStoredAura());
                 this.container.drainAura(toDrain, false);
                 this.generateAura(toDrain);
 

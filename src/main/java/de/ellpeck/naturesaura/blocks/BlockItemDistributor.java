@@ -23,11 +23,11 @@ public class BlockItemDistributor extends BlockContainerImpl implements ICustomB
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (!player.isCrouching())
             return InteractionResult.FAIL;
-        BlockEntity tile = levelIn.getBlockEntity(pos);
+        var tile = levelIn.getBlockEntity(pos);
         if (!(tile instanceof BlockEntityItemDistributor))
             return InteractionResult.FAIL;
         if (!levelIn.isClientSide) {
-            BlockEntityItemDistributor distributor = (BlockEntityItemDistributor) tile;
+            var distributor = (BlockEntityItemDistributor) tile;
             distributor.isRandomMode = !distributor.isRandomMode;
             distributor.sendToClients();
         }

@@ -26,10 +26,10 @@ public class ExplosionEffect implements IDrainSpotEffect {
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot >= 0)
             return false;
-        int aura = IAuraChunk.getAuraInArea(level, pos, 85);
+        var aura = IAuraChunk.getAuraInArea(level, pos, 85);
         if (aura > -5000000)
             return false;
-        int chance = 140 - Math.abs(aura) / 200000;
+        var chance = 140 - Math.abs(aura) / 200000;
         if (chance > 1 && level.random.nextInt(chance) != 0)
             return false;
         this.strength = Math.min(Math.abs(aura) / 5000000F, 5F);
@@ -60,9 +60,9 @@ public class ExplosionEffect implements IDrainSpotEffect {
         if (!this.calcValues(level, pos, spot))
             return;
 
-        int x = Mth.floor(pos.getX() + level.random.nextGaussian() * this.dist);
-        int z = Mth.floor(pos.getZ() + level.random.nextGaussian() * this.dist);
-        BlockPos chosenPos = new BlockPos(x, level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z);
+        var x = Mth.floor(pos.getX() + level.random.nextGaussian() * this.dist);
+        var z = Mth.floor(pos.getZ() + level.random.nextGaussian() * this.dist);
+        var chosenPos = new BlockPos(x, level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z);
         if (chosenPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(chosenPos)) {
             level.explode(null,
                     chosenPos.getX() + 0.5, chosenPos.getY() + 0.5, chosenPos.getZ() + 0.5,

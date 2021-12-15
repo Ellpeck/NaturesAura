@@ -53,7 +53,7 @@ public class AltarRecipe extends ModRecipe {
     }
 
     public ItemStack getDimensionBottle() {
-        ItemStack bottle = ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), this.requiredType);
+        var bottle = ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), this.requiredType);
         bottle.setHoverName(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".required_aura_type." + this.requiredType.getName()));
         return bottle;
     }

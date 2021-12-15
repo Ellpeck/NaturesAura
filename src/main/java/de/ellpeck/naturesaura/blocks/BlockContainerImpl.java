@@ -76,7 +76,7 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         if (this.hasWaterlogging()) {
-            FluidState state = context.getLevel().getFluidState(context.getClickedPos());
+            var state = context.getLevel().getFluidState(context.getClickedPos());
             return this.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, state.is(FluidTags.WATER) && state.getAmount() == 8);
         }
         return super.getStateForPlacement(context);
@@ -100,11 +100,11 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        List<ItemStack> drops = super.getDrops(state, builder);
+        var drops = super.getDrops(state, builder);
 
-        BlockEntity tile = builder.getParameter(LootContextParams.BLOCK_ENTITY);
+        var tile = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         if (tile instanceof BlockEntityImpl) {
-            for (ItemStack stack : drops) {
+            for (var stack : drops) {
                 if (stack.getItem() != this.asItem())
                     continue;
                 ((BlockEntityImpl) tile).modifyDrop(stack);
@@ -117,7 +117,7 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     @Override
     public void onPlace(BlockState state, Level levelIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
-            BlockEntity tile = levelIn.getBlockEntity(pos);
+            var tile = levelIn.getBlockEntity(pos);
             if (tile instanceof BlockEntityImpl)
                 ((BlockEntityImpl) tile).dropInventory();
         }
@@ -132,7 +132,7 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
 
     @Override
     public void setPlacedBy(Level levelIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        BlockEntity tile = levelIn.getBlockEntity(pos);
+        var tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityImpl)
             ((BlockEntityImpl) tile).loadDataOnPlace(stack);
     }
@@ -144,9 +144,9 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
 
     private void updateRedstoneState(Level level, BlockPos pos) {
         if (!level.isClientSide) {
-            BlockEntity tile = level.getBlockEntity(pos);
+            var tile = level.getBlockEntity(pos);
             if (tile instanceof BlockEntityImpl impl) {
-                int newPower = level.getBestNeighborSignal(pos);
+                var newPower = level.getBestNeighborSignal(pos);
                 if (impl.redstonePower != newPower)
                     level.scheduleTick(pos, this, 4);
             }
@@ -156,9 +156,9 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     @Override
     public void tick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
         if (!levelIn.isClientSide) {
-            BlockEntity tile = levelIn.getBlockEntity(pos);
+            var tile = levelIn.getBlockEntity(pos);
             if (tile instanceof BlockEntityImpl impl) {
-                int newPower = levelIn.getBestNeighborSignal(pos);
+                var newPower = levelIn.getBestNeighborSignal(pos);
                 if (impl.redstonePower != newPower)
                     impl.onRedstonePowerChange(newPower);
             }

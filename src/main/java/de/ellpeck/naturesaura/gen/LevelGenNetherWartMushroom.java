@@ -23,28 +23,28 @@ public class LevelGenNetherWartMushroom extends Feature<NoneFeatureConfiguration
         var levelIn = ctx.level();
         var pos = ctx.origin();
         var rand = ctx.random();
-        int height = rand.nextInt(5) + 4;
+        var height = rand.nextInt(5) + 4;
         if (rand.nextInt(10) == 0)
             height += 5;
 
         // Check if the stem has space
-        for (int i = 1; i < height; i++) {
-            BlockPos offset = pos.above(i);
+        for (var i = 1; i < height; i++) {
+            var offset = pos.above(i);
             if (levelIn.isStateAtPosition(offset, s -> !TreeFeature.validTreePos(levelIn, offset)))
                 return false;
         }
 
         // Place stem
         this.setBlock(levelIn, pos, Blocks.AIR.defaultBlockState());
-        for (int i = 0; i < height; i++)
+        for (var i = 0; i < height; i++)
             this.placeIfPossible(levelIn, pos.above(i), Blocks.NETHER_WART_BLOCK);
 
         // Place hat
-        int rad = 3;
-        for (int x = -rad; x <= rad; x++) {
-            for (int z = -rad; z <= rad; z++) {
-                int absX = Math.abs(x);
-                int absZ = Math.abs(z);
+        var rad = 3;
+        for (var x = -rad; x <= rad; x++) {
+            for (var z = -rad; z <= rad; z++) {
+                var absX = Math.abs(x);
+                var absZ = Math.abs(z);
                 if (absX <= 1 && absZ <= 1) {
                     this.placeIfPossible(levelIn, pos.offset(x, height, z), ModBlocks.NETHER_WART_MUSHROOM);
                 } else if (absX <= 2 && absZ <= 2 && absX != absZ) {

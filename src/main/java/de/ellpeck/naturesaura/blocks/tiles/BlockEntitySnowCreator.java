@@ -36,7 +36,7 @@ public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickable
 
     @Override
     public void tick() {
-        int range = this.getRange();
+        var range = this.getRange();
         if (range <= 0)
             return;
 
@@ -44,13 +44,13 @@ public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickable
             if (this.level.getGameTime() % 10 != 0)
                 return;
 
-            for (int i = 0; i < 10; i++) {
-                double angle = this.level.random.nextFloat() * Math.PI * 2;
-                BlockPos pos = this.worldPosition.offset(Math.cos(angle) * range * this.level.random.nextFloat(), 0, Math.sin(angle) * range * this.level.random.nextFloat());
+            for (var i = 0; i < 10; i++) {
+                var angle = this.level.random.nextFloat() * Math.PI * 2;
+                var pos = this.worldPosition.offset(Math.cos(angle) * range * this.level.random.nextFloat(), 0, Math.sin(angle) * range * this.level.random.nextFloat());
                 pos = this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, pos);
-                BlockPos down = pos.below();
+                var down = pos.below();
 
-                Fluid fluid = this.level.getFluidState(down).getType();
+                var fluid = this.level.getFluidState(down).getType();
                 if (fluid == Fluids.WATER) {
                     if (this.level.getBlockState(down).getMaterial().isReplaceable())
                         this.level.setBlockAndUpdate(down, Blocks.ICE.defaultBlockState());
@@ -67,7 +67,7 @@ public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickable
                     continue;
                 }
 
-                BlockPos auraPos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 30, this.worldPosition);
+                var auraPos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 30, this.worldPosition);
                 IAuraChunk.getAuraChunk(this.level, auraPos).drainAura(auraPos, 300);
 
                 PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
@@ -77,9 +77,9 @@ public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickable
         } else {
             if (this.level.getGameTime() % 30 != 0)
                 return;
-            for (int i = range * 4; i >= 0; i--) {
-                double angle = this.level.random.nextFloat() * Math.PI * 2;
-                BlockPos pos = this.worldPosition.offset(
+            for (var i = range * 4; i >= 0; i--) {
+                var angle = this.level.random.nextFloat() * Math.PI * 2;
+                var pos = this.worldPosition.offset(
                         Math.cos(angle) * range * this.level.random.nextFloat(),
                         Mth.nextInt(this.level.random, range / 2, range),
                         Math.sin(angle) * range * this.level.random.nextFloat());

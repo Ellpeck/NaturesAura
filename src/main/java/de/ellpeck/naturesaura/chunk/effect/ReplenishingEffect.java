@@ -25,18 +25,18 @@ public class ReplenishingEffect implements IDrainSpotEffect {
         if (spot < 0) {
             List<ISpotDrainable> tiles = new ArrayList<>();
             Helper.getBlockEntitiesInArea(level, pos, 25, tile -> {
-                IAuraContainer container = tile.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
+                var container = tile.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
                 if (container instanceof ISpotDrainable)
                     tiles.add((ISpotDrainable) container);
                 return false;
             });
             if (!tiles.isEmpty()) {
-                IAuraType type = IAuraType.forLevel(level);
-                for (int i = level.random.nextInt(6); i >= 0; i--) {
-                    ISpotDrainable tile = tiles.get(level.random.nextInt(tiles.size()));
+                var type = IAuraType.forLevel(level);
+                for (var i = level.random.nextInt(6); i >= 0; i--) {
+                    var tile = tiles.get(level.random.nextInt(tiles.size()));
                     if (!tile.isAcceptableType(type))
                         continue;
-                    int drained = tile.drainAuraPassively(-spot, false);
+                    var drained = tile.drainAuraPassively(-spot, false);
                     if (drained <= 0)
                         continue;
                     auraChunk.storeAura(pos, drained);

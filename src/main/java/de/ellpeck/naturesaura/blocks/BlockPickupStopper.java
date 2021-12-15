@@ -31,17 +31,17 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
 
     @SubscribeEvent
     public void onPickup(EntityItemPickupEvent event) {
-        Player player = event.getPlayer();
+        var player = event.getPlayer();
         if (player != null && !player.isCrouching()) {
-            ItemEntity item = event.getItem();
-            BlockPos pos = item.blockPosition();
+            var item = event.getItem();
+            var pos = item.blockPosition();
             Helper.getBlockEntitiesInArea(item.level, pos, 8, tile -> {
                 if (!(tile instanceof BlockEntityPickupStopper stopper))
                     return false;
-                float radius = stopper.getRadius();
+                var radius = stopper.getRadius();
                 if (radius <= 0F)
                     return false;
-                BlockPos stopperPos = stopper.getBlockPos();
+                var stopperPos = stopper.getBlockPos();
                 if (!new AABB(stopperPos).inflate(radius).intersects(item.getBoundingBox()))
                     return false;
 
@@ -58,7 +58,7 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
     @Override
     @OnlyIn(Dist.CLIENT)
     public AABB getVisualizationBounds(Level level, BlockPos pos) {
-        BlockEntity tile = level.getBlockEntity(pos);
+        var tile = level.getBlockEntity(pos);
         if (tile instanceof BlockEntityPickupStopper) {
             double radius = ((BlockEntityPickupStopper) tile).getRadius();
             if (radius > 0)

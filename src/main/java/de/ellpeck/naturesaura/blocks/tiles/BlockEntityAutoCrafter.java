@@ -38,7 +38,7 @@ public class BlockEntityAutoCrafter extends BlockEntityImpl implements ITickable
             this.crafting.clearContent();
 
             var state = this.level.getBlockState(this.worldPosition);
-            Direction facing = state.getValue(BlockAutoCrafter.FACING);
+            var facing = state.getValue(BlockAutoCrafter.FACING);
             var middlePos = this.worldPosition.above();
             var topPos = middlePos.relative(facing, 2);
             var bottomPos = middlePos.relative(facing.getOpposite(), 2);

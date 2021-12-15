@@ -41,7 +41,7 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
     }
 
     private OfferingRecipe getRecipe(ItemStack input) {
-        for (OfferingRecipe recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.OFFERING_TYPE, null, null))
+        for (var recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.OFFERING_TYPE, null, null))
             if (recipe.input.test(input))
                 return recipe;
         return null;
@@ -54,44 +54,44 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
                 if (!Multiblocks.OFFERING_TABLE.isComplete(this.level, this.worldPosition))
                     return;
 
-                ItemStack stack = this.items.getStackInSlot(0);
+                var stack = this.items.getStackInSlot(0);
                 if (stack.isEmpty())
                     return;
 
-                List<ItemEntity> items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(this.worldPosition).inflate(1));
+                var items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(this.worldPosition).inflate(1));
                 if (items.isEmpty())
                     return;
 
-                OfferingRecipe recipe = this.getRecipe(stack);
+                var recipe = this.getRecipe(stack);
                 if (recipe == null)
                     return;
 
-                for (ItemEntity item : items) {
+                for (var item : items) {
                     if (!item.isAlive() || item.hasPickUpDelay())
                         continue;
 
-                    ItemStack itemStack = item.getItem();
+                    var itemStack = item.getItem();
                     if (itemStack.isEmpty() || itemStack.getCount() != 1)
                         continue;
 
                     if (!recipe.startItem.test(itemStack))
                         continue;
 
-                    int amount = Helper.getIngredientAmount(recipe.input);
-                    int recipeCount = stack.getCount() / amount;
+                    var amount = Helper.getIngredientAmount(recipe.input);
+                    var recipeCount = stack.getCount() / amount;
                     stack.shrink(recipeCount * amount);
                     item.kill();
                     this.sendToClients();
 
-                    for (int i = 0; i < recipeCount; i++)
+                    for (var i = 0; i < recipeCount; i++)
                         this.itemsToSpawn.add(recipe.output.copy());
 
                     if (Multiblocks.OFFERING_TABLE.forEach(this.worldPosition, 'R', (pos, m) -> this.level.getBlockState(pos).getBlock() == Blocks.WITHER_ROSE)) {
-                        for (int i = this.level.random.nextInt(5) + 3; i >= 0; i--)
+                        for (var i = this.level.random.nextInt(5) + 3; i >= 0; i--)
                             this.itemsToSpawn.add(new ItemStack(Items.BLACK_DYE));
                     }
 
-                    LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level);
+                    var lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level);
                     lightningboltentity.setVisualOnly(true);
                     lightningboltentity.moveTo(Vec3.atCenterOf(this.worldPosition));
                     this.level.addFreshEntity(lightningboltentity);
@@ -115,8 +115,8 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
             compound.put("items", this.items.serializeNBT());
 
             if (type != SaveType.SYNC) {
-                ListTag list = new ListTag();
-                for (ItemStack stack : this.itemsToSpawn)
+                var list = new ListTag();
+                for (var stack : this.itemsToSpawn)
                     list.add(stack.serializeNBT());
                 compound.put("items_to_spawn", list);
             }
@@ -131,8 +131,8 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
 
             if (type != SaveType.SYNC) {
                 this.itemsToSpawn.clear();
-                ListTag list = compound.getList("items_to_spawn", 10);
-                for (Tag base : list)
+                var list = compound.getList("items_to_spawn", 10);
+                for (var base : list)
                     this.itemsToSpawn.add(ItemStack.of((CompoundTag) base));
             }
         }

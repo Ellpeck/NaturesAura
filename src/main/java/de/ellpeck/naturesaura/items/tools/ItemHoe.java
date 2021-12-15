@@ -39,16 +39,16 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         if (this == ModItems.INFUSED_IRON_HOE) {
-            Level level = context.getLevel();
-            InteractionResult result = super.useOn(context);
+            var level = context.getLevel();
+            var result = super.useOn(context);
             if (!level.isClientSide && result.consumesAction()) {
-                ItemStack seed = ItemStack.EMPTY;
-                Random random = level.getRandom();
-                BlockPos pos = context.getClickedPos();
+                var seed = ItemStack.EMPTY;
+                var random = level.getRandom();
+                var pos = context.getClickedPos();
                 if (random.nextInt(5) == 0) {
                     seed = new ItemStack(Items.WHEAT_SEEDS);
                 } else if (random.nextInt(10) == 0) {
-                    int rand = random.nextInt(3);
+                    var rand = random.nextInt(3);
                     if (rand == 0) {
                         seed = new ItemStack(Items.MELON_SEEDS);
                     } else if (rand == 1) {
@@ -59,18 +59,18 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
                 }
 
                 if (!seed.isEmpty()) {
-                    ItemEntity item = new ItemEntity(level, pos.getX() + random.nextFloat(), pos.getY() + 1F, pos.getZ() + random.nextFloat(), seed);
+                    var item = new ItemEntity(level, pos.getX() + random.nextFloat(), pos.getY() + 1F, pos.getZ() + random.nextFloat(), seed);
                     level.addFreshEntity(item);
                 }
             }
             return result;
         } else if (this == ModItems.SKY_HOE) {
-            boolean success = false;
-            for (int x = -1; x <= 1; x++) {
-                for (int z = -1; z <= 1; z++) {
-                    BlockPos offset = context.getClickedPos().offset(x, 0, z);
-                    BlockHitResult newResult = new BlockHitResult(context.getClickLocation(), context.getClickedFace(), offset, context.isInside());
-                    UseOnContext newContext = new UseOnContext(context.getPlayer(), context.getHand(), newResult);
+            var success = false;
+            for (var x = -1; x <= 1; x++) {
+                for (var z = -1; z <= 1; z++) {
+                    var offset = context.getClickedPos().offset(x, 0, z);
+                    var newResult = new BlockHitResult(context.getClickLocation(), context.getClickedFace(), offset, context.isInside());
+                    var newContext = new UseOnContext(context.getPlayer(), context.getHand(), newResult);
                     success |= super.useOn(newContext) == InteractionResult.SUCCESS;
                 }
             }
@@ -85,14 +85,14 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
             if (!(player.level.getBlockState(pos).getBlock() instanceof BushBlock))
                 return false;
             if (!player.level.isClientSide) {
-                int range = 3;
-                for (int x = -range; x <= range; x++) {
-                    for (int y = -range; y <= range; y++) {
-                        for (int z = -range; z <= range; z++) {
+                var range = 3;
+                for (var x = -range; x <= range; x++) {
+                    for (var y = -range; y <= range; y++) {
+                        for (var z = -range; z <= range; z++) {
                             if (x == 0 && y == 0 && z == 0)
                                 continue;
-                            BlockPos offset = pos.offset(x, y, z);
-                            BlockState otherState = player.level.getBlockState(offset);
+                            var offset = pos.offset(x, y, z);
+                            var otherState = player.level.getBlockState(offset);
                             if (otherState.getBlock() instanceof BushBlock)
                                 player.level.destroyBlock(offset, true);
                         }

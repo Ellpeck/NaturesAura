@@ -50,7 +50,7 @@ public class TreeRitualRecipe extends ModRecipe {
         @Override
         public TreeRitualRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             List<Ingredient> ings = new ArrayList<>();
-            for (JsonElement element : json.getAsJsonArray("ingredients"))
+            for (var element : json.getAsJsonArray("ingredients"))
                 ings.add(Ingredient.fromJson(element));
             return new TreeRitualRecipe(
                     recipeId,
@@ -63,8 +63,8 @@ public class TreeRitualRecipe extends ModRecipe {
         @Nullable
         @Override
         public TreeRitualRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            Ingredient[] ings = new Ingredient[buffer.readInt()];
-            for (int i = 0; i < ings.length; i++)
+            var ings = new Ingredient[buffer.readInt()];
+            for (var i = 0; i < ings.length; i++)
                 ings[i] = Ingredient.fromNetwork(buffer);
             return new TreeRitualRecipe(
                     recipeId,
@@ -77,7 +77,7 @@ public class TreeRitualRecipe extends ModRecipe {
         @Override
         public void toNetwork(FriendlyByteBuf buffer, TreeRitualRecipe recipe) {
             buffer.writeInt(recipe.ingredients.length);
-            for (Ingredient ing : recipe.ingredients)
+            for (var ing : recipe.ingredients)
                 ing.toNetwork(buffer);
             recipe.saplingType.toNetwork(buffer);
             buffer.writeItem(recipe.result);

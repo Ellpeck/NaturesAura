@@ -25,14 +25,14 @@ public class RenderOfferingTable implements BlockEntityRenderer<BlockEntityOffer
 
     @Override
     public void render(BlockEntityOfferingTable tileEntityOfferingTable, float v, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
-        ItemStack stack = tileEntityOfferingTable.items.getStackInSlot(0);
+        var stack = tileEntityOfferingTable.items.getStackInSlot(0);
         if (!stack.isEmpty()) {
             this.rand.setSeed(Item.getId(stack.getItem()) + stack.getDamageValue());
 
-            int amount = Mth.ceil(stack.getCount() / 2F);
-            for (int i = 0; i < amount; i++) {
+            var amount = Mth.ceil(stack.getCount() / 2F);
+            for (var i = 0; i < amount; i++) {
                 matrixStack.pushPose();
-                Item item = stack.getItem();
+                var item = stack.getItem();
 
                 float scale;
                 float yOff;

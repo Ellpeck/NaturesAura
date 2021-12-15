@@ -29,24 +29,24 @@ public class Multiblock implements IMultiblock {
     public Multiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {
         this.name = name;
 
-        int width = -1;
+        var width = -1;
         this.height = pattern.length;
-        int depth = -1;
-        int xOff = 0;
-        int yOff = 0;
-        int zOff = 0;
+        var depth = -1;
+        var xOff = 0;
+        var yOff = 0;
+        var zOff = 0;
         char[][][] raw = null;
 
-        for (int i = 0; i < pattern.length; i++) {
-            String[] row = pattern[i];
+        for (var i = 0; i < pattern.length; i++) {
+            var row = pattern[i];
 
             if (width < 0)
                 width = row.length;
             else if (row.length != width)
                 throw new IllegalArgumentException();
 
-            for (int j = 0; j < row.length; j++) {
-                String column = row[j];
+            for (var j = 0; j < row.length; j++) {
+                var column = row[j];
                 if (depth < 0)
                     depth = column.length();
                 else if (column.length() != depth)
@@ -54,8 +54,8 @@ public class Multiblock implements IMultiblock {
 
                 if (raw == null)
                     raw = new char[width][this.height][depth];
-                for (int k = 0; k < column.length(); k++) {
-                    char c = column.charAt(k);
+                for (var k = 0; k < column.length(); k++) {
+                    var c = column.charAt(k);
                     raw[k][this.height - 1 - i][j] = c;
 
                     if (c == '0') {
@@ -74,12 +74,12 @@ public class Multiblock implements IMultiblock {
         this.rawPattern = raw;
 
         Map<Character, Matcher> matchers = new HashMap<>();
-        for (int i = 0; i < rawMatchers.length; i += 2) {
-            char c = (char) rawMatchers[i];
+        for (var i = 0; i < rawMatchers.length; i += 2) {
+            var c = (char) rawMatchers[i];
             if (matchers.containsKey(c))
                 continue;
 
-            Object value = rawMatchers[i + 1];
+            var value = rawMatchers[i + 1];
             if (value instanceof BlockState state) {
                 matchers.put(c, new Matcher(state,
                         (level, start, offset, pos, other, otherC) -> other == state));
@@ -90,10 +90,10 @@ public class Multiblock implements IMultiblock {
                 matchers.put(c, (Matcher) value);
         }
 
-        for (int x = 0; x < this.width; x++)
-            for (int y = 0; y < this.height; y++)
-                for (int z = 0; z < this.depth; z++) {
-                    Matcher matcher = matchers.get(this.rawPattern[x][y][z]);
+        for (var x = 0; x < this.width; x++)
+            for (var y = 0; y < this.height; y++)
+                for (var z = 0; z < this.depth; z++) {
+                    var matcher = matchers.get(this.rawPattern[x][y][z]);
                     if (matcher == null)
                         throw new IllegalStateException();
                     if (matcher.check() != null)
@@ -106,18 +106,18 @@ public class Multiblock implements IMultiblock {
 
     @Override
     public boolean isComplete(Level level, BlockPos center) {
-        BlockPos start = this.getStart(center);
+        var start = this.getStart(center);
         return this.forEach(center, (char) 0, (pos, matcher) -> {
-            BlockPos offset = pos.subtract(start);
+            var offset = pos.subtract(start);
             return matcher.check().matches(level, start, offset, pos, level.getBlockState(pos), this.getChar(offset));
         });
     }
 
     @Override
     public boolean forEach(BlockPos center, char c, BiFunction<BlockPos, Matcher, Boolean> function) {
-        BlockPos start = this.getStart(center);
-        for (Map.Entry<BlockPos, Matcher> entry : this.matchers.entrySet()) {
-            BlockPos offset = entry.getKey();
+        var start = this.getStart(center);
+        for (var entry : this.matchers.entrySet()) {
+            var offset = entry.getKey();
             if (c == 0 || this.getChar(offset) == c)
                 if (!function.apply(start.offset(offset), entry.getValue()))
                     return false;

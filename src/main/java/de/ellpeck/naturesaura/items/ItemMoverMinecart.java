@@ -20,8 +20,8 @@ public class ItemMoverMinecart extends ItemImpl {
     @Nonnull
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        Level level = context.getLevel();
-        BlockPos pos = context.getClickedPos();
+        var level = context.getLevel();
+        var pos = context.getClickedPos();
         if (BaseRailBlock.isRail(level.getBlockState(pos))) {
             if (!level.isClientSide) {
                 AbstractMinecart cart = new EntityMoverMinecart(ModEntities.MOVER_CART, level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);

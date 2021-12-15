@@ -24,26 +24,26 @@ public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITick
     public void tick() {
         if (!this.level.isClientSide && this.level.getGameTime() % 10 == 0) {
             if (Multiblocks.POTION_GENERATOR.isComplete(this.level, this.worldPosition)) {
-                boolean addedOne = false;
+                var addedOne = false;
 
-                List<AreaEffectCloud> clouds = this.level.getEntitiesOfClass(AreaEffectCloud.class, new AABB(this.worldPosition).inflate(2));
-                for (AreaEffectCloud cloud : clouds) {
+                var clouds = this.level.getEntitiesOfClass(AreaEffectCloud.class, new AABB(this.worldPosition).inflate(2));
+                for (var cloud : clouds) {
                     if (!cloud.isAlive())
                         continue;
 
                     if (!addedOne) {
-                        Potion type = cloud.getPotion();
+                        var type = cloud.getPotion();
                         if (type == null)
                             continue;
 
-                        for (MobEffectInstance effect : type.getEffects()) {
-                            MobEffect potion = effect.getEffect();
+                        for (var effect : type.getEffects()) {
+                            var potion = effect.getEffect();
                             if (!potion.isBeneficial() || potion.isInstantenous()) {
                                 continue;
                             }
 
-                            int toAdd = (effect.getAmplifier() * 7 + 1) * (effect.getDuration() / 25) * 100;
-                            boolean canGen = this.canGenerateRightNow(toAdd);
+                            var toAdd = (effect.getAmplifier() * 7 + 1) * (effect.getDuration() / 25) * 100;
+                            var canGen = this.canGenerateRightNow(toAdd);
                             if (canGen)
                                 this.generateAura(toAdd);
 
@@ -56,7 +56,7 @@ public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITick
                         }
                     }
 
-                    float newRadius = cloud.getRadius() - 0.25F;
+                    var newRadius = cloud.getRadius() - 0.25F;
                     if (newRadius < 0.5F) {
                         cloud.kill();
                     } else {

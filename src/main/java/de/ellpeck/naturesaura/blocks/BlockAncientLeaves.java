@@ -53,7 +53,7 @@ public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorP
     public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
         super.animateTick(stateIn, levelIn, pos, rand);
         if (rand.nextFloat() >= 0.95F && !levelIn.getBlockState(pos.below()).isCollisionShapeFullBlock(levelIn, pos)) {
-            BlockEntity tile = levelIn.getBlockEntity(pos);
+            var tile = levelIn.getBlockEntity(pos);
             if (tile instanceof BlockEntityAncientLeaves) {
                 if (((BlockEntityAncientLeaves) tile).getAuraContainer().getStoredAura() > 0) {
                     NaturesAuraAPI.instance().spawnMagicParticle(
@@ -72,7 +72,7 @@ public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorP
     public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
         super.randomTick(state, levelIn, pos, random);
         if (!levelIn.isClientSide) {
-            BlockEntity tile = levelIn.getBlockEntity(pos);
+            var tile = levelIn.getBlockEntity(pos);
             if (tile instanceof BlockEntityAncientLeaves) {
                 if (((BlockEntityAncientLeaves) tile).getAuraContainer().getStoredAura() <= 0) {
                     levelIn.setBlockAndUpdate(pos, ModBlocks.DECAYED_LEAVES.defaultBlockState());

@@ -16,7 +16,7 @@ public class BasicAuraContainer implements IAuraContainer {
 
     @Override
     public int storeAura(int amountToStore, boolean simulate) {
-        int actual = Math.min(amountToStore, this.maxAura - this.aura);
+        var actual = Math.min(amountToStore, this.maxAura - this.aura);
         if (!simulate) {
             this.aura += actual;
         }
@@ -25,7 +25,7 @@ public class BasicAuraContainer implements IAuraContainer {
 
     @Override
     public int drainAura(int amountToDrain, boolean simulate) {
-        int actual = Math.min(amountToDrain, this.aura);
+        var actual = Math.min(amountToDrain, this.aura);
         if (!simulate) {
             this.aura -= actual;
         }

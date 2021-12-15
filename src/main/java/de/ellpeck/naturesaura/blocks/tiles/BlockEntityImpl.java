@@ -65,7 +65,7 @@ public class BlockEntityImpl extends BlockEntity {
     @Override
     public final ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this, e -> {
-            CompoundTag compound = new CompoundTag();
+            var compound = new CompoundTag();
             this.writeNBT(compound, SaveType.SYNC);
             return compound;
         });
@@ -73,7 +73,7 @@ public class BlockEntityImpl extends BlockEntity {
 
     @Override
     public final CompoundTag getUpdateTag() {
-        CompoundTag compound = new CompoundTag();
+        var compound = new CompoundTag();
         this.writeNBT(compound, SaveType.SYNC);
         return compound;
     }
@@ -92,7 +92,7 @@ public class BlockEntityImpl extends BlockEntity {
     public void sendToClients() {
         var world = (ServerLevel) this.getLevel();
         var entities = world.getChunkSource().chunkMap.getPlayers(new ChunkPos(this.getBlockPos()), false);
-        ClientboundBlockEntityDataPacket packet = this.getUpdatePacket();
+        var packet = this.getUpdatePacket();
         for (var e : entities)
             e.connection.send(packet);
     }
@@ -116,7 +116,7 @@ public class BlockEntityImpl extends BlockEntity {
             return this.itemHandler.cast();
         } else if (capability == NaturesAuraAPI.capAuraContainer) {
             if (this.auraContainer == null) {
-                IAuraContainer container = this.getAuraContainer();
+                var container = this.getAuraContainer();
                 this.auraContainer = container == null ? LazyOptional.empty() : LazyOptional.of(() -> container);
             }
             return this.auraContainer.cast();
@@ -137,10 +137,10 @@ public class BlockEntityImpl extends BlockEntity {
     public void dropInventory() {
         IItemHandler handler = this.getItemHandler();
         if (handler != null) {
-            for (int i = 0; i < handler.getSlots(); i++) {
-                ItemStack stack = handler.getStackInSlot(i);
+            for (var i = 0; i < handler.getSlots(); i++) {
+                var stack = handler.getStackInSlot(i);
                 if (!stack.isEmpty()) {
-                    ItemEntity item = new ItemEntity(this.level, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5, stack);
+                    var item = new ItemEntity(this.level, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5, stack);
                     this.level.addFreshEntity(item);
                 }
             }
@@ -148,7 +148,7 @@ public class BlockEntityImpl extends BlockEntity {
     }
 
     public void modifyDrop(ItemStack regularItem) {
-        CompoundTag compound = new CompoundTag();
+        var compound = new CompoundTag();
         this.writeNBT(compound, SaveType.BLOCK);
         if (!compound.isEmpty()) {
             if (!regularItem.hasTag()) regularItem.setTag(new CompoundTag());
@@ -158,18 +158,18 @@ public class BlockEntityImpl extends BlockEntity {
 
     public void loadDataOnPlace(ItemStack stack) {
         if (stack.hasTag()) {
-            CompoundTag compound = stack.getTag().getCompound("data");
+            var compound = stack.getTag().getCompound("data");
             if (compound != null) this.readNBT(compound, SaveType.BLOCK);
         }
     }
 
     public boolean canGenerateRightNow(int toAdd) {
         if (this.wantsLimitRemover()) {
-            BlockState below = this.level.getBlockState(this.worldPosition.below());
+            var below = this.level.getBlockState(this.worldPosition.below());
             if (below.getBlock() == ModBlocks.GENERATOR_LIMIT_REMOVER)
                 return true;
         }
-        int aura = IAuraChunk.getAuraInArea(this.level, this.worldPosition, 35);
+        var aura = IAuraChunk.getAuraInArea(this.level, this.worldPosition, 35);
         return aura + toAdd <= IAuraChunk.DEFAULT_AURA * 2;
     }
 
@@ -179,7 +179,7 @@ public class BlockEntityImpl extends BlockEntity {
 
     public void generateAura(int amount) {
         while (amount > 0) {
-            BlockPos spot = IAuraChunk.getLowestSpot(this.level, this.worldPosition, 35, this.worldPosition);
+            var spot = IAuraChunk.getLowestSpot(this.level, this.worldPosition, 35, this.worldPosition);
             amount -= IAuraChunk.getAuraChunk(this.level, spot).storeAura(spot, amount);
         }
     }

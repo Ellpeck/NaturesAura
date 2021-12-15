@@ -17,7 +17,7 @@ public class BlockStateGenerator extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        for (IModItem item : ModRegistry.ALL_ITEMS) {
+        for (var item : ModRegistry.ALL_ITEMS) {
             if (!(item instanceof Block block))
                 continue;
             if (block instanceof ICustomBlockState custom) {

@@ -21,10 +21,10 @@ public class PotionBreathless extends PotionImpl {
 
     @SubscribeEvent
     public void onHeal(LivingHealEvent event) {
-        MobEffectInstance effect = event.getEntityLiving().getEffect(this);
+        var effect = event.getEntityLiving().getEffect(this);
         if (effect == null)
             return;
-        float chance = (effect.getAmplifier() + 1) / 15F;
+        var chance = (effect.getAmplifier() + 1) / 15F;
         if (this.random.nextFloat() <= chance) {
             event.setAmount(event.getAmount() / 4F);
         }
@@ -32,7 +32,7 @@ public class PotionBreathless extends PotionImpl {
 
     @Override
     public boolean isDurationEffectTick(int duration, int amplifier) {
-        int mod = 200 >> amplifier;
+        var mod = 200 >> amplifier;
         return mod > 0 && duration % mod == 0 && this.random.nextBoolean();
     }
 

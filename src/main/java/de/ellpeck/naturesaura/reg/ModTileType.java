@@ -18,7 +18,7 @@ public class ModTileType<T extends BlockEntity> implements IModItem {
 
     public ModTileType(BlockEntityType.BlockEntitySupplier<T> supplier, String name, IModItem... items) {
         this.name = name;
-        Block[] blocks = Arrays.stream(items).map(i -> (Block) i).toArray(Block[]::new);
+        var blocks = Arrays.stream(items).map(i -> (Block) i).toArray(Block[]::new);
         this.type = BlockEntityType.Builder.of(supplier, blocks).build(null);
     }
 

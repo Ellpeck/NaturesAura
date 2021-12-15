@@ -23,16 +23,16 @@ public class BlockEntityMossGenerator extends BlockEntityImpl implements ITickab
         if (!this.level.isClientSide) {
             if (this.level.getGameTime() % 20 != 0)
                 return;
-            LevelData data = (LevelData) ILevelData.getLevelData(this.level);
+            var data = (LevelData) ILevelData.getLevelData(this.level);
 
             List<BlockPos> possibleOffsets = new ArrayList<>();
-            int range = 2;
-            for (int x = -range; x <= range; x++)
-                for (int y = -range; y <= range; y++)
-                    for (int z = -range; z <= range; z++) {
-                        BlockPos offset = this.worldPosition.offset(x, y, z);
-                        boolean isRecent = data.recentlyConvertedMossStones.contains(offset);
-                        BlockState state = this.level.getBlockState(offset);
+            var range = 2;
+            for (var x = -range; x <= range; x++)
+                for (var y = -range; y <= range; y++)
+                    for (var z = -range; z <= range; z++) {
+                        var offset = this.worldPosition.offset(x, y, z);
+                        var isRecent = data.recentlyConvertedMossStones.contains(offset);
+                        var state = this.level.getBlockState(offset);
                         if (NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.inverse().containsKey(state)) {
                             if (isRecent)
                                 continue;
@@ -44,11 +44,11 @@ public class BlockEntityMossGenerator extends BlockEntityImpl implements ITickab
 
             if (possibleOffsets.isEmpty())
                 return;
-            BlockPos offset = possibleOffsets.get(this.level.random.nextInt(possibleOffsets.size()));
-            BlockState state = this.level.getBlockState(offset);
-            BlockState result = NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.inverse().get(state);
+            var offset = possibleOffsets.get(this.level.random.nextInt(possibleOffsets.size()));
+            var state = this.level.getBlockState(offset);
+            var result = NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.inverse().get(state);
 
-            int toAdd = 7000;
+            var toAdd = 7000;
             if (this.canGenerateRightNow(toAdd)) {
                 this.generateAura(toAdd);
                 PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,

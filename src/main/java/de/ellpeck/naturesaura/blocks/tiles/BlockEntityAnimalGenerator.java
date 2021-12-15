@@ -22,7 +22,7 @@ public class BlockEntityAnimalGenerator extends BlockEntityImpl implements ITick
             if (this.timeRemaining <= 0)
                 return;
 
-            int remain = this.amountToRelease;
+            var remain = this.amountToRelease;
             if (this.canGenerateRightNow(remain)) {
                 this.generateAura(remain);
                 PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,

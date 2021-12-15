@@ -25,7 +25,7 @@ public class RenderGeneratorLimitRemover implements BlockEntityRenderer<BlockEnt
 
     @Override
     public void render(BlockEntityGeneratorLimitRemover te, float v, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
-        BlockEntity above = te.getLevel().getBlockEntity(te.getBlockPos().above());
+        var above = te.getLevel().getBlockEntity(te.getBlockPos().above());
         if (above instanceof BlockEntityImpl && ((BlockEntityImpl) above).wantsLimitRemover()) {
             this.renderGlint(matrixStack, iRenderTypeBuffer, 1, combinedOverlayIn);
             this.renderGlint(matrixStack, iRenderTypeBuffer, 0, combinedOverlayIn);
@@ -34,8 +34,8 @@ public class RenderGeneratorLimitRemover implements BlockEntityRenderer<BlockEnt
 
     private void renderGlint(PoseStack stack, MultiBufferSource buffer, double yOff, int combinedOverlayIn) {
         stack.pushPose();
-        int brightness = 15 << 20 | 15 << 4;
-        float alpha = ((float) Math.sin(System.currentTimeMillis() / 800D) + 1F) / 2F;
+        var brightness = 15 << 20 | 15 << 4;
+        var alpha = ((float) Math.sin(System.currentTimeMillis() / 800D) + 1F) / 2F;
         stack.translate(-0.001F, yOff + 1 + 0.001F, 1 + 0.001F);
         stack.mulPose(Vector3f.XP.rotationDegrees(180F));
         stack.scale(1.002F, 1.002F, 1.002F);

@@ -37,14 +37,14 @@ public class AnimalEffect implements IDrainSpotEffect {
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot <= 0)
             return false;
-        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 30);
+        var auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 30);
         int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
         this.chance = Math.min(50, Mth.ceil(Math.abs(aura) / 500000F / auraAndSpots.getRight()));
         if (this.chance <= 0)
             return false;
-        int dist = Mth.clamp(Math.abs(aura) / 150000, 5, 35);
+        var dist = Mth.clamp(Math.abs(aura) / 150000, 5, 35);
         this.bb = new AABB(pos).inflate(dist);
         return true;
     }
@@ -72,18 +72,18 @@ public class AnimalEffect implements IDrainSpotEffect {
         if (!this.calcValues(level, pos, spot))
             return;
 
-        List<Animal> animals = level.getEntitiesOfClass(Animal.class, this.bb);
+        var animals = level.getEntitiesOfClass(Animal.class, this.bb);
         if (animals.size() >= ModConfig.instance.maxAnimalsAroundPowder.get())
             return;
 
-        List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, this.bb);
-        for (ItemEntity item : items) {
+        var items = level.getEntitiesOfClass(ItemEntity.class, this.bb);
+        for (var item : items) {
             if (!item.isAlive())
                 continue;
             if (!NaturesAuraAPI.instance().isEffectPowderActive(level, item.blockPosition(), NAME))
                 continue;
 
-            ItemStack stack = item.getItem();
+            var stack = item.getItem();
             if (!(stack.getItem() instanceof EggItem))
                 continue;
             if (item.getAge() < item.lifespan / 2)
@@ -96,44 +96,44 @@ public class AnimalEffect implements IDrainSpotEffect {
                 item.setItem(stack);
             }
 
-            Chicken chicken = new Chicken(EntityType.CHICKEN, level);
+            var chicken = new Chicken(EntityType.CHICKEN, level);
             chicken.setAge(-24000);
             chicken.setPos(item.getX(), item.getY(), item.getZ());
             level.addFreshEntity(chicken);
 
-            BlockPos closestSpot = IAuraChunk.getHighestSpot(level, item.blockPosition(), 35, pos);
+            var closestSpot = IAuraChunk.getHighestSpot(level, item.blockPosition(), 35, pos);
             IAuraChunk.getAuraChunk(level, closestSpot).drainAura(closestSpot, 2000);
         }
 
         if (level.random.nextInt(20) <= this.chance) {
             if (animals.size() < 2)
                 return;
-            Animal first = animals.get(level.random.nextInt(animals.size()));
+            var first = animals.get(level.random.nextInt(animals.size()));
             if (first.isBaby() || first.isInLove())
                 return;
             if (!NaturesAuraAPI.instance().isEffectPowderActive(level, first.blockPosition(), NAME))
                 return;
 
-            Optional<Animal> secondOptional = animals.stream()
+            var secondOptional = animals.stream()
                     .filter(e -> e != first && !e.isInLove() && !e.isBaby())
                     .min(Comparator.comparingDouble(e -> e.distanceToSqr(first)));
             if (secondOptional.isEmpty())
                 return;
-            Animal second = secondOptional.get();
+            var second = secondOptional.get();
             if (second.distanceToSqr(first) > 5 * 5)
                 return;
 
             this.setInLove(first);
             this.setInLove(second);
 
-            BlockPos closestSpot = IAuraChunk.getHighestSpot(level, first.blockPosition(), 35, pos);
+            var closestSpot = IAuraChunk.getHighestSpot(level, first.blockPosition(), 35, pos);
             IAuraChunk.getAuraChunk(level, closestSpot).drainAura(closestSpot, 3500);
         }
     }
 
     private void setInLove(Animal animal) {
         animal.setInLove(null);
-        for (int j = 0; j < 7; j++)
+        for (var j = 0; j < 7; j++)
             animal.level.addParticle(ParticleTypes.HEART,
                     animal.getX() + (double) (animal.level.random.nextFloat() * animal.getBbWidth() * 2.0F) - animal.getBbWidth(),
                     animal.getY() + 0.5D + (double) (animal.level.random.nextFloat() * animal.getBbHeight()),

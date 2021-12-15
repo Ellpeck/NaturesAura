@@ -45,19 +45,19 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     public void inventoryTick(ItemStack stackIn, Level levelIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (!levelIn.isClientSide && entityIn instanceof Player player) {
             if (player.isCrouching() && stackIn.getCapability(NaturesAuraAPI.capAuraContainer).isPresent()) {
-                IAuraContainer container = stackIn.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
+                var container = stackIn.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
                 if (container.getStoredAura() <= 0) {
                     return;
                 }
-                for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-                    ItemStack stack = player.getInventory().getItem(i);
-                    IAuraRecharge recharge = stack.getCapability(NaturesAuraAPI.capAuraRecharge).orElse(null);
+                for (var i = 0; i < player.getInventory().getContainerSize(); i++) {
+                    var stack = player.getInventory().getItem(i);
+                    var recharge = stack.getCapability(NaturesAuraAPI.capAuraRecharge).orElse(null);
                     if (recharge != null) {
                         if (recharge.rechargeFromContainer(container, itemSlot, i, player.getInventory().selected == i))
                             break;
                     } else if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.AURA_MENDING, stack) > 0) {
-                        int mainSize = player.getInventory().items.size();
-                        boolean isArmor = i >= mainSize && i < mainSize + player.getInventory().armor.size();
+                        var mainSize = player.getInventory().items.size();
+                        var isArmor = i >= mainSize && i < mainSize + player.getInventory().armor.size();
                         if ((isArmor || player.getInventory().selected == i) && Helper.rechargeAuraItem(stack, container, 1000))
                             break;
                     }
@@ -71,7 +71,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
         if (this.allowdedIn(tab)) {
             items.add(new ItemStack(this));
 
-            ItemStack stack = new ItemStack(this);
+            var stack = new ItemStack(this);
             stack.getCapability(NaturesAuraAPI.capAuraContainer).ifPresent(container -> {
                 container.storeAura(container.getMaxAura(), false);
                 items.add(stack);
@@ -87,7 +87,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     @Override
     public int getBarColor(ItemStack stack) {
         if (stack.getCapability(NaturesAuraAPI.capAuraContainer).isPresent()) {
-            IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
+            var container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
             return (int) (1 - container.getStoredAura() / (double) container.getMaxAura());
         }
         return 0;
@@ -115,8 +115,8 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     @OnlyIn(Dist.CLIENT)
     public void render(ItemStack stack, Player player, RenderType type, PoseStack matrices, MultiBufferSource buffer, int packedLight, boolean isHolding) {
         if (type == RenderType.BODY && !isHolding) {
-            boolean chest = !player.getInventory().armor.get(EquipmentSlot.CHEST.getIndex()).isEmpty();
-            boolean legs = !player.getInventory().armor.get(EquipmentSlot.LEGS.getIndex()).isEmpty();
+            var chest = !player.getInventory().armor.get(EquipmentSlot.CHEST.getIndex()).isEmpty();
+            var legs = !player.getInventory().armor.get(EquipmentSlot.LEGS.getIndex()).isEmpty();
             matrices.translate(-0.15F, 0.65F, chest ? -0.195F : legs ? -0.165F : -0.1475F);
             matrices.scale(0.5F, 0.5F, 0.5F);
             matrices.mulPose(Vector3f.XP.rotationDegrees(180F));

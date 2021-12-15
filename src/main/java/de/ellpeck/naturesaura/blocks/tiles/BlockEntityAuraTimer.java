@@ -38,7 +38,7 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
     public void onRedstonePowerChange(int newPower) {
         if (this.redstonePower <= 0 && newPower > 0) {
             this.timer = 0;
-            int color = ItemAuraBottle.getType(this.itemHandler.getStackInSlot(0)).getColor();
+            var color = ItemAuraBottle.getType(this.itemHandler.getStackInSlot(0)).getColor();
             PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.TIMER_RESET, color));
             this.sendToClients();
         }
@@ -47,7 +47,7 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
 
     @Override
     public void tick() {
-        int total = this.getTotalTime();
+        var total = this.getTotalTime();
         if (total <= 0) {
             this.timer = 0;
             return;
@@ -55,7 +55,7 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
 
         if (this.level.isClientSide) {
             if (this.level.getGameTime() % 8 == 0) {
-                int color = ItemAuraBottle.getType(this.itemHandler.getStackInSlot(0)).getColor();
+                var color = ItemAuraBottle.getType(this.itemHandler.getStackInSlot(0)).getColor();
                 NaturesAuraAPI.instance().spawnMagicParticle(
                         this.worldPosition.getX() + 1 / 16F + this.level.random.nextFloat() * 14 / 16F,
                         this.worldPosition.getY() + 1 / 16F + this.level.random.nextFloat() * 14 / 16F,
@@ -69,11 +69,11 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
         if (this.timer >= total) {
             this.timer = 0;
 
-            BlockState state = this.getBlockState();
+            var state = this.getBlockState();
             this.level.setBlock(this.worldPosition, state.setValue(BlockStateProperties.POWERED, true), 1);
             this.level.scheduleTick(this.worldPosition, state.getBlock(), 4);
 
-            int color = ItemAuraBottle.getType(this.itemHandler.getStackInSlot(0)).getColor();
+            var color = ItemAuraBottle.getType(this.itemHandler.getStackInSlot(0)).getColor();
             PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.TIMER_RESET, color));
         }
         if (this.timer % 2 == 0)
@@ -81,10 +81,10 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
     }
 
     public int getTotalTime() {
-        ItemStack stack = this.itemHandler.getStackInSlot(0);
+        var stack = this.itemHandler.getStackInSlot(0);
         if (stack.isEmpty())
             return 0;
-        Integer amount = TIMES.get(ItemAuraBottle.getType(stack));
+        var amount = TIMES.get(ItemAuraBottle.getType(stack));
         if (amount == null)
             return 0;
         return amount * stack.getCount();

@@ -20,7 +20,7 @@ public class ItemGoldFiber extends ItemImpl implements IColorProvidingItem {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        ItemStack stack = context.getPlayer().getItemInHand(context.getHand());
+        var stack = context.getPlayer().getItemInHand(context.getHand());
         if (BlockGoldenLeaves.convert(context.getLevel(), context.getClickedPos())) {
             if (!context.getLevel().isClientSide) {
                 stack.shrink(1);

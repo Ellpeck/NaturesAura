@@ -49,22 +49,22 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        Vec3 vec3d = state.getOffset(levelIn, pos);
+        var vec3d = state.getOffset(levelIn, pos);
         return SHAPE.move(vec3d.x, vec3d.y, vec3d.z);
     }
 
     @SubscribeEvent
     public void onDragonTick(LivingUpdateEvent event) {
-        LivingEntity living = event.getEntityLiving();
+        var living = event.getEntityLiving();
         if (living.level.isClientSide || !(living instanceof EnderDragon dragon))
             return;
         if (dragon.deathTime < 150 || dragon.deathTime % 10 != 0)
             return;
 
-        for (int i = 0; i < 6; i++) {
-            int x = dragon.level.random.nextInt(256) - 128;
-            int z = dragon.level.random.nextInt(256) - 128;
-            BlockPos pos = new BlockPos(x, dragon.level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z);
+        for (var i = 0; i < 6; i++) {
+            var x = dragon.level.random.nextInt(256) - 128;
+            var z = dragon.level.random.nextInt(256) - 128;
+            var pos = new BlockPos(x, dragon.level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z);
             if (!dragon.level.isLoaded(pos))
                 continue;
             if (dragon.level.getBlockState(pos.below()).getBlock() != Blocks.END_STONE)
@@ -102,7 +102,7 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        BlockEntity tile = builder.getParameter(LootContextParams.BLOCK_ENTITY);
+        var tile = builder.getParameter(LootContextParams.BLOCK_ENTITY);
         if (tile instanceof BlockEntityEndFlower && ((BlockEntityEndFlower) tile).isDrainMode)
             return NonNullList.create();
         return super.getDrops(state, builder);

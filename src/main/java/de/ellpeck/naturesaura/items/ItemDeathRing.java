@@ -24,15 +24,15 @@ public class ItemDeathRing extends ItemImpl {
 
         @SubscribeEvent
         public void onDeath(LivingDeathEvent event) {
-            LivingEntity entity = event.getEntityLiving();
+            var entity = event.getEntityLiving();
             if (!entity.level.isClientSide && entity instanceof Player) {
-                ItemStack equipped = Helper.getEquippedItem(s -> s.getItem() == ModItems.DEATH_RING, (Player) entity);
+                var equipped = Helper.getEquippedItem(s -> s.getItem() == ModItems.DEATH_RING, (Player) entity);
                 if (!equipped.isEmpty()) {
                     entity.setHealth(entity.getMaxHealth() / 2);
                     entity.removeAllEffects();
                     entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 500, 1));
 
-                    CompoundTag data = new CompoundTag();
+                    var data = new CompoundTag();
                     data.putInt("id", entity.getId());
                     PacketHandler.sendToAllAround(entity.level, entity.blockPosition(), 32, new PacketClient(1, data));
 

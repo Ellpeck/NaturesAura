@@ -49,24 +49,24 @@ public class BlockEntityRFConverter extends BlockEntityImpl implements ITickable
                 this.lastEnergy = this.storage.getEnergyStored();
             }
 
-            for (Direction facing : Direction.values()) {
-                BlockEntity tile = this.level.getBlockEntity(this.worldPosition.relative(facing));
+            for (var facing : Direction.values()) {
+                var tile = this.level.getBlockEntity(this.worldPosition.relative(facing));
                 if (tile == null)
                     continue;
-                IEnergyStorage storage = tile.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).orElse(null);
+                var storage = tile.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).orElse(null);
                 if (storage == null)
                     continue;
-                int canStore = storage.receiveEnergy(Integer.MAX_VALUE, true);
+                var canStore = storage.receiveEnergy(Integer.MAX_VALUE, true);
                 if (canStore <= 0)
                     continue;
-                int extracted = this.storage.extractEnergy(canStore, false);
+                var extracted = this.storage.extractEnergy(canStore, false);
                 if (extracted <= 0)
                     continue;
                 storage.receiveEnergy(extracted, false);
                 break;
             }
 
-            int emptyPart = this.storage.getMaxEnergyStored() - this.storage.getEnergyStored();
+            var emptyPart = this.storage.getMaxEnergyStored() - this.storage.getEnergyStored();
             if (emptyPart <= 0)
                 return;
             if (this.level.getGameTime() % 20 != 0)
@@ -74,14 +74,14 @@ public class BlockEntityRFConverter extends BlockEntityImpl implements ITickable
             if (!Multiblocks.RF_CONVERTER.isComplete(this.level, this.worldPosition))
                 return;
 
-            int aura = IAuraChunk.getAuraInArea(this.level, this.worldPosition, 45);
+            var aura = IAuraChunk.getAuraInArea(this.level, this.worldPosition, 45);
             if (aura <= IAuraChunk.DEFAULT_AURA)
                 return;
-            int amountToGen = Math.min(Math.min(10000, aura / 1000), emptyPart);
-            int amountToUse = Mth.ceil(amountToGen / ModConfig.instance.auraToRFRatio.get());
+            var amountToGen = Math.min(Math.min(10000, aura / 1000), emptyPart);
+            var amountToUse = Mth.ceil(amountToGen / ModConfig.instance.auraToRFRatio.get());
 
             this.storage.setEnergy(this.storage.getEnergyStored() + amountToGen);
-            BlockPos pos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 45, this.worldPosition);
+            var pos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 45, this.worldPosition);
             IAuraChunk.getAuraChunk(this.level, pos).drainAura(pos, amountToUse);
 
             PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,

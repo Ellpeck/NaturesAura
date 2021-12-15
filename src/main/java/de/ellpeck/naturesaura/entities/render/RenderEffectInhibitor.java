@@ -37,12 +37,12 @@ public class RenderEffectInhibitor extends EntityRenderer<EntityEffectInhibitor>
     @Override
     public void render(EntityEffectInhibitor entity, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
-        float time = entity.renderTicks + entity.getId() + partialTicks;
-        float bob = (float) Math.sin(time / 10F) * 0.05F;
+        var time = entity.renderTicks + entity.getId() + partialTicks;
+        var bob = (float) Math.sin(time / 10F) * 0.05F;
         matrixStackIn.translate(0, 0.15F + bob, 0);
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(time * 3 % 360));
-        ResourceLocation effect = entity.getInhibitedEffect();
-        ItemStack stack = this.items.computeIfAbsent(effect,
+        var effect = entity.getInhibitedEffect();
+        var stack = this.items.computeIfAbsent(effect,
                 res -> ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER), effect));
         Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
         matrixStackIn.popPose();

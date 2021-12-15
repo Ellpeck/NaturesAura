@@ -21,7 +21,7 @@ public class BlockAuraDetector extends BlockContainerImpl {
 
     @Override
     public int getAnalogOutputSignal(BlockState blockState, Level levelIn, BlockPos pos) {
-        BlockEntity tile = levelIn.getBlockEntity(pos);
+        var tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityAuraDetector detector)
             return detector.redstonePower;
         else

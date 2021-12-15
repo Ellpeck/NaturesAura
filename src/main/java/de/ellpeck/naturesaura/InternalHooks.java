@@ -39,9 +39,9 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     private boolean auraPlayerInteraction(Player player, int amount, boolean extract, boolean simulate) {
         if (extract && player.isCreative())
             return true;
-        ItemStack stack = Helper.getEquippedItem(s -> s.getCapability(NaturesAuraAPI.capAuraContainer).isPresent(), player);
+        var stack = Helper.getEquippedItem(s -> s.getCapability(NaturesAuraAPI.capAuraContainer).isPresent(), player);
         if (!stack.isEmpty()) {
-            IAuraContainer container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
+            var container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
             if (extract) {
                 amount -= container.drainAura(amount, simulate);
             } else {
@@ -59,8 +59,8 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public void spawnParticleStream(float startX, float startY, float startZ, float endX, float endY, float endZ, float speed, int color, float scale) {
-        Vec3 dir = new Vec3(endX - startX, endY - startY, endZ - startZ);
-        double length = dir.length();
+        var dir = new Vec3(endX - startX, endY - startY, endZ - startZ);
+        var length = dir.length();
         if (length > 0) {
             dir = dir.normalize();
             this.spawnMagicParticle(startX, startY, startZ,
@@ -92,7 +92,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     @Override
     public List<Tuple<Vec3, Integer>> getActiveEffectPowders(Level level, AABB area, ResourceLocation name) {
         List<Tuple<Vec3, Integer>> found = new ArrayList<>();
-        for (Tuple<Vec3, Integer> powder : ((LevelData) ILevelData.getLevelData(level)).effectPowders.get(name))
+        for (var powder : ((LevelData) ILevelData.getLevelData(level)).effectPowders.get(name))
             if (area.contains(powder.getA()))
                 found.add(powder);
         return found;
@@ -100,10 +100,10 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public boolean isEffectPowderActive(Level level, BlockPos pos, ResourceLocation name) {
-        Vec3 posVec = new Vec3(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-        List<Tuple<Vec3, Integer>> powders = this.getActiveEffectPowders(level, new AABB(pos).inflate(64), name);
-        for (Tuple<Vec3, Integer> powder : powders) {
-            AABB bounds = Helper.aabb(powder.getA()).inflate(powder.getB());
+        var posVec = new Vec3(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+        var powders = this.getActiveEffectPowders(level, new AABB(pos).inflate(64), name);
+        for (var powder : powders) {
+            var bounds = Helper.aabb(powder.getA()).inflate(powder.getB());
             if (bounds.contains(posVec))
                 return true;
         }
@@ -117,22 +117,22 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public int getSpotAmountInArea(Level level, BlockPos pos, int radius) {
-        MutableInt result = new MutableInt();
+        var result = new MutableInt();
         this.getAuraSpotsInArea(level, pos, radius, (blockpos, drainSpot) -> result.increment());
         return result.intValue();
     }
 
     @Override
     public int getAuraInArea(Level level, BlockPos pos, int radius) {
-        MutableInt result = new MutableInt(IAuraChunk.DEFAULT_AURA);
+        var result = new MutableInt(IAuraChunk.DEFAULT_AURA);
         this.getAuraSpotsInArea(level, pos, radius, (blockPos, drainSpot) -> result.add(drainSpot));
         return result.intValue();
     }
 
     @Override
     public Pair<Integer, Integer> getAuraAndSpotAmountInArea(Level level, BlockPos pos, int radius) {
-        MutableInt spots = new MutableInt();
-        MutableInt aura = new MutableInt(IAuraChunk.DEFAULT_AURA);
+        var spots = new MutableInt();
+        var aura = new MutableInt(IAuraChunk.DEFAULT_AURA);
         this.getAuraSpotsInArea(level, pos, radius, (blockPos, drainSpot) -> {
             aura.add(drainSpot);
             spots.increment();
@@ -142,9 +142,9 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public int triangulateAuraInArea(Level level, BlockPos pos, int radius) {
-        MutableFloat result = new MutableFloat(IAuraChunk.DEFAULT_AURA);
+        var result = new MutableFloat(IAuraChunk.DEFAULT_AURA);
         IAuraChunk.getSpotsInArea(level, pos, radius, (blockPos, spot) -> {
-            float percentage = 1F - (float) Math.sqrt(pos.distSqr(blockPos)) / radius;
+            var percentage = 1F - (float) Math.sqrt(pos.distSqr(blockPos)) / radius;
             result.add(spot * percentage);
         });
         return result.intValue();
@@ -152,15 +152,15 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public BlockPos getLowestAuraDrainSpot(Level level, BlockPos pos, int radius, BlockPos defaultSpot) {
-        MutableInt lowestAmount = new MutableInt(Integer.MAX_VALUE);
-        MutableObject<BlockPos> lowestSpot = new MutableObject<>();
+        var lowestAmount = new MutableInt(Integer.MAX_VALUE);
+        var lowestSpot = new MutableObject<BlockPos>();
         this.getAuraSpotsInArea(level, pos, radius, (blockPos, drainSpot) -> {
             if (drainSpot < lowestAmount.intValue()) {
                 lowestAmount.setValue(drainSpot);
                 lowestSpot.setValue(blockPos);
             }
         });
-        BlockPos lowest = lowestSpot.getValue();
+        var lowest = lowestSpot.getValue();
         if (lowest == null || lowestAmount.intValue() >= 0)
             lowest = defaultSpot;
         return lowest;
@@ -168,15 +168,15 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public BlockPos getHighestAuraDrainSpot(Level level, BlockPos pos, int radius, BlockPos defaultSpot) {
-        MutableInt highestAmount = new MutableInt(Integer.MIN_VALUE);
-        MutableObject<BlockPos> highestSpot = new MutableObject<>();
+        var highestAmount = new MutableInt(Integer.MIN_VALUE);
+        var highestSpot = new MutableObject<BlockPos>();
         this.getAuraSpotsInArea(level, pos, radius, (blockPos, drainSpot) -> {
             if (drainSpot > highestAmount.intValue()) {
                 highestAmount.setValue(drainSpot);
                 highestSpot.setValue(blockPos);
             }
         });
-        BlockPos highest = highestSpot.getValue();
+        var highest = highestSpot.getValue();
         if (highest == null || highestAmount.intValue() <= 0)
             highest = defaultSpot;
         return highest;

@@ -53,26 +53,26 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     public void onSpawn(LivingSpawnEvent.CheckSpawn event) {
         if (event.getSpawner() != null)
             return;
-        LevelAccessor level = event.getWorld();
-        BlockPos pos = new BlockPos(event.getX(), event.getY(), event.getZ());
+        var level = event.getWorld();
+        var pos = new BlockPos(event.getX(), event.getY(), event.getZ());
         if (!(level instanceof Level))
             return;
-        LevelData data = (LevelData) ILevelData.getLevelData((Level) level);
-        for (BlockEntitySpawnLamp lamp : data.spawnLamps) {
+        var data = (LevelData) ILevelData.getLevelData((Level) level);
+        for (var lamp : data.spawnLamps) {
             if (lamp.isRemoved())
                 continue;
 
-            int range = lamp.getRadius();
+            var range = lamp.getRadius();
             if (range <= 0)
                 continue;
 
-            BlockPos lampPos = lamp.getBlockPos();
+            var lampPos = lamp.getBlockPos();
             if (!new AABB(lampPos).inflate(range).contains(new Vec3(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)))
                 continue;
 
-            Mob entity = (Mob) event.getEntityLiving();
+            var entity = (Mob) event.getEntityLiving();
             if (entity.checkSpawnRules(level, event.getSpawnReason()) && entity.checkSpawnObstruction(level)) {
-                BlockPos spot = IAuraChunk.getHighestSpot((Level) level, lampPos, 32, lampPos);
+                var spot = IAuraChunk.getHighestSpot((Level) level, lampPos, 32, lampPos);
                 IAuraChunk.getAuraChunk((Level) level, spot).drainAura(spot, 200);
 
                 PacketHandler.sendToAllAround((ServerLevel) level, lampPos, 32,
@@ -92,9 +92,9 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     @Override
     @OnlyIn(Dist.CLIENT)
     public AABB getVisualizationBounds(Level level, BlockPos pos) {
-        BlockEntity tile = level.getBlockEntity(pos);
+        var tile = level.getBlockEntity(pos);
         if (tile instanceof BlockEntitySpawnLamp) {
-            int radius = ((BlockEntitySpawnLamp) tile).getRadius();
+            var radius = ((BlockEntitySpawnLamp) tile).getRadius();
             if (radius > 0)
                 return new AABB(pos).inflate(radius);
         }

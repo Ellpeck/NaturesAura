@@ -49,9 +49,9 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
-        BlockEntity tile = levelIn.getBlockEntity(pos);
+        var tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityFurnaceHeater heater && heater.isActive) {
-            Direction facing = stateIn.getValue(FACING);
+            var facing = stateIn.getValue(FACING);
 
             float x;
             float y;

@@ -54,13 +54,13 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
             if (this.ritualPos != null && this.recipe != null) {
                 if (this.level.getGameTime() % 5 == 0) {
                     if (this.isRitualOkay()) {
-                        boolean wasOverHalf = this.timer >= this.recipe.time / 2;
+                        var wasOverHalf = this.timer >= this.recipe.time / 2;
                         this.timer += 5;
-                        boolean isOverHalf = this.timer >= this.recipe.time / 2;
+                        var isOverHalf = this.timer >= this.recipe.time / 2;
 
                         if (!isOverHalf)
                             Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'W', (pos, matcher) -> {
-                                BlockEntity tile = this.level.getBlockEntity(pos);
+                                var tile = this.level.getBlockEntity(pos);
                                 if (tile instanceof BlockEntityWoodStand && !((BlockEntityWoodStand) tile).items.getStackInSlot(0).isEmpty()) {
                                     PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticleStream(
                                             (float) pos.getX() + 0.2F + this.level.random.nextFloat() * 0.6F,
@@ -83,7 +83,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
                             });
                             recurseTreeDestruction(this.level, this.ritualPos, this.ritualPos, true, false);
 
-                            ItemEntity item = new ItemEntity(this.level,
+                            var item = new ItemEntity(this.level,
                                     this.ritualPos.getX() + 0.5, this.ritualPos.getY() + 4.5, this.ritualPos.getZ() + 0.5,
                                     this.recipe.result.copy());
                             this.level.addFreshEntity(item);
@@ -98,7 +98,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
                             this.timer = 0;
                         } else if (isOverHalf && !wasOverHalf) {
                             Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'W', (pos, matcher) -> {
-                                BlockEntity tile = this.level.getBlockEntity(pos);
+                                var tile = this.level.getBlockEntity(pos);
                                 if (tile instanceof BlockEntityWoodStand stand && !stand.items.getStackInSlot(0).isEmpty()) {
                                     PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
                                             new PacketParticles(stand.worldPosition.getX(), stand.worldPosition.getY(), stand.worldPosition.getZ(), PacketParticles.Type.TR_CONSUME_ITEM));
@@ -129,11 +129,11 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
             return;
         }
 
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-                for (int z = -1; z <= 1; z++) {
-                    BlockPos offset = pos.offset(x, y, z);
-                    BlockState state = level.getBlockState(offset);
+        for (var x = -1; x <= 1; x++) {
+            for (var y = -1; y <= 1; y++) {
+                for (var z = -1; z <= 1; z++) {
+                    var offset = pos.offset(x, y, z);
+                    var state = level.getBlockState(offset);
                     if (state.getBlock().getTags().contains(BlockTags.LOGS.getName()) || includeLeaves && state.getBlock() instanceof LeavesBlock) {
                         if (drop) {
                             level.destroyBlock(offset, true);
@@ -153,20 +153,20 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
         if (!Multiblocks.TREE_RITUAL.isComplete(this.level, this.ritualPos)) {
             return false;
         }
-        for (int i = 0; i < 2; i++) {
-            BlockState state = this.level.getBlockState(this.ritualPos.above(i));
+        for (var i = 0; i < 2; i++) {
+            var state = this.level.getBlockState(this.ritualPos.above(i));
             if (!(state.getBlock().getTags().contains(BlockTags.LOGS.getName())))
                 return false;
         }
         if (this.timer < this.recipe.time / 2) {
             List<Ingredient> required = new ArrayList<>(Arrays.asList(this.recipe.ingredients));
-            boolean fine = Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'W', (pos, matcher) -> {
-                BlockEntity tile = this.level.getBlockEntity(pos);
+            var fine = Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'W', (pos, matcher) -> {
+                var tile = this.level.getBlockEntity(pos);
                 if (tile instanceof BlockEntityWoodStand) {
-                    ItemStack stack = ((BlockEntityWoodStand) tile).items.getStackInSlot(0);
+                    var stack = ((BlockEntityWoodStand) tile).items.getStackInSlot(0);
                     if (!stack.isEmpty()) {
-                        for (int i = required.size() - 1; i >= 0; i--) {
-                            Ingredient req = required.get(i);
+                        for (var i = required.size() - 1; i >= 0; i--) {
+                            var req = required.get(i);
                             if (req.test(stack)) {
                                 required.remove(i);
                                 return true;

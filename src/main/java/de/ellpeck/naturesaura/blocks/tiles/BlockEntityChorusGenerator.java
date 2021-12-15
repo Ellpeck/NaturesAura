@@ -34,8 +34,8 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
             return;
         if (this.currentlyBreaking.isEmpty())
             return;
-        BlockPos pos = this.currentlyBreaking.removeLast();
-        BlockState state = this.level.getBlockState(pos);
+        var pos = this.currentlyBreaking.removeLast();
+        var state = this.level.getBlockState(pos);
         if (state.getBlock() != Blocks.CHORUS_PLANT && state.getBlock() != Blocks.CHORUS_FLOWER) {
             this.currentlyBreaking.clear();
             return;
@@ -50,16 +50,16 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
     @Override
     public void onRedstonePowerChange(int newPower) {
         if (this.redstonePower <= 0 && newPower > 0 && this.currentlyBreaking.isEmpty()) {
-            int range = 2;
+            var range = 2;
             xyz:
-            for (int x = -range; x <= range; x++) {
-                for (int y = -range; y <= range; y++) {
-                    for (int z = -range; z <= range; z++) {
-                        BlockPos offset = this.worldPosition.offset(x, y, z);
-                        BlockState below = this.level.getBlockState(offset.below());
+            for (var x = -range; x <= range; x++) {
+                for (var y = -range; y <= range; y++) {
+                    for (var z = -range; z <= range; z++) {
+                        var offset = this.worldPosition.offset(x, y, z);
+                        var below = this.level.getBlockState(offset.below());
                         if (below.getBlock() != Blocks.END_STONE)
                             continue;
-                        BlockState state = this.level.getBlockState(offset);
+                        var state = this.level.getBlockState(offset);
                         if (state.getBlock() != Blocks.CHORUS_PLANT)
                             continue;
 
@@ -70,7 +70,7 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
                         this.currentlyBreaking.addAll(plants);
                         this.currentlyBreaking.addFirst(offset);
 
-                        int aura = plants.size() * plants.size() * 300;
+                        var aura = plants.size() * plants.size() * 300;
                         this.auraPerBlock = aura / plants.size();
 
                         break xyz;
@@ -82,13 +82,13 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
     }
 
     private void collectChorusPlant(BlockPos pos, List<BlockPos> blocks) {
-        for (Direction dir : Direction.values()) {
+        for (var dir : Direction.values()) {
             if (dir == Direction.DOWN)
                 continue;
-            BlockPos offset = pos.relative(dir);
+            var offset = pos.relative(dir);
             if (blocks.contains(offset))
                 continue;
-            BlockState state = this.level.getBlockState(offset);
+            var state = this.level.getBlockState(offset);
             if (state.getBlock() != Blocks.CHORUS_PLANT && state.getBlock() != Blocks.CHORUS_FLOWER)
                 continue;
             blocks.add(offset);
@@ -100,8 +100,8 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
     public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type == SaveType.TILE) {
-            ListTag list = new ListTag();
-            for (BlockPos pos : this.currentlyBreaking)
+            var list = new ListTag();
+            for (var pos : this.currentlyBreaking)
                 list.add(NbtUtils.writeBlockPos(pos));
             compound.put("breaking", list);
             compound.putInt("aura", this.auraPerBlock);
@@ -113,8 +113,8 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
         super.readNBT(compound, type);
         if (type == SaveType.TILE) {
             this.currentlyBreaking.clear();
-            ListTag list = compound.getList("breaking", 10);
-            for (int i = 0; i < list.size(); i++)
+            var list = compound.getList("breaking", 10);
+            for (var i = 0; i < list.size(); i++)
                 this.currentlyBreaking.add(NbtUtils.readBlockPos(list.getCompound(i)));
             this.auraPerBlock = compound.getInt("aura");
         }

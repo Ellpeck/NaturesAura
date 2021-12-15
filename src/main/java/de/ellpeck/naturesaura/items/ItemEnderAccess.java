@@ -39,8 +39,8 @@ public class ItemEnderAccess extends ItemImpl {
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
         if (handIn != InteractionHand.MAIN_HAND)
             return new InteractionResultHolder<>(InteractionResult.PASS, playerIn.getItemInHand(handIn));
-        ItemStack stack = playerIn.getMainHandItem();
-        String name = BlockEnderCrate.getEnderName(stack);
+        var stack = playerIn.getMainHandItem();
+        var name = BlockEnderCrate.getEnderName(stack);
         if (!Strings.isNullOrEmpty(name)) {
             if (!levelIn.isClientSide && NaturesAuraAPI.instance().extractAuraFromPlayer(playerIn, 10000, false)) {
                 NetworkHooks.openGui((ServerPlayer) playerIn, new MenuProvider() {

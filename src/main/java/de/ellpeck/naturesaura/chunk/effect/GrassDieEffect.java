@@ -27,7 +27,7 @@ public class GrassDieEffect implements IDrainSpotEffect {
 
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot < 0) {
-            Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 50);
+            var auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 50);
             int aura = auraAndSpots.getLeft();
             if (aura < 0) {
                 this.amount = Math.min(300, Mth.ceil(Math.abs(aura) / 100000F / auraAndSpots.getRight()));
@@ -58,15 +58,15 @@ public class GrassDieEffect implements IDrainSpotEffect {
     public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(level, pos, spot))
             return;
-        for (int i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
-            BlockPos grassPos = new BlockPos(
+        for (var i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
+            var grassPos = new BlockPos(
                     pos.getX() + level.random.nextGaussian() * this.dist,
                     pos.getY() + level.random.nextGaussian() * this.dist,
                     pos.getZ() + level.random.nextGaussian() * this.dist
             );
             if (grassPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(grassPos)) {
-                BlockState state = level.getBlockState(grassPos);
-                Block block = state.getBlock();
+                var state = level.getBlockState(grassPos);
+                var block = state.getBlock();
 
                 BlockState newState = null;
                 if (block instanceof LeavesBlock) {

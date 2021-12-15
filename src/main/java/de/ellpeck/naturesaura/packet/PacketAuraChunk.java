@@ -31,13 +31,13 @@ public class PacketAuraChunk {
     }
 
     public static PacketAuraChunk fromBytes(FriendlyByteBuf buf) {
-        PacketAuraChunk packet = new PacketAuraChunk();
+        var packet = new PacketAuraChunk();
         packet.chunkX = buf.readInt();
         packet.chunkZ = buf.readInt();
 
         packet.drainSpots = new HashMap<>();
-        int amount = buf.readInt();
-        for (int i = 0; i < amount; i++) {
+        var amount = buf.readInt();
+        for (var i = 0; i < amount; i++) {
             packet.drainSpots.put(
                     BlockPos.of(buf.readLong()),
                     new MutableInt(buf.readInt())
@@ -52,7 +52,7 @@ public class PacketAuraChunk {
         buf.writeInt(packet.chunkZ);
 
         buf.writeInt(packet.drainSpots.size());
-        for (Map.Entry<BlockPos, MutableInt> entry : packet.drainSpots.entrySet()) {
+        for (var entry : packet.drainSpots.entrySet()) {
             buf.writeLong(entry.getKey().asLong());
             buf.writeInt(entry.getValue().intValue());
         }
@@ -65,10 +65,10 @@ public class PacketAuraChunk {
 
     public boolean tryHandle(Level level) {
         try {
-            LevelChunk chunk = level.getChunk(this.chunkX, this.chunkZ);
+            var chunk = level.getChunk(this.chunkX, this.chunkZ);
             if (chunk.isEmpty())
                 return false;
-            AuraChunk auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk).orElse(null);
+            var auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk).orElse(null);
             if (auraChunk == null)
                 return false;
             auraChunk.setSpots(this.drainSpots);

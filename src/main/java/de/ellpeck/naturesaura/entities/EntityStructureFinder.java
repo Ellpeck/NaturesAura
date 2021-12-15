@@ -52,10 +52,10 @@ public class EntityStructureFinder extends EyeOfEnder {
     @Override
     public void signalTo(BlockPos pos) {
         double d0 = pos.getX();
-        int i = pos.getY();
+        var i = pos.getY();
         double d1 = pos.getZ();
-        double d2 = d0 - this.getX();
-        double d3 = d1 - this.getZ();
+        var d2 = d0 - this.getX();
+        var d3 = d1 - this.getZ();
         var f = Math.sqrt(d2 * d2 + d3 * d3);
         if (f > 12.0F) {
             this.targetX = this.getX() + d2 / (double) f * 12.0D;
@@ -75,10 +75,10 @@ public class EntityStructureFinder extends EyeOfEnder {
     public void tick() {
         this.baseTick();
 
-        Vec3 vec3d = this.getDeltaMovement();
-        double d0 = this.getX() + vec3d.x;
-        double d1 = this.getY() + vec3d.y;
-        double d2 = this.getZ() + vec3d.z;
+        var vec3d = this.getDeltaMovement();
+        var d0 = this.getX() + vec3d.x;
+        var d1 = this.getY() + vec3d.y;
+        var d2 = this.getZ() + vec3d.z;
         var f = Math.sqrt(vec3d.horizontalDistance());
         this.setYRot((float) (Mth.atan2(vec3d.x, vec3d.z) * (double) (180F / (float) Math.PI)));
         this.setXRot((float) (Mth.atan2(vec3d.y, f) * (double) (180F / (float) Math.PI)));
@@ -93,24 +93,24 @@ public class EntityStructureFinder extends EyeOfEnder {
         this.setXRot(Mth.lerp(0.2F, this.xRotO, this.getXRot()));
         this.setYRot(Mth.lerp(0.2F, this.yRotO, this.getYRot()));
         if (!this.level.isClientSide) {
-            double d3 = this.targetX - d0;
-            double d4 = this.targetZ - d2;
-            float f1 = (float) Math.sqrt(d3 * d3 + d4 * d4);
-            float f2 = (float) Mth.atan2(d4, d3);
-            double d5 = Mth.lerp(0.0025D, f, f1);
-            double d6 = vec3d.y;
+            var d3 = this.targetX - d0;
+            var d4 = this.targetZ - d2;
+            var f1 = (float) Math.sqrt(d3 * d3 + d4 * d4);
+            var f2 = (float) Mth.atan2(d4, d3);
+            var d5 = Mth.lerp(0.0025D, f, f1);
+            var d6 = vec3d.y;
             if (f1 < 1.0F) {
                 d5 *= 0.8D;
                 d6 *= 0.8D;
             }
 
-            int j = this.getY() < this.targetY ? 1 : -1;
+            var j = this.getY() < this.targetY ? 1 : -1;
             vec3d = new Vec3(Math.cos(f2) * d5, d6 + ((double) j - d6) * (double) 0.015F, Math.sin(f2) * d5);
             this.setDeltaMovement(vec3d);
         }
 
         if (this.isInWater()) {
-            for (int i = 0; i < 4; ++i)
+            for (var i = 0; i < 4; ++i)
                 this.level.addParticle(ParticleTypes.BUBBLE, d0 - vec3d.x * 0.25D, d1 - vec3d.y * 0.25D, d2 - vec3d.z * 0.25D, vec3d.x, vec3d.y, vec3d.z);
         } else if (this.level.isClientSide) {
             NaturesAuraAPI.instance().spawnMagicParticle(d0 - vec3d.x * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, d1 - vec3d.y * 0.25D - 0.5D, d2 - vec3d.z * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, vec3d.x * 0.25F, vec3d.y * 0.25F, vec3d.z * 0.25F, this.entityData.get(COLOR), 1, 50, 0, false, true);

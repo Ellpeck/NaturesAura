@@ -51,13 +51,13 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
             }
 
             if (this.currentRecipe != null) {
-                int drain = Mth.ceil(this.currentRecipe.aura / (float) this.currentRecipe.time * 10F);
-                BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
+                var drain = Mth.ceil(this.currentRecipe.aura / (float) this.currentRecipe.time * 10F);
+                var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
                 IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, drain);
 
                 this.time += 10;
                 if (this.time >= this.currentRecipe.time) {
-                    Entity entity = this.currentRecipe.makeEntity(this.level, new BlockPos(this.spawnX, this.worldPosition.getY() + 1, this.spawnZ));
+                    var entity = this.currentRecipe.makeEntity(this.level, new BlockPos(this.spawnX, this.worldPosition.getY() + 1, this.spawnZ));
                     this.level.addFreshEntity(entity);
 
                     this.currentRecipe = null;
@@ -65,20 +65,20 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
                     this.sendToClients();
                 }
             } else {
-                List<ItemEntity> items = this.level.getEntitiesOfClass(ItemEntity.class,
+                var items = this.level.getEntitiesOfClass(ItemEntity.class,
                         new AABB(this.worldPosition).inflate(2));
 
-                for (AnimalSpawnerRecipe recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.ANIMAL_SPAWNER_TYPE, null, null)) {
+                for (var recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.ANIMAL_SPAWNER_TYPE, null, null)) {
                     if (recipe.ingredients.length != items.size())
                         continue;
                     List<Ingredient> required = new ArrayList<>(Arrays.asList(recipe.ingredients));
-                    for (ItemEntity item : items) {
+                    for (var item : items) {
                         if (!item.isAlive() || item.hasPickUpDelay())
                             break;
-                        ItemStack stack = item.getItem();
+                        var stack = item.getItem();
                         if (stack.isEmpty())
                             break;
-                        for (Ingredient ingredient : required) {
+                        for (var ingredient : required) {
                             if (ingredient.test(stack) && Helper.getIngredientAmount(ingredient) == stack.getCount()) {
                                 required.remove(ingredient);
                                 break;
@@ -88,7 +88,7 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
                     if (!required.isEmpty())
                         continue;
 
-                    for (ItemEntity item : items) {
+                    for (var item : items) {
                         item.remove(Entity.RemovalReason.KILLED);
                         PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
                                 new PacketParticles((float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.ANIMAL_SPAWNER));
@@ -124,8 +124,8 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
                 this.entityClient = this.currentRecipe.makeEntity(this.level, BlockPos.ZERO);
                 this.entityClient.setPos(this.spawnX, this.worldPosition.getY() + 1, this.spawnZ);
             }
-            AABB bounds = this.entityClient.getBoundingBox();
-            for (int i = this.level.random.nextInt(5) + 5; i >= 0; i--)
+            var bounds = this.entityClient.getBoundingBox();
+            for (var i = this.level.random.nextInt(5) + 5; i >= 0; i--)
                 NaturesAuraAPI.instance().spawnMagicParticle(
                         bounds.minX + this.level.random.nextFloat() * (bounds.maxX - bounds.minX),
                         bounds.minY + this.level.random.nextFloat() * (bounds.maxY - bounds.minY),
@@ -153,7 +153,7 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
         if (type != SaveType.BLOCK) {
             if (compound.contains("recipe")) {
                 if (this.hasLevel()) {
-                    ResourceLocation name = new ResourceLocation(compound.getString("recipe"));
+                    var name = new ResourceLocation(compound.getString("recipe"));
                     this.currentRecipe = (AnimalSpawnerRecipe) this.level.getRecipeManager().byKey(name).orElse(null);
                 }
                 this.spawnX = compound.getDouble("spawn_x");

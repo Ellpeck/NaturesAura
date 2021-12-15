@@ -38,42 +38,42 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
 
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        LivingEntity entity = event.getEntityLiving();
+        var entity = event.getEntityLiving();
         if (entity.level.isClientSide || entity.level.getGameTime() % 40 != 0 || !(entity instanceof Animal) || entity instanceof Mob || entity instanceof Npc)
             return;
-        CompoundTag data = entity.getPersistentData();
-        int timeAlive = data.getInt(NaturesAura.MOD_ID + ":time_alive");
+        var data = entity.getPersistentData();
+        var timeAlive = data.getInt(NaturesAura.MOD_ID + ":time_alive");
         data.putInt(NaturesAura.MOD_ID + ":time_alive", timeAlive + 40);
     }
 
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
-        LivingEntity entity = event.getEntityLiving();
+        var entity = event.getEntityLiving();
         if (entity.level.isClientSide || !(entity instanceof Animal) || entity instanceof Mob || entity instanceof Npc)
             return;
-        BlockPos pos = entity.blockPosition();
+        var pos = entity.blockPosition();
         Helper.getBlockEntitiesInArea(entity.level, pos, 5, tile -> {
             if (!(tile instanceof BlockEntityAnimalGenerator gen))
                 return false;
 
-            CompoundTag data = entity.getPersistentData();
+            var data = entity.getPersistentData();
             data.putBoolean(NaturesAura.MOD_ID + ":no_drops", true);
 
             if (gen.isBusy())
                 return false;
 
-            boolean child = entity.isBaby();
-            float timeMod = child ? 0.5F : 1;
-            float amountMod = child ? 0.667F : 1;
+            var child = entity.isBaby();
+            var timeMod = child ? 0.5F : 1;
+            var amountMod = child ? 0.667F : 1;
 
-            int timeAlive = data.getInt(NaturesAura.MOD_ID + ":time_alive");
-            int time = Math.min(Mth.floor((timeAlive - 15000) / 500F * timeMod), 200);
-            int amount = Math.min(Mth.floor((timeAlive - 8000) / 2F * amountMod), 25000);
+            var timeAlive = data.getInt(NaturesAura.MOD_ID + ":time_alive");
+            var time = Math.min(Mth.floor((timeAlive - 15000) / 500F * timeMod), 200);
+            var amount = Math.min(Mth.floor((timeAlive - 8000) / 2F * amountMod), 25000);
             if (time <= 0 || amount <= 0)
                 return false;
             gen.setGenerationValues(time, amount);
 
-            BlockPos genPos = gen.getBlockPos();
+            var genPos = gen.getBlockPos();
             PacketHandler.sendToAllAround(entity.level, pos, 32, new PacketParticles(
                     (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), PacketParticles.Type.ANIMAL_GEN_CONSUME,
                     child ? 1 : 0,
@@ -86,14 +86,14 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
 
     @SubscribeEvent
     public void onEntityDrops(LivingDropsEvent event) {
-        LivingEntity entity = event.getEntityLiving();
+        var entity = event.getEntityLiving();
         if (entity.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":no_drops"))
             event.setCanceled(true);
     }
 
     @SubscribeEvent
     public void onEntityExp(LivingExperienceDropEvent event) {
-        LivingEntity entity = event.getEntityLiving();
+        var entity = event.getEntityLiving();
         if (entity.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":no_drops"))
             event.setCanceled(true);
     }

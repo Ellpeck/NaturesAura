@@ -37,45 +37,45 @@ public class BlockEntityPlacer extends BlockEntityImpl implements ITickableBlock
         if (!this.level.isClientSide && this.level.getGameTime() % 15 == 0) {
             if (this.redstonePower > 0)
                 return;
-            BlockEntity tileUp = this.level.getBlockEntity(this.worldPosition.above());
+            var tileUp = this.level.getBlockEntity(this.worldPosition.above());
             if (tileUp == null)
                 return;
-            IItemHandler handler = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN).orElse(null);
+            var handler = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN).orElse(null);
             if (handler == null)
                 return;
-            List<ItemFrame> frames = Helper.getAttachedItemFrames(this.level, this.worldPosition);
+            var frames = Helper.getAttachedItemFrames(this.level, this.worldPosition);
             if (frames.isEmpty())
                 return;
 
             List<BlockPos> validPositions = new ArrayList<>();
-            int range = 5;
-            for (int x = -range; x <= range; x++)
-                for (int y = -range; y <= range; y++)
-                    for (int z = -range; z <= range; z++) {
-                        BlockPos pos = this.worldPosition.offset(x, y, z);
+            var range = 5;
+            for (var x = -range; x <= range; x++)
+                for (var y = -range; y <= range; y++)
+                    for (var z = -range; z <= range; z++) {
+                        var pos = this.worldPosition.offset(x, y, z);
                         if (!this.framesContain(frames, pos, this.level.getBlockState(pos)))
                             continue;
 
-                        BlockPos up = pos.above();
-                        BlockState state = this.level.getBlockState(up);
+                        var up = pos.above();
+                        var state = this.level.getBlockState(up);
                         if (state.getMaterial().isReplaceable())
                             validPositions.add(up);
                     }
             if (validPositions.isEmpty())
                 return;
 
-            for (int i = 0; i < handler.getSlots(); i++) {
-                ItemStack stack = handler.extractItem(i, 1, true);
+            for (var i = 0; i < handler.getSlots(); i++) {
+                var stack = handler.extractItem(i, 1, true);
                 if (stack.isEmpty())
                     continue;
 
-                BlockPos pos = validPositions.get(this.level.random.nextInt(validPositions.size()));
-                ItemStack left = this.tryPlace(stack.copy(), pos);
+                var pos = validPositions.get(this.level.random.nextInt(validPositions.size()));
+                var left = this.tryPlace(stack.copy(), pos);
                 if (ItemStack.isSame(stack, left))
                     continue;
 
                 handler.extractItem(i, 1, false);
-                BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 10, this.worldPosition);
+                var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 10, this.worldPosition);
                 IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, 1000);
 
                 PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), PacketParticles.Type.PLACER_PLACING));
@@ -86,12 +86,12 @@ public class BlockEntityPlacer extends BlockEntityImpl implements ITickableBlock
     }
 
     private boolean framesContain(List<ItemFrame> frames, BlockPos pos, BlockState state) {
-        ItemStack stack = state.getBlock().getCloneItemStack(this.level, pos, state);
+        var stack = state.getBlock().getCloneItemStack(this.level, pos, state);
         if (stack.isEmpty())
             return false;
 
-        for (ItemFrame frame : frames) {
-            ItemStack frameStack = frame.getItem();
+        for (var frame : frames) {
+            var frameStack = frame.getItem();
             if (frameStack.isEmpty())
                 continue;
             if (Helper.areItemsEqual(stack, frameStack, false))
@@ -106,9 +106,9 @@ public class BlockEntityPlacer extends BlockEntityImpl implements ITickableBlock
     private ItemStack tryPlace(ItemStack stack, BlockPos pos) {
         if (!(this.level instanceof ServerLevel))
             return stack;
-        FakePlayer fake = FakePlayerFactory.getMinecraft((ServerLevel) this.level);
+        var fake = FakePlayerFactory.getMinecraft((ServerLevel) this.level);
         fake.getInventory().items.set(fake.getInventory().selected, stack);
-        BlockHitResult ray = new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false);
+        var ray = new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false);
         ForgeHooks.onPlaceItemIntoWorld(new UseOnContext(fake, InteractionHand.MAIN_HAND, ray));
         return fake.getMainHandItem().copy();
     }

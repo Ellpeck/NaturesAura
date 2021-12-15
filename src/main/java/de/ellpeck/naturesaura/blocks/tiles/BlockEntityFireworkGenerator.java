@@ -36,15 +36,15 @@ public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITi
     public void tick() {
         if (!this.level.isClientSide) {
             if (this.level.getGameTime() % 10 == 0) {
-                List<ItemEntity> items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(this.worldPosition).inflate(4), Entity::isAlive);
-                for (ItemEntity item : items) {
+                var items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(this.worldPosition).inflate(4), Entity::isAlive);
+                for (var item : items) {
                     if (item.hasPickUpDelay())
                         continue;
-                    ItemStack stack = item.getItem();
+                    var stack = item.getItem();
                     if (stack.isEmpty() || stack.getItem() != Items.FIREWORK_ROCKET)
                         continue;
                     if (this.trackedEntity == null && this.releaseTimer <= 0) {
-                        FireworkRocketEntity entity = new FireworkRocketEntity(this.level, item.getX(), item.getY(), item.getZ(), stack);
+                        var entity = new FireworkRocketEntity(this.level, item.getX(), item.getY(), item.getZ(), stack);
                         this.trackedEntity = entity;
                         this.trackedItem = stack.copy();
                         this.level.addFreshEntity(entity);
@@ -63,31 +63,31 @@ public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITi
                     float generateFactor = 0;
                     Set<Integer> usedColors = new HashSet<>();
 
-                    CompoundTag compound = this.trackedItem.getTag();
-                    CompoundTag fireworks = compound.getCompound("Fireworks");
+                    var compound = this.trackedItem.getTag();
+                    var fireworks = compound.getCompound("Fireworks");
 
-                    int flightTime = fireworks.getInt("Flight");
-                    ListTag explosions = fireworks.getList("Explosions", 10);
+                    var flightTime = fireworks.getInt("Flight");
+                    var explosions = fireworks.getList("Explosions", 10);
                     if (!explosions.isEmpty()) {
                         generateFactor += flightTime;
 
-                        for (Tag base : explosions) {
-                            CompoundTag explosion = (CompoundTag) base;
+                        for (var base : explosions) {
+                            var explosion = (CompoundTag) base;
                             generateFactor += 1.5F;
 
-                            boolean flicker = explosion.getBoolean("Flicker");
+                            var flicker = explosion.getBoolean("Flicker");
                             if (flicker)
                                 generateFactor += 1;
 
-                            boolean trail = explosion.getBoolean("Trail");
+                            var trail = explosion.getBoolean("Trail");
                             if (trail)
                                 generateFactor += 8;
 
-                            byte type = explosion.getByte("Type");
+                            var type = explosion.getByte("Type");
                             generateFactor += new float[]{0, 1, 0.5F, 20, 0.5F}[type];
 
                             Set<Integer> colors = new HashSet<>();
-                            for (int color : explosion.getIntArray("Colors")) {
+                            for (var color : explosion.getIntArray("Colors")) {
                                 usedColors.add(color);
                                 colors.add(color);
                             }
@@ -96,7 +96,7 @@ public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITi
                     }
 
                     if (generateFactor > 0) {
-                        int toAdd = Mth.ceil(generateFactor * 10000F);
+                        var toAdd = Mth.ceil(generateFactor * 10000F);
                         if (this.canGenerateRightNow(toAdd)) {
                             this.toRelease = toAdd;
                             this.releaseTimer = 15 * flightTime + 40;

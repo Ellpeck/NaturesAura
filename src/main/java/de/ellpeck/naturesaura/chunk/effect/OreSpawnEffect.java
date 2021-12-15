@@ -48,7 +48,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot <= 0)
             return false;
-        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 30);
+        var auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 30);
         int aura = auraAndSpots.getLeft();
         if (aura <= 2000000)
             return false;
@@ -81,7 +81,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
             return;
         if (!this.calcValues(level, pos, spot))
             return;
-        IAuraType type = auraChunk.getType();
+        var type = auraChunk.getType();
         Block requiredBlock;
         List<WeightedOre> ores;
         if (type.isSimilar(NaturesAuraAPI.TYPE_OVERWORLD)) {
@@ -91,51 +91,51 @@ public class OreSpawnEffect implements IDrainSpotEffect {
             requiredBlock = Blocks.NETHERRACK;
             ores = NaturesAuraAPI.NETHER_ORES;
         }
-        int totalWeight = WeightedRandom.getTotalWeight(ores);
+        var totalWeight = WeightedRandom.getTotalWeight(ores);
 
-        List<Tuple<Vec3, Integer>> powders = NaturesAuraAPI.instance().getActiveEffectPowders(level,
+        var powders = NaturesAuraAPI.instance().getActiveEffectPowders(level,
                 new AABB(pos).inflate(this.dist), NAME);
         if (powders.isEmpty())
             return;
-        for (int i = 0; i < this.amount; i++) {
-            Tuple<Vec3, Integer> powder = powders.get(i % powders.size());
-            Vec3 powderPos = powder.getA();
+        for (var i = 0; i < this.amount; i++) {
+            var powder = powders.get(i % powders.size());
+            var powderPos = powder.getA();
             int range = powder.getB();
-            int x = Mth.floor(powderPos.x + level.random.nextGaussian() * range);
-            int y = Mth.floor(powderPos.y + level.random.nextGaussian() * range);
-            int z = Mth.floor(powderPos.z + level.random.nextGaussian() * range);
-            BlockPos orePos = new BlockPos(x, y, z);
+            var x = Mth.floor(powderPos.x + level.random.nextGaussian() * range);
+            var y = Mth.floor(powderPos.y + level.random.nextGaussian() * range);
+            var z = Mth.floor(powderPos.z + level.random.nextGaussian() * range);
+            var orePos = new BlockPos(x, y, z);
             if (orePos.distSqr(powderPos.x, powderPos.y, powderPos.z, true) <= range * range
                     && orePos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(orePos)) {
-                BlockState state = level.getBlockState(orePos);
+                var state = level.getBlockState(orePos);
                 if (state.getBlock() != requiredBlock)
                     continue;
 
                 outer:
                 while (true) {
-                    WeightedOre ore = WeightedRandom.getRandomItem(level.random, ores, totalWeight).orElse(null);
+                    var ore = WeightedRandom.getRandomItem(level.random, ores, totalWeight).orElse(null);
                     if (ore == null)
                         continue;
-                    Tag<Block> tag = level.getTagManager().getOrEmpty(Registry.BLOCK_REGISTRY).getTag(ore.tag);
+                    var tag = level.getTagManager().getOrEmpty(Registry.BLOCK_REGISTRY).getTag(ore.tag);
                     if (tag == null)
                         continue;
-                    for (Block toPlace : tag.getValues()) {
+                    for (var toPlace : tag.getValues()) {
                         if (toPlace == null || toPlace == Blocks.AIR)
                             continue;
 
-                        FakePlayer player = FakePlayerFactory.getMinecraft((ServerLevel) level);
+                        var player = FakePlayerFactory.getMinecraft((ServerLevel) level);
                         player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-                        BlockHitResult ray = new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false);
-                        BlockPlaceContext context = new BlockPlaceContext(new UseOnContext(player, InteractionHand.MAIN_HAND, ray));
-                        BlockState stateToPlace = toPlace.getStateForPlacement(context);
+                        var ray = new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false);
+                        var context = new BlockPlaceContext(new UseOnContext(player, InteractionHand.MAIN_HAND, ray));
+                        var stateToPlace = toPlace.getStateForPlacement(context);
                         if (SPAWN_EXCEPTIONS.contains(stateToPlace))
                             continue;
 
                         level.setBlockAndUpdate(orePos, stateToPlace);
                         level.levelEvent(2001, orePos, Block.getId(stateToPlace));
 
-                        int toDrain = (20000 - ore.getWeight().asInt() * 2) * 2;
-                        BlockPos highestSpot = IAuraChunk.getHighestSpot(level, orePos, 30, pos);
+                        var toDrain = (20000 - ore.getWeight().asInt() * 2) * 2;
+                        var highestSpot = IAuraChunk.getHighestSpot(level, orePos, 30, pos);
                         IAuraChunk.getAuraChunk(level, highestSpot).drainAura(highestSpot, toDrain);
                         break outer;
                     }

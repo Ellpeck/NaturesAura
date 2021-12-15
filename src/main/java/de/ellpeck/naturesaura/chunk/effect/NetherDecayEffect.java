@@ -32,7 +32,7 @@ public class NetherDecayEffect implements IDrainSpotEffect {
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot >= 0)
             return false;
-        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 50);
+        var auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 50);
         int aura = auraAndSpots.getLeft();
         if (aura >= 0)
             return false;
@@ -61,8 +61,8 @@ public class NetherDecayEffect implements IDrainSpotEffect {
     public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(level, pos, spot))
             return;
-        for (int i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
-            BlockPos offset = new BlockPos(
+        for (var i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
+            var offset = new BlockPos(
                     pos.getX() + level.random.nextGaussian() * this.dist,
                     pos.getY() + level.random.nextGaussian() * this.dist,
                     pos.getZ() + level.random.nextGaussian() * this.dist);
@@ -71,7 +71,7 @@ public class NetherDecayEffect implements IDrainSpotEffect {
 
             // degrade blocks
             Block degraded = null;
-            BlockState state = level.getBlockState(offset);
+            var state = level.getBlockState(offset);
             if (state.getBlock() == Blocks.GLOWSTONE) {
                 degraded = Blocks.NETHERRACK;
             } else if (state.is(BlockTags.NYLIUM) || state.getBlock() == Blocks.NETHERRACK) {
@@ -86,7 +86,7 @@ public class NetherDecayEffect implements IDrainSpotEffect {
 
             // ignite blocks
             if (BaseFireBlock.canBePlacedAt(level, offset, Direction.NORTH)) {
-                BlockState fire = BaseFireBlock.getState(level, offset);
+                var fire = BaseFireBlock.getState(level, offset);
                 level.setBlockAndUpdate(offset, fire);
                 level.levelEvent(1009, offset, 0);
             }

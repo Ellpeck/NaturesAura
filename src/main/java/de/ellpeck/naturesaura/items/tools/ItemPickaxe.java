@@ -47,17 +47,17 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
     @Override
     public InteractionResult useOn(UseOnContext context) {
         if (this == ModItems.INFUSED_IRON_PICKAXE) {
-            Player player = context.getPlayer();
-            Level level = context.getLevel();
-            BlockPos pos = context.getClickedPos();
-            ItemStack stack = player.getItemInHand(context.getHand());
-            BlockState state = level.getBlockState(pos);
-            BlockState result = NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.get(state);
+            var player = context.getPlayer();
+            var level = context.getLevel();
+            var pos = context.getClickedPos();
+            var stack = player.getItemInHand(context.getHand());
+            var state = level.getBlockState(pos);
+            var result = NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.get(state);
             if (result != null) {
                 if (!level.isClientSide) {
                     level.setBlockAndUpdate(pos, result);
 
-                    LevelData data = (LevelData) ILevelData.getLevelData(level);
+                    var data = (LevelData) ILevelData.getLevelData(level);
                     data.addMossStone(pos);
                 }
                 level.playSound(player, pos, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -75,8 +75,8 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
                 return;
             if (!isSelected || levelIn.isClientSide)
                 return;
-            AABB bounds = new AABB(entityIn.blockPosition()).inflate(3.5F);
-            for (ItemEntity item : levelIn.getEntitiesOfClass(ItemEntity.class, bounds)) {
+            var bounds = new AABB(entityIn.blockPosition()).inflate(3.5F);
+            for (var item : levelIn.getEntitiesOfClass(ItemEntity.class, bounds)) {
                 // only pick up freshly dropped items
                 if (item.tickCount >= 5 || !item.isAlive())
                     continue;

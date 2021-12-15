@@ -40,7 +40,7 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader levelIn, BlockPos pos) {
-        BlockPos down = pos.below();
+        var down = pos.below();
         return this.mayPlaceOn(levelIn.getBlockState(down), levelIn, down);
     }
 
@@ -57,7 +57,7 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        Vec3 vec3d = state.getOffset(levelIn, pos);
+        var vec3d = state.getOffset(levelIn, pos);
         return SHAPE.move(vec3d.x, vec3d.y, vec3d.z);
     }
 

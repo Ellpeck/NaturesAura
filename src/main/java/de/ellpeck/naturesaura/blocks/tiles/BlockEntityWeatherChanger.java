@@ -34,11 +34,11 @@ public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITicka
                 return;
             if (this.processTime <= 0)
                 return;
-            int color = this.type == WeatherType.SUN ? 0xf5d742 : this.type == WeatherType.RAIN ? 0x4d5ae3 : 0x373247;
-            for (int r = 0; r < 360; r += 20) {
-                double xOff = Math.cos(Math.toRadians(r)) * 3F;
-                double zOff = Math.sin(Math.toRadians(r)) * 3F;
-                for (int i = this.level.random.nextInt(3); i > 0; i--) {
+            var color = this.type == WeatherType.SUN ? 0xf5d742 : this.type == WeatherType.RAIN ? 0x4d5ae3 : 0x373247;
+            for (var r = 0; r < 360; r += 20) {
+                var xOff = Math.cos(Math.toRadians(r)) * 3F;
+                var zOff = Math.sin(Math.toRadians(r)) * 3F;
+                for (var i = this.level.random.nextInt(3); i > 0; i--) {
                     NaturesAuraAPI.instance().spawnMagicParticle(
                             this.worldPosition.getX() + 0.5F + xOff,
                             this.worldPosition.getY(),
@@ -54,15 +54,15 @@ public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITicka
 
         if (this.processTime > 0) {
             if (this.processTime % 20 == 0) {
-                BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
+                var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
                 IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, 30000 * this.itemAmount);
             }
 
             this.processTime--;
             if (this.processTime <= 0) {
                 this.sendToClients();
-                int time = 6000 * this.itemAmount;
-                ServerLevel server = (ServerLevel) this.level;
+                var time = 6000 * this.itemAmount;
+                var server = (ServerLevel) this.level;
                 switch (this.type) {
                     case SUN -> server.setWeatherParameters(time, 0, false, false);
                     case RAIN -> server.setWeatherParameters(0, time, true, false);
@@ -72,7 +72,7 @@ public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITicka
         } else {
             if (this.level.getGameTime() % 20 != 0)
                 return;
-            Pair<WeatherType, Integer> type = this.getNextWeatherType();
+            var type = this.getNextWeatherType();
             if (type == null)
                 return;
             this.type = type.getLeft();
@@ -104,13 +104,13 @@ public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITicka
     }
 
     private Pair<WeatherType, Integer> getNextWeatherType() {
-        AABB area = new AABB(this.worldPosition).inflate(2);
-        List<ItemEntity> items = this.level.getEntitiesOfClass(ItemEntity.class, area, Entity::isAlive);
-        for (ItemEntity entity : items) {
+        var area = new AABB(this.worldPosition).inflate(2);
+        var items = this.level.getEntitiesOfClass(ItemEntity.class, area, Entity::isAlive);
+        for (var entity : items) {
             if (entity.hasPickUpDelay())
                 continue;
-            ItemStack stack = entity.getItem();
-            for (Map.Entry<ItemStack, WeatherType> entry : NaturesAuraAPI.WEATHER_CHANGER_CONVERSIONS.entrySet()) {
+            var stack = entity.getItem();
+            for (var entry : NaturesAuraAPI.WEATHER_CHANGER_CONVERSIONS.entrySet()) {
                 if (!Helper.areItemsEqual(stack, entry.getKey(), true))
                     continue;
                 entity.setItem(ItemStack.EMPTY);

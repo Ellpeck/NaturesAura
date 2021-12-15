@@ -43,24 +43,24 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        Level level = context.getLevel();
-        Player player = context.getPlayer();
-        ItemStack stack = player.getItemInHand(context.getHand());
-        BlockPos pos = context.getClickedPos();
-        BlockState state = level.getBlockState(pos);
+        var level = context.getLevel();
+        var player = context.getPlayer();
+        var stack = player.getItemInHand(context.getHand());
+        var pos = context.getClickedPos();
+        var state = level.getBlockState(pos);
         if (this == ModItems.INFUSED_IRON_SHOVEL) {
-            int damage = 0;
+            var damage = 0;
             if (state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.MYCELIUM) {
                 if (level.getBlockState(pos.above()).getMaterial() == Material.AIR) {
                     level.setBlockAndUpdate(pos, Blocks.GRASS_BLOCK.defaultBlockState());
                     damage = 5;
                 }
             } else {
-                int range = player.isCrouching() ? 0 : 1;
-                for (int x = -range; x <= range; x++) {
-                    for (int y = -range; y <= range; y++) {
-                        BlockPos actualPos = pos.offset(x, 0, y);
-                        Direction facing = context.getClickedFace();
+                var range = player.isCrouching() ? 0 : 1;
+                for (var x = -range; x <= range; x++) {
+                    for (var y = -range; y <= range; y++) {
+                        var actualPos = pos.offset(x, 0, y);
+                        var facing = context.getClickedFace();
                         if (player.mayUseItemAt(actualPos.relative(facing), facing, stack)) {
                             if (facing != Direction.DOWN
                                     && level.getBlockState(actualPos.above()).getMaterial() == Material.AIR
@@ -82,14 +82,14 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
         } else if (this == ModItems.SKY_SHOVEL) {
             if (this.getDestroySpeed(stack, state) <= 1)
                 return super.useOn(context);
-            InteractionHand otherHand = context.getHand() == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
-            ItemStack other = player.getItemInHand(otherHand);
+            var otherHand = context.getHand() == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+            var other = player.getItemInHand(otherHand);
             if (other.isEmpty() || !(other.getItem() instanceof BlockItem))
                 return super.useOn(context);
             level.removeBlock(pos, false);
-            BlockEntity tile = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
+            var tile = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
             Block.dropResources(state, level, pos, tile, null, ItemStack.EMPTY);
-            UseOnContext newContext = new UseOnContext(player, otherHand, new BlockHitResult(context.getClickLocation(), context.getClickedFace(), context.getClickedPos(), context.isInside()));
+            var newContext = new UseOnContext(player, otherHand, new BlockHitResult(context.getClickLocation(), context.getClickedFace(), context.getClickedPos(), context.isInside()));
             other.useOn(newContext);
             stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
             return InteractionResult.SUCCESS;

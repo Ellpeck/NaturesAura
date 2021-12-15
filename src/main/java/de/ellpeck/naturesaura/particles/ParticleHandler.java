@@ -67,11 +67,11 @@ public final class ParticleHandler {
     public static boolean culling = true;
 
     public static void spawnParticle(Supplier<Particle> particle, double x, double y, double z) {
-        Minecraft mc = Minecraft.getInstance();
+        var mc = Minecraft.getInstance();
         if (mc.player.distanceToSqr(x, y, z) <= range * range) {
             if (culling) {
                 if (ModConfig.instance.respectVanillaParticleSettings.get()) {
-                    ParticleStatus setting = mc.options.particles;
+                    var setting = mc.options.particles;
                     if (setting != ParticleStatus.ALL &&
                             (setting != ParticleStatus.DECREASED || mc.level.random.nextInt(3) != 0) &&
                             (setting != ParticleStatus.MINIMAL || mc.level.random.nextInt(10) != 0))

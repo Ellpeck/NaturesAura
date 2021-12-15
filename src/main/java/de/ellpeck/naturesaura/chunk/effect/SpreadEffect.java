@@ -19,16 +19,16 @@ public class SpreadEffect implements IDrainSpotEffect {
     public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (Math.abs(spot) < 500000 || Math.abs(IAuraChunk.getAuraInArea(level, pos, 25)) < 2000000)
             return;
-        boolean drain = spot > 0;
-        int toMove = Mth.ceil(Math.abs(spot) * 0.72F);
-        int perSide = toMove / 6;
+        var drain = spot > 0;
+        var toMove = Mth.ceil(Math.abs(spot) * 0.72F);
+        var perSide = toMove / 6;
         while (toMove > 0) {
             BlockPos bestOffset = null;
-            int bestAmount = drain ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-            for (Direction facing : Direction.values()) {
-                BlockPos offset = pos.relative(facing, 15);
+            var bestAmount = drain ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            for (var facing : Direction.values()) {
+                var offset = pos.relative(facing, 15);
                 if (level.isLoaded(offset) && offset.getY() >= 0 && offset.getY() <= level.getHeight()) {
-                    int amount = IAuraChunk.getAuraInArea(level, offset, 14);
+                    var amount = IAuraChunk.getAuraInArea(level, offset, 14);
                     if (drain ? amount < bestAmount : amount > bestAmount) {
                         bestAmount = amount;
                         bestOffset = offset;
@@ -38,9 +38,9 @@ public class SpreadEffect implements IDrainSpotEffect {
             if (bestOffset == null)
                 break;
 
-            BlockPos bestPos = drain ? IAuraChunk.getLowestSpot(level, bestOffset, 14, bestOffset)
+            var bestPos = drain ? IAuraChunk.getLowestSpot(level, bestOffset, 14, bestOffset)
                     : IAuraChunk.getHighestSpot(level, bestOffset, 14, bestOffset);
-            IAuraChunk bestChunk = IAuraChunk.getAuraChunk(level, bestPos);
+            var bestChunk = IAuraChunk.getAuraChunk(level, bestPos);
 
             int moved;
             if (drain) {

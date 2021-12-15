@@ -182,7 +182,7 @@ public final class ModConfig {
 
         try {
             for (String s : this.additionalBotanistPickaxeConversions.get()) {
-                String[] split = s.split("->");
+                var split = s.split("->");
                 NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
                         Objects.requireNonNull(Helper.getStateFromString(split[0]), "state1"),
                         Objects.requireNonNull(Helper.getStateFromString(split[1]), "state2"));
@@ -193,9 +193,9 @@ public final class ModConfig {
 
         try {
             for (String s : this.auraTypeOverrides.get()) {
-                String[] split = s.split("->");
-                ResourceLocation dim = new ResourceLocation(split[0]);
-                BasicAuraType type = Objects.requireNonNull((BasicAuraType) NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(split[1])), "type");
+                var split = s.split("->");
+                var dim = new ResourceLocation(split[0]);
+                var type = Objects.requireNonNull((BasicAuraType) NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(split[1])), "type");
                 type.addDimensionType(dim);
             }
         } catch (Exception e) {
@@ -204,9 +204,9 @@ public final class ModConfig {
 
         try {
             for (String s : this.additionalOres.get()) {
-                String[] split = s.split("->");
-                WeightedOre ore = new WeightedOre(new ResourceLocation(split[0]), Integer.parseInt(split[1]));
-                String dimension = split[2];
+                var split = s.split("->");
+                var ore = new WeightedOre(new ResourceLocation(split[0]), Integer.parseInt(split[1]));
+                var dimension = split[2];
                 if ("nether".equalsIgnoreCase(dimension)) {
                     NaturesAuraAPI.NETHER_ORES.removeIf(o -> o.tag.equals(ore.tag));
                     NaturesAuraAPI.NETHER_ORES.add(ore);
@@ -230,10 +230,10 @@ public final class ModConfig {
 
         try {
             for (String s : this.additionalProjectiles.get()) {
-                String[] split = s.split("->");
-                ResourceLocation name = new ResourceLocation(split[0]);
-                EntityType<?> type = Objects.requireNonNull(ForgeRegistries.ENTITIES.getValue(name));
-                int amount = Integer.parseInt(split[1]);
+                var split = s.split("->");
+                var name = new ResourceLocation(split[0]);
+                var type = Objects.requireNonNull(ForgeRegistries.ENTITIES.getValue(name));
+                var amount = Integer.parseInt(split[1]);
                 NaturesAuraAPI.PROJECTILE_GENERATIONS.put(type, amount);
             }
         } catch (Exception e) {

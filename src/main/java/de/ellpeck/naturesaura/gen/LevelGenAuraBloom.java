@@ -34,15 +34,15 @@ public class LevelGenAuraBloom extends Feature<NoneFeatureConfiguration> {
         var rand = ctx.random();
         if (rand.nextInt(this.chance) != 0)
             return false;
-        int startX = pos.getX() + rand.nextInt(16);
-        int startZ = pos.getZ() + rand.nextInt(16);
-        boolean any = false;
-        for (int i = Mth.nextInt(rand, 3, 8); i > 0; i--) {
-            int offX = startX + Mth.nextInt(rand, -5, 5);
-            int offZ = startZ + Mth.nextInt(rand, -5, 5);
+        var startX = pos.getX() + rand.nextInt(16);
+        var startZ = pos.getZ() + rand.nextInt(16);
+        var any = false;
+        for (var i = Mth.nextInt(rand, 3, 8); i > 0; i--) {
+            var offX = startX + Mth.nextInt(rand, -5, 5);
+            var offZ = startZ + Mth.nextInt(rand, -5, 5);
             if (this.nether) {
-                int y = Mth.nextInt(rand, 0, 128);
-                for (int off = 0; off < 64; off++) {
+                var y = Mth.nextInt(rand, 0, 128);
+                for (var off = 0; off < 64; off++) {
                     // try to find a good location in both directions of the random pos
                     if (this.tryPlace(levelIn, new BlockPos(offX, y - off, offZ)) || this.tryPlace(levelIn, new BlockPos(offX, y + off, offZ))) {
                         any = true;
@@ -50,7 +50,7 @@ public class LevelGenAuraBloom extends Feature<NoneFeatureConfiguration> {
                     }
                 }
             } else {
-                BlockPos placePos = new BlockPos(offX, levelIn.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, offX, offZ), offZ);
+                var placePos = new BlockPos(offX, levelIn.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, offX, offZ), offZ);
                 if (this.tryPlace(levelIn, placePos))
                     any = true;
             }
@@ -59,10 +59,10 @@ public class LevelGenAuraBloom extends Feature<NoneFeatureConfiguration> {
     }
 
     private boolean tryPlace(WorldGenLevel level, BlockPos pos) {
-        BlockState state = this.block.defaultBlockState();
+        var state = this.block.defaultBlockState();
         if (this.block.canSurvive(state, level, pos)) {
             level.setBlock(pos, state, 3);
-            BlockEntity tile = level.getBlockEntity(pos);
+            var tile = level.getBlockEntity(pos);
             if (tile instanceof BlockEntityAuraBloom bloom)
                 bloom.justGenerated = true;
             return true;

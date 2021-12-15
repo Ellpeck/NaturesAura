@@ -47,8 +47,8 @@ public class EntityLightProjectile extends ThrowableProjectile {
     protected void onHit(HitResult result) {
         if (!this.level.isClientSide) {
             if (result instanceof BlockHitResult res) {
-                BlockPos pos = res.getBlockPos().relative(res.getDirection());
-                BlockState state = this.level.getBlockState(pos);
+                var pos = res.getBlockPos().relative(res.getDirection());
+                var state = this.level.getBlockState(pos);
                 if (state.getMaterial().isReplaceable())
                     this.level.setBlockAndUpdate(pos, ModBlocks.LIGHT.defaultBlockState());
             } else if (result instanceof EntityHitResult entity) {

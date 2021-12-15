@@ -52,21 +52,21 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onDebugRender(RenderGameOverlayEvent.Text event) {
-        Minecraft mc = Minecraft.getInstance();
+        var mc = Minecraft.getInstance();
         if (mc.options.renderDebug && ModConfig.instance.debugText.get()) {
-            String prefix = ChatFormatting.GREEN + "[" + NaturesAura.MOD_NAME + "]" + ChatFormatting.RESET + " ";
+            var prefix = ChatFormatting.GREEN + "[" + NaturesAura.MOD_NAME + "]" + ChatFormatting.RESET + " ";
             List<String> left = event.getLeft();
             if (mc.player.isCreative()) {
                 left.add("");
-                MutableInt amount = new MutableInt(IAuraChunk.DEFAULT_AURA);
-                MutableInt spots = new MutableInt();
-                MutableInt chunks = new MutableInt();
+                var amount = new MutableInt(IAuraChunk.DEFAULT_AURA);
+                var spots = new MutableInt();
+                var chunks = new MutableInt();
                 IAuraChunk.getSpotsInArea(mc.level, mc.player.blockPosition(), 35, (blockPos, drainSpot) -> {
                     spots.increment();
                     amount.add(drainSpot);
                 });
                 Helper.getAuraChunksWithSpotsInArea(mc.level, mc.player.blockPosition(), 35, c -> chunks.increment());
-                NumberFormat format = NumberFormat.getInstance();
+                var format = NumberFormat.getInstance();
                 left.add(prefix + "A: " + format.format(amount.intValue()) + " (S: " + spots.intValue() + ", C: " + chunks.intValue() + ")");
                 left.add(prefix + "AT: " + IAuraType.forLevel(mc.level).getName());
             }
@@ -80,7 +80,7 @@ public class ClientEvents {
             heldEye = ItemStack.EMPTY;
             heldOcular = ItemStack.EMPTY;
 
-            Minecraft mc = Minecraft.getInstance();
+            var mc = Minecraft.getInstance();
             if (mc.level == null) {
                 ItemRangeVisualizer.clear();
                 PENDING_AURA_CHUNKS.clear();
@@ -89,17 +89,17 @@ public class ClientEvents {
 
                 if (!mc.isPaused()) {
                     if (mc.level.getGameTime() % 20 == 0) {
-                        int amount = Mth.floor(190 * ModConfig.instance.excessParticleAmount.get());
-                        for (int i = 0; i < amount; i++) {
-                            int x = Mth.floor(mc.player.getX()) + mc.level.random.nextInt(64) - 32;
-                            int z = Mth.floor(mc.player.getZ()) + mc.level.random.nextInt(64) - 32;
-                            BlockPos pos = new BlockPos(x, mc.level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z) - 1, z);
-                            BlockState state = mc.level.getBlockState(pos);
-                            Block block = state.getBlock();
+                        var amount = Mth.floor(190 * ModConfig.instance.excessParticleAmount.get());
+                        for (var i = 0; i < amount; i++) {
+                            var x = Mth.floor(mc.player.getX()) + mc.level.random.nextInt(64) - 32;
+                            var z = Mth.floor(mc.player.getZ()) + mc.level.random.nextInt(64) - 32;
+                            var pos = new BlockPos(x, mc.level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z) - 1, z);
+                            var state = mc.level.getBlockState(pos);
+                            var block = state.getBlock();
                             if (block instanceof BonemealableBlock || block instanceof IPlantable || block instanceof LeavesBlock || block instanceof MyceliumBlock) {
-                                int excess = IAuraChunk.triangulateAuraInArea(mc.level, pos, 45) - IAuraChunk.DEFAULT_AURA;
+                                var excess = IAuraChunk.triangulateAuraInArea(mc.level, pos, 45) - IAuraChunk.DEFAULT_AURA;
                                 if (excess > 0) {
-                                    int chance = Math.max(10, 50 - excess / 25000);
+                                    var chance = Math.max(10, 50 - excess / 25000);
                                     if (mc.level.random.nextInt(chance) <= 0)
                                         NaturesAuraAPI.instance().spawnMagicParticle(
                                                 pos.getX() + mc.level.random.nextFloat(),
@@ -118,10 +118,10 @@ public class ClientEvents {
                     }
 
                     if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER) && mc.level.getGameTime() % 5 == 0) {
-                        NaturesAuraAPI.IInternalHooks inst = NaturesAuraAPI.instance();
+                        var inst = NaturesAuraAPI.instance();
                         inst.setParticleSpawnRange(512);
                         inst.setParticleDepth(false);
-                        for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_RAILS.get(mc.level.dimension().location())) {
+                        for (var pos : ItemRangeVisualizer.VISUALIZED_RAILS.get(mc.level.dimension().location())) {
                             NaturesAuraAPI.instance().spawnMagicParticle(
                                     pos.getX() + mc.level.random.nextFloat(),
                                     pos.getY() + mc.level.random.nextFloat(),
@@ -417,10 +417,10 @@ public class ClientEvents {
     }
 
     private String createTimeString(int totalTicks) {
-        int ticks = totalTicks % 20;
-        int seconds = totalTicks / 20 % 60;
-        int minutes = totalTicks / 20 / 60 % 60;
-        int hours = totalTicks / 20 / 60 / 60;
+        var ticks = totalTicks % 20;
+        var seconds = totalTicks / 20 % 60;
+        var minutes = totalTicks / 20 / 60 % 60;
+        var hours = totalTicks / 20 / 60 / 60;
         return String.format("%02d:%02d:%02d.%02d", hours, minutes, seconds, ticks);
     }
 

@@ -37,7 +37,7 @@ public class RenderProjectileGenerator implements BlockEntityRenderer<BlockEntit
         } else {
             stack.translate(-0.002F, 0, 0);
         }
-        int brightness = 15 << 20 | 15 << 4;
+        var brightness = 15 << 20 | 15 << 4;
         //this.model.render(stack, buffer.getBuffer(this.model.getRenderType(RES)), brightness, combinedOverlayIn, 1, 1, 1, 1);
         stack.popPose();
     }

@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -37,9 +36,9 @@ public class BlockAnimalContainer extends BlockContainerImpl implements IVisuali
     @Override
     @OnlyIn(Dist.CLIENT)
     public AABB getVisualizationBounds(Level level, BlockPos pos) {
-        BlockEntity tile = level.getBlockEntity(pos);
+        var tile = level.getBlockEntity(pos);
         if (tile instanceof BlockEntityAnimalContainer) {
-            int radius = ((BlockEntityAnimalContainer) tile).getRadius();
+            var radius = ((BlockEntityAnimalContainer) tile).getRadius();
             if (radius > 0)
                 return new AABB(pos).inflate(radius);
         }

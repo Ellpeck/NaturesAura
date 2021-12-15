@@ -32,18 +32,18 @@ public class BlockEntityItemDistributor extends BlockEntityImpl implements ITick
         }
         this.cooldown = 1;
 
-        IItemHandler above = this.getHandler(Direction.UP);
+        var above = this.getHandler(Direction.UP);
         if (above == null)
             return;
-        IItemHandler dest = this.getNextSide();
+        var dest = this.getNextSide();
         if (dest == null)
             return;
-        for (int i = 0; i < above.getSlots(); i++) {
-            ItemStack stack = above.extractItem(i, 1, true);
+        for (var i = 0; i < above.getSlots(); i++) {
+            var stack = above.extractItem(i, 1, true);
             if (stack.isEmpty())
                 continue;
-            for (int j = 0; j < dest.getSlots(); j++) {
-                ItemStack remain = dest.insertItem(j, stack, false);
+            for (var j = 0; j < dest.getSlots(); j++) {
+                var remain = dest.insertItem(j, stack, false);
                 if (!ItemStack.isSame(remain, stack)) {
                     above.extractItem(i, 1, false);
                     this.cooldown = 3;
@@ -54,8 +54,8 @@ public class BlockEntityItemDistributor extends BlockEntityImpl implements ITick
     }
 
     private IItemHandler getHandler(Direction direction) {
-        BlockPos offset = this.worldPosition.relative(direction);
-        BlockEntity tile = this.level.getBlockEntity(offset);
+        var offset = this.worldPosition.relative(direction);
+        var tile = this.level.getBlockEntity(offset);
         if (tile == null)
             return null;
         return tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, direction.getOpposite()).orElse(null);
@@ -64,8 +64,8 @@ public class BlockEntityItemDistributor extends BlockEntityImpl implements ITick
     private IItemHandler getNextSide() {
         if (this.isRandomMode) {
             List<IItemHandler> handlers = new ArrayList<>();
-            for (int i = 0; i < 4; i++) {
-                IItemHandler handler = this.getHandler(Direction.values()[i]);
+            for (var i = 0; i < 4; i++) {
+                var handler = this.getHandler(Direction.values()[i]);
                 if (handler != null)
                     handlers.add(handler);
             }
@@ -73,9 +73,9 @@ public class BlockEntityItemDistributor extends BlockEntityImpl implements ITick
                 return null;
             return handlers.get(this.level.random.nextInt(handlers.size()));
         } else {
-            for (int i = 0; i < 4; i++) {
+            for (var i = 0; i < 4; i++) {
                 this.currentSide = this.currentSide.getClockWise();
-                IItemHandler handler = this.getHandler(this.currentSide);
+                var handler = this.getHandler(this.currentSide);
                 if (handler != null)
                     return handler;
             }

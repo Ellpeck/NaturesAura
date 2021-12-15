@@ -30,10 +30,10 @@ public class BreathlessEffect implements IDrainSpotEffect {
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot >= 0)
             return false;
-        int aura = IAuraChunk.getAuraInArea(level, pos, 50);
+        var aura = IAuraChunk.getAuraInArea(level, pos, 50);
         if (aura > 0)
             return false;
-        int dist = Math.min(Math.abs(aura) / 50000, 75);
+        var dist = Math.min(Math.abs(aura) / 50000, 75);
         if (dist < 10)
             return false;
         this.amp = Math.min(Mth.floor(Math.abs(aura) / 2500000F), 3);
@@ -61,8 +61,8 @@ public class BreathlessEffect implements IDrainSpotEffect {
             return;
         if (!this.calcValues(level, pos, spot))
             return;
-        List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, this.bb);
-        for (LivingEntity entity : entities)
+        var entities = level.getEntitiesOfClass(LivingEntity.class, this.bb);
+        for (var entity : entities)
             entity.addEffect(new MobEffectInstance(ModPotions.BREATHLESS, 300, this.amp));
     }
 

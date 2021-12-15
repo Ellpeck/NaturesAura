@@ -29,11 +29,11 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
     private boolean calcValues(Level level, BlockPos pos, Integer spot) {
         if (spot < 100000)
             return false;
-        Pair<Integer, Integer> auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 20);
+        var auraAndSpots = IAuraChunk.getAuraAndSpotAmountInArea(level, pos, 20);
         int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
-        int dist = Mth.clamp(aura / 3500, 3, 15);
+        var dist = Mth.clamp(aura / 3500, 3, 15);
         this.bb = new AABB(pos).inflate(dist);
         this.amount = Mth.ceil(aura / 250F / auraAndSpots.getRight());
         return true;
@@ -59,8 +59,8 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
     public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
         if (!this.calcValues(level, pos, spot))
             return;
-        List<Player> players = level.getEntitiesOfClass(Player.class, this.bb);
-        for (Player player : players) {
+        var players = level.getEntitiesOfClass(Player.class, this.bb);
+        for (var player : players) {
             if (NaturesAuraAPI.instance().isEffectPowderActive(level, player.blockPosition(), NAME))
                 continue;
             if (NaturesAuraAPI.instance().insertAuraIntoPlayer(player, this.amount, true)) {

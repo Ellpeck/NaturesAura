@@ -36,26 +36,26 @@ public class BlockEntityHopperUpgrade extends BlockEntityImpl implements ITickab
         if (!this.level.isClientSide && this.level.getGameTime() % 10 == 0) {
             if (IAuraChunk.getAuraInArea(this.level, this.worldPosition, 25) < 100000)
                 return;
-            BlockEntity tile = this.level.getBlockEntity(this.worldPosition.below());
+            var tile = this.level.getBlockEntity(this.worldPosition.below());
             if (!isValidHopper(tile))
                 return;
-            IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
+            var handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
             if (handler == null)
                 return;
 
-            List<ItemEntity> items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(this.worldPosition).inflate(7));
+            var items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(this.worldPosition).inflate(7));
             if (items.isEmpty())
                 return;
 
-            for (ItemEntity item : items) {
+            for (var item : items) {
                 if (!item.isAlive() || item.hasPickUpDelay())
                     continue;
-                ItemStack stack = item.getItem();
+                var stack = item.getItem();
                 if (stack.isEmpty())
                     continue;
-                ItemStack copy = stack.copy();
+                var copy = stack.copy();
 
-                for (int i = 0; i < handler.getSlots(); i++) {
+                for (var i = 0; i < handler.getSlots(); i++) {
                     copy = handler.insertItem(i, copy, false);
                     if (copy.isEmpty()) {
                         break;
@@ -67,7 +67,7 @@ public class BlockEntityHopperUpgrade extends BlockEntityImpl implements ITickab
                     if (copy.isEmpty())
                         item.kill();
 
-                    BlockPos spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 25, this.worldPosition);
+                    var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 25, this.worldPosition);
                     IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, 500);
 
                     PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,

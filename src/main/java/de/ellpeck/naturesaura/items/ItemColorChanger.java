@@ -31,13 +31,13 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
     }
 
     private static boolean changeOrCopyColor(Player player, ItemStack stack, Level level, BlockPos pos, DyeColor firstColor) {
-        Block block = level.getBlockState(pos).getBlock();
-        List<Block> blocks = ColoredBlockHelper.getBlocksContaining(block);
+        var block = level.getBlockState(pos).getBlock();
+        var blocks = ColoredBlockHelper.getBlocksContaining(block);
         if (blocks == null)
             return false;
-        DyeColor color = DyeColor.byId(blocks.indexOf(block));
+        var color = DyeColor.byId(blocks.indexOf(block));
         if (firstColor == null || color == firstColor) {
-            DyeColor stored = getStoredColor(stack);
+            var stored = getStoredColor(stack);
             if (player.isCrouching()) {
                 if (stored != color) {
                     level.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
@@ -57,7 +57,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
                             level.setBlockAndUpdate(pos, blocks.get(stored.getId()).defaultBlockState());
 
                             if (isFillMode(stack)) {
-                                for (Direction off : Direction.values()) {
+                                for (var off : Direction.values()) {
                                     changeOrCopyColor(player, stack, level, pos.relative(off), color);
                                 }
                             }
@@ -74,7 +74,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
         if (!stack.hasTag()) {
             return null;
         } else {
-            int color = stack.getTag().getInt("color");
+            var color = stack.getTag().getInt("color");
             return DyeColor.byId(color);
         }
     }
@@ -97,7 +97,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        ItemStack stack = context.getPlayer().getItemInHand(context.getHand());
+        var stack = context.getPlayer().getItemInHand(context.getHand());
         if (changeOrCopyColor(context.getPlayer(), stack, context.getLevel(), context.getClickedPos(), null)) {
             return InteractionResult.SUCCESS;
         } else {
@@ -107,7 +107,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
-        ItemStack stack = playerIn.getItemInHand(handIn);
+        var stack = playerIn.getItemInHand(handIn);
         if (playerIn.isCrouching() && getStoredColor(stack) != null) {
             levelIn.playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.BUCKET_FILL_LAVA, SoundSource.PLAYERS, 0.65F, 1F);
             if (!levelIn.isClientSide) {
@@ -124,7 +124,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
     public ItemColor getItemColor() {
         return (stack, tintIndex) -> {
             if (tintIndex > 0) {
-                DyeColor color = getStoredColor(stack);
+                var color = getStoredColor(stack);
                 if (color != null) {
                     return color.getFireworkColor();
                 }
