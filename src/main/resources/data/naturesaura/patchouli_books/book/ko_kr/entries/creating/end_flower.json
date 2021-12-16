@@ -1,7 +1,7 @@
 {
     "name": "망각의 장미",
     "icon": "naturesaura:end_flower",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:end_flower",
     "pages": [
         {

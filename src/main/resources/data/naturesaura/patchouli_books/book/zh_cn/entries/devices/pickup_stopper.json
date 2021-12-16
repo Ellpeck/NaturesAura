@@ -1,7 +1,7 @@
 {
     "name": "物品束缚器",
     "icon": "naturesaura:pickup_stopper",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

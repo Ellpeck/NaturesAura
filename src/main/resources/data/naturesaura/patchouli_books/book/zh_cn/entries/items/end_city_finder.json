@@ -1,7 +1,7 @@
 {
     "name": "潜影之眼",
     "icon": "naturesaura:end_city_finder",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:aura_bottle_end",
     "pages": [
         {

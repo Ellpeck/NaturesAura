@@ -1,7 +1,7 @@
 {
     "name": "Rose of Oblivion",
     "icon": "naturesaura:end_flower",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:end_flower",
     "pages": [
         {

@@ -1,7 +1,7 @@
 {
     "name": "Corporeal Eye",
     "icon": "naturesaura:animal_container",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:eye",
     "pages": [
         {

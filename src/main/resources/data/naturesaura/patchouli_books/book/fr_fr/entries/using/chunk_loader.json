@@ -1,7 +1,7 @@
 {
     "name": "World Eye",
     "icon": "naturesaura:chunk_loader",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:aura_bottle_end",
     "flag": "naturesaura:chunk_loader",
     "pages": [

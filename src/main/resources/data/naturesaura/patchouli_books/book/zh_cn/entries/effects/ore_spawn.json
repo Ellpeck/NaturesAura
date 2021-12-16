@@ -1,7 +1,7 @@
 {
     "name": "矿物质聚合",
     "icon": "minecraft:diamond_ore",
-    "category": "effects",
+    "category": "naturesaura:effects",
     "advancement": "naturesaura:positive_imbalance",
     "pages": [
         {

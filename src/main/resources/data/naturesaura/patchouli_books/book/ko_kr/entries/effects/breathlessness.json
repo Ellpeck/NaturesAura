@@ -1,7 +1,7 @@
 {
     "name": "호흡 장애",
     "icon": "minecraft:wool",
-    "category": "effects",
+    "category": "naturesaura:effects",
     "advancement": "naturesaura:negative_imbalance",
     "pages": [
         {

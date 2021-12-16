@@ -1,7 +1,7 @@
 {
     "name": "Automatic Constructor",
     "icon": "naturesaura:auto_crafter",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

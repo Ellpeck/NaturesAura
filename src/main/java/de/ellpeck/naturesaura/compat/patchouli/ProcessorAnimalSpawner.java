@@ -1,9 +1,8 @@
-/*
 package de.ellpeck.naturesaura.compat.patchouli;
 
 import de.ellpeck.naturesaura.recipes.AnimalSpawnerRecipe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SpawnEggItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
@@ -22,23 +21,15 @@ public class ProcessorAnimalSpawner implements IComponentProcessor {
         if (this.recipe == null)
             return null;
         if (key.startsWith("input")) {
-            int id = Integer.parseInt(key.substring(5)) - 1;
-            if (this.recipe.ingredients.length > id)
-                return PatchouliCompat.ingredientVariable(this.recipe.ingredients[id]);
-            else
-                return null;
+            var id = Integer.parseInt(key.substring(5)) - 1;
+            return this.recipe.ingredients.length > id ? PatchouliCompat.ingredientVariable(this.recipe.ingredients[id]) : null;
         } else {
-            switch (key) {
-                case "name":
-                    return IVariable.wrap(this.recipe.entity.getName().getString());
-                case "entity":
-                    return IVariable.wrap(this.recipe.entity.getRegistryName().toString());
-                case "egg":
-                    ItemStack egg = new ItemStack(SpawnEggItem.getEgg(this.recipe.entity));
-                    return IVariable.from(egg);
-                default:
-                    return null;
-            }
+            return switch (key) {
+                case "name" -> IVariable.wrap(this.recipe.entity.getDescription().getString());
+                case "entity" -> IVariable.wrap(this.recipe.entity.getRegistryName().toString());
+                case "egg" -> IVariable.from(new ItemStack(ForgeSpawnEggItem.fromEntityType(this.recipe.entity)));
+                default -> null;
+            };
         }
     }
 
@@ -47,4 +38,3 @@ public class ProcessorAnimalSpawner implements IComponentProcessor {
         return !"seekrit".equals(group);
     }
 }
-*/

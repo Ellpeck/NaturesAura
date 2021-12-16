@@ -1,7 +1,7 @@
 {
     "name": "Bucket of Infinite Color",
     "icon": "naturesaura:color_changer",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

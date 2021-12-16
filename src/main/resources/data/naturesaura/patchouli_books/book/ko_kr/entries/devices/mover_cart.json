@@ -1,7 +1,7 @@
 {
     "name": "오라 카트",
     "icon": "naturesaura:mover_cart",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:aura_bottle_end",
     "pages": [
         {

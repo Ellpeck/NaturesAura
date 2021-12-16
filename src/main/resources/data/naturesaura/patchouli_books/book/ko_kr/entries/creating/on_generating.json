@@ -1,7 +1,7 @@
 {
     "name": "오라의 생산",
     "icon": "naturesaura:gold_leaf",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:wood_stand",
     "priority": true,
     "pages": [

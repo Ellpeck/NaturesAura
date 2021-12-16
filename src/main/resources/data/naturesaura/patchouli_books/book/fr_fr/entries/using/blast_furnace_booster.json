@@ -1,7 +1,7 @@
 {
     "name": "Armorer's Aid",
     "icon": "naturesaura:blast_furnace_booster",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:offering",
     "pages": [
         {

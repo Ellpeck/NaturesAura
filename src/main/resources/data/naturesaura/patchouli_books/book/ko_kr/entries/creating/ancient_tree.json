@@ -1,7 +1,7 @@
 {
     "name": "고대의 나무",
     "icon": "naturesaura:ancient_leaves",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:wood_stand",
     "pages": [
         {

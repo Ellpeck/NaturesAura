@@ -1,7 +1,7 @@
 {
     "name": "식물 흡수기",
     "icon": "naturesaura:flower_generator",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

@@ -1,7 +1,7 @@
 {
     "name": "粉末操纵器",
     "icon": "naturesaura:powder_placer",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:positive_imbalance",
     "pages": [
         {

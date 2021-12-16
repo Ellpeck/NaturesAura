@@ -1,7 +1,7 @@
 {
     "name": "酿造者仪式",
     "icon": "naturesaura:potion_generator",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

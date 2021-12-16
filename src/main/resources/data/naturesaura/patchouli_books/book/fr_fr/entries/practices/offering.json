@@ -1,7 +1,7 @@
 {
     "name": "Offering to the Gods",
     "icon": "naturesaura:offering_table",
-    "category": "practices",
+    "category": "naturesaura:practices",
     "advancement": "naturesaura:tainted_gold",
     "pages": [
         {

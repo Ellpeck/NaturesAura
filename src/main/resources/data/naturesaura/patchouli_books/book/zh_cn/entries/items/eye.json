@@ -1,7 +1,7 @@
 {
     "name": "环境之眼",
     "icon": "naturesaura:eye",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:wood_stand",
     "turnin": "naturesaura:eye",
     "priority": true,

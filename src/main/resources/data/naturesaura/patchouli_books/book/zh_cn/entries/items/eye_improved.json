@@ -1,7 +1,7 @@
 {
     "name": "环境目镜",
     "icon": "naturesaura:eye_improved",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:end_flower",
     "pages": [
         {

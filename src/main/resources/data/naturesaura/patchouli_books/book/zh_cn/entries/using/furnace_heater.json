@@ -1,7 +1,7 @@
 {
     "name": "外置燃火器",
     "icon": "naturesaura:furnace_heater",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

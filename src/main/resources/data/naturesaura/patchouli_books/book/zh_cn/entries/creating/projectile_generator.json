@@ -1,7 +1,7 @@
 {
     "name": "射击标靶",
     "icon": "naturesaura:projectile_generator",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

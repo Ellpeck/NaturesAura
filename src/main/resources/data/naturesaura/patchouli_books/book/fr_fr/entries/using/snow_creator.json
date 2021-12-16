@@ -1,7 +1,7 @@
 {
     "name": "Winter's Calling",
     "icon": "naturesaura:snow_creator",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:sky_ingot",
     "flag": "naturesaura:chunk_loader",
     "pages": [

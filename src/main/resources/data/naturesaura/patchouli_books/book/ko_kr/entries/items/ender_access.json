@@ -1,7 +1,7 @@
 {
     "name": "엔더의 시각",
     "icon": "naturesaura:ender_access",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:aura_bottle_end",
     "pages": [
         {

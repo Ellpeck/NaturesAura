@@ -1,7 +1,7 @@
 {
     "name": "Crumbling Catalyst",
     "icon": "naturesaura:crushing_catalyst",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

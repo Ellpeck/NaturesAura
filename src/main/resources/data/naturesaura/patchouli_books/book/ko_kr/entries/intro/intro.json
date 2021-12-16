@@ -1,7 +1,7 @@
 {
     "name": "이 책에 대해",
     "icon": "patchouli:guide_book{'patchouli:book':'naturesaura:book'}",
-    "category": "intro",
+    "category": "naturesaura:intro",
     "priority": true,
     "pages": [
         {

@@ -1,7 +1,7 @@
 {
     "name": "Mystical Magnifier",
     "icon": "naturesaura:range_visualizer",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

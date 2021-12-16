@@ -1,7 +1,7 @@
 {
     "name": "繁殖行为增加",
     "icon": "minecraft:egg",
-    "category": "effects",
+    "category": "naturesaura:effects",
     "advancement": "naturesaura:positive_imbalance",
     "pages": [
         {

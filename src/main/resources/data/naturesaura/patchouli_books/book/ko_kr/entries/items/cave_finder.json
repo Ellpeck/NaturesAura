@@ -1,7 +1,7 @@
 {
     "name": "그림자의 지팡이",
     "icon": "naturesaura:cave_finder",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:offering",
     "pages": [
         {

@@ -1,7 +1,7 @@
 {
     "name": "灵气探测器",
     "icon": "naturesaura:aura_detector",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

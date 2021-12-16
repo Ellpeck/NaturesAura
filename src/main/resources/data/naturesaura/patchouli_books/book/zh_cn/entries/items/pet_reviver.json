@@ -1,7 +1,7 @@
 {
     "name": "不朽友情之证明",
     "icon": "naturesaura:pet_reviver",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

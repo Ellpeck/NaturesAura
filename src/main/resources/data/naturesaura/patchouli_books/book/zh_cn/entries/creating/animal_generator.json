@@ -1,7 +1,7 @@
 {
     "name": "凡俗解脱之物",
     "icon": "naturesaura:animal_generator",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

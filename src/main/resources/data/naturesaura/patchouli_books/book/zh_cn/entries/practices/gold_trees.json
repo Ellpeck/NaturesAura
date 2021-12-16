@@ -1,7 +1,7 @@
 {
     "name": "闪耀之树",
     "icon": "naturesaura:gold_leaf",
-    "category": "practices",
+    "category": "naturesaura:practices",
     "priority": true,
     "turnin": "naturesaura:gold_leaf",
     "pages": [

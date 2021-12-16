@@ -1,7 +1,7 @@
 {
     "name": "붕해 촉매제",
     "icon": "naturesaura:crushing_catalyst",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

@@ -1,7 +1,7 @@
 {
     "name": "자연의 죽음",
     "icon": "naturesaura:decayed_leaves",
-    "category": "effects",
+    "category": "naturesaura:effects",
     "advancement": "naturesaura:negative_imbalance",
     "pages": [
         {

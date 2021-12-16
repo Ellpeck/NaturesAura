@@ -1,7 +1,7 @@
 {
     "name": "嬗变催化器",
     "icon": "naturesaura:conversion_catalyst",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

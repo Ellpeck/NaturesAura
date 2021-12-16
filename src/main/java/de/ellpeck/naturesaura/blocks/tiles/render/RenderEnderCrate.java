@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+// TODO get the 1-pixel border around the ender overlay back
 @OnlyIn(Dist.CLIENT)
 public class RenderEnderCrate implements BlockEntityRenderer<BlockEntityEnderCrate> {
 

@@ -1,7 +1,7 @@
 {
     "name": "探天者的盔甲",
     "icon": "naturesaura:sky_chest",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

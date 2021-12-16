@@ -1,7 +1,7 @@
 {
     "name": "미네랄 축적",
     "icon": "minecraft:diamond_ore",
-    "category": "effects",
+    "category": "naturesaura:effects",
     "advancement": "naturesaura:positive_imbalance",
     "pages": [
         {

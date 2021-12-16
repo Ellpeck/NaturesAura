@@ -1,7 +1,7 @@
 {
     "name": "降生祭坛",
     "icon": "naturesaura:animal_spawner",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

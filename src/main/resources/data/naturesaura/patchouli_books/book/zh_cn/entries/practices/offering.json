@@ -1,7 +1,7 @@
 {
     "name": "祭祀诸神",
     "icon": "naturesaura:offering_table",
-    "category": "practices",
+    "category": "naturesaura:practices",
     "advancement": "naturesaura:tainted_gold",
     "pages": [
         {

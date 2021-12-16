@@ -9,13 +9,15 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.Nullable;
 
 public class BlockTagProvider extends BlockTagsProvider {
 
     public static final Tags.IOptionalNamedTag<Block> NETHER_ALTAR_WOOD = BlockTags.createOptional(new ResourceLocation(NaturesAura.MOD_ID, "nether_altar_wood"));
 
-    public BlockTagProvider(DataGenerator generatorIn) {
-        super(generatorIn);
+    public BlockTagProvider(DataGenerator gen, @Nullable ExistingFileHelper existingFileHelper) {
+        super(gen, NaturesAura.MOD_ID, existingFileHelper);
     }
 
     @Override

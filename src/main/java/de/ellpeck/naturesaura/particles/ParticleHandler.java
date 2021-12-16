@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 @OnlyIn(Dist.CLIENT)
 public final class ParticleHandler {
 
+    // TODO fix particle transparency, they don't seem to fade on the edges anymore
     public static final ParticleRenderType MAGIC = new ParticleRenderType() {
 
         @Override

@@ -1,7 +1,7 @@
 {
     "name": "축소 캐노피",
     "icon": "naturesaura:oak_generator",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

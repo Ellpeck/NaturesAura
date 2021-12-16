@@ -1,7 +1,7 @@
 {
     "name": "凛冬的呼唤",
     "icon": "naturesaura:snow_creator",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

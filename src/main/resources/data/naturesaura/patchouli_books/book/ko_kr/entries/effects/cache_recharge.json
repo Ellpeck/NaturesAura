@@ -1,7 +1,7 @@
 {
     "name": "자연의 충전",
     "icon": "naturesaura:aura_cache",
-    "category": "effects",
+    "category": "naturesaura:effects",
     "advancement": "naturesaura:positive_imbalance",
     "pages": [
         {

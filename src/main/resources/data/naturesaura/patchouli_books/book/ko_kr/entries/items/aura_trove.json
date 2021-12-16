@@ -1,7 +1,7 @@
 {
     "name": "오라 수집기",
     "icon": "naturesaura:aura_trove",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

@@ -1,7 +1,7 @@
 {
     "name": "신께 바치는 공물",
     "icon": "naturesaura:offering_table",
-    "category": "practices",
+    "category": "naturesaura:practices",
     "advancement": "naturesaura:aura_bottle_nether",
     "pages": [
         {

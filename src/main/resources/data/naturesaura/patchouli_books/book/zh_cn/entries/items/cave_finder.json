@@ -1,7 +1,7 @@
 {
     "name": "阴影之杖",
     "icon": "naturesaura:cave_finder",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:offering",
     "pages": [
         {

@@ -1,7 +1,7 @@
 {
     "name": "Eir's Token",
     "icon": "naturesaura:break_prevention",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

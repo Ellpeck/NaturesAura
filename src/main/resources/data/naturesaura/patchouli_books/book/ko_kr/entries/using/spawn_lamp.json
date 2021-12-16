@@ -1,7 +1,7 @@
 {
     "name": "안식의 등불",
     "icon": "naturesaura:spawn_lamp",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:aura_bottle_end",
     "pages": [
         {

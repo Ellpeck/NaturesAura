@@ -1,7 +1,7 @@
 {
     "name": "漏斗增强器",
     "icon": "naturesaura:hopper_upgrade",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

@@ -1,7 +1,7 @@
 {
     "name": "마법의 식물",
     "icon": "minecraft:sapling",
-    "category": "intro",
+    "category": "naturesaura:intro",
     "pages": [
         {
             "type": "text",

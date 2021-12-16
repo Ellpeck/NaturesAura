@@ -1,7 +1,7 @@
 {
     "name": "Token of Undying Friendship",
     "icon": "naturesaura:pet_reviver",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

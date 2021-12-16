@@ -1,7 +1,7 @@
 {
     "name": "Aura Trove",
     "icon": "naturesaura:aura_trove",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

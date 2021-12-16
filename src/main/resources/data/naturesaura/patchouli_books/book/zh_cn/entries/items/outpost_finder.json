@@ -1,7 +1,7 @@
 {
     "name": "灾厄村民之眼",
     "icon": "naturesaura:outpost_finder",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:aura_bottle_overworld",
     "pages": [
         {

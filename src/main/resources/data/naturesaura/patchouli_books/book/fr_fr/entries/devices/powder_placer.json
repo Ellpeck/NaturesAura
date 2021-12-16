@@ -1,7 +1,7 @@
 {
     "name": "Powder Manipulator",
     "icon": "naturesaura:powder_placer",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:positive_imbalance",
     "pages": [
         {

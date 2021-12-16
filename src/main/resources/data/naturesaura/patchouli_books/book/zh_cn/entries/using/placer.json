@@ -1,7 +1,7 @@
 {
     "name": "无感知建造器",
     "icon": "naturesaura:placer",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

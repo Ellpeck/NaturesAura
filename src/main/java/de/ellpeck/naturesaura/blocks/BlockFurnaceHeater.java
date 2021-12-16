@@ -10,7 +10,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -81,7 +80,7 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        return SHAPES[state.getValue(FACING).ordinal()];
+        return SHAPES[state.getValue(FACING).get3DDataValue()];
     }
 
     @Override

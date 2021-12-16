@@ -1,7 +1,7 @@
 {
     "name": "Mineral Amassing",
     "icon": "minecraft:diamond_ore",
-    "category": "effects",
+    "category": "naturesaura:effects",
     "advancement": "naturesaura:positive_imbalance",
     "pages": [
         {

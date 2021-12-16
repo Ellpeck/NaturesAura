@@ -1,7 +1,7 @@
 {
     "name": "自然之愈",
     "icon": "minecraft:enchanted_book",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:infused_tools",
     "flag": "mod:enchantability",
     "pages": [

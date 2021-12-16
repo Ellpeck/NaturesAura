@@ -1,7 +1,7 @@
 {
     "name": "폭죽 응시기",
     "icon": "naturesaura:firework_generator",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:offering",
     "pages": [
         {

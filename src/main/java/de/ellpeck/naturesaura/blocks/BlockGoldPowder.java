@@ -50,16 +50,16 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
         var w = state.getValue(WEST) != RedstoneSide.NONE;
 
         if (n || s && !n && !e && !w) {
-            i |= 1 << Direction.NORTH.ordinal();
+            i |= 1 << Direction.NORTH.get2DDataValue();
         }
         if (e || w && !n && !e && !s) {
-            i |= 1 << Direction.EAST.ordinal();
+            i |= 1 << Direction.EAST.get2DDataValue();
         }
         if (s || n && !e && !s && !w) {
-            i |= 1 << Direction.SOUTH.ordinal();
+            i |= 1 << Direction.SOUTH.get2DDataValue();
         }
         if (w || e && !n && !s && !w) {
-            i |= 1 << Direction.WEST.ordinal();
+            i |= 1 << Direction.WEST.get2DDataValue();
         }
         return i;
     }

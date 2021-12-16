@@ -1,7 +1,7 @@
 {
     "name": "Aura Plants",
     "icon": "naturesaura:aura_bloom",
-    "category": "practices",
+    "category": "naturesaura:practices",
     "pages": [
         {
             "type": "text",

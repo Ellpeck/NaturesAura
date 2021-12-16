@@ -1,7 +1,7 @@
 {
     "name": "灵气场生成器",
     "icon": "naturesaura:field_creator",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

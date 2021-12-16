@@ -1,7 +1,7 @@
 {
     "name": "植物学家的盔甲",
     "icon": "naturesaura:infused_iron_chest",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

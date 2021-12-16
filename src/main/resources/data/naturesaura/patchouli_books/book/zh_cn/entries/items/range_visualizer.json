@@ -1,7 +1,7 @@
 {
     "name": "奥秘放大镜",
     "icon": "naturesaura:range_visualizer",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

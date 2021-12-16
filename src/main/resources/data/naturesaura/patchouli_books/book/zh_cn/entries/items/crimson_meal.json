@@ -1,7 +1,7 @@
 {
     "name": "猩红粉末",
     "icon": "naturesaura:crimson_meal",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:aura_bottle_nether",
     "pages": [
         {

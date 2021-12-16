@@ -1,7 +1,7 @@
 {
     "name": "Ancient Trees",
     "icon": "naturesaura:ancient_leaves",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:wood_stand",
     "pages": [
         {

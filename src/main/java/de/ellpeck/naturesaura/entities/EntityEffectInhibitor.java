@@ -26,6 +26,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
 
+// TODO these behave very weirdly in-world
 public class EntityEffectInhibitor extends Entity implements IVisualizable {
 
     private static final EntityDataAccessor<String> INHIBITED_EFFECT = SynchedEntityData.defineId(EntityEffectInhibitor.class, EntityDataSerializers.STRING);

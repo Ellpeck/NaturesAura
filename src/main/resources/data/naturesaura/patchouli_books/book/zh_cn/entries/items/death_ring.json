@@ -1,7 +1,7 @@
 {
     "name": "最后机会之指环",
     "icon": "naturesaura:death_ring",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

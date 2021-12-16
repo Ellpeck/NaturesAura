@@ -1,7 +1,7 @@
 {
     "name": "변화의 해시계",
     "icon": "naturesaura:time_changer",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:aura_bottle_end",
     "pages": [
         {

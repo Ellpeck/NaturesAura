@@ -1,7 +1,7 @@
 {
     "name": "Disentangler of Mortals",
     "icon": "naturesaura:animal_generator",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:tainted_gold",
     "pages": [
         {

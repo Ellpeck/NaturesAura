@@ -1,7 +1,7 @@
 {
     "name": "Item Grounder",
     "icon": "naturesaura:pickup_stopper",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

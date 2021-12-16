@@ -1,7 +1,7 @@
 {
     "name": "实形之眼",
     "icon": "naturesaura:animal_container",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:eye",
     "pages": [
         {

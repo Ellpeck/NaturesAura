@@ -151,7 +151,7 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(SHAPE);
+        builder.add(SHAPE, WATERLOGGED);
     }
 
     @Override

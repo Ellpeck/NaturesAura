@@ -1,7 +1,7 @@
 {
     "name": "식물학자의 도구",
     "icon": "naturesaura:infused_iron_pickaxe",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

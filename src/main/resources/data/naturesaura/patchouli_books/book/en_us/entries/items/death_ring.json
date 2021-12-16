@@ -1,7 +1,7 @@
 {
     "name": "Ring of Last Chance",
     "icon": "naturesaura:death_ring",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

@@ -1,7 +1,7 @@
 {
     "name": "自然祭坛",
     "icon": "naturesaura:nature_altar",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:aura_bottle_overworld",
     "priority": true,
     "turnin": "naturesaura:infused_materials",

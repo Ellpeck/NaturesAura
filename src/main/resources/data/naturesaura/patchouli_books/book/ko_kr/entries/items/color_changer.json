@@ -1,7 +1,7 @@
 {
     "name": "무한의 색 양동이",
     "icon": "naturesaura:color_changer",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

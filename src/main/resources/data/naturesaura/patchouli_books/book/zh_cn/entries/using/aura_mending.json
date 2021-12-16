@@ -1,7 +1,7 @@
 {
     "name": "自然修补",
     "icon": "minecraft:enchanted_book",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:infused_tools",
     "pages": [
         {

@@ -1,7 +1,7 @@
 {
     "name": "移云器",
     "icon": "naturesaura:weather_changer",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:offering",
     "pages": [
         {

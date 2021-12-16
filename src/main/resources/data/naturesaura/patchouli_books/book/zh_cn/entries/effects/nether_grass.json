@@ -1,7 +1,7 @@
 {
     "name": "猩红增生",
     "icon": "naturesaura:nether_grass",
-    "category": "effects",
+    "category": "naturesaura:effects",
     "advancement": "naturesaura:positive_imbalance",
     "pages": [
         {

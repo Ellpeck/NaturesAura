@@ -1,7 +1,7 @@
 {
     "name": "充能灵气锻炉",
     "icon": "naturesaura:rf_converter",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:sky_ingot",
     "flag": "naturesaura:rf_converter",
     "pages": [

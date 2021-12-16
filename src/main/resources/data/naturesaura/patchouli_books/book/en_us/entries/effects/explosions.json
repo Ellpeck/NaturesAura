@@ -1,7 +1,7 @@
 {
     "name": "Unstable Outbreak",
     "icon": "minecraft:tnt",
-    "category": "effects",
+    "category": "naturesaura:effects",
     "advancement": "naturesaura:negative_imbalance",
     "pages": [
         {

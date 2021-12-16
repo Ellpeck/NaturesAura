@@ -1,7 +1,7 @@
 {
     "name": "Imperceptible Builder",
     "icon": "naturesaura:placer",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

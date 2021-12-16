@@ -1,7 +1,7 @@
 {
     "name": "Environmental Eye",
     "icon": "naturesaura:eye",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:wood_stand",
     "turnin": "naturesaura:eye",
     "priority": true,

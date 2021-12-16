@@ -1,7 +1,7 @@
 {
     "name": "자동 제작기",
     "icon": "naturesaura:auto_crafter",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

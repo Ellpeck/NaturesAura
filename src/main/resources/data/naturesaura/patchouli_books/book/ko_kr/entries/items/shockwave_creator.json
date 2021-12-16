@@ -1,7 +1,7 @@
 {
     "name": "분노의 부적",
     "icon": "naturesaura:shockwave_creator",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:infused_tools",
     "pages": [
         {

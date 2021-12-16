@@ -1,7 +1,7 @@
 {
     "name": "专家型漏斗",
     "icon": "naturesaura:grated_chute",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

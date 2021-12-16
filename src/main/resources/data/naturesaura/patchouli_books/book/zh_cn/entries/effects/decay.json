@@ -1,7 +1,7 @@
 {
     "name": "自然衰退",
     "icon": "naturesaura:decayed_leaves",
-    "category": "effects",
+    "category": "naturesaura:effects",
     "advancement": "naturesaura:negative_imbalance",
     "pages": [
         {

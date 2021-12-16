@@ -108,9 +108,8 @@ dependencies {
 /*    compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.6.1.75:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.6.1.75")*/
 
-    // TODO Patchouli
-/*    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50")*/
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-61:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-61")
 
     // TODO Curios
 /*    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.0")

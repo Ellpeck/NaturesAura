@@ -1,7 +1,7 @@
 {
     "name": "末影高花收割机",
     "icon": "naturesaura:chorus_generator",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:aura_bottle_end",
     "pages": [
         {

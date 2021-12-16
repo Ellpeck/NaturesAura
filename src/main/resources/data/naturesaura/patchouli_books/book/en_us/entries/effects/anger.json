@@ -1,7 +1,7 @@
 {
     "name": "Inexplicable Anger",
     "icon": "minecraft:fire_charge",
-    "category": "effects",
+    "category": "naturesaura:effects",
     "advancement": "naturesaura:negative_imbalance",
     "pages": [
         {

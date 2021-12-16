@@ -1,7 +1,7 @@
 {
     "name": "오라 에너지 가공기",
     "icon": "naturesaura:rf_converter",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:sky_ingot",
     "flag": "naturesaura:rf_converter",
     "pages": [

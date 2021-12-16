@@ -1,7 +1,7 @@
 {
     "name": "탄생의 제단",
     "icon": "naturesaura:animal_spawner",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

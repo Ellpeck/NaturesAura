@@ -1,7 +1,7 @@
 {
     "name": "Skyseeker's Armor",
     "icon": "naturesaura:sky_chest",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

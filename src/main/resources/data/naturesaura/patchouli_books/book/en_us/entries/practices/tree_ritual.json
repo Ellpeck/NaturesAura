@@ -1,7 +1,7 @@
 {
     "name": "Ritual of the Forest",
     "icon": "naturesaura:wood_stand",
-    "category": "practices",
+    "category": "naturesaura:practices",
     "advancement": "naturesaura:gold_leaf",
     "priority": true,
     "turnin": "naturesaura:wood_stand",

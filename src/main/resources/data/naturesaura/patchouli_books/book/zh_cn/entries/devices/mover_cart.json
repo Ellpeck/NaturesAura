@@ -1,7 +1,7 @@
 {
     "name": "灵气吸引矿车",
     "icon": "naturesaura:mover_cart",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:aura_bottle_end",
     "pages": [
         {

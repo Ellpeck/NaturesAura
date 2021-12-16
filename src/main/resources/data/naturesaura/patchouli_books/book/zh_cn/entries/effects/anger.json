@@ -1,7 +1,7 @@
 {
     "name": "莫名愤怒",
     "icon": "minecraft:fire_charge",
-    "category": "effects",
+    "category": "naturesaura:effects",
     "advancement": "naturesaura:negative_imbalance",
     "pages": [
         {

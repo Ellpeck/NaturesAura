@@ -11,21 +11,22 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.TreeFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.material.Material;
 
 import java.util.Random;
 
 import static net.minecraft.core.Direction.Axis;
 
-public class LevelGenAncientTree extends Feature<TreeConfiguration> {
+public class LevelGenAncientTree extends Feature<NoneFeatureConfiguration> {
 
     public LevelGenAncientTree() {
-        super(Codec.unit(ModFeatures.Configured.ANCIENT_TREE.config()));
+        super(Codec.unit(FeatureConfiguration.NONE));
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<TreeConfiguration> ctx) {
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> ctx) {
         var level = ctx.level();
         var pos = ctx.origin();
         var rand = ctx.random();

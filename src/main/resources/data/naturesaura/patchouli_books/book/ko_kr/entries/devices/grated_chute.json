@@ -1,7 +1,7 @@
 {
     "name": "전문가 호퍼",
     "icon": "naturesaura:grated_chute",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

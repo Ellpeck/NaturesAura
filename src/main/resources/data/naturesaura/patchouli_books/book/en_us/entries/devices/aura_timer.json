@@ -1,7 +1,7 @@
 {
     "name": "Redstone Aura Vaporizer",
     "icon": "naturesaura:aura_timer",
-    "category": "devices",
+    "category": "naturesaura:devices",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {

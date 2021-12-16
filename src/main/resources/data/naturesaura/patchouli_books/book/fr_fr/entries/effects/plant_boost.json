@@ -1,7 +1,7 @@
 {
     "name": "Vegetational Increase",
     "icon": "minecraft:wheat_seeds",
-    "category": "effects",
+    "category": "naturesaura:effects",
     "advancement": "naturesaura:positive_imbalance",
     "pages": [
         {

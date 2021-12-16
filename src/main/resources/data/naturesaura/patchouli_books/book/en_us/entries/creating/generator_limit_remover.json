@@ -1,7 +1,7 @@
 {
     "name": "Creational Catalyst",
     "icon": "naturesaura:generator_limit_remover",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:offering",
     "priority": true,
     "pages": [

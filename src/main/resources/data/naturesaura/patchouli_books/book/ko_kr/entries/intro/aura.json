@@ -1,7 +1,7 @@
 {
     "name": "오라의 개념",
     "icon": "naturesaura:gold_leaf",
-    "category": "intro",
+    "category": "naturesaura:intro",
     "pages": [
         {
             "type": "text",

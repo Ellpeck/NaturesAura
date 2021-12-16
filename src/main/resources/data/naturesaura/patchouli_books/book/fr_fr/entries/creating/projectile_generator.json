@@ -1,7 +1,7 @@
 {
     "name": "Shooting Mark",
     "icon": "naturesaura:projectile_generator",
-    "category": "creating",
+    "category": "naturesaura:creating",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

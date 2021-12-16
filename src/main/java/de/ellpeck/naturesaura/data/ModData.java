@@ -1,7 +1,5 @@
 package de.ellpeck.naturesaura.data;
 
-import net.minecraft.data.DataGenerator;
-import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
@@ -13,7 +11,7 @@ public final class ModData {
     public static void gatherData(GatherDataEvent event) {
         var generator = event.getGenerator();
         var ex = event.getExistingFileHelper();
-        var blockTags = new BlockTagProvider(generator);
+        var blockTags = new BlockTagProvider(generator, ex);
         generator.addProvider(blockTags);
         generator.addProvider(new ItemTagProvider(generator, blockTags, ex));
         generator.addProvider(new BlockLootProvider(generator));

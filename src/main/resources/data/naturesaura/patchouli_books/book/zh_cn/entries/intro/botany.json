@@ -1,7 +1,7 @@
 {
     "name": "魔法植物学",
     "icon": "minecraft:oak_sapling",
-    "category": "intro",
+    "category": "naturesaura:intro",
     "pages": [
         {
             "type": "text",

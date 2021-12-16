@@ -1,7 +1,7 @@
 {
     "name": "Amulet of Wrath",
     "icon": "naturesaura:shockwave_creator",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:tainted_gold",
     "pages": [
         {

@@ -1,7 +1,7 @@
 {
     "name": "Altar of Birthing",
     "icon": "naturesaura:animal_spawner",
-    "category": "using",
+    "category": "naturesaura:using",
     "advancement": "naturesaura:sky_ingot",
     "pages": [
         {

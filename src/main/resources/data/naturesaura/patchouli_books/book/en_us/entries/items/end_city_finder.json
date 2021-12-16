@@ -1,7 +1,7 @@
 {
     "name": "Eye of the Shulker",
     "icon": "naturesaura:end_city_finder",
-    "category": "items",
+    "category": "naturesaura:items",
     "advancement": "naturesaura:aura_bottle_end",
     "pages": [
         {

@@ -1,7 +1,7 @@
 {
     "name": "눈부신 나무",
     "icon": "naturesaura:gold_leaf",
-    "category": "practices",
+    "category": "naturesaura:practices",
     "priority": true,
     "turnin": "naturesaura:gold_leaf",
     "pages": [
