@@ -19,14 +19,15 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.Nullable;
 
-// TODO these behave very weirdly in-world
 public class EntityEffectInhibitor extends Entity implements IVisualizable {
 
     private static final EntityDataAccessor<String> INHIBITED_EFFECT = SynchedEntityData.defineId(EntityEffectInhibitor.class, EntityDataSerializers.STRING);
@@ -109,11 +110,6 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
-        return true;
-    }
-
-    @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         this.setInhibitedEffect(new ResourceLocation(compound.getString("effect")));
         this.setColor(compound.getInt("color"));
@@ -133,13 +129,31 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     @Override
+    public boolean skipAttackInteraction(Entity entity) {
+        return entity instanceof Player player && (!this.level.mayInteract(player, this.blockPosition()) || this.hurt(DamageSource.playerAttack(player), 0.0F));
+    }
+
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source instanceof EntityDamageSource && !this.level.isClientSide) {
             this.kill();
             this.spawnAtLocation(this.getDrop(), 0F);
             return true;
-        } else
+        } else {
             return super.hurt(source, amount);
+        }
+    }
+
+    @Override
+    public boolean isPickable() {
+        // SOMEHOW, this actually means "is raytraceable" IN GENERAL even though getPickResult is about middle-clicking, jesus fucking christ mojang
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getPickResult() {
+        return this.getDrop();
     }
 
     public ItemStack getDrop() {
