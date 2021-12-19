@@ -19,11 +19,8 @@ import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -37,28 +34,26 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.UUID;
 
 import static net.minecraft.world.level.levelgen.GenerationStep.Decoration;
 
 public class CommonEvents {
 
-    private static final Method GET_LOADED_CHUNKS_METHOD = ObfuscationReflectionHelper.findMethod(ChunkMap.class, "getChunks");
+    private static final Method GET_LOADED_CHUNKS_METHOD = ObfuscationReflectionHelper.findMethod(ChunkMap.class, "m_140416_");
     private static final ListMultimap<UUID, ChunkPos> PENDING_AURA_CHUNKS = ArrayListMultimap.create();
 
     @SubscribeEvent
     public void onBiomeLoad(BiomeLoadingEvent event) {
         if (ModConfig.instance.auraBlooms.get()) {
-            // TODO features might have to be registered *AGAIN* now because .placed() is another thing again oh my God
-            event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Configured.AURA_BLOOM.placed());
+            event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Placed.AURA_BLOOM);
             switch (event.getCategory()) {
-                case DESERT -> event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Configured.AURA_CACTUS.placed());
+                case DESERT -> event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Placed.AURA_CACTUS);
                 case NETHER -> {
-                    event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Configured.CRIMSON_AURA_MUSHROOM.placed());
-                    event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Configured.WARPED_AURA_MUSHROOM.placed());
+                    event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Placed.CRIMSON_AURA_MUSHROOM);
+                    event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Placed.WARPED_AURA_MUSHROOM);
                 }
-                case MUSHROOM -> event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Configured.AURA_MUSHROOM.placed());
+                case MUSHROOM -> event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Placed.AURA_MUSHROOM);
             }
         }
     }

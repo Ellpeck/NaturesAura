@@ -51,7 +51,7 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
             protected Projectile getProjectile(Level levelIn, Position position, ItemStack stackIn) {
                 var ret = new ThrownTrident(EntityType.TRIDENT, levelIn);
                 ret.setPos(position.x(), position.y(), position.z());
-                ObfuscationReflectionHelper.setPrivateValue(ThrownTrident.class, ret, stackIn.copy(), "tridentItem");
+                ObfuscationReflectionHelper.setPrivateValue(ThrownTrident.class, ret, stackIn.copy(), "f_37555_");
                 ret.pickup = AbstractArrow.Pickup.ALLOWED;
                 return ret;
             }

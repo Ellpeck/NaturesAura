@@ -30,7 +30,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -46,18 +45,22 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ModRegistry {
@@ -337,12 +340,25 @@ public final class ModRegistry {
                 provider.registerTESR();
         }
 
-        // register features again for some reason
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(NaturesAura.MOD_ID, "aura_bloom"), ModFeatures.Configured.AURA_BLOOM);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(NaturesAura.MOD_ID, "aura_cactus"), ModFeatures.Configured.AURA_CACTUS);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(NaturesAura.MOD_ID, "crimson_aura_mushroom"), ModFeatures.Configured.CRIMSON_AURA_MUSHROOM);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(NaturesAura.MOD_ID, "warped_aura_mushroom"), ModFeatures.Configured.WARPED_AURA_MUSHROOM);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(NaturesAura.MOD_ID, "aura_mushroom"), ModFeatures.Configured.AURA_MUSHROOM);
+        // register features 27 more times for some reason
+        for (var entry : ModFeatures.Configured.class.getFields()) {
+            try {
+                var feature = (ConfiguredFeature<?, ?>) entry.get(null);
+                Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, feature.feature.getRegistryName(), feature);
+            } catch (IllegalAccessException e) {
+                NaturesAura.LOGGER.error(e);
+            }
+        }
+        for (var entry : ModFeatures.Placed.class.getFields()) {
+            try {
+                var placed = (PlacedFeature) entry.get(null);
+                // why are you making this so difficult for me
+                Supplier<ConfiguredFeature<?, ?>> feature = ObfuscationReflectionHelper.getPrivateValue(PlacedFeature.class, placed, "f_191775_");
+                Registry.register(BuiltinRegistries.PLACED_FEATURE, feature.get().feature.getRegistryName(), placed);
+            } catch (IllegalAccessException e) {
+                NaturesAura.LOGGER.error(e);
+            }
+        }
     }
 
     public static Block createFlowerPot(Block block) {
