@@ -8,7 +8,7 @@ import net.minecraft.world.level.material.Material;
 public class BlockPotionGenerator extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockPotionGenerator() {
-        super("potion_generator", BlockEntityPotionGenerator::new, Properties.of(Material.STONE).strength(5F));
+        super("potion_generator", BlockEntityPotionGenerator.class, Properties.of(Material.STONE).strength(5F));
     }
 
     @Override

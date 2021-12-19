@@ -1,6 +1,8 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraBloom;
+import de.ellpeck.naturesaura.blocks.tiles.ITickableBlockEntity;
+import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.*;
@@ -16,11 +18,13 @@ import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.function.Supplier;
@@ -85,5 +89,11 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new BlockEntityAuraBloom(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return ITickableBlockEntity.createTickerHelper(type, ModBlockEntities.AURA_BLOOM);
     }
 }

@@ -14,9 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
-import java.util.Map;
-
 public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITickableBlockEntity {
 
     private int processTime;
@@ -24,7 +21,7 @@ public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITicka
     private int itemAmount;
 
     public BlockEntityWeatherChanger(BlockPos pos, BlockState state) {
-        super(ModTileEntities.WEATHER_CHANGER, pos, state);
+        super(ModBlockEntities.WEATHER_CHANGER, pos, state);
     }
 
     @Override

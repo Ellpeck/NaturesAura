@@ -9,13 +9,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-
-import java.util.List;
 
 public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBlockEntity {
 
@@ -46,7 +43,7 @@ public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBl
     public boolean isDrainMode;
 
     public BlockEntityEndFlower(BlockPos pos, BlockState state) {
-        super(ModTileEntities.END_FLOWER, pos, state);
+        super(ModBlockEntities.END_FLOWER, pos, state);
     }
 
     @Override

@@ -5,7 +5,6 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +24,7 @@ public class BlockEntityAutoCrafter extends BlockEntityImpl implements ITickable
     }, 3, 3);
 
     public BlockEntityAutoCrafter(BlockPos pos, BlockState state) {
-        super(ModTileEntities.AUTO_CRAFTER, pos, state);
+        super(ModBlockEntities.AUTO_CRAFTER, pos, state);
     }
 
     @Override

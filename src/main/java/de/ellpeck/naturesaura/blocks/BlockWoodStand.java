@@ -3,11 +3,10 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityWoodStand;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
+import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderWoodStand;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
-import de.ellpeck.naturesaura.recipes.TreeRitualRecipe;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -15,13 +14,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
@@ -42,7 +38,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
     private static final VoxelShape SHAPE = Shapes.create(3 / 16F, 0F, 3 / 16F, 13 / 16F, 13 / 16F, 13 / 16F);
 
     public BlockWoodStand() {
-        super("wood_stand", BlockEntityWoodStand::new, Properties.of(Material.WOOD).strength(1.5F).sound(SoundType.WOOD));
+        super("wood_stand", BlockEntityWoodStand.class, Properties.of(Material.WOOD).strength(1.5F).sound(SoundType.WOOD));
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -115,6 +111,6 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
 
     @Override
     public void registerTESR() {
-        BlockEntityRenderers.register(ModTileEntities.WOOD_STAND, RenderWoodStand::new);
+        BlockEntityRenderers.register(ModBlockEntities.WOOD_STAND, RenderWoodStand::new);
     }
 }

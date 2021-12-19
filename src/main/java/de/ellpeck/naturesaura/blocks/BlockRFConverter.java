@@ -9,7 +9,7 @@ import net.minecraft.world.level.material.Material;
 public class BlockRFConverter extends BlockContainerImpl {
 
     public BlockRFConverter() {
-        super("rf_converter", BlockEntityRFConverter::new, Properties.of(Material.STONE).sound(SoundType.STONE).strength(3));
+        super("rf_converter", BlockEntityRFConverter.class, Properties.of(Material.STONE).sound(SoundType.STONE).strength(3));
     }
 
     @Override

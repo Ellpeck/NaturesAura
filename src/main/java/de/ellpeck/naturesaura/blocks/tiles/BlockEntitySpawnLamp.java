@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class BlockEntitySpawnLamp extends BlockEntityImpl {
 
     public BlockEntitySpawnLamp(BlockPos pos, BlockState state) {
-        super(ModTileEntities.SPAWN_LAMP, pos, state);
+        super(ModBlockEntities.SPAWN_LAMP, pos, state);
     }
 
     public int getRadius() {

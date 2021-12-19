@@ -10,21 +10,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.world.BlockEvent;
-
-import java.util.List;
 
 public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickableBlockEntity {
 
@@ -34,7 +29,7 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
     private int chargeTimer;
 
     public BlockEntityFieldCreator(BlockPos pos, BlockState state) {
-        super(ModTileEntities.FIELD_CREATOR, pos, state);
+        super(ModBlockEntities.FIELD_CREATOR, pos, state);
     }
 
     @Override

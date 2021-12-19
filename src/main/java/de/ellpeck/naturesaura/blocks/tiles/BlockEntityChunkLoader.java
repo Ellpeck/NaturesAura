@@ -20,7 +20,7 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
     private boolean firstTick = true;
 
     public BlockEntityChunkLoader(BlockPos pos, BlockState state) {
-        super(ModTileEntities.CHUNK_LOADER, pos, state);
+        super(ModBlockEntities.CHUNK_LOADER, pos, state);
     }
 
     @Override

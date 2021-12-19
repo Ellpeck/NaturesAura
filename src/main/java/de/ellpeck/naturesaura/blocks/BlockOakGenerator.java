@@ -19,12 +19,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.SaplingGrowTreeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.Random;
-
 public class BlockOakGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockOakGenerator() {
-        super("oak_generator", BlockEntityOakGenerator::new, Properties.of(Material.WOOD).strength(2F).sound(SoundType.WOOD));
+        super("oak_generator", BlockEntityOakGenerator.class, Properties.of(Material.WOOD).strength(2F).sound(SoundType.WOOD));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

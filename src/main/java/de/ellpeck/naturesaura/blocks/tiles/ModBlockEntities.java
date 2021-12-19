@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 @SuppressWarnings("FieldNamingConvention")
-public final class ModTileEntities {
+public final class ModBlockEntities {
 
     public static BlockEntityType<BlockEntityAncientLeaves> ANCIENT_LEAVES;
     public static BlockEntityType<BlockEntityAnimalGenerator> ANIMAL_GENERATOR;

@@ -13,14 +13,11 @@ import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-
-import java.util.List;
 
 public class BlockEntityHopperUpgrade extends BlockEntityImpl implements ITickableBlockEntity {
 
     public BlockEntityHopperUpgrade(BlockPos pos, BlockState state) {
-        super(ModTileEntities.HOPPER_UPGRADE, pos, state);
+        super(ModBlockEntities.HOPPER_UPGRADE, pos, state);
     }
 
     private static boolean isValidHopper(BlockEntity tile) {

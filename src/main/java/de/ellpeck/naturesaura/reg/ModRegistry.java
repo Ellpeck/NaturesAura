@@ -6,7 +6,7 @@ import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.*;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraBloom;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEnderCrate;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
+import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import de.ellpeck.naturesaura.entities.*;
@@ -236,7 +236,7 @@ public final class ModRegistry {
             if (item instanceof ModTileType type)
                 event.getRegistry().register(type.type);
         }
-        Helper.populateObjectHolders(ModTileEntities.class, event.getRegistry());
+        Helper.populateObjectHolders(ModBlockEntities.class, event.getRegistry());
     }
 
     @SubscribeEvent

@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockFlowerGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockFlowerGenerator() {
-        super("flower_generator", BlockEntityFlowerGenerator::new, Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(2F));
+        super("flower_generator", BlockEntityFlowerGenerator.class, Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(2F));
     }
 
     @Override

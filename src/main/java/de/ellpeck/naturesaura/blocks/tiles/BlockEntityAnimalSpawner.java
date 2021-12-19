@@ -15,7 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -33,7 +32,7 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
     private Entity entityClient;
 
     public BlockEntityAnimalSpawner(BlockPos pos, BlockState state) {
-        super(ModTileEntities.ANIMAL_SPAWNER, pos, state);
+        super(ModBlockEntities.ANIMAL_SPAWNER, pos, state);
     }
 
     @Override

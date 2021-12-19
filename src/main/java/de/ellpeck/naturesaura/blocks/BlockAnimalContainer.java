@@ -20,7 +20,7 @@ public class BlockAnimalContainer extends BlockContainerImpl implements IVisuali
     private static final VoxelShape SHAPE = box(5, 0, 5, 11, 13, 11);
 
     public BlockAnimalContainer() {
-        super("animal_container", BlockEntityAnimalContainer::new, Properties.copy(Blocks.STONE));
+        super("animal_container", BlockEntityAnimalContainer.class, Properties.copy(Blocks.STONE));
     }
 
     @Override

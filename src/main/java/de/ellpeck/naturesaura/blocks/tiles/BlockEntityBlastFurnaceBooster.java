@@ -5,15 +5,12 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
@@ -22,7 +19,7 @@ import java.util.List;
 public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements ITickableBlockEntity {
 
     public BlockEntityBlastFurnaceBooster(BlockPos pos, BlockState state) {
-        super(ModTileEntities.BLAST_FURNACE_BOOSTER, pos, state);
+        super(ModBlockEntities.BLAST_FURNACE_BOOSTER, pos, state);
     }
 
     @Override

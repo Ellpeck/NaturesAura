@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.FarmlandWaterManager;
@@ -30,7 +29,7 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
     private AABBTicket waterTicket;
 
     public BlockEntitySpring(BlockPos pos, BlockState state) {
-        super(ModTileEntities.SPRING, pos, state);
+        super(ModBlockEntities.SPRING, pos, state);
     }
 
     @Override

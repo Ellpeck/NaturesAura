@@ -9,26 +9,21 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.players.PlayerList;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.phys.AABB;
 
-import java.util.List;
-
 public class BlockEntityTimeChanger extends BlockEntityImpl implements ITickableBlockEntity {
 
     private long goalTime;
 
     public BlockEntityTimeChanger(BlockPos pos, BlockState state) {
-        super(ModTileEntities.TIME_CHANGER, pos, state);
+        super(ModBlockEntities.TIME_CHANGER, pos, state);
     }
 
     @Override

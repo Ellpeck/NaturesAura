@@ -8,11 +8,8 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,7 +21,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockPickupStopper() {
-        super("pickup_stopper", BlockEntityPickupStopper::new, Properties.of(Material.STONE).strength(2F).sound(SoundType.STONE));
+        super("pickup_stopper", BlockEntityPickupStopper.class, Properties.of(Material.STONE).strength(2F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

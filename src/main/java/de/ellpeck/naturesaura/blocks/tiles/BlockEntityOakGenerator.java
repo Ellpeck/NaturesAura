@@ -14,7 +14,7 @@ public class BlockEntityOakGenerator extends BlockEntityImpl implements ITickabl
     public Queue<BlockPos> scheduledBigTrees = new ArrayDeque<>();
 
     public BlockEntityOakGenerator(BlockPos pos, BlockState state) {
-        super(ModTileEntities.OAK_GENERATOR, pos, state);
+        super(ModBlockEntities.OAK_GENERATOR, pos, state);
     }
 
     @Override

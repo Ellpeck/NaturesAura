@@ -76,7 +76,7 @@ public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvid
     };
 
     public BlockEntityEnderCrate(BlockPos pos, BlockState state) {
-        super(ModTileEntities.ENDER_CRATE, pos, state);
+        super(ModBlockEntities.ENDER_CRATE, pos, state);
     }
 
     @Override

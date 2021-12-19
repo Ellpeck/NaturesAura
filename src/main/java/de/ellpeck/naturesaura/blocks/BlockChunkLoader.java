@@ -12,7 +12,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
@@ -28,7 +27,7 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
     private static final VoxelShape SHAPE = box(4, 4, 4, 12, 12, 12);
 
     public BlockChunkLoader() {
-        super("chunk_loader", BlockEntityChunkLoader::new, Properties.of(Material.STONE).strength(3F).sound(SoundType.STONE));
+        super("chunk_loader", BlockEntityChunkLoader.class, Properties.of(Material.STONE).strength(3F).sound(SoundType.STONE));
     }
 
     @Override

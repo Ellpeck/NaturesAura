@@ -37,7 +37,7 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
     };
 
     public BlockFurnaceHeater() {
-        super("furnace_heater", BlockEntityFurnaceHeater::new, Properties.of(Material.STONE).strength(3F));
+        super("furnace_heater", BlockEntityFurnaceHeater.class, Properties.of(Material.STONE).strength(3F));
     }
 
     @Override

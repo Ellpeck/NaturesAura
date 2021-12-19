@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.Blocks;
 public class BlockWeatherChanger extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockWeatherChanger() {
-        super("weather_changer", BlockEntityWeatherChanger::new, Properties.copy(Blocks.STONE_BRICKS));
+        super("weather_changer", BlockEntityWeatherChanger.class, Properties.copy(Blocks.STONE_BRICKS));
     }
 
     @Override

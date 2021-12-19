@@ -6,7 +6,6 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntitySlimeSplitGenerator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -20,7 +19,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class BlockSlimeSplitGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockSlimeSplitGenerator() {
-        super("slime_split_generator", BlockEntitySlimeSplitGenerator::new, Properties.copy(Blocks.SLIME_BLOCK).strength(2));
+        super("slime_split_generator", BlockEntitySlimeSplitGenerator.class, Properties.copy(Blocks.SLIME_BLOCK).strength(2));
         MinecraftForge.EVENT_BUS.register(new Events());
     }
 

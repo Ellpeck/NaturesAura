@@ -31,7 +31,7 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
     private int timer;
 
     public BlockEntityAuraTimer(BlockPos pos, BlockState state) {
-        super(ModTileEntities.AURA_TIMER, pos, state);
+        super(ModBlockEntities.AURA_TIMER, pos, state);
     }
 
     @Override

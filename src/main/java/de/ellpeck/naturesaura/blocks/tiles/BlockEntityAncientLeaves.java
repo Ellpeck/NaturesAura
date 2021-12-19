@@ -26,7 +26,7 @@ public class BlockEntityAncientLeaves extends BlockEntityImpl {
     };
 
     public BlockEntityAncientLeaves(BlockPos pos, BlockState state) {
-        super(ModTileEntities.ANCIENT_LEAVES, pos, state);
+        super(ModBlockEntities.ANCIENT_LEAVES, pos, state);
     }
 
     @Override

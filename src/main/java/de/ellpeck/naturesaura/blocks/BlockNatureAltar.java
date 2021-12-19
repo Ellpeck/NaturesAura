@@ -4,7 +4,7 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityNatureAltar;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
+import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderNatureAltar;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
@@ -35,7 +35,7 @@ public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvide
     public static final BooleanProperty NETHER = BooleanProperty.create("nether");
 
     public BlockNatureAltar() {
-        super("nature_altar", BlockEntityNatureAltar::new, Block.Properties.of(Material.STONE).strength(4F));
+        super("nature_altar", BlockEntityNatureAltar.class, Block.Properties.of(Material.STONE).strength(4F));
         this.registerDefaultState(this.defaultBlockState().setValue(NETHER, false));
     }
 
@@ -75,6 +75,6 @@ public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvide
 
     @Override
     public void registerTESR() {
-        BlockEntityRenderers.register(ModTileEntities.NATURE_ALTAR, RenderNatureAltar::new);
+        BlockEntityRenderers.register(ModBlockEntities.NATURE_ALTAR, RenderNatureAltar::new);
     }
 }

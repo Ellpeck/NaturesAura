@@ -13,7 +13,6 @@ import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 
 public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickableBlockEntity {
@@ -21,7 +20,7 @@ public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickable
     private int snowmanCount;
 
     public BlockEntitySnowCreator(BlockPos pos, BlockState state) {
-        super(ModTileEntities.SNOW_CREATOR, pos, state);
+        super(ModBlockEntities.SNOW_CREATOR, pos, state);
     }
 
     public int getRange() {

@@ -19,7 +19,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BucketPickup;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,7 +30,7 @@ import java.util.function.Supplier;
 public class BlockSpring extends BlockContainerImpl implements ICustomBlockState, IColorProvidingBlock, IColorProvidingItem, BucketPickup, ICustomRenderType {
 
     public BlockSpring() {
-        super("spring", BlockEntitySpring::new, Properties.copy(Blocks.STONE_BRICKS));
+        super("spring", BlockEntitySpring.class, Properties.copy(Blocks.STONE_BRICKS));
     }
 
     @Override

@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockPlacer extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockPlacer() {
-        super("placer", BlockEntityPlacer::new, Properties.of(Material.STONE).strength(2.5F).sound(SoundType.STONE));
+        super("placer", BlockEntityPlacer.class, Properties.of(Material.STONE).strength(2.5F).sound(SoundType.STONE));
     }
 
     @Override

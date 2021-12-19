@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -19,7 +18,7 @@ public class BlockEntityItemDistributor extends BlockEntityImpl implements ITick
     public boolean isRandomMode;
 
     public BlockEntityItemDistributor(BlockPos pos, BlockState state) {
-        super(ModTileEntities.ITEM_DISTRIBUTOR, pos, state);
+        super(ModBlockEntities.ITEM_DISTRIBUTOR, pos, state);
     }
 
     @Override

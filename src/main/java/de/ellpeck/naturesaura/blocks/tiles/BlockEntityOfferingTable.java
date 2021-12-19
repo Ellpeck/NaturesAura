@@ -9,9 +9,7 @@ import de.ellpeck.naturesaura.recipes.OfferingRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -23,7 +21,6 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.ArrayDeque;
-import java.util.List;
 import java.util.Queue;
 
 public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickableBlockEntity {
@@ -37,7 +34,7 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
     private final Queue<ItemStack> itemsToSpawn = new ArrayDeque<>();
 
     public BlockEntityOfferingTable(BlockPos pos, BlockState state) {
-        super(ModTileEntities.OFFERING_TABLE, pos, state);
+        super(ModBlockEntities.OFFERING_TABLE, pos, state);
     }
 
     private OfferingRecipe getRecipe(ItemStack input) {

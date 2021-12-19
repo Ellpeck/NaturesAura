@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
+import de.ellpeck.naturesaura.blocks.tiles.ITickableBlockEntity;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import de.ellpeck.naturesaura.reg.ModTileType;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -29,19 +31,22 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Random;
 
 public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
 
     private final String baseName;
-    private final ModTileType<BlockEntity> tileType;
+    private final Class<? extends BlockEntity> tileClass;
+    private final ModTileType<? extends BlockEntity> tileType;
 
-    public BlockContainerImpl(String baseName, BlockEntityType.BlockEntitySupplier<BlockEntity> tileSupplier, Block.Properties properties) {
+    public BlockContainerImpl(String baseName, Class<? extends BlockEntity> tileClass, Block.Properties properties) {
         super(properties);
 
         this.baseName = baseName;
-        this.tileType = new ModTileType<>(tileSupplier, this);
+        this.tileClass = tileClass;
+        this.tileType = new ModTileType<>(this::createBlockEntity, this);
 
         ModRegistry.add(this);
         ModRegistry.add(this.tileType);
@@ -85,7 +90,14 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     @org.jetbrains.annotations.Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return this.tileType.type.create(pos, state);
+        return this.createBlockEntity(pos, state);
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        if (ITickableBlockEntity.class.isAssignableFrom(this.tileClass))
+            return ITickableBlockEntity.createTickerHelper(type, this.tileType.type);
+        return null;
     }
 
     @Override
@@ -162,6 +174,14 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
                 if (impl.redstonePower != newPower)
                     impl.onRedstonePowerChange(newPower);
             }
+        }
+    }
+
+    private BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        try {
+            return this.tileClass.getConstructor(BlockPos.class, BlockState.class).newInstance(pos, state);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new IllegalStateException("Cannot construct block entity from class " + this.tileClass, e);
         }
     }
 }

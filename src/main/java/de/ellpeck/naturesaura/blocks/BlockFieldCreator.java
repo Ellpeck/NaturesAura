@@ -8,14 +8,12 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ICustomRenderType;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
@@ -28,7 +26,7 @@ import java.util.function.Supplier;
 public class BlockFieldCreator extends BlockContainerImpl implements ICustomBlockState, ICustomRenderType {
 
     public BlockFieldCreator() {
-        super("field_creator", BlockEntityFieldCreator::new, Properties.of(Material.STONE).strength(2F).noCollission().sound(SoundType.STONE));
+        super("field_creator", BlockEntityFieldCreator.class, Properties.of(Material.STONE).strength(2F).noCollission().sound(SoundType.STONE));
     }
 
     @Override

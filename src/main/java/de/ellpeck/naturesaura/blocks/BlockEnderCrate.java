@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEnderCrate;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
+import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderEnderCrate;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
@@ -43,7 +43,7 @@ import java.util.Random;
 public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider<BlockEntityEnderCrate>, ICustomBlockState {
 
     public BlockEnderCrate() {
-        super("ender_crate", BlockEntityEnderCrate::new, Properties.of(Material.STONE).strength(5F).lightLevel(s -> 7).sound(SoundType.STONE));
+        super("ender_crate", BlockEntityEnderCrate.class, Properties.of(Material.STONE).strength(5F).lightLevel(s -> 7).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -131,6 +131,6 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
 
     @Override
     public void registerTESR() {
-        BlockEntityRenderers.register(ModTileEntities.ENDER_CRATE, RenderEnderCrate::new);
+        BlockEntityRenderers.register(ModBlockEntities.ENDER_CRATE, RenderEnderCrate::new);
     }
 }

@@ -13,7 +13,7 @@ import java.util.Set;
 public class BlockEntityAnimalContainer extends BlockEntityImpl implements ITickableBlockEntity {
 
     public BlockEntityAnimalContainer(BlockPos pos, BlockState state) {
-        super(ModTileEntities.ANIMAL_CONTAINER, pos, state);
+        super(ModBlockEntities.ANIMAL_CONTAINER, pos, state);
     }
 
     public int getRadius() {

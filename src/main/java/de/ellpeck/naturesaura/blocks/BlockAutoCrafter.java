@@ -17,7 +17,7 @@ public class BlockAutoCrafter extends BlockContainerImpl implements ICustomBlock
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockAutoCrafter() {
-        super("auto_crafter", BlockEntityAutoCrafter::new, Properties.of(Material.WOOD).strength(1.5F).sound(SoundType.WOOD));
+        super("auto_crafter", BlockEntityAutoCrafter.class, Properties.of(Material.WOOD).strength(1.5F).sound(SoundType.WOOD));
     }
 
     @Override

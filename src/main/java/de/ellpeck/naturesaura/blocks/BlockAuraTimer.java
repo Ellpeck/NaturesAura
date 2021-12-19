@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraTimer;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
+import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderAuraTimer;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
@@ -35,7 +35,7 @@ public class BlockAuraTimer extends BlockContainerImpl implements ICustomBlockSt
     private static final VoxelShape SHAPE = box(1, 0, 1, 15, 15, 15);
 
     public BlockAuraTimer() {
-        super("aura_timer", BlockEntityAuraTimer::new, Properties.copy(Blocks.SMOOTH_STONE));
+        super("aura_timer", BlockEntityAuraTimer.class, Properties.copy(Blocks.SMOOTH_STONE));
         this.registerDefaultState(this.defaultBlockState().setValue(BlockStateProperties.POWERED, false));
     }
 
@@ -83,6 +83,6 @@ public class BlockAuraTimer extends BlockContainerImpl implements ICustomBlockSt
 
     @Override
     public void registerTESR() {
-        BlockEntityRenderers.register(ModTileEntities.AURA_TIMER, RenderAuraTimer::new);
+        BlockEntityRenderers.register(ModBlockEntities.AURA_TIMER, RenderAuraTimer::new);
     }
 }

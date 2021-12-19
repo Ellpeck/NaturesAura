@@ -10,7 +10,7 @@ public class BlockEntityAuraDetector extends BlockEntityImpl implements ITickabl
     public int redstonePower;
 
     public BlockEntityAuraDetector(BlockPos pos, BlockState state) {
-        super(ModTileEntities.AURA_DETECTOR, pos, state);
+        super(ModBlockEntities.AURA_DETECTOR, pos, state);
     }
 
     @Override

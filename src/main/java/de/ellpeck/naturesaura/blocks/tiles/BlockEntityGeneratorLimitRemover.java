@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockEntityGeneratorLimitRemover extends BlockEntityImpl {
 
     public BlockEntityGeneratorLimitRemover(BlockPos pos, BlockState state) {
-        super(ModTileEntities.GENERATOR_LIMIT_REMOVER, pos, state);
+        super(ModBlockEntities.GENERATOR_LIMIT_REMOVER, pos, state);
     }
 
     @Override

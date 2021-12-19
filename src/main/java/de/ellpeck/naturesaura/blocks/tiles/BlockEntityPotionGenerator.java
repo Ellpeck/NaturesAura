@@ -4,20 +4,15 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.AreaEffectCloud;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-import java.util.List;
-
 public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITickableBlockEntity {
 
     public BlockEntityPotionGenerator(BlockPos pos, BlockState state) {
-        super(ModTileEntities.POTION_GENERATOR, pos, state);
+        super(ModBlockEntities.POTION_GENERATOR, pos, state);
     }
 
     @Override

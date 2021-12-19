@@ -9,9 +9,7 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.npc.Npc;
@@ -31,7 +29,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockAnimalGenerator() {
-        super("animal_generator", BlockEntityAnimalGenerator::new, Properties.of(Material.STONE).strength(3F).sound(SoundType.STONE));
+        super("animal_generator", BlockEntityAnimalGenerator.class, Properties.of(Material.STONE).strength(3F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }

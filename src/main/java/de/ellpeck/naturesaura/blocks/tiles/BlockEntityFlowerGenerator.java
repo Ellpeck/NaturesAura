@@ -9,10 +9,8 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -27,7 +25,7 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
     private final Map<BlockState, MutableInt> consumedRecently = new HashMap<>();
 
     public BlockEntityFlowerGenerator(BlockPos pos, BlockState state) {
-        super(ModTileEntities.FLOWER_GENERATOR, pos, state);
+        super(ModBlockEntities.FLOWER_GENERATOR, pos, state);
     }
 
     @Override

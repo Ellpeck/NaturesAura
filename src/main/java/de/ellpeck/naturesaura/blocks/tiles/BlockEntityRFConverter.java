@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -26,7 +25,7 @@ public class BlockEntityRFConverter extends BlockEntityImpl implements ITickable
     private int lastEnergy;
 
     public BlockEntityRFConverter(BlockPos pos, BlockState state) {
-        super(ModTileEntities.RF_CONVERTER, pos, state);
+        super(ModBlockEntities.RF_CONVERTER, pos, state);
     }
 
     @Override

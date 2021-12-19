@@ -15,7 +15,7 @@ import java.util.List;
 public class BlockEntityMossGenerator extends BlockEntityImpl implements ITickableBlockEntity {
 
     public BlockEntityMossGenerator(BlockPos pos, BlockState state) {
-        super(ModTileEntities.MOSS_GENERATOR, pos, state);
+        super(ModBlockEntities.MOSS_GENERATOR, pos, state);
     }
 
     @Override

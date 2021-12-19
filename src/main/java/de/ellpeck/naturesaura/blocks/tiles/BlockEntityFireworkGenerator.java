@@ -5,8 +5,6 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -29,7 +27,7 @@ public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITi
     private int releaseTimer;
 
     public BlockEntityFireworkGenerator(BlockPos pos, BlockState state) {
-        super(ModTileEntities.FIREWORK_GENERATOR, pos, state);
+        super(ModBlockEntities.FIREWORK_GENERATOR, pos, state);
     }
 
     @Override

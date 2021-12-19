@@ -5,17 +5,12 @@ import de.ellpeck.naturesaura.blocks.BlockGratedChute;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-
-import java.util.List;
 
 public class BlockEntityGratedChute extends BlockEntityImpl implements ITickableBlockEntity {
 
@@ -34,7 +29,7 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
     private int cooldown;
 
     public BlockEntityGratedChute(BlockPos pos, BlockState state) {
-        super(ModTileEntities.GRATED_CHUTE, pos, state);
+        super(ModBlockEntities.GRATED_CHUTE, pos, state);
     }
 
     @Override

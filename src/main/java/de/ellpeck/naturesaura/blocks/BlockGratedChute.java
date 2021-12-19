@@ -11,7 +11,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -19,7 +18,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HopperBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.Hopper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -53,7 +51,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     private static final VoxelShape WEST_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, box(0.0D, 8.0D, 6.0D, 4.0D, 10.0D, 10.0D));
 
     public BlockGratedChute() {
-        super("grated_chute", BlockEntityGratedChute::new, Properties.of(Material.METAL).strength(3.0F, 8.0F).sound(SoundType.METAL));
+        super("grated_chute", BlockEntityGratedChute.class, Properties.of(Material.METAL).strength(3.0F, 8.0F).sound(SoundType.METAL));
     }
 
     @Override

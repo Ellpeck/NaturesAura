@@ -65,7 +65,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
     private boolean firstTick = true;
 
     public BlockEntityNatureAltar(BlockPos pos, BlockState state) {
-        super(ModTileEntities.NATURE_ALTAR, pos, state);
+        super(ModBlockEntities.NATURE_ALTAR, pos, state);
     }
 
     @Override

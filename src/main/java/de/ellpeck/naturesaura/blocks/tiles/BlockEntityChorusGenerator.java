@@ -23,7 +23,7 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
     private int auraPerBlock;
 
     public BlockEntityChorusGenerator(BlockPos pos, BlockState state) {
-        super(ModTileEntities.CHORUS_GENERATOR, pos, state);
+        super(ModBlockEntities.CHORUS_GENERATOR, pos, state);
     }
 
     @Override

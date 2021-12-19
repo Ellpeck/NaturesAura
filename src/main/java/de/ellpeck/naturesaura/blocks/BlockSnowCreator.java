@@ -7,7 +7,6 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -15,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockSnowCreator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockSnowCreator() {
-        super("snow_creator", BlockEntitySnowCreator::new, Properties.copy(Blocks.STONE_BRICKS));
+        super("snow_creator", BlockEntitySnowCreator.class, Properties.copy(Blocks.STONE_BRICKS));
     }
 
     @Override

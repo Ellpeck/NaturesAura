@@ -10,7 +10,7 @@ public class BlockEntityProjectileGenerator extends BlockEntityImpl {
     public Direction nextSide = Direction.NORTH;
 
     public BlockEntityProjectileGenerator(BlockPos pos, BlockState state) {
-        super(ModTileEntities.PROJECTILE_GENERATOR, pos, state);
+        super(ModBlockEntities.PROJECTILE_GENERATOR, pos, state);
     }
 
     @Override

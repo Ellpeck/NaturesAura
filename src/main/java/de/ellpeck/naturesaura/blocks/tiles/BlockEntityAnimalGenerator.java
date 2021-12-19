@@ -11,7 +11,7 @@ public class BlockEntityAnimalGenerator extends BlockEntityImpl implements ITick
     private int amountToRelease;
 
     public BlockEntityAnimalGenerator(BlockPos pos, BlockState state) {
-        super(ModTileEntities.ANIMAL_GENERATOR, pos, state);
+        super(ModBlockEntities.ANIMAL_GENERATOR, pos, state);
     }
 
     @Override

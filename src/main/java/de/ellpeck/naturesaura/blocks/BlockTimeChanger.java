@@ -9,7 +9,7 @@ import net.minecraft.world.level.material.Material;
 public class BlockTimeChanger extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockTimeChanger() {
-        super("time_changer", BlockEntityTimeChanger::new, Properties.of(Material.STONE).strength(2.5F).sound(SoundType.STONE));
+        super("time_changer", BlockEntityTimeChanger.class, Properties.of(Material.STONE).strength(2.5F).sound(SoundType.STONE));
     }
 
     @Override

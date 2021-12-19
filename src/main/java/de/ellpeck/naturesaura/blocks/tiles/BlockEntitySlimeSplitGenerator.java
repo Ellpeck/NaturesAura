@@ -15,7 +15,7 @@ public class BlockEntitySlimeSplitGenerator extends BlockEntityImpl implements I
     private int color;
 
     public BlockEntitySlimeSplitGenerator(BlockPos pos, BlockState state) {
-        super(ModTileEntities.SLIME_SPLIT_GENERATOR, pos, state);
+        super(ModBlockEntities.SLIME_SPLIT_GENERATOR, pos, state);
     }
 
     @Override

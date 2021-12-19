@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityOfferingTable;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
+import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderOfferingTable;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
@@ -27,7 +27,7 @@ public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvi
     private static final VoxelShape SHAPE = Shapes.create(2 / 16F, 0F, 2 / 16F, 14 / 16F, 1F, 14 / 16F);
 
     public BlockOfferingTable() {
-        super("offering_table", BlockEntityOfferingTable::new, Properties.of(Material.WOOD).strength(2F).sound(SoundType.WOOD));
+        super("offering_table", BlockEntityOfferingTable.class, Properties.of(Material.WOOD).strength(2F).sound(SoundType.WOOD));
     }
 
     @Override
@@ -52,6 +52,6 @@ public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvi
 
     @Override
     public void registerTESR() {
-        BlockEntityRenderers.register(ModTileEntities.OFFERING_TABLE, RenderOfferingTable::new);
+        BlockEntityRenderers.register(ModBlockEntities.OFFERING_TABLE, RenderOfferingTable::new);
     }
 }

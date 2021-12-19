@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockHopperUpgrade extends BlockContainerImpl implements IVisualizable {
 
     public BlockHopperUpgrade() {
-        super("hopper_upgrade", BlockEntityHopperUpgrade::new, Properties.of(Material.METAL).strength(2.5F).sound(SoundType.METAL));
+        super("hopper_upgrade", BlockEntityHopperUpgrade.class, Properties.of(Material.METAL).strength(2.5F).sound(SoundType.METAL));
     }
 
     @Override

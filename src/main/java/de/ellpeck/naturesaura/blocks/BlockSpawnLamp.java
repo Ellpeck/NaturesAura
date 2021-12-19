@@ -16,9 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
@@ -40,7 +38,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     private static final VoxelShape SHAPE = Shapes.create(4 / 16F, 0F, 4 / 16F, 12 / 16F, 13 / 16F, 12 / 16F);
 
     public BlockSpawnLamp() {
-        super("spawn_lamp", BlockEntitySpawnLamp::new, Properties.of(Material.METAL).strength(3F).lightLevel(s -> 15).sound(SoundType.METAL));
+        super("spawn_lamp", BlockEntitySpawnLamp.class, Properties.of(Material.METAL).strength(3F).lightLevel(s -> 15).sound(SoundType.METAL));
         MinecraftForge.EVENT_BUS.register(this);
     }
 

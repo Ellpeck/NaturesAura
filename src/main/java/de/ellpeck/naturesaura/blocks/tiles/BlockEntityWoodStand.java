@@ -17,7 +17,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
@@ -40,7 +39,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
     private int timer;
 
     public BlockEntityWoodStand(BlockPos pos, BlockState state) {
-        super(ModTileEntities.WOOD_STAND, pos, state);
+        super(ModBlockEntities.WOOD_STAND, pos, state);
     }
 
     public void setRitual(BlockPos pos, TreeRitualRecipe recipe) {

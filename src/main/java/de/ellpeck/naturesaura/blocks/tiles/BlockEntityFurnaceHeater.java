@@ -8,17 +8,14 @@ import de.ellpeck.naturesaura.blocks.BlockFurnaceHeater;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SmokerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
@@ -31,7 +28,7 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
     public boolean isActive;
 
     public BlockEntityFurnaceHeater(BlockPos pos, BlockState state) {
-        super(ModTileEntities.FURNACE_HEATER, pos, state);
+        super(ModBlockEntities.FURNACE_HEATER, pos, state);
     }
 
     public static ContainerData getFurnaceData(AbstractFurnaceBlockEntity tile) {

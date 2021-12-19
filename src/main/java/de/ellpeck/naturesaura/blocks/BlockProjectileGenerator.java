@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityProjectileGenerator;
-import de.ellpeck.naturesaura.blocks.tiles.ModTileEntities;
+import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderProjectileGenerator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -10,12 +10,10 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -26,10 +24,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -38,7 +34,7 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider<BlockEntityProjectileGenerator>, ICustomBlockState {
 
     public BlockProjectileGenerator() {
-        super("projectile_generator", BlockEntityProjectileGenerator::new, Properties.of(Material.STONE).strength(2.5F).sound(SoundType.STONE));
+        super("projectile_generator", BlockEntityProjectileGenerator.class, Properties.of(Material.STONE).strength(2.5F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
         DispenserBlock.registerBehavior(Items.ENDER_PEARL, new AbstractProjectileDispenseBehavior() {
@@ -106,6 +102,6 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
 
     @Override
     public void registerTESR() {
-        BlockEntityRenderers.register(ModTileEntities.PROJECTILE_GENERATOR, RenderProjectileGenerator::new);
+        BlockEntityRenderers.register(ModBlockEntities.PROJECTILE_GENERATOR, RenderProjectileGenerator::new);
     }
 }

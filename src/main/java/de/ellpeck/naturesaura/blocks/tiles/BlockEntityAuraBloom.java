@@ -10,7 +10,7 @@ public class BlockEntityAuraBloom extends BlockEntityImpl implements ITickableBl
     public boolean justGenerated;
 
     public BlockEntityAuraBloom(BlockPos pos, BlockState state) {
-        this(ModTileEntities.AURA_BLOOM, pos, state);
+        this(ModBlockEntities.AURA_BLOOM, pos, state);
     }
 
     protected BlockEntityAuraBloom(BlockEntityType<BlockEntityAuraBloom> type, BlockPos pos, BlockState state) {
