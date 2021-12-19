@@ -1,32 +1,28 @@
-/*
 package de.ellpeck.naturesaura.compat.jei;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.recipes.AnimalSpawnerRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,48 +31,53 @@ import java.util.Map;
 public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecipe> {
 
     private final IDrawable background;
-    private final Map<EntityType, Entity> entityCache = new HashMap<>();
+    private final Map<EntityType<?>, Entity> entityCache = new HashMap<>();
 
     public AnimalSpawnerCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/jei/animal_spawner.png"), 0, 0, 72, 86);
     }
 
-    private static void renderEntity(MatrixStack matrixstack, int x, int y, float scale, float yaw, float pitch, LivingEntity entity) {
-        float f = (float) Math.atan(yaw / 40.0F);
-        float f1 = (float) Math.atan(pitch / 40.0F);
-        RenderSystem.pushMatrix();
-        RenderSystem.translatef((float) x, (float) y, 1050.0F);
-        RenderSystem.scalef(1.0F, 1.0F, -1.0F);
+    private static void renderEntity(PoseStack matrixstack, int x, int y, float scale, float yaw, float pitch, LivingEntity entity) {
+        var f = (float) Math.atan(yaw / 40.0F);
+        var f1 = (float) Math.atan(pitch / 40.0F);
+        var posestack = RenderSystem.getModelViewStack();
+        posestack.pushPose();
+        posestack.translate(x, y, 1050.0D);
+        posestack.scale(1.0F, 1.0F, -1.0F);
+        RenderSystem.applyModelViewMatrix();
         matrixstack.translate(0.0D, 0.0D, 1000.0D);
         matrixstack.scale(scale, scale, scale);
-        Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
-        Quaternion quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
-        quaternion.multiply(quaternion1);
-        matrixstack.rotate(quaternion);
-        float f2 = entity.renderYawOffset;
-        float f3 = entity.rotationYaw;
-        float f4 = entity.rotationPitch;
-        float f5 = entity.prevRotationYawHead;
-        float f6 = entity.rotationYawHead;
-        entity.renderYawOffset = 180.0F + f * 20.0F;
-        entity.rotationYaw = 180.0F + f * 40.0F;
-        entity.rotationPitch = -f1 * 20.0F;
-        entity.rotationYawHead = entity.rotationYaw;
-        entity.prevRotationYawHead = entity.rotationYaw;
-        EntityRendererManager entityrenderermanager = Minecraft.getInstance().getRenderManager();
-        quaternion1.conjugate();
-        entityrenderermanager.setCameraOrientation(quaternion1);
+        var quaternion = Vector3f.ZP.rotationDegrees(180.0F);
+        var quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
+        quaternion.mul(quaternion1);
+        matrixstack.mulPose(quaternion);
+        var f2 = entity.yBodyRot;
+        var f3 = entity.getYRot();
+        var f4 = entity.getXRot();
+        var f5 = entity.yHeadRotO;
+        var f6 = entity.yHeadRot;
+        entity.yBodyRot = 180.0F + f * 20.0F;
+        entity.setYRot(180.0F + f * 40.0F);
+        entity.setXRot(-f1 * 20.0F);
+        entity.yHeadRot = entity.getYRot();
+        entity.yHeadRotO = entity.getYRot();
+        Lighting.setupForEntityInInventory();
+        var entityrenderermanager = Minecraft.getInstance().getEntityRenderDispatcher();
+        quaternion1.conj();
+        entityrenderermanager.overrideCameraOrientation(quaternion1);
         entityrenderermanager.setRenderShadow(false);
-        IRenderTypeBuffer.Impl buff = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-        entityrenderermanager.renderEntityStatic(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, buff, 15728880);
-        buff.finish();
+        var buff = Minecraft.getInstance().renderBuffers().bufferSource();
+        entityrenderermanager.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, buff, 15728880);
+        buff.endBatch();
         entityrenderermanager.setRenderShadow(true);
-        entity.renderYawOffset = f2;
-        entity.rotationYaw = f3;
-        entity.rotationPitch = f4;
-        entity.prevRotationYawHead = f5;
-        entity.rotationYawHead = f6;
-        RenderSystem.popMatrix();
+        entity.yBodyRot = f2;
+        entity.setYRot(f3);
+        entity.setXRot(f4);
+        entity.yHeadRotO = f5;
+        entity.yHeadRot = f6;
+        posestack.popPose();
+        RenderSystem.applyModelViewMatrix();
+        Lighting.setupFor3DItems();
     }
 
     @Override
@@ -90,8 +91,8 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
     }
 
     @Override
-    public String getTitle() {
-        return I18n.format("container." + JEINaturesAuraPlugin.SPAWNER + ".name");
+    public Component getTitle() {
+        return new TranslatableComponent("container." + JEINaturesAuraPlugin.SPAWNER + ".name");
     }
 
     @Override
@@ -107,38 +108,37 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
     @Override
     public void setIngredients(AnimalSpawnerRecipe animalSpawnerRecipe, IIngredients iIngredients) {
         ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
-        for (Ingredient ing : animalSpawnerRecipe.ingredients)
-            builder.add(ing.getMatchingStacks());
+        for (var ing : animalSpawnerRecipe.ingredients)
+            builder.add(ing.getItems());
         iIngredients.setInputs(VanillaTypes.ITEM, builder.build());
-        iIngredients.setOutput(VanillaTypes.ITEM, new ItemStack(SpawnEggItem.getEgg(animalSpawnerRecipe.entity)));
+        iIngredients.setOutput(VanillaTypes.ITEM, new ItemStack(ForgeSpawnEggItem.fromEntityType(animalSpawnerRecipe.entity)));
     }
 
     @Override
     public void setRecipe(IRecipeLayout iRecipeLayout, AnimalSpawnerRecipe recipe, IIngredients iIngredients) {
-        IGuiItemStackGroup group = iRecipeLayout.getItemStacks();
-        for (int i = 0; i < recipe.ingredients.length; i++) {
+        var group = iRecipeLayout.getItemStacks();
+        for (var i = 0; i < recipe.ingredients.length; i++) {
             group.init(i, true, i * 18, 68);
-            group.set(i, Arrays.asList(recipe.ingredients[i].getMatchingStacks()));
+            group.set(i, Arrays.asList(recipe.ingredients[i].getItems()));
         }
     }
 
     @Override
-    public void draw(AnimalSpawnerRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-        Minecraft minecraft = Minecraft.getInstance();
-        Entity entity = this.entityCache.get(recipe.entity);
+    public void draw(AnimalSpawnerRecipe recipe, PoseStack matrixStack, double mouseX, double mouseY) {
+        var minecraft = Minecraft.getInstance();
+        var entity = this.entityCache.get(recipe.entity);
         if (entity == null) {
             entity = recipe.makeEntity(minecraft.level, BlockPos.ZERO);
             this.entityCache.put(recipe.entity, entity);
         }
 
-        matrixStack.push();
-        float size = Math.max(1F, Math.max(recipe.entity.getWidth(), recipe.entity.getHeight()));
+        matrixStack.pushPose();
+        var size = Math.max(1F, Math.max(recipe.entity.getWidth(), recipe.entity.getHeight()));
         renderEntity(matrixStack, 35, 55, 100F / size * 0.4F, 40, size * 0.5F, (LivingEntity) entity);
-        matrixStack.pop();
+        matrixStack.popPose();
 
-        String name = recipe.entity.getName().getString();
-        minecraft.fontRenderer.drawStringWithShadow(matrixStack, name, 36 - minecraft.fontRenderer.getStringWidth(name) / 2F, 55, 0xFFFFFF);
+        var name = recipe.entity.getDescription().getString();
+        minecraft.font.drawShadow(matrixStack, name, 36 - minecraft.font.width(name) / 2F, 55, 0xFFFFFF);
 
     }
 }
-*/
