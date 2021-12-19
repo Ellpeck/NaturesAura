@@ -59,7 +59,7 @@ public class BlockEntityHopperUpgrade extends BlockEntityImpl implements ITickab
                     }
                 }
 
-                if (!ItemStack.isSame(stack, copy)) {
+                if (!ItemStack.matches(stack, copy)) {
                     item.setItem(copy);
                     if (copy.isEmpty())
                         item.kill();

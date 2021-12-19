@@ -43,7 +43,7 @@ public class BlockEntityItemDistributor extends BlockEntityImpl implements ITick
                 continue;
             for (var j = 0; j < dest.getSlots(); j++) {
                 var remain = dest.insertItem(j, stack, false);
-                if (!ItemStack.isSame(remain, stack)) {
+                if (!ItemStack.matches(remain, stack)) {
                     above.extractItem(i, 1, false);
                     this.cooldown = 3;
                     return;

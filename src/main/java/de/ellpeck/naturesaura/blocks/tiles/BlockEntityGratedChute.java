@@ -75,7 +75,7 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
                         if (stack.isEmpty())
                             continue;
                         var left = this.items.insertItem(0, stack, false);
-                        if (!ItemStack.isSame(stack, left)) {
+                        if (!ItemStack.matches(stack, left)) {
                             if (left.isEmpty()) {
                                 item.kill();
                             } else {

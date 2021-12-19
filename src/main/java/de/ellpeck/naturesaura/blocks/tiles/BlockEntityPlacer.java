@@ -68,7 +68,7 @@ public class BlockEntityPlacer extends BlockEntityImpl implements ITickableBlock
 
                 var pos = validPositions.get(this.level.random.nextInt(validPositions.size()));
                 var left = this.tryPlace(stack.copy(), pos);
-                if (ItemStack.isSame(stack, left))
+                if (ItemStack.matches(stack, left))
                     continue;
 
                 handler.extractItem(i, 1, false);

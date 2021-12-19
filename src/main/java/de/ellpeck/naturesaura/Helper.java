@@ -121,7 +121,7 @@ public final class Helper {
                 var handStack = player.getItemInHand(hand);
                 if (!handStack.isEmpty()) {
                     var remain = handler.insertItem(slot, handStack, player.level.isClientSide);
-                    if (!ItemStack.isSame(remain, handStack)) {
+                    if (!ItemStack.matches(remain, handStack)) {
                         if (sound)
                             player.level.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                                     SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.PLAYERS, 0.75F, 1F);
