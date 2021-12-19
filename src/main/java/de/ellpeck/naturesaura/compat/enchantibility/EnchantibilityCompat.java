@@ -1,4 +1,3 @@
-// TODO Enchantability
 /*
 package de.ellpeck.naturesaura.compat.enchantibility;
 

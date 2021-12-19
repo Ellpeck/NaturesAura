@@ -23,7 +23,6 @@ import java.util.function.Supplier;
 @OnlyIn(Dist.CLIENT)
 public final class ParticleHandler {
 
-    // TODO fix particle transparency, they don't seem to fade on the edges anymore
     public static final ParticleRenderType MAGIC = new ParticleRenderType() {
 
         @Override
@@ -87,12 +86,12 @@ public final class ParticleHandler {
     }
 
     private static void setupRendering() {
-        RenderSystem.enableBlend();
         RenderSystem.disableCull();
+        RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-        RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.depthMask(false);
         RenderSystem.setShader(GameRenderer::getParticleShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, ParticleMagic.TEXTURE);
     }
 }
