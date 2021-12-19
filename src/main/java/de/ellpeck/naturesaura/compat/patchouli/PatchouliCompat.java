@@ -138,8 +138,7 @@ public class PatchouliCompat implements ICompat {
                 var r = ((info.color() >> 16) & 255) / 255F;
                 var g = ((info.color() >> 8) & 255) / 255F;
                 var b = (info.color() & 255) / 255F;
-                // TODO apply leaf color, we probably have to blit manually using the texture + color shader
-                //RenderSystem.color3f(r, g, b);
+                RenderSystem.setShaderColor(r, g, b, 1);
                 Screen.blit(event.getPoseStack(), x, y, 496 - 32, 44, 16, 18, 512, 256);
             }
 

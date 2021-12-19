@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
@@ -8,6 +9,7 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.misc.LevelData;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -41,7 +43,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.lwjgl.opengl.GL11;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import javax.annotation.Nonnull;
@@ -114,6 +115,19 @@ public final class Helper {
         if (!ItemStack.isSame(first, second))
             return false;
         return !nbt || ItemStack.tagMatches(first, second);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void renderItemInGui(ItemStack stack, int x, int y, float scale) {
+        var poseStack = RenderSystem.getModelViewStack();
+        poseStack.pushPose();
+        poseStack.translate(x, y, 0);
+        poseStack.scale(scale, scale, scale);
+        RenderSystem.applyModelViewMatrix();
+        Minecraft.getInstance().getItemRenderer().renderGuiItem(stack, 0, 0);
+        Minecraft.getInstance().getItemRenderer().renderGuiItemDecorations(Minecraft.getInstance().font, stack, 0, 0, null);
+        poseStack.popPose();
+        RenderSystem.applyModelViewMatrix();
     }
 
     public static InteractionResult putStackOnTile(Player player, InteractionHand hand, BlockPos pos, int slot, boolean sound) {
@@ -224,34 +238,6 @@ public final class Helper {
             if (stack.getCount() > highestAmount)
                 highestAmount = stack.getCount();
         return highestAmount;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static void renderWeirdBox(double x, double y, double z, double width, double height, double depth) {
-        GL11.glVertex3d(x, y + height, z);
-        GL11.glVertex3d(x + width, y + height, z);
-        GL11.glVertex3d(x + width, y, z);
-        GL11.glVertex3d(x, y, z);
-        GL11.glVertex3d(x + width, y, z + depth);
-        GL11.glVertex3d(x + width, y, z);
-        GL11.glVertex3d(x + width, y + height, z);
-        GL11.glVertex3d(x + width, y + height, z + depth);
-        GL11.glVertex3d(x + width, y + height, z + depth);
-        GL11.glVertex3d(x, y + height, z + depth);
-        GL11.glVertex3d(x, y, z + depth);
-        GL11.glVertex3d(x + width, y, z + depth);
-        GL11.glVertex3d(x, y + height, z + depth);
-        GL11.glVertex3d(x, y + height, z);
-        GL11.glVertex3d(x, y, z);
-        GL11.glVertex3d(x, y, z + depth);
-        GL11.glVertex3d(x, y + height, z);
-        GL11.glVertex3d(x, y + height, z + depth);
-        GL11.glVertex3d(x + width, y + height, z + depth);
-        GL11.glVertex3d(x + width, y + height, z);
-        GL11.glVertex3d(x + width, y, z);
-        GL11.glVertex3d(x + width, y, z + depth);
-        GL11.glVertex3d(x, y, z + depth);
-        GL11.glVertex3d(x, y, z);
     }
 
     public static boolean isHoldingItem(Player player, Item item) {
