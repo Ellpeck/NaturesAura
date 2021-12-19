@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-// TODO get the 1-pixel border around the ender overlay back
 @OnlyIn(Dist.CLIENT)
 public class RenderEnderCrate implements BlockEntityRenderer<BlockEntityEnderCrate> {
 
@@ -27,10 +26,10 @@ public class RenderEnderCrate implements BlockEntityRenderer<BlockEntityEnderCra
     }
 
     private static void renderFace(Matrix4f p_173696_, VertexConsumer p_173697_, float p_173700_, float p_173701_) {
-        p_173697_.vertex(p_173696_, (float) 0.0, p_173700_, (float) 1.0).endVertex();
-        p_173697_.vertex(p_173696_, (float) 1.0, p_173700_, (float) 1.0).endVertex();
-        p_173697_.vertex(p_173696_, (float) 1.0, p_173701_, (float) 0.0).endVertex();
-        p_173697_.vertex(p_173696_, (float) 0.0, p_173701_, (float) 0.0).endVertex();
+        p_173697_.vertex(p_173696_, (float) 1 / 16F, p_173700_, (float) 15 / 16F).endVertex();
+        p_173697_.vertex(p_173696_, (float) 15 / 16F, p_173700_, (float) 15 / 16F).endVertex();
+        p_173697_.vertex(p_173696_, (float) 15 / 16F, p_173701_, (float) 1 / 16F).endVertex();
+        p_173697_.vertex(p_173696_, (float) 1 / 16F, p_173701_, (float) 1 / 16F).endVertex();
     }
 
     private static float getOffsetUp() {
