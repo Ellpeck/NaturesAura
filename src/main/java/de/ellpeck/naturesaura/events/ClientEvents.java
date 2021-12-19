@@ -2,7 +2,8 @@ package de.ellpeck.naturesaura.events;
 
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Vector3d;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
@@ -10,6 +11,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.*;
 import de.ellpeck.naturesaura.items.ItemAuraCache;
 import de.ellpeck.naturesaura.items.ItemRangeVisualizer;
@@ -25,14 +27,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.MyceliumBlock;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -61,6 +65,7 @@ public class ClientEvents {
     private static ItemStack heldCache = ItemStack.EMPTY;
     private static ItemStack heldEye = ItemStack.EMPTY;
     private static ItemStack heldOcular = ItemStack.EMPTY;
+    private static BlockPos hoveringAuraSpot;
 
     @SubscribeEvent
     public void onDebugRender(RenderGameOverlayEvent.Text event) {
@@ -160,91 +165,82 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onLevelRender(RenderLevelLastEvent event) {
-        // TODO GL-based in-world rendering
-/*        Minecraft mc = Minecraft.getInstance();
+        var mc = Minecraft.getInstance();
+        var view = mc.gameRenderer.getMainCamera().getPosition();
+        var tesselator = Tesselator.getInstance();
+        var buffer = tesselator.getBuilder();
 
-        RenderSystem.pushMatrix();
-        RenderSystem.multMatrix(event.getMatrixStack().getLast().getMatrix());
+        mc.getProfiler().push(NaturesAura.MOD_ID + ":onLevelRender");
 
-        ActiveRenderInfo info = mc.gameRenderer.getActiveRenderInfo();
-        Vector3d view = info.getProjectedView();
-        GL11.glTranslated(-view.getX(), -view.getY(), -view.getZ());
+        RenderSystem.enableDepthTest();
+        var mv = RenderSystem.getModelViewStack();
+        mv.pushPose();
+        mv.mulPoseMatrix(event.getPoseStack().last().pose());
+        mv.translate(-view.x, -view.y, -view.z);
+        RenderSystem.applyModelViewMatrix();
+        RenderSystem.enableBlend();
 
-        if (mc.gameSettings.showDebugInfo && mc.player.isCreative() && ModConfig.instance.debugLevel.get()) {
-            Map<BlockPos, Integer> spots = new HashMap<>();
-            GL11.glPushMatrix();
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
-            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBegin(GL11.GL_QUADS);
-            IAuraChunk.getSpotsInArea(mc.level, mc.player.getPosition(), 64, (pos, spot) -> {
-                spots.put(pos, spot);
+        // aura spot debug
+        hoveringAuraSpot = null;
+        if (mc.options.renderDebug && mc.player.isCreative() && ModConfig.instance.debugLevel.get()) {
+            var playerEye = mc.player.getEyePosition(event.getPartialTick());
+            var playerView = mc.player.getViewVector(event.getPartialTick()).normalize();
+            var range = mc.gameMode.getPickRange();
+            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+            IAuraChunk.getSpotsInArea(mc.level, mc.player.blockPosition(), 64, (pos, spot) -> {
+                Helper.renderWeirdBox(buffer, pos.getX(), pos.getY(), pos.getZ(), 1, 1, 1, spot > 0 ? 0F : 1F, spot > 0 ? 1F : 0F, 0F, 0.35F);
+                // dirty raytrace to see if we're looking at roughly this spot
+                if (playerEye.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= range * range) {
+                    for (var d = 0F; d <= range; d += 0.5F) {
+                        if (pos.equals(new BlockPos(playerEye.add(playerView.scale(d))))) {
+                            hoveringAuraSpot = pos;
+                            break;
+                        }
+                    }
+                }
 
-                RenderSystem.color4f(spot > 0 ? 0F : 1F, spot > 0 ? 1F : 0F, 0F, 0.35F);
-                Helper.renderWeirdBox(pos.getX(), pos.getY(), pos.getZ(), 1, 1, 1);
             });
-            GL11.glEnd();
-            GL11.glPopAttrib();
-
-            float scale = 0.03F;
-            NumberFormat format = NumberFormat.getInstance();
-            RenderSystem.scalef(scale, scale, scale);
-            for (Map.Entry<BlockPos, Integer> spot : spots.entrySet()) {
-                BlockPos pos = spot.getKey();
-                RenderSystem.pushMatrix();
-                RenderSystem.translated((pos.getX() + 0.1) / scale, (pos.getY() + 1.001) / scale, (pos.getZ() + 0.1) / scale);
-                RenderSystem.rotatef(90F, 1F, 0F, 0F);
-                RenderSystem.scalef(0.65F, 0.65F, 0.65F);
-                mc.fontRenderer.drawString(new MatrixStack(), format.format(spot.getValue()), 0, 0, 0);
-                RenderSystem.popMatrix();
-            }
-
-            GL11.glEnable(GL11.GL_DEPTH_TEST);
-            GL11.glPopMatrix();
+            tesselator.end();
         }
 
+        // range visualizer
         if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER)) {
-            RegistryKey<Level> dim = mc.level.func_234923_W_();
-            GL11.glPushMatrix();
-            GL11.glDisable(GL11.GL_CULL_FACE);
-            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBegin(GL11.GL_QUADS);
-            for (BlockPos pos : ItemRangeVisualizer.VISUALIZED_BLOCKS.get(dim.func_240901_a_())) {
-                if (!mc.level.isBlockLoaded(pos))
+            RenderSystem.disableCull();
+            var dim = mc.level.dimension().location();
+            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+            for (var pos : ItemRangeVisualizer.VISUALIZED_BLOCKS.get(dim)) {
+                if (!mc.level.isLoaded(pos))
                     continue;
-                BlockState state = mc.level.getBlockState(pos);
-                Block block = state.getBlock();
+                var state = mc.level.getBlockState(pos);
+                var block = state.getBlock();
                 if (!(block instanceof IVisualizable))
                     continue;
-                this.renderVisualize((IVisualizable) block, mc.level, pos);
+                this.renderVisualize(buffer, (IVisualizable) block, mc.level, pos);
             }
-            for (Entity entity : ItemRangeVisualizer.VISUALIZED_ENTITIES.get(dim.func_240901_a_())) {
+            for (var entity : ItemRangeVisualizer.VISUALIZED_ENTITIES.get(dim)) {
                 if (!entity.isAlive() || !(entity instanceof IVisualizable))
                     continue;
-                this.renderVisualize((IVisualizable) entity, mc.level, entity.getPosition());
+                this.renderVisualize(buffer, (IVisualizable) entity, mc.level, entity.blockPosition());
             }
-            GL11.glEnd();
-            GL11.glPopAttrib();
-            GL11.glEnable(GL11.GL_CULL_FACE);
-            GL11.glPopMatrix();
+            tesselator.end();
+            RenderSystem.enableCull();
         }
 
-        GL11.glPopMatrix();*/
+        mv.popPose();
+        RenderSystem.applyModelViewMatrix();
+        RenderSystem.disableBlend();
+
+        mc.getProfiler().pop();
     }
 
-/*    private void renderVisualize(IVisualizable visualize, Level
-            level, BlockPos pos) {
-        AABB box = visualize.getVisualizationBounds(level, pos);
-        if (box == null)
-            return;
-        box = box.grow(0.05F);
-        int color = visualize.getVisualizationColor(level, pos);
-        RenderSystem.color4f((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 0.5F);
-        Helper.renderWeirdBox(box.minX, box.minY, box.minZ, box.maxX - box.minX, box.maxY - box.minY, box.maxZ - box.minZ);
-    }*/
+    private void renderVisualize(BufferBuilder buffer, IVisualizable visualize, Level level, BlockPos pos) {
+        var box = visualize.getVisualizationBounds(level, pos);
+        if (box != null) {
+            box = box.inflate(0.05F);
+            var color = visualize.getVisualizationColor(level, pos);
+            Helper.renderWeirdBox(buffer, box.minX, box.minY, box.minZ, box.maxX - box.minX, box.maxY - box.minY, box.maxZ - box.minZ, (color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 0.5F);
+        }
+    }
 
     @SubscribeEvent
     public void onOverlayRender(RenderGameOverlayEvent.Post event) {
@@ -422,6 +418,13 @@ public class ClientEvents {
 
                     RenderSystem.setShaderColor(1F, 1F, 1F, 1);
                     stack.popPose();
+                }
+
+                if (hoveringAuraSpot != null) {
+                    var format = NumberFormat.getInstance();
+                    var amount = IAuraChunk.getAuraChunk(mc.level, hoveringAuraSpot).getDrainSpot(hoveringAuraSpot);
+                    var color = amount > 0 ? ChatFormatting.GREEN : ChatFormatting.RED;
+                    mc.font.drawShadow(stack, color + format.format(amount), res.getGuiScaledWidth() / 2F + 5, res.getGuiScaledHeight() / 2F - 11, 0xFFFFFF);
                 }
             }
         }

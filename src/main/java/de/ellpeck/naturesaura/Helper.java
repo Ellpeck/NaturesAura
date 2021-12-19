@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
@@ -128,6 +129,34 @@ public final class Helper {
         Minecraft.getInstance().getItemRenderer().renderGuiItemDecorations(Minecraft.getInstance().font, stack, 0, 0, null);
         poseStack.popPose();
         RenderSystem.applyModelViewMatrix();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void renderWeirdBox(VertexConsumer buffer, double x, double y, double z, double width, double height, double depth, float r, float g, float b, float a) {
+        buffer.vertex(x, y + height, z).color(r, g, b, a).endVertex();
+        buffer.vertex(x + width, y + height, z).color(r, g, b, a).endVertex();
+        buffer.vertex(x + width, y, z).color(r, g, b, a).endVertex();
+        buffer.vertex(x, y, z).color(r, g, b, a).endVertex();
+        buffer.vertex(x + width, y, z + depth).color(r, g, b, a).endVertex();
+        buffer.vertex(x + width, y, z).color(r, g, b, a).endVertex();
+        buffer.vertex(x + width, y + height, z).color(r, g, b, a).endVertex();
+        buffer.vertex(x + width, y + height, z + depth).color(r, g, b, a).endVertex();
+        buffer.vertex(x + width, y + height, z + depth).color(r, g, b, a).endVertex();
+        buffer.vertex(x, y + height, z + depth).color(r, g, b, a).endVertex();
+        buffer.vertex(x, y, z + depth).color(r, g, b, a).endVertex();
+        buffer.vertex(x + width, y, z + depth).color(r, g, b, a).endVertex();
+        buffer.vertex(x, y + height, z + depth).color(r, g, b, a).endVertex();
+        buffer.vertex(x, y + height, z).color(r, g, b, a).endVertex();
+        buffer.vertex(x, y, z).color(r, g, b, a).endVertex();
+        buffer.vertex(x, y, z + depth).color(r, g, b, a).endVertex();
+        buffer.vertex(x, y + height, z).color(r, g, b, a).endVertex();
+        buffer.vertex(x, y + height, z + depth).color(r, g, b, a).endVertex();
+        buffer.vertex(x + width, y + height, z + depth).color(r, g, b, a).endVertex();
+        buffer.vertex(x + width, y + height, z).color(r, g, b, a).endVertex();
+        buffer.vertex(x + width, y, z).color(r, g, b, a).endVertex();
+        buffer.vertex(x + width, y, z + depth).color(r, g, b, a).endVertex();
+        buffer.vertex(x, y, z + depth).color(r, g, b, a).endVertex();
+        buffer.vertex(x, y, z).color(r, g, b, a).endVertex();
     }
 
     public static InteractionResult putStackOnTile(Player player, InteractionHand hand, BlockPos pos, int slot, boolean sound) {
