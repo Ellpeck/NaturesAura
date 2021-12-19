@@ -1,10 +1,18 @@
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityProjectileGenerator;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
@@ -16,7 +24,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class RenderProjectileGenerator implements BlockEntityRenderer<BlockEntityProjectileGenerator> {
 
     private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/projectile_generator_overlay.png");
-    //private final ModelOverlay model = new ModelOverlay();
+    private final ModelOverlay model = new ModelOverlay();
 
     public RenderProjectileGenerator(BlockEntityRendererProvider.Context context) {
 
@@ -38,25 +46,25 @@ public class RenderProjectileGenerator implements BlockEntityRenderer<BlockEntit
             stack.translate(-0.002F, 0, 0);
         }
         var brightness = 15 << 20 | 15 << 4;
-        //this.model.render(stack, buffer.getBuffer(this.model.getRenderType(RES)), brightness, combinedOverlayIn, 1, 1, 1, 1);
+        this.model.renderToBuffer(stack, buffer.getBuffer(this.model.renderType(RES)), brightness, combinedOverlayIn, 1, 1, 1, 1);
         stack.popPose();
     }
 
-    // TODO model rendering
-/*    private static class ModelOverlay extends Model {
+    private static class ModelOverlay extends Model {
 
-        private final ModelPart box;
+        private final ModelPart model;
 
         public ModelOverlay() {
             super(RenderType::entityTranslucent);
-            this.box = new ModelPart(this, 0, 0);
-            this.box.setTextureSize(64, 64);
-            this.box.(0, 0, 0, 16, 16, 16);
+            var mesh = new MeshDefinition();
+            var part = mesh.getRoot();
+            part.addOrReplaceChild("main", new CubeListBuilder().addBox(0, 0, 0, 16, 16, 16), PartPose.ZERO);
+            this.model = LayerDefinition.create(mesh, 64, 64).bakeRoot();
         }
 
         @Override
-        public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-            this.box.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+            this.model.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         }
-    }*/
+    }
 }

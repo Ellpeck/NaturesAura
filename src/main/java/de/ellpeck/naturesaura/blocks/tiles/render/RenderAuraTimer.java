@@ -1,23 +1,31 @@
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraTimer;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.List;
+
 public class RenderAuraTimer implements BlockEntityRenderer<BlockEntityAuraTimer> {
 
     private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/aura_timer_aura.png");
-    // private final AuraModel model = new AuraModel();
+    private final AuraModel model = new AuraModel();
 
     public RenderAuraTimer(BlockEntityRendererProvider.Context context) {
-
     }
 
     @Override
@@ -35,26 +43,26 @@ public class RenderAuraTimer implements BlockEntityRenderer<BlockEntityAuraTimer
         var r = (type.getColor() >> 16 & 255) / 255F;
         var g = (type.getColor() >> 8 & 255) / 255F;
         var b = (type.getColor() & 255) / 255F;
-        //this.model.render(stack, buffer.getBuffer(this.model.getRenderType(RES)), combinedLightIn, combinedOverlayIn, r, g, b, 0.75F);
+        this.model.renderToBuffer(stack, buffer.getBuffer(this.model.renderType(RES)), combinedLightIn, combinedOverlayIn, r, g, b, 0.75F);
         stack.popPose();
 
     }
 
-    // TODO model rendering
-/*    private static class AuraModel extends Model {
+    private static class AuraModel extends Model {
 
-        private final ModelRenderer box;
+        private final ModelPart model;
 
         public AuraModel() {
-            super(RenderType::getEntityTranslucent);
-            this.box = new ModelRenderer(this, 0, 0);
-            this.box.setTextureSize(64, 64);
-            this.box.addBox(0, 0, 0, 16, 16, 16);
+            super(RenderType::entityTranslucent);
+            var mesh = new MeshDefinition();
+            var part = mesh.getRoot();
+            part.addOrReplaceChild("main", new CubeListBuilder().addBox(0, 0, 0, 16, 16, 16), PartPose.ZERO);
+            this.model = LayerDefinition.create(mesh, 64, 64).bakeRoot();
         }
 
         @Override
-        public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-            this.box.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+            this.model.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         }
-    }*/
+    }
 }
