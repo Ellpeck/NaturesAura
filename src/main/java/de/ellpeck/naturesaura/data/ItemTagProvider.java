@@ -8,6 +8,8 @@ import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -31,4 +33,9 @@ public class ItemTagProvider extends ItemTagsProvider {
         Compat.addItemTags(this);
     }
 
+    @Override
+    public TagAppender<Item> tag(Tag.Named<Item> p_126549_) {
+        // super is protected, but CuriosCompat needs this
+        return super.tag(p_126549_);
+    }
 }

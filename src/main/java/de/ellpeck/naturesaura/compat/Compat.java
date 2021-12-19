@@ -16,8 +16,8 @@ public final class Compat {
 
     private static final Map<String, Supplier<ICompat>> MODULE_TYPES = ImmutableMap.<String, Supplier<ICompat>>builder()
             .put("patchouli", PatchouliCompat::new)
-            /* .put("curios", CuriosCompat::new)
-             .put("enchantability", EnchantibilityCompat::new)*/
+            .put("curios", CuriosCompat::new)
+            //.put("enchantability", EnchantibilityCompat::new)
             .build();
     private static final Map<String, ICompat> MODULES = new HashMap<>();
 

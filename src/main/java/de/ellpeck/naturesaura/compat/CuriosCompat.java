@@ -1,18 +1,14 @@
-// TODO Curios
-/*
 package de.ellpeck.naturesaura.compat;
 
 import com.google.common.collect.ImmutableMap;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.data.ItemTagProvider;
 import de.ellpeck.naturesaura.items.ModItems;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -58,14 +54,18 @@ public class CuriosCompat implements ICompat {
     }
 
     private void onCapabilitiesAttach(AttachCapabilitiesEvent<ItemStack> event) {
-        ItemStack stack = event.getObject();
+        var stack = event.getObject();
         if (TYPES.containsKey(stack.getItem())) {
             event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "curios"), new ICapabilityProvider() {
                 private final LazyOptional<ICurio> curio = LazyOptional.of(() -> new ICurio() {
                     @Override
-                    public void curioTick(String identifier, int index, LivingEntity livingEntity) {
-                        stack.getItem().inventoryTick(stack, livingEntity.level, livingEntity, -1, false);
+                    public void curioTick(SlotContext slotContext) {
+                        stack.getItem().inventoryTick(stack, slotContext.entity().level, slotContext.entity(), -1, false);
+                    }
 
+                    @Override
+                    public ItemStack getStack() {
+                        return stack;
                     }
 
                     @Override
@@ -74,7 +74,7 @@ public class CuriosCompat implements ICompat {
                     }
 
                     @Override
-                    public boolean canSync(String identifier, int index, LivingEntity livingEntity) {
+                    public boolean canSync(SlotContext slotContext) {
                         return true;
                     }
                 });
@@ -92,10 +92,9 @@ public class CuriosCompat implements ICompat {
 
     @Override
     public void addItemTags(ItemTagProvider provider) {
-        for (Map.Entry<Item, String> entry : TYPES.entrySet()) {
-            ITag.INamedTag<Item> tag = ItemTags.createOptional(new ResourceLocation("curios", entry.getValue()));
-            provider.getOrCreateBuilder(tag).add(entry.getKey());
+        for (var entry : TYPES.entrySet()) {
+            var tag = ItemTags.createOptional(new ResourceLocation("curios", entry.getValue()));
+            provider.tag(tag).add(entry.getKey());
         }
     }
 }
-*/
