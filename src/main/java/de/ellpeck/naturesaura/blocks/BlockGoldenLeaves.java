@@ -30,7 +30,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
     public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, HIGHEST_STAGE);
 
     public BlockGoldenLeaves() {
-        super(Properties.of(Material.LEAVES, MaterialColor.GOLD).strength(0.2F).randomTicks().noCollission().sound(SoundType.GRASS));
+        super(Properties.of(Material.LEAVES, MaterialColor.GOLD).strength(0.2F).randomTicks().noOcclusion().sound(SoundType.GRASS));
         ModRegistry.add(this);
     }
 
