@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:eye_improved"
+                        "items": ["naturesaura:eye_improved"]
                     }
                 ]
             }

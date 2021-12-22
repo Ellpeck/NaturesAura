@@ -17,10 +17,10 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:infused_iron_pickaxe"
+                        "items": ["naturesaura:infused_iron_pickaxe"]
                     },
                     {
-                        "item": "naturesaura:infused_iron_sword"
+                        "items": ["naturesaura:infused_iron_sword"]
                     }
                 ]
             }

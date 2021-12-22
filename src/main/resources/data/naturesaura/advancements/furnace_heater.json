@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:furnace_heater"
+                        "items": ["naturesaura:furnace_heater"]
                     }
                 ]
             }

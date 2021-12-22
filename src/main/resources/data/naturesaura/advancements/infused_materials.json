@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:infused_iron"
+                        "items": ["naturesaura:infused_iron"]
                     }
                 ]
             }

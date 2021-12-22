@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:nature_altar"
+                        "items": ["naturesaura:nature_altar"]
                     }
                 ]
             }

@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:sky_ingot"
+                        "items": ["naturesaura:sky_ingot"]
                     }
                 ]
             }

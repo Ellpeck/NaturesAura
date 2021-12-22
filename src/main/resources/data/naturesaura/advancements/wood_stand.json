@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:wood_stand"
+                        "items": ["naturesaura:wood_stand"]
                     }
                 ]
             }

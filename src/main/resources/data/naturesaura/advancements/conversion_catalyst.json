@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:conversion_catalyst"
+                        "items": ["naturesaura:conversion_catalyst"]
                     }
                 ]
             }

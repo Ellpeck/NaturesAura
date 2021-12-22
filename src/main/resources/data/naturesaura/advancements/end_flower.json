@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:end_flower"
+                        "items": ["naturesaura:end_flower"]
                     }
                 ]
             }

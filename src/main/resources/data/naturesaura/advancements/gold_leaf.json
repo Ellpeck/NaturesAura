@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:gold_leaf"
+                        "items": ["naturesaura:gold_leaf"]
                     }
                 ]
             }

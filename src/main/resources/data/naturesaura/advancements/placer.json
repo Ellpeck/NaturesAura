@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:placer"
+                        "items": ["naturesaura:placer"]
                     }
                 ]
             }

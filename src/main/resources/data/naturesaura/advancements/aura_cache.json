@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "naturesaura:aura_cache"
+                        "items": ["naturesaura:aura_cache"]
                     }
                 ]
             }
