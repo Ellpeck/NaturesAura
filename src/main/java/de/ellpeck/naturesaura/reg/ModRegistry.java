@@ -10,9 +10,6 @@ import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import de.ellpeck.naturesaura.entities.*;
-import de.ellpeck.naturesaura.entities.render.RenderEffectInhibitor;
-import de.ellpeck.naturesaura.entities.render.RenderMoverMinecart;
-import de.ellpeck.naturesaura.entities.render.RenderStub;
 import de.ellpeck.naturesaura.gen.LevelGenAncientTree;
 import de.ellpeck.naturesaura.gen.LevelGenAuraBloom;
 import de.ellpeck.naturesaura.gen.LevelGenNetherWartMushroom;
@@ -25,9 +22,6 @@ import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
 import de.ellpeck.naturesaura.recipes.EnabledCondition;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.world.effect.MobEffect;
@@ -275,7 +269,6 @@ public final class ModRegistry {
         Helper.populateObjectHolders(ModEnchantments.class, event.getRegistry());
     }
 
-    @SuppressWarnings("Convert2Lambda")
     @SubscribeEvent
     public static void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
         event.getRegistry().registerAll(
@@ -297,17 +290,6 @@ public final class ModRegistry {
                         .setRegistryName("structure_finder")
         );
         Helper.populateObjectHolders(ModEntities.class, event.getRegistry());
-
-        NaturesAura.proxy.registerEntityRenderer(ModEntities.MOVER_CART, () -> RenderMoverMinecart::new);
-        NaturesAura.proxy.registerEntityRenderer(ModEntities.EFFECT_INHIBITOR, () -> RenderEffectInhibitor::new);
-        NaturesAura.proxy.registerEntityRenderer(ModEntities.LIGHT_PROJECTILE, () -> RenderStub::new);
-        // for some reason, only this one causes classloading issues if shortened to a lambda, what
-        NaturesAura.proxy.registerEntityRenderer(ModEntities.STRUCTURE_FINDER, () -> new EntityRendererProvider<>() {
-            @Override
-            public EntityRenderer<EntityStructureFinder> create(Context context) {
-                return new ThrownItemRenderer<>(context, 1, true);
-            }
-        });
     }
 
     @SubscribeEvent
@@ -331,15 +313,6 @@ public final class ModRegistry {
     }
 
     public static void init() {
-        for (var item : ALL_ITEMS) {
-            if (item instanceof IColorProvidingBlock)
-                NaturesAura.proxy.addColorProvidingBlock((IColorProvidingBlock) item);
-            if (item instanceof IColorProvidingItem)
-                NaturesAura.proxy.addColorProvidingItem((IColorProvidingItem) item);
-            if (item instanceof ITESRProvider provider)
-                provider.registerTESR();
-        }
-
         // register features 27 more times for some reason
         for (var entry : ModFeatures.Configured.class.getFields()) {
             try {

@@ -39,7 +39,9 @@ public final class NaturesAura {
         }
     };
     public static NaturesAura instance;
-    public static IProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
+    // this causes a classloading issue if it's not wrapped like this
+    @SuppressWarnings("Convert2MethodRef")
+    public static IProxy proxy = DistExecutor.unsafeRunForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 
     public NaturesAura() {
         instance = this;

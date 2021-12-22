@@ -1,13 +1,6 @@
 package de.ellpeck.naturesaura.proxy;
 
-import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
-import de.ellpeck.naturesaura.reg.IColorProvidingItem;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-
-import java.util.function.Supplier;
 
 public class ServerProxy implements IProxy {
 
@@ -23,16 +16,6 @@ public class ServerProxy implements IProxy {
 
     @Override
     public void postInit(FMLCommonSetupEvent event) {
-
-    }
-
-    @Override
-    public void addColorProvidingItem(IColorProvidingItem item) {
-
-    }
-
-    @Override
-    public void addColorProvidingBlock(IColorProvidingBlock block) {
 
     }
 
@@ -53,11 +36,6 @@ public class ServerProxy implements IProxy {
 
     @Override
     public void setParticleCulling(boolean cull) {
-
-    }
-
-    @Override
-    public <T extends Entity> void registerEntityRenderer(EntityType<T> entityClass, Supplier<EntityRendererProvider<T>> renderFactory) {
 
     }
 }

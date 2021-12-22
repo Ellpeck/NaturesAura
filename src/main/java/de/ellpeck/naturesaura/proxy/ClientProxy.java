@@ -2,6 +2,10 @@ package de.ellpeck.naturesaura.proxy;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.compat.Compat;
+import de.ellpeck.naturesaura.entities.ModEntities;
+import de.ellpeck.naturesaura.entities.render.RenderEffectInhibitor;
+import de.ellpeck.naturesaura.entities.render.RenderMoverMinecart;
+import de.ellpeck.naturesaura.entities.render.RenderStub;
 import de.ellpeck.naturesaura.events.ClientEvents;
 import de.ellpeck.naturesaura.gui.GuiEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
@@ -13,24 +17,18 @@ import de.ellpeck.naturesaura.reg.*;
 import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColor;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-
-import java.util.function.Supplier;
 
 public class ClientProxy implements IProxy {
 
@@ -55,6 +53,20 @@ public class ClientProxy implements IProxy {
                 living.addLayer(new PlayerLayerTrinkets(living));
         }
         new SupporterFancyHandler();
+
+        for (var item : ModRegistry.ALL_ITEMS) {
+            if (item instanceof IColorProvidingBlock color)
+                this.addColorProvidingBlock(color);
+            if (item instanceof IColorProvidingItem color)
+                this.addColorProvidingItem(color);
+            if (item instanceof ITESRProvider provider)
+                provider.registerTESR();
+        }
+
+        EntityRenderers.register(ModEntities.MOVER_CART, RenderMoverMinecart::new);
+        EntityRenderers.register(ModEntities.EFFECT_INHIBITOR, RenderEffectInhibitor::new);
+        EntityRenderers.register(ModEntities.LIGHT_PROJECTILE, RenderStub::new);
+        EntityRenderers.register(ModEntities.STRUCTURE_FINDER, c -> new ThrownItemRenderer<>(c, 1, true));
     }
 
     @Override
@@ -63,24 +75,6 @@ public class ClientProxy implements IProxy {
             if (item instanceof ICustomRenderType)
                 ItemBlockRenderTypes.setRenderLayer((Block) item, ((ICustomRenderType) item).getRenderType().get());
         }
-    }
-
-    @Override
-    public void addColorProvidingItem(IColorProvidingItem item) {
-        var colors = Minecraft.getInstance().getItemColors();
-        var color = item.getItemColor();
-
-        if (item instanceof Item) {
-            colors.register(color, (Item) item);
-        } else if (item instanceof Block) {
-            colors.register(color, (Block) item);
-        }
-    }
-
-    @Override
-    public void addColorProvidingBlock(IColorProvidingBlock block) {
-        if (block instanceof Block)
-            Minecraft.getInstance().getBlockColors().register(block.getBlockColor(), (Block) block);
     }
 
     @Override
@@ -106,9 +100,20 @@ public class ClientProxy implements IProxy {
         ParticleHandler.culling = cull;
     }
 
-    @Override
-    public <T extends Entity> void registerEntityRenderer(EntityType<T> entityClass, Supplier<EntityRendererProvider<T>> renderFactory) {
-        EntityRenderers.register(entityClass, renderFactory.get());
+    private void addColorProvidingItem(IColorProvidingItem item) {
+        var colors = Minecraft.getInstance().getItemColors();
+        var color = item.getItemColor();
+
+        if (item instanceof Item) {
+            colors.register(color, (Item) item);
+        } else if (item instanceof Block) {
+            colors.register(color, (Block) item);
+        }
+    }
+
+    private void addColorProvidingBlock(IColorProvidingBlock block) {
+        if (block instanceof Block)
+            Minecraft.getInstance().getBlockColors().register(block.getBlockColor(), (Block) block);
     }
 
 }
