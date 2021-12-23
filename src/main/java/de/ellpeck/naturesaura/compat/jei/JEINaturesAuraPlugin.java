@@ -48,7 +48,7 @@ public class JEINaturesAuraPlugin implements IModPlugin {
         registration.registerSubtypeInterpreter(ModItems.AURA_BOTTLE, (stack, context) -> ItemAuraBottle.getType(stack).getName().toString());
 
         var auraInterpreter = (IIngredientSubtypeInterpreter<ItemStack>) (stack, context) -> {
-            var container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
+            var container = stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).orElse(null);
             if (container != null)
                 return String.valueOf(container.getStoredAura());
             return IIngredientSubtypeInterpreter.NONE;

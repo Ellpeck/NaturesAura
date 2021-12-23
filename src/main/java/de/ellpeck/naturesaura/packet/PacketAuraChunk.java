@@ -7,7 +7,6 @@ import de.ellpeck.naturesaura.events.ClientEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.network.NetworkEvent;
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -68,7 +67,7 @@ public class PacketAuraChunk {
             var chunk = level.getChunk(this.chunkX, this.chunkZ);
             if (chunk.isEmpty())
                 return false;
-            var auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk).orElse(null);
+            var auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.CAP_AURA_CHUNK).orElse(null);
             if (auraChunk == null)
                 return false;
             auraChunk.setSpots(this.drainSpots);

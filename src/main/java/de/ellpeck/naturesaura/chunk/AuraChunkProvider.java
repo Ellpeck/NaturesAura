@@ -33,7 +33,7 @@ public class AuraChunkProvider implements ICapabilityProvider, INBTSerializable<
     @Nullable
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-        return capability == NaturesAuraAPI.capAuraChunk ? this.lazyChunk.cast() : LazyOptional.empty();
+        return capability == NaturesAuraAPI.CAP_AURA_CHUNK ? this.lazyChunk.cast() : LazyOptional.empty();
     }
 
     @Override

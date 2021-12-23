@@ -73,7 +73,7 @@ public class CommonEvents {
     public void onChunkUnload(ChunkEvent.Unload event) {
         var iChunk = event.getChunk();
         if (iChunk instanceof LevelChunk chunk) {
-            var auraChunk = chunk.getCapability(NaturesAuraAPI.capAuraChunk).orElse(null);
+            var auraChunk = chunk.getCapability(NaturesAuraAPI.CAP_AURA_CHUNK).orElse(null);
             if (auraChunk instanceof AuraChunk) {
                 var data = (LevelData) ILevelData.getLevelData(chunk.getLevel());
                 data.auraChunksWithSpots.remove(chunk.getPos().toLong());
@@ -109,7 +109,7 @@ public class CommonEvents {
                         var chunk = holder.getTickingChunk();
                         if (chunk == null)
                             continue;
-                        var auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
+                        var auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.CAP_AURA_CHUNK, null).orElse(null);
                         if (auraChunk != null)
                             auraChunk.update();
                     }
@@ -149,7 +149,7 @@ public class CommonEvents {
         var chunk = Helper.getLoadedChunk(player.level, pos.x, pos.z);
         if (chunk == null)
             return false;
-        var auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.capAuraChunk, null).orElse(null);
+        var auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.CAP_AURA_CHUNK, null).orElse(null);
         if (auraChunk == null)
             return false;
         PacketHandler.sendTo(player, auraChunk.makePacket());

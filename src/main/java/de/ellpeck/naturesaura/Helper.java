@@ -207,7 +207,7 @@ public final class Helper {
             @Nullable
             @Override
             public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-                if (capability == NaturesAuraAPI.capAuraRecharge)
+                if (capability == NaturesAuraAPI.CAP_AURA_RECHARGE)
                     return this.recharge.cast();
                 return LazyOptional.empty();
             }

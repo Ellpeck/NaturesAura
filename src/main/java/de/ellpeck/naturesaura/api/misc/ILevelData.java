@@ -10,7 +10,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 public interface ILevelData extends ICapabilityProvider, INBTSerializable<CompoundTag> {
 
     static ILevelData getLevelData(Level level) {
-        return level.getCapability(NaturesAuraAPI.capLevelData, null).orElse(null);
+        return level.getCapability(NaturesAuraAPI.CAP_LEVEL_DATA, null).orElse(null);
     }
 
     static ILevelData getOverworldData(Level level) {

@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.blocks.multi.Multiblock;
@@ -11,7 +10,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -39,9 +37,9 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     private boolean auraPlayerInteraction(Player player, int amount, boolean extract, boolean simulate) {
         if (extract && player.isCreative())
             return true;
-        var stack = Helper.getEquippedItem(s -> s.getCapability(NaturesAuraAPI.capAuraContainer).isPresent(), player);
+        var stack = Helper.getEquippedItem(s -> s.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).isPresent(), player);
         if (!stack.isEmpty()) {
-            var container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
+            var container = stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).orElse(null);
             if (extract) {
                 return container.drainAura(amount, simulate) > 0;
             } else {

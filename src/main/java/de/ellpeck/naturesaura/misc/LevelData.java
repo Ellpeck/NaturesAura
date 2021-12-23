@@ -18,7 +18,6 @@ import net.minecraft.nbt.LongTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -39,7 +38,7 @@ public class LevelData implements ILevelData {
     @Nullable
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-        return capability == NaturesAuraAPI.capLevelData ? this.lazyThis.cast() : LazyOptional.empty();
+        return capability == NaturesAuraAPI.CAP_LEVEL_DATA ? this.lazyThis.cast() : LazyOptional.empty();
     }
 
     @Override

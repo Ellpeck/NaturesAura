@@ -114,7 +114,7 @@ public class BlockEntityImpl extends BlockEntity {
                 this.itemHandler = handler == null ? LazyOptional.empty() : LazyOptional.of(() -> handler);
             }
             return this.itemHandler.cast();
-        } else if (capability == NaturesAuraAPI.capAuraContainer) {
+        } else if (capability == NaturesAuraAPI.CAP_AURA_CONTAINER) {
             if (this.auraContainer == null) {
                 var container = this.getAuraContainer();
                 this.auraContainer = container == null ? LazyOptional.empty() : LazyOptional.of(() -> container);

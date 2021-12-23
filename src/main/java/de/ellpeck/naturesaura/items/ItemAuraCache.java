@@ -4,9 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.ItemAuraContainer;
-import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import net.minecraft.client.Minecraft;
@@ -44,14 +42,14 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     @Override
     public void inventoryTick(ItemStack stackIn, Level levelIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (!levelIn.isClientSide && entityIn instanceof Player player) {
-            if (player.isCrouching() && stackIn.getCapability(NaturesAuraAPI.capAuraContainer).isPresent()) {
-                var container = stackIn.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
+            if (player.isCrouching() && stackIn.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).isPresent()) {
+                var container = stackIn.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).orElse(null);
                 if (container.getStoredAura() <= 0) {
                     return;
                 }
                 for (var i = 0; i < player.getInventory().getContainerSize(); i++) {
                     var stack = player.getInventory().getItem(i);
-                    var recharge = stack.getCapability(NaturesAuraAPI.capAuraRecharge).orElse(null);
+                    var recharge = stack.getCapability(NaturesAuraAPI.CAP_AURA_RECHARGE).orElse(null);
                     if (recharge != null) {
                         if (recharge.rechargeFromContainer(container, itemSlot, i, player.getInventory().selected == i))
                             break;
@@ -72,7 +70,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
             items.add(new ItemStack(this));
 
             var stack = new ItemStack(this);
-            stack.getCapability(NaturesAuraAPI.capAuraContainer).ifPresent(container -> {
+            stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).ifPresent(container -> {
                 container.storeAura(container.getMaxAura(), false);
                 items.add(stack);
             });
@@ -86,8 +84,8 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        if (stack.getCapability(NaturesAuraAPI.capAuraContainer).isPresent()) {
-            var container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
+        if (stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).isPresent()) {
+            var container = stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).orElse(null);
             return Math.round((container.getStoredAura() / (float) container.getMaxAura()) * 13);
         }
         return 0;
@@ -95,7 +93,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
     @Override
     public int getBarColor(ItemStack stack) {
-        var cap = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
+        var cap = stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).orElse(null);
         return cap != null ? cap.getAuraColor() : super.getBarColor(stack);
     }
 
@@ -108,7 +106,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
             @Nonnull
             @Override
             public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-                if (capability == NaturesAuraAPI.capAuraContainer) {
+                if (capability == NaturesAuraAPI.CAP_AURA_CONTAINER) {
                     return this.container.cast();
                 } else {
                     return LazyOptional.empty();

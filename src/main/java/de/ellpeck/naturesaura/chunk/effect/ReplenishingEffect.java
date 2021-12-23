@@ -6,7 +6,6 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.chunk.ISpotDrainable;
-import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +24,7 @@ public class ReplenishingEffect implements IDrainSpotEffect {
         if (spot < 0) {
             List<ISpotDrainable> tiles = new ArrayList<>();
             Helper.getBlockEntitiesInArea(level, pos, 25, tile -> {
-                var container = tile.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
+                var container = tile.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null);
                 if (container instanceof ISpotDrainable)
                     tiles.add((ISpotDrainable) container);
                 return false;

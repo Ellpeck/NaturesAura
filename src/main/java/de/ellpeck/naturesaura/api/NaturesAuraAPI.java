@@ -43,8 +43,7 @@ import java.util.function.Supplier;
 public final class NaturesAuraAPI {
 
     public static final String MOD_ID = "naturesaura";
-    public static final String API_ID = MOD_ID + "api";
-    public static final String VERSION = "9";
+
     /**
      * A map of all the block states that the Botanist's Pickaxe can convert
      * into their mossy variations. Contains mossy brick and mossy cobblestone
@@ -107,14 +106,14 @@ public final class NaturesAuraAPI {
      * The capability for any item or block that stores Aura in the form of an
      * {@link IAuraContainer}
      */
-    public static Capability<IAuraContainer> capAuraContainer = CapabilityManager.get(new CapabilityToken<>() {
+    public static final Capability<IAuraContainer> CAP_AURA_CONTAINER = CapabilityManager.get(new CapabilityToken<>() {
     });
     /**
      * The capability for any item that can be recharged from an Aura storage
      * container like the Aura Cache in the form of {@link IAuraRecharge} by a
      * player holding it in their hand
      */
-    public static Capability<IAuraRecharge> capAuraRecharge = CapabilityManager.get(new CapabilityToken<>() {
+    public static final Capability<IAuraRecharge> CAP_AURA_RECHARGE = CapabilityManager.get(new CapabilityToken<>() {
     });
     /**
      * The capability that any chunk in a level has to store Aura in it. As this
@@ -124,7 +123,7 @@ public final class NaturesAuraAPI {
      * helper method {@link IAuraChunk#getAuraChunk(net.minecraft.world.level.Level,
      * BlockPos)}.
      */
-    public static Capability<IAuraChunk> capAuraChunk = CapabilityManager.get(new CapabilityToken<>() {
+    public static final Capability<IAuraChunk> CAP_AURA_CHUNK = CapabilityManager.get(new CapabilityToken<>() {
     });
     /**
      * The capability that any level has to store Nature's Aura specific data in
@@ -132,14 +131,14 @@ public final class NaturesAuraAPI {
      * {@link ILevelData#getLevelData(net.minecraft.world.level.Level)} or
      * {@link ILevelData#getOverworldData(net.minecraft.world.level.Level)}.
      */
-    public static Capability<ILevelData> capLevelData = CapabilityManager.get(new CapabilityToken<>() {
+    public static final Capability<ILevelData> CAP_LEVEL_DATA = CapabilityManager.get(new CapabilityToken<>() {
     });
     private static final IInternalHooks INSTANCE;
 
     static {
         try {
-            INSTANCE = (IInternalHooks) Class.forName("de.ellpeck.naturesaura.InternalHooks").newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            INSTANCE = (IInternalHooks) Class.forName("de.ellpeck.naturesaura.InternalHooks").getConstructor().newInstance();
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

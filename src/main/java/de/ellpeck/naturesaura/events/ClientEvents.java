@@ -3,7 +3,6 @@ package de.ellpeck.naturesaura.events;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Vector3d;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
@@ -27,16 +26,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -250,7 +245,7 @@ public class ClientEvents {
             var res = event.getWindow();
             if (mc.player != null) {
                 if (!heldCache.isEmpty()) {
-                    var container = heldCache.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
+                    var container = heldCache.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null);
                     var width = Mth.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
 
                     int conf = ModConfig.instance.cacheBarLocation.get();
@@ -360,7 +355,7 @@ public class ClientEvents {
                             IAuraContainer container;
                             var x = res.getGuiScaledWidth() / 2;
                             var y = res.getGuiScaledHeight() / 2;
-                            if (tile != null && (container = tile.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null)) != null) {
+                            if (tile != null && (container = tile.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null)) != null) {
                                 var state = mc.level.getBlockState(pos);
                                 var blockStack = state.getBlock().getCloneItemStack(state, blockHitResult, mc.level, pos, mc.player);
                                 this.drawContainerInfo(stack, container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
@@ -369,7 +364,7 @@ public class ClientEvents {
                                 if (tile instanceof BlockEntityNatureAltar) {
                                     var tileStack = ((BlockEntityNatureAltar) tile).getItemHandler().getStackInSlot(0);
                                     if (!tileStack.isEmpty()) {
-                                        var stackCont = tileStack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
+                                        var stackCont = tileStack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null);
                                         if (stackCont != null) {
                                             this.drawContainerInfo(stack, stackCont.getStoredAura(), stackCont.getMaxAura(), stackCont.getAuraColor(),
                                                     mc, res, 55, tileStack.getDisplayName().getString(), null);

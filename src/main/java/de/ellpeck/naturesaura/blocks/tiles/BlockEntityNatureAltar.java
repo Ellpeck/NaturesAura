@@ -42,12 +42,12 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
 
         @Override
         protected boolean canInsert(ItemStack stack, int slot) {
-            return BlockEntityNatureAltar.this.getRecipeForInput(stack) != null || stack.getCapability(NaturesAuraAPI.capAuraContainer, null).isPresent();
+            return BlockEntityNatureAltar.this.getRecipeForInput(stack) != null || stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).isPresent();
         }
 
         @Override
         protected boolean canExtract(ItemStack stack, int slot, int amount) {
-            var cap = stack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
+            var cap = stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null);
             if (cap != null) {
                 return cap.storeAura(1, true) <= 0;
             } else {
@@ -119,7 +119,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
                 }
 
                 var stack = this.items.getStackInSlot(0);
-                var container = stack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
+                var container = stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null);
                 if (!stack.isEmpty() && container != null) {
                     var theoreticalDrain = this.container.drainAura(1000, true);
                     if (theoreticalDrain > 0) {
