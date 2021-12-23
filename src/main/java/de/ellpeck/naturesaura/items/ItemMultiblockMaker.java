@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
+import de.ellpeck.naturesaura.blocks.multi.Multiblock;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
@@ -23,25 +24,11 @@ public class ItemMultiblockMaker extends ItemImpl {
         super("multiblock_maker");
     }
 
-    private static int getMultiblock(ItemStack stack) {
-        if (!stack.hasTag())
-            return -1;
-        return stack.getTag().getInt("multiblock");
-    }
-
-    private static List<IMultiblock> multiblocks() {
-        if (multiblocks == null) {
-            multiblocks = new ArrayList<>();
-            multiblocks.addAll(NaturesAuraAPI.MULTIBLOCKS.values());
-        }
-        return multiblocks;
-    }
-
     @Override
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
         var stack = playerIn.getItemInHand(handIn);
         if (!levelIn.isClientSide && playerIn.isCreative()) {
-            var curr = getMultiblock(stack);
+            var curr = getMultiblockId(stack);
             var next = (curr + 1) % multiblocks().size();
             stack.getOrCreateTag().putInt("multiblock", next);
         }
@@ -52,10 +39,7 @@ public class ItemMultiblockMaker extends ItemImpl {
     public InteractionResult useOn(UseOnContext context) {
         var player = context.getPlayer();
         if (player.isCreative()) {
-            var id = getMultiblock(player.getItemInHand(context.getHand()));
-            if (id < 0)
-                return InteractionResult.PASS;
-            var multi = multiblocks().get(id);
+            var multi = getMultiblock(player.getItemInHand(context.getHand()));
             if (multi == null)
                 return InteractionResult.PASS;
 
@@ -73,11 +57,34 @@ public class ItemMultiblockMaker extends ItemImpl {
     @Override
     public Component getName(ItemStack stack) {
         var name = (MutableComponent) super.getName(stack);
-        var id = getMultiblock(stack);
-        if (id < 0)
-            return name;
-        var multi = multiblocks().get(id);
+        var multi = getMultiblock(stack);
         return multi == null ? name : name.append(" (" + multi.getName() + ")");
     }
 
+    private static List<IMultiblock> multiblocks() {
+        if (multiblocks == null) {
+            // some weird mixins call getName way too early, before multiblocks are initialized
+            if (NaturesAuraAPI.MULTIBLOCKS.isEmpty())
+                return null;
+            multiblocks = new ArrayList<>();
+            multiblocks.addAll(NaturesAuraAPI.MULTIBLOCKS.values());
+        }
+        return multiblocks;
+    }
+
+    private static int getMultiblockId(ItemStack stack) {
+        if (!stack.hasTag())
+            return -1;
+        return stack.getTag().getInt("multiblock");
+    }
+
+    private static IMultiblock getMultiblock(ItemStack stack) {
+        var multiblocks = multiblocks();
+        if (multiblocks == null)
+            return null;
+        var id = getMultiblockId(stack);
+        if (id < 0 || id >= multiblocks.size())
+            return null;
+        return multiblocks.get(id);
+    }
 }
