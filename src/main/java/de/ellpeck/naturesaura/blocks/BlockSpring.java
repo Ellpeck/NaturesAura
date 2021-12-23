@@ -47,6 +47,8 @@ public class BlockSpring extends BlockContainerImpl implements ICustomBlockState
             @Override
             public int getColor(ItemStack stack, int i) {
                 Player player = Minecraft.getInstance().player;
+                if (player == null)
+                    return 0;
                 return BiomeColors.getAverageWaterColor(player.level, player.blockPosition());
             }
         };
@@ -56,7 +58,6 @@ public class BlockSpring extends BlockContainerImpl implements ICustomBlockState
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
     }
-
 
     @Override
     public Supplier<RenderType> getRenderType() {
@@ -68,7 +69,8 @@ public class BlockSpring extends BlockContainerImpl implements ICustomBlockState
         var tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntitySpring)
             ((BlockEntitySpring) tile).consumeAura(2500);
-        return new ItemStack(Items.WATER_BUCKET);    }
+        return new ItemStack(Items.WATER_BUCKET);
+    }
 
     @Override
     public Optional<SoundEvent> getPickupSound() {
