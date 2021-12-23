@@ -85,12 +85,18 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     }
 
     @Override
-    public int getBarColor(ItemStack stack) {
+    public int getBarWidth(ItemStack stack) {
         if (stack.getCapability(NaturesAuraAPI.capAuraContainer).isPresent()) {
             var container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
-            return (int) (1 - container.getStoredAura() / (double) container.getMaxAura());
+            return Math.round((container.getStoredAura() / (float) container.getMaxAura()) * 13);
         }
         return 0;
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        var cap = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
+        return cap != null ? cap.getAuraColor() : super.getBarColor(stack);
     }
 
     @Nullable
