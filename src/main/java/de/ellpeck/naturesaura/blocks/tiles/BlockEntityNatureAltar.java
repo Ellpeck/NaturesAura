@@ -48,10 +48,11 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
         @Override
         protected boolean canExtract(ItemStack stack, int slot, int amount) {
             var cap = stack.getCapability(NaturesAuraAPI.capAuraContainer, null).orElse(null);
-            if (cap != null)
+            if (cap != null) {
                 return cap.storeAura(1, true) <= 0;
-            else
+            } else {
                 return BlockEntityNatureAltar.this.getRecipeForInput(stack) == null;
+            }
         }
     };
     @OnlyIn(Dist.CLIENT)

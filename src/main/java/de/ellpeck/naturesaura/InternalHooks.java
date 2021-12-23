@@ -43,11 +43,10 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
         if (!stack.isEmpty()) {
             var container = stack.getCapability(NaturesAuraAPI.capAuraContainer).orElse(null);
             if (extract) {
-                amount -= container.drainAura(amount, simulate);
+                return container.drainAura(amount, simulate) > 0;
             } else {
-                amount -= container.storeAura(amount, simulate);
+                return container.storeAura(amount, simulate) > 0;
             }
-            return amount <= 0;
         }
         return false;
     }
