@@ -24,7 +24,7 @@ public class ProcessorAltar implements IComponentProcessor {
             case "output" -> IVariable.from(this.recipe.output);
             case "catalyst" -> this.recipe.catalyst != Ingredient.EMPTY ? PatchouliCompat.ingredientVariable(this.recipe.catalyst) : null;
             case "type" -> this.recipe.requiredType != null ? IVariable.from(this.recipe.getDimensionBottle()) : null;
-            case "name" -> IVariable.wrap(this.recipe.output.getDisplayName().getString());
+            case "name" -> IVariable.wrap(this.recipe.output.getHoverName().getString());
             default -> null;
         };
     }

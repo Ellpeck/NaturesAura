@@ -265,7 +265,7 @@ public class ClientEvents {
                     var scale = 0.75F;
                     stack.pushPose();
                     stack.scale(scale, scale, scale);
-                    var s = heldCache.getDisplayName().getString();
+                    var s = heldCache.getHoverName().getString();
                     mc.font.drawShadow(stack, s, conf == 1 ? x / scale : (x + 80) / scale - mc.font.width(s), (y - 7) / scale, color);
                     stack.popPose();
 
@@ -359,7 +359,7 @@ public class ClientEvents {
                                 var state = mc.level.getBlockState(pos);
                                 var blockStack = state.getBlock().getCloneItemStack(state, blockHitResult, mc.level, pos, mc.player);
                                 this.drawContainerInfo(stack, container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
-                                        mc, res, 35, blockStack.getDisplayName().getString(), null);
+                                        mc, res, 35, blockStack.getHoverName().getString(), null);
 
                                 if (tile instanceof BlockEntityNatureAltar) {
                                     var tileStack = ((BlockEntityNatureAltar) tile).getItemHandler().getStackInSlot(0);
@@ -367,7 +367,7 @@ public class ClientEvents {
                                         var stackCont = tileStack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null);
                                         if (stackCont != null) {
                                             this.drawContainerInfo(stack, stackCont.getStoredAura(), stackCont.getMaxAura(), stackCont.getAuraColor(),
-                                                    mc, res, 55, tileStack.getDisplayName().getString(), null);
+                                                    mc, res, 55, tileStack.getHoverName().getString(), null);
                                         }
                                     }
                                 }

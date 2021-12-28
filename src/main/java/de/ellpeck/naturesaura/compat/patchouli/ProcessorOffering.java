@@ -22,7 +22,7 @@ public class ProcessorOffering implements IComponentProcessor {
             case "input" -> PatchouliCompat.ingredientVariable(this.recipe.input);
             case "output" -> IVariable.from(this.recipe.output);
             case "start" -> PatchouliCompat.ingredientVariable(this.recipe.startItem);
-            case "name" -> IVariable.wrap(this.recipe.output.getDisplayName().getString());
+            case "name" -> IVariable.wrap(this.recipe.output.getHoverName().getString());
             default -> null;
         };
     }

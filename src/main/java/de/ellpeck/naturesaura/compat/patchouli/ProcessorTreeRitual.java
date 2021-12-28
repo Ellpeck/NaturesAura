@@ -25,7 +25,7 @@ public class ProcessorTreeRitual implements IComponentProcessor {
             return switch (key) {
                 case "output" -> IVariable.from(this.recipe.result);
                 case "sapling" -> PatchouliCompat.ingredientVariable(this.recipe.saplingType);
-                case "name" -> IVariable.wrap(this.recipe.result.getDisplayName().getString());
+                case "name" -> IVariable.wrap(this.recipe.result.getHoverName().getString());
                 default -> null;
             };
         }

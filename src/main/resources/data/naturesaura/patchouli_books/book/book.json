@@ -17,5 +17,6 @@
         "$(item)": "$(#ad09e2)",
         "$(aura)": "$(#419600)Aura$()",
         "$(aura-zh-cn)": "$(#419600)灵气$()"
-    }
+    },
+    "use_resource_pack": true
 }
