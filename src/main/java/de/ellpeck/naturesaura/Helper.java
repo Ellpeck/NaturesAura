@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.datafixers.util.Either;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
@@ -14,6 +15,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -31,6 +34,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -51,6 +56,7 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -95,13 +101,13 @@ public final class Helper {
         return frames;
     }
 
-    public static LevelChunk getLoadedChunk(LevelAccessor level, int x, int z) {
-        // DO NOT EDIT PLEASE FOR THE LOVE OF GOD
-        // This is very finicky and easily causes the game to hang for some reason
-        var provider = level.getChunkSource();
-        if (provider.hasChunk(x, z))
-            return provider.getChunk(x, z, false);
-        return null;
+    public static ChunkAccess getLoadedChunk(LevelAccessor level, int x, int z) {
+        // thanks DrCat https://github.com/ldtteam/minecolonies/blob/version/1.18/src/api/java/com/minecolonies/api/util/WorldUtil.java#L66
+        if (level.getChunkSource() instanceof ServerChunkCache cache) {
+            var future = cache.getChunkFuture(x, z, ChunkStatus.FULL, false);
+            return future.isDone() ? future.getNow(ChunkHolder.UNLOADED_CHUNK).left().orElse(null) : null;
+        }
+        return level.getChunk(x, z, ChunkStatus.FULL, false);
     }
 
     public static int blendColors(int c1, int c2, float ratio) {

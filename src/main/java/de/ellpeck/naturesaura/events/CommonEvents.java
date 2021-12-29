@@ -147,9 +147,9 @@ public class CommonEvents {
 
     private boolean handleChunkWatchDeferred(Player player, ChunkPos pos) {
         var chunk = Helper.getLoadedChunk(player.level, pos.x, pos.z);
-        if (chunk == null)
+        if (!(chunk instanceof LevelChunk levelChunk))
             return false;
-        var auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.CAP_AURA_CHUNK, null).orElse(null);
+        var auraChunk = (AuraChunk) levelChunk.getCapability(NaturesAuraAPI.CAP_AURA_CHUNK, null).orElse(null);
         if (auraChunk == null)
             return false;
         PacketHandler.sendTo(player, auraChunk.makePacket());
