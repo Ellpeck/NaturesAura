@@ -102,12 +102,12 @@ public final class Helper {
     }
 
     public static ChunkAccess getLoadedChunk(LevelAccessor level, int x, int z) {
-        // thanks DrCat https://github.com/ldtteam/minecolonies/blob/version/1.18/src/api/java/com/minecolonies/api/util/WorldUtil.java#L66
+        // as always, this code is EXTREMELY FRAGILE and editing it before the next major version will probably break it
         if (level.getChunkSource() instanceof ServerChunkCache cache) {
-            var future = cache.getChunkFuture(x, z, ChunkStatus.FULL, false);
-            return future.isDone() ? future.getNow(ChunkHolder.UNLOADED_CHUNK).left().orElse(null) : null;
+            return cache.isPositionTicking(ChunkPos.asLong(x, z)) ? cache.getChunk(x, z, ChunkStatus.FULL, false) : null;
+        } else {
+            return level.getChunk(x, z, ChunkStatus.FULL, false);
         }
-        return level.getChunk(x, z, ChunkStatus.FULL, false);
     }
 
     public static int blendColors(int c1, int c2, float ratio) {
