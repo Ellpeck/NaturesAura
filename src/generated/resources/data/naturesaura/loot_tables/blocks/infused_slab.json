@@ -1,32 +1,34 @@
 {
-    "type": "minecraft:block",
-    "pools": [
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
         {
-            "rolls": 1,
-            "entries": [
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
                 {
-                    "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:set_count",
-                            "conditions": [
-                                {
-                                    "condition": "minecraft:block_state_property",
-                                    "block": "naturesaura:infused_slab",
-                                    "properties": {
-                                        "type": "double"
-                                    }
-                                }
-                            ],
-                            "count": 2
-                        },
-                        {
-                            "function": "minecraft:explosion_decay"
-                        }
-                    ],
-                    "name": "naturesaura:infused_slab"
+                  "condition": "minecraft:block_state_property",
+                  "block": "naturesaura:infused_slab",
+                  "properties": {
+                    "type": "double"
+                  }
                 }
-            ]
+              ],
+              "count": 2.0,
+              "add": false
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "naturesaura:infused_slab"
         }
-    ]
+      ]
+    }
+  ]
 }

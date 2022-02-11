@@ -1,29 +1,30 @@
 {
-    "type": "minecraft:block",
-    "pools": [
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
         {
-            "rolls": 1,
-            "entries": [
-                {
-                    "type": "minecraft:item",
-                    "name": "naturesaura:decayed_leaves"
-                }
-            ],
-            "conditions": [
-                {
-                    "condition": "minecraft:match_tool",
-                    "predicate": {
-                        "enchantments": [
-                            {
-                                "enchantment": "minecraft:silk_touch",
-                                "levels": {
-                                    "min": 1
-                                }
-                            }
-                        ]
-                    }
-                }
-            ]
+          "type": "minecraft:item",
+          "name": "naturesaura:decayed_leaves"
         }
-    ]
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:match_tool",
+          "predicate": {
+            "enchantments": [
+              {
+                "enchantment": "minecraft:silk_touch",
+                "levels": {
+                  "min": 1
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
 }

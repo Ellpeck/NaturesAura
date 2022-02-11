@@ -3,6 +3,8 @@ package de.ellpeck.naturesaura.data;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.items.tools.ItemPickaxe;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -29,6 +31,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.copy(BlockTags.SLABS, ItemTags.SLABS);
 
         this.tag(Tags.Items.RODS_WOODEN).add(ModItems.ANCIENT_STICK);
+        this.tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(ModItems.INFUSED_IRON_PICKAXE, ModItems.SKY_PICKAXE);
 
         Compat.addItemTags(this);
     }
