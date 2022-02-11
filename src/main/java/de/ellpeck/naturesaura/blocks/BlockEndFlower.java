@@ -60,7 +60,7 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
         var living = event.getEntityLiving();
         if (living.level.isClientSide || !(living instanceof EnderDragon dragon))
             return;
-        if (dragon.deathTime < 150 || dragon.deathTime % 10 != 0)
+        if (dragon.dragonDeathTime < 150 || dragon.dragonDeathTime % 10 != 0)
             return;
 
         for (var i = 0; i < 6; i++) {
