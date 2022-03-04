@@ -24,7 +24,7 @@ if (System.getenv('BUILD_NUMBER') != null) {
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'official', version: '1.18.1'
+    mappings channel: 'official', version: '1.18.2'
 
     runs {
         client {
@@ -102,16 +102,16 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.1-39.0.5'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.0.3'
 
-    compileOnly fg.deobf("mezz.jei:jei-1.18.1:9.1.0.47:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.1:9.1.0.47")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.4.1.117:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.4.1.117")
 
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-63:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.1-63")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-66-SNAPSHOT:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-66-SNAPSHOT")
 
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.1-5.0.3.0")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.1-5.0.3.0:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.2-5.0.6.3")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.2-5.0.6.3:api")
 
     // TODO Enchantability
 /*    compile fg.deobf("quarris.enchantability:Enchantability:11.0.48")*/

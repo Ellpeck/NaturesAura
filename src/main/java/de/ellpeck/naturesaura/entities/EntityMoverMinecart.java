@@ -156,7 +156,7 @@ public class EntityMoverMinecart extends AbstractMinecart {
     }
 
     @Override
-    public ItemStack getCartItem() {
+    public ItemStack getPickResult() {
         return new ItemStack(ModItems.MOVER_CART);
     }
 

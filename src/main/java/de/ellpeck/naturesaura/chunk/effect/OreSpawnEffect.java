@@ -13,6 +13,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.random.WeightedRandom;
@@ -105,7 +106,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
             var y = Mth.floor(powderPos.y + level.random.nextGaussian() * range);
             var z = Mth.floor(powderPos.z + level.random.nextGaussian() * range);
             var orePos = new BlockPos(x, y, z);
-            if (orePos.distSqr(powderPos.x, powderPos.y, powderPos.z, true) <= range * range
+            if (orePos.distToCenterSqr(powderPos.x, powderPos.y, powderPos.z) <= range * range
                     && orePos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(orePos)) {
                 var state = level.getBlockState(orePos);
                 if (state.getBlock() != requiredBlock)
@@ -116,10 +117,11 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                     var ore = WeightedRandom.getRandomItem(level.random, ores, totalWeight).orElse(null);
                     if (ore == null)
                         continue;
-                    var tag = level.getTagManager().getOrEmpty(Registry.BLOCK_REGISTRY).getTag(ore.tag);
+                    var tag = TagKey.create(Registry.BLOCK_REGISTRY, ore.tag);
                     if (tag == null)
                         continue;
-                    for (var toPlace : tag.getValues()) {
+                    for (var holder : Registry.BLOCK.getTagOrEmpty(tag)) {
+                        var toPlace = holder.value();
                         if (toPlace == null || toPlace == Blocks.AIR)
                             continue;
 

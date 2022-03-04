@@ -69,7 +69,7 @@ public class BlockAncientSapling extends BushBlock implements BonemealableBlock,
         if (state.getValue(SaplingBlock.STAGE) == 0) {
             level.setBlock(pos, state.cycle(SaplingBlock.STAGE), 4);
         } else if (ForgeEventFactory.saplingGrowTree(level, rand, pos)) {
-            ModFeatures.Configured.ANCIENT_TREE.place(level, level.getChunkSource().getGenerator(), rand, pos);
+            ModFeatures.Configured.ANCIENT_TREE.value().place(level, level.getChunkSource().getGenerator(), rand, pos);
         }
     }
 

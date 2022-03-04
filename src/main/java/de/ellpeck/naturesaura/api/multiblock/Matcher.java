@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.api.multiblock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -13,8 +14,8 @@ public record Matcher(BlockState defaultState, ICheck check) {
         return new Matcher(Blocks.AIR.defaultBlockState(), null);
     }
 
-    public static Matcher tag(Block defaultBlock, Tag.Named<?> tag) {
-        return new Matcher(defaultBlock.defaultBlockState(), (level, start, offset, pos, state, c) -> state.getBlock().getTags().contains(tag.getName()));
+    public static Matcher tag(Block defaultBlock, TagKey<Block> tag) {
+        return new Matcher(defaultBlock.defaultBlockState(), (level, start, offset, pos, state, c) -> state.is(tag));
     }
 
     public interface ICheck {

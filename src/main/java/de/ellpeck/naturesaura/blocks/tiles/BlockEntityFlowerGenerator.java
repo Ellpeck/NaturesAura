@@ -38,7 +38,7 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
                     for (var z = -range; z <= range; z++) {
                         var offset = this.worldPosition.offset(x, y, z);
                         var state = this.level.getBlockState(offset);
-                        if (BlockTags.SMALL_FLOWERS.contains(state.getBlock()))
+                        if (state.is(BlockTags.SMALL_FLOWERS))
                             possible.add(offset);
                     }
                 }

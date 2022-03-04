@@ -77,7 +77,7 @@ public final class Multiblocks {
             new String[][]{
                     {"  RRRRR  ", " R     R ", "R  RRR  R", "R R   R R", "R R 0 R R", "R R   R R", "R  RRR  R", " R     R ", "  RRRRR  "}},
             'R', new Matcher(Blocks.POPPY.defaultBlockState(),
-                    (level, start, offset, pos, state, c) -> BlockTags.SMALL_FLOWERS.contains(state.getBlock())),
+                    (level, start, offset, pos, state, c) -> state.is(BlockTags.SMALL_FLOWERS)),
             '0', ModBlocks.OFFERING_TABLE,
             ' ', Matcher.wildcard());
     public static final IMultiblock ANIMAL_SPAWNER = NaturesAuraAPI.instance().createMultiblock(

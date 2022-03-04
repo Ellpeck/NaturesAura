@@ -68,7 +68,7 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
     private boolean isApplicable(List<Ingredient> ingredients) {
         for (var ing : ingredients) {
             for (var stack : ing.getItems()) {
-                if (stack.getItem().getTags().stream().anyMatch(t -> t.getPath().startsWith("ores/")))
+                if (stack.getTags().anyMatch(t -> t.location().getPath().startsWith("ores/")))
                     return true;
             }
         }

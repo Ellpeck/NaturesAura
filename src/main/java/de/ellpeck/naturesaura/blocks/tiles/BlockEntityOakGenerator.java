@@ -22,7 +22,7 @@ public class BlockEntityOakGenerator extends BlockEntityImpl implements ITickabl
         if (!this.level.isClientSide)
             while (!this.scheduledBigTrees.isEmpty()) {
                 var pos = this.scheduledBigTrees.remove();
-                if (this.level.getBlockState(pos).getBlock().getTags().contains(BlockTags.LOGS.getName())) {
+                if (this.level.getBlockState(pos).is(BlockTags.LOGS)) {
                     var toAdd = 100000;
                     var canGen = this.canGenerateRightNow(toAdd);
                     if (canGen)

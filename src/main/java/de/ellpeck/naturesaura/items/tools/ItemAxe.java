@@ -48,7 +48,7 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
         if (itemstack.getItem() == ModItems.SKY_AXE) {
-            if (player.level.getBlockState(pos).getBlock().getTags().contains(BlockTags.LOGS.getName())) {
+            if (player.level.getBlockState(pos).is(BlockTags.LOGS)) {
                 BlockEntityWoodStand.recurseTreeDestruction(player.level, pos, pos, false, true);
                 return true;
             }

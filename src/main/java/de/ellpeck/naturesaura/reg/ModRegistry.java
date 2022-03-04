@@ -24,6 +24,9 @@ import de.ellpeck.naturesaura.recipes.EnabledCondition;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.StructureFeatures;
+import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -42,6 +45,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -214,9 +219,9 @@ public final class ModRegistry {
                 new ItemArmor("sky_chest", ModArmorMaterial.SKY, EquipmentSlot.CHEST),
                 new ItemArmor("sky_pants", ModArmorMaterial.SKY, EquipmentSlot.LEGS),
                 new ItemArmor("sky_shoes", ModArmorMaterial.SKY, EquipmentSlot.FEET),
-                new ItemStructureFinder("fortress_finder", StructureFeature.NETHER_BRIDGE, 0xba2800, 1024),
-                new ItemStructureFinder("end_city_finder", StructureFeature.END_CITY, 0xca5cd6, 1024),
-                new ItemStructureFinder("outpost_finder", StructureFeature.PILLAGER_OUTPOST, 0xab9f98, 2048),
+                new ItemStructureFinder("fortress_finder", StructureFeatures.FORTRESS, 0xba2800, 1024),
+                new ItemStructureFinder("end_city_finder", StructureFeatures.END_CITY, 0xca5cd6, 1024),
+                new ItemStructureFinder("outpost_finder", StructureFeatures.PILLAGER_OUTPOST, 0xab9f98, 2048),
                 new ItemBreakPrevention(),
                 new ItemPetReviver(),
                 new ItemNetheriteFinder()
@@ -313,25 +318,19 @@ public final class ModRegistry {
     }
 
     public static void init() {
-        // register features 27 more times for some reason
-        for (var entry : ModFeatures.Configured.class.getFields()) {
-            try {
-                var feature = (ConfiguredFeature<?, ?>) entry.get(null);
-                Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, feature.feature.getRegistryName(), feature);
-            } catch (IllegalAccessException e) {
-                NaturesAura.LOGGER.error(e);
-            }
-        }
-        for (var entry : ModFeatures.Placed.class.getFields()) {
-            try {
-                var placed = (PlacedFeature) entry.get(null);
-                // why are you making this so difficult for me
-                Supplier<ConfiguredFeature<?, ?>> feature = ObfuscationReflectionHelper.getPrivateValue(PlacedFeature.class, placed, "f_191775_");
-                Registry.register(BuiltinRegistries.PLACED_FEATURE, feature.get().feature.getRegistryName(), placed);
-            } catch (IllegalAccessException e) {
-                NaturesAura.LOGGER.error(e);
-            }
-        }
+        ModFeatures.Configured.AURA_BLOOM = FeatureUtils.register(ModFeatures.AURA_BLOOM.getRegistryName().toString(), ModFeatures.AURA_BLOOM, NoneFeatureConfiguration.INSTANCE);
+        ModFeatures.Configured.AURA_CACTUS = FeatureUtils.register(ModFeatures.AURA_CACTUS.getRegistryName().toString(), ModFeatures.AURA_CACTUS, NoneFeatureConfiguration.INSTANCE);
+        ModFeatures.Configured.WARPED_AURA_MUSHROOM = FeatureUtils.register(ModFeatures.WARPED_AURA_MUSHROOM.getRegistryName().toString(), ModFeatures.WARPED_AURA_MUSHROOM, NoneFeatureConfiguration.INSTANCE);
+        ModFeatures.Configured.CRIMSON_AURA_MUSHROOM = FeatureUtils.register(ModFeatures.CRIMSON_AURA_MUSHROOM.getRegistryName().toString(), ModFeatures.CRIMSON_AURA_MUSHROOM, NoneFeatureConfiguration.INSTANCE);
+        ModFeatures.Configured.AURA_MUSHROOM = FeatureUtils.register(ModFeatures.AURA_MUSHROOM.getRegistryName().toString(), ModFeatures.AURA_MUSHROOM, NoneFeatureConfiguration.INSTANCE);
+        ModFeatures.Configured.ANCIENT_TREE = FeatureUtils.register(ModFeatures.ANCIENT_TREE.getRegistryName().toString(), ModFeatures.ANCIENT_TREE, new TreeConfiguration.TreeConfigurationBuilder(null, null, null, null, null).build());
+        ModFeatures.Configured.NETHER_WART_MUSHROOM = FeatureUtils.register(ModFeatures.NETHER_WART_MUSHROOM.getRegistryName().toString(), ModFeatures.NETHER_WART_MUSHROOM, NoneFeatureConfiguration.INSTANCE);
+
+        ModFeatures.Placed.AURA_BLOOM = PlacementUtils.register(ModFeatures.AURA_BLOOM.getRegistryName().toString(), ModFeatures.Configured.AURA_BLOOM);
+        ModFeatures.Placed.AURA_CACTUS = PlacementUtils.register(ModFeatures.AURA_CACTUS.getRegistryName().toString(), ModFeatures.Configured.AURA_CACTUS);
+        ModFeatures.Placed.WARPED_AURA_MUSHROOM = PlacementUtils.register(ModFeatures.WARPED_AURA_MUSHROOM.getRegistryName().toString(), ModFeatures.Configured.WARPED_AURA_MUSHROOM);
+        ModFeatures.Placed.CRIMSON_AURA_MUSHROOM = PlacementUtils.register(ModFeatures.CRIMSON_AURA_MUSHROOM.getRegistryName().toString(), ModFeatures.Configured.CRIMSON_AURA_MUSHROOM);
+        ModFeatures.Placed.AURA_MUSHROOM = PlacementUtils.register(ModFeatures.AURA_MUSHROOM.getRegistryName().toString(), ModFeatures.Configured.AURA_MUSHROOM);
     }
 
     public static Block createFlowerPot(Block block) {

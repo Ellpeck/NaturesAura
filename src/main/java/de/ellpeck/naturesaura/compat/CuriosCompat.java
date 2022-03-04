@@ -93,7 +93,7 @@ public class CuriosCompat implements ICompat {
     @Override
     public void addItemTags(ItemTagProvider provider) {
         for (var entry : TYPES.entrySet()) {
-            var tag = ItemTags.createOptional(new ResourceLocation("curios", entry.getValue()));
+            var tag = ItemTags.create(new ResourceLocation("curios", entry.getValue()));
             provider.tag(tag).add(entry.getKey());
         }
     }

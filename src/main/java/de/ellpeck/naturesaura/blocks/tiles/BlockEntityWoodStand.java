@@ -133,7 +133,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
                 for (var z = -1; z <= 1; z++) {
                     var offset = pos.offset(x, y, z);
                     var state = level.getBlockState(offset);
-                    if (state.getBlock().getTags().contains(BlockTags.LOGS.getName()) || includeLeaves && state.getBlock() instanceof LeavesBlock) {
+                    if (state.is(BlockTags.LOGS) || includeLeaves && state.getBlock() instanceof LeavesBlock) {
                         if (drop) {
                             level.destroyBlock(offset, true);
                         } else {
@@ -154,7 +154,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
         }
         for (var i = 0; i < 2; i++) {
             var state = this.level.getBlockState(this.ritualPos.above(i));
-            if (!(state.getBlock().getTags().contains(BlockTags.LOGS.getName())))
+            if (!(state.is(BlockTags.LOGS)))
                 return false;
         }
         if (this.timer < this.recipe.time / 2) {

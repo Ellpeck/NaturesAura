@@ -80,8 +80,7 @@ public class NetherGrassEffect implements IDrainSpotEffect {
                         continue;
 
                     var state = level.getBlockState(goalPos);
-                    var block = state.getBlock();
-                    if (Tags.Blocks.NETHERRACK.contains(block)) {
+                    if (state.is(Tags.Blocks.NETHERRACK)) {
                         level.setBlockAndUpdate(goalPos, ModBlocks.NETHER_GRASS.defaultBlockState());
 
                         var closestSpot = IAuraChunk.getHighestSpot(level, goalPos, 25, pos);
