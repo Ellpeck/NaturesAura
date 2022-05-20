@@ -20,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class AuraChunk implements IAuraChunk {
     private final IAuraType type;
     private final Map<BlockPos, MutableInt> drainSpots = new ConcurrentHashMap<>();
     private final Table<BlockPos, Integer, Pair<Integer, Integer>> auraAndSpotAmountCache = HashBasedTable.create();
+    private final Table<BlockPos, Integer, Pair<BlockPos, Integer>[]> limitSpotCache = HashBasedTable.create();
     private final List<IDrainSpotEffect> effects = new ArrayList<>();
     private boolean needsSync;
 
@@ -143,6 +145,7 @@ public class AuraChunk implements IAuraChunk {
         this.chunk.setUnsaved(true);
         this.needsSync = true;
         this.auraAndSpotAmountCache.clear();
+        this.limitSpotCache.clear();
         this.addOrRemoveAsActive();
     }
 
@@ -190,6 +193,31 @@ public class AuraChunk implements IAuraChunk {
             });
             ret = Pair.of(aura.intValue(), spots.intValue());
             this.auraAndSpotAmountCache.put(pos, radius, ret);
+        }
+        return ret;
+    }
+
+    public Pair<BlockPos, Integer>[] getLowestAndHighestSpots(BlockPos pos, int radius) {
+        var ret = this.limitSpotCache.get(pos, radius);
+        if (ret == null) {
+            var lowestSpot = new MutableObject<BlockPos>();
+            var highestSpot = new MutableObject<BlockPos>();
+            var lowestAmount = new MutableInt(Integer.MAX_VALUE);
+            var highestAmount = new MutableInt(Integer.MIN_VALUE);
+            this.getSpots(pos, radius, (p, i) -> {
+                if (i > highestAmount.intValue()) {
+                    highestAmount.setValue(i);
+                    highestSpot.setValue(p);
+                }
+                if (i < lowestAmount.intValue()) {
+                    lowestAmount.setValue(i);
+                    lowestSpot.setValue(p);
+                }
+            });
+            ret = new Pair[]{
+                    Pair.of(lowestSpot.getValue(), lowestAmount.intValue()),
+                    Pair.of(highestSpot.getValue(), highestAmount.intValue())};
+            this.limitSpotCache.put(pos, radius, ret);
         }
         return ret;
     }

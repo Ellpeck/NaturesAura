@@ -152,10 +152,11 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     public BlockPos getLowestAuraDrainSpot(Level level, BlockPos pos, int radius, BlockPos defaultSpot) {
         var lowestAmount = new MutableInt(Integer.MAX_VALUE);
         var lowestSpot = new MutableObject<BlockPos>();
-        this.getAuraSpotsInArea(level, pos, radius, (blockPos, drainSpot) -> {
-            if (drainSpot < lowestAmount.intValue()) {
-                lowestAmount.setValue(drainSpot);
-                lowestSpot.setValue(blockPos);
+        Helper.getAuraChunksWithSpotsInArea(level, pos, radius, c -> {
+            var spot = c.getLowestAndHighestSpots(pos, radius)[0];
+            if (spot.getRight() < lowestAmount.intValue()) {
+                lowestAmount.setValue(spot.getRight());
+                lowestSpot.setValue(spot.getLeft());
             }
         });
         var lowest = lowestSpot.getValue();
@@ -168,10 +169,11 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     public BlockPos getHighestAuraDrainSpot(Level level, BlockPos pos, int radius, BlockPos defaultSpot) {
         var highestAmount = new MutableInt(Integer.MIN_VALUE);
         var highestSpot = new MutableObject<BlockPos>();
-        this.getAuraSpotsInArea(level, pos, radius, (blockPos, drainSpot) -> {
-            if (drainSpot > highestAmount.intValue()) {
-                highestAmount.setValue(drainSpot);
-                highestSpot.setValue(blockPos);
+        Helper.getAuraChunksWithSpotsInArea(level, pos, radius, c -> {
+            var spot = c.getLowestAndHighestSpots(pos, radius)[1];
+            if (spot.getRight() > highestAmount.intValue()) {
+                highestAmount.setValue(spot.getRight());
+                highestSpot.setValue(spot.getLeft());
             }
         });
         var highest = highestSpot.getValue();
