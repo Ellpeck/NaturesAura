@@ -37,7 +37,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         var entity = event.getEntityLiving();
-        if (entity.level.isClientSide || entity.level.getGameTime() % 40 != 0 || !(entity instanceof Animal) || entity instanceof Mob || entity instanceof Npc)
+        if (entity.level.isClientSide || entity.level.getGameTime() % 40 != 0 || !(entity instanceof Animal) || entity instanceof Npc)
             return;
         var data = entity.getPersistentData();
         var timeAlive = data.getInt(NaturesAura.MOD_ID + ":time_alive");
@@ -47,7 +47,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
         var entity = event.getEntityLiving();
-        if (entity.level.isClientSide || !(entity instanceof Animal) || entity instanceof Mob || entity instanceof Npc)
+        if (entity.level.isClientSide || !(entity instanceof Animal) || entity instanceof Npc)
             return;
         var pos = entity.blockPosition();
         Helper.getBlockEntitiesInArea(entity.level, pos, 5, tile -> {
