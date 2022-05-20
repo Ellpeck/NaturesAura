@@ -109,20 +109,20 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
 
     @Override
     public void getAuraSpotsInArea(Level level, BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
-        Helper.getAuraChunksWithSpotsInArea(level, pos, radius, chunk -> chunk.getSpotsInArea(pos, radius, consumer));
+        Helper.getAuraChunksWithSpotsInArea(level, pos, radius, chunk -> chunk.getSpots(pos, radius, consumer));
     }
 
     @Override
     public int getSpotAmountInArea(Level level, BlockPos pos, int radius) {
         var result = new MutableInt();
-        this.getAuraSpotsInArea(level, pos, radius, (blockpos, drainSpot) -> result.increment());
+        Helper.getAuraChunksWithSpotsInArea(level, pos, radius, chunk -> result.add(chunk.getAuraAndSpotAmount(pos, radius).getRight()));
         return result.intValue();
     }
 
     @Override
     public int getAuraInArea(Level level, BlockPos pos, int radius) {
         var result = new MutableInt(IAuraChunk.DEFAULT_AURA);
-        this.getAuraSpotsInArea(level, pos, radius, (blockPos, drainSpot) -> result.add(drainSpot));
+        Helper.getAuraChunksWithSpotsInArea(level, pos, radius, chunk -> result.add(chunk.getAuraAndSpotAmount(pos, radius).getLeft()));
         return result.intValue();
     }
 
@@ -130,9 +130,10 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     public Pair<Integer, Integer> getAuraAndSpotAmountInArea(Level level, BlockPos pos, int radius) {
         var spots = new MutableInt();
         var aura = new MutableInt(IAuraChunk.DEFAULT_AURA);
-        this.getAuraSpotsInArea(level, pos, radius, (blockPos, drainSpot) -> {
-            aura.add(drainSpot);
-            spots.increment();
+        Helper.getAuraChunksWithSpotsInArea(level, pos, radius, chunk -> {
+            var auraAndSpots = chunk.getAuraAndSpotAmount(pos, radius);
+            aura.add(auraAndSpots.getLeft());
+            spots.add(auraAndSpots.getRight());
         });
         return Pair.of(aura.intValue(), spots.intValue());
     }

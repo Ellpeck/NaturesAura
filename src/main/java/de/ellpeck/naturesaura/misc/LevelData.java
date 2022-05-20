@@ -1,7 +1,9 @@
 package de.ellpeck.naturesaura.misc;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Table;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
@@ -21,6 +23,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,6 +33,7 @@ public class LevelData implements ILevelData {
 
     public final ListMultimap<ResourceLocation, Tuple<Vec3, Integer>> effectPowders = ArrayListMultimap.create();
     public final Long2ObjectOpenHashMap<AuraChunk> auraChunksWithSpots = new Long2ObjectOpenHashMap<>();
+    public final Table<BlockPos, Integer, Pair<Integer, Integer>> auraAndSpotAmountCache = HashBasedTable.create();
     public final List<BlockPos> recentlyConvertedMossStones = new ArrayList<>();
     public final Set<BlockEntitySpawnLamp> spawnLamps = new HashSet<>();
     private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();

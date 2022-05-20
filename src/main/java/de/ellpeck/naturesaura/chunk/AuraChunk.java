@@ -1,5 +1,7 @@
 package de.ellpeck.naturesaura.chunk;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
@@ -18,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,7 @@ public class AuraChunk implements IAuraChunk {
     private final LevelChunk chunk;
     private final IAuraType type;
     private final Map<BlockPos, MutableInt> drainSpots = new ConcurrentHashMap<>();
+    private final Table<BlockPos, Integer, Pair<Integer, Integer>> auraAndSpotAmountCache = HashBasedTable.create();
     private final List<IDrainSpotEffect> effects = new ArrayList<>();
     private boolean needsSync;
 
@@ -138,6 +142,7 @@ public class AuraChunk implements IAuraChunk {
     public void markDirty() {
         this.chunk.setUnsaved(true);
         this.needsSync = true;
+        this.auraAndSpotAmountCache.clear();
         this.addOrRemoveAsActive();
     }
 
@@ -165,13 +170,28 @@ public class AuraChunk implements IAuraChunk {
         return new PacketAuraChunk(pos.x, pos.z, this.drainSpots);
     }
 
-    public void getSpotsInArea(BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
+    public void getSpots(BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
         for (var entry : this.drainSpots.entrySet()) {
             var drainPos = entry.getKey();
             if (drainPos.distSqr(pos) <= radius * radius) {
                 consumer.accept(drainPos, entry.getValue().intValue());
             }
         }
+    }
+
+    public Pair<Integer, Integer> getAuraAndSpotAmount(BlockPos pos, int radius) {
+        var ret = this.auraAndSpotAmountCache.get(pos, radius);
+        if (ret == null) {
+            var aura = new MutableInt();
+            var spots = new MutableInt();
+            this.getSpots(pos, radius, (p, i) -> {
+                aura.add(i);
+                spots.increment();
+            });
+            ret = Pair.of(aura.intValue(), spots.intValue());
+            this.auraAndSpotAmountCache.put(pos, radius, ret);
+        }
+        return ret;
     }
 
     public void getActiveEffectIcons(Player player, Map<ResourceLocation, Tuple<ItemStack, Boolean>> icons) {
