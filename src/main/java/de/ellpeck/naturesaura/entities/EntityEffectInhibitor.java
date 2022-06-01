@@ -136,8 +136,8 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source instanceof EntityDamageSource && !this.level.isClientSide) {
-            this.kill();
             this.spawnAtLocation(this.getDrop(), 0F);
+            this.kill();
             return true;
         } else {
             return super.hurt(source, amount);
