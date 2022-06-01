@@ -118,7 +118,7 @@ public class PatchouliCompat implements ICompat {
 
             if (event.getMouseX() >= x && event.getMouseY() >= y && event.getMouseX() < x + 45 && event.getMouseY() < y + 26)
                 gui.renderComponentTooltip(event.getPoseStack(),
-                        Collections.singletonList(new TextComponent("§6Happy §4P§6r§ei§2d§9e§5!")),
+                        Collections.singletonList(new TextComponent("\u00A76Happy \u00A74P\u00A76r\u00A7ei\u00A72d\u00A79e\u00A75!")),
                         event.getMouseX(), event.getMouseY(), gui.getMinecraft().font);
         }
 
