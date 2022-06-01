@@ -15,7 +15,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockTagProvider extends BlockTagsProvider {
 
+    public static final TagKey<Block> ALTAR_WOOD = BlockTags.create(new ResourceLocation(NaturesAura.MOD_ID, "altar_wood"));
+    public static final TagKey<Block> ALTAR_STONE = BlockTags.create(new ResourceLocation(NaturesAura.MOD_ID, "altar_stone"));
     public static final TagKey<Block> NETHER_ALTAR_WOOD = BlockTags.create(new ResourceLocation(NaturesAura.MOD_ID, "nether_altar_wood"));
+    public static final TagKey<Block> NETHER_ALTAR_STONE = BlockTags.create(new ResourceLocation(NaturesAura.MOD_ID, "nether_altar_stone"));
 
     public BlockTagProvider(DataGenerator gen, @Nullable ExistingFileHelper existingFileHelper) {
         super(gen, NaturesAura.MOD_ID, existingFileHelper);
@@ -31,6 +34,10 @@ public class BlockTagProvider extends BlockTagsProvider {
         this.tag(BlockTags.SLABS).add(ModBlocks.ANCIENT_SLAB, ModBlocks.INFUSED_SLAB, ModBlocks.INFUSED_BRICK_SLAB);
         this.tag(BlockTags.DIRT).add(ModBlocks.NETHER_GRASS);
         this.tag(BlockTags.SMALL_FLOWERS).add(ModBlocks.END_FLOWER, ModBlocks.AURA_BLOOM);
+        this.tag(ALTAR_WOOD).addTag(BlockTags.PLANKS);
+        this.tag(ALTAR_STONE).addTag(BlockTags.STONE_BRICKS);
         this.tag(NETHER_ALTAR_WOOD).add(Blocks.CRIMSON_PLANKS, Blocks.WARPED_PLANKS);
+        this.tag(NETHER_ALTAR_STONE).add(Blocks.NETHER_BRICKS);
+
     }
 }
