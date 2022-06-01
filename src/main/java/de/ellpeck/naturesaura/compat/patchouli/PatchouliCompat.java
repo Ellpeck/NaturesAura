@@ -110,7 +110,7 @@ public class PatchouliCompat implements ICompat {
                         event.getMouseX(), event.getMouseY(), gui.getMinecraft().font);
         } else if (now.getMonth() == Month.JUNE) {
             var x = gui.width / 2 + 272 / 2;
-            var y = gui.height / 2 - 180 / 2 + 16;
+            var y = gui.height / 2 + 32;
 
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, ClientEvents.BOOK_GUI);
