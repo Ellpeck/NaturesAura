@@ -39,22 +39,6 @@ public class CommonEvents {
     private static final Method GET_LOADED_CHUNKS_METHOD = ObfuscationReflectionHelper.findMethod(ChunkMap.class, "m_140416_");
     private static final ListMultimap<UUID, ChunkPos> PENDING_AURA_CHUNKS = ArrayListMultimap.create();
 
-    // TODO apparently this changed a ton to some weird biome modifier thing
-    /*@SubscribeEvent
-    public void onBiomeLoad(BiomeLoadingEvent event) {
-        if (ModConfig.instance.auraBlooms.get()) {
-            event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Placed.AURA_BLOOM);
-            switch (event.getCategory()) {
-                case DESERT -> event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Placed.AURA_CACTUS);
-                case NETHER -> {
-                    event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Placed.CRIMSON_AURA_MUSHROOM);
-                    event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Placed.WARPED_AURA_MUSHROOM);
-                }
-                case MUSHROOM -> event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Placed.AURA_MUSHROOM);
-            }
-        }
-    }*/
-
     @SubscribeEvent
     public void onChunkCapsAttach(AttachCapabilitiesEvent<LevelChunk> event) {
         var chunk = event.getObject();

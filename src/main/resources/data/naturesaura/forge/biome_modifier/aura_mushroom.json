@@ -1,0 +1,6 @@
+{
+    "type": "forge:add_features",
+    "biomes": "#forge:is_mushroom",
+    "features": "naturesaura:aura_mushroom",
+    "step": "vegetal_decoration"
+}
