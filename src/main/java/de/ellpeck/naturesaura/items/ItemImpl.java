@@ -16,7 +16,7 @@ public class ItemImpl extends Item implements IModItem {
     public ItemImpl(String baseName, Item.Properties properties) {
         super(properties.tab(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     @Override

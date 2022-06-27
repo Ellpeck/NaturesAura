@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -32,7 +33,7 @@ import java.util.function.Supplier;
 
 public class BlockAuraTimer extends BlockContainerImpl implements ICustomBlockState, ITESRProvider<BlockEntityAuraTimer>, ICustomRenderType {
 
-    private static final VoxelShape SHAPE = box(1, 0, 1, 15, 15, 15);
+    private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 15, 15);
 
     public BlockAuraTimer() {
         super("aura_timer", BlockEntityAuraTimer.class, Properties.copy(Blocks.SMOOTH_STONE));
@@ -46,7 +47,7 @@ public class BlockAuraTimer extends BlockContainerImpl implements ICustomBlockSt
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return BlockAuraTimer.SHAPE;
     }
 
     @Override
@@ -75,7 +76,7 @@ public class BlockAuraTimer extends BlockContainerImpl implements ICustomBlockSt
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel levelIn, BlockPos pos, RandomSource random) {
         super.tick(state, levelIn, pos, random);
         if (state.getValue(BlockStateProperties.POWERED))
             levelIn.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, false));

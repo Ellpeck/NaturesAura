@@ -41,7 +41,7 @@ public class SupporterFancyHandler {
         var mc = Minecraft.getInstance();
         if (player == mc.player && mc.options.getCameraType() == CameraType.FIRST_PERSON)
             return;
-        var info = FANCY_INFOS.get(player.getGameProfile().getName());
+        var info = SupporterFancyHandler.FANCY_INFOS.get(player.getGameProfile().getName());
         if (info == null)
             return;
 
@@ -89,7 +89,7 @@ public class SupporterFancyHandler {
                     var object = entry.getValue().getAsJsonObject();
                     var tier = object.get("tier").getAsInt();
                     var color = object.has("color") ? Integer.parseInt(object.get("color").getAsString(), 16) : 0;
-                    FANCY_INFOS.put(entry.getKey(), new FancyInfo(tier, color));
+                    SupporterFancyHandler.FANCY_INFOS.put(entry.getKey(), new FancyInfo(tier, color));
                 }
 
                 reader.close();

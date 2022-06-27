@@ -16,19 +16,19 @@ public class BlockCatalyst extends BlockImpl implements ICustomBlockState {
 
     public BlockCatalyst(String baseName, Properties properties) {
         super(baseName, properties);
-        this.registerDefaultState(this.defaultBlockState().setValue(NETHER, false));
+        this.registerDefaultState(this.defaultBlockState().setValue(BlockCatalyst.NETHER, false));
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         var nether = IAuraType.forLevel(context.getLevel()).isSimilar(NaturesAuraAPI.TYPE_NETHER);
-        return super.getStateForPlacement(context).setValue(NETHER, nether);
+        return super.getStateForPlacement(context).setValue(BlockCatalyst.NETHER, nether);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(NETHER);
+        builder.add(BlockCatalyst.NETHER);
     }
 
     @Override

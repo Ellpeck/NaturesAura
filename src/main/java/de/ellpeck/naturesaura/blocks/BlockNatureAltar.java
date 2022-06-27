@@ -36,7 +36,7 @@ public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvide
 
     public BlockNatureAltar() {
         super("nature_altar", BlockEntityNatureAltar.class, Block.Properties.of(Material.STONE).strength(4F));
-        this.registerDefaultState(this.defaultBlockState().setValue(NETHER, false));
+        this.registerDefaultState(this.defaultBlockState().setValue(BlockNatureAltar.NETHER, false));
     }
 
     @Override
@@ -46,7 +46,7 @@ public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvide
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return BlockNatureAltar.SHAPE;
     }
 
     @Override
@@ -63,14 +63,14 @@ public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvide
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(NETHER);
+        builder.add(BlockNatureAltar.NETHER);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         var nether = IAuraType.forLevel(context.getLevel()).isSimilar(NaturesAuraAPI.TYPE_NETHER);
-        return super.getStateForPlacement(context).setValue(NETHER, nether);
+        return super.getStateForPlacement(context).setValue(BlockNatureAltar.NETHER, nether);
     }
 
     @Override

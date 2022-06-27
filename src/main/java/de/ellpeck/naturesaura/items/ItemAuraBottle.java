@@ -10,7 +10,6 @@ import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -43,7 +42,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
             var dispense = stack.split(1);
             if (offsetState.isAir()) {
                 if (IAuraChunk.getAuraInArea(level, offset, 30) >= 100000) {
-                    dispense = setType(new ItemStack(ItemAuraBottle.this), IAuraType.forLevel(level));
+                    dispense = ItemAuraBottle.setType(new ItemStack(ItemAuraBottle.this), IAuraType.forLevel(level));
 
                     var spot = IAuraChunk.getHighestSpot(level, offset, 30, offset);
                     IAuraChunk.getAuraChunk(level, spot).drainAura(spot, 20000);
@@ -71,10 +70,10 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
 
     @Override
     public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
-        if (this.allowdedIn(tab)) {
+        if (this.allowedIn(tab)) {
             for (var type : NaturesAuraAPI.AURA_TYPES.values()) {
                 var stack = new ItemStack(this);
-                setType(stack, type);
+                ItemAuraBottle.setType(stack, type);
                 items.add(stack);
             }
         }
@@ -82,13 +81,13 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
 
     @Override
     public Component getName(ItemStack stack) {
-        return new TranslatableComponent(stack.getDescriptionId() + "." + getType(stack).getName());
+        return Component.translatable(stack.getDescriptionId() + "." + ItemAuraBottle.getType(stack).getName());
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public ItemColor getItemColor() {
-        return (stack, tintIndex) -> tintIndex > 0 ? getType(stack).getColor() : 0xFFFFFF;
+        return (stack, tintIndex) -> tintIndex > 0 ? ItemAuraBottle.getType(stack).getColor() : 0xFFFFFF;
     }
 
     @Override
@@ -106,7 +105,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
             if (held.isEmpty() || held.getItem() != ModItems.BOTTLE_TWO_THE_REBOTTLING)
                 return;
             var player = event.getPlayer();
-            HitResult ray = getPlayerPOVHitResult(player.level, player, ClipContext.Fluid.NONE);
+            HitResult ray = Item.getPlayerPOVHitResult(player.level, player, ClipContext.Fluid.NONE);
             if (ray.getType() == HitResult.Type.BLOCK)
                 return;
             var pos = player.blockPosition();
@@ -116,7 +115,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
             if (!player.level.isClientSide) {
                 held.shrink(1);
 
-                player.getInventory().add(setType(new ItemStack(ItemAuraBottle.this), IAuraType.forLevel(player.level)));
+                player.getInventory().add(ItemAuraBottle.setType(new ItemStack(ItemAuraBottle.this), IAuraType.forLevel(player.level)));
 
                 var spot = IAuraChunk.getHighestSpot(player.level, pos, 30, pos);
                 IAuraChunk.getAuraChunk(player.level, spot).drainAura(spot, 20000);

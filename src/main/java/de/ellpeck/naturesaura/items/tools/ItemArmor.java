@@ -35,11 +35,11 @@ public class ItemArmor extends ArmorItem implements IModItem {
     public ItemArmor(String baseName, ArmorMaterial materialIn, EquipmentSlot equipmentSlotIn) {
         super(materialIn, equipmentSlotIn, new Properties().tab(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     public static boolean isFullSetEquipped(LivingEntity entity, ArmorMaterial material) {
-        var set = SETS.computeIfAbsent(material, m -> ForgeRegistries.ITEMS.getValues().stream()
+        var set = ItemArmor.SETS.computeIfAbsent(material, m -> ForgeRegistries.ITEMS.getValues().stream()
                 .filter(i -> i instanceof ItemArmor && ((ItemArmor) i).getMaterial() == material)
                 .sorted(Comparator.comparingInt(i -> ((ItemArmor) i).getSlot().ordinal()))
                 .toArray(Item[]::new));
@@ -70,7 +70,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
         public static void onAttack(LivingAttackEvent event) {
             var entity = event.getEntityLiving();
             if (!entity.level.isClientSide) {
-                if (!isFullSetEquipped(entity, ModArmorMaterial.INFUSED))
+                if (!ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.INFUSED))
                     return;
                 var source = event.getSource().getEntity();
                 if (source instanceof LivingEntity)
@@ -84,18 +84,18 @@ public class ItemArmor extends ArmorItem implements IModItem {
             var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
             var key = NaturesAura.MOD_ID + ":sky_equipped";
             var nbt = player.getPersistentData();
-            var equipped = isFullSetEquipped(player, ModArmorMaterial.SKY);
+            var equipped = ItemArmor.isFullSetEquipped(player, ModArmorMaterial.SKY);
             if (equipped && !nbt.getBoolean(key)) {
                 // we just equipped it
                 nbt.putBoolean(key, true);
                 player.maxUpStep = 1.1F;
-                if (!speed.hasModifier(SKY_MOVEMENT_MODIFIER))
-                    speed.addPermanentModifier(SKY_MOVEMENT_MODIFIER);
+                if (!speed.hasModifier(ItemArmor.SKY_MOVEMENT_MODIFIER))
+                    speed.addPermanentModifier(ItemArmor.SKY_MOVEMENT_MODIFIER);
             } else if (!equipped && nbt.getBoolean(key)) {
                 // we just unequipped it
                 nbt.putBoolean(key, false);
                 player.maxUpStep = 0.6F;
-                speed.removeModifier(SKY_MOVEMENT_MODIFIER);
+                speed.removeModifier(ItemArmor.SKY_MOVEMENT_MODIFIER);
             }
         }
     }

@@ -73,6 +73,6 @@ public class BreathlessEffect implements IDrainSpotEffect {
 
     @Override
     public ResourceLocation getName() {
-        return NAME;
+        return BreathlessEffect.NAME;
     }
 }

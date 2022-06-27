@@ -9,8 +9,10 @@ import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
@@ -20,11 +22,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Random;
-
 public class BlockChunkLoader extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
-    private static final VoxelShape SHAPE = box(4, 4, 4, 12, 12, 12);
+    private static final VoxelShape SHAPE = Block.box(4, 4, 4, 12, 12, 12);
 
     public BlockChunkLoader() {
         super("chunk_loader", BlockEntityChunkLoader.class, Properties.of(Material.STONE).strength(3F).sound(SoundType.STONE));
@@ -43,12 +43,12 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
             var range = ((BlockEntityChunkLoader) tile).range();
             if (range > 0) {
                 return new AABB(
-                        (pos.getX() - range) >> 4 << 4,
+                        pos.getX() - range >> 4 << 4,
                         0,
-                        (pos.getZ() - range) >> 4 << 4,
-                        ((pos.getX() + range) >> 4 << 4) + 16,
+                        pos.getZ() - range >> 4 << 4,
+                        (pos.getX() + range >> 4 << 4) + 16,
                         level.getHeight(),
-                        ((pos.getZ() + range) >> 4 << 4) + 16);
+                        (pos.getZ() + range >> 4 << 4) + 16);
             }
         }
         return null;
@@ -56,7 +56,7 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, RandomSource rand) {
         if (!ModConfig.instance.chunkLoader.get())
             return;
         var tile = levelIn.getBlockEntity(pos);
@@ -78,7 +78,7 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return BlockChunkLoader.SHAPE;
     }
 
     @Override

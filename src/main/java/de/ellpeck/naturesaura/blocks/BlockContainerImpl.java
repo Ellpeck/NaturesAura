@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -48,8 +49,8 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
         this.tileClass = tileClass;
         this.tileType = new ModTileType<>(this::createBlockEntity, this);
 
-        ModRegistry.add(this);
-        ModRegistry.add(this.tileType);
+        ModRegistry.ALL_ITEMS.add(this);
+        ModRegistry.ALL_ITEMS.add(this.tileType);
 
         if (this.hasWaterlogging())
             this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
@@ -166,7 +167,7 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerLevel levelIn, BlockPos pos, RandomSource random) {
         if (!levelIn.isClientSide) {
             var tile = levelIn.getBlockEntity(pos);
             if (tile instanceof BlockEntityImpl impl) {

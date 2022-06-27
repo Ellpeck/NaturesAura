@@ -23,12 +23,12 @@ public class BlockAutoCrafter extends BlockContainerImpl implements ICustomBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(FACING);
+        builder.add(BlockAutoCrafter.FACING);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return super.getStateForPlacement(context).setValue(FACING, context.getPlayer().getDirection());
+        return super.getStateForPlacement(context).setValue(BlockAutoCrafter.FACING, context.getPlayer().getDirection());
     }
 
     @Override

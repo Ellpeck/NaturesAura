@@ -27,11 +27,11 @@ public class EnabledCondition implements ICondition {
 
     @Override
     public ResourceLocation getID() {
-        return NAME;
+        return EnabledCondition.NAME;
     }
 
     @Override
-    public boolean test() {
+    public boolean test(IContext context) {
         return this.config != null && this.config.get();
     }
 

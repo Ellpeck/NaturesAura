@@ -34,10 +34,10 @@ public class BlockTagProvider extends BlockTagsProvider {
         this.tag(BlockTags.SLABS).add(ModBlocks.ANCIENT_SLAB, ModBlocks.INFUSED_SLAB, ModBlocks.INFUSED_BRICK_SLAB);
         this.tag(BlockTags.DIRT).add(ModBlocks.NETHER_GRASS);
         this.tag(BlockTags.SMALL_FLOWERS).add(ModBlocks.END_FLOWER, ModBlocks.AURA_BLOOM);
-        this.tag(ALTAR_WOOD).addTag(BlockTags.PLANKS);
-        this.tag(ALTAR_STONE).addTag(BlockTags.STONE_BRICKS);
-        this.tag(NETHER_ALTAR_WOOD).add(Blocks.CRIMSON_PLANKS, Blocks.WARPED_PLANKS);
-        this.tag(NETHER_ALTAR_STONE).add(Blocks.NETHER_BRICKS);
+        this.tag(BlockTagProvider.ALTAR_WOOD).addTag(BlockTags.PLANKS);
+        this.tag(BlockTagProvider.ALTAR_STONE).addTag(BlockTags.STONE_BRICKS);
+        this.tag(BlockTagProvider.NETHER_ALTAR_WOOD).add(Blocks.CRIMSON_PLANKS, Blocks.WARPED_PLANKS);
+        this.tag(BlockTagProvider.NETHER_ALTAR_STONE).add(Blocks.NETHER_BRICKS);
 
     }
 }

@@ -1,19 +1,16 @@
 package de.ellpeck.naturesaura.compat.jei;
 
-import com.google.common.collect.ImmutableList;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.recipes.OfferingRecipe;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;
 
@@ -26,18 +23,13 @@ public class OfferingCategory implements IRecipeCategory<OfferingRecipe> {
     }
 
     @Override
-    public ResourceLocation getUid() {
+    public RecipeType<OfferingRecipe> getRecipeType() {
         return JEINaturesAuraPlugin.OFFERING;
     }
 
     @Override
-    public Class<? extends OfferingRecipe> getRecipeClass() {
-        return OfferingRecipe.class;
-    }
-
-    @Override
     public Component getTitle() {
-        return new TranslatableComponent("container." + JEINaturesAuraPlugin.OFFERING + ".name");
+        return Component.translatable("container." + JEINaturesAuraPlugin.OFFERING + ".name");
     }
 
     @Override
@@ -51,21 +43,9 @@ public class OfferingCategory implements IRecipeCategory<OfferingRecipe> {
     }
 
     @Override
-    public void setIngredients(OfferingRecipe offeringRecipe, IIngredients iIngredients) {
-        iIngredients.setInputs(VanillaTypes.ITEM, ImmutableList.<ItemStack>builder()
-                .add(offeringRecipe.input.getItems())
-                .add(offeringRecipe.startItem.getItems()).build());
-        iIngredients.setOutput(VanillaTypes.ITEM, offeringRecipe.output);
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, OfferingRecipe recipe, IIngredients ingredients) {
-        IGuiItemStackGroup group = recipeLayout.getItemStacks();
-        group.init(0, true, 0, 14);
-        group.set(0, Arrays.asList(recipe.input.getItems()));
-        group.init(1, false, 65, 14);
-        group.set(1, recipe.output);
-        group.init(2, true, 27, 0);
-        group.set(2, Arrays.asList(recipe.startItem.getItems()));
+    public void setRecipe(IRecipeLayoutBuilder builder, OfferingRecipe recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 0, 14).addItemStacks(Arrays.asList(recipe.input.getItems()));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 65, 14).addItemStack(recipe.output);
+        builder.addSlot(RecipeIngredientRole.INPUT, 27, 0).addItemStacks(Arrays.asList(recipe.startItem.getItems()));
     }
 }

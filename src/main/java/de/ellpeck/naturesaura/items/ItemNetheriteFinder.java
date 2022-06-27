@@ -9,7 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemNetheriteFinder extends ItemImpl {
 
@@ -35,7 +35,7 @@ public class ItemNetheriteFinder extends ItemImpl {
                     for (var z = -range; z <= range; z++) {
                         var offset = new BlockPos(pos.getX() + x, y, pos.getZ() + z);
                         var state = levelIn.getBlockState(offset);
-                        if (state.getBlock() == Blocks.ANCIENT_DEBRIS || state.getBlock().getRegistryName().toString().contains("netherite")) {
+                        if (state.getBlock() == Blocks.ANCIENT_DEBRIS || ForgeRegistries.BLOCKS.getKey(state.getBlock()).toString().contains("netherite")) {
                             inst.spawnMagicParticle(
                                     offset.getX() + 0.5F, offset.getY() + 0.5F, offset.getZ() + 0.5F,
                                     0F, 0F, 0F, 0xab4d38, 6F, 20 * 60, 0F, false, true);

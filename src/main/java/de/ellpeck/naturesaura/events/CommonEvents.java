@@ -3,7 +3,6 @@ package de.ellpeck.naturesaura.events;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
@@ -11,7 +10,6 @@ import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.chunk.AuraChunkProvider;
 import de.ellpeck.naturesaura.commands.CommandAura;
-import de.ellpeck.naturesaura.gen.ModFeatures;
 import de.ellpeck.naturesaura.misc.LevelData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.resources.ResourceLocation;
@@ -26,24 +24,23 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
-
-import static net.minecraft.world.level.levelgen.GenerationStep.Decoration;
 
 public class CommonEvents {
 
     private static final Method GET_LOADED_CHUNKS_METHOD = ObfuscationReflectionHelper.findMethod(ChunkMap.class, "m_140416_");
     private static final ListMultimap<UUID, ChunkPos> PENDING_AURA_CHUNKS = ArrayListMultimap.create();
 
-    @SubscribeEvent
+    // TODO apparently this changed a ton to some weird biome modifier thing
+    /*@SubscribeEvent
     public void onBiomeLoad(BiomeLoadingEvent event) {
         if (ModConfig.instance.auraBlooms.get()) {
             event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Placed.AURA_BLOOM);
@@ -56,7 +53,7 @@ public class CommonEvents {
                 case MUSHROOM -> event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, ModFeatures.Placed.AURA_MUSHROOM);
             }
         }
-    }
+    }*/
 
     @SubscribeEvent
     public void onChunkCapsAttach(AttachCapabilitiesEvent<LevelChunk> event) {
@@ -87,7 +84,7 @@ public class CommonEvents {
         if (player.level.isClientSide)
             return;
         var held = event.getItemStack();
-        if (!held.isEmpty() && held.getItem().getRegistryName().getPath().contains("chisel")) {
+        if (!held.isEmpty() && ForgeRegistries.ITEMS.getKey(held.getItem()).getPath().contains("chisel")) {
             var state = player.level.getBlockState(event.getPos());
             if (NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.containsKey(state)) {
                 var data = (LevelData) ILevelData.getLevelData(player.level);
@@ -104,7 +101,7 @@ public class CommonEvents {
                 event.world.getProfiler().push(NaturesAura.MOD_ID + ":onLevelTick");
                 try {
                     var manager = ((ServerChunkCache) event.world.getChunkSource()).chunkMap;
-                    var chunks = (Iterable<ChunkHolder>) GET_LOADED_CHUNKS_METHOD.invoke(manager);
+                    var chunks = (Iterable<ChunkHolder>) CommonEvents.GET_LOADED_CHUNKS_METHOD.invoke(manager);
                     for (var holder : chunks) {
                         var chunk = holder.getTickingChunk();
                         if (chunk == null)
@@ -125,7 +122,7 @@ public class CommonEvents {
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (!event.player.level.isClientSide && event.phase == TickEvent.Phase.END) {
             if (event.player.level.getGameTime() % 10 == 0) {
-                var pending = PENDING_AURA_CHUNKS.get(event.player.getUUID());
+                var pending = CommonEvents.PENDING_AURA_CHUNKS.get(event.player.getUUID());
                 pending.removeIf(p -> this.handleChunkWatchDeferred(event.player, p));
             }
 
@@ -142,7 +139,7 @@ public class CommonEvents {
 
     @SubscribeEvent
     public void onChunkWatch(ChunkWatchEvent.Watch event) {
-        PENDING_AURA_CHUNKS.put(event.getPlayer().getUUID(), event.getPos());
+        CommonEvents.PENDING_AURA_CHUNKS.put(event.getPlayer().getUUID(), event.getPos());
     }
 
     private boolean handleChunkWatchDeferred(Player player, ChunkPos pos) {

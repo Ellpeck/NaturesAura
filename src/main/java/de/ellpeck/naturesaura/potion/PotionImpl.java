@@ -13,7 +13,7 @@ public class PotionImpl extends MobEffect implements IModItem {
         super(type, liquidColorIn);
         this.baseName = baseName;
 
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     @Override

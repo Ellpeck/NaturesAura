@@ -15,8 +15,8 @@ public interface ILevelData extends ICapabilityProvider, INBTSerializable<Compou
 
     static ILevelData getOverworldData(Level level) {
         if (!level.isClientSide)
-            return getLevelData(level.getServer().getLevel(Level.OVERWORLD));
-        return getLevelData(level);
+            return ILevelData.getLevelData(level.getServer().getLevel(Level.OVERWORLD));
+        return ILevelData.getLevelData(level);
     }
 
     IItemHandlerModifiable getEnderStorage(String name);

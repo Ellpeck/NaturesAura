@@ -106,7 +106,7 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
                 var block = state.getBlock();
 
                 var tag = new CompoundTag();
-                tag.putString("block", block.getRegistryName().toString());
+                tag.putString("block", ForgeRegistries.BLOCKS.getKey(block).toString());
                 tag.putInt("amount", entry.getValue().intValue());
                 list.add(tag);
             }

@@ -7,9 +7,11 @@ import de.ellpeck.naturesaura.reg.ICustomRenderType;
 import de.ellpeck.naturesaura.reg.INoItemBlock;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -22,7 +24,7 @@ import java.util.function.Supplier;
 
 public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemBlock, ICustomRenderType {
 
-    private static final VoxelShape SHAPE = box(4, 4, 4, 12, 12, 12);
+    private static final VoxelShape SHAPE = Block.box(4, 4, 4, 12, 12, 12);
 
     public BlockLight() {
         super("light", Properties.of(Material.WOOL).noCollission().lightLevel(s -> 15));
@@ -30,7 +32,7 @@ public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemB
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, RandomSource rand) {
         for (var i = 0; i < 2; i++)
             NaturesAuraAPI.instance().spawnMagicParticle(
                     pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
@@ -40,7 +42,7 @@ public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemB
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return BlockLight.SHAPE;
     }
 
     @Override

@@ -7,14 +7,13 @@ import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
@@ -44,7 +43,7 @@ public class AltarRecipe extends ModRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.ALTAR_SERIAIZER;
+        return ModRecipes.ALTAR_SERIALIZER;
     }
 
     @Override
@@ -54,11 +53,11 @@ public class AltarRecipe extends ModRecipe {
 
     public ItemStack getDimensionBottle() {
         var bottle = ItemAuraBottle.setType(new ItemStack(ModItems.AURA_BOTTLE), this.requiredType);
-        bottle.setHoverName(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".required_aura_type." + this.requiredType.getName()));
+        bottle.setHoverName(Component.translatable("info." + NaturesAura.MOD_ID + ".required_aura_type." + this.requiredType.getName()));
         return bottle;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<AltarRecipe> {
+    public static class Serializer implements RecipeSerializer<AltarRecipe> {
 
         @Override
         public AltarRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

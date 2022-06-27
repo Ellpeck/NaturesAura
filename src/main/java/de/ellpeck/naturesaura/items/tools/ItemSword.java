@@ -25,7 +25,7 @@ public class ItemSword extends SwordItem implements IModItem, ICustomItemModel {
     public ItemSword(String baseName, Tier material, int damage, float speed) {
         super(material, damage, speed, new Properties().tab(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     @Override

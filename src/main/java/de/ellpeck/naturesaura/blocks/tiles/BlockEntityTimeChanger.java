@@ -68,7 +68,7 @@ public class BlockEntityTimeChanger extends BlockEntityImpl implements ITickable
                     if (stack.isEmpty() || stack.getItem() != Items.CLOCK)
                         continue;
 
-                    var dayGoal = Mth.floor((frame.getRotation() / 8F) * 24000F) + 18000;
+                    var dayGoal = Mth.floor(frame.getRotation() / 8F * 24000F) + 18000;
                     var current = this.level.getDayTime();
                     var toMove = (24000 - current % 24000 + dayGoal) % 24000;
                     this.goalTime = current + toMove;

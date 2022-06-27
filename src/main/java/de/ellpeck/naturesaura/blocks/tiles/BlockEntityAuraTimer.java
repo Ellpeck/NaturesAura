@@ -84,7 +84,7 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
         var stack = this.itemHandler.getStackInSlot(0);
         if (stack.isEmpty())
             return 0;
-        var amount = TIMES.get(ItemAuraBottle.getType(stack));
+        var amount = BlockEntityAuraTimer.TIMES.get(ItemAuraBottle.getType(stack));
         if (amount == null)
             return 0;
         return amount * stack.getCount();

@@ -6,7 +6,7 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 public final class CommandAura {
 
@@ -20,7 +20,7 @@ public final class CommandAura {
                         var spot = IAuraChunk.getLowestSpot(source.getLevel(), pos, 35, pos);
                         amount -= IAuraChunk.getAuraChunk(source.getLevel(), spot).storeAura(spot, amount);
                     }
-                    source.sendSuccess(new TextComponent("Added aura to area"), true);
+                    source.sendSuccess(Component.literal("Added aura to area"), true);
                     return 0;
                 })))
                 .then(Commands.literal("remove").then(Commands.argument("amount", IntegerArgumentType.integer(1)).executes(context -> {
@@ -31,7 +31,7 @@ public final class CommandAura {
                         var spot = IAuraChunk.getHighestSpot(source.getLevel(), pos, 35, pos);
                         amount -= IAuraChunk.getAuraChunk(source.getLevel(), spot).drainAura(spot, amount);
                     }
-                    source.sendSuccess(new TextComponent("Removed aura from area"), true);
+                    source.sendSuccess(Component.literal("Removed aura from area"), true);
                     return 0;
                 })))
                 .then(Commands.literal("reset").executes(context -> {
@@ -44,7 +44,7 @@ public final class CommandAura {
                         else
                             chunk.storeAura(spot, -amount);
                     });
-                    source.sendSuccess(new TextComponent("Reset aura in area"), true);
+                    source.sendSuccess(Component.literal("Reset aura in area"), true);
                     return 0;
                 })));
     }

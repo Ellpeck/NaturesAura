@@ -11,7 +11,7 @@ public class BlockImpl extends Block implements IModItem {
     public BlockImpl(String baseName, Block.Properties properties) {
         super(properties);
         this.baseName = baseName;
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     @Override

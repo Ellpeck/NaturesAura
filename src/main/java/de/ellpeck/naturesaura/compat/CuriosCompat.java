@@ -50,12 +50,12 @@ public class CuriosCompat implements ICompat {
     }
 
     private void sendImc(InterModEnqueueEvent event) {
-        TYPES.values().stream().distinct().forEach(t -> InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder(t).build()));
+        CuriosCompat.TYPES.values().stream().distinct().forEach(t -> InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder(t).build()));
     }
 
     private void onCapabilitiesAttach(AttachCapabilitiesEvent<ItemStack> event) {
         var stack = event.getObject();
-        if (TYPES.containsKey(stack.getItem())) {
+        if (CuriosCompat.TYPES.containsKey(stack.getItem())) {
             event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "curios"), new ICapabilityProvider() {
                 private final LazyOptional<ICurio> curio = LazyOptional.of(() -> new ICurio() {
                     @Override
@@ -92,7 +92,7 @@ public class CuriosCompat implements ICompat {
 
     @Override
     public void addItemTags(ItemTagProvider provider) {
-        for (var entry : TYPES.entrySet()) {
+        for (var entry : CuriosCompat.TYPES.entrySet()) {
             var tag = ItemTags.create(new ResourceLocation("curios", entry.getValue()));
             provider.tag(tag).add(entry.getKey());
         }

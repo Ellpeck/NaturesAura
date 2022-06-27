@@ -55,7 +55,7 @@ public class AnimalEffect implements IDrainSpotEffect {
             return ActiveType.INACTIVE;
         if (!this.bb.contains(player.getEyePosition()))
             return ActiveType.INACTIVE;
-        if (!NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), NAME))
+        if (!NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), AnimalEffect.NAME))
             return ActiveType.INHIBITED;
         return ActiveType.ACTIVE;
     }
@@ -80,7 +80,7 @@ public class AnimalEffect implements IDrainSpotEffect {
         for (var item : items) {
             if (!item.isAlive())
                 continue;
-            if (!NaturesAuraAPI.instance().isEffectPowderActive(level, item.blockPosition(), NAME))
+            if (!NaturesAuraAPI.instance().isEffectPowderActive(level, item.blockPosition(), AnimalEffect.NAME))
                 continue;
 
             var stack = item.getItem();
@@ -111,7 +111,7 @@ public class AnimalEffect implements IDrainSpotEffect {
             var first = animals.get(level.random.nextInt(animals.size()));
             if (first.isBaby() || first.isInLove())
                 return;
-            if (!NaturesAuraAPI.instance().isEffectPowderActive(level, first.blockPosition(), NAME))
+            if (!NaturesAuraAPI.instance().isEffectPowderActive(level, first.blockPosition(), AnimalEffect.NAME))
                 return;
 
             var secondOptional = animals.stream()
@@ -150,6 +150,6 @@ public class AnimalEffect implements IDrainSpotEffect {
 
     @Override
     public ResourceLocation getName() {
-        return NAME;
+        return AnimalEffect.NAME;
     }
 }

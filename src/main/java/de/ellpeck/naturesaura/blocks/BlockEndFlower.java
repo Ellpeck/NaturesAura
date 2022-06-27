@@ -15,10 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -40,19 +37,19 @@ import java.util.function.Supplier;
 
 public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockState, ICustomItemModel, ICustomRenderType, EntityBlock {
 
-    protected static final VoxelShape SHAPE = box(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
+    protected static final VoxelShape SHAPE = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 
     public BlockEndFlower() {
         super(Properties.of(Material.GRASS).noCollission().strength(0.5F).sound(SoundType.GRASS));
         MinecraftForge.EVENT_BUS.register(this);
-        ModRegistry.add(this);
-        ModRegistry.add(new ModTileType<>(BlockEntityEndFlower::new, this));
+        ModRegistry.ALL_ITEMS.add(this);
+        ModRegistry.ALL_ITEMS.add(new ModTileType<BlockEntityEndFlower>(BlockEntityEndFlower::new, this));
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         var vec3d = state.getOffset(levelIn, pos);
-        return SHAPE.move(vec3d.x, vec3d.y, vec3d.z);
+        return BlockEndFlower.SHAPE.move(vec3d.x, vec3d.y, vec3d.z);
     }
 
     @SubscribeEvent

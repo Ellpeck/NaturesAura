@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.recipes;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,7 +14,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -58,7 +56,7 @@ public class AnimalSpawnerRecipe extends ModRecipe {
         return ModRecipes.ANIMAL_SPAWNER_TYPE;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<AnimalSpawnerRecipe> {
+    public static class Serializer implements RecipeSerializer<AnimalSpawnerRecipe> {
 
         @Override
         public AnimalSpawnerRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
@@ -91,7 +89,7 @@ public class AnimalSpawnerRecipe extends ModRecipe {
             buffer.writeInt(recipe.ingredients.length);
             for (var ing : recipe.ingredients)
                 ing.toNetwork(buffer);
-            buffer.writeResourceLocation(recipe.entity.getRegistryName());
+            buffer.writeResourceLocation(ForgeRegistries.ENTITIES.getKey(recipe.entity));
             buffer.writeInt(recipe.aura);
             buffer.writeInt(recipe.time);
         }

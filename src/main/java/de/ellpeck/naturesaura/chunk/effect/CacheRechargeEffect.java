@@ -45,7 +45,7 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
             return ActiveType.INACTIVE;
         if (!this.bb.contains(player.getEyePosition()))
             return ActiveType.INACTIVE;
-        if (NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), NAME))
+        if (NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), CacheRechargeEffect.NAME))
             return ActiveType.INHIBITED;
         return ActiveType.ACTIVE;
     }
@@ -61,7 +61,7 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
             return;
         var players = level.getEntitiesOfClass(Player.class, this.bb);
         for (var player : players) {
-            if (NaturesAuraAPI.instance().isEffectPowderActive(level, player.blockPosition(), NAME))
+            if (NaturesAuraAPI.instance().isEffectPowderActive(level, player.blockPosition(), CacheRechargeEffect.NAME))
                 continue;
             if (NaturesAuraAPI.instance().insertAuraIntoPlayer(player, this.amount, true)) {
                 NaturesAuraAPI.instance().insertAuraIntoPlayer(player, this.amount, false);
@@ -77,6 +77,6 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
 
     @Override
     public ResourceLocation getName() {
-        return NAME;
+        return CacheRechargeEffect.NAME;
     }
 }

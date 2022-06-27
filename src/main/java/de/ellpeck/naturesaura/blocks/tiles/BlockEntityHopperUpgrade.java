@@ -34,7 +34,7 @@ public class BlockEntityHopperUpgrade extends BlockEntityImpl implements ITickab
             if (IAuraChunk.getAuraInArea(this.level, this.worldPosition, 25) < 100000)
                 return;
             var tile = this.level.getBlockEntity(this.worldPosition.below());
-            if (!isValidHopper(tile))
+            if (!BlockEntityHopperUpgrade.isValidHopper(tile))
                 return;
             var handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
             if (handler == null)

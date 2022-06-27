@@ -42,7 +42,7 @@ public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvi
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return BlockOfferingTable.SHAPE;
     }
 
     @Override

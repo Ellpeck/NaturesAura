@@ -28,8 +28,8 @@ public class ItemMultiblockMaker extends ItemImpl {
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
         var stack = playerIn.getItemInHand(handIn);
         if (!levelIn.isClientSide && playerIn.isCreative()) {
-            var curr = getMultiblockId(stack);
-            var next = (curr + 1) % multiblocks().size();
+            var curr = ItemMultiblockMaker.getMultiblockId(stack);
+            var next = (curr + 1) % ItemMultiblockMaker.multiblocks().size();
             stack.getOrCreateTag().putInt("multiblock", next);
         }
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
@@ -39,7 +39,7 @@ public class ItemMultiblockMaker extends ItemImpl {
     public InteractionResult useOn(UseOnContext context) {
         var player = context.getPlayer();
         if (player.isCreative()) {
-            var multi = getMultiblock(player.getItemInHand(context.getHand()));
+            var multi = ItemMultiblockMaker.getMultiblock(player.getItemInHand(context.getHand()));
             if (multi == null)
                 return InteractionResult.PASS;
 
@@ -57,19 +57,19 @@ public class ItemMultiblockMaker extends ItemImpl {
     @Override
     public Component getName(ItemStack stack) {
         var name = (MutableComponent) super.getName(stack);
-        var multi = getMultiblock(stack);
+        var multi = ItemMultiblockMaker.getMultiblock(stack);
         return multi == null ? name : name.append(" (" + multi.getName() + ")");
     }
 
     private static List<IMultiblock> multiblocks() {
-        if (multiblocks == null) {
+        if (ItemMultiblockMaker.multiblocks == null) {
             // some weird mixins call getName way too early, before multiblocks are initialized
             if (NaturesAuraAPI.MULTIBLOCKS.isEmpty())
                 return null;
-            multiblocks = new ArrayList<>();
-            multiblocks.addAll(NaturesAuraAPI.MULTIBLOCKS.values());
+            ItemMultiblockMaker.multiblocks = new ArrayList<>();
+            ItemMultiblockMaker.multiblocks.addAll(NaturesAuraAPI.MULTIBLOCKS.values());
         }
-        return multiblocks;
+        return ItemMultiblockMaker.multiblocks;
     }
 
     private static int getMultiblockId(ItemStack stack) {
@@ -79,10 +79,10 @@ public class ItemMultiblockMaker extends ItemImpl {
     }
 
     private static IMultiblock getMultiblock(ItemStack stack) {
-        var multiblocks = multiblocks();
+        var multiblocks = ItemMultiblockMaker.multiblocks();
         if (multiblocks == null)
             return null;
-        var id = getMultiblockId(stack);
+        var id = ItemMultiblockMaker.getMultiblockId(stack);
         if (id < 0 || id >= multiblocks.size())
             return null;
         return multiblocks.get(id);

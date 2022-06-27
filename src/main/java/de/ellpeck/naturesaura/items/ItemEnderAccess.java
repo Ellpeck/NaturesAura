@@ -9,7 +9,6 @@ import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -46,7 +45,7 @@ public class ItemEnderAccess extends ItemImpl {
                 NetworkHooks.openGui((ServerPlayer) playerIn, new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
-                        return new TranslatableComponent("info." + NaturesAura.MOD_ID + ".ender_access", ChatFormatting.ITALIC + name + ChatFormatting.RESET);
+                        return Component.translatable("info." + NaturesAura.MOD_ID + ".ender_access", ChatFormatting.ITALIC + name + ChatFormatting.RESET);
                     }
 
                     @Nullable

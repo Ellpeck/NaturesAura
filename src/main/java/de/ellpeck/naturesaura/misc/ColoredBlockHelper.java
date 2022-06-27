@@ -12,14 +12,14 @@ import java.util.List;
 
 public final class ColoredBlockHelper {
 
-    public static final List<Block> WOOL = collectBlocks("wool");
-    public static final List<Block> TERRACOTTA = collectBlocks("terracotta");
-    public static final List<Block> CONCRETE_POWDER = collectBlocks("concrete_powder");
-    public static final List<Block> CONCRETE = collectBlocks("concrete");
-    public static final List<Block> GLASS = collectBlocks("stained_glass");
-    public static final List<Block> GLASS_PANE = collectBlocks("glass_pane");
-    public static final List<Block> CARPET = collectBlocks("carpet");
-    public static final List<List<Block>> LISTS = Arrays.asList(WOOL, TERRACOTTA, CONCRETE_POWDER, CONCRETE, GLASS, GLASS_PANE, CARPET);
+    public static final List<Block> WOOL = ColoredBlockHelper.collectBlocks("wool");
+    public static final List<Block> TERRACOTTA = ColoredBlockHelper.collectBlocks("terracotta");
+    public static final List<Block> CONCRETE_POWDER = ColoredBlockHelper.collectBlocks("concrete_powder");
+    public static final List<Block> CONCRETE = ColoredBlockHelper.collectBlocks("concrete");
+    public static final List<Block> GLASS = ColoredBlockHelper.collectBlocks("stained_glass");
+    public static final List<Block> GLASS_PANE = ColoredBlockHelper.collectBlocks("glass_pane");
+    public static final List<Block> CARPET = ColoredBlockHelper.collectBlocks("carpet");
+    public static final List<List<Block>> LISTS = Arrays.asList(ColoredBlockHelper.WOOL, ColoredBlockHelper.TERRACOTTA, ColoredBlockHelper.CONCRETE_POWDER, ColoredBlockHelper.CONCRETE, ColoredBlockHelper.GLASS, ColoredBlockHelper.GLASS_PANE, ColoredBlockHelper.CARPET);
 
     private static List<Block> collectBlocks(String name) {
         List<Block> blocks = new ArrayList<>();
@@ -29,7 +29,7 @@ public final class ColoredBlockHelper {
     }
 
     public static List<Block> getBlocksContaining(Block block) {
-        for (var list : LISTS) {
+        for (var list : ColoredBlockHelper.LISTS) {
             if (list.contains(block))
                 return list;
         }

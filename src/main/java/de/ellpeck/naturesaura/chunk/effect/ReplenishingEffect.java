@@ -55,6 +55,6 @@ public class ReplenishingEffect implements IDrainSpotEffect {
 
     @Override
     public ResourceLocation getName() {
-        return NAME;
+        return ReplenishingEffect.NAME;
     }
 }

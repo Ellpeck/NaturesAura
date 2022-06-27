@@ -35,20 +35,20 @@ import javax.annotation.Nullable;
 public class BlockGratedChute extends BlockContainerImpl implements ICustomBlockState, ICustomItemModel {
 
     public static final DirectionProperty FACING = HopperBlock.FACING;
-    private static final VoxelShape INPUT_SHAPE = box(0.0D, 10.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    private static final VoxelShape MIDDLE_SHAPE = box(4.0D, 4.0D, 4.0D, 12.0D, 10.0D, 12.0D);
-    private static final VoxelShape INPUT_MIDDLE_SHAPE = Shapes.or(MIDDLE_SHAPE, INPUT_SHAPE);
-    private static final VoxelShape COMBINED_SHAPE = Shapes.join(INPUT_MIDDLE_SHAPE, Hopper.INSIDE, BooleanOp.ONLY_FIRST);
-    private static final VoxelShape DOWN_SHAPE = Shapes.or(COMBINED_SHAPE, box(6.0D, 0.0D, 6.0D, 10.0D, 4.0D, 10.0D));
-    private static final VoxelShape EAST_SHAPE = Shapes.or(COMBINED_SHAPE, box(12.0D, 4.0D, 6.0D, 16.0D, 8.0D, 10.0D));
-    private static final VoxelShape NORTH_SHAPE = Shapes.or(COMBINED_SHAPE, box(6.0D, 4.0D, 0.0D, 10.0D, 8.0D, 4.0D));
-    private static final VoxelShape SOUTH_SHAPE = Shapes.or(COMBINED_SHAPE, box(6.0D, 4.0D, 12.0D, 10.0D, 8.0D, 16.0D));
-    private static final VoxelShape WEST_SHAPE = Shapes.or(COMBINED_SHAPE, box(0.0D, 4.0D, 6.0D, 4.0D, 8.0D, 10.0D));
+    private static final VoxelShape INPUT_SHAPE = Block.box(0.0D, 10.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    private static final VoxelShape MIDDLE_SHAPE = Block.box(4.0D, 4.0D, 4.0D, 12.0D, 10.0D, 12.0D);
+    private static final VoxelShape INPUT_MIDDLE_SHAPE = Shapes.or(BlockGratedChute.MIDDLE_SHAPE, BlockGratedChute.INPUT_SHAPE);
+    private static final VoxelShape COMBINED_SHAPE = Shapes.join(BlockGratedChute.INPUT_MIDDLE_SHAPE, Hopper.INSIDE, BooleanOp.ONLY_FIRST);
+    private static final VoxelShape DOWN_SHAPE = Shapes.or(BlockGratedChute.COMBINED_SHAPE, Block.box(6.0D, 0.0D, 6.0D, 10.0D, 4.0D, 10.0D));
+    private static final VoxelShape EAST_SHAPE = Shapes.or(BlockGratedChute.COMBINED_SHAPE, Block.box(12.0D, 4.0D, 6.0D, 16.0D, 8.0D, 10.0D));
+    private static final VoxelShape NORTH_SHAPE = Shapes.or(BlockGratedChute.COMBINED_SHAPE, Block.box(6.0D, 4.0D, 0.0D, 10.0D, 8.0D, 4.0D));
+    private static final VoxelShape SOUTH_SHAPE = Shapes.or(BlockGratedChute.COMBINED_SHAPE, Block.box(6.0D, 4.0D, 12.0D, 10.0D, 8.0D, 16.0D));
+    private static final VoxelShape WEST_SHAPE = Shapes.or(BlockGratedChute.COMBINED_SHAPE, Block.box(0.0D, 4.0D, 6.0D, 4.0D, 8.0D, 10.0D));
     private static final VoxelShape DOWN_RAYTRACE_SHAPE = Hopper.INSIDE;
-    private static final VoxelShape EAST_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, box(12.0D, 8.0D, 6.0D, 16.0D, 10.0D, 10.0D));
-    private static final VoxelShape NORTH_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, box(6.0D, 8.0D, 0.0D, 10.0D, 10.0D, 4.0D));
-    private static final VoxelShape SOUTH_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, box(6.0D, 8.0D, 12.0D, 10.0D, 10.0D, 16.0D));
-    private static final VoxelShape WEST_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, box(0.0D, 8.0D, 6.0D, 4.0D, 10.0D, 10.0D));
+    private static final VoxelShape EAST_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, Block.box(12.0D, 8.0D, 6.0D, 16.0D, 10.0D, 10.0D));
+    private static final VoxelShape NORTH_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, Block.box(6.0D, 8.0D, 0.0D, 10.0D, 10.0D, 4.0D));
+    private static final VoxelShape SOUTH_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, Block.box(6.0D, 8.0D, 12.0D, 10.0D, 10.0D, 16.0D));
+    private static final VoxelShape WEST_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, Block.box(0.0D, 8.0D, 6.0D, 4.0D, 10.0D, 10.0D));
 
     public BlockGratedChute() {
         super("grated_chute", BlockEntityGratedChute.class, Properties.of(Material.METAL).strength(3.0F, 8.0F).sound(SoundType.METAL));
@@ -61,24 +61,24 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        return switch (state.getValue(FACING)) {
-            case DOWN -> DOWN_SHAPE;
-            case NORTH -> NORTH_SHAPE;
-            case SOUTH -> SOUTH_SHAPE;
-            case WEST -> WEST_SHAPE;
-            case EAST -> EAST_SHAPE;
-            default -> COMBINED_SHAPE;
+        return switch (state.getValue(BlockGratedChute.FACING)) {
+            case DOWN -> BlockGratedChute.DOWN_SHAPE;
+            case NORTH -> BlockGratedChute.NORTH_SHAPE;
+            case SOUTH -> BlockGratedChute.SOUTH_SHAPE;
+            case WEST -> BlockGratedChute.WEST_SHAPE;
+            case EAST -> BlockGratedChute.EAST_SHAPE;
+            default -> BlockGratedChute.COMBINED_SHAPE;
         };
     }
 
     @Override
     public VoxelShape getInteractionShape(BlockState state, BlockGetter levelIn, BlockPos pos) {
-        return switch (state.getValue(FACING)) {
-            case DOWN -> DOWN_RAYTRACE_SHAPE;
-            case NORTH -> NORTH_RAYTRACE_SHAPE;
-            case SOUTH -> SOUTH_RAYTRACE_SHAPE;
-            case WEST -> WEST_RAYTRACE_SHAPE;
-            case EAST -> EAST_RAYTRACE_SHAPE;
+        return switch (state.getValue(BlockGratedChute.FACING)) {
+            case DOWN -> BlockGratedChute.DOWN_RAYTRACE_SHAPE;
+            case NORTH -> BlockGratedChute.NORTH_RAYTRACE_SHAPE;
+            case SOUTH -> BlockGratedChute.SOUTH_RAYTRACE_SHAPE;
+            case WEST -> BlockGratedChute.WEST_RAYTRACE_SHAPE;
+            case EAST -> BlockGratedChute.EAST_RAYTRACE_SHAPE;
             default -> Hopper.INSIDE;
         };
     }
@@ -103,7 +103,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
         var newFacing = context.getClickedFace().getOpposite();
         if (newFacing == Direction.UP)
             newFacing = Direction.DOWN;
-        return super.getStateForPlacement(context).setValue(FACING, newFacing);
+        return super.getStateForPlacement(context).setValue(BlockGratedChute.FACING, newFacing);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(FACING);
+        builder.add(BlockGratedChute.FACING);
     }
 
     @Override

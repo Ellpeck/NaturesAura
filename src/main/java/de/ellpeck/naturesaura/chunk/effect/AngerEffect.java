@@ -76,6 +76,6 @@ public class AngerEffect implements IDrainSpotEffect {
 
     @Override
     public ResourceLocation getName() {
-        return NAME;
+        return AngerEffect.NAME;
     }
 }

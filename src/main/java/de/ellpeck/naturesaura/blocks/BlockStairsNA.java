@@ -19,7 +19,7 @@ public class BlockStairsNA extends StairBlock implements IModItem, ICustomBlockS
         super(modelState, properties.dynamicShape());
         this.baseName = baseName;
         this.textureName = textureName;
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     @Override

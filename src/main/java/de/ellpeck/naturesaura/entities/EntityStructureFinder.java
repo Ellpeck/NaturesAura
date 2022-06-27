@@ -34,19 +34,19 @@ public class EntityStructureFinder extends EyeOfEnder {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(COLOR, 0);
+        this.entityData.define(EntityStructureFinder.COLOR, 0);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("color", this.entityData.get(COLOR));
+        compound.putInt("color", this.entityData.get(EntityStructureFinder.COLOR));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.entityData.set(COLOR, compound.getInt("color"));
+        this.entityData.set(EntityStructureFinder.COLOR, compound.getInt("color"));
     }
 
     @Override
@@ -58,8 +58,8 @@ public class EntityStructureFinder extends EyeOfEnder {
         var d3 = d1 - this.getZ();
         var f = Math.sqrt(d2 * d2 + d3 * d3);
         if (f > 12.0F) {
-            this.targetX = this.getX() + d2 / (double) f * 12.0D;
-            this.targetZ = this.getZ() + d3 / (double) f * 12.0D;
+            this.targetX = this.getX() + d2 / f * 12.0D;
+            this.targetZ = this.getZ() + d3 / f * 12.0D;
             this.targetY = this.getY() + 8.0D;
         } else {
             this.targetX = d0;
@@ -113,7 +113,7 @@ public class EntityStructureFinder extends EyeOfEnder {
             for (var i = 0; i < 4; ++i)
                 this.level.addParticle(ParticleTypes.BUBBLE, d0 - vec3d.x * 0.25D, d1 - vec3d.y * 0.25D, d2 - vec3d.z * 0.25D, vec3d.x, vec3d.y, vec3d.z);
         } else if (this.level.isClientSide) {
-            NaturesAuraAPI.instance().spawnMagicParticle(d0 - vec3d.x * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, d1 - vec3d.y * 0.25D - 0.5D, d2 - vec3d.z * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, vec3d.x * 0.25F, vec3d.y * 0.25F, vec3d.z * 0.25F, this.entityData.get(COLOR), 1, 50, 0, false, true);
+            NaturesAuraAPI.instance().spawnMagicParticle(d0 - vec3d.x * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, d1 - vec3d.y * 0.25D - 0.5D, d2 - vec3d.z * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, vec3d.x * 0.25F, vec3d.y * 0.25F, vec3d.z * 0.25F, this.entityData.get(EntityStructureFinder.COLOR), 1, 50, 0, false, true);
         }
 
         if (!this.level.isClientSide) {

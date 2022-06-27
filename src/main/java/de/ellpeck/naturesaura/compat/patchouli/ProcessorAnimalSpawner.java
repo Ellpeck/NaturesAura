@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.compat.patchouli;
 import de.ellpeck.naturesaura.recipes.AnimalSpawnerRecipe;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.registries.ForgeRegistries;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
@@ -26,7 +27,7 @@ public class ProcessorAnimalSpawner implements IComponentProcessor {
         } else {
             return switch (key) {
                 case "name" -> IVariable.wrap(this.recipe.entity.getDescription().getString());
-                case "entity" -> IVariable.wrap(this.recipe.entity.getRegistryName().toString());
+                case "entity" -> IVariable.wrap(ForgeRegistries.ENTITIES.getKey(this.recipe.entity).toString());
                 case "egg" -> IVariable.from(new ItemStack(ForgeSpawnEggItem.fromEntityType(this.recipe.entity)));
                 default -> null;
             };

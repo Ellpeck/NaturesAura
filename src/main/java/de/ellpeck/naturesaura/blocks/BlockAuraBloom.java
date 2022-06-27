@@ -39,7 +39,7 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
         super(Properties.of(Material.PLANT).noCollission().strength(0).sound(SoundType.GRASS));
         this.baseName = baseName;
         this.allowedGround = allowedGround;
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         var vec3d = state.getOffset(levelIn, pos);
-        return SHAPE.move(vec3d.x, vec3d.y, vec3d.z);
+        return BlockAuraBloom.SHAPE.move(vec3d.x, vec3d.y, vec3d.z);
     }
 
     @Override

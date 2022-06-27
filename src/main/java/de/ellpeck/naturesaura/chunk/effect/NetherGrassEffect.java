@@ -49,7 +49,7 @@ public class NetherGrassEffect implements IDrainSpotEffect {
             return ActiveType.INACTIVE;
         if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return ActiveType.INACTIVE;
-        if (NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), NAME))
+        if (NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), NetherGrassEffect.NAME))
             return ActiveType.INHIBITED;
         return ActiveType.ACTIVE;
     }
@@ -73,7 +73,7 @@ public class NetherGrassEffect implements IDrainSpotEffect {
             for (var yOff = -5; yOff <= 5; yOff++) {
                 var goalPos = new BlockPos(x, y + yOff, z);
                 if (goalPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(goalPos)) {
-                    if (NaturesAuraAPI.instance().isEffectPowderActive(level, goalPos, NAME))
+                    if (NaturesAuraAPI.instance().isEffectPowderActive(level, goalPos, NetherGrassEffect.NAME))
                         continue;
                     var up = goalPos.above();
                     if (level.getBlockState(up).isFaceSturdy(level, up, Direction.DOWN))
@@ -102,6 +102,6 @@ public class NetherGrassEffect implements IDrainSpotEffect {
 
     @Override
     public ResourceLocation getName() {
-        return NAME;
+        return NetherGrassEffect.NAME;
     }
 }

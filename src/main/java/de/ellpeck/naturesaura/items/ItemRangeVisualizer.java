@@ -5,7 +5,7 @@ import com.google.common.collect.ListMultimap;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -15,8 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,21 +31,21 @@ public class ItemRangeVisualizer extends ItemImpl {
     }
 
     public static void clear() {
-        if (!VISUALIZED_BLOCKS.isEmpty())
-            VISUALIZED_BLOCKS.clear();
-        if (!VISUALIZED_ENTITIES.isEmpty())
-            VISUALIZED_ENTITIES.clear();
-        if (!VISUALIZED_RAILS.isEmpty())
-            VISUALIZED_RAILS.clear();
+        if (!ItemRangeVisualizer.VISUALIZED_BLOCKS.isEmpty())
+            ItemRangeVisualizer.VISUALIZED_BLOCKS.clear();
+        if (!ItemRangeVisualizer.VISUALIZED_ENTITIES.isEmpty())
+            ItemRangeVisualizer.VISUALIZED_ENTITIES.clear();
+        if (!ItemRangeVisualizer.VISUALIZED_RAILS.isEmpty())
+            ItemRangeVisualizer.VISUALIZED_RAILS.clear();
     }
 
     public static <T> void visualize(Player player, ListMultimap<ResourceLocation, T> map, ResourceLocation dim, T value) {
         if (map.containsEntry(dim, value)) {
             map.remove(dim, value);
-            player.displayClientMessage(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.end"), true);
+            player.displayClientMessage(Component.translatable("info." + NaturesAura.MOD_ID + ".range_visualizer.end"), true);
         } else {
             map.put(dim, value);
-            player.displayClientMessage(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.start"), true);
+            player.displayClientMessage(Component.translatable("info." + NaturesAura.MOD_ID + ".range_visualizer.start"), true);
         }
     }
 
@@ -55,8 +53,8 @@ public class ItemRangeVisualizer extends ItemImpl {
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
         var stack = playerIn.getItemInHand(handIn);
         if (playerIn.isCrouching()) {
-            clear();
-            playerIn.displayClientMessage(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".range_visualizer.end_all"), true);
+            ItemRangeVisualizer.clear();
+            playerIn.displayClientMessage(Component.translatable("info." + NaturesAura.MOD_ID + ".range_visualizer.end_all"), true);
             return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
         }
         return new InteractionResultHolder<>(InteractionResult.PASS, stack);
@@ -70,7 +68,7 @@ public class ItemRangeVisualizer extends ItemImpl {
         var block = state.getBlock();
         if (block instanceof IVisualizable) {
             if (level.isClientSide)
-                visualize(context.getPlayer(), VISUALIZED_BLOCKS, level.dimension().location(), pos);
+                ItemRangeVisualizer.visualize(context.getPlayer(), ItemRangeVisualizer.VISUALIZED_BLOCKS, level.dimension().location(), pos);
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
@@ -87,7 +85,7 @@ public class ItemRangeVisualizer extends ItemImpl {
             if (entity instanceof IVisualizable) {
                 if (entity.level.isClientSide) {
                     var dim = entity.level.dimension().location();
-                    visualize(event.getPlayer(), VISUALIZED_ENTITIES, dim, entity);
+                    ItemRangeVisualizer.visualize(event.getPlayer(), ItemRangeVisualizer.VISUALIZED_ENTITIES, dim, entity);
                 }
                 event.getPlayer().swing(event.getHand());
                 event.setCancellationResult(InteractionResult.SUCCESS);

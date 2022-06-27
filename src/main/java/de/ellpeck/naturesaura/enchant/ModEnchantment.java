@@ -13,7 +13,7 @@ public class ModEnchantment extends Enchantment implements IModItem {
     protected ModEnchantment(String name, Rarity rarityIn, EnchantmentCategory typeIn, EquipmentSlot[] slots) {
         super(rarityIn, typeIn, slots);
         this.name = name;
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     @Override

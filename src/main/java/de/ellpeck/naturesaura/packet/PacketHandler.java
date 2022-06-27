@@ -16,22 +16,22 @@ public final class PacketHandler {
     private static SimpleChannel network;
 
     public static void init() {
-        network = NetworkRegistry.newSimpleChannel(new ResourceLocation(NaturesAura.MOD_ID, "network"), () -> VERSION, VERSION::equals, VERSION::equals);
-        network.registerMessage(0, PacketParticleStream.class, PacketParticleStream::toBytes, PacketParticleStream::fromBytes, PacketParticleStream::onMessage);
-        network.registerMessage(1, PacketParticles.class, PacketParticles::toBytes, PacketParticles::fromBytes, PacketParticles::onMessage);
-        network.registerMessage(2, PacketAuraChunk.class, PacketAuraChunk::toBytes, PacketAuraChunk::fromBytes, PacketAuraChunk::onMessage);
-        network.registerMessage(3, PacketClient.class, PacketClient::toBytes, PacketClient::fromBytes, PacketClient::onMessage);
+        PacketHandler.network = NetworkRegistry.newSimpleChannel(new ResourceLocation(NaturesAura.MOD_ID, "network"), () -> PacketHandler.VERSION, PacketHandler.VERSION::equals, PacketHandler.VERSION::equals);
+        PacketHandler.network.registerMessage(0, PacketParticleStream.class, PacketParticleStream::toBytes, PacketParticleStream::fromBytes, PacketParticleStream::onMessage);
+        PacketHandler.network.registerMessage(1, PacketParticles.class, PacketParticles::toBytes, PacketParticles::fromBytes, PacketParticles::onMessage);
+        PacketHandler.network.registerMessage(2, PacketAuraChunk.class, PacketAuraChunk::toBytes, PacketAuraChunk::fromBytes, PacketAuraChunk::onMessage);
+        PacketHandler.network.registerMessage(3, PacketClient.class, PacketClient::toBytes, PacketClient::fromBytes, PacketClient::onMessage);
     }
 
     public static void sendToAllLoaded(Level level, BlockPos pos, Object message) {
-        network.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(pos)), message);
+        PacketHandler.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(pos)), message);
     }
 
     public static void sendToAllAround(Level level, BlockPos pos, int range, Object message) {
-        network.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, level.dimension())), message);
+        PacketHandler.network.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, level.dimension())), message);
     }
 
     public static void sendTo(Player player, Object message) {
-        network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), message);
+        PacketHandler.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), message);
     }
 }

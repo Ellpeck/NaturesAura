@@ -56,10 +56,10 @@ public final class NaturesAuraAPI {
      * easily registered using {@link BasicAuraType#register()}.
      */
     public static final Map<ResourceLocation, IAuraType> AURA_TYPES = new HashMap<>();
-    public static final BasicAuraType TYPE_OVERWORLD = new BasicAuraType(new ResourceLocation(MOD_ID, "overworld"), Level.OVERWORLD, 0x89cc37, 0).register();
-    public static final BasicAuraType TYPE_NETHER = new BasicAuraType(new ResourceLocation(MOD_ID, "nether"), Level.NETHER, 0x871c0c, 0).register();
-    public static final BasicAuraType TYPE_END = new BasicAuraType(new ResourceLocation(MOD_ID, "end"), Level.END, 0x302624, 0).register();
-    public static final BasicAuraType TYPE_OTHER = new BasicAuraType(new ResourceLocation(MOD_ID, "other"), null, 0x2fa8a0, Integer.MIN_VALUE).register();
+    public static final BasicAuraType TYPE_OVERWORLD = new BasicAuraType(new ResourceLocation(NaturesAuraAPI.MOD_ID, "overworld"), Level.OVERWORLD, 0x89cc37, 0).register();
+    public static final BasicAuraType TYPE_NETHER = new BasicAuraType(new ResourceLocation(NaturesAuraAPI.MOD_ID, "nether"), Level.NETHER, 0x871c0c, 0).register();
+    public static final BasicAuraType TYPE_END = new BasicAuraType(new ResourceLocation(NaturesAuraAPI.MOD_ID, "end"), Level.END, 0x302624, 0).register();
+    public static final BasicAuraType TYPE_OTHER = new BasicAuraType(new ResourceLocation(NaturesAuraAPI.MOD_ID, "other"), null, 0x2fa8a0, Integer.MIN_VALUE).register();
     /**
      * A map of all {@link IDrainSpotEffect} suppliers which are effects that
      * happen passively at every spot that Aura has been drained from in the
@@ -150,7 +150,7 @@ public final class NaturesAuraAPI {
      * @return The active {@link IInternalHooks} instance
      */
     public static IInternalHooks instance() {
-        return INSTANCE;
+        return NaturesAuraAPI.INSTANCE;
     }
 
     /**

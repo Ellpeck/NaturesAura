@@ -49,7 +49,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return BlockWoodStand.SHAPE;
     }
 
     @SubscribeEvent

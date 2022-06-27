@@ -66,7 +66,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
 
     @Override
     public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
-        if (this.allowdedIn(tab)) {
+        if (this.allowedIn(tab)) {
             items.add(new ItemStack(this));
 
             var stack = new ItemStack(this);
@@ -86,7 +86,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     public int getBarWidth(ItemStack stack) {
         if (stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).isPresent()) {
             var container = stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).orElse(null);
-            return Math.round((container.getStoredAura() / (float) container.getMaxAura()) * 13);
+            return Math.round(container.getStoredAura() / (float) container.getMaxAura() * 13);
         }
         return 0;
     }

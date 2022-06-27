@@ -27,7 +27,7 @@ public final class ParticleHandler {
 
         @Override
         public void begin(BufferBuilder buffer, TextureManager textureManager) {
-            setupRendering();
+            ParticleHandler.setupRendering();
             RenderSystem.enableDepthTest();
             buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
         }
@@ -46,7 +46,7 @@ public final class ParticleHandler {
     public static final ParticleRenderType MAGIC_NO_DEPTH = new ParticleRenderType() {
         @Override
         public void begin(BufferBuilder buffer, TextureManager textureManager) {
-            setupRendering();
+            ParticleHandler.setupRendering();
             RenderSystem.disableDepthTest();
             buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
         }
@@ -68,10 +68,10 @@ public final class ParticleHandler {
 
     public static void spawnParticle(Supplier<Particle> particle, double x, double y, double z) {
         var mc = Minecraft.getInstance();
-        if (mc.player.distanceToSqr(x, y, z) <= range * range) {
-            if (culling) {
+        if (mc.player.distanceToSqr(x, y, z) <= ParticleHandler.range * ParticleHandler.range) {
+            if (ParticleHandler.culling) {
                 if (ModConfig.instance.respectVanillaParticleSettings.get()) {
-                    var setting = mc.options.particles;
+                    var setting = mc.options.particles().get();
                     if (setting != ParticleStatus.ALL &&
                             (setting != ParticleStatus.DECREASED || mc.level.random.nextInt(3) != 0) &&
                             (setting != ParticleStatus.MINIMAL || mc.level.random.nextInt(10) != 0))

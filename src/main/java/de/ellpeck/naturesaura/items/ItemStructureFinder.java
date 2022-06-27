@@ -11,17 +11,17 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 
 public class ItemStructureFinder extends ItemImpl {
 
-    private final Holder<ConfiguredStructureFeature<?, ?>> structureName;
+    private final Holder<Structure> structure;
     private final int color;
     private final int radius;
 
-    public ItemStructureFinder(String baseName, Holder<ConfiguredStructureFeature<?, ?>> structureName, int color, int radius) {
+    public ItemStructureFinder(String baseName, Holder<Structure> structure, int color, int radius) {
         super(baseName);
-        this.structureName = structureName;
+        this.structure = structure;
         this.color = color;
         this.radius = radius;
     }
@@ -29,9 +29,9 @@ public class ItemStructureFinder extends ItemImpl {
     @Override
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
         var stack = playerIn.getItemInHand(handIn);
-        if (!levelIn.isClientSide && ((ServerLevel) levelIn).structureFeatureManager().shouldGenerateFeatures()) {
-            var holderSet = HolderSet.direct(this.structureName);
-            var pos = ((ServerLevel) levelIn).getChunkSource().getGenerator().findNearestMapFeature((ServerLevel) levelIn, holderSet, playerIn.blockPosition(), this.radius, false);
+        if (!levelIn.isClientSide && ((ServerLevel) levelIn).structureManager().shouldGenerateStructures()) {
+            var holderSet = HolderSet.direct(this.structure);
+            var pos = ((ServerLevel) levelIn).getChunkSource().getGenerator().findNearestMapStructure((ServerLevel) levelIn, holderSet, playerIn.blockPosition(), this.radius, false);
             if (pos != null) {
                 var entity = new EntityStructureFinder(ModEntities.STRUCTURE_FINDER, levelIn);
                 entity.setPos(playerIn.getX(), playerIn.getY(0.5D), playerIn.getZ());

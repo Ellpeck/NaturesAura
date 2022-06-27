@@ -44,7 +44,7 @@ public class BlockEntitySlimeSplitGenerator extends BlockEntityImpl implements I
     public void startGenerating(Slime slime) {
         var size = slime.getSize();
         this.generationTimer = size * 30;
-        this.amountToRelease = (size * this.getGenerationAmount(slime)) / this.generationTimer;
+        this.amountToRelease = size * this.getGenerationAmount(slime) / this.generationTimer;
         this.color = this.getSlimeColor(slime);
 
         PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles((float) slime.getX(), (float) slime.getY(), (float) slime.getZ(), PacketParticles.Type.SLIME_SPLIT_GEN_START,

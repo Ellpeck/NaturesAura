@@ -12,8 +12,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -51,7 +51,7 @@ public class PatchouliCompat implements ICompat {
                             state -> check.matches(null, null, null, null, state, (char) 0));
             }
         }
-        MULTIBLOCKS.put(name, PatchouliAPI.get().makeMultiblock(pattern, rawMatchers));
+        PatchouliCompat.MULTIBLOCKS.put(name, PatchouliAPI.get().makeMultiblock(pattern, rawMatchers));
     }
 
     @SuppressWarnings("unchecked")
@@ -70,7 +70,7 @@ public class PatchouliCompat implements ICompat {
     @Override
     public void setup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            for (var entry : MULTIBLOCKS.entrySet())
+            for (var entry : PatchouliCompat.MULTIBLOCKS.entrySet())
                 PatchouliAPI.get().registerMultiblock(entry.getKey(), entry.getValue());
 
             PatchouliAPI.get().setConfigFlag(NaturesAura.MOD_ID + ":rf_converter", ModConfig.instance.rfConverter.get());
@@ -93,7 +93,7 @@ public class PatchouliCompat implements ICompat {
     public void onBookDraw(BookDrawScreenEvent event) {
         var book = event.getBook();
         var gui = event.getScreen();
-        if (book == null || !book.equals(BOOK))
+        if (book == null || !book.equals(PatchouliCompat.BOOK))
             return;
         var now = LocalDateTime.now();
         if (now.getMonth() == Month.MAY && now.getDayOfMonth() == 21) {
@@ -106,7 +106,7 @@ public class PatchouliCompat implements ICompat {
 
             if (event.getMouseX() >= x && event.getMouseY() >= y && event.getMouseX() < x + 43 && event.getMouseY() < y + 42)
                 gui.renderComponentTooltip(event.getPoseStack(),
-                        Collections.singletonList(new TextComponent("It's the author Ellpeck's birthday!").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GOLD))),
+                        Collections.singletonList(Component.literal("It's the author Ellpeck's birthday!").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GOLD))),
                         event.getMouseX(), event.getMouseY(), gui.getMinecraft().font);
         } else if (now.getMonth() == Month.JUNE) {
             var x = gui.width / 2 + 272 / 2;
@@ -118,7 +118,7 @@ public class PatchouliCompat implements ICompat {
 
             if (event.getMouseX() >= x && event.getMouseY() >= y && event.getMouseX() < x + 45 && event.getMouseY() < y + 26)
                 gui.renderComponentTooltip(event.getPoseStack(),
-                        Collections.singletonList(new TextComponent("\u00A76Happy \u00A74P\u00A76r\u00A7ei\u00A72d\u00A79e\u00A75!")),
+                        Collections.singletonList(Component.literal("\u00A76Happy \u00A74P\u00A76r\u00A7ei\u00A72d\u00A79e\u00A75!")),
                         event.getMouseX(), event.getMouseY(), gui.getMinecraft().font);
         }
 
@@ -135,8 +135,8 @@ public class PatchouliCompat implements ICompat {
             if (info.tier() == 1) {
                 Screen.blit(event.getPoseStack(), x, y, 496 - 16, 44, 16, 18, 512, 256);
             } else {
-                var r = ((info.color() >> 16) & 255) / 255F;
-                var g = ((info.color() >> 8) & 255) / 255F;
+                var r = (info.color() >> 16 & 255) / 255F;
+                var g = (info.color() >> 8 & 255) / 255F;
                 var b = (info.color() & 255) / 255F;
                 RenderSystem.setShaderColor(r, g, b, 1);
                 Screen.blit(event.getPoseStack(), x, y, 496 - 32, 44, 16, 18, 512, 256);
@@ -144,7 +144,7 @@ public class PatchouliCompat implements ICompat {
 
             if (event.getMouseX() >= x && event.getMouseY() >= y && event.getMouseX() < x + 16 && event.getMouseY() < y + 18)
                 gui.renderComponentTooltip(event.getPoseStack(),
-                        Collections.singletonList(new TextComponent("Thanks for your support, " + name + "!").setStyle(Style.EMPTY.applyFormat(ChatFormatting.YELLOW))),
+                        Collections.singletonList(Component.literal("Thanks for your support, " + name + "!").setStyle(Style.EMPTY.applyFormat(ChatFormatting.YELLOW))),
                         event.getMouseX(), event.getMouseY(), gui.getMinecraft().font);
 
         }

@@ -10,7 +10,6 @@ import de.ellpeck.naturesaura.misc.LevelData;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -23,7 +22,6 @@ import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
@@ -36,7 +34,7 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
     public ItemPickaxe(String baseName, Tier material, int damage, float speed) {
         super(material, damage, speed, new Properties().tab(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     @Override

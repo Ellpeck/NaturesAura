@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -14,8 +15,6 @@ import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.material.Material;
-
-import java.util.Random;
 
 import static net.minecraft.core.Direction.Axis;
 
@@ -100,7 +99,7 @@ public class LevelGenAncientTree extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void makeLeaves(WorldGenLevel level, BlockPos pos, BlockState state, int radius, Random rand) {
+    private void makeLeaves(WorldGenLevel level, BlockPos pos, BlockState state, int radius, RandomSource rand) {
         for (var x = -radius; x <= radius; x++) {
             for (var y = -radius; y <= radius; y++) {
                 for (var z = -radius; z <= radius; z++) {

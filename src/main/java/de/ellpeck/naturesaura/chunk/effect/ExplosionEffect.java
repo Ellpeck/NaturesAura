@@ -77,6 +77,6 @@ public class ExplosionEffect implements IDrainSpotEffect {
 
     @Override
     public ResourceLocation getName() {
-        return NAME;
+        return ExplosionEffect.NAME;
     }
 }

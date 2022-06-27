@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.reg.*;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -17,25 +18,24 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.event.ForgeEventFactory;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class BlockAncientSapling extends BushBlock implements BonemealableBlock, IModItem, ICustomBlockState, ICustomItemModel, ICustomRenderType {
 
-    protected static final VoxelShape SHAPE = box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
+    protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
     public BlockAncientSapling() {
         super(Properties.of(Material.GRASS).strength(0.0F).sound(SoundType.GRASS));
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return BlockAncientSapling.SHAPE;
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!level.isClientSide) {
             super.randomTick(state, level, pos, random);
 
@@ -60,12 +60,12 @@ public class BlockAncientSapling extends BushBlock implements BonemealableBlock,
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level level, RandomSource rand, BlockPos pos, BlockState state) {
         return level.random.nextFloat() < 0.45F;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, Random rand, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state) {
         if (state.getValue(SaplingBlock.STAGE) == 0) {
             level.setBlock(pos, state.cycle(SaplingBlock.STAGE), 4);
         } else if (ForgeEventFactory.saplingGrowTree(level, rand, pos)) {

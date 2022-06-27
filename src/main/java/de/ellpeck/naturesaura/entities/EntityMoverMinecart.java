@@ -12,17 +12,19 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -30,7 +32,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityMoverMinecart extends AbstractMinecart {
+public class EntityMoverMinecart extends Minecart {
 
     private final List<BlockPos> spotOffsets = new ArrayList<>();
     public boolean isActive;
@@ -41,7 +43,11 @@ public class EntityMoverMinecart extends AbstractMinecart {
     }
 
     public EntityMoverMinecart(EntityType<?> type, Level level, double x, double y, double z) {
-        super(type, level, x, y, z);
+        super(type, level);
+        this.setPos(x, y, z);
+        this.xo = x;
+        this.yo = y;
+        this.zo = z;
     }
 
     @Override
@@ -179,5 +185,10 @@ public class EntityMoverMinecart extends AbstractMinecart {
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
+    @Override
+    public InteractionResult interact(Player p_38483_, InteractionHand p_38484_) {
+        return InteractionResult.PASS;
     }
 }

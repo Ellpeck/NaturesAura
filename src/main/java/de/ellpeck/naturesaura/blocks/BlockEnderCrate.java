@@ -15,8 +15,8 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -38,7 +38,6 @@ import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 
 public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider<BlockEntityEnderCrate>, ICustomBlockState {
 
@@ -56,11 +55,11 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
 
     @OnlyIn(Dist.CLIENT)
     public static void addEnderNameInfo(ItemStack stack, List<Component> tooltip) {
-        var name = getEnderName(stack);
+        var name = BlockEnderCrate.getEnderName(stack);
         if (name != null && !name.isEmpty()) {
-            tooltip.add(new TextComponent(ChatFormatting.DARK_PURPLE + I18n.get("info." + NaturesAura.MOD_ID + ".ender_name", ChatFormatting.ITALIC + name + ChatFormatting.RESET)));
+            tooltip.add(Component.literal(ChatFormatting.DARK_PURPLE + I18n.get("info." + NaturesAura.MOD_ID + ".ender_name", ChatFormatting.ITALIC + name + ChatFormatting.RESET)));
         } else {
-            tooltip.add(new TextComponent(ChatFormatting.DARK_PURPLE + I18n.get("info." + NaturesAura.MOD_ID + ".ender_name.missing")));
+            tooltip.add(Component.literal(ChatFormatting.DARK_PURPLE + I18n.get("info." + NaturesAura.MOD_ID + ".ender_name.missing")));
         }
     }
 
@@ -102,12 +101,12 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter levelIn, List<Component> tooltip, TooltipFlag flagIn) {
-        addEnderNameInfo(stack, tooltip);
+        BlockEnderCrate.addEnderNameInfo(stack, tooltip);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, RandomSource rand) {
         for (var i = 0; i < 3; ++i) {
             var j = rand.nextInt(2) * 2 - 1;
             var k = rand.nextInt(2) * 2 - 1;

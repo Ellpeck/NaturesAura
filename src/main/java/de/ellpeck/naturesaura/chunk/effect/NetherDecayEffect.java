@@ -100,6 +100,6 @@ public class NetherDecayEffect implements IDrainSpotEffect {
 
     @Override
     public ResourceLocation getName() {
-        return NAME;
+        return NetherDecayEffect.NAME;
     }
 }

@@ -46,7 +46,7 @@ public class RenderProjectileGenerator implements BlockEntityRenderer<BlockEntit
             stack.translate(-0.002F, 0, 0);
         }
         var brightness = 15 << 20 | 15 << 4;
-        this.model.renderToBuffer(stack, buffer.getBuffer(this.model.renderType(RES)), brightness, combinedOverlayIn, 1, 1, 1, 1);
+        this.model.renderToBuffer(stack, buffer.getBuffer(this.model.renderType(RenderProjectileGenerator.RES)), brightness, combinedOverlayIn, 1, 1, 1, 1);
         stack.popPose();
     }
 

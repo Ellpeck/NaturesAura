@@ -91,6 +91,6 @@ public class GrassDieEffect implements IDrainSpotEffect {
 
     @Override
     public ResourceLocation getName() {
-        return NAME;
+        return GrassDieEffect.NAME;
     }
 }

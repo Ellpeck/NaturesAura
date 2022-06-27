@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.recipes;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -9,7 +8,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -45,7 +43,7 @@ public class TreeRitualRecipe extends ModRecipe {
         return ModRecipes.TREE_RITUAL_TYPE;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<TreeRitualRecipe> {
+    public static class Serializer implements RecipeSerializer<TreeRitualRecipe> {
 
         @Override
         public TreeRitualRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

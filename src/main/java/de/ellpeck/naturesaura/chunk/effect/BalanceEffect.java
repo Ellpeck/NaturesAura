@@ -41,6 +41,6 @@ public class BalanceEffect implements IDrainSpotEffect {
 
     @Override
     public ResourceLocation getName() {
-        return NAME;
+        return BalanceEffect.NAME;
     }
 }

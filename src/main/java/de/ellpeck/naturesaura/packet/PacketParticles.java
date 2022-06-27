@@ -525,7 +525,7 @@ public class PacketParticles {
                 renderer.addParticle(new ItemParticleOption(ParticleTypes.ITEM, entity.getItem()), false, d0, d13, d18, level.random.nextGaussian() * 0.15D, level.random.nextDouble() * 0.2D, level.random.nextGaussian() * 0.15D);
 
             int color = entity.getEntityData().get(EntityStructureFinder.COLOR);
-            for (var d24 = 0.0D; d24 < (Math.PI * 2D); d24 += 0.15707963267948966D) {
+            for (var d24 = 0.0D; d24 < Math.PI * 2D; d24 += 0.15707963267948966D) {
                 NaturesAuraAPI.instance().spawnMagicParticle(d0 + Math.cos(d24) * 5.0D, d13 - 0.4D, d18 + Math.sin(d24) * 5.0D, Math.cos(d24) * -2, 0.0D, Math.sin(d24) * -2, color, 2, 60, 0, false, true);
                 NaturesAuraAPI.instance().spawnMagicParticle(d0 + Math.cos(d24) * 5.0D, d13 - 0.4D, d18 + Math.sin(d24) * 5.0D, Math.cos(d24) * -2.5, 0.0D, Math.sin(d24) * -2.5, color, 2, 60, 0, false, true);
             }

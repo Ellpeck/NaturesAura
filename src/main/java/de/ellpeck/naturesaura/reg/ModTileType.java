@@ -3,7 +3,6 @@ package de.ellpeck.naturesaura.reg;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Arrays;
 
@@ -25,10 +24,5 @@ public class ModTileType<T extends BlockEntity> implements IModItem {
     @Override
     public String getBaseName() {
         return this.name;
-    }
-
-    @Override
-    public ForgeRegistryEntry<?> getRegistryEntry() {
-        return this.type;
     }
 }

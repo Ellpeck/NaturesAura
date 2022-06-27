@@ -12,10 +12,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -30,9 +28,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;
 import java.util.List;
@@ -66,7 +62,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
             return ActiveType.INACTIVE;
         if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return ActiveType.INACTIVE;
-        if (!NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), NAME))
+        if (!NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), OreSpawnEffect.NAME))
             return ActiveType.INHIBITED;
         return ActiveType.ACTIVE;
     }
@@ -95,7 +91,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
         var totalWeight = WeightedRandom.getTotalWeight(ores);
 
         var powders = NaturesAuraAPI.instance().getActiveEffectPowders(level,
-                new AABB(pos).inflate(this.dist), NAME);
+                new AABB(pos).inflate(this.dist), OreSpawnEffect.NAME);
         if (powders.isEmpty())
             return;
         for (var i = 0; i < this.amount; i++) {
@@ -130,7 +126,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                         var ray = new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false);
                         var context = new BlockPlaceContext(new UseOnContext(player, InteractionHand.MAIN_HAND, ray));
                         var stateToPlace = toPlace.getStateForPlacement(context);
-                        if (SPAWN_EXCEPTIONS.contains(stateToPlace))
+                        if (OreSpawnEffect.SPAWN_EXCEPTIONS.contains(stateToPlace))
                             continue;
 
                         level.setBlockAndUpdate(orePos, stateToPlace);
@@ -154,6 +150,6 @@ public class OreSpawnEffect implements IDrainSpotEffect {
 
     @Override
     public ResourceLocation getName() {
-        return NAME;
+        return OreSpawnEffect.NAME;
     }
 }

@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -17,7 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockAnimalContainer extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
-    private static final VoxelShape SHAPE = box(5, 0, 5, 11, 13, 11);
+    private static final VoxelShape SHAPE = Block.box(5, 0, 5, 11, 13, 11);
 
     public BlockAnimalContainer() {
         super("animal_container", BlockEntityAnimalContainer.class, Properties.copy(Blocks.STONE));
@@ -30,7 +31,7 @@ public class BlockAnimalContainer extends BlockContainerImpl implements IVisuali
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return BlockAnimalContainer.SHAPE;
     }
 
     @Override

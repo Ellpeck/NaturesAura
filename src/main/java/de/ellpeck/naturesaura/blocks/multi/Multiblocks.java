@@ -24,7 +24,7 @@ public final class Multiblocks {
             {"         ", "   WBW   ", "   WBW   ", " WWCWCWW ", " BBW WBB ", " WWCWCWW ", "   WBW   ", "   WBW   ", "         "}};
     public static final IMultiblock ALTAR = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "altar"),
-            ALTAR_PATTERN,
+            Multiblocks.ALTAR_PATTERN,
             'C', Blocks.CHISELED_STONE_BRICKS,
             'B', Matcher.tag(Blocks.STONE_BRICKS, BlockTagProvider.ALTAR_STONE),
             'W', Matcher.tag(Blocks.OAK_PLANKS, BlockTagProvider.ALTAR_WOOD),
@@ -33,7 +33,7 @@ public final class Multiblocks {
             ' ', Matcher.wildcard());
     public static final IMultiblock NETHER_ALTAR = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "nether_altar"),
-            ALTAR_PATTERN,
+            Multiblocks.ALTAR_PATTERN,
             'C', Blocks.RED_NETHER_BRICKS,
             'B', Matcher.tag(Blocks.NETHER_BRICKS, BlockTagProvider.NETHER_ALTAR_STONE),
             'W', Matcher.tag(Blocks.CRIMSON_PLANKS, BlockTagProvider.NETHER_ALTAR_WOOD),

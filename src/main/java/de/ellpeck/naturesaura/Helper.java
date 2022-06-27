@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.datafixers.util.Either;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
@@ -15,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -36,7 +34,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -47,7 +44,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import top.theillusivec4.curios.api.CuriosApi;
 
@@ -56,7 +52,6 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -66,7 +61,7 @@ public final class Helper {
     public static boolean getBlockEntitiesInArea(LevelAccessor level, BlockPos pos, int radius, Function<BlockEntity, Boolean> consumer) {
         for (var x = pos.getX() - radius >> 4; x <= pos.getX() + radius >> 4; x++) {
             for (var z = pos.getZ() - radius >> 4; z <= pos.getZ() + radius >> 4; z++) {
-                var chunk = getLoadedChunk(level, x, z);
+                var chunk = Helper.getLoadedChunk(level, x, z);
                 if (chunk != null) {
                     for (var tilePos : chunk.getBlockEntitiesPos()) {
                         if (tilePos.distSqr(pos) <= radius * radius)
@@ -206,7 +201,7 @@ public final class Helper {
         return new ICapabilityProvider() {
             private final LazyOptional<IAuraRecharge> recharge = LazyOptional.of(() -> (container, containerSlot, itemSlot, isSelected) -> {
                 if (isSelected || !needsSelected)
-                    return rechargeAuraItem(stack, container, 300);
+                    return Helper.rechargeAuraItem(stack, container, 300);
                 return false;
             });
 
@@ -238,7 +233,7 @@ public final class Helper {
                 for (var part : split[1].replace("]", "").split(",")) {
                     var keyValue = part.split("=");
                     for (var prop : state.getProperties()) {
-                        var changed = findProperty(state, prop, keyValue[0], keyValue[1]);
+                        var changed = Helper.findProperty(state, prop, keyValue[0], keyValue[1]);
                         if (changed != null) {
                             state = changed;
                             break;
@@ -296,7 +291,7 @@ public final class Helper {
     }
 
     // This is how @ObjectHolder SHOULD work...
-    public static <T extends IForgeRegistryEntry<T>> void populateObjectHolders(Class<?> clazz, IForgeRegistry<T> registry) {
+    public static <T> void populateObjectHolders(Class<?> clazz, IForgeRegistry<T> registry) {
         for (var entry : clazz.getFields()) {
             if (!Modifier.isStatic(entry.getModifiers()))
                 continue;

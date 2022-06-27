@@ -49,7 +49,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
             return ActiveType.INACTIVE;
         if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return ActiveType.INACTIVE;
-        if (NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), NAME))
+        if (NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), PlantBoostEffect.NAME))
             return ActiveType.INHIBITED;
         return ActiveType.ACTIVE;
     }
@@ -68,7 +68,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
             var z = Mth.floor(pos.getZ() + (2 * level.random.nextFloat() - 1) * this.dist);
             var plantPos = new BlockPos(x, level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z).below();
             if (plantPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(plantPos)) {
-                if (NaturesAuraAPI.instance().isEffectPowderActive(level, plantPos, NAME))
+                if (NaturesAuraAPI.instance().isEffectPowderActive(level, plantPos, PlantBoostEffect.NAME))
                     continue;
 
                 var state = level.getBlockState(plantPos);
@@ -99,6 +99,6 @@ public class PlantBoostEffect implements IDrainSpotEffect {
 
     @Override
     public ResourceLocation getName() {
-        return NAME;
+        return PlantBoostEffect.NAME;
     }
 }

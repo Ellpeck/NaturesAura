@@ -51,8 +51,8 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
         if (!unload) {
             var range = this.range();
             if (range > 0) {
-                for (var x = (this.worldPosition.getX() - range) >> 4; x <= (this.worldPosition.getX() + range) >> 4; x++) {
-                    for (var z = (this.worldPosition.getZ() - range) >> 4; z <= (this.worldPosition.getZ() + range) >> 4; z++) {
+                for (var x = this.worldPosition.getX() - range >> 4; x <= this.worldPosition.getX() + range >> 4; x++) {
+                    for (var z = this.worldPosition.getZ() - range >> 4; z <= this.worldPosition.getZ() + range >> 4; z++) {
                         var pos = new ChunkPos(x, z);
                         // Only force chunks that we're already forcing or that nobody else is forcing
                         if (this.forcedChunks.contains(pos) || !level.getForcedChunks().contains(pos.toLong()))

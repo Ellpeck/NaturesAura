@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
@@ -22,16 +23,14 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Random;
-
 public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorProvidingBlock, IColorProvidingItem, ICustomBlockState {
 
     public static final int HIGHEST_STAGE = 3;
-    public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, HIGHEST_STAGE);
+    public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, BlockGoldenLeaves.HIGHEST_STAGE);
 
     public BlockGoldenLeaves() {
         super(Properties.of(Material.LEAVES, MaterialColor.GOLD).strength(0.2F).randomTicks().noOcclusion().sound(SoundType.GRASS));
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     public static boolean convert(Level level, BlockPos pos) {
@@ -39,8 +38,8 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
         if (state.getBlock() instanceof LeavesBlock && !(state.getBlock() instanceof BlockAncientLeaves || state.getBlock() instanceof BlockGoldenLeaves)) {
             if (!level.isClientSide) {
                 level.setBlockAndUpdate(pos, ModBlocks.GOLDEN_LEAVES.defaultBlockState()
-                        .setValue(DISTANCE, state.hasProperty(DISTANCE) ? state.getValue(DISTANCE) : 1)
-                        .setValue(PERSISTENT, state.hasProperty(PERSISTENT) ? state.getValue(PERSISTENT) : false));
+                        .setValue(LeavesBlock.DISTANCE, state.hasProperty(LeavesBlock.DISTANCE) ? state.getValue(LeavesBlock.DISTANCE) : 1)
+                        .setValue(LeavesBlock.PERSISTENT, state.hasProperty(LeavesBlock.PERSISTENT) ? state.getValue(LeavesBlock.PERSISTENT) : false));
             }
             return true;
         }
@@ -54,8 +53,8 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
-        if (stateIn.getValue(STAGE) == HIGHEST_STAGE && rand.nextFloat() >= 0.75F)
+    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, RandomSource rand) {
+        if (stateIn.getValue(BlockGoldenLeaves.STAGE) == BlockGoldenLeaves.HIGHEST_STAGE && rand.nextFloat() >= 0.75F)
             NaturesAuraAPI.instance().spawnMagicParticle(
                     pos.getX() + rand.nextFloat(),
                     pos.getY() + rand.nextFloat(),
@@ -67,7 +66,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(STAGE);
+        builder.add(BlockGoldenLeaves.STAGE);
     }
 
     @Override
@@ -77,7 +76,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
             var color = 0xF2FF00;
             if (state != null && levelIn != null && pos != null) {
                 var foliage = BiomeColors.getAverageFoliageColor(levelIn, pos);
-                return Helper.blendColors(color, foliage, state.getValue(STAGE) / (float) HIGHEST_STAGE);
+                return Helper.blendColors(color, foliage, state.getValue(BlockGoldenLeaves.STAGE) / (float) BlockGoldenLeaves.HIGHEST_STAGE);
             } else {
                 return color;
             }
@@ -91,18 +90,18 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, RandomSource random) {
         super.randomTick(state, levelIn, pos, random);
         if (!levelIn.isClientSide) {
-            int stage = state.getValue(STAGE);
-            if (stage < HIGHEST_STAGE) {
-                levelIn.setBlockAndUpdate(pos, state.setValue(STAGE, stage + 1));
+            int stage = state.getValue(BlockGoldenLeaves.STAGE);
+            if (stage < BlockGoldenLeaves.HIGHEST_STAGE) {
+                levelIn.setBlockAndUpdate(pos, state.setValue(BlockGoldenLeaves.STAGE, stage + 1));
             }
 
             if (stage > 1) {
                 var offset = pos.relative(Direction.getRandom(random));
                 if (levelIn.isLoaded(offset))
-                    convert(levelIn, offset);
+                    BlockGoldenLeaves.convert(levelIn, offset);
             }
         }
     }

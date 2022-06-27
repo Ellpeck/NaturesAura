@@ -8,7 +8,8 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ICustomRenderType;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -52,16 +53,16 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
                                 otherCreator.sendToClients();
 
                                 compound.remove(key);
-                                player.displayClientMessage(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".connected"), true);
+                                player.displayClientMessage(Component.translatable("info." + NaturesAura.MOD_ID + ".connected"), true);
                             } else
-                                player.displayClientMessage(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".stored_pos_gone"), true);
+                                player.displayClientMessage(Component.translatable("info." + NaturesAura.MOD_ID + ".stored_pos_gone"), true);
                         } else
-                            player.displayClientMessage(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".too_far"), true);
+                            player.displayClientMessage(Component.translatable("info." + NaturesAura.MOD_ID + ".too_far"), true);
                     } else
-                        player.displayClientMessage(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".same_position"), true);
+                        player.displayClientMessage(Component.translatable("info." + NaturesAura.MOD_ID + ".same_position"), true);
                 } else {
                     compound.putLong(key, pos.asLong());
-                    player.displayClientMessage(new TranslatableComponent("info." + NaturesAura.MOD_ID + ".stored_pos"), true);
+                    player.displayClientMessage(Component.translatable("info." + NaturesAura.MOD_ID + ".stored_pos"), true);
                 }
             }
             return InteractionResult.SUCCESS;
@@ -71,7 +72,7 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, RandomSource rand) {
         var tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityFieldCreator creator && creator.isCharged) {
             var connected = creator.getConnectedPos();

@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -20,7 +21,7 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, Bo
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, RandomSource random) {
         var up = pos.above();
         var upState = levelIn.getBlockState(up);
         if (upState.isFaceSturdy(levelIn, up, Direction.DOWN))
@@ -41,12 +42,12 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, Bo
     }
 
     @Override
-    public boolean isBonemealSuccess(Level levelIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level levelIn, RandomSource rand, BlockPos pos, BlockState state) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, Random rand, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state) {
         var blockpos = pos.above();
         var blockstate = Blocks.GRASS.defaultBlockState();
 

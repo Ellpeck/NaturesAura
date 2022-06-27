@@ -36,7 +36,7 @@ public class GuiEnderCrate extends AbstractContainerScreen<ContainerEnderCrate> 
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, CHEST_GUI_TEXTURE);
+        RenderSystem.setShaderTexture(0, GuiEnderCrate.CHEST_GUI_TEXTURE);
         var i = (this.width - this.imageWidth) / 2;
         var j = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, i, j, 0, 0, this.imageWidth, 3 * 18 + 17);

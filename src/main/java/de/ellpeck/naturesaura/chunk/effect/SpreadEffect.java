@@ -61,6 +61,6 @@ public class SpreadEffect implements IDrainSpotEffect {
 
     @Override
     public ResourceLocation getName() {
-        return NAME;
+        return SpreadEffect.NAME;
     }
 }

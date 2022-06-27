@@ -35,19 +35,19 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     public static final EnumProperty<RedstoneSide> EAST = BlockStateProperties.EAST_REDSTONE;
     public static final EnumProperty<RedstoneSide> SOUTH = BlockStateProperties.SOUTH_REDSTONE;
     public static final EnumProperty<RedstoneSide> WEST = BlockStateProperties.WEST_REDSTONE;
-    protected static final VoxelShape[] SHAPES = new VoxelShape[]{box(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), box(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), box(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), box(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), box(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), box(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), box(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), box(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), box(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), box(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), box(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), box(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), box(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), box(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D), box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D)};
+    protected static final VoxelShape[] SHAPES = new VoxelShape[]{Block.box(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.box(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.box(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.box(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D)};
 
     public BlockGoldPowder() {
         super("gold_powder", Properties.copy(Blocks.REDSTONE_WIRE));
-        this.registerDefaultState(this.defaultBlockState().setValue(NORTH, RedstoneSide.NONE).setValue(EAST, RedstoneSide.NONE).setValue(SOUTH, RedstoneSide.NONE).setValue(WEST, RedstoneSide.NONE));
+        this.registerDefaultState(this.defaultBlockState().setValue(BlockGoldPowder.NORTH, RedstoneSide.NONE).setValue(BlockGoldPowder.EAST, RedstoneSide.NONE).setValue(BlockGoldPowder.SOUTH, RedstoneSide.NONE).setValue(BlockGoldPowder.WEST, RedstoneSide.NONE));
     }
 
     private static int getShapeIndex(BlockState state) {
         var i = 0;
-        var n = state.getValue(NORTH) != RedstoneSide.NONE;
-        var e = state.getValue(EAST) != RedstoneSide.NONE;
-        var s = state.getValue(SOUTH) != RedstoneSide.NONE;
-        var w = state.getValue(WEST) != RedstoneSide.NONE;
+        var n = state.getValue(BlockGoldPowder.NORTH) != RedstoneSide.NONE;
+        var e = state.getValue(BlockGoldPowder.EAST) != RedstoneSide.NONE;
+        var s = state.getValue(BlockGoldPowder.SOUTH) != RedstoneSide.NONE;
+        var w = state.getValue(BlockGoldPowder.WEST) != RedstoneSide.NONE;
 
         if (n || s && !n && !e && !w) {
             i |= 1 << Direction.NORTH.get2DDataValue();
@@ -66,7 +66,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(NORTH, EAST, SOUTH, WEST);
+        builder.add(BlockGoldPowder.NORTH, BlockGoldPowder.EAST, BlockGoldPowder.SOUTH, BlockGoldPowder.WEST);
     }
 
     @Override
@@ -76,14 +76,14 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        return SHAPES[getShapeIndex(state)];
+        return BlockGoldPowder.SHAPES[BlockGoldPowder.getShapeIndex(state)];
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockGetter iblockreader = context.getLevel();
         var blockpos = context.getClickedPos();
-        return this.defaultBlockState().setValue(WEST, this.getSide(iblockreader, blockpos, Direction.WEST)).setValue(EAST, this.getSide(iblockreader, blockpos, Direction.EAST)).setValue(NORTH, this.getSide(iblockreader, blockpos, Direction.NORTH)).setValue(SOUTH, this.getSide(iblockreader, blockpos, Direction.SOUTH));
+        return this.defaultBlockState().setValue(BlockGoldPowder.WEST, this.getSide(iblockreader, blockpos, Direction.WEST)).setValue(BlockGoldPowder.EAST, this.getSide(iblockreader, blockpos, Direction.EAST)).setValue(BlockGoldPowder.NORTH, this.getSide(iblockreader, blockpos, Direction.NORTH)).setValue(BlockGoldPowder.SOUTH, this.getSide(iblockreader, blockpos, Direction.SOUTH));
     }
 
     @Override
@@ -91,7 +91,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
         if (facing == Direction.DOWN) {
             return stateIn;
         } else {
-            return facing == Direction.UP ? stateIn.setValue(WEST, this.getSide(levelIn, currentPos, Direction.WEST)).setValue(EAST, this.getSide(levelIn, currentPos, Direction.EAST)).setValue(NORTH, this.getSide(levelIn, currentPos, Direction.NORTH)).setValue(SOUTH, this.getSide(levelIn, currentPos, Direction.SOUTH)) : stateIn.setValue(RedStoneWireBlock.PROPERTY_BY_DIRECTION.get(facing), this.getSide(levelIn, currentPos, facing));
+            return facing == Direction.UP ? stateIn.setValue(BlockGoldPowder.WEST, this.getSide(levelIn, currentPos, Direction.WEST)).setValue(BlockGoldPowder.EAST, this.getSide(levelIn, currentPos, Direction.EAST)).setValue(BlockGoldPowder.NORTH, this.getSide(levelIn, currentPos, Direction.NORTH)).setValue(BlockGoldPowder.SOUTH, this.getSide(levelIn, currentPos, Direction.SOUTH)) : stateIn.setValue(RedStoneWireBlock.PROPERTY_BY_DIRECTION.get(facing), this.getSide(levelIn, currentPos, facing));
         }
     }
 
@@ -180,7 +180,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     public void neighborChanged(BlockState state, Level levelIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         if (!levelIn.isClientSide) {
             if (!state.canSurvive(levelIn, pos)) {
-                dropResources(state, levelIn, pos);
+                Block.dropResources(state, levelIn, pos);
                 levelIn.removeBlock(pos, false);
             }
         }
@@ -197,7 +197,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
                 if (blockstate.getBlock() != Blocks.OBSERVER) {
                     var blockpos = pool.relative(direction.getOpposite());
                     var blockstate1 = blockstate.updateShape(direction.getOpposite(), levelIn.getBlockState(blockpos), levelIn, pool, blockpos);
-                    updateOrDestroy(blockstate, blockstate1, levelIn, pool, flags);
+                    Block.updateOrDestroy(blockstate, blockstate1, levelIn, pool, flags);
                 }
 
                 pool.set(pos).move(direction).move(Direction.UP);
@@ -205,7 +205,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
                 if (blockstate3.getBlock() != Blocks.OBSERVER) {
                     var blockpos1 = pool.relative(direction.getOpposite());
                     var blockstate2 = blockstate3.updateShape(direction.getOpposite(), levelIn.getBlockState(blockpos1), levelIn, pool, blockpos1);
-                    updateOrDestroy(blockstate3, blockstate2, levelIn, pool, flags);
+                    Block.updateOrDestroy(blockstate3, blockstate2, levelIn, pool, flags);
                 }
             }
         }

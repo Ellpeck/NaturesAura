@@ -80,7 +80,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
                                 this.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                                 return true;
                             });
-                            recurseTreeDestruction(this.level, this.ritualPos, this.ritualPos, true, false);
+                            BlockEntityWoodStand.recurseTreeDestruction(this.level, this.ritualPos, this.ritualPos, true, false);
 
                             var item = new ItemEntity(this.level,
                                     this.ritualPos.getX() + 0.5, this.ritualPos.getY() + 4.5, this.ritualPos.getZ() + 0.5,
@@ -141,7 +141,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
                             level.setBlockAndUpdate(offset, Blocks.AIR.defaultBlockState());
                             PacketHandler.sendToAllAround(level, pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), PacketParticles.Type.TR_DISAPPEAR));
                         }
-                        recurseTreeDestruction(level, offset, start, includeLeaves, drop);
+                        BlockEntityWoodStand.recurseTreeDestruction(level, offset, start, includeLeaves, drop);
                     }
                 }
             }
@@ -154,7 +154,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
         }
         for (var i = 0; i < 2; i++) {
             var state = this.level.getBlockState(this.ritualPos.above(i));
-            if (!(state.is(BlockTags.LOGS)))
+            if (!state.is(BlockTags.LOGS))
                 return false;
         }
         if (this.timer < this.recipe.time / 2) {

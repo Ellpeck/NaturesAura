@@ -33,7 +33,7 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
 
     public static ContainerData getFurnaceData(AbstractFurnaceBlockEntity tile) {
         try {
-            return (ContainerData) FURNACE_DATA_FIELD.get(tile);
+            return (ContainerData) BlockEntityFurnaceHeater.FURNACE_DATA_FIELD.get(tile);
         } catch (IllegalAccessException e) {
             NaturesAura.LOGGER.fatal("Couldn't reflect furnace field", e);
             return null;
@@ -59,7 +59,7 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
             var tilePos = this.worldPosition.relative(facing.getOpposite());
             var tile = this.level.getBlockEntity(tilePos);
             if (tile instanceof AbstractFurnaceBlockEntity furnace && this.isReady(furnace)) {
-                var data = getFurnaceData(furnace);
+                var data = BlockEntityFurnaceHeater.getFurnaceData(furnace);
                 var burnTime = data.get(0);
                 if (burnTime <= 0)
                     this.level.setBlockAndUpdate(tilePos, this.level.getBlockState(tilePos).setValue(AbstractFurnaceBlock.LIT, true));
@@ -99,7 +99,7 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
 
         var input = furnace.getItem(0);
         if (!input.isEmpty()) {
-            var recipe = this.level.getRecipeManager().getRecipeFor(getRecipeType(furnace), furnace, this.level).orElse(null);
+            var recipe = this.level.getRecipeManager().getRecipeFor(BlockEntityFurnaceHeater.getRecipeType(furnace), furnace, this.level).orElse(null);
             if (recipe == null)
                 return false;
             var output = recipe.getResultItem();

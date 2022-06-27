@@ -88,16 +88,16 @@ public class ClientEvents {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) {
-            heldCache = ItemStack.EMPTY;
-            heldEye = ItemStack.EMPTY;
-            heldOcular = ItemStack.EMPTY;
+            ClientEvents.heldCache = ItemStack.EMPTY;
+            ClientEvents.heldEye = ItemStack.EMPTY;
+            ClientEvents.heldOcular = ItemStack.EMPTY;
 
             var mc = Minecraft.getInstance();
             if (mc.level == null) {
                 ItemRangeVisualizer.clear();
-                PENDING_AURA_CHUNKS.clear();
+                ClientEvents.PENDING_AURA_CHUNKS.clear();
             } else {
-                PENDING_AURA_CHUNKS.removeIf(next -> next.tryHandle(mc.level));
+                ClientEvents.PENDING_AURA_CHUNKS.removeIf(next -> next.tryHandle(mc.level));
 
                 if (!mc.isPaused()) {
                     if (mc.level.getGameTime() % 20 == 0) {
@@ -144,14 +144,14 @@ public class ClientEvents {
                         inst.setParticleSpawnRange(32);
                     }
 
-                    heldCache = Helper.getEquippedItem(s -> s.getItem() instanceof ItemAuraCache, mc.player);
-                    heldEye = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE, mc.player);
-                    heldOcular = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE_IMPROVED, mc.player);
+                    ClientEvents.heldCache = Helper.getEquippedItem(s -> s.getItem() instanceof ItemAuraCache, mc.player);
+                    ClientEvents.heldEye = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE, mc.player);
+                    ClientEvents.heldOcular = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE_IMPROVED, mc.player);
 
-                    if (!heldOcular.isEmpty() && mc.level.getGameTime() % 20 == 0) {
-                        SHOWING_EFFECTS.clear();
+                    if (!ClientEvents.heldOcular.isEmpty() && mc.level.getGameTime() % 20 == 0) {
+                        ClientEvents.SHOWING_EFFECTS.clear();
                         Helper.getAuraChunksWithSpotsInArea(mc.level, mc.player.blockPosition(), 100,
-                                chunk -> chunk.getActiveEffectIcons(mc.player, SHOWING_EFFECTS));
+                                chunk -> chunk.getActiveEffectIcons(mc.player, ClientEvents.SHOWING_EFFECTS));
                     }
                 }
             }
@@ -176,7 +176,7 @@ public class ClientEvents {
         RenderSystem.enableBlend();
 
         // aura spot debug
-        hoveringAuraSpot = null;
+        ClientEvents.hoveringAuraSpot = null;
         if (mc.options.renderDebug && mc.player.isCreative() && ModConfig.instance.debugLevel.get()) {
             var playerEye = mc.player.getEyePosition(event.getPartialTick());
             var playerView = mc.player.getViewVector(event.getPartialTick()).normalize();
@@ -188,7 +188,7 @@ public class ClientEvents {
                 if (playerEye.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= range * range) {
                     for (var d = 0F; d <= range; d += 0.5F) {
                         if (pos.equals(new BlockPos(playerEye.add(playerView.scale(d))))) {
-                            hoveringAuraSpot = pos;
+                            ClientEvents.hoveringAuraSpot = pos;
                             break;
                         }
                     }
@@ -240,12 +240,12 @@ public class ClientEvents {
     @SubscribeEvent
     public void onOverlayRender(RenderGameOverlayEvent.Post event) {
         var mc = Minecraft.getInstance();
-        var stack = event.getMatrixStack();
+        var stack = event.getPoseStack();
         if (event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             var res = event.getWindow();
             if (mc.player != null) {
-                if (!heldCache.isEmpty()) {
-                    var container = heldCache.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null);
+                if (!ClientEvents.heldCache.isEmpty()) {
+                    var container = ClientEvents.heldCache.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null);
                     var width = Mth.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
 
                     int conf = ModConfig.instance.cacheBarLocation.get();
@@ -256,7 +256,7 @@ public class ClientEvents {
 
                     var color = container.getAuraColor();
                     RenderSystem.setShaderColor((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 1);
-                    RenderSystem.setShaderTexture(0, OVERLAYS);
+                    RenderSystem.setShaderTexture(0, ClientEvents.OVERLAYS);
                     if (width < 80)
                         Screen.blit(stack, x + width, y, width, 0, 80 - width, 6, 256, 256);
                     if (width > 0)
@@ -265,7 +265,7 @@ public class ClientEvents {
                     var scale = 0.75F;
                     stack.pushPose();
                     stack.scale(scale, scale, scale);
-                    var s = heldCache.getHoverName().getString();
+                    var s = ClientEvents.heldCache.getHoverName().getString();
                     mc.font.drawShadow(stack, s, conf == 1 ? x / scale : (x + 80) / scale - mc.font.width(s), (y - 7) / scale, color);
                     stack.popPose();
 
@@ -273,9 +273,9 @@ public class ClientEvents {
                     stack.pushPose();
                 }
 
-                if (!heldEye.isEmpty() || !heldOcular.isEmpty()) {
+                if (!ClientEvents.heldEye.isEmpty() || !ClientEvents.heldOcular.isEmpty()) {
                     stack.pushPose();
-                    RenderSystem.setShaderTexture(0, OVERLAYS);
+                    RenderSystem.setShaderTexture(0, ClientEvents.OVERLAYS);
 
                     int conf = ModConfig.instance.auraBarLocation.get();
                     if (!mc.options.renderDebug && (conf != 2 || !(mc.screen instanceof ChatScreen))) {
@@ -288,19 +288,19 @@ public class ClientEvents {
                         var textScale = 0.75F;
 
                         var startX = conf % 2 == 0 ? 3 : res.getGuiScaledWidth() - 3 - 6;
-                        var startY = conf < 2 ? 10 : (!heldOcular.isEmpty() && (totalPercentage > 1F || totalPercentage < 0) ? -26 : 0) + res.getGuiScaledHeight() - 60;
+                        var startY = conf < 2 ? 10 : (!ClientEvents.heldOcular.isEmpty() && (totalPercentage > 1F || totalPercentage < 0) ? -26 : 0) + res.getGuiScaledHeight() - 60;
                         float plusOffX = conf % 2 == 0 ? 7 : -1 - 6;
                         var textX = conf % 2 == 0 ? 3 : res.getGuiScaledWidth() - 3 - mc.font.width(text) * textScale;
                         float textY = conf < 2 ? 3 : res.getGuiScaledHeight() - 3 - 6;
 
                         var tHeight = Mth.ceil(Mth.clamp(totalPercentage, 0F, 1F) * 50);
-                        var y = !heldOcular.isEmpty() && totalPercentage > 1F ? startY + 26 : startY;
+                        var y = !ClientEvents.heldOcular.isEmpty() && totalPercentage > 1F ? startY + 26 : startY;
                         if (tHeight < 50)
                             Screen.blit(stack, startX, y, 6, 12, 6, 50 - tHeight, 256, 256);
                         if (tHeight > 0)
                             Screen.blit(stack, startX, y + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
 
-                        if (!heldOcular.isEmpty()) {
+                        if (!ClientEvents.heldOcular.isEmpty()) {
                             var topHeight = Mth.ceil(Mth.clamp((totalPercentage - 1F) * 2F, 0F, 1F) * 25);
                             if (topHeight > 0) {
                                 if (topHeight < 25)
@@ -315,30 +315,30 @@ public class ClientEvents {
                             }
                         }
 
-                        if (totalPercentage > (heldOcular.isEmpty() ? 1F : 1.5F))
+                        if (totalPercentage > (ClientEvents.heldOcular.isEmpty() ? 1F : 1.5F))
                             mc.font.drawShadow(stack, "+", startX + plusOffX, startY - 0.5F, color);
-                        if (totalPercentage < (heldOcular.isEmpty() ? 0F : -0.5F))
-                            mc.font.drawShadow(stack, "-", startX + plusOffX, startY - 0.5F + (heldOcular.isEmpty() ? 44 : 70), color);
+                        if (totalPercentage < (ClientEvents.heldOcular.isEmpty() ? 0F : -0.5F))
+                            mc.font.drawShadow(stack, "-", startX + plusOffX, startY - 0.5F + (ClientEvents.heldOcular.isEmpty() ? 44 : 70), color);
 
                         stack.pushPose();
                         stack.scale(textScale, textScale, textScale);
                         mc.font.drawShadow(stack, text, textX / textScale, textY / textScale, color);
                         stack.popPose();
 
-                        if (!heldOcular.isEmpty()) {
+                        if (!ClientEvents.heldOcular.isEmpty()) {
                             var scale = 0.75F;
                             stack.pushPose();
                             stack.scale(scale, scale, scale);
                             var stackX = conf % 2 == 0 ? 10 : res.getGuiScaledWidth() - 22;
                             var stackY = conf < 2 ? 15 : res.getGuiScaledHeight() - 55;
-                            for (var effect : SHOWING_EFFECTS.values()) {
+                            for (var effect : ClientEvents.SHOWING_EFFECTS.values()) {
                                 var theX = (int) (stackX / scale);
                                 var theY = (int) (stackY / scale);
                                 var itemStack = effect.getA();
                                 Helper.renderItemInGui(itemStack, theX, theY, 1F);
                                 if (effect.getB()) {
                                     RenderSystem.disableDepthTest();
-                                    RenderSystem.setShaderTexture(0, OVERLAYS);
+                                    RenderSystem.setShaderTexture(0, ClientEvents.OVERLAYS);
                                     Screen.blit(stack, theX, theY, 240, 0, 16, 16, 256, 256);
                                     RenderSystem.enableDepthTest();
                                 }
@@ -387,15 +387,15 @@ public class ClientEvents {
                                     Helper.renderItemInGui(itemStack, x + 2, y - 18, 1F);
                                 }
 
-                                Helper.renderItemInGui(ITEM_FRAME, x - 24, y - 24, 1F);
-                                RenderSystem.setShaderTexture(0, OVERLAYS);
+                                Helper.renderItemInGui(ClientEvents.ITEM_FRAME, x - 24, y - 24, 1F);
+                                RenderSystem.setShaderTexture(0, ClientEvents.OVERLAYS);
                                 var u = chute.isBlacklist ? 240 : 224;
                                 RenderSystem.disableDepthTest();
                                 Screen.blit(stack, x - 18, y - 18, u, 0, 16, 16, 256, 256);
                                 RenderSystem.enableDepthTest();
                             } else if (tile instanceof BlockEntityItemDistributor distributor) {
-                                Helper.renderItemInGui(DISPENSER, x - 24, y - 24, 1F);
-                                RenderSystem.setShaderTexture(0, OVERLAYS);
+                                Helper.renderItemInGui(ClientEvents.DISPENSER, x - 24, y - 24, 1F);
+                                RenderSystem.setShaderTexture(0, ClientEvents.OVERLAYS);
                                 var u = !distributor.isRandomMode ? 240 : 224;
                                 RenderSystem.disableDepthTest();
                                 Screen.blit(stack, x - 18, y - 18, u, 0, 16, 16, 256, 256);
@@ -415,9 +415,9 @@ public class ClientEvents {
                     stack.popPose();
                 }
 
-                if (hoveringAuraSpot != null) {
+                if (ClientEvents.hoveringAuraSpot != null) {
                     var format = NumberFormat.getInstance();
-                    var amount = IAuraChunk.getAuraChunk(mc.level, hoveringAuraSpot).getDrainSpot(hoveringAuraSpot);
+                    var amount = IAuraChunk.getAuraChunk(mc.level, ClientEvents.hoveringAuraSpot).getDrainSpot(ClientEvents.hoveringAuraSpot);
                     var color = amount > 0 ? ChatFormatting.GREEN : ChatFormatting.RED;
                     mc.font.drawShadow(stack, color + format.format(amount), res.getGuiScaledWidth() / 2F + 5, res.getGuiScaledHeight() / 2F - 11, 0xFFFFFF);
                 }
@@ -440,7 +440,7 @@ public class ClientEvents {
         var y = res.getGuiScaledHeight() / 2 + yOffset;
         var width = Mth.ceil(stored / (float) max * 80);
 
-        RenderSystem.setShaderTexture(0, OVERLAYS);
+        RenderSystem.setShaderTexture(0, ClientEvents.OVERLAYS);
         if (width < 80)
             Screen.blit(stack, x + width, y, width, 0, 80 - width, 6, 256, 256);
         if (width > 0)

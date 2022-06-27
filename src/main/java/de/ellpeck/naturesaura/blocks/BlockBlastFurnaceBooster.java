@@ -32,18 +32,18 @@ public class BlockBlastFurnaceBooster extends BlockContainerImpl implements ICus
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return BlockBlastFurnaceBooster.SHAPE;
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(FACING);
+        builder.add(BlockBlastFurnaceBooster.FACING);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return super.getStateForPlacement(context).setValue(FACING, context.getHorizontalDirection().getOpposite());
+        return super.getStateForPlacement(context).setValue(BlockBlastFurnaceBooster.FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override

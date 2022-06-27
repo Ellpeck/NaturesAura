@@ -28,7 +28,7 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
     public ItemAxe(String baseName, Tier material, float damage, float speed) {
         super(material, damage, speed, new Properties().tab(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     @Override

@@ -68,15 +68,15 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
 
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(INHIBITED_EFFECT, null);
-        this.entityData.define(COLOR, 0);
-        this.entityData.define(AMOUNT, 0);
+        this.entityData.define(EntityEffectInhibitor.INHIBITED_EFFECT, null);
+        this.entityData.define(EntityEffectInhibitor.COLOR, 0);
+        this.entityData.define(EntityEffectInhibitor.AMOUNT, 0);
     }
 
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (INHIBITED_EFFECT.equals(key) || AMOUNT.equals(key))
+        if (EntityEffectInhibitor.INHIBITED_EFFECT.equals(key) || EntityEffectInhibitor.AMOUNT.equals(key))
             this.powderListDirty = true;
     }
 
@@ -161,30 +161,30 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     public ResourceLocation getInhibitedEffect() {
-        var effect = this.entityData.get(INHIBITED_EFFECT);
+        var effect = this.entityData.get(EntityEffectInhibitor.INHIBITED_EFFECT);
         if (effect == null || effect.isEmpty())
             return null;
         return new ResourceLocation(effect);
     }
 
     public void setInhibitedEffect(ResourceLocation effect) {
-        this.entityData.set(INHIBITED_EFFECT, effect != null ? effect.toString() : null);
+        this.entityData.set(EntityEffectInhibitor.INHIBITED_EFFECT, effect != null ? effect.toString() : null);
     }
 
     public int getColor() {
-        return this.entityData.get(COLOR);
+        return this.entityData.get(EntityEffectInhibitor.COLOR);
     }
 
     public void setColor(int color) {
-        this.entityData.set(COLOR, color);
+        this.entityData.set(EntityEffectInhibitor.COLOR, color);
     }
 
     public int getAmount() {
-        return this.entityData.get(AMOUNT);
+        return this.entityData.get(EntityEffectInhibitor.AMOUNT);
     }
 
     public void setAmount(int amount) {
-        this.entityData.set(AMOUNT, amount);
+        this.entityData.set(EntityEffectInhibitor.AMOUNT, amount);
     }
 
     @Override

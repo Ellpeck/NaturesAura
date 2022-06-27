@@ -16,7 +16,7 @@ public class Slab extends SlabBlock implements IModItem, ICustomBlockState {
         super(properties);
         this.baseName = baseName;
         this.textureName = textureName;
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     @Override

@@ -22,29 +22,29 @@ public final class Compat {
     private static final Map<String, ICompat> MODULES = new HashMap<>();
 
     public static void setup(FMLCommonSetupEvent event) {
-        populateModules(ModList.get()::isLoaded);
-        MODULES.values().forEach(c -> c.setup(event));
+        Compat.populateModules(ModList.get()::isLoaded);
+        Compat.MODULES.values().forEach(c -> c.setup(event));
     }
 
     public static void setupClient() {
-        MODULES.values().forEach(ICompat::setupClient);
+        Compat.MODULES.values().forEach(ICompat::setupClient);
     }
 
     public static boolean hasCompat(String mod) {
-        return MODULES.containsKey(mod);
+        return Compat.MODULES.containsKey(mod);
     }
 
     public static void addItemTags(ItemTagProvider provider) {
         // since other mods don't get loaded in runData, just populate all modules
-        populateModules(s -> true);
-        MODULES.values().forEach(m -> m.addItemTags(provider));
+        Compat.populateModules(s -> true);
+        Compat.MODULES.values().forEach(m -> m.addItemTags(provider));
     }
 
     private static void populateModules(Predicate<String> isLoaded) {
-        for (var entry : MODULE_TYPES.entrySet()) {
+        for (var entry : Compat.MODULE_TYPES.entrySet()) {
             var id = entry.getKey();
             if (isLoaded.test(id)) {
-                MODULES.put(id, entry.getValue().get());
+                Compat.MODULES.put(id, entry.getValue().get());
                 NaturesAura.LOGGER.info("Loading compat module for mod " + id);
             }
         }

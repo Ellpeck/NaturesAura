@@ -53,7 +53,7 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
         this.goalDim = goalDim;
         this.canUseDims = canUseDims;
 
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     private boolean canUseHere(ResourceKey<Level> dimension) {
@@ -136,7 +136,7 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
 
     @Override
     public Property<RailShape> getShapeProperty() {
-        return SHAPE;
+        return BlockDimensionRail.SHAPE;
     }
 
     @Override
@@ -151,7 +151,7 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(SHAPE, WATERLOGGED);
+        builder.add(BlockDimensionRail.SHAPE, BaseRailBlock.WATERLOGGED);
     }
 
     @Override

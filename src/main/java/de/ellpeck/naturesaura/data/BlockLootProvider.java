@@ -7,12 +7,11 @@ import de.ellpeck.naturesaura.blocks.BlockGoldenLeaves;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.blocks.Slab;
 import de.ellpeck.naturesaura.items.ModItems;
-import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
@@ -31,6 +30,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePrope
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -72,13 +72,13 @@ public class BlockLootProvider implements DataProvider {
     }
 
     @Override
-    public void run(HashCache cache) throws IOException {
+    public void run(CachedOutput cache) throws IOException {
         for (var function : this.lootFunctions.entrySet()) {
             var block = function.getKey();
             var func = function.getValue();
             var table = func.apply(block).setParamSet(LootContextParamSets.BLOCK).build();
-            var path = getPath(this.generator.getOutputFolder(), block.getRegistryName());
-            DataProvider.save(GSON, cache, LootTables.serialize(table), path);
+            var path = BlockLootProvider.getPath(this.generator.getOutputFolder(), ForgeRegistries.BLOCKS.getKey(block));
+            DataProvider.saveStable(cache, LootTables.serialize(table), path);
         }
     }
 
@@ -92,31 +92,31 @@ public class BlockLootProvider implements DataProvider {
     private static class LootTableHooks extends BlockLoot {
 
         public static LootTable.Builder genLeaves(Block block, Block drop) {
-            return createLeavesDrops(block, drop, 0.05F, 0.0625F, 0.083333336F, 0.1F);
+            return BlockLoot.createLeavesDrops(block, drop, 0.05F, 0.0625F, 0.083333336F, 0.1F);
         }
 
         public static LootTable.Builder genSlab(Block block) {
-            return createSlabItemTable(block);
+            return BlockLoot.createSlabItemTable(block);
         }
 
         public static LootTable.Builder genRegular(Block block) {
-            return createSingleItemTable(block);
+            return BlockLoot.createSingleItemTable(block);
         }
 
         public static LootTable.Builder genSilkOnly(Block block) {
-            return createSilkTouchOnlyTable(block);
+            return BlockLoot.createSilkTouchOnlyTable(block);
         }
 
         public static LootTable.Builder genSilkOr(Block block, LootPoolEntryContainer.Builder<?> builder) {
-            return createSilkTouchOrShearsDispatchTable(block, builder);
+            return BlockLoot.createSilkTouchOrShearsDispatchTable(block, builder);
         }
 
         public static LootTable.Builder genFlowerPot(Block block) {
-            return createPotFlowerItemTable(((FlowerPotBlock) block).getContent());
+            return BlockLoot.createPotFlowerItemTable(((FlowerPotBlock) block).getContent());
         }
 
-        public static <T> T survivesExplosion(Block block, ConditionUserBuilder<T> then) {
-            return applyExplosionCondition(block, then);
+        public static <T extends ConditionUserBuilder<T>> T survivesExplosion(Block block, ConditionUserBuilder<T> then) {
+            return BlockLoot.applyExplosionCondition(block, then);
         }
     }
 }

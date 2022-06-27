@@ -47,7 +47,7 @@ public class RenderGeneratorLimitRemover implements BlockEntityRenderer<BlockEnt
         stack.translate(-0.001F, yOff + 1 + 0.001F, 1 + 0.001F);
         stack.mulPose(Vector3f.XP.rotationDegrees(180F));
         stack.scale(1.002F, 1.002F, 1.002F);
-        this.model.renderToBuffer(stack, buffer.getBuffer(this.model.renderType(RES)), brightness, combinedOverlayIn, 1, 1, 1, alpha);
+        this.model.renderToBuffer(stack, buffer.getBuffer(this.model.renderType(RenderGeneratorLimitRemover.RES)), brightness, combinedOverlayIn, 1, 1, 1, alpha);
         stack.popPose();
     }
 

@@ -1,17 +1,16 @@
 package de.ellpeck.naturesaura.compat.jei;
 
-import com.google.common.collect.ImmutableList;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.recipes.AltarRecipe;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -29,18 +28,13 @@ public class AltarCategory implements IRecipeCategory<AltarRecipe> {
     }
 
     @Override
-    public ResourceLocation getUid() {
+    public RecipeType<AltarRecipe> getRecipeType() {
         return JEINaturesAuraPlugin.ALTAR;
     }
 
     @Override
-    public Class<? extends AltarRecipe> getRecipeClass() {
-        return AltarRecipe.class;
-    }
-
-    @Override
     public Component getTitle() {
-        return new TranslatableComponent("container." + JEINaturesAuraPlugin.ALTAR + ".name");
+        return Component.translatable("container." + JEINaturesAuraPlugin.ALTAR + ".name");
     }
 
     @Override
@@ -54,29 +48,10 @@ public class AltarCategory implements IRecipeCategory<AltarRecipe> {
     }
 
     @Override
-    public void setIngredients(AltarRecipe altarRecipe, IIngredients iIngredients) {
-        ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
-        builder.add(altarRecipe.input.getItems());
-        if (altarRecipe.catalyst != Ingredient.EMPTY)
-            builder.add(altarRecipe.catalyst.getItems());
-        if (altarRecipe.requiredType != null)
-            builder.add(altarRecipe.getDimensionBottle());
-        iIngredients.setInputs(VanillaTypes.ITEM, builder.build());
-        iIngredients.setOutput(VanillaTypes.ITEM, altarRecipe.output);
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, AltarRecipe recipe, IIngredients iIngredients) {
-        var group = iRecipeLayout.getItemStacks();
-        group.init(0, true, 0, 18);
-        group.set(0, Arrays.asList(recipe.input.getItems()));
-        group.init(1, false, 80, 18);
-        group.set(1, recipe.output);
-        group.init(2, true, 26, 18);
-        group.set(2, recipe.catalyst == Ingredient.EMPTY ?
-                Collections.singletonList(this.altar) : Arrays.asList(recipe.catalyst.getItems()));
-        group.init(3, true, 51, 18);
-        if (recipe.requiredType != null)
-            group.set(3, recipe.getDimensionBottle());
+    public void setRecipe(IRecipeLayoutBuilder builder, AltarRecipe recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 0, 18).addItemStacks(Arrays.asList(recipe.input.getItems()));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 80, 18).addItemStack(recipe.output);
+        builder.addSlot(RecipeIngredientRole.CATALYST, 26, 18).addItemStacks(recipe.catalyst == Ingredient.EMPTY ? Collections.singletonList(this.altar) : Arrays.asList(recipe.catalyst.getItems()));
+        builder.addSlot(RecipeIngredientRole.CATALYST, 51, 18).addItemStack(recipe.requiredType != null ? recipe.getDimensionBottle() : ItemStack.EMPTY);
     }
 }

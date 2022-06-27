@@ -8,6 +8,7 @@ import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -27,8 +28,8 @@ public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorP
 
     public BlockAncientLeaves() {
         super(Block.Properties.of(Material.LEAVES, MaterialColor.COLOR_PINK).strength(0.2F).randomTicks().noOcclusion().sound(SoundType.GRASS));
-        ModRegistry.add(this);
-        ModRegistry.add(new ModTileType<>(BlockEntityAncientLeaves::new, this));
+        ModRegistry.ALL_ITEMS.add(this);
+        ModRegistry.ALL_ITEMS.add(new ModTileType<BlockEntityAncientLeaves>(BlockEntityAncientLeaves::new, this));
     }
 
     @Override
@@ -50,7 +51,7 @@ public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorP
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, RandomSource rand) {
         super.animateTick(stateIn, levelIn, pos, rand);
         if (rand.nextFloat() >= 0.95F && !levelIn.getBlockState(pos.below()).isCollisionShapeFullBlock(levelIn, pos)) {
             var tile = levelIn.getBlockEntity(pos);
@@ -69,7 +70,7 @@ public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorP
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, RandomSource random) {
         super.randomTick(state, levelIn, pos, random);
         if (!levelIn.isClientSide) {
             var tile = levelIn.getBlockEntity(pos);

@@ -24,7 +24,7 @@ public interface IDrainSpotEffect {
         return ItemStack.EMPTY;
     }
 
-    public enum ActiveType {
+    enum ActiveType {
         INACTIVE, INHIBITED, ACTIVE
     }
 }

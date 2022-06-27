@@ -36,7 +36,7 @@ public class RenderMoverMinecart extends MinecartRenderer<EntityMoverMinecart> {
         matrixStackIn.translate(0, 22 / 16F, 0);
         matrixStackIn.translate(0, 0, 1);
         matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
-        this.model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(this.model.renderType(RES)), packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        this.model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(this.model.renderType(RenderMoverMinecart.RES)), packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         matrixStackIn.popPose();
     }
 

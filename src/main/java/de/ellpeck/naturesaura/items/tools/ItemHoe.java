@@ -17,14 +17,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
 
@@ -33,7 +30,7 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
     public ItemHoe(String baseName, Tier material, int speed) {
         super(material, speed, 0, new Properties().tab(NaturesAura.CREATIVE_TAB));
         this.baseName = baseName;
-        ModRegistry.add(this);
+        ModRegistry.ALL_ITEMS.add(this);
     }
 
     @Override

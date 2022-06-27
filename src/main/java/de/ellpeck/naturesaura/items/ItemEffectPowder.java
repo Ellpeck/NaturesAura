@@ -6,14 +6,11 @@ import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -51,10 +48,10 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
 
     @Override
     public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
-        if (this.allowdedIn(tab)) {
+        if (this.allowedIn(tab)) {
             for (var effect : NaturesAuraAPI.EFFECT_POWDERS.keySet()) {
                 var stack = new ItemStack(this);
-                setEffect(stack, effect);
+                ItemEffectPowder.setEffect(stack, effect);
                 items.add(stack);
             }
         }
@@ -62,12 +59,12 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
 
     @Override
     public Component getName(ItemStack stack) {
-        return new TranslatableComponent(this.getDescriptionId(stack) + "." + getEffect(stack));
+        return Component.translatable(this.getDescriptionId(stack) + "." + ItemEffectPowder.getEffect(stack));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public ItemColor getItemColor() {
-        return (stack, tintIndex) -> NaturesAuraAPI.EFFECT_POWDERS.getOrDefault(getEffect(stack), 0xFFFFFF);
+        return (stack, tintIndex) -> NaturesAuraAPI.EFFECT_POWDERS.getOrDefault(ItemEffectPowder.getEffect(stack), 0xFFFFFF);
     }
 }

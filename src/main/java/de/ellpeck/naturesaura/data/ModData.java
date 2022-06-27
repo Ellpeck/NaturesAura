@@ -12,10 +12,10 @@ public final class ModData {
         var generator = event.getGenerator();
         var ex = event.getExistingFileHelper();
         var blockTags = new BlockTagProvider(generator, ex);
-        generator.addProvider(blockTags);
-        generator.addProvider(new ItemTagProvider(generator, blockTags, ex));
-        generator.addProvider(new BlockLootProvider(generator));
-        generator.addProvider(new BlockStateGenerator(generator, ex));
-        generator.addProvider(new ItemModelGenerator(generator, ex));
+        generator.addProvider(event.includeServer(), blockTags);
+        generator.addProvider(event.includeServer(), new ItemTagProvider(generator, blockTags, ex));
+        generator.addProvider(event.includeServer(), new BlockLootProvider(generator));
+        generator.addProvider(event.includeServer(), new BlockStateGenerator(generator, ex));
+        generator.addProvider(event.includeServer(), new ItemModelGenerator(generator, ex));
     }
 }

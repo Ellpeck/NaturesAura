@@ -31,8 +31,8 @@ public final class NaturesAura {
     public static final String MOD_ID = NaturesAuraAPI.MOD_ID;
     public static final String MOD_NAME = "Nature's Aura";
 
-    public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(MOD_ID) {
+    public static final Logger LOGGER = LogManager.getLogger(NaturesAura.MOD_NAME);
+    public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(NaturesAura.MOD_ID) {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(ModItems.GOLD_LEAF);
@@ -44,7 +44,7 @@ public final class NaturesAura {
     public static IProxy proxy = DistExecutor.unsafeRunForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 
     public NaturesAura() {
-        instance = this;
+        NaturesAura.instance = this;
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
         var builder = new ForgeConfigSpec.Builder();
@@ -65,7 +65,7 @@ public final class NaturesAura {
 
         MinecraftForge.EVENT_BUS.register(new CommonEvents());
 
-        proxy.preInit(event);
+        NaturesAura.proxy.preInit(event);
     }
 
     private void init(FMLCommonSetupEvent event) {
@@ -75,16 +75,16 @@ public final class NaturesAura {
         ModRegistry.init();
         DrainSpotEffects.init();
 
-        proxy.init(event);
+        NaturesAura.proxy.init(event);
     }
 
     private void postInit(FMLCommonSetupEvent event) {
-        proxy.postInit(event);
+        NaturesAura.proxy.postInit(event);
 
-        LOGGER.info("-- Nature's Aura Fake Player Information --");
-        LOGGER.info("Name: [Minecraft]");
-        LOGGER.info("UUID: 41C82C87-7AfB-4024-BA57-13D2C99CAE77");
-        LOGGER.info(Strings.padStart("", 43, '-'));
+        NaturesAura.LOGGER.info("-- Nature's Aura Fake Player Information --");
+        NaturesAura.LOGGER.info("Name: [Minecraft]");
+        NaturesAura.LOGGER.info("UUID: 41C82C87-7AfB-4024-BA57-13D2C99CAE77");
+        NaturesAura.LOGGER.info(Strings.padStart("", 43, '-'));
     }
 
 }
