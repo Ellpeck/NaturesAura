@@ -1,7 +1,7 @@
 {
-    "variants": {
-        "": {
-            "model": "naturesaura:block/tainted_gold_block"
-        }
+  "variants": {
+    "": {
+      "model": "naturesaura:block/tainted_gold_block"
     }
+  }
 }

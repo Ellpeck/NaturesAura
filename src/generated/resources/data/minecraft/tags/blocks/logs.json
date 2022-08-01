@@ -1,7 +1,6 @@
 {
-    "replace": false,
-    "values": [
-        "naturesaura:ancient_log",
-        "naturesaura:ancient_bark"
-    ]
+  "values": [
+    "naturesaura:ancient_log",
+    "naturesaura:ancient_bark"
+  ]
 }

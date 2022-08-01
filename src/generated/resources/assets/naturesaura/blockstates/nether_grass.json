@@ -1,7 +1,7 @@
 {
-    "variants": {
-        "": {
-            "model": "naturesaura:block/nether_grass"
-        }
+  "variants": {
+    "": {
+      "model": "naturesaura:block/nether_grass"
     }
+  }
 }

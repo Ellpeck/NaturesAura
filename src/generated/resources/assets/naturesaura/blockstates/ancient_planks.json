@@ -1,7 +1,7 @@
 {
-    "variants": {
-        "": {
-            "model": "naturesaura:block/ancient_planks"
-        }
+  "variants": {
+    "": {
+      "model": "naturesaura:block/ancient_planks"
     }
+  }
 }

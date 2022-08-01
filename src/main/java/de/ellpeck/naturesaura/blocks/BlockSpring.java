@@ -5,7 +5,6 @@ import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import de.ellpeck.naturesaura.reg.ICustomRenderType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
@@ -27,7 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class BlockSpring extends BlockContainerImpl implements ICustomBlockState, IColorProvidingBlock, IColorProvidingItem, BucketPickup, ICustomRenderType {
+public class BlockSpring extends BlockContainerImpl implements ICustomBlockState, IColorProvidingBlock, IColorProvidingItem, BucketPickup {
 
     public BlockSpring() {
         super("spring", BlockEntitySpring.class, Properties.copy(Blocks.STONE_BRICKS));
@@ -57,11 +56,6 @@ public class BlockSpring extends BlockContainerImpl implements ICustomBlockState
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
-    }
-
-    @Override
-    public Supplier<RenderType> getRenderType() {
-        return RenderType::translucent;
     }
 
     @Override

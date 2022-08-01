@@ -27,7 +27,7 @@ public class ProcessorAnimalSpawner implements IComponentProcessor {
         } else {
             return switch (key) {
                 case "name" -> IVariable.wrap(this.recipe.entity.getDescription().getString());
-                case "entity" -> IVariable.wrap(ForgeRegistries.ENTITIES.getKey(this.recipe.entity).toString());
+                case "entity" -> IVariable.wrap(ForgeRegistries.ENTITY_TYPES.getKey(this.recipe.entity).toString());
                 case "egg" -> IVariable.from(new ItemStack(ForgeSpawnEggItem.fromEntityType(this.recipe.entity)));
                 default -> null;
             };

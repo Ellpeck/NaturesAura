@@ -1,6 +1,7 @@
 {
-    "parent": "minecraft:block/cross",
-    "textures": {
-        "cross": "naturesaura:block/ancient_sapling"
-    }
+  "parent": "minecraft:block/cross",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "cross": "naturesaura:block/ancient_sapling"
+  }
 }

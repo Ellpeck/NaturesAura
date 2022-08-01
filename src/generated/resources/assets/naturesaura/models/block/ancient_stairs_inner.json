@@ -1,8 +1,8 @@
 {
-    "parent": "minecraft:block/inner_stairs",
-    "textures": {
-        "side": "naturesaura:block/ancient_planks",
-        "bottom": "naturesaura:block/ancient_planks",
-        "top": "naturesaura:block/ancient_planks"
-    }
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "naturesaura:block/ancient_planks",
+    "side": "naturesaura:block/ancient_planks",
+    "top": "naturesaura:block/ancient_planks"
+  }
 }

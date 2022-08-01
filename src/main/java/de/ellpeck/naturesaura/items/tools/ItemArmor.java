@@ -68,7 +68,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
 
         @SubscribeEvent
         public static void onAttack(LivingAttackEvent event) {
-            var entity = event.getEntityLiving();
+            var entity = event.getEntity();
             if (!entity.level.isClientSide) {
                 if (!ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.INFUSED))
                     return;

@@ -1,8 +1,8 @@
 {
-    "parent": "minecraft:block/cube_bottom_top",
-    "textures": {
-        "side": "naturesaura:block/time_changer",
-        "bottom": "naturesaura:block/time_changer_bottom",
-        "top": "naturesaura:block/time_changer_top"
-    }
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "naturesaura:block/time_changer_bottom",
+    "side": "naturesaura:block/time_changer",
+    "top": "naturesaura:block/time_changer_top"
+  }
 }

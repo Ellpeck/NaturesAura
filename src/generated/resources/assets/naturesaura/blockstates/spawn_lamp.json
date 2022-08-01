@@ -1,7 +1,7 @@
 {
-    "variants": {
-        "": {
-            "model": "naturesaura:block/spawn_lamp"
-        }
+  "variants": {
+    "": {
+      "model": "naturesaura:block/spawn_lamp"
     }
+  }
 }

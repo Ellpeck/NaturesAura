@@ -3,7 +3,10 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.gen.ModFeatures;
-import de.ellpeck.naturesaura.reg.*;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.ICustomItemModel;
+import de.ellpeck.naturesaura.reg.IModItem;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -20,7 +23,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.function.Supplier;
 
-public class BlockAncientSapling extends BushBlock implements BonemealableBlock, IModItem, ICustomBlockState, ICustomItemModel, ICustomRenderType {
+public class BlockAncientSapling extends BushBlock implements BonemealableBlock, IModItem, ICustomBlockState, ICustomItemModel {
 
     protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
@@ -75,16 +78,11 @@ public class BlockAncientSapling extends BushBlock implements BonemealableBlock,
 
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
-        generator.simpleBlock(this, generator.models().cross(this.getBaseName(), generator.modLoc("block/" + this.getBaseName())));
+        generator.simpleBlock(this, generator.models().cross(this.getBaseName(), generator.modLoc("block/" + this.getBaseName())).renderType("cutout_mipped"));
     }
 
     @Override
     public void generateCustomItemModel(ItemModelGenerator generator) {
         generator.withExistingParent(this.getBaseName(), "item/generated").texture("layer0", "block/" + this.getBaseName());
-    }
-
-    @Override
-    public Supplier<RenderType> getRenderType() {
-        return RenderType::cutoutMipped;
     }
 }

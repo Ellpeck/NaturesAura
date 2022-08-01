@@ -1,8 +1,8 @@
 {
-    "parent": "minecraft:block/cube_bottom_top",
-    "textures": {
-        "side": "naturesaura:block/placer",
-        "bottom": "naturesaura:block/placer_top",
-        "top": "naturesaura:block/placer_top"
-    }
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "naturesaura:block/placer_top",
+    "side": "naturesaura:block/placer",
+    "top": "naturesaura:block/placer_top"
+  }
 }

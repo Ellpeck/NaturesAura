@@ -1,6 +1,6 @@
 {
-    "parent": "minecraft:block/cube_all",
-    "textures": {
-        "all": "naturesaura:block/crushing_catalyst_nether"
-    }
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "naturesaura:block/crushing_catalyst_nether"
+  }
 }

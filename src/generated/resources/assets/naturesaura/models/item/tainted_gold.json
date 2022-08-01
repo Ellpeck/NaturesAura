@@ -1,6 +1,6 @@
 {
-    "parent": "minecraft:item/generated",
-    "textures": {
-        "layer0": "naturesaura:item/tainted_gold"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "naturesaura:item/tainted_gold"
+  }
 }

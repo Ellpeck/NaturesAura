@@ -31,8 +31,8 @@ public class ItemPetReviver extends ItemImpl {
     private static class Events {
 
         @SubscribeEvent
-        public void onEntityTick(LivingEvent.LivingUpdateEvent event) {
-            var entity = event.getEntityLiving();
+        public void onEntityTick(LivingEvent.LivingTickEvent event) {
+            var entity = event.getEntity();
             if (entity.level.isClientSide || entity.level.getGameTime() % 20 != 0 || !(entity instanceof TamableAnimal tameable))
                 return;
             if (!tameable.isTame() || !tameable.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":pet_reviver"))
@@ -57,7 +57,7 @@ public class ItemPetReviver extends ItemImpl {
                 return;
             if (target.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":pet_reviver"))
                 return;
-            var stack = event.getPlayer().getItemInHand(event.getHand());
+            var stack = event.getEntity().getItemInHand(event.getHand());
             if (stack.getItem() != ModItems.PET_REVIVER)
                 return;
             target.getPersistentData().putBoolean(NaturesAura.MOD_ID + ":pet_reviver", true);
@@ -70,7 +70,7 @@ public class ItemPetReviver extends ItemImpl {
         // we want to be sure that the pet is really dying, so we want to receive the event last
         @SubscribeEvent(priority = EventPriority.LOWEST)
         public void onLivingDeath(LivingDeathEvent event) {
-            var entity = event.getEntityLiving();
+            var entity = event.getEntity();
             if (entity.level.isClientSide || !(entity instanceof TamableAnimal tameable))
                 return;
             if (!tameable.isTame() || !tameable.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":pet_reviver"))

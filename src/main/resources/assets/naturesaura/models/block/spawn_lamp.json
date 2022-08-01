@@ -1,6 +1,7 @@
 {
     "__comment": "Model contributed by PolarizedIons <3",
     "parent": "minecraft:block/block",
+    "render_type": "cutout_mipped",
     "textures": {
         "0": "naturesaura:block/spawn_lamp",
         "-1": "naturesaura:block/spawn_lamp",

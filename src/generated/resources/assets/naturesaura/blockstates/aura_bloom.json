@@ -1,7 +1,7 @@
 {
-    "variants": {
-        "": {
-            "model": "naturesaura:block/aura_bloom"
-        }
+  "variants": {
+    "": {
+      "model": "naturesaura:block/aura_bloom"
     }
+  }
 }

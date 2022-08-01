@@ -232,7 +232,7 @@ public final class ModConfig {
             for (String s : this.additionalProjectiles.get()) {
                 var split = s.split("->");
                 var name = new ResourceLocation(split[0]);
-                var type = Objects.requireNonNull(ForgeRegistries.ENTITIES.getValue(name));
+                var type = Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getValue(name));
                 var amount = Integer.parseInt(split[1]);
                 NaturesAuraAPI.PROJECTILE_GENERATIONS.put(type, amount);
             }

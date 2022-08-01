@@ -1,6 +1,6 @@
 {
-    "parent": "minecraft:block/cube_all",
-    "textures": {
-        "all": "naturesaura:block/gold_nether_brick"
-    }
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "naturesaura:block/gold_nether_brick"
+  }
 }

@@ -1,6 +1,6 @@
 {
-    "parent": "minecraft:item/generated",
-    "textures": {
-        "layer0": "naturesaura:block/ancient_sapling"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "naturesaura:block/ancient_sapling"
+  }
 }

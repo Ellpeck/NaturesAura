@@ -1,7 +1,6 @@
 {
-    "replace": false,
-    "values": [
-        "naturesaura:end_flower",
-        "naturesaura:aura_bloom"
-    ]
+  "values": [
+    "naturesaura:end_flower",
+    "naturesaura:aura_bloom"
+  ]
 }

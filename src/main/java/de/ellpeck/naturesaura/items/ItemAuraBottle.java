@@ -104,7 +104,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
             var held = event.getItemStack();
             if (held.isEmpty() || held.getItem() != ModItems.BOTTLE_TWO_THE_REBOTTLING)
                 return;
-            var player = event.getPlayer();
+            var player = event.getEntity();
             HitResult ray = Item.getPlayerPOVHitResult(player.level, player, ClipContext.Fluid.NONE);
             if (ray.getType() == HitResult.Type.BLOCK)
                 return;

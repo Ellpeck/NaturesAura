@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.proxy;
 
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.entities.ModEntities;
 import de.ellpeck.naturesaura.entities.render.RenderEffectInhibitor;
@@ -13,12 +14,16 @@ import de.ellpeck.naturesaura.items.ItemColorChanger;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
 import de.ellpeck.naturesaura.particles.ParticleMagic;
-import de.ellpeck.naturesaura.reg.*;
+import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
+import de.ellpeck.naturesaura.reg.IColorProvidingItem;
+import de.ellpeck.naturesaura.reg.ITESRProvider;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -71,10 +76,8 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void postInit(FMLCommonSetupEvent event) {
-        for (var item : ModRegistry.ALL_ITEMS) {
-            if (item instanceof ICustomRenderType)
-                ItemBlockRenderTypes.setRenderLayer((Block) item, ((ICustomRenderType) item).getRenderType().get());
-        }
+        // TODO this uses a vanilla model so we can't just add the json entry to it
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.GOLD_POWDER, RenderType.cutoutMipped());
     }
 
     @Override

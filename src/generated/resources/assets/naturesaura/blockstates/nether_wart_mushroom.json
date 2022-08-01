@@ -1,7 +1,7 @@
 {
-    "variants": {
-        "": {
-            "model": "naturesaura:block/nether_wart_mushroom"
-        }
+  "variants": {
+    "": {
+      "model": "naturesaura:block/nether_wart_mushroom"
     }
+  }
 }

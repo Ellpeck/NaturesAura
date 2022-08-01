@@ -1,6 +1,7 @@
 {
-    "parent": "minecraft:block/cross",
-    "textures": {
-        "cross": "naturesaura:block/aura_cactus"
-    }
+  "parent": "minecraft:block/cross",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "cross": "naturesaura:block/aura_cactus"
+  }
 }

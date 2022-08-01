@@ -40,7 +40,7 @@ public class ItemBreakPrevention extends ItemImpl {
 
         @SubscribeEvent
         public void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-            var player = event.getPlayer();
+            var player = event.getEntity();
             if (player == null)
                 return;
             var stack = player.getMainHandItem();

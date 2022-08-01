@@ -1,6 +1,7 @@
 {
     "credit": "Made with Blockbench",
     "parent": "minecraft:block/block",
+    "render_type": "cutout",
     "textures": {
         "0": "naturesaura:block/aura_timer_base",
         "1": "naturesaura:block/aura_timer_glass_top",

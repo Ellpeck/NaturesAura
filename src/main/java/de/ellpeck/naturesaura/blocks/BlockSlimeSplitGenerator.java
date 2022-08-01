@@ -47,7 +47,7 @@ public class BlockSlimeSplitGenerator extends BlockContainerImpl implements IVis
 
         @SubscribeEvent
         public void onLivingDeath(LivingDeathEvent event) {
-            var entity = event.getEntityLiving();
+            var entity = event.getEntity();
             if (!(entity instanceof Slime slime) || entity.level.isClientSide)
                 return;
             var size = slime.getSize();

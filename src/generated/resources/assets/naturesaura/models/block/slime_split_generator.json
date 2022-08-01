@@ -1,8 +1,8 @@
 {
-    "parent": "minecraft:block/cube_bottom_top",
-    "textures": {
-        "side": "naturesaura:block/slime_split_generator",
-        "bottom": "naturesaura:block/slime_split_generator_bottom",
-        "top": "naturesaura:block/slime_split_generator_top"
-    }
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "naturesaura:block/slime_split_generator_bottom",
+    "side": "naturesaura:block/slime_split_generator",
+    "top": "naturesaura:block/slime_split_generator_top"
+  }
 }

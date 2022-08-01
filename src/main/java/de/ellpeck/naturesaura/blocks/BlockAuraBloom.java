@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
-public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockState, ICustomItemModel, ICustomRenderType, EntityBlock {
+public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockState, ICustomItemModel, EntityBlock {
 
     protected static final VoxelShape SHAPE = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
     private final String baseName;
@@ -67,17 +67,12 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
 
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
-        generator.simpleBlock(this, generator.models().cross(this.getBaseName(), generator.modLoc("block/" + this.getBaseName())));
+        generator.simpleBlock(this, generator.models().cross(this.getBaseName(), generator.modLoc("block/" + this.getBaseName())).renderType("cutout"));
     }
 
     @Override
     public void generateCustomItemModel(ItemModelGenerator generator) {
         generator.withExistingParent(this.getBaseName(), "item/generated").texture("layer0", "block/" + this.getBaseName());
-    }
-
-    @Override
-    public Supplier<RenderType> getRenderType() {
-        return RenderType::cutout;
     }
 
     @Override

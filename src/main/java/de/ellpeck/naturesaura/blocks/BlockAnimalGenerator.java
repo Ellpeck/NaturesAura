@@ -10,7 +10,6 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.npc.Npc;
 import net.minecraft.world.level.Level;
@@ -35,8 +34,8 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
     }
 
     @SubscribeEvent
-    public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        var entity = event.getEntityLiving();
+    public void onLivingUpdate(LivingEvent.LivingTickEvent event) {
+        var entity = event.getEntity();
         if (entity.level.isClientSide || entity.level.getGameTime() % 40 != 0 || !(entity instanceof Animal) || entity instanceof Npc)
             return;
         var data = entity.getPersistentData();
@@ -46,7 +45,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
 
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
-        var entity = event.getEntityLiving();
+        var entity = event.getEntity();
         if (entity.level.isClientSide || !(entity instanceof Animal) || entity instanceof Npc)
             return;
         var pos = entity.blockPosition();
@@ -84,14 +83,14 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
 
     @SubscribeEvent
     public void onEntityDrops(LivingDropsEvent event) {
-        var entity = event.getEntityLiving();
+        var entity = event.getEntity();
         if (entity.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":no_drops"))
             event.setCanceled(true);
     }
 
     @SubscribeEvent
     public void onEntityExp(LivingExperienceDropEvent event) {
-        var entity = event.getEntityLiving();
+        var entity = event.getEntity();
         if (entity.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":no_drops"))
             event.setCanceled(true);
     }

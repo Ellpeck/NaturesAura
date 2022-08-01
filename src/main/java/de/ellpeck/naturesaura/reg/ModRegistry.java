@@ -227,7 +227,7 @@ public final class ModRegistry {
             Helper.populateObjectHolders(ModPotions.class, event.getForgeRegistry());
         });
 
-        event.register(ForgeRegistries.Keys.CONTAINER_TYPES, h -> {
+        event.register(ForgeRegistries.Keys.MENU_TYPES, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "ender_crate"), IForgeMenuType.create((windowId, inv, data) -> {
                 var tile = inv.player.level.getBlockEntity(data.readBlockPos());
                 if (tile instanceof BlockEntityEnderCrate crate)

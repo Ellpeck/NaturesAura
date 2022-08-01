@@ -16,7 +16,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.SaplingGrowTreeEvent;
+import net.minecraftforge.event.level.SaplingGrowTreeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class BlockOakGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
@@ -29,7 +29,7 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
 
     @SubscribeEvent
     public void onTreeGrow(SaplingGrowTreeEvent event) {
-        var level = event.getWorld();
+        var level = event.getLevel();
         var pos = event.getPos();
         if (level instanceof Level && !level.isClientSide() && IAuraType.forLevel((Level) level).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD)
                 && level.getBlockState(pos).getBlock() instanceof SaplingBlock) {
@@ -37,7 +37,7 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
                 if (!(tile instanceof BlockEntityOakGenerator))
                     return false;
 
-                var rand = event.getRand();
+                var rand = event.getRandomSource();
                 if (rand.nextInt(10) == 0)
                     ((BlockEntityOakGenerator) tile).scheduledBigTrees.add(pos);
 

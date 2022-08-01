@@ -1,8 +1,8 @@
 {
-    "parent": "minecraft:block/cube_bottom_top",
-    "textures": {
-        "side": "naturesaura:block/nether_grass",
-        "bottom": "minecraft:block/netherrack",
-        "top": "naturesaura:block/nether_grass_top"
-    }
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "minecraft:block/netherrack",
+    "side": "naturesaura:block/nether_grass",
+    "top": "naturesaura:block/nether_grass_top"
+  }
 }

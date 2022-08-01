@@ -42,7 +42,7 @@ public class ItemEnderAccess extends ItemImpl {
         var name = BlockEnderCrate.getEnderName(stack);
         if (!Strings.isNullOrEmpty(name)) {
             if (!levelIn.isClientSide && NaturesAuraAPI.instance().extractAuraFromPlayer(playerIn, 10000, false)) {
-                NetworkHooks.openGui((ServerPlayer) playerIn, new MenuProvider() {
+                NetworkHooks.openScreen((ServerPlayer) playerIn, new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
                         return Component.translatable("info." + NaturesAura.MOD_ID + ".ender_access", ChatFormatting.ITALIC + name + ChatFormatting.RESET);

@@ -5,7 +5,6 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityFieldCreator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import de.ellpeck.naturesaura.reg.ICustomRenderType;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -21,10 +20,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
-public class BlockFieldCreator extends BlockContainerImpl implements ICustomBlockState, ICustomRenderType {
+public class BlockFieldCreator extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockFieldCreator() {
         super("field_creator", BlockEntityFieldCreator.class, Properties.of(Material.STONE).strength(2F).noCollission().sound(SoundType.STONE));
@@ -94,8 +92,4 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
         generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
     }
 
-    @Override
-    public Supplier<RenderType> getRenderType() {
-        return RenderType::cutoutMipped;
-    }
 }

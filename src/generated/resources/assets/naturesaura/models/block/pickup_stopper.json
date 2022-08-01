@@ -1,8 +1,8 @@
 {
-    "parent": "minecraft:block/cube_bottom_top",
-    "textures": {
-        "side": "naturesaura:block/pickup_stopper",
-        "bottom": "naturesaura:block/pickup_stopper_top",
-        "top": "naturesaura:block/pickup_stopper_top"
-    }
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "naturesaura:block/pickup_stopper_top",
+    "side": "naturesaura:block/pickup_stopper",
+    "top": "naturesaura:block/pickup_stopper_top"
+  }
 }

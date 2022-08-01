@@ -1,8 +1,8 @@
 {
-    "parent": "minecraft:block/cube_bottom_top",
-    "textures": {
-        "side": "naturesaura:block/chorus_generator",
-        "bottom": "naturesaura:block/chorus_generator",
-        "top": "naturesaura:block/chorus_generator_top"
-    }
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "naturesaura:block/chorus_generator",
+    "side": "naturesaura:block/chorus_generator",
+    "top": "naturesaura:block/chorus_generator_top"
+  }
 }

@@ -1,6 +1,6 @@
 {
-    "parent": "minecraft:block/cube_all",
-    "textures": {
-        "all": "naturesaura:block/infused_brick"
-    }
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "naturesaura:block/infused_brick"
+  }
 }

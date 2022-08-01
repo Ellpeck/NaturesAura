@@ -1,5 +1,6 @@
 {
     "parent": "block/rail_flat",
+    "render_type": "cutout_mipped",
     "textures": {
         "rail": "naturesaura:block/dimension_rail_end"
     }

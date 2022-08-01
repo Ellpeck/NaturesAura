@@ -1,8 +1,8 @@
 {
-    "parent": "minecraft:block/cube_bottom_top",
-    "textures": {
-        "side": "naturesaura:block/potion_generator",
-        "bottom": "naturesaura:block/potion_generator_bottom",
-        "top": "naturesaura:block/potion_generator_top"
-    }
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "naturesaura:block/potion_generator_bottom",
+    "side": "naturesaura:block/potion_generator",
+    "top": "naturesaura:block/potion_generator_top"
+  }
 }

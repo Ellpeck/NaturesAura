@@ -64,7 +64,7 @@ public class AnimalSpawnerRecipe extends ModRecipe {
             for (var e : json.getAsJsonArray("ingredients"))
                 ingredients.add(Ingredient.fromJson(e));
             return new AnimalSpawnerRecipe(recipeId,
-                    ForgeRegistries.ENTITIES.getValue(new ResourceLocation(json.get("entity").getAsString())),
+                    ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(json.get("entity").getAsString())),
                     json.get("aura").getAsInt(),
                     json.get("time").getAsInt(),
                     ingredients.toArray(new Ingredient[0]));
@@ -78,7 +78,7 @@ public class AnimalSpawnerRecipe extends ModRecipe {
                 ings[i] = Ingredient.fromNetwork(buffer);
             return new AnimalSpawnerRecipe(
                     recipeId,
-                    ForgeRegistries.ENTITIES.getValue(buffer.readResourceLocation()),
+                    ForgeRegistries.ENTITY_TYPES.getValue(buffer.readResourceLocation()),
                     buffer.readInt(),
                     buffer.readInt(),
                     ings);
@@ -89,7 +89,7 @@ public class AnimalSpawnerRecipe extends ModRecipe {
             buffer.writeInt(recipe.ingredients.length);
             for (var ing : recipe.ingredients)
                 ing.toNetwork(buffer);
-            buffer.writeResourceLocation(ForgeRegistries.ENTITIES.getKey(recipe.entity));
+            buffer.writeResourceLocation(ForgeRegistries.ENTITY_TYPES.getKey(recipe.entity));
             buffer.writeInt(recipe.aura);
             buffer.writeInt(recipe.time);
         }

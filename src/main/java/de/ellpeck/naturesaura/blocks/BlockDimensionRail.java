@@ -38,7 +38,7 @@ import net.minecraftforge.common.util.ITeleporter;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICustomRenderType, ICustomBlockState, ICustomItemModel {
+public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICustomBlockState, ICustomItemModel {
 
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE;
 
@@ -157,11 +157,6 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
     @Override
     public String getBaseName() {
         return "dimension_rail_" + this.name;
-    }
-
-    @Override
-    public Supplier<RenderType> getRenderType() {
-        return RenderType::cutoutMipped;
     }
 
     @Override

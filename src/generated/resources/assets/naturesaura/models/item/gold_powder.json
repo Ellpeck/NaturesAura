@@ -1,6 +1,6 @@
 {
-    "parent": "minecraft:item/generated",
-    "textures": {
-        "layer0": "naturesaura:item/gold_powder"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "naturesaura:item/gold_powder"
+  }
 }

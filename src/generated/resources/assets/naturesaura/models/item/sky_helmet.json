@@ -1,6 +1,6 @@
 {
-    "parent": "minecraft:item/generated",
-    "textures": {
-        "layer0": "naturesaura:item/sky_helmet"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "naturesaura:item/sky_helmet"
+  }
 }

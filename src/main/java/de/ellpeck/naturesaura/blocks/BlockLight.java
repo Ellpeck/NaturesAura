@@ -3,7 +3,6 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import de.ellpeck.naturesaura.reg.ICustomRenderType;
 import de.ellpeck.naturesaura.reg.INoItemBlock;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -19,10 +18,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
-public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemBlock, ICustomRenderType {
+public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemBlock {
 
     private static final VoxelShape SHAPE = Block.box(4, 4, 4, 12, 12, 12);
 
@@ -53,11 +51,6 @@ public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemB
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().withExistingParent("light", generator.mcLoc("block/air"))
-                .texture("particle", "block/light"));
-    }
-
-    @Override
-    public Supplier<RenderType> getRenderType() {
-        return RenderType::cutoutMipped;
+                .renderType("cutout_mipped").texture("particle", "block/light"));
     }
 }

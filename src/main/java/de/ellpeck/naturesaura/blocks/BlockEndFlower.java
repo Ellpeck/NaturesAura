@@ -6,7 +6,6 @@ import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.*;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -28,14 +27,13 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Supplier;
 
-public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockState, ICustomItemModel, ICustomRenderType, EntityBlock {
+public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockState, ICustomItemModel, EntityBlock {
 
     protected static final VoxelShape SHAPE = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 
@@ -53,8 +51,8 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
     }
 
     @SubscribeEvent
-    public void onDragonTick(LivingUpdateEvent event) {
-        var living = event.getEntityLiving();
+    public void onDragonTick(LivingEvent.LivingTickEvent event) {
+        var living = event.getEntity();
         if (living.level.isClientSide || !(living instanceof EnderDragon dragon))
             return;
         if (dragon.dragonDeathTime < 150 || dragon.dragonDeathTime % 10 != 0)
@@ -115,16 +113,11 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
 
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
-        generator.simpleBlock(this, generator.models().cross(this.getBaseName(), generator.modLoc("block/" + this.getBaseName())));
+        generator.simpleBlock(this, generator.models().cross(this.getBaseName(), generator.modLoc("block/" + this.getBaseName())).renderType("cutout"));
     }
 
     @Override
     public void generateCustomItemModel(ItemModelGenerator generator) {
         generator.withExistingParent(this.getBaseName(), "item/generated").texture("layer0", "block/" + this.getBaseName());
-    }
-
-    @Override
-    public Supplier<RenderType> getRenderType() {
-        return RenderType::cutout;
     }
 }

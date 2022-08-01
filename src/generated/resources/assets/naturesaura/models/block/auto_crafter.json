@@ -1,8 +1,8 @@
 {
-    "parent": "minecraft:block/cube_bottom_top",
-    "textures": {
-        "side": "naturesaura:block/auto_crafter",
-        "bottom": "naturesaura:block/auto_crafter_bottom",
-        "top": "naturesaura:block/auto_crafter_top"
-    }
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "naturesaura:block/auto_crafter_bottom",
+    "side": "naturesaura:block/auto_crafter",
+    "top": "naturesaura:block/auto_crafter_top"
+  }
 }

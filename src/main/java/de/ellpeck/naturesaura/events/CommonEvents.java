@@ -23,9 +23,9 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.level.ChunkEvent;
+import net.minecraftforge.event.level.ChunkWatchEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -64,7 +64,7 @@ public class CommonEvents {
 
     @SubscribeEvent
     public void onItemUse(PlayerInteractEvent.RightClickBlock event) {
-        var player = event.getPlayer();
+        var player = event.getEntity();
         if (player.level.isClientSide)
             return;
         var held = event.getItemStack();
@@ -79,12 +79,12 @@ public class CommonEvents {
 
     @SubscribeEvent
     @SuppressWarnings("unchecked")
-    public void onLevelTick(TickEvent.WorldTickEvent event) {
-        if (!event.world.isClientSide && event.phase == TickEvent.Phase.END) {
-            if (event.world.getGameTime() % 20 == 0) {
-                event.world.getProfiler().push(NaturesAura.MOD_ID + ":onLevelTick");
+    public void onLevelTick(TickEvent.LevelTickEvent event) {
+        if (!event.level.isClientSide && event.phase == TickEvent.Phase.END) {
+            if (event.level.getGameTime() % 20 == 0) {
+                event.level.getProfiler().push(NaturesAura.MOD_ID + ":onLevelTick");
                 try {
-                    var manager = ((ServerChunkCache) event.world.getChunkSource()).chunkMap;
+                    var manager = ((ServerChunkCache) event.level.getChunkSource()).chunkMap;
                     var chunks = (Iterable<ChunkHolder>) CommonEvents.GET_LOADED_CHUNKS_METHOD.invoke(manager);
                     for (var holder : chunks) {
                         var chunk = holder.getTickingChunk();
@@ -97,7 +97,7 @@ public class CommonEvents {
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     NaturesAura.LOGGER.fatal(e);
                 }
-                event.world.getProfiler().pop();
+                event.level.getProfiler().pop();
             }
         }
     }

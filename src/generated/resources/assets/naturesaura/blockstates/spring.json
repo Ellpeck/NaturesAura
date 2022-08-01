@@ -1,7 +1,7 @@
 {
-    "variants": {
-        "": {
-            "model": "naturesaura:block/spring"
-        }
+  "variants": {
+    "": {
+      "model": "naturesaura:block/spring"
     }
+  }
 }

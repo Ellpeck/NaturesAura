@@ -1,6 +1,6 @@
 {
-    "parent": "minecraft:item/generated",
-    "textures": {
-        "layer0": "naturesaura:item/farming_stencil"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "naturesaura:item/farming_stencil"
+  }
 }

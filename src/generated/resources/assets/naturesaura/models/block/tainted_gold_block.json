@@ -1,6 +1,6 @@
 {
-    "parent": "minecraft:block/cube_all",
-    "textures": {
-        "all": "naturesaura:block/tainted_gold_block"
-    }
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "naturesaura:block/tainted_gold_block"
+  }
 }

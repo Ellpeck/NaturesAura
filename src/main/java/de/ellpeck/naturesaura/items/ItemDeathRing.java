@@ -24,7 +24,7 @@ public class ItemDeathRing extends ItemImpl {
 
         @SubscribeEvent
         public void onDeath(LivingDeathEvent event) {
-            var entity = event.getEntityLiving();
+            var entity = event.getEntity();
             if (!entity.level.isClientSide && entity instanceof Player) {
                 var equipped = Helper.getEquippedItem(s -> s.getItem() == ModItems.DEATH_RING, (Player) entity);
                 if (!equipped.isEmpty()) {

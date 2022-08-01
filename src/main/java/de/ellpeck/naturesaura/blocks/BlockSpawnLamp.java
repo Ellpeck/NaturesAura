@@ -9,7 +9,6 @@ import de.ellpeck.naturesaura.misc.LevelData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import de.ellpeck.naturesaura.reg.ICustomRenderType;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -33,7 +32,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.function.Supplier;
 
-public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable, ICustomBlockState, ICustomRenderType {
+public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     private static final VoxelShape SHAPE = Shapes.create(4 / 16F, 0F, 4 / 16F, 12 / 16F, 13 / 16F, 12 / 16F);
 
@@ -51,7 +50,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     public void onSpawn(LivingSpawnEvent.CheckSpawn event) {
         if (event.getSpawner() != null)
             return;
-        var level = event.getWorld();
+        var level = event.getLevel();
         var pos = new BlockPos(event.getX(), event.getY(), event.getZ());
         if (!(level instanceof Level))
             return;
@@ -68,7 +67,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
             if (!new AABB(lampPos).inflate(range).contains(new Vec3(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)))
                 continue;
 
-            var entity = (Mob) event.getEntityLiving();
+            var entity = (Mob) event.getEntity();
             if (entity.checkSpawnRules(level, event.getSpawnReason()) && entity.checkSpawnObstruction(level)) {
                 var spot = IAuraChunk.getHighestSpot((Level) level, lampPos, 32, lampPos);
                 IAuraChunk.getAuraChunk((Level) level, spot).drainAura(spot, 200);
@@ -108,10 +107,5 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
-    }
-
-    @Override
-    public Supplier<RenderType> getRenderType() {
-        return RenderType::cutoutMipped;
     }
 }

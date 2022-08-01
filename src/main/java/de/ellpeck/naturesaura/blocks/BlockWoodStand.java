@@ -25,7 +25,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.SaplingGrowTreeEvent;
+import net.minecraftforge.event.level.SaplingGrowTreeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.commons.lang3.mutable.MutableObject;
 
@@ -54,7 +54,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
 
     @SubscribeEvent
     public void onTreeGrow(SaplingGrowTreeEvent event) {
-        var level = event.getWorld();
+        var level = event.getLevel();
         var pos = event.getPos();
         if (!level.isClientSide() && level instanceof Level) {
             if (Multiblocks.TREE_RITUAL.isComplete((Level) level, pos)) {

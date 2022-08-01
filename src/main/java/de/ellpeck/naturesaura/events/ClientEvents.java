@@ -21,6 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -29,13 +30,18 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.MyceliumBlock;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.event.TickEvent;
@@ -63,7 +69,7 @@ public class ClientEvents {
     private static BlockPos hoveringAuraSpot;
 
     @SubscribeEvent
-    public void onDebugRender(RenderGameOverlayEvent.Text event) {
+    public void onDebugRender(CustomizeGuiOverlayEvent.DebugText event) {
         var mc = Minecraft.getInstance();
         if (mc.options.renderDebug && ModConfig.instance.debugText.get()) {
             var prefix = ChatFormatting.GREEN + "[" + NaturesAura.MOD_NAME + "]" + ChatFormatting.RESET + " ";
@@ -159,7 +165,9 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void onLevelRender(RenderLevelLastEvent event) {
+    public void onLevelRender(RenderLevelStageEvent event) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES)
+            return;
         var mc = Minecraft.getInstance();
         var view = mc.gameRenderer.getMainCamera().getPosition();
         var tesselator = Tesselator.getInstance();
@@ -174,6 +182,8 @@ public class ClientEvents {
         mv.translate(-view.x, -view.y, -view.z);
         RenderSystem.applyModelViewMatrix();
         RenderSystem.enableBlend();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
 
         // aura spot debug
         ClientEvents.hoveringAuraSpot = null;
@@ -238,10 +248,10 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void onOverlayRender(RenderGameOverlayEvent.Post event) {
+    public void onOverlayRender(RenderGuiOverlayEvent.Post event) {
         var mc = Minecraft.getInstance();
         var stack = event.getPoseStack();
-        if (event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+        if (event.getOverlay() == VanillaGuiOverlay.HOTBAR.type()) {
             var res = event.getWindow();
             if (mc.player != null) {
                 if (!ClientEvents.heldCache.isEmpty()) {

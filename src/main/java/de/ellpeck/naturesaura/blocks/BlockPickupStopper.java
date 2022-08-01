@@ -28,7 +28,7 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
 
     @SubscribeEvent
     public void onPickup(EntityItemPickupEvent event) {
-        var player = event.getPlayer();
+        var player = event.getEntity();
         if (player != null && !player.isCrouching()) {
             var item = event.getItem();
             var pos = item.blockPosition();
