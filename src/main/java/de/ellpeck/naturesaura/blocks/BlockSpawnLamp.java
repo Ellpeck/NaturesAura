@@ -9,7 +9,6 @@ import de.ellpeck.naturesaura.misc.LevelData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Mob;
@@ -29,8 +28,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import java.util.function.Supplier;
 
 public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 

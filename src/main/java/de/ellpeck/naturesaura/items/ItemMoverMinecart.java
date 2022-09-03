@@ -2,11 +2,9 @@ package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
 import de.ellpeck.naturesaura.entities.ModEntities;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
 
 import javax.annotation.Nonnull;

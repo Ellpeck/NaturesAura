@@ -34,7 +34,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Random;
 
 public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
 

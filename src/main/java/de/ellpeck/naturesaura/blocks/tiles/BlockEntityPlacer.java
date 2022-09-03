@@ -17,8 +17,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class BlockEntityPlacer extends BlockEntityImpl implements ITickableBlock
             var tileUp = this.level.getBlockEntity(this.worldPosition.above());
             if (tileUp == null)
                 return;
-            var handler = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN).orElse(null);
+            var handler = tileUp.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.DOWN).orElse(null);
             if (handler == null)
                 return;
             var frames = Helper.getAttachedItemFrames(this.level, this.worldPosition);

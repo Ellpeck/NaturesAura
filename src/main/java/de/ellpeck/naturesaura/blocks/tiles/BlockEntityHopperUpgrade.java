@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 public class BlockEntityHopperUpgrade extends BlockEntityImpl implements ITickableBlockEntity {
 
@@ -36,7 +36,7 @@ public class BlockEntityHopperUpgrade extends BlockEntityImpl implements ITickab
             var tile = this.level.getBlockEntity(this.worldPosition.below());
             if (!BlockEntityHopperUpgrade.isValidHopper(tile))
                 return;
-            var handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
+            var handler = tile.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP).orElse(null);
             if (handler == null)
                 return;
 

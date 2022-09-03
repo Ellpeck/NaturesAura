@@ -16,7 +16,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import org.apache.commons.lang3.tuple.Pair;
 
 public class GrassDieEffect implements IDrainSpotEffect {
 

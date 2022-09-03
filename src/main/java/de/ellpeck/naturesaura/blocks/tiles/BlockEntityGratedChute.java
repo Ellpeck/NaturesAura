@@ -9,7 +9,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 public class BlockEntityGratedChute extends BlockEntityImpl implements ITickableBlockEntity {
@@ -48,8 +48,7 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
                     var tile = this.level.getBlockEntity(this.worldPosition.relative(facing));
                     if (tile == null)
                         break push;
-                    var handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
-                            facing.getOpposite()).orElse(null);
+                    var handler = tile.getCapability(ForgeCapabilities.ITEM_HANDLER, facing.getOpposite()).orElse(null);
                     if (handler == null)
                         break push;
                     for (var i = 0; i < handler.getSlots(); i++) {
@@ -88,7 +87,7 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
                     var tileUp = this.level.getBlockEntity(this.worldPosition.above());
                     if (tileUp == null)
                         break pull;
-                    var handlerUp = tileUp.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN).orElse(null);
+                    var handlerUp = tileUp.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.DOWN).orElse(null);
                     if (handlerUp == null)
                         break pull;
                     for (var i = 0; i < handlerUp.getSlots(); i++) {

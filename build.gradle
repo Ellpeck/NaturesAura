@@ -102,16 +102,16 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19-41.1.0'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.1.1'
 
-    compileOnly fg.deobf("mezz.jei:jei-1.19-common-api:11.1.1.239")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.19-forge:11.1.1.239")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.2-common-api:11.3.0.260")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:11.3.0.260")
 
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.19-75:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.19-75")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-76:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-76")
 
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19-5.1.0.4")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19-5.1.0.4:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0:api")
 
     // TODO Enchantability
 /*    compile fg.deobf("quarris.enchantability:Enchantability:11.0.48")*/

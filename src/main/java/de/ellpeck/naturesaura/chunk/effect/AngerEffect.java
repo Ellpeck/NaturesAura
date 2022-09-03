@@ -16,8 +16,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
 
-import java.util.List;
-
 public class AngerEffect implements IDrainSpotEffect {
 
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "anger");

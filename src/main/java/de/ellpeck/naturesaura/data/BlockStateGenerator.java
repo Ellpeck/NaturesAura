@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.data;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.block.Block;

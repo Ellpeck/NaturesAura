@@ -15,12 +15,12 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.FarmlandWaterManager;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.ticket.AABBTicket;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlockEntity {
@@ -122,7 +122,7 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+        if (capability == ForgeCapabilities.FLUID_HANDLER)
             return this.tank.cast();
         return LazyOptional.empty();
     }

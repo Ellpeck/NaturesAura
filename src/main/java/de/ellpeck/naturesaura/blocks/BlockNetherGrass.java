@@ -12,8 +12,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Random;
-
 public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, BonemealableBlock {
 
     public BlockNetherGrass() {

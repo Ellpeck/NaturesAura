@@ -21,11 +21,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
 
 public class AnimalEffect implements IDrainSpotEffect {
 

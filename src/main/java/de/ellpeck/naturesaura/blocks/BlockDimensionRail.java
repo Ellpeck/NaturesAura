@@ -8,7 +8,6 @@ import de.ellpeck.naturesaura.packet.PacketClient;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.*;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -36,7 +35,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.util.ITeleporter;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICustomBlockState, ICustomItemModel {
 

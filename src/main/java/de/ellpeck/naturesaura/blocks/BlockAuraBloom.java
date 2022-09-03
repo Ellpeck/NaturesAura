@@ -6,7 +6,6 @@ import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.*;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -27,7 +26,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.function.Supplier;
 
 public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockState, ICustomItemModel, EntityBlock {
 

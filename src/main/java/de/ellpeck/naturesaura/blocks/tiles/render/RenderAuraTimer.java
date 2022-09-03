@@ -3,11 +3,9 @@ package de.ellpeck.naturesaura.blocks.tiles.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraTimer;
 import de.ellpeck.naturesaura.items.ItemAuraBottle;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -16,9 +14,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-
-import java.util.List;
 
 public class RenderAuraTimer implements BlockEntityRenderer<BlockEntityAuraTimer> {
 

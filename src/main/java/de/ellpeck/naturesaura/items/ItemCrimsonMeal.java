@@ -1,15 +1,12 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.gen.ModFeatures;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NetherWartBlock;
-import net.minecraft.world.level.block.state.BlockState;
 
 public class ItemCrimsonMeal extends ItemImpl {
 

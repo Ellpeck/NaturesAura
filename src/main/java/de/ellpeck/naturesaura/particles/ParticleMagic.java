@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura.particles;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.client.Camera;

@@ -43,7 +43,7 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
 
         var other = this.level.getBlockEntity(connectedPos);
         if (!this.isCloseEnough(connectedPos)
-                || !(other instanceof BlockEntityFieldCreator)
+                || !(other instanceof BlockEntityFieldCreator creator)
                 || !this.worldPosition.equals(((BlockEntityFieldCreator) other).getConnectedPos())) {
             this.connectionOffset = null;
             this.chargeTimer = 0;
@@ -56,7 +56,6 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
         if (!this.isMain)
             return;
 
-        var creator = (BlockEntityFieldCreator) other;
         if (this.redstonePower <= 0 && creator.redstonePower <= 0) {
             this.chargeTimer = 0;
             if (this.isCharged) {

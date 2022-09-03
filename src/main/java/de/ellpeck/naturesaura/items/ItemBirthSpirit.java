@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;

@@ -15,9 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.List;
 
 public class CacheRechargeEffect implements IDrainSpotEffect {
 

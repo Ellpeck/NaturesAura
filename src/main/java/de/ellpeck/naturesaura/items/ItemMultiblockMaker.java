@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
-import de.ellpeck.naturesaura.blocks.multi.Multiblock;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
