@@ -48,6 +48,7 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -219,9 +220,9 @@ public final class ModRegistry {
                 new ItemArmor("sky_chest", ModArmorMaterial.SKY, EquipmentSlot.CHEST),
                 new ItemArmor("sky_pants", ModArmorMaterial.SKY, EquipmentSlot.LEGS),
                 new ItemArmor("sky_shoes", ModArmorMaterial.SKY, EquipmentSlot.FEET),
-                new ItemStructureFinder("fortress_finder", StructureFeatures.FORTRESS, 0xba2800, 1024),
-                new ItemStructureFinder("end_city_finder", StructureFeatures.END_CITY, 0xca5cd6, 1024),
-                new ItemStructureFinder("outpost_finder", StructureFeatures.PILLAGER_OUTPOST, 0xab9f98, 2048),
+                new ItemStructureFinder("fortress_finder", BuiltinStructures.FORTRESS, 0xba2800, 1024),
+                new ItemStructureFinder("end_city_finder", BuiltinStructures.END_CITY, 0xca5cd6, 1024),
+                new ItemStructureFinder("outpost_finder", BuiltinStructures.PILLAGER_OUTPOST, 0xab9f98, 2048),
                 new ItemBreakPrevention(),
                 new ItemPetReviver(),
                 new ItemNetheriteFinder()
