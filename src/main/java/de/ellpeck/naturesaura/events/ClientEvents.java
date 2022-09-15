@@ -336,23 +336,20 @@ public class ClientEvents {
                         stack.popPose();
 
                         if (!ClientEvents.heldOcular.isEmpty()) {
-                            var scale = 0.75F;
                             stack.pushPose();
-                            stack.scale(scale, scale, scale);
+                            //stack.scale(scale, scale, scale);
                             var stackX = conf % 2 == 0 ? 10 : res.getGuiScaledWidth() - 22;
-                            var stackY = conf < 2 ? 15 : res.getGuiScaledHeight() - 55;
+                            var stackY = conf < 2 ? 10 : res.getGuiScaledHeight() - 60;
                             for (var effect : ClientEvents.SHOWING_EFFECTS.values()) {
-                                var theX = (int) (stackX / scale);
-                                var theY = (int) (stackY / scale);
                                 var itemStack = effect.getA();
-                                Helper.renderItemInGui(itemStack, theX, theY, 1F);
+                                Helper.renderItemInGui(itemStack, stackX, stackY, 1F);
                                 if (effect.getB()) {
                                     RenderSystem.disableDepthTest();
                                     RenderSystem.setShaderTexture(0, ClientEvents.OVERLAYS);
-                                    Screen.blit(stack, theX, theY, 240, 0, 16, 16, 256, 256);
+                                    Screen.blit(stack, stackX, stackY, 240, 0, 16, 16, 256, 256);
                                     RenderSystem.enableDepthTest();
                                 }
-                                stackY += 8;
+                                stackY += 12;
                             }
                             stack.popPose();
                         }
