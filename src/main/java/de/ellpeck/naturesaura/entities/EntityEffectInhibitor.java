@@ -62,8 +62,8 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     @Override
     public void onRemovedFromWorld() {
         super.onRemovedFromWorld();
-        this.setInhibitedEffect(null);
-        this.updatePowderListStatus();
+        // we pass a null effect because we want to remove our effect from the world
+        this.updatePowderListStatus(null);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
         super.tick();
 
         if (this.powderListDirty)
-            this.updatePowderListStatus();
+            this.updatePowderListStatus(this.getInhibitedEffect());
 
         if (this.level.isClientSide) {
             if (this.level.getGameTime() % 5 == 0) {
@@ -199,18 +199,17 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
         return this.getColor();
     }
 
-    private void updatePowderListStatus() {
+    private void updatePowderListStatus(ResourceLocation inhibitedEffect) {
         var powders = ((LevelData) ILevelData.getLevelData(this.level)).effectPowders;
         if (this.lastEffect != null) {
             var oldList = powders.get(this.lastEffect);
             oldList.removeIf(t -> this.getEyePosition().equals(t.getA()));
         }
-        var effect = this.getInhibitedEffect();
-        if (effect != null) {
-            var newList = powders.get(effect);
+        if (inhibitedEffect != null) {
+            var newList = powders.get(inhibitedEffect);
             newList.add(new Tuple<>(this.getEyePosition(), this.getAmount()));
         }
         this.powderListDirty = false;
-        this.lastEffect = effect;
+        this.lastEffect = inhibitedEffect;
     }
 }
