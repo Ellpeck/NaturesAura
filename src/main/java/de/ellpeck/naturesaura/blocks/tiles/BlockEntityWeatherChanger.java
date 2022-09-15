@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.api.misc.WeatherType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -52,7 +53,7 @@ public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITicka
         if (this.processTime > 0) {
             if (this.processTime % 20 == 0) {
                 var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
-                IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, 30000 * this.itemAmount);
+                IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, 30000 * Mth.ceil(this.itemAmount * 0.75F));
             }
 
             this.processTime--;
