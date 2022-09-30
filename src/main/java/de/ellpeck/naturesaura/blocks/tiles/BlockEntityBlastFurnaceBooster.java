@@ -10,6 +10,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
@@ -68,7 +69,7 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
     private boolean isApplicable(List<Ingredient> ingredients) {
         for (var ing : ingredients) {
             for (var stack : ing.getItems()) {
-                if (stack.getTags().anyMatch(t -> t.location().getPath().startsWith("ores/")))
+                if (stack.is(Tags.Items.ORES) || stack.is(Tags.Items.RAW_MATERIALS))
                     return true;
             }
         }

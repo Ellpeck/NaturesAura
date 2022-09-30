@@ -65,8 +65,8 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
                     this.level.setBlockAndUpdate(tilePos, this.level.getBlockState(tilePos).setValue(AbstractFurnaceBlock.LIT, true));
 
                 data.set(0, 200);
-                //if set higher than 199, it'll never finish because the furnace does ++ and then ==
-                data.set(2, Math.min(data.get(3) - 1, data.get(2) + 5));
+                // we leave some wiggle room for the furnace to do its own checks + the blast furnace booster
+                data.set(2, Math.min(data.get(3) - 2, data.get(2) + 5));
 
                 var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 20, this.worldPosition);
                 var chunk = IAuraChunk.getAuraChunk(this.level, spot);
