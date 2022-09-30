@@ -29,7 +29,7 @@ public class OfferingCategory implements IRecipeCategory<OfferingRecipe> {
 
     @Override
     public Component getTitle() {
-        return Component.translatable("container." + JEINaturesAuraPlugin.OFFERING + ".name");
+        return Component.translatable("container." + JEINaturesAuraPlugin.OFFERING.getUid() + ".name");
     }
 
     @Override
@@ -44,8 +44,8 @@ public class OfferingCategory implements IRecipeCategory<OfferingRecipe> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, OfferingRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 0, 14).addItemStacks(Arrays.asList(recipe.input.getItems()));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 65, 14).addItemStack(recipe.output);
-        builder.addSlot(RecipeIngredientRole.INPUT, 27, 0).addItemStacks(Arrays.asList(recipe.startItem.getItems()));
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 15).addItemStacks(Arrays.asList(recipe.input.getItems()));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 66, 15).addItemStack(recipe.output);
+        builder.addSlot(RecipeIngredientRole.INPUT, 28, 1).addItemStacks(Arrays.asList(recipe.startItem.getItems()));
     }
 }

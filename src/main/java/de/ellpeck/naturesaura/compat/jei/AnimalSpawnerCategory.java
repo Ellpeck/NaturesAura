@@ -87,7 +87,7 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
 
     @Override
     public Component getTitle() {
-        return Component.translatable("container." + JEINaturesAuraPlugin.SPAWNER + ".name");
+        return Component.translatable("container." + JEINaturesAuraPlugin.SPAWNER.getUid() + ".name");
     }
 
     @Override
@@ -103,7 +103,7 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, AnimalSpawnerRecipe recipe, IFocusGroup focuses) {
         for (var i = 0; i < recipe.ingredients.length; i++)
-            builder.addSlot(RecipeIngredientRole.INPUT, i * 18, 68).addItemStacks(Arrays.asList(recipe.ingredients[i].getItems()));
+            builder.addSlot(RecipeIngredientRole.INPUT, i * 18 + 1, 69).addItemStacks(Arrays.asList(recipe.ingredients[i].getItems()));
         builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(new ItemStack(ForgeSpawnEggItem.fromEntityType(recipe.entity)));
     }
 
@@ -118,7 +118,7 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
 
         matrixStack.pushPose();
         var size = Math.max(1F, Math.max(recipe.entity.getWidth(), recipe.entity.getHeight()));
-        AnimalSpawnerCategory.renderEntity(matrixStack, 35, 55, 100F / size * 0.4F, 40, size * 0.5F, (LivingEntity) entity);
+        AnimalSpawnerCategory.renderEntity(matrixStack, 36, 56, 100F / size * 0.4F, 40, size * 0.5F, (LivingEntity) entity);
         matrixStack.popPose();
 
         var name = recipe.entity.getDescription().getString();

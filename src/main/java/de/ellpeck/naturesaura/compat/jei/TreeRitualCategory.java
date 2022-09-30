@@ -29,7 +29,7 @@ public class TreeRitualCategory implements IRecipeCategory<TreeRitualRecipe> {
 
     @Override
     public Component getTitle() {
-        return Component.translatable("container." + JEINaturesAuraPlugin.TREE_RITUAL + ".name");
+        return Component.translatable("container." + JEINaturesAuraPlugin.TREE_RITUAL.getUid() + ".name");
     }
 
     @Override
@@ -44,12 +44,12 @@ public class TreeRitualCategory implements IRecipeCategory<TreeRitualRecipe> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, TreeRitualRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.CATALYST, 34, 34).addItemStacks(Arrays.asList(recipe.saplingType.getItems()));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 124, 34).addItemStack(recipe.result);
+        builder.addSlot(RecipeIngredientRole.CATALYST, 35, 35).addItemStacks(Arrays.asList(recipe.saplingType.getItems()));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 125, 35).addItemStack(recipe.result);
 
         var positions = new int[][]{{35, 1}, {35, 69}, {1, 35}, {69, 35}, {12, 12}, {58, 58}, {58, 12}, {12, 58}};
         for (var i = 0; i < recipe.ingredients.length; i++)
-            builder.addSlot(RecipeIngredientRole.INPUT, positions[i][0] - 1, positions[i][1] - 1).addItemStacks(Arrays.asList(recipe.ingredients[i].getItems()));
+            builder.addSlot(RecipeIngredientRole.INPUT, positions[i][0], positions[i][1]).addItemStacks(Arrays.asList(recipe.ingredients[i].getItems()));
     }
 
 }
