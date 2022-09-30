@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.data;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -9,6 +10,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,5 +40,18 @@ public class BlockTagProvider extends BlockTagsProvider {
         this.tag(BlockTagProvider.NETHER_ALTAR_WOOD).add(Blocks.CRIMSON_PLANKS, Blocks.WARPED_PLANKS);
         this.tag(BlockTagProvider.NETHER_ALTAR_STONE).add(Blocks.NETHER_BRICKS);
 
+        for (var item : ModRegistry.ALL_ITEMS) {
+            if (!(item instanceof Block b))
+                continue;
+            var state = b.defaultBlockState();
+            if (!state.requiresCorrectToolForDrops())
+                continue;
+            var material = state.getMaterial();
+            if (material == Material.STONE) {
+                this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b);
+            } else if (material == Material.WOOD) {
+                this.tag(BlockTags.MINEABLE_WITH_AXE).add(b);
+            }
+        }
     }
 }

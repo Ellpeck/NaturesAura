@@ -1,0 +1,15 @@
+{
+  "values": [
+    "naturesaura:spring",
+    "naturesaura:aura_timer",
+    "naturesaura:animal_container",
+    "naturesaura:blast_furnace_booster",
+    "naturesaura:snow_creator",
+    "naturesaura:chorus_generator",
+    "naturesaura:nether_grass",
+    "naturesaura:gold_nether_brick",
+    "naturesaura:gold_brick",
+    "naturesaura:item_distributor",
+    "naturesaura:weather_changer"
+  ]
+}
