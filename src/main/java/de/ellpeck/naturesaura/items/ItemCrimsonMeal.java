@@ -24,7 +24,7 @@ public class ItemCrimsonMeal extends ItemImpl {
                 if (level.random.nextInt(5) == 0) {
                     int age = state.getValue(NetherWartBlock.AGE);
                     if (age >= 3) {
-                        ModFeatures.Configured.CRIMSON_AURA_MUSHROOM.value().place((ServerLevel) level, ((ServerLevel) level).getChunkSource().getGenerator(), level.random, pos);
+                        ModFeatures.Configured.NETHER_WART_MUSHROOM.value().place((ServerLevel) level, ((ServerLevel) level).getChunkSource().getGenerator(), level.random, pos);
                     } else {
                         level.setBlockAndUpdate(pos, state.setValue(NetherWartBlock.AGE, age + 1));
                     }
