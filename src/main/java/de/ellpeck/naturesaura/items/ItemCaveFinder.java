@@ -47,7 +47,7 @@ public class ItemCaveFinder extends ItemImpl {
 
                         var sky = levelIn.getBrightness(LightLayer.SKY, offUp);
                         var block = levelIn.getBrightness(LightLayer.BLOCK, offUp);
-                        if (sky > 7 || block > 7)
+                        if (sky > 0 || block > 0)
                             continue;
 
                         inst.spawnMagicParticle(
