@@ -34,10 +34,11 @@ public final class CommandAura {
                     source.sendFeedback(new StringTextComponent("Removed aura from area"), true);
                     return 0;
                 })))
-                .then(Commands.literal("reset").executes(context -> {
+                .then(Commands.literal("reset").then(Commands.argument("range", IntegerArgumentType.integer(1)).executes(context -> {
+                    int range = IntegerArgumentType.getInteger(context, "range");
                     CommandSource source = context.getSource();
                     BlockPos pos = new BlockPos(source.getPos());
-                    IAuraChunk.getSpotsInArea(source.getWorld(), pos, 35, (spot, amount) -> {
+                    IAuraChunk.getSpotsInArea(source.getWorld(), pos, range, (spot, amount) -> {
                         IAuraChunk chunk = IAuraChunk.getAuraChunk(source.getWorld(), spot);
                         if (amount > 0)
                             chunk.drainAura(spot, amount);
@@ -46,6 +47,6 @@ public final class CommandAura {
                     });
                     source.sendFeedback(new StringTextComponent("Reset aura in area"), true);
                     return 0;
-                })));
+                }))));
     }
 }
