@@ -10,7 +10,7 @@
         },
         {
             "type": "text",
-            "text": "To set it up, all that is required is for the $(item)Shifting Sundial$() to have an $(item)Item Frame$() on it containg a $(item)Hand of Time$(). The $(thing)rotation$() of the hand in the frame will then determine the time that will be skipped to, with the hand pointing to the top corresponding to midnight. To activate a time skip, a regular $(item)Clock$() has to be dropped very close to the sundial.$(br)This, of course, comes at the cost of a large amount of $(aura) - the more time skipped, the more will be consumed."
+            "text": "To set it up, all that is required is for the $(item)Shifting Sundial$() to have an $(item)Item Frame$() on it containing a $(item)Hand of Time$(). The $(thing)rotation$() of the hand in the frame will then determine the time that will be skipped to, with the hand pointing to the top corresponding to midnight. To activate a time skip, a regular $(item)Clock$() has to be dropped very close to the sundial.$(br)This, of course, comes at the cost of a large amount of $(aura) - the more time skipped, the more will be consumed."
         },
         {
             "type": "crafting",
