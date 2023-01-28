@@ -114,7 +114,7 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         var drops = super.getDrops(state, builder);
 
-        var tile = builder.getParameter(LootContextParams.BLOCK_ENTITY);
+        var tile = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (tile instanceof BlockEntityImpl) {
             for (var stack : drops) {
                 if (stack.getItem() != this.asItem())

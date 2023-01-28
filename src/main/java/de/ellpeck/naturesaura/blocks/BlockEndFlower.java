@@ -105,8 +105,8 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        var tile = builder.getParameter(LootContextParams.BLOCK_ENTITY);
-        if (tile instanceof BlockEntityEndFlower && ((BlockEntityEndFlower) tile).isDrainMode)
+        var tile = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        if (tile instanceof BlockEntityEndFlower f && f.isDrainMode)
             return NonNullList.create();
         return super.getDrops(state, builder);
     }
