@@ -8,9 +8,12 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntityOakGenerator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,21 +37,13 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
         if (level instanceof Level && !level.isClientSide() && IAuraType.forLevel((Level) level).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD)
                 && level.getBlockState(pos).getBlock() instanceof SaplingBlock) {
             Helper.getBlockEntitiesInArea(level, pos, 10, tile -> {
-                if (!(tile instanceof BlockEntityOakGenerator))
+                if (!(tile instanceof BlockEntityOakGenerator oak))
                     return false;
-
-                var rand = event.getRandomSource();
-                if (rand.nextInt(10) == 0)
-                    ((BlockEntityOakGenerator) tile).scheduledBigTrees.add(pos);
-
-                long seed;
-                do {
-                    seed = rand.nextLong();
-                    rand.setSeed(seed);
+                var replacement = BlockOakGenerator.getReplacement(event.getFeature());
+                if (replacement != null) {
+                    oak.scheduledBigTrees.add(pos);
+                    event.setFeature(replacement);
                 }
-                while (rand.nextInt(10) == 0);
-                rand.setSeed(seed);
-
                 return true;
             });
         }
@@ -72,5 +67,19 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
                 generator.modLoc("block/" + this.getBaseName()),
                 generator.modLoc("block/" + this.getBaseName() + "_bottom"),
                 generator.modLoc("block/" + this.getBaseName() + "_top")));
+    }
+
+    private static Holder<? extends ConfiguredFeature<?, ?>> getReplacement(Holder<? extends ConfiguredFeature<?, ?>> feature) {
+        if (feature == TreeFeatures.FANCY_OAK || feature == TreeFeatures.FANCY_OAK_BEES) {
+            return TreeFeatures.OAK;
+        } else if (feature == TreeFeatures.FANCY_OAK_BEES_002) {
+            return TreeFeatures.OAK_BEES_002;
+        } else if (feature == TreeFeatures.FANCY_OAK_BEES_0002) {
+            return TreeFeatures.OAK_BEES_0002;
+        } else if (feature == TreeFeatures.FANCY_OAK_BEES_005) {
+            return TreeFeatures.OAK_BEES_005;
+        } else {
+            return null;
+        }
     }
 }
