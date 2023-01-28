@@ -43,11 +43,8 @@ public class BlockTagProvider extends BlockTagsProvider {
         for (var item : ModRegistry.ALL_ITEMS) {
             if (!(item instanceof Block b))
                 continue;
-            var state = b.defaultBlockState();
-            if (!state.requiresCorrectToolForDrops())
-                continue;
-            var material = state.getMaterial();
-            if (material == Material.STONE) {
+            var material = b.defaultBlockState().getMaterial();
+            if (material == Material.STONE || material == Material.METAL) {
                 this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b);
             } else if (material == Material.WOOD) {
                 this.tag(BlockTags.MINEABLE_WITH_AXE).add(b);
