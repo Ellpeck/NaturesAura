@@ -21,11 +21,11 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.event.level.ChunkWatchEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -138,7 +138,7 @@ public class CommonEvents {
     }
 
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-        CommandAura.register(event.getServer().getCommands().getDispatcher());
+    public void onCommands(RegisterCommandsEvent event) {
+        CommandAura.register(event.getDispatcher());
     }
 }
