@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -115,7 +116,9 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
             if (!player.level.isClientSide) {
                 held.shrink(1);
 
-                player.getInventory().add(ItemAuraBottle.setType(new ItemStack(ItemAuraBottle.this), IAuraType.forLevel(player.level)));
+                var stack = ItemAuraBottle.setType(new ItemStack(ItemAuraBottle.this), IAuraType.forLevel(player.level));
+                if (!player.addItem(stack))
+                    player.level.addFreshEntity(new ItemEntity(player.level, player.getX(), player.getY(), player.getZ(), stack));
 
                 var spot = IAuraChunk.getHighestSpot(player.level, pos, 30, pos);
                 IAuraChunk.getAuraChunk(player.level, spot).drainAura(spot, 20000);
