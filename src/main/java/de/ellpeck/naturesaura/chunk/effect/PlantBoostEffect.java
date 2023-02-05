@@ -16,9 +16,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.DoublePlantBlock;
+import net.minecraft.world.level.block.TallGrassBlock;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.levelgen.Heightmap;
 
 public class PlantBoostEffect implements IDrainSpotEffect {
 
@@ -34,7 +36,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
         int aura = auraAndSpots.getLeft();
         if (aura < 1500000)
             return false;
-        this.amount = Math.min(45, Mth.ceil(Math.abs(aura) / 100000F / auraAndSpots.getRight()));
+        this.amount = Math.min(75, Mth.ceil(Math.abs(aura) / 50000F / auraAndSpots.getRight()));
         if (this.amount <= 1)
             return false;
         this.dist = Mth.clamp(Math.abs(aura) / 150000, 5, 35);
@@ -63,15 +65,16 @@ public class PlantBoostEffect implements IDrainSpotEffect {
             return;
         for (var i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
             var x = Mth.floor(pos.getX() + (2 * level.random.nextFloat() - 1) * this.dist);
+            var y = Mth.floor(pos.getY() + (2 * level.random.nextFloat() - 1) * this.dist);
             var z = Mth.floor(pos.getZ() + (2 * level.random.nextFloat() - 1) * this.dist);
-            var plantPos = new BlockPos(x, level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z).below();
+            var plantPos = new BlockPos(x, y, z).below();
             if (plantPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(plantPos)) {
                 if (NaturesAuraAPI.instance().isEffectPowderActive(level, plantPos, PlantBoostEffect.NAME))
                     continue;
 
                 var state = level.getBlockState(plantPos);
                 var block = state.getBlock();
-                if (block instanceof BonemealableBlock growable && !(block instanceof DoublePlantBlock) && !(block instanceof TallGrassBlock) && block != Blocks.GRASS_BLOCK) {
+                if (block instanceof BonemealableBlock growable && !(block instanceof DoublePlantBlock) && !(block instanceof TallGrassBlock) && block != Blocks.GRASS_BLOCK && block != Blocks.MOSS_BLOCK) {
                     if (growable.isValidBonemealTarget(level, plantPos, state, false)) {
                         try {
                             growable.performBonemeal((ServerLevel) level, level.random, plantPos, state);
