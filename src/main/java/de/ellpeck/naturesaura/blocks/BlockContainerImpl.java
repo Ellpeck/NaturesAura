@@ -18,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -127,19 +126,11 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     }
 
     @Override
-    public void onPlace(BlockState state, Level levelIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (state.getBlock() != newState.getBlock()) {
-            var tile = levelIn.getBlockEntity(pos);
-            if (tile instanceof BlockEntityImpl)
-                ((BlockEntityImpl) tile).dropInventory();
-        }
-        super.onPlace(state, levelIn, pos, newState, isMoving);
-    }
-
-    @Override
-    public void playerDestroy(Level levelIn, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
-        super.playerDestroy(levelIn, player, pos, state, te, stack);
-        levelIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+    public void playerWillDestroy(Level p_49852_, BlockPos p_49853_, BlockState p_49854_, Player p_49855_) {
+        var tile = p_49852_.getBlockEntity(p_49853_);
+        if (tile instanceof BlockEntityImpl impl)
+            impl.dropInventory();
+        super.playerWillDestroy(p_49852_, p_49853_, p_49854_, p_49855_);
     }
 
     @Override
