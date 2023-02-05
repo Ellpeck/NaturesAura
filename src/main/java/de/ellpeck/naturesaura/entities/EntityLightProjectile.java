@@ -50,7 +50,7 @@ public class EntityLightProjectile extends ThrowableProjectile {
                 if (state.getMaterial().isReplaceable())
                     this.level.setBlockAndUpdate(pos, ModBlocks.LIGHT.defaultBlockState());
             } else if (result instanceof EntityHitResult entity) {
-                entity.getEntity().setRemainingFireTicks(5);
+                entity.getEntity().setSecondsOnFire(5);
             }
         }
         this.discard();
