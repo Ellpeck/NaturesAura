@@ -40,6 +40,6 @@ public class GuiEnderCrate extends AbstractContainerScreen<ContainerEnderCrate> 
         var i = (this.width - this.imageWidth) / 2;
         var j = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, i, j, 0, 0, this.imageWidth, 3 * 18 + 17);
-        this.blit(matrixStack, i, j + 3 * 18 + 17, 0, 126, this.imageHeight, 96);
+        this.blit(matrixStack, i, j + 3 * 18 + 17, 0, 126, this.imageWidth, 96);
     }
 }
