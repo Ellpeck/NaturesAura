@@ -321,4 +321,16 @@ public final class Helper {
         }
         return ItemStack.EMPTY;
     }
+
+    public static BlockPos getClosestAirAboveGround(Level level, BlockPos pos, int radius) {
+        for (var i = 0; i < radius; i++) {
+            var up = pos.above(i);
+            if (level.isEmptyBlock(up) && !level.isEmptyBlock(up.below()))
+                return up;
+            var dn = pos.below(i);
+            if (level.isEmptyBlock(dn) && !level.isEmptyBlock(dn.below()))
+                return dn;
+        }
+        return pos;
+    }
 }

@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.chunk.effect;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
@@ -65,9 +66,9 @@ public class PlantBoostEffect implements IDrainSpotEffect {
             return;
         for (var i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
             var x = Mth.floor(pos.getX() + (2 * level.random.nextFloat() - 1) * this.dist);
-            var y = Mth.floor(pos.getY() + (2 * level.random.nextFloat() - 1) * this.dist);
+            var y = Mth.floor(pos.getY() + (2 * level.random.nextFloat() - 1) * this.dist / 2);
             var z = Mth.floor(pos.getZ() + (2 * level.random.nextFloat() - 1) * this.dist);
-            var plantPos = new BlockPos(x, y, z).below();
+            var plantPos = Helper.getClosestAirAboveGround(level, new BlockPos(x, y, z), this.dist / 2).below();
             if (plantPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(plantPos)) {
                 if (NaturesAuraAPI.instance().isEffectPowderActive(level, plantPos, PlantBoostEffect.NAME))
                     continue;

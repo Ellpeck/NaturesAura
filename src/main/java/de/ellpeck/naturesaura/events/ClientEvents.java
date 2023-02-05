@@ -34,7 +34,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.MyceliumBlock;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -110,8 +109,9 @@ public class ClientEvents {
                         var amount = Mth.floor(190 * ModConfig.instance.excessParticleAmount.get());
                         for (var i = 0; i < amount; i++) {
                             var x = Mth.floor(mc.player.getX()) + mc.level.random.nextInt(64) - 32;
+                            var y = Mth.floor(mc.player.getY()) + mc.level.random.nextInt(32) - 16;
                             var z = Mth.floor(mc.player.getZ()) + mc.level.random.nextInt(64) - 32;
-                            var pos = new BlockPos(x, mc.level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z) - 1, z);
+                            var pos = Helper.getClosestAirAboveGround(mc.level, new BlockPos(x, y, z), 16).below();
                             var state = mc.level.getBlockState(pos);
                             var block = state.getBlock();
                             if (block instanceof BonemealableBlock || block instanceof IPlantable || block instanceof LeavesBlock || block instanceof MyceliumBlock) {
