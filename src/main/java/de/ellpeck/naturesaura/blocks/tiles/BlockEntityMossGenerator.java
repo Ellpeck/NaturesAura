@@ -48,7 +48,7 @@ public class BlockEntityMossGenerator extends BlockEntityImpl implements ITickab
             var state = this.level.getBlockState(offset);
             var result = NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.inverse().get(state);
 
-            var toAdd = 7000;
+            var toAdd = 4000;
             if (this.canGenerateRightNow(toAdd)) {
                 this.generateAura(toAdd);
                 PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
