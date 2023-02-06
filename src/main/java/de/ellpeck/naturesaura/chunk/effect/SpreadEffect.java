@@ -27,7 +27,7 @@ public class SpreadEffect implements IDrainSpotEffect {
             var bestAmount = drain ? Integer.MAX_VALUE : Integer.MIN_VALUE;
             for (var facing : Direction.values()) {
                 var offset = pos.relative(facing, 15);
-                if (level.isLoaded(offset) && offset.getY() >= 0 && offset.getY() <= level.getHeight()) {
+                if (level.isLoaded(offset) && offset.getY() >= level.getMinBuildHeight() && offset.getY() <= level.getMaxBuildHeight()) {
                     var amount = IAuraChunk.getAuraInArea(level, offset, 14);
                     if (drain ? amount < bestAmount : amount > bestAmount) {
                         bestAmount = amount;

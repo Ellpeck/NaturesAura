@@ -44,10 +44,10 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
             if (range > 0) {
                 return new AABB(
                         pos.getX() - range >> 4 << 4,
-                        0,
+                        level.getMinBuildHeight(),
                         pos.getZ() - range >> 4 << 4,
                         (pos.getX() + range >> 4 << 4) + 16,
-                        level.getHeight(),
+                        level.getMaxBuildHeight(),
                         (pos.getZ() + range >> 4 << 4) + 16);
             }
         }
