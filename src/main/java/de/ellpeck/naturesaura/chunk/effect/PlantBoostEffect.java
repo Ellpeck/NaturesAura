@@ -17,14 +17,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.DoublePlantBlock;
-import net.minecraft.world.level.block.TallGrassBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.chunk.LevelChunk;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class PlantBoostEffect implements IDrainSpotEffect {
 
+    public static final Set<Block> EXCEPTIONS = new HashSet<>(List.of(Blocks.GRASS_BLOCK, Blocks.MOSS_BLOCK, Blocks.GLOW_LICHEN, Blocks.SMALL_DRIPLEAF, Blocks.BIG_DRIPLEAF, Blocks.BIG_DRIPLEAF_STEM));
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "plant_boost");
 
     private int amount;
@@ -75,7 +77,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
 
                 var state = level.getBlockState(plantPos);
                 var block = state.getBlock();
-                if (block instanceof BonemealableBlock growable && !(block instanceof DoublePlantBlock) && !(block instanceof TallGrassBlock) && block != Blocks.GRASS_BLOCK && block != Blocks.MOSS_BLOCK) {
+                if (block instanceof BonemealableBlock growable && !PlantBoostEffect.EXCEPTIONS.contains(block) && !(block instanceof DoublePlantBlock) && !(block instanceof TallGrassBlock)) {
                     if (growable.isValidBonemealTarget(level, plantPos, state, false)) {
                         try {
                             growable.performBonemeal((ServerLevel) level, level.random, plantPos, state);

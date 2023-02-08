@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import de.ellpeck.naturesaura.chunk.effect.OreSpawnEffect;
+import de.ellpeck.naturesaura.chunk.effect.PlantBoostEffect;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
@@ -20,6 +21,7 @@ public final class ModConfig {
     public ConfigValue<List<? extends String>> auraTypeOverrides;
     public ConfigValue<List<? extends String>> additionalOres;
     public ConfigValue<List<? extends String>> oreExceptions;
+    public ConfigValue<List<? extends String>> plantBoostExceptions;
     public ConfigValue<List<? extends String>> additionalProjectiles;
     public ConfigValue<Integer> fieldCreatorRange;
     public ConfigValue<Double> auraToRFRatio;
@@ -66,6 +68,10 @@ public final class ModConfig {
                 .comment("Blocks that are exempt from being recognized as generatable ores for the passive ore generation effect. Each entry needs to be formatted as modid:block[prop1=value1,...] where block state properties are optional")
                 .translation("config." + NaturesAura.MOD_ID + ".oreExceptions")
                 .defineList("oreExceptions", Collections.emptyList(), s -> true);
+        this.plantBoostExceptions = builder
+                .comment("Blocks that are exept from being fertilized by the plant boost effect. Each entry needs to be formatted as modid:block")
+                .translation("config." + NaturesAura.MOD_ID + ".plantBoostExceptions")
+                .defineList("plantBoostExceptions", Collections.emptyList(), s -> true);
         this.additionalProjectiles = builder
                 .comment("Additional projectile types that are allowed to be consumed by the projectile generator. Each entry needs to be formatted as entity_registry_name->aura_amount")
                 .translation("config." + NaturesAura.MOD_ID + ".additionalProjectiles")
@@ -225,6 +231,14 @@ public final class ModConfig {
                 OreSpawnEffect.SPAWN_EXCEPTIONS.add(Objects.requireNonNull(Helper.getStateFromString(s)));
         } catch (Exception e) {
             NaturesAura.LOGGER.warn("Error parsing oreExceptions", e);
+        }
+
+        try {
+            for (String s : this.plantBoostExceptions.get())
+                PlantBoostEffect.EXCEPTIONS.add(Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s))));
+        } catch (Exception e) {
+            NaturesAura.LOGGER.warn("Error parsing plantBoostExceptions", e);
+
         }
 
         try {
