@@ -18,8 +18,8 @@ public class BlockTagProvider extends BlockTagsProvider {
 
     public static final TagKey<Block> ALTAR_WOOD = BlockTags.create(new ResourceLocation(NaturesAura.MOD_ID, "altar_wood"));
     public static final TagKey<Block> ALTAR_STONE = BlockTags.create(new ResourceLocation(NaturesAura.MOD_ID, "altar_stone"));
-    public static final TagKey<Block> NETHER_ALTAR_WOOD = BlockTags.create(new ResourceLocation(NaturesAura.MOD_ID, "nether_altar_wood"));
-    public static final TagKey<Block> NETHER_ALTAR_STONE = BlockTags.create(new ResourceLocation(NaturesAura.MOD_ID, "nether_altar_stone"));
+    public static final TagKey<Block> ALTAR_GOLD_BRICK = BlockTags.create(new ResourceLocation(NaturesAura.MOD_ID, "altar_gold_brick"));
+    public static final TagKey<Block> ALTAR_FANCY_BRICK = BlockTags.create(new ResourceLocation(NaturesAura.MOD_ID, "altar_fancy_brick"));
 
     public BlockTagProvider(DataGenerator gen, @Nullable ExistingFileHelper existingFileHelper) {
         super(gen, NaturesAura.MOD_ID, existingFileHelper);
@@ -35,10 +35,10 @@ public class BlockTagProvider extends BlockTagsProvider {
         this.tag(BlockTags.SLABS).add(ModBlocks.ANCIENT_SLAB, ModBlocks.INFUSED_SLAB, ModBlocks.INFUSED_BRICK_SLAB);
         this.tag(BlockTags.DIRT).add(ModBlocks.NETHER_GRASS);
         this.tag(BlockTags.SMALL_FLOWERS).add(ModBlocks.END_FLOWER, ModBlocks.AURA_BLOOM);
-        this.tag(BlockTagProvider.ALTAR_WOOD).addTag(BlockTags.PLANKS);
-        this.tag(BlockTagProvider.ALTAR_STONE).addTag(BlockTags.STONE_BRICKS);
-        this.tag(BlockTagProvider.NETHER_ALTAR_WOOD).add(Blocks.CRIMSON_PLANKS, Blocks.WARPED_PLANKS);
-        this.tag(BlockTagProvider.NETHER_ALTAR_STONE).add(Blocks.NETHER_BRICKS);
+        this.tag(BlockTagProvider.ALTAR_WOOD).addTag(BlockTags.PLANKS).add(Blocks.CRIMSON_PLANKS, Blocks.WARPED_PLANKS);
+        this.tag(BlockTagProvider.ALTAR_STONE).addTag(BlockTags.STONE_BRICKS).add(Blocks.NETHER_BRICKS);
+        this.tag(BlockTagProvider.ALTAR_GOLD_BRICK).add(ModBlocks.GOLD_BRICK, ModBlocks.GOLD_NETHER_BRICK);
+        this.tag(BlockTagProvider.ALTAR_FANCY_BRICK).add(Blocks.RED_NETHER_BRICKS, Blocks.CHISELED_STONE_BRICKS);
 
         for (var item : ModRegistry.ALL_ITEMS) {
             if (!(item instanceof Block b))

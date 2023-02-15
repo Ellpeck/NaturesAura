@@ -15,20 +15,19 @@ import net.minecraft.world.level.material.Material;
 
 public final class Multiblocks {
 
-    private static final String[][] ALTAR_PATTERN = new String[][]{
-            {"    M    ", "         ", "         ", "         ", "M       M", "         ", "         ", "         ", "    M    "},
-            {"    B    ", "         ", "         ", "         ", "B       B", "         ", "         ", "         ", "    B    "},
-            {"    B    ", "         ", "  M   M  ", "         ", "B   0   B", "         ", "  M   M  ", "         ", "    B    "},
-            {"         ", "   WBW   ", "   WBW   ", " WWCWCWW ", " BBW WBB ", " WWCWCWW ", "   WBW   ", "   WBW   ", "         "}};
     public static final IMultiblock ALTAR = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "altar"),
-            Multiblocks.ALTAR_PATTERN,
-            'C', Blocks.CHISELED_STONE_BRICKS,
+            new String[][]{
+                    {"    M    ", "         ", "         ", "         ", "M       M", "         ", "         ", "         ", "    M    "},
+                    {"    B    ", "         ", "         ", "         ", "B       B", "         ", "         ", "         ", "    B    "},
+                    {"    B    ", "         ", "  M   M  ", "         ", "B   0   B", "         ", "  M   M  ", "         ", "    B    "},
+                    {"         ", "   WBW   ", "   WBW   ", " WWCWCWW ", " BBW WBB ", " WWCWCWW ", "   WBW   ", "   WBW   ", "         "}},
+            'C', Matcher.tag(Blocks.CHISELED_STONE_BRICKS, BlockTagProvider.ALTAR_FANCY_BRICK),
             'B', Matcher.tag(Blocks.STONE_BRICKS, BlockTagProvider.ALTAR_STONE),
             'W', Matcher.tag(Blocks.OAK_PLANKS, BlockTagProvider.ALTAR_WOOD),
-            'M', ModBlocks.GOLD_BRICK,
+            'M', Matcher.tag(ModBlocks.GOLD_BRICK, BlockTagProvider.ALTAR_GOLD_BRICK),
             '0', ModBlocks.NATURE_ALTAR,
-            ' ', Matcher.wildcard());
+            ' ', Matcher.any());
     public static final IMultiblock TREE_RITUAL = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "tree_ritual"),
             new String[][]{
@@ -49,7 +48,7 @@ public final class Multiblocks {
                         }
                     }
             ),
-            ' ', Matcher.wildcard());
+            ' ', Matcher.any());
     public static final IMultiblock POTION_GENERATOR = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "potion_generator"),
             new String[][]{
@@ -60,7 +59,7 @@ public final class Multiblocks {
             'N', Blocks.NETHER_BRICKS,
             'R', Blocks.RED_NETHER_BRICKS,
             '0', ModBlocks.POTION_GENERATOR,
-            ' ', Matcher.wildcard());
+            ' ', Matcher.any());
     public static final IMultiblock OFFERING_TABLE = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "offering_table"),
             new String[][]{
@@ -68,7 +67,7 @@ public final class Multiblocks {
             'R', new Matcher(Blocks.POPPY.defaultBlockState(),
                     (level, start, offset, pos, state, c) -> state.is(BlockTags.SMALL_FLOWERS)),
             '0', ModBlocks.OFFERING_TABLE,
-            ' ', Matcher.wildcard());
+            ' ', Matcher.any());
     public static final IMultiblock ANIMAL_SPAWNER = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "animal_spawner"),
             new String[][]{
@@ -78,7 +77,7 @@ public final class Multiblocks {
             'R', ModBlocks.INFUSED_BRICK,
             'W', ModBlocks.ANCIENT_PLANKS,
             '0', ModBlocks.ANIMAL_SPAWNER,
-            ' ', Matcher.wildcard());
+            ' ', Matcher.any());
     public static final IMultiblock AUTO_CRAFTER = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "auto_crafter"),
             new String[][]{
@@ -86,7 +85,7 @@ public final class Multiblocks {
             'P', ModBlocks.ANCIENT_PLANKS,
             'L', ModBlocks.ANCIENT_LOG,
             '0', ModBlocks.AUTO_CRAFTER,
-            ' ', Matcher.wildcard());
+            ' ', Matcher.any());
     public static final IMultiblock RF_CONVERTER = NaturesAuraAPI.instance().createMultiblock(
             new ResourceLocation(NaturesAura.MOD_ID, "rf_converter"),
             new String[][]{
@@ -99,5 +98,5 @@ public final class Multiblocks {
                     {"       ", "       ", "       ", "   R   ", "       ", "       ", "       "}},
             'R', Blocks.REDSTONE_BLOCK,
             '0', ModBlocks.RF_CONVERTER,
-            ' ', Matcher.wildcard());
+            ' ', Matcher.any());
 }

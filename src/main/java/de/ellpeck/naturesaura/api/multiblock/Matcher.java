@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public record Matcher(BlockState defaultState, ICheck check) {
 
-    public static Matcher wildcard() {
+    public static Matcher any() {
         return new Matcher(Blocks.AIR.defaultBlockState(), null);
     }
 
