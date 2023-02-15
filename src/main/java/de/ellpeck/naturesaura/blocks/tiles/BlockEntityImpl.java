@@ -151,7 +151,8 @@ public class BlockEntityImpl extends BlockEntity {
         var compound = new CompoundTag();
         this.writeNBT(compound, SaveType.BLOCK);
         if (!compound.isEmpty()) {
-            if (!regularItem.hasTag()) regularItem.setTag(new CompoundTag());
+            if (!regularItem.hasTag())
+                regularItem.setTag(new CompoundTag());
             regularItem.getTag().put("data", compound);
         }
     }
@@ -159,7 +160,8 @@ public class BlockEntityImpl extends BlockEntity {
     public void loadDataOnPlace(ItemStack stack) {
         if (stack.hasTag()) {
             var compound = stack.getTag().getCompound("data");
-            if (compound != null) this.readNBT(compound, SaveType.BLOCK);
+            if (compound != null)
+                this.readNBT(compound, SaveType.BLOCK);
         }
     }
 
