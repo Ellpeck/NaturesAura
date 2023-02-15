@@ -11,6 +11,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -119,7 +120,7 @@ public final class ModRecipes {
 
         @Override
         public String toString() {
-            return Registry.RECIPE_TYPE.getKey(this).toString();
+            return ForgeRegistries.RECIPE_TYPES.getKey(this).toString();
         }
     }
 }

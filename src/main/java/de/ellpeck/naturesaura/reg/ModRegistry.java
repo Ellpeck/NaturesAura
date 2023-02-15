@@ -22,7 +22,6 @@ import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
 import de.ellpeck.naturesaura.recipes.EnabledCondition;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
-import net.minecraft.data.worldgen.Structures;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -217,7 +216,7 @@ public final class ModRegistry {
             ModRegistry.ALL_ITEMS.add(new ModTileType<>(BlockEntityAuraBloom::new, "aura_bloom", ModRegistry.ALL_ITEMS.stream().filter(i -> i instanceof BlockAuraBloom).toArray(IModItem[]::new)));
 
             for (var item : ModRegistry.ALL_ITEMS) {
-                if (item instanceof ModTileType type)
+                if (item instanceof ModTileType<?> type)
                     h.register(new ResourceLocation(NaturesAura.MOD_ID, type.getBaseName()), type.type);
             }
             Helper.populateObjectHolders(ModBlockEntities.class, event.getForgeRegistry());

@@ -29,6 +29,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
 import java.util.List;
@@ -113,11 +114,10 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                     var ore = WeightedRandom.getRandomItem(level.random, ores, totalWeight).orElse(null);
                     if (ore == null)
                         continue;
-                    var tag = TagKey.create(Registry.BLOCK_REGISTRY, ore.tag);
+                    var tag = TagKey.create(ForgeRegistries.Keys.BLOCKS, ore.tag);
                     if (tag == null)
                         continue;
-                    for (var holder : Registry.BLOCK.getTagOrEmpty(tag)) {
-                        var toPlace = holder.value();
+                    for (var toPlace : ForgeRegistries.BLOCKS.tags().getTag(tag)) {
                         if (toPlace == null || toPlace == Blocks.AIR)
                             continue;
 

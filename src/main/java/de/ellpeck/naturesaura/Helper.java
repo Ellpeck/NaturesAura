@@ -46,6 +46,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -310,7 +311,7 @@ public final class Helper {
 
     public static ItemStack getEquippedItem(Predicate<ItemStack> predicate, Player player) {
         if (Compat.hasCompat("curios")) {
-            var stack = CuriosApi.getCuriosHelper().findEquippedCurio(predicate, player).map(ImmutableTriple::getRight);
+            var stack = CuriosApi.getCuriosHelper().findFirstCurio(player, predicate).map(SlotResult::stack);
             if (stack.isPresent())
                 return stack.get();
         }

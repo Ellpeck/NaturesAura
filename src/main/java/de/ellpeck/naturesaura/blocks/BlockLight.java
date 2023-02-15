@@ -36,11 +36,13 @@ public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemB
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return BlockLight.SHAPE;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
         return true;
     }

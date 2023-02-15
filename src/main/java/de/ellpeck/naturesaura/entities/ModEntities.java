@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.entities;
 
 import net.minecraft.world.entity.EntityType;
 
-@SuppressWarnings("FieldNamingConvention")
+@SuppressWarnings("NonConstantFieldWithUpperCaseName")
 public final class ModEntities {
 
     public static EntityType<EntityMoverMinecart> MOVER_CART;

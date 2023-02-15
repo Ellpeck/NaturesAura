@@ -14,11 +14,13 @@ public class BlockAuraDetector extends BlockContainerImpl {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public int getAnalogOutputSignal(BlockState blockState, Level levelIn, BlockPos pos) {
         var tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityAuraDetector detector)

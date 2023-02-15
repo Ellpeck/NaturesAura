@@ -9,6 +9,7 @@ import de.ellpeck.naturesaura.data.BlockTagProvider;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.material.Material;
@@ -41,7 +42,7 @@ public final class Multiblocks {
                             return true;
                         // try-catch to prevent blocks that need to have been placed crashing here
                         try {
-                            var stack = state.getBlock().getCloneItemStack(level, pos, state);
+                            var stack = new ItemStack(state.getBlock());
                             return !stack.isEmpty() && level.getRecipeManager().getRecipesFor(ModRecipes.TREE_RITUAL_TYPE, null, null).stream().anyMatch(r -> r.saplingType.test(stack));
                         } catch (Exception e) {
                             return false;

@@ -17,6 +17,7 @@ public class BlockDecayedLeaves extends BlockImpl implements ICustomBlockState {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!level.isClientSide) {
             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());

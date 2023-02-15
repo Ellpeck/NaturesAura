@@ -26,7 +26,8 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult p_225533_6_) {
+    @SuppressWarnings("deprecation")
+    public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult result) {
         var tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityFieldCreator) {
             if (!levelIn.isClientSide) {

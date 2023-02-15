@@ -36,11 +36,13 @@ public class BlockNatureAltar extends BlockContainerImpl implements ITESRProvide
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return BlockNatureAltar.SHAPE;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         return Helper.putStackOnTile(player, handIn, pos, 0, true);
     }

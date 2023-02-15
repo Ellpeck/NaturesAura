@@ -19,6 +19,7 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, Bo
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void randomTick(BlockState state, ServerLevel levelIn, BlockPos pos, RandomSource random) {
         var up = pos.above();
         var upState = levelIn.getBlockState(up);

@@ -18,7 +18,7 @@ public enum ModArmorMaterial implements ArmorMaterial {
     INFUSED(NaturesAura.MOD_ID + ":infused_iron", 19, new int[]{2, 5, 6, 2}, 16, SoundEvents.ARMOR_EQUIP_GENERIC, 0, () -> Ingredient.of(ModItems.INFUSED_IRON)),
     SKY(NaturesAura.MOD_ID + ":sky", 33, new int[]{3, 6, 8, 3}, 12, SoundEvents.ARMOR_EQUIP_GENERIC, 2, () -> Ingredient.of(ModItems.SKY_INGOT));
 
-    private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
+    private static final int[] MAX_DAMAGE_ARRAY = {13, 15, 16, 11};
     private final String name;
     private final int maxDamageFactor;
     private final int[] damageReductionAmountArray;

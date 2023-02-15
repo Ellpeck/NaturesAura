@@ -78,7 +78,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
                 for (var z = -2; z <= 2; z += 4) {
                     var offset = this.worldPosition.offset(x, 1, z);
                     var state = this.level.getBlockState(offset);
-                    this.catalysts[index] = state.getBlock().getCloneItemStack(this.level, offset, state);
+                    this.catalysts[index] = new ItemStack(state.getBlock());
                     index++;
                 }
             }

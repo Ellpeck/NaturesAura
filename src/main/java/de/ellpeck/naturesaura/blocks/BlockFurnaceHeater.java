@@ -27,7 +27,7 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-    private static final VoxelShape[] SHAPES = new VoxelShape[]{
+    private static final VoxelShape[] SHAPES = {
             Block.box(2, 12, 2, 14, 16, 14),    // Down
             Block.box(2, 0, 2, 14, 4, 14),      // Up
             Block.box(2, 2, 12, 14, 14, 16),    // North
@@ -79,6 +79,7 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return BlockFurnaceHeater.SHAPES[state.getValue(BlockFurnaceHeater.FACING).get3DDataValue()];
     }

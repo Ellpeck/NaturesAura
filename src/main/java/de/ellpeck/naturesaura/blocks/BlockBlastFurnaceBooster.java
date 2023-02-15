@@ -31,6 +31,7 @@ public class BlockBlastFurnaceBooster extends BlockContainerImpl implements ICus
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return BlockBlastFurnaceBooster.SHAPE;
     }

@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-@SuppressWarnings("FieldNamingConvention")
+@SuppressWarnings("NonConstantFieldWithUpperCaseName")
 public final class ModBlockEntities {
 
     public static BlockEntityType<BlockEntityAncientLeaves> ANCIENT_LEAVES;

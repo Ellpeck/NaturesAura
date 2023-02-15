@@ -136,7 +136,7 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
 
     private boolean isLava(BlockPos offset, boolean source) {
         var state = this.level.getFluidState(offset);
-        return (!source || state.isSource()) && state.getType().is(FluidTags.LAVA);
+        return (!source || state.isSource()) && state.is(FluidTags.LAVA);
     }
 
     private class InfiniteTank implements IFluidTank, IFluidHandler {
@@ -158,7 +158,7 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
 
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            return stack.getFluid().is(FluidTags.WATER);
+            return stack.getFluid().defaultFluidState().is(FluidTags.WATER);
         }
 
         @Override

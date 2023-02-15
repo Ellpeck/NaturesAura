@@ -264,14 +264,12 @@ public class PacketParticles {
                         level.random.nextGaussian() * 0.01F,
                         0xd3e4ff, 1.5F, 150, 0F, false, true);
         }),
-        PICKUP_STOPPER((message, level) -> {
-            NaturesAuraAPI.instance().spawnMagicParticle(
-                    message.posX, message.posY + 0.4F, message.posZ,
-                    level.random.nextGaussian() * 0.005F,
-                    level.random.nextFloat() * 0.005F,
-                    level.random.nextGaussian() * 0.005F,
-                    0xcc3116, 1.5F, 40, 0F, false, true);
-        }),
+        PICKUP_STOPPER((message, level) -> NaturesAuraAPI.instance().spawnMagicParticle(
+                message.posX, message.posY + 0.4F, message.posZ,
+                level.random.nextGaussian() * 0.005F,
+                level.random.nextFloat() * 0.005F,
+                level.random.nextGaussian() * 0.005F,
+                0xcc3116, 1.5F, 40, 0F, false, true)),
         SPAWN_LAMP((message, level) -> {
             for (var i = level.random.nextInt(5) + 5; i >= 0; i--)
                 NaturesAuraAPI.instance().spawnMagicParticle(

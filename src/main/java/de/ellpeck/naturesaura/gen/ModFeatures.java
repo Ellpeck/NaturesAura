@@ -7,7 +7,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
-@SuppressWarnings("FieldNamingConvention")
+@SuppressWarnings("NonConstantFieldWithUpperCaseName")
 public final class ModFeatures {
 
     public static Feature<TreeConfiguration> ANCIENT_TREE;

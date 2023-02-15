@@ -77,6 +77,7 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return BlockChunkLoader.SHAPE;
     }

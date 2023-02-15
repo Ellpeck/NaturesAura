@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import net.minecraft.world.level.block.Block;
 
-@SuppressWarnings("FieldNamingConvention")
+@SuppressWarnings("NonConstantFieldWithUpperCaseName")
 public final class ModBlocks {
 
     public static Block ANCIENT_LOG;

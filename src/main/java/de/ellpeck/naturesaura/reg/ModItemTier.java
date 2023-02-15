@@ -43,6 +43,7 @@ public enum ModItemTier implements Tier {
     }
 
     @Override
+    @SuppressWarnings({"deprecation", "RedundantSuppression"})
     public int getLevel() {
         return this.harvestLevel;
     }

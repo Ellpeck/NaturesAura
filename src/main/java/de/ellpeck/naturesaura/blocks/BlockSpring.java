@@ -65,6 +65,7 @@ public class BlockSpring extends BlockContainerImpl implements ICustomBlockState
     }
 
     @Override
+    @SuppressWarnings({"deprecation", "RedundantSuppression"})
     public Optional<SoundEvent> getPickupSound() {
         return Fluids.WATER.getPickupSound();
     }

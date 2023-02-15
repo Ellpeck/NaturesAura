@@ -26,6 +26,7 @@ public class BlockPowderPlacer extends BlockContainerImpl implements ICustomBloc
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return BlockPowderPlacer.SHAPE;
     }

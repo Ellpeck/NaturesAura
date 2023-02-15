@@ -58,7 +58,7 @@ public class LevelGenAuraBloom extends Feature<NoneFeatureConfiguration> {
 
     private boolean tryPlace(WorldGenLevel level, BlockPos pos) {
         var state = this.block.defaultBlockState();
-        if (this.block.canSurvive(state, level, pos)) {
+        if (state.canSurvive(level, pos)) {
             level.setBlock(pos, state, 3);
             var tile = level.getBlockEntity(pos);
             if (tile instanceof BlockEntityAuraBloom bloom)

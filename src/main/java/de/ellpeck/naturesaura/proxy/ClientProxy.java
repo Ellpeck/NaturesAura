@@ -64,7 +64,7 @@ public class ClientProxy implements IProxy {
                 this.addColorProvidingBlock(color);
             if (item instanceof IColorProvidingItem color)
                 this.addColorProvidingItem(color);
-            if (item instanceof ITESRProvider provider)
+            if (item instanceof ITESRProvider<?> provider)
                 provider.registerTESR();
         }
 
@@ -75,6 +75,7 @@ public class ClientProxy implements IProxy {
     }
 
     @Override
+    @SuppressWarnings("removal")
     public void postInit(FMLCommonSetupEvent event) {
         // TODO this uses a vanilla model so we can't just add the json entry to it
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.GOLD_POWDER, RenderType.cutoutMipped());
@@ -107,6 +108,7 @@ public class ClientProxy implements IProxy {
         var colors = Minecraft.getInstance().getItemColors();
         var color = item.getItemColor();
 
+        // TODO use event
         if (item instanceof Item) {
             colors.register(color, (Item) item);
         } else if (item instanceof Block) {

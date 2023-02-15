@@ -30,6 +30,7 @@ public class BlockAnimalContainer extends BlockContainerImpl implements IVisuali
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return BlockAnimalContainer.SHAPE;
     }

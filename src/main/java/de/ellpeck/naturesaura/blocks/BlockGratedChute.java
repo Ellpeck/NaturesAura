@@ -60,6 +60,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return switch (state.getValue(BlockGratedChute.FACING)) {
             case DOWN -> BlockGratedChute.DOWN_SHAPE;
@@ -72,6 +73,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getInteractionShape(BlockState state, BlockGetter levelIn, BlockPos pos) {
         return switch (state.getValue(BlockGratedChute.FACING)) {
             case DOWN -> BlockGratedChute.DOWN_RAYTRACE_SHAPE;
@@ -84,6 +86,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (!player.isCrouching())
             return InteractionResult.FAIL;
@@ -112,11 +115,13 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     }
 
     @Override
-    public boolean hasAnalogOutputSignal(BlockState p_60457_) {
+    @SuppressWarnings("deprecation")
+    public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public int getAnalogOutputSignal(BlockState blockState, Level levelIn, BlockPos pos) {
         var tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityGratedChute) {

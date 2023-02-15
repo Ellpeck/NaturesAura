@@ -87,6 +87,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (!levelIn.isClientSide) {
             var tile = levelIn.getBlockEntity(pos);

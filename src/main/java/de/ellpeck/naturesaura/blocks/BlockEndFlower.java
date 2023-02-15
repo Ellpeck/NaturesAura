@@ -41,10 +41,11 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
         super(Properties.of(Material.GRASS).noCollission().strength(0.5F).sound(SoundType.GRASS));
         MinecraftForge.EVENT_BUS.register(this);
         ModRegistry.ALL_ITEMS.add(this);
-        ModRegistry.ALL_ITEMS.add(new ModTileType<BlockEntityEndFlower>(BlockEntityEndFlower::new, this));
+        ModRegistry.ALL_ITEMS.add(new ModTileType<>(BlockEntityEndFlower::new, this));
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         var vec3d = state.getOffset(levelIn, pos);
         return BlockEndFlower.SHAPE.move(vec3d.x, vec3d.y, vec3d.z);
@@ -104,6 +105,7 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         var tile = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (tile instanceof BlockEntityEndFlower f && f.isDrainMode)

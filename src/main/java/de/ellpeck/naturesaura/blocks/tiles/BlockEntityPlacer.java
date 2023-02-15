@@ -50,7 +50,7 @@ public class BlockEntityPlacer extends BlockEntityImpl implements ITickableBlock
                 for (var y = -range; y <= range; y++)
                     for (var z = -range; z <= range; z++) {
                         var pos = this.worldPosition.offset(x, y, z);
-                        if (!this.framesContain(frames, pos, this.level.getBlockState(pos)))
+                        if (!this.framesContain(frames, this.level.getBlockState(pos)))
                             continue;
 
                         var up = pos.above();
@@ -82,8 +82,8 @@ public class BlockEntityPlacer extends BlockEntityImpl implements ITickableBlock
         }
     }
 
-    private boolean framesContain(List<ItemFrame> frames, BlockPos pos, BlockState state) {
-        var stack = state.getBlock().getCloneItemStack(this.level, pos, state);
+    private boolean framesContain(List<ItemFrame> frames, BlockState state) {
+        var stack = new ItemStack(state.getBlock());
         if (stack.isEmpty())
             return false;
 

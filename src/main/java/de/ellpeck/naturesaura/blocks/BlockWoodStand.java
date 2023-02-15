@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -48,6 +49,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return BlockWoodStand.SHAPE;
     }
@@ -58,8 +60,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
         var pos = event.getPos();
         if (!level.isClientSide() && level instanceof Level) {
             if (Multiblocks.TREE_RITUAL.isComplete((Level) level, pos)) {
-                var sapling = level.getBlockState(pos);
-                var saplingStack = sapling.getBlock().getCloneItemStack(level, pos, sapling);
+                var saplingStack = new ItemStack(level.getBlockState(pos).getBlock());
                 if (!saplingStack.isEmpty()) {
                     for (var recipe : ((Level) level).getRecipeManager().getRecipesFor(ModRecipes.TREE_RITUAL_TYPE, null, null)) {
                         if (recipe.saplingType.test(saplingStack)) {
@@ -100,6 +101,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         return Helper.putStackOnTile(player, handIn, pos, 0, true);
     }

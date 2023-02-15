@@ -41,6 +41,7 @@ public class BlockAuraTimer extends BlockContainerImpl implements ICustomBlockSt
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return BlockAuraTimer.SHAPE;
     }
@@ -51,16 +52,19 @@ public class BlockAuraTimer extends BlockContainerImpl implements ICustomBlockSt
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult p_225533_6_) {
         return Helper.putStackOnTile(player, handIn, pos, 0, true);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isSignalSource(BlockState state) {
         return true;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction side) {
         return state.getValue(BlockStateProperties.POWERED) ? 15 : 0;
     }

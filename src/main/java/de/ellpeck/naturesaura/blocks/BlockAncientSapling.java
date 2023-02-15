@@ -19,6 +19,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.eventbus.api.Event;
 
 public class BlockAncientSapling extends BushBlock implements BonemealableBlock, IModItem, ICustomBlockState, ICustomItemModel {
 
@@ -30,11 +31,13 @@ public class BlockAncientSapling extends BushBlock implements BonemealableBlock,
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return BlockAncientSapling.SHAPE;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!level.isClientSide) {
             super.randomTick(state, level, pos, random);
@@ -55,7 +58,7 @@ public class BlockAncientSapling extends BushBlock implements BonemealableBlock,
     }
 
     @Override
-    public boolean isValidBonemealTarget(BlockGetter p_50897_, BlockPos p_50898_, BlockState p_50899_, boolean p_50900_) {
+    public boolean isValidBonemealTarget(BlockGetter level, BlockPos pos, BlockState state, boolean b) {
         return true;
     }
 
@@ -68,7 +71,7 @@ public class BlockAncientSapling extends BushBlock implements BonemealableBlock,
     public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state) {
         if (state.getValue(SaplingBlock.STAGE) == 0) {
             level.setBlock(pos, state.cycle(SaplingBlock.STAGE), 4);
-        } else if (ForgeEventFactory.saplingGrowTree(level, rand, pos)) {
+        } else if (!ForgeEventFactory.blockGrowFeature(level, rand, pos, null).getResult().equals(Event.Result.DENY)) {
             ModFeatures.Configured.ANCIENT_TREE.value().place(level, level.getChunkSource().getGenerator(), rand, pos);
         }
     }

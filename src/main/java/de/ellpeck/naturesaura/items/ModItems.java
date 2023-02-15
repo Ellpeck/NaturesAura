@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.items;
 
 import net.minecraft.world.item.Item;
 
-@SuppressWarnings("FieldNamingConvention")
+@SuppressWarnings("NonConstantFieldWithUpperCaseName")
 public final class ModItems {
 
     public static Item INFUSED_IRON_PICKAXE;

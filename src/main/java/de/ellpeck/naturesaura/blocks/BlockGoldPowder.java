@@ -31,7 +31,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     public static final EnumProperty<RedstoneSide> EAST = BlockStateProperties.EAST_REDSTONE;
     public static final EnumProperty<RedstoneSide> SOUTH = BlockStateProperties.SOUTH_REDSTONE;
     public static final EnumProperty<RedstoneSide> WEST = BlockStateProperties.WEST_REDSTONE;
-    protected static final VoxelShape[] SHAPES = new VoxelShape[]{Block.box(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.box(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.box(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.box(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D)};
+    protected static final VoxelShape[] SHAPES = {Block.box(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.box(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.box(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.box(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D)};
 
     public BlockGoldPowder() {
         super("gold_powder", Properties.copy(Blocks.REDSTONE_WIRE));
@@ -71,6 +71,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return BlockGoldPowder.SHAPES[BlockGoldPowder.getShapeIndex(state)];
     }
@@ -83,6 +84,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor levelIn, BlockPos currentPos, BlockPos facingPos) {
         if (facing == Direction.DOWN) {
             return stateIn;
@@ -116,6 +118,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean canSurvive(BlockState state, LevelReader levelIn, BlockPos pos) {
         var blockpos = pos.below();
         var blockstate = levelIn.getBlockState(blockpos);
@@ -123,11 +126,13 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getCollisionShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return Shapes.empty();
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onPlace(BlockState state, Level levelIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (oldState.getBlock() != state.getBlock() && !levelIn.isClientSide) {
             for (var direction : Direction.Plane.VERTICAL) {
@@ -149,6 +154,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onRemove(BlockState state, Level levelIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!isMoving && state.getBlock() != newState.getBlock()) {
             super.onRemove(state, levelIn, pos, newState, isMoving);
@@ -173,6 +179,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void neighborChanged(BlockState state, Level levelIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         if (!levelIn.isClientSide) {
             if (!state.canSurvive(levelIn, pos)) {
@@ -183,6 +190,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void updateIndirectNeighbourShapes(BlockState state, LevelAccessor levelIn, BlockPos pos, int flags, int recursionLeft) {
         var pool = new BlockPos.MutableBlockPos();
         for (var direction : Direction.Plane.HORIZONTAL) {

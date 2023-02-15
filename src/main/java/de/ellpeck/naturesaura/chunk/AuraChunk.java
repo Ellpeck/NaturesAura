@@ -197,6 +197,7 @@ public class AuraChunk implements IAuraChunk {
         return ret;
     }
 
+    @SuppressWarnings("unchecked")
     public Pair<BlockPos, Integer>[] getLowestAndHighestSpots(BlockPos pos, int radius) {
         var ret = this.limitSpotCache.get(pos, radius);
         if (ret == null) {

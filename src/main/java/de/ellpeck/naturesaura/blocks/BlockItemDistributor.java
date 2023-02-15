@@ -19,6 +19,7 @@ public class BlockItemDistributor extends BlockContainerImpl implements ICustomB
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (!player.isCrouching())
             return InteractionResult.FAIL;

@@ -88,6 +88,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
             if (equipped && !nbt.getBoolean(key)) {
                 // we just equipped it
                 nbt.putBoolean(key, true);
+                // TODO use new forge attribute for step height
                 player.maxUpStep = 1.1F;
                 if (!speed.hasModifier(ItemArmor.SKY_MOVEMENT_MODIFIER))
                     speed.addPermanentModifier(ItemArmor.SKY_MOVEMENT_MODIFIER);

@@ -7,7 +7,10 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketClient;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
-import de.ellpeck.naturesaura.reg.*;
+import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.ICustomItemModel;
+import de.ellpeck.naturesaura.reg.IModItem;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -62,6 +65,7 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         var stack = player.getItemInHand(hand);
         if (stack.getItem() == ModItems.RANGE_VISUALIZER) {
@@ -133,6 +137,7 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
     }
 
     @Override
+    @SuppressWarnings({"deprecation", "RedundantSuppression"})
     public Property<RailShape> getShapeProperty() {
         return BlockDimensionRail.SHAPE;
     }

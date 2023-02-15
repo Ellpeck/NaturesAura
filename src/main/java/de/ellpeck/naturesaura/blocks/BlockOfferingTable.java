@@ -36,11 +36,13 @@ public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvi
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         return Helper.putStackOnTile(player, handIn, pos, 0, true);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         return BlockOfferingTable.SHAPE;
     }

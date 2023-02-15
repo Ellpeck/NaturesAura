@@ -65,11 +65,13 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state) {
         return this.hasWaterlogging() && state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor levelIn, BlockPos currentPos, BlockPos facingPos) {
         if (this.hasWaterlogging() && stateIn.getValue(BlockStateProperties.WATERLOGGED))
             levelIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelIn));
@@ -110,6 +112,7 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         var drops = super.getDrops(state, builder);
 
@@ -126,11 +129,11 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     }
 
     @Override
-    public void playerWillDestroy(Level p_49852_, BlockPos p_49853_, BlockState p_49854_, Player p_49855_) {
-        var tile = p_49852_.getBlockEntity(p_49853_);
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        var tile = level.getBlockEntity(pos);
         if (tile instanceof BlockEntityImpl impl)
             impl.dropInventory();
-        super.playerWillDestroy(p_49852_, p_49853_, p_49854_, p_49855_);
+        super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -141,6 +144,7 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void neighborChanged(BlockState state, Level levelIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         this.updateRedstoneState(levelIn, pos);
     }
@@ -157,6 +161,7 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void tick(BlockState state, ServerLevel levelIn, BlockPos pos, RandomSource random) {
         if (!levelIn.isClientSide) {
             var tile = levelIn.getBlockEntity(pos);

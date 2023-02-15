@@ -6,11 +6,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.inventory.InventoryMenu;
 
 public class RenderStub<T extends Entity> extends EntityRenderer<T> {
 
-    public RenderStub(EntityRendererProvider.Context p_174008_) {
-        super(p_174008_);
+    public RenderStub(EntityRendererProvider.Context ctx) {
+        super(ctx);
     }
 
     @Override
@@ -19,7 +20,7 @@ public class RenderStub<T extends Entity> extends EntityRenderer<T> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(T p_114482_) {
-        return TextureAtlas.LOCATION_BLOCKS;
+    public ResourceLocation getTextureLocation(T t) {
+        return InventoryMenu.BLOCK_ATLAS;
     }
 }
