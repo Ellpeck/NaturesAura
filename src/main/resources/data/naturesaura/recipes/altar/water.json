@@ -9,7 +9,6 @@
         },
         "item": "minecraft:potion"
     },
-    "aura_type": "naturesaura:overworld",
     "catalyst": {
         "item": "naturesaura:conversion_catalyst"
     },

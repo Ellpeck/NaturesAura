@@ -6,7 +6,6 @@
     "output": {
         "item": "naturesaura:tainted_gold_block"
     },
-    "aura_type": "naturesaura:nether",
     "aura": 135000,
     "time": 700
 }

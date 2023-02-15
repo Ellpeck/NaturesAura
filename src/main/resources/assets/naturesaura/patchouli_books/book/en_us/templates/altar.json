@@ -18,20 +18,14 @@
             "group": "catalyst",
             "type": "patchouli:item",
             "item": "#catalyst",
-            "x": 36,
-            "y": 26
-        },
-        {
-            "type": "patchouli:item",
-            "item": "#type",
-            "x": 58,
+            "x": 48,
             "y": 26
         },
         {
             "group": "altar",
             "type": "patchouli:item",
             "item": "naturesaura:nature_altar",
-            "x": 36,
+            "x": 48,
             "y": 26
         },
         {

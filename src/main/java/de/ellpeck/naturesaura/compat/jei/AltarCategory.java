@@ -51,7 +51,6 @@ public class AltarCategory implements IRecipeCategory<AltarRecipe> {
     public void setRecipe(IRecipeLayoutBuilder builder, AltarRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 1, 19).addItemStacks(Arrays.asList(recipe.input.getItems()));
         builder.addSlot(RecipeIngredientRole.OUTPUT, 81, 19).addItemStack(recipe.output);
-        builder.addSlot(RecipeIngredientRole.CATALYST, 27, 19).addItemStacks(recipe.catalyst == Ingredient.EMPTY ? Collections.singletonList(this.altar) : Arrays.asList(recipe.catalyst.getItems()));
-        builder.addSlot(RecipeIngredientRole.CATALYST, 52, 19).addItemStack(recipe.requiredType != null ? recipe.getDimensionBottle() : ItemStack.EMPTY);
+        builder.addSlot(RecipeIngredientRole.CATALYST, 38, 19).addItemStacks(recipe.catalyst == Ingredient.EMPTY ? Collections.singletonList(this.altar) : Arrays.asList(recipe.catalyst.getItems()));
     }
 }

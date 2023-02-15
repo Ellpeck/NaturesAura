@@ -6,7 +6,6 @@
     "output": {
         "item": "minecraft:warped_fungus"
     },
-    "aura_type": "naturesaura:nether",
     "catalyst": {
         "item": "naturesaura:conversion_catalyst"
     },

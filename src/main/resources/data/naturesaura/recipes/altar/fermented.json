@@ -6,7 +6,6 @@
     "output": {
         "item": "minecraft:fermented_spider_eye"
     },
-    "aura_type": "naturesaura:overworld",
     "catalyst": {
         "item": "naturesaura:conversion_catalyst"
     },

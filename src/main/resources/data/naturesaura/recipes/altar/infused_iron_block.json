@@ -6,7 +6,6 @@
     "output": {
         "item": "naturesaura:infused_iron_block"
     },
-    "aura_type": "naturesaura:overworld",
     "aura": 135000,
     "time": 700
 }

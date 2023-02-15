@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "naturesaura:block/conversion_catalyst_nether"
-  }
-}

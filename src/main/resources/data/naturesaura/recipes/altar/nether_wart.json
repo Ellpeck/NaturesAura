@@ -6,7 +6,6 @@
     "output": {
         "item": "minecraft:nether_wart"
     },
-    "aura_type": "naturesaura:nether",
     "catalyst": {
         "item": "naturesaura:conversion_catalyst"
     },

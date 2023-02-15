@@ -6,7 +6,6 @@
     "output": {
         "item": "minecraft:potato"
     },
-    "aura_type": "naturesaura:overworld",
     "catalyst": {
         "item": "naturesaura:conversion_catalyst"
     },

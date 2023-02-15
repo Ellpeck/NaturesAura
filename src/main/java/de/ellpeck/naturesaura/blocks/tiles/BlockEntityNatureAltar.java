@@ -57,11 +57,10 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
     };
     @OnlyIn(Dist.CLIENT)
     public int bobTimer;
-    public StructureState structureState = StructureState.INVALID;
+    public boolean isComplete;
 
     private AltarRecipe currentRecipe;
     private int timer;
-
     private int lastAura;
     private boolean firstTick = true;
 
@@ -87,18 +86,18 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
 
         if (!this.level.isClientSide) {
             if (this.level.getGameTime() % 40 == 0 || this.firstTick) {
-                var newState = this.getNewState();
-                if (newState != this.structureState) {
-                    this.structureState = newState;
+                var complete = Multiblocks.ALTAR.isComplete(this.level, this.worldPosition);
+                if (complete != this.isComplete) {
+                    this.isComplete = complete;
                     this.sendToClients();
                 }
                 this.firstTick = false;
             }
 
-            if (this.structureState != StructureState.INVALID) {
+            if (this.isComplete) {
+                var type = IAuraType.forLevel(this.level);
                 var space = this.container.storeAura(300, true);
-                IAuraType expectedType = this.structureState == StructureState.NETHER ? NaturesAuraAPI.TYPE_NETHER : NaturesAuraAPI.TYPE_OVERWORLD;
-                if (space > 0 && IAuraType.forLevel(this.level).isSimilar(expectedType)) {
+                if (space > 0 && (type.isSimilar(NaturesAuraAPI.TYPE_OVERWORLD) || type.isSimilar(NaturesAuraAPI.TYPE_NETHER))) {
                     var toStore = Math.min(IAuraChunk.getAuraInArea(this.level, this.worldPosition, 20), space);
                     if (toStore > 0) {
                         var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 20, this.worldPosition);
@@ -167,7 +166,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
                 this.sendToClients();
             }
         } else {
-            if (this.structureState != StructureState.INVALID) {
+            if (this.isComplete) {
                 if (rand.nextFloat() >= 0.7F) {
                     var fourths = this.container.getMaxAura() / 4;
                     if (this.container.getStoredAura() > 0) {
@@ -199,25 +198,17 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
     }
 
     private AltarRecipe getRecipeForInput(ItemStack input) {
-        var type = IAuraType.forLevel(this.level);
         for (var recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.ALTAR_TYPE, null, null)) {
-            if (recipe.input.test(input) && (recipe.requiredType == null || type.isSimilar(recipe.requiredType))) {
+            if (recipe.input.test(input)) {
                 if (recipe.catalyst == Ingredient.EMPTY)
                     return recipe;
-                for (var stack : this.catalysts)
+                for (var stack : this.catalysts) {
                     if (recipe.catalyst.test(stack))
                         return recipe;
+                }
             }
         }
         return null;
-    }
-
-    private StructureState getNewState() {
-        if (Multiblocks.ALTAR.isComplete(this.level, this.worldPosition))
-            return StructureState.OVERWORLD;
-        if (Multiblocks.NETHER_ALTAR.isComplete(this.level, this.worldPosition))
-            return StructureState.NETHER;
-        return StructureState.INVALID;
     }
 
     @Override
@@ -225,7 +216,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             compound.put("items", this.items.serializeNBT());
-            compound.putString("state", this.structureState.name());
+            compound.putBoolean("complete", this.isComplete);
             this.container.writeNBT(compound);
         }
         if (type == SaveType.TILE) {
@@ -241,8 +232,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK) {
             this.items.deserializeNBT(compound.getCompound("items"));
-            if (compound.contains("state"))
-                this.structureState = StructureState.valueOf(compound.getString("state"));
+            this.isComplete = compound.getBoolean("complete");
             this.container.readNBT(compound);
         }
         if (type == SaveType.TILE) {
@@ -262,11 +252,5 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
     @Override
     public IItemHandlerModifiable getItemHandler() {
         return this.items;
-    }
-
-    public enum StructureState {
-        INVALID,
-        NETHER,
-        OVERWORLD
     }
 }

@@ -7,7 +7,6 @@
         "item": "minecraft:blaze_powder",
         "count": 4
     },
-    "aura_type": "naturesaura:nether",
     "catalyst": {
         "item": "naturesaura:crushing_catalyst"
     },

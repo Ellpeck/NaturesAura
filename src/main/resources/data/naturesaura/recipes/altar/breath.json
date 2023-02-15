@@ -9,7 +9,6 @@
     "output": {
         "item": "minecraft:dragon_breath"
     },
-    "aura_type": "naturesaura:nether",
     "catalyst": {
         "item": "naturesaura:conversion_catalyst"
     },

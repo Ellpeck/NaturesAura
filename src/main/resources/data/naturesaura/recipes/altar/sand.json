@@ -6,7 +6,6 @@
     "output": {
         "item": "minecraft:sand"
     },
-    "aura_type": "naturesaura:overworld",
     "catalyst": {
         "item": "naturesaura:crushing_catalyst"
     },

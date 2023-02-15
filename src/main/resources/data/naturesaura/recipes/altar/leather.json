@@ -6,7 +6,6 @@
     "output": {
         "item": "minecraft:leather"
     },
-    "aura_type": "naturesaura:overworld",
     "catalyst": {
         "item": "naturesaura:conversion_catalyst"
     },
