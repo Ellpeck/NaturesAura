@@ -1,7 +1,7 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "ONO",
+        "OSO",
         "PEP",
         "ONO"
     ],
@@ -21,6 +21,9 @@
             "nbt": {
                 "stored_type": "naturesaura:end"
             }
+        },
+        "S": {
+            "item": "minecraft:spyglass"
         }
     },
     "result": {

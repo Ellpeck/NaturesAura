@@ -3,7 +3,7 @@
     "pattern": [
         "SFS",
         "GIG",
-        "TSJ"
+        "TLJ"
     ],
     "key": {
         "F": {
@@ -23,6 +23,9 @@
         },
         "I": {
             "item": "naturesaura:sky_ingot"
+        },
+        "L": {
+            "item": "minecraft:lightning_rod"
         }
     },
     "result": {
