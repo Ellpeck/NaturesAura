@@ -53,27 +53,27 @@ public final class ModConfig {
     public ModConfig(ForgeConfigSpec.Builder builder) {
         builder.push("general");
         this.additionalBotanistPickaxeConversions = builder
-                .comment("Additional conversion recipes for the Botanist's Pickaxe right click function. Each entry needs to be formatted as modid:input_block[prop1=value1,...]->modid:output_block[prop1=value1,...] where block state properties are optional")
+                .comment("Additional conversion recipes for the Botanist's Pickaxe right click function. Each entry needs to be formatted as modid:input_block[prop1=value1,...]->modid:output_block[prop1=value1,...] where block state properties are optional, and entries follow standard TOML array formatting (https://toml.io/en/v1.0.0#array).")
                 .translation("config." + NaturesAura.MOD_ID + ".additionalBotanistPickaxeConversions")
                 .defineList("additionalBotanistPickaxeConversions", Collections.emptyList(), s -> true);
         this.auraTypeOverrides = builder
-                .comment("Additional dimensions that map to Aura types that should be present in them. This is useful if you have a modpack with custom dimensions that should have Aura act similarly to an existing dimension in them. Each entry needs to be formatted as dimension_name->aura_type, where aura_type can be any of naturesaura:overworld, naturesaura:nether and naturesaura:end.")
+                .comment("Additional dimensions that map to Aura types that should be present in them. This is useful if you have a modpack with custom dimensions that should have Aura act similarly to an existing dimension in them. Each entry needs to be formatted as dimension_name->aura_type, where aura_type can be any of naturesaura:overworld, naturesaura:nether and naturesaura:end, and entries follow standard TOML array formatting (https://toml.io/en/v1.0.0#array).")
                 .translation("config." + NaturesAura.MOD_ID + ".auraTypeOverrides")
                 .defineList("auraTypeOverrides", Collections.emptyList(), s -> true);
         this.additionalOres = builder
-                .comment("Additional blocks that are recognized as generatable ores for the passive ore generation effect. Each entry needs to be formatted as tag_name->oreWeight->dimension where a higher weight makes the ore more likely to spawn with 5000 being the weight of coal, the default ore with the highest weight, and dimension being any of overworld and nether")
+                .comment("Additional blocks that are recognized as generatable ores for the passive ore generation effect. Each entry needs to be formatted as tag_name->oreWeight->dimension where a higher weight makes the ore more likely to spawn with 5000 being the weight of coal, the default ore with the highest weight, and dimension being any of overworld and nether, and entries follow standard TOML array formatting (https://toml.io/en/v1.0.0#array).")
                 .translation("config." + NaturesAura.MOD_ID + ".additionalOres")
                 .defineList("additionalOres", Collections.emptyList(), s -> true);
         this.oreExceptions = builder
-                .comment("Blocks that are exempt from being recognized as generatable ores for the passive ore generation effect. Each entry needs to be formatted as modid:block[prop1=value1,...] where block state properties are optional")
+                .comment("Blocks that are exempt from being recognized as generatable ores for the passive ore generation effect. Each entry needs to be formatted as modid:block[prop1=value1,...] where block state properties are optional, and entries follow standard TOML array formatting (https://toml.io/en/v1.0.0#array).")
                 .translation("config." + NaturesAura.MOD_ID + ".oreExceptions")
                 .defineList("oreExceptions", Collections.emptyList(), s -> true);
         this.plantBoostExceptions = builder
-                .comment("Blocks that are exept from being fertilized by the plant boost effect. Each entry needs to be formatted as modid:block")
+                .comment("Blocks that are exept from being fertilized by the plant boost effect. Each entry needs to be formatted as modid:block, and entries follow standard TOML array formatting (https://toml.io/en/v1.0.0#array).")
                 .translation("config." + NaturesAura.MOD_ID + ".plantBoostExceptions")
                 .defineList("plantBoostExceptions", Collections.emptyList(), s -> true);
         this.additionalProjectiles = builder
-                .comment("Additional projectile types that are allowed to be consumed by the projectile generator. Each entry needs to be formatted as entity_registry_name->aura_amount")
+                .comment("Additional projectile types that are allowed to be consumed by the projectile generator. Each entry needs to be formatted as entity_registry_name->aura_amount, and entries follow standard TOML array formatting (https://toml.io/en/v1.0.0#array).")
                 .translation("config." + NaturesAura.MOD_ID + ".additionalProjectiles")
                 .defineList("additionalProjectiles", Collections.emptyList(), s -> true);
         this.fieldCreatorRange = builder
