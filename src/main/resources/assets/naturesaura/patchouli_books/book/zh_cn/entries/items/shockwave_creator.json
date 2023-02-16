@@ -2,7 +2,7 @@
     "name": "狂怒护身符",
     "icon": "naturesaura:shockwave_creator",
     "category": "naturesaura:items",
-    "advancement": "naturesaura:tainted_gold",
+    "advancement": "naturesaura:infused_materials",
     "pages": [
         {
             "type": "text",

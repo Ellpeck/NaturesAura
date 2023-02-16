@@ -2,7 +2,7 @@
     "name": "Offshoot Observer",
     "icon": "naturesaura:slime_split_generator",
     "category": "naturesaura:creating",
-    "advancement": "naturesaura:tainted_gold",
+    "advancement": "naturesaura:infused_materials",
     "pages": [
         {
             "type": "text",

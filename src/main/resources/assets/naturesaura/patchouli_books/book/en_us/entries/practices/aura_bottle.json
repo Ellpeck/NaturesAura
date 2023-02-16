@@ -23,6 +23,12 @@
         {
             "type": "text",
             "text": "Additionally, the collection of $(aura) in this manner can be automated easily using $(item)Dispensers$(): Putting empty $(item)Bottles and Corks$() into them will cause them to be shot out open, making them fill up with $(aura) in the process. As they are not sucked up by the Dispenser again afterwards, an additional tool like a $(item)Hopper$() is required."
+        },
+        {
+            "type": "spotlight",
+            "item": "naturesaura:vacuum_bottle",
+            "link_recipe": true,
+            "text": "Lastly, some areas have a severe lack of $(aura), much lower than the $(l:items/eye)Environmental Eye$() can display, and whose air is subsequently nearly devoid of oxygen. Using a $(item)Bottle and Cork$() in areas like these allows bottling up this air and capturing a nearly perfect vacuum in the bottle."
         }
     ]
 }

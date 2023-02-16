@@ -1,0 +1,18 @@
+{
+    "name": "Aura Imbalance Ward",
+    "icon": "naturesaura:lower_limiter",
+    "category": "naturesaura:using",
+    "advancement": "naturesaura:vacuum_bottle",
+    "priority": true,
+    "pages": [
+        {
+            "type": "text",
+            "text": "As any magical botanist knows, causing negative $(aura) imbalance effects can be quite dangerous, especially when using a device that consumes $(aura) passively.$(br)For cases like this, the $(item)Aura Imbalance Ward$() provides protection against any dangers: placing it next to a device that uses $(aura) causes the device to cease operation while the $(aura) levels around it are too low.$(br)This comes at no cost in return."
+        },
+        {
+            "type": "crafting",
+            "recipe": "naturesaura:lower_limiter",
+            "text": "Crafting the $(item)Aura Imbalance Ward$()"
+        }
+    ]
+}

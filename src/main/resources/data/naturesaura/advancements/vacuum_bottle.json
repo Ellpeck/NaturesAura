@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:vacuum_bottle"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.vacuum_bottle"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.vacuum_bottle.desc"
+        }
+    },
+    "parent": "naturesaura:negative_imbalance",
+    "criteria": {
+        "bottle": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": ["naturesaura:vacuum_bottle"]
+                    }
+                ]
+            }
+        }
+    }
+}
