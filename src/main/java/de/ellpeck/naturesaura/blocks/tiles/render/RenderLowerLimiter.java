@@ -25,10 +25,11 @@ public class RenderLowerLimiter implements BlockEntityRenderer<BlockEntityLowerL
     @Override
     public void render(BlockEntityLowerLimiter te, float v, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
         for (var dir : Direction.values()) {
-            var entity = te.getLevel().getBlockEntity(te.getBlockPos().relative(dir));
-            if (entity instanceof BlockEntityImpl impl && impl.allowsLowerLimiter()) {
-                RenderGeneratorLimitRemover.renderGlint(matrixStack, iRenderTypeBuffer, this.model, dir.getStepX(), dir.getStepY(), dir.getStepZ(), combinedOverlayIn, RenderLowerLimiter.RES);
-                RenderGeneratorLimitRemover.renderGlint(matrixStack, iRenderTypeBuffer, this.model, 0, 0, 0, combinedOverlayIn, RenderLowerLimiter.RES);
+            var offset = te.getBlockPos().relative(dir);
+            if (te.getLevel().getBlockEntity(offset) instanceof BlockEntityImpl impl && impl.allowsLowerLimiter()) {
+                var alpha = te.getLevel().getBlockState(offset).isCollisionShapeFullBlock(te.getLevel(), offset) ? 1 : 0.25F;
+                RenderGeneratorLimitRemover.renderGlint(matrixStack, iRenderTypeBuffer, this.model, dir.getStepX(), dir.getStepY(), dir.getStepZ(), combinedOverlayIn, RenderLowerLimiter.RES, alpha);
+                RenderGeneratorLimitRemover.renderGlint(matrixStack, iRenderTypeBuffer, this.model, 0, 0, 0, combinedOverlayIn, RenderLowerLimiter.RES, 1);
             }
         }
     }

@@ -34,19 +34,19 @@ public class RenderGeneratorLimitRemover implements BlockEntityRenderer<BlockEnt
     public void render(BlockEntityGeneratorLimitRemover te, float v, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
         var above = te.getLevel().getBlockEntity(te.getBlockPos().above());
         if (above instanceof BlockEntityImpl && ((BlockEntityImpl) above).wantsLimitRemover()) {
-            RenderGeneratorLimitRemover.renderGlint(matrixStack, iRenderTypeBuffer, this.model, 0, 1, 0, combinedOverlayIn, RenderGeneratorLimitRemover.RES);
-            RenderGeneratorLimitRemover.renderGlint(matrixStack, iRenderTypeBuffer, this.model, 0, 0, 0, combinedOverlayIn, RenderGeneratorLimitRemover.RES);
+            RenderGeneratorLimitRemover.renderGlint(matrixStack, iRenderTypeBuffer, this.model, 0, 1, 0, combinedOverlayIn, RenderGeneratorLimitRemover.RES, 1);
+            RenderGeneratorLimitRemover.renderGlint(matrixStack, iRenderTypeBuffer, this.model, 0, 0, 0, combinedOverlayIn, RenderGeneratorLimitRemover.RES, 1);
         }
     }
 
-    public static void renderGlint(PoseStack stack, MultiBufferSource buffer, ModelLimitRemoverGlint model, int xOff, int yOff, int zOff, int combinedOverlayIn, ResourceLocation texture) {
+    public static void renderGlint(PoseStack stack, MultiBufferSource buffer, ModelLimitRemoverGlint model, int xOff, int yOff, int zOff, int combinedOverlayIn, ResourceLocation texture, float maxAlpha) {
         stack.pushPose();
         var brightness = 15 << 20 | 15 << 4;
         var alpha = ((float) Math.sin(System.currentTimeMillis() / 800D) + 1F) / 2F;
-        stack.translate(-0.001F + xOff, 1 + 0.001F + yOff, 1 + 0.001F + zOff);
+        stack.translate(-0.002F + xOff, 1 + 0.002F + yOff, 1 + 0.002F + zOff);
         stack.mulPose(Vector3f.XP.rotationDegrees(180F));
-        stack.scale(1.002F, 1.002F, 1.002F);
-        model.renderToBuffer(stack, buffer.getBuffer(model.renderType(texture)), brightness, combinedOverlayIn, 1, 1, 1, alpha);
+        stack.scale(1.004F, 1.004F, 1.004F);
+        model.renderToBuffer(stack, buffer.getBuffer(model.renderType(texture)), brightness, combinedOverlayIn, 1, 1, 1, alpha * maxAlpha);
         stack.popPose();
     }
 
