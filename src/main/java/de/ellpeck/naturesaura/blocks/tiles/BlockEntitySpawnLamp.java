@@ -39,4 +39,9 @@ public class BlockEntitySpawnLamp extends BlockEntityImpl {
         if (!this.level.isClientSide)
             this.sendToClients();
     }
+
+    @Override
+    public boolean allowsLowerLimiter() {
+        return true;
+    }
 }

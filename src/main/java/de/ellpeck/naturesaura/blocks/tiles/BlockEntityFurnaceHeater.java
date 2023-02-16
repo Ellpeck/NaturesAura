@@ -64,25 +64,28 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
                 if (burnTime <= 0)
                     this.level.setBlockAndUpdate(tilePos, this.level.getBlockState(tilePos).setValue(AbstractFurnaceBlock.LIT, true));
 
-                data.set(0, 200);
-                // we leave some wiggle room for the furnace to do its own checks + the blast furnace booster
-                data.set(2, Math.min(data.get(3) - 2, data.get(2) + 5));
+                var toDrain = Mth.ceil((200 - burnTime) * 16.6F);
+                if (this.canUseRightNow(toDrain)) {
+                    data.set(0, 200);
+                    // we leave some wiggle room for the furnace to do its own checks + the blast furnace booster
+                    data.set(2, Math.min(data.get(3) - 2, data.get(2) + 5));
 
-                var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 20, this.worldPosition);
-                var chunk = IAuraChunk.getAuraChunk(this.level, spot);
-                chunk.drainAura(spot, Mth.ceil((200 - burnTime) * 16.6F));
-                did = true;
+                    var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 20, this.worldPosition);
+                    var chunk = IAuraChunk.getAuraChunk(this.level, spot);
+                    chunk.drainAura(spot, toDrain);
+                    did = true;
 
-                if (this.level.getGameTime() % 15 == 0) {
-                    PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticleStream(
-                            this.worldPosition.getX() + (float) this.level.random.nextGaussian() * 5F,
-                            this.worldPosition.getY() + 1 + this.level.random.nextFloat() * 5F,
-                            this.worldPosition.getZ() + (float) this.level.random.nextGaussian() * 5F,
-                            tilePos.getX() + this.level.random.nextFloat(),
-                            tilePos.getY() + this.level.random.nextFloat(),
-                            tilePos.getZ() + this.level.random.nextFloat(),
-                            this.level.random.nextFloat() * 0.07F + 0.07F, IAuraType.forLevel(this.level).getColor(), this.level.random.nextFloat() + 0.5F
-                    ));
+                    if (this.level.getGameTime() % 15 == 0) {
+                        PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticleStream(
+                                this.worldPosition.getX() + (float) this.level.random.nextGaussian() * 5F,
+                                this.worldPosition.getY() + 1 + this.level.random.nextFloat() * 5F,
+                                this.worldPosition.getZ() + (float) this.level.random.nextGaussian() * 5F,
+                                tilePos.getX() + this.level.random.nextFloat(),
+                                tilePos.getY() + this.level.random.nextFloat(),
+                                tilePos.getZ() + this.level.random.nextFloat(),
+                                this.level.random.nextFloat() * 0.07F + 0.07F, IAuraType.forLevel(this.level).getColor(), this.level.random.nextFloat() + 0.5F
+                        ));
+                    }
                 }
             }
 
@@ -123,5 +126,10 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
 
         if (type == SaveType.SYNC)
             this.isActive = compound.getBoolean("active");
+    }
+
+    @Override
+    public boolean allowsLowerLimiter() {
+        return true;
     }
 }

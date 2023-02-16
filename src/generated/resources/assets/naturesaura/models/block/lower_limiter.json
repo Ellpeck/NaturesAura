@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "naturesaura:block/lower_limiter_top",
+    "side": "naturesaura:block/lower_limiter",
+    "top": "naturesaura:block/lower_limiter_top"
+  }
+}

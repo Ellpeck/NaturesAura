@@ -58,10 +58,9 @@ public class BlockSpring extends BlockContainerImpl implements ICustomBlockState
 
     @Override
     public ItemStack pickupBlock(LevelAccessor levelIn, BlockPos pos, BlockState state) {
-        var tile = levelIn.getBlockEntity(pos);
-        if (tile instanceof BlockEntitySpring)
-            ((BlockEntitySpring) tile).consumeAura(2500);
-        return new ItemStack(Items.WATER_BUCKET);
+        if (levelIn.getBlockEntity(pos) instanceof BlockEntitySpring spring && spring.tryConsumeAura(2500))
+            return new ItemStack(Items.WATER_BUCKET);
+        return ItemStack.EMPTY;
     }
 
     @Override

@@ -165,6 +165,20 @@ public class BlockEntityImpl extends BlockEntity {
         }
     }
 
+    public boolean canUseRightNow(int toUse) {
+        if (this.allowsLowerLimiter()) {
+            for (var dir : Direction.values()) {
+                var offset = this.worldPosition.relative(dir);
+                if (this.level.getBlockState(offset).getBlock() == ModBlocks.LOWER_LIMITER) {
+                    var aura = IAuraChunk.getAuraInArea(this.level, this.worldPosition, 35);
+                    return aura - toUse > 0;
+                }
+            }
+
+        }
+        return true;
+    }
+
     public boolean canGenerateRightNow(int toAdd) {
         if (this.wantsLimitRemover()) {
             var below = this.level.getBlockState(this.worldPosition.below());
@@ -176,6 +190,10 @@ public class BlockEntityImpl extends BlockEntity {
     }
 
     public boolean wantsLimitRemover() {
+        return false;
+    }
+
+    public boolean allowsLowerLimiter() {
         return false;
     }
 

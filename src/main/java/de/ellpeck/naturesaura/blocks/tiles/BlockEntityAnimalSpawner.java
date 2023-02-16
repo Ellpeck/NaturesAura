@@ -51,6 +51,9 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
 
             if (this.currentRecipe != null) {
                 var drain = Mth.ceil(this.currentRecipe.aura / (float) this.currentRecipe.time * 10F);
+                if (!this.canUseRightNow(drain))
+                    return;
+
                 var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
                 IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, drain);
 
@@ -163,5 +166,10 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
                 this.time = 0;
             }
         }
+    }
+
+    @Override
+    public boolean allowsLowerLimiter() {
+        return true;
     }
 }

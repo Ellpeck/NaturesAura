@@ -60,9 +60,8 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
         if (!ModConfig.instance.chunkLoader.get())
             return;
         var tile = levelIn.getBlockEntity(pos);
-        if (tile instanceof BlockEntityChunkLoader) {
-            var range = ((BlockEntityChunkLoader) tile).range();
-            for (var i = Mth.ceil(range / 8F); i > 0; i--) {
+        if (tile instanceof BlockEntityChunkLoader loader && loader.canUseRightNow(loader.getAuraUsed())) {
+            for (var i = Mth.ceil(loader.range() / 8F); i > 0; i--) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
                         pos.getX() + levelIn.random.nextFloat(), pos.getY() + levelIn.random.nextFloat(), pos.getZ() + levelIn.random.nextFloat(),
                         0, 0, 0, 0xa12dff, 1F + levelIn.random.nextFloat(), 100, 0, false, true);

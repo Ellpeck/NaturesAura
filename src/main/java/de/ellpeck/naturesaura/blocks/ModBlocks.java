@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import net.minecraft.world.level.block.Block;
 
-@SuppressWarnings("NonConstantFieldWithUpperCaseName")
+@SuppressWarnings("FieldNamingConvention")
 public final class ModBlocks {
 
     public static Block ANCIENT_LOG;
@@ -74,4 +74,5 @@ public final class ModBlocks {
     public static Block CRIMSON_AURA_MUSHROOM;
     public static Block AURA_MUSHROOM;
     public static Block WEATHER_CHANGER;
+    public static Block LOWER_LIMITER;
 }

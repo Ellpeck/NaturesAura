@@ -62,10 +62,9 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         var upState = this.level.getBlockState(up);
         if (upState.hasProperty(BlockStateProperties.LEVEL_CAULDRON)) {
             int level = upState.getValue(BlockStateProperties.LEVEL_CAULDRON);
-            if (level < 3) {
+            if (level < 3 && this.tryConsumeAura(2500)) {
                 this.level.setBlockAndUpdate(up, upState.setValue(BlockStateProperties.LEVEL_CAULDRON, level + 1));
                 this.level.playSound(null, up, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1, 1);
-                this.consumeAura(2500);
                 return;
             }
         }
@@ -77,10 +76,9 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
                 for (var z = -spongeRadius; z <= spongeRadius; z++) {
                     var pos = this.worldPosition.offset(x, y, z);
                     var state = this.level.getBlockState(pos);
-                    if (state.getBlock() == Blocks.SPONGE) {
+                    if (state.getBlock() == Blocks.SPONGE && this.tryConsumeAura(2500)) {
                         this.level.setBlock(pos, Blocks.WET_SPONGE.defaultBlockState(), 2);
                         this.level.levelEvent(2001, pos, Block.getId(Blocks.WATER.defaultBlockState()));
-                        this.consumeAura(2500);
                         return;
                     }
                 }
@@ -90,20 +88,18 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         // generate obsidian
         for (var dir : Direction.Plane.HORIZONTAL) {
             var side = this.worldPosition.relative(dir);
-            if (this.isLava(side, true)) {
+            if (this.isLava(side, true) && this.tryConsumeAura(1500)) {
                 this.level.setBlockAndUpdate(side, ForgeEventFactory.fireFluidPlaceBlockEvent(this.level, side, side, Blocks.OBSIDIAN.defaultBlockState()));
                 this.level.levelEvent(1501, side, 0);
-                this.consumeAura(1500);
                 return;
             }
         }
 
         // generate stone
         var twoUp = this.worldPosition.above(2);
-        if (this.isLava(twoUp, false) && (this.level.getBlockState(up).isAir() || this.isLava(up, false))) {
+        if (this.isLava(twoUp, false) && (this.level.getBlockState(up).isAir() || this.isLava(up, false)) && this.tryConsumeAura(150)) {
             this.level.setBlockAndUpdate(up, ForgeEventFactory.fireFluidPlaceBlockEvent(this.level, up, twoUp, Blocks.STONE.defaultBlockState()));
             this.level.levelEvent(1501, up, 0);
-            this.consumeAura(150);
             return;
         }
 
@@ -111,10 +107,9 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         for (var dir : Direction.Plane.HORIZONTAL) {
             var twoSide = this.worldPosition.relative(dir, 2);
             var side = this.worldPosition.relative(dir);
-            if (this.isLava(twoSide, false) && (this.level.getBlockState(side).isAir() || this.isLava(side, false))) {
+            if (this.isLava(twoSide, false) && (this.level.getBlockState(side).isAir() || this.isLava(side, false)) && this.tryConsumeAura(100)) {
                 this.level.setBlockAndUpdate(side, ForgeEventFactory.fireFluidPlaceBlockEvent(this.level, side, twoSide, Blocks.COBBLESTONE.defaultBlockState()));
                 this.level.levelEvent(1501, side, 0);
-                this.consumeAura(100);
                 return;
             }
         }
@@ -127,11 +122,17 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         return LazyOptional.empty();
     }
 
-    public void consumeAura(int amount) {
-        while (amount > 0) {
-            var pos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
-            amount -= IAuraChunk.getAuraChunk(this.level, pos).drainAura(pos, amount);
-        }
+    @Override
+    public boolean allowsLowerLimiter() {
+        return true;
+    }
+
+    public boolean tryConsumeAura(int amount) {
+        if (!this.canUseRightNow(amount))
+            return false;
+        var pos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
+        IAuraChunk.getAuraChunk(this.level, pos).drainAura(pos, amount);
+        return true;
     }
 
     private boolean isLava(BlockPos offset, boolean source) {
@@ -169,8 +170,11 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         @Override
         public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
             var drain = Math.min(maxDrain, 1000);
+            var auraUsed = Mth.ceil(drain / 2F);
+            if (!BlockEntitySpring.this.canUseRightNow(auraUsed))
+                return FluidStack.EMPTY;
             if (action.execute())
-                BlockEntitySpring.this.consumeAura(Mth.ceil(drain / 2F));
+                BlockEntitySpring.this.tryConsumeAura(auraUsed);
             return new FluidStack(Fluids.WATER, drain);
         }
 

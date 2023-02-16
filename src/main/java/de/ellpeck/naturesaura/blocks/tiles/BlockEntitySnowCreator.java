@@ -39,6 +39,10 @@ public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickable
         if (range <= 0)
             return;
 
+        var toDrain = 300;
+        if (!this.canUseRightNow(toDrain))
+            return;
+
         if (!this.level.isClientSide) {
             if (this.level.getGameTime() % 10 != 0)
                 return;
@@ -67,7 +71,7 @@ public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickable
                 }
 
                 var auraPos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 30, this.worldPosition);
-                IAuraChunk.getAuraChunk(this.level, auraPos).drainAura(auraPos, 300);
+                IAuraChunk.getAuraChunk(this.level, auraPos).drainAura(auraPos, toDrain);
 
                 PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
                         new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.SNOW_CREATOR));
@@ -103,5 +107,10 @@ public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickable
         super.readNBT(compound, type);
         if (type == SaveType.TILE)
             this.snowmanCount = compound.getInt("snowman_count");
+    }
+
+    @Override
+    public boolean allowsLowerLimiter() {
+        return true;
     }
 }

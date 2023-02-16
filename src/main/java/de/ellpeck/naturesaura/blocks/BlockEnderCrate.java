@@ -91,7 +91,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (!levelIn.isClientSide) {
             var tile = levelIn.getBlockEntity(pos);
-            if (tile instanceof BlockEntityEnderCrate crate && crate.canOpen()) {
+            if (tile instanceof BlockEntityEnderCrate crate && crate.canOpen() && crate.canUseRightNow(2500)) {
                 crate.drainAura(2500);
                 NetworkHooks.openScreen((ServerPlayer) player, crate, pos);
             }

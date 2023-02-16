@@ -51,9 +51,16 @@ public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITicka
         }
 
         if (this.processTime > 0) {
+            var auraToUse = 30000 * Mth.ceil(this.itemAmount * 0.75F);
+            if (!this.canUseRightNow(auraToUse)) {
+                this.processTime = 0;
+                this.sendToClients();
+                return;
+            }
+
             if (this.processTime % 20 == 0) {
                 var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
-                IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, 30000 * Mth.ceil(this.itemAmount * 0.75F));
+                IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, auraToUse);
             }
 
             this.processTime--;
@@ -99,6 +106,11 @@ public class BlockEntityWeatherChanger extends BlockEntityImpl implements ITicka
             this.type = WeatherType.values()[compound.getInt("weather")];
             this.itemAmount = compound.getInt("amount");
         }
+    }
+
+    @Override
+    public boolean allowsLowerLimiter() {
+        return true;
     }
 
     private Pair<WeatherType, Integer> getNextWeatherType() {

@@ -18,6 +18,7 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
 
     private final List<ChunkPos> forcedChunks = new ArrayList<>();
     private boolean firstTick = true;
+    private boolean canUseRightNow = true;
 
     public BlockEntityChunkLoader(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CHUNK_LOADER, pos, state);
@@ -42,6 +43,10 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
         return this.redstonePower * 2;
     }
 
+    public int getAuraUsed() {
+        return Mth.ceil(this.range() / 2F);
+    }
+
     private void loadChunks(boolean unload) {
         if (this.level.isClientSide || !ModConfig.instance.chunkLoader.get())
             return;
@@ -50,7 +55,7 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
         List<ChunkPos> shouldBeForced = new ArrayList<>();
         if (!unload) {
             var range = this.range();
-            if (range > 0) {
+            if (range > 0 && this.canUseRightNow) {
                 for (var x = this.worldPosition.getX() - range >> 4; x <= this.worldPosition.getX() + range >> 4; x++) {
                     for (var z = this.worldPosition.getZ() - range >> 4; z <= this.worldPosition.getZ() + range >> 4; z++) {
                         var pos = new ChunkPos(x, z);
@@ -86,10 +91,16 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
                 this.firstTick = false;
             }
 
+            var toUse = this.getAuraUsed();
+            var canUse = this.canUseRightNow(toUse);
+            if (this.canUseRightNow != canUse) {
+                this.canUseRightNow = canUse;
+                this.loadChunks(false);
+            }
+
             if (this.level.getGameTime() % 20 != 0)
                 return;
-            var toUse = Mth.ceil(this.range() / 2F);
-            if (toUse > 0) {
+            if (toUse > 0 && this.canUseRightNow) {
                 var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 35, this.worldPosition);
                 IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, toUse);
             }
@@ -111,5 +122,10 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
             this.forcedChunks.clear();
             Arrays.stream(compound.getLongArray("forced_chunks")).mapToObj(ChunkPos::new).forEach(this.forcedChunks::add);
         }
+    }
+
+    @Override
+    public boolean allowsLowerLimiter() {
+        return true;
     }
 }

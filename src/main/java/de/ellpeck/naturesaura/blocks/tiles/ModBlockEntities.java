@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-@SuppressWarnings("NonConstantFieldWithUpperCaseName")
+@SuppressWarnings("FieldNamingConvention")
 public final class ModBlockEntities {
 
     public static BlockEntityType<BlockEntityAncientLeaves> ANCIENT_LEAVES;
@@ -43,4 +43,5 @@ public final class ModBlockEntities {
     public static BlockEntityType<BlockEntitySlimeSplitGenerator> SLIME_SPLIT_GENERATOR;
     public static BlockEntityType<BlockEntitySpring> SPRING;
     public static BlockEntityType<BlockEntityWeatherChanger> WEATHER_CHANGER;
+    public static BlockEntityType<BlockEntityLowerLimiter> LOWER_LIMITER;
 }

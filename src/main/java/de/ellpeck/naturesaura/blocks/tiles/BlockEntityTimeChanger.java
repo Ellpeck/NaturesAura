@@ -38,7 +38,7 @@ public class BlockEntityTimeChanger extends BlockEntityImpl implements ITickable
                 if (this.goalTime > 0) {
                     var current = this.level.getDayTime();
                     var toAdd = Math.min(75, this.goalTime - current);
-                    if (toAdd <= 0) {
+                    if (toAdd <= 0 || !this.canUseRightNow((int) toAdd * 20)) {
                         this.goalTime = 0;
                         this.sendToClients();
                         return;
@@ -117,5 +117,10 @@ public class BlockEntityTimeChanger extends BlockEntityImpl implements ITickable
         super.readNBT(compound, type);
         if (type != SaveType.BLOCK)
             this.goalTime = compound.getLong("goal");
+    }
+
+    @Override
+    public boolean allowsLowerLimiter() {
+        return true;
     }
 }

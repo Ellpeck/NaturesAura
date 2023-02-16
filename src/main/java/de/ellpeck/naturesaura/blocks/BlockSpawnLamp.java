@@ -10,7 +10,6 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -45,15 +44,16 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
 
     @SubscribeEvent
     public void onSpawn(LivingSpawnEvent.CheckSpawn event) {
+        var amountToUse = 200;
         if (event.getSpawner() != null)
             return;
-        var level = event.getLevel();
+        var accessor = event.getLevel();
         var pos = new BlockPos(event.getX(), event.getY(), event.getZ());
-        if (!(level instanceof Level))
+        if (!(accessor instanceof Level level))
             return;
-        var data = (LevelData) ILevelData.getLevelData((Level) level);
+        var data = (LevelData) ILevelData.getLevelData(level);
         for (var lamp : data.spawnLamps) {
-            if (lamp.isRemoved())
+            if (lamp.isRemoved() || !lamp.canUseRightNow(amountToUse))
                 continue;
 
             var range = lamp.getRadius();
@@ -66,10 +66,10 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
 
             var entity = (Mob) event.getEntity();
             if (entity.checkSpawnRules(level, event.getSpawnReason()) && entity.checkSpawnObstruction(level)) {
-                var spot = IAuraChunk.getHighestSpot((Level) level, lampPos, 32, lampPos);
-                IAuraChunk.getAuraChunk((Level) level, spot).drainAura(spot, 200);
+                var spot = IAuraChunk.getHighestSpot(level, lampPos, 32, lampPos);
+                IAuraChunk.getAuraChunk(level, spot).drainAura(spot, amountToUse);
 
-                PacketHandler.sendToAllAround((ServerLevel) level, lampPos, 32,
+                PacketHandler.sendToAllAround(level, lampPos, 32,
                         new PacketParticles(lampPos.getX(), lampPos.getY(), lampPos.getZ(), PacketParticles.Type.SPAWN_LAMP));
             }
 

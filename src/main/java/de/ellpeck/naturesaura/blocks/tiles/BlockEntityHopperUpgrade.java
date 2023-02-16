@@ -44,6 +44,10 @@ public class BlockEntityHopperUpgrade extends BlockEntityImpl implements ITickab
             if (items.isEmpty())
                 return;
 
+            var drainPerItem = 500;
+            if (!this.canUseRightNow(drainPerItem * items.size()))
+                return;
+
             for (var item : items) {
                 if (!item.isAlive() || item.hasPickUpDelay())
                     continue;
@@ -65,12 +69,17 @@ public class BlockEntityHopperUpgrade extends BlockEntityImpl implements ITickab
                         item.kill();
 
                     var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 25, this.worldPosition);
-                    IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, 500);
+                    IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, drainPerItem);
 
                     PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
                             new PacketParticles((float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.HOPPER_UPGRADE));
                 }
             }
         }
+    }
+
+    @Override
+    public boolean allowsLowerLimiter() {
+        return true;
     }
 }

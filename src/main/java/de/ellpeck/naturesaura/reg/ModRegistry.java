@@ -133,7 +133,9 @@ public final class ModRegistry {
                     new BlockSpring(),
                     new BlockWeatherChanger(),
                     new BlockRFConverter(),
-                    new BlockChunkLoader());
+                    new BlockChunkLoader(),
+                    new BlockLowerLimiter()
+            );
             Helper.populateObjectHolders(ModBlocks.class, event.getForgeRegistry());
         });
 

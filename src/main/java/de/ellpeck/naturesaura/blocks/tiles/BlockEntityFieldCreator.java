@@ -56,7 +56,7 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
         if (!this.isMain)
             return;
 
-        if (this.redstonePower <= 0 && creator.redstonePower <= 0) {
+        if (this.redstonePower <= 0 && creator.redstonePower <= 0 || !this.canUseRightNow(20)) {
             this.chargeTimer = 0;
             if (this.isCharged) {
                 this.isCharged = false;
@@ -106,7 +106,6 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
                     continue;
 
                 var state = this.level.getBlockState(pos);
-                var block = state.getBlock();
                 if (!state.isAir() && state.getDestroySpeed(this.level, pos) >= 0F) {
                     var fake = FakePlayerFactory.getMinecraft((ServerLevel) this.level);
                     if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.level, pos, state, fake))) {
@@ -203,5 +202,10 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
             if (type == SaveType.TILE)
                 this.chargeTimer = compound.getInt("timer");
         }
+    }
+
+    @Override
+    public boolean allowsLowerLimiter() {
+        return true;
     }
 }

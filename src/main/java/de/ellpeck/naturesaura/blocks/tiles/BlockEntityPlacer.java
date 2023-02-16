@@ -44,6 +44,10 @@ public class BlockEntityPlacer extends BlockEntityImpl implements ITickableBlock
             if (frames.isEmpty())
                 return;
 
+            var toDrain = 1000;
+            if (!this.canUseRightNow(toDrain))
+                return;
+
             List<BlockPos> validPositions = new ArrayList<>();
             var range = 5;
             for (var x = -range; x <= range; x++)
@@ -73,13 +77,18 @@ public class BlockEntityPlacer extends BlockEntityImpl implements ITickableBlock
 
                 handler.extractItem(i, 1, false);
                 var spot = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 10, this.worldPosition);
-                IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, 1000);
+                IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, toDrain);
 
                 PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), PacketParticles.Type.PLACER_PLACING));
 
                 return;
             }
         }
+    }
+
+    @Override
+    public boolean allowsLowerLimiter() {
+        return true;
     }
 
     private boolean framesContain(List<ItemFrame> frames, BlockState state) {

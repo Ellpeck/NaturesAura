@@ -44,6 +44,8 @@ public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvid
         @Nonnull
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+            if (!BlockEntityEnderCrate.this.canUseRightNow(20))
+                return stack;
             var remain = this.getStorage().insertItem(slot, stack, simulate);
             if (!simulate)
                 BlockEntityEnderCrate.this.drainAura((stack.getCount() - remain.getCount()) * 20);
@@ -53,6 +55,8 @@ public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvid
         @Nonnull
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            if (!BlockEntityEnderCrate.this.canUseRightNow(20))
+                return ItemStack.EMPTY;
             var extracted = this.getStorage().extractItem(slot, amount, simulate);
             if (!simulate)
                 BlockEntityEnderCrate.this.drainAura(extracted.getCount() * 20);
@@ -146,5 +150,10 @@ public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvid
     @Override
     public AbstractContainerMenu createMenu(int window, Inventory inv, Player player) {
         return new ContainerEnderCrate(ModContainers.ENDER_CRATE, window, player, this.getItemHandler());
+    }
+
+    @Override
+    public boolean allowsLowerLimiter() {
+        return true;
     }
 }

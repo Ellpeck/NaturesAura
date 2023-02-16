@@ -28,6 +28,10 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
         if (this.level.isClientSide)
             return;
 
+        var toUse = 6500;
+        if (!this.canUseRightNow(toUse))
+            return;
+
         var below = this.level.getBlockEntity(this.worldPosition.below());
         if (!(below instanceof BlastFurnaceBlockEntity tile))
             return;
@@ -60,7 +64,7 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
         }
 
         var pos = IAuraChunk.getHighestSpot(this.level, this.worldPosition, 30, this.worldPosition);
-        IAuraChunk.getAuraChunk(this.level, pos).drainAura(pos, 6500);
+        IAuraChunk.getAuraChunk(this.level, pos).drainAura(pos, toUse);
 
         PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
                 new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.BLAST_FURNACE_BOOSTER, 1));
@@ -128,5 +132,10 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
 
     @Override
     public void dropInventory() {
+    }
+
+    @Override
+    public boolean allowsLowerLimiter() {
+        return true;
     }
 }
