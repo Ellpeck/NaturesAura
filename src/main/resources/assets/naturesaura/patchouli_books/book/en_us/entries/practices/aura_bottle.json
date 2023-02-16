@@ -2,7 +2,7 @@
     "name": "Aura Bottling",
     "icon": "naturesaura:aura_bottle{stored_type:'naturesaura:overworld'}",
     "category": "naturesaura:practices",
-    "advancement": "naturesaura:wood_stand",
+    "advancement": "naturesaura:gold_leaf",
     "turnin": "naturesaura:aura_bottle_overworld",
     "pages": [
         {
