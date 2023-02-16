@@ -17,7 +17,7 @@ public class SpreadEffect implements IDrainSpotEffect {
 
     @Override
     public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (Math.abs(spot) < 500000 || Math.abs(IAuraChunk.getAuraInArea(level, pos, 25)) < 2000000)
+        if (Math.abs(spot) < 500000 || Math.abs(IAuraChunk.getAuraInArea(level, pos, 25) - IAuraChunk.DEFAULT_AURA) < 1000000)
             return;
         var drain = spot > 0;
         var toMove = Mth.ceil(Math.abs(spot) * 0.72F);

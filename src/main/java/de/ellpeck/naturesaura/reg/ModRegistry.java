@@ -206,7 +206,8 @@ public final class ModRegistry {
                     new ItemStructureFinder("outpost_finder", BuiltinStructures.PILLAGER_OUTPOST, 0xab9f98, 2048),
                     new ItemBreakPrevention(),
                     new ItemPetReviver(),
-                    new ItemNetheriteFinder()
+                    new ItemNetheriteFinder(),
+                    new ItemImpl("vacuum_bottle")
             );
             Helper.populateObjectHolders(ModItems.class, event.getForgeRegistry());
         });

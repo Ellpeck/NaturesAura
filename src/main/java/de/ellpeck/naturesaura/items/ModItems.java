@@ -64,4 +64,5 @@ public final class ModItems {
     public static Item BREAK_PREVENTION;
     public static Item PET_REVIVER;
     public static Item NETHERITE_FINDER;
+    public static Item VACUUM_BOTTLE;
 }
