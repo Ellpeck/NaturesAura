@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:nether_wart_block"
+    },
+    "output": {
+        "item": "minecraft:nether_wart"
+    },
+    "catalyst": {
+        "item": "naturesaura:crushing_catalyst"
+    },
+    "aura": 25000,
+    "time": 200
+}

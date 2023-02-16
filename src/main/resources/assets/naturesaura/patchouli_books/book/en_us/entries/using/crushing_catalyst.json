@@ -42,6 +42,26 @@
             "type": "naturesaura:altar",
             "text": "Making $(item)Gold Powder$() from $(item)Golden Leaves$()",
             "recipe": "naturesaura:gold_powder"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Reducing $(item)Amethyst Blocks$() to $(item)Shards$()",
+            "recipe": "naturesaura:amethyst"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Turning $(item)Packed Mud$() back into $(item)Mud$()",
+            "recipe": "naturesaura:mud"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Extracting $(item)Nether Warts$() from $(item)Nether Wart Blocks$()",
+            "recipe": "naturesaura:nether_wart_crushing"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Turning $(item)Soul Soil$() into $(item)Soul Sand$()",
+            "recipe": "naturesaura:soul_sand_crushing"
         }
     ]
 }

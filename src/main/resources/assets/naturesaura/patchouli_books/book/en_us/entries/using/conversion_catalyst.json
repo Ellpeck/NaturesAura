@@ -107,6 +107,16 @@
             "type": "naturesaura:altar",
             "text": "Turning $(item)Water$() into $(item)Milk$()$(p)$(italic)Just like Jesus$()",
             "recipe": "naturesaura:milk"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Turning $(item)Amethyst Shards$() into $(item)Ender Pearls$()",
+            "recipe": "naturesaura:ender_pearl"
+        },
+        {
+            "type": "naturesaura:altar",
+            "text": "Turning $(item)Soul Soil$() into $(item)Ghast Tears$()",
+            "recipe": "naturesaura:ghast_tear"
         }
     ]
 }
