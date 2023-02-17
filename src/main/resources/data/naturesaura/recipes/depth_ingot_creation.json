@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "SGS",
+        "GIG",
+        "SGS"
+    ],
+    "key": {
+        "I": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "S": {
+            "item": "minecraft:netherite_scrap"
+        },
+        "G": {
+            "item": "naturesaura:tainted_gold"
+        }
+    },
+    "result": {
+        "item": "naturesaura:depth_ingot"
+    }
+}

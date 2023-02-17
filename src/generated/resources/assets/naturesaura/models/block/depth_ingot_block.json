@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "naturesaura:block/depth_ingot_block"
+  }
+}

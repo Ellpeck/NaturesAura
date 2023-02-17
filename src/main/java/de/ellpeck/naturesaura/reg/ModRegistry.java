@@ -134,7 +134,9 @@ public final class ModRegistry {
                     new BlockWeatherChanger(),
                     new BlockRFConverter(),
                     new BlockChunkLoader(),
-                    new BlockLowerLimiter()
+                    new BlockLowerLimiter(),
+                    new BlockImpl("sky_ingot_block", Block.Properties.of(Material.METAL).sound(SoundType.METAL).strength(4F)),
+                    new BlockImpl("depth_ingot_block", Block.Properties.of(Material.METAL).sound(SoundType.METAL).strength(6F))
             );
             Helper.populateObjectHolders(ModBlocks.class, event.getForgeRegistry());
         });
@@ -209,7 +211,8 @@ public final class ModRegistry {
                     new ItemBreakPrevention(),
                     new ItemPetReviver(),
                     new ItemNetheriteFinder(),
-                    new ItemImpl("vacuum_bottle")
+                    new ItemImpl("vacuum_bottle"),
+                    new ItemImpl("depth_ingot")
             );
             Helper.populateObjectHolders(ModItems.class, event.getForgeRegistry());
         });

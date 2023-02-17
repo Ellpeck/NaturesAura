@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.data;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -13,6 +14,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Comparator;
 
 public class BlockTagProvider extends BlockTagsProvider {
 
@@ -40,15 +43,14 @@ public class BlockTagProvider extends BlockTagsProvider {
         this.tag(BlockTagProvider.ALTAR_GOLD_BRICK).add(ModBlocks.GOLD_BRICK, ModBlocks.GOLD_NETHER_BRICK);
         this.tag(BlockTagProvider.ALTAR_FANCY_BRICK).add(Blocks.RED_NETHER_BRICKS, Blocks.CHISELED_STONE_BRICKS);
 
-        for (var item : ModRegistry.ALL_ITEMS) {
-            if (!(item instanceof Block b))
-                continue;
+        // sort these so that they don't change the json every time we run data (because it's a set)
+        ModRegistry.ALL_ITEMS.stream().sorted(Comparator.comparing(IModItem::getBaseName)).filter(i -> i instanceof Block).map(i -> (Block) i).forEach(b -> {
             var material = b.defaultBlockState().getMaterial();
             if (material == Material.STONE || material == Material.METAL) {
                 this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b);
             } else if (material == Material.WOOD) {
                 this.tag(BlockTags.MINEABLE_WITH_AXE).add(b);
             }
-        }
+        });
     }
 }
