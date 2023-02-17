@@ -29,14 +29,14 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.copy(BlockTags.SLABS, ItemTags.SLABS);
 
         this.tag(Tags.Items.RODS_WOODEN).add(ModItems.ANCIENT_STICK);
-        this.tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(ModItems.INFUSED_IRON_PICKAXE, ModItems.SKY_PICKAXE);
+        this.tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(ModItems.INFUSED_IRON_PICKAXE, ModItems.SKY_PICKAXE, ModItems.DEPTH_PICKAXE);
 
         Compat.addItemTags(this);
     }
 
     @Override
-    public TagAppender<Item> tag(TagKey<Item> p_126549_) {
+    public TagAppender<Item> tag(TagKey<Item> tag) {
         // super is protected, but CuriosCompat needs this
-        return super.tag(p_126549_);
+        return super.tag(tag);
     }
 }

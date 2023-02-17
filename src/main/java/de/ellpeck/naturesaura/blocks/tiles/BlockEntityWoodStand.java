@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
@@ -122,30 +123,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
     }
 
     public static void recurseTreeDestruction(Level level, BlockPos pos, BlockPos start, boolean includeLeaves, boolean drop) {
-        if (Math.abs(pos.getX() - start.getX()) >= 6
-                || Math.abs(pos.getZ() - start.getZ()) >= 6
-                || Math.abs(pos.getY() - start.getY()) >= 32) {
-            return;
-        }
-
-        for (var x = -1; x <= 1; x++) {
-            for (var y = -1; y <= 1; y++) {
-                for (var z = -1; z <= 1; z++) {
-                    var offset = pos.offset(x, y, z);
-                    var state = level.getBlockState(offset);
-                    if (state.is(BlockTags.LOGS) || includeLeaves && state.getBlock() instanceof LeavesBlock) {
-                        if (drop) {
-                            level.destroyBlock(offset, true);
-                        } else {
-                            // in this case we don't want the particles, so we can't use destroyBlock
-                            level.setBlockAndUpdate(offset, Blocks.AIR.defaultBlockState());
-                            PacketHandler.sendToAllAround(level, pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), PacketParticles.Type.TR_DISAPPEAR));
-                        }
-                        BlockEntityWoodStand.recurseTreeDestruction(level, offset, start, includeLeaves, drop);
-                    }
-                }
-            }
-        }
+        Helper.mineRecursively(level, pos, start, drop, 6, 32, s -> s.is(BlockTags.LOGS) || includeLeaves && s.getBlock() instanceof LeavesBlock);
     }
 
     private boolean isRitualOkay() {

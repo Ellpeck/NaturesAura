@@ -8,8 +8,10 @@ import net.minecraftforge.common.util.Lazy;
 import java.util.function.Supplier;
 
 public enum ModItemTier implements Tier {
+
     INFUSED(2, 250, 6, 2, 16, () -> Ingredient.of(ModItems.INFUSED_IRON)),
-    SKY(3, 1500, 8, 3, 12, () -> Ingredient.of(ModItems.SKY_INGOT));
+    SKY(3, 1500, 8, 3, 12, () -> Ingredient.of(ModItems.SKY_INGOT)),
+    DEPTH(4, 2500, 10, 5, 18, () -> Ingredient.of(ModItems.DEPTH_INGOT));
 
     private final int harvestLevel;
     private final int maxUses;

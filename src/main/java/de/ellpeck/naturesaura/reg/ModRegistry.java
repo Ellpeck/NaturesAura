@@ -212,7 +212,16 @@ public final class ModRegistry {
                     new ItemPetReviver(),
                     new ItemNetheriteFinder(),
                     new ItemImpl("vacuum_bottle"),
-                    new ItemImpl("depth_ingot")
+                    new ItemImpl("depth_ingot"),
+                    new ItemPickaxe("depth_pickaxe", ModItemTier.DEPTH, 1, -2.8F),
+                    new ItemAxe("depth_axe", ModItemTier.DEPTH, 5, -3),
+                    new ItemShovel("depth_shovel", ModItemTier.DEPTH, 1.5F, -3),
+                    new ItemHoe("depth_hoe", ModItemTier.DEPTH, -1),
+                    new ItemSword("depth_sword", ModItemTier.DEPTH, 3, -2.4F),
+                    new ItemArmor("depth_helmet", ModArmorMaterial.DEPTH, EquipmentSlot.HEAD),
+                    new ItemArmor("depth_chest", ModArmorMaterial.DEPTH, EquipmentSlot.CHEST),
+                    new ItemArmor("depth_pants", ModArmorMaterial.DEPTH, EquipmentSlot.LEGS),
+                    new ItemArmor("depth_shoes", ModArmorMaterial.DEPTH, EquipmentSlot.FEET)
             );
             Helper.populateObjectHolders(ModItems.class, event.getForgeRegistry());
         });

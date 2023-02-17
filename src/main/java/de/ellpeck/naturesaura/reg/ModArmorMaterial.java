@@ -15,8 +15,9 @@ import java.util.function.Supplier;
 
 public enum ModArmorMaterial implements ArmorMaterial {
 
-    INFUSED(NaturesAura.MOD_ID + ":infused_iron", 19, new int[]{2, 5, 6, 2}, 16, SoundEvents.ARMOR_EQUIP_GENERIC, 0, () -> Ingredient.of(ModItems.INFUSED_IRON)),
-    SKY(NaturesAura.MOD_ID + ":sky", 33, new int[]{3, 6, 8, 3}, 12, SoundEvents.ARMOR_EQUIP_GENERIC, 2, () -> Ingredient.of(ModItems.SKY_INGOT));
+    INFUSED(NaturesAura.MOD_ID + ":infused_iron", 19, new int[]{2, 5, 6, 2}, 16, SoundEvents.ARMOR_EQUIP_IRON, 0, () -> Ingredient.of(ModItems.INFUSED_IRON)),
+    SKY(NaturesAura.MOD_ID + ":sky", 33, new int[]{3, 6, 8, 3}, 12, SoundEvents.ARMOR_EQUIP_DIAMOND, 2, () -> Ingredient.of(ModItems.SKY_INGOT)),
+    DEPTH(NaturesAura.MOD_ID + ":depth", 37, new int[]{3, 6, 8, 3}, 18, SoundEvents.ARMOR_EQUIP_NETHERITE, 3, () -> Ingredient.of(ModItems.DEPTH_INGOT));
 
     private static final int[] MAX_DAMAGE_ARRAY = {13, 15, 16, 11};
     private final String name;

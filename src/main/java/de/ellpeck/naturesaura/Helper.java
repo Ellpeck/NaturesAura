@@ -10,6 +10,8 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.misc.LevelData;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,6 +31,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -332,5 +335,28 @@ public final class Helper {
                 return dn;
         }
         return pos;
+    }
+
+    public static void mineRecursively(Level level, BlockPos pos, BlockPos start, boolean drop, int horizontalRange, int verticalRange, Predicate<BlockState> filter) {
+        if (Math.abs(pos.getX() - start.getX()) >= horizontalRange || Math.abs(pos.getZ() - start.getZ()) >= horizontalRange || Math.abs(pos.getY() - start.getY()) >= verticalRange)
+            return;
+        for (var x = -1; x <= 1; x++) {
+            for (var y = -1; y <= 1; y++) {
+                for (var z = -1; z <= 1; z++) {
+                    var offset = pos.offset(x, y, z);
+                    var state = level.getBlockState(offset);
+                    if (filter.test(state)) {
+                        if (drop) {
+                            level.destroyBlock(offset, true);
+                        } else {
+                            // in this case we don't want the block breaking particles, so we can't use destroyBlock
+                            level.setBlockAndUpdate(offset, Blocks.AIR.defaultBlockState());
+                            PacketHandler.sendToAllAround(level, pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), PacketParticles.Type.TR_DISAPPEAR));
+                        }
+                        Helper.mineRecursively(level, offset, start, drop, horizontalRange, verticalRange, filter);
+                    }
+                }
+            }
+        }
     }
 }

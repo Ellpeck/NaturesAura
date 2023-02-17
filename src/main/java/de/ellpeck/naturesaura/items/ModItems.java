@@ -65,4 +65,14 @@ public final class ModItems {
     public static Item PET_REVIVER;
     public static Item NETHERITE_FINDER;
     public static Item VACUUM_BOTTLE;
+    public static Item DEPTH_INGOT;
+    public static Item DEPTH_PICKAXE;
+    public static Item DEPTH_AXE;
+    public static Item DEPTH_SHOVEL;
+    public static Item DEPTH_HOE;
+    public static Item DEPTH_SWORD;
+    public static Item DEPTH_HELMET;
+    public static Item DEPTH_CHEST;
+    public static Item DEPTH_PANTS;
+    public static Item DEPTH_SHOES;
 }

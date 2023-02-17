@@ -10,6 +10,7 @@ import de.ellpeck.naturesaura.misc.LevelData;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -23,7 +24,9 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
@@ -82,6 +85,15 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
                 item.playerTouch((Player) entityIn);
             }
         }
+    }
+
+    @Override
+    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
+        if (itemstack.getItem() == ModItems.DEPTH_PICKAXE && !player.isShiftKeyDown() && player.level.getBlockState(pos).is(Tags.Blocks.ORES)) {
+            Helper.mineRecursively(player.level, pos, pos, true, 5, 5, s -> s.is(Tags.Blocks.ORES));
+            return true;
+        }
+        return false;
     }
 
     @Nullable
