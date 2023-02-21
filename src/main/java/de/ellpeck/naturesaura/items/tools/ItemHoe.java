@@ -17,7 +17,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
@@ -78,8 +81,9 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        if (stack.getItem() == ModItems.SKY_HOE) {
-            if (!(player.level.getBlockState(pos).getBlock() instanceof BushBlock))
+        if (!player.isShiftKeyDown() && (stack.getItem() == ModItems.SKY_HOE || stack.getItem() == ModItems.DEPTH_HOE)) {
+            var block = player.level.getBlockState(pos).getBlock();
+            if (!(block instanceof BushBlock) && (stack.getItem() != ModItems.DEPTH_HOE || !(block instanceof LeavesBlock)))
                 return false;
             if (!player.level.isClientSide) {
                 var range = 3;
@@ -89,9 +93,12 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
                             if (x == 0 && y == 0 && z == 0)
                                 continue;
                             var offset = pos.offset(x, y, z);
-                            var otherState = player.level.getBlockState(offset);
-                            if (otherState.getBlock() instanceof BushBlock)
-                                player.level.destroyBlock(offset, true);
+                            var offState = player.level.getBlockState(offset);
+                            if (offState.getBlock() instanceof BushBlock || stack.getItem() == ModItems.DEPTH_HOE && offState.getBlock() instanceof LeavesBlock) {
+                                var entity = offState.hasBlockEntity() ? player.level.getBlockEntity(offset) : null;
+                                Block.dropResources(offState, player.level, offset, entity, null, ItemStack.EMPTY);
+                                player.level.setBlock(offset, Blocks.AIR.defaultBlockState(), 3);
+                            }
                         }
                     }
                 }
