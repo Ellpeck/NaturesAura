@@ -51,7 +51,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
                     damage = 5;
                 }
             } else {
-                var range = player.isCrouching() ? 0 : 1;
+                var range = player.isShiftKeyDown() ? 0 : 1;
                 for (var x = -range; x <= range; x++) {
                     for (var y = -range; y <= range; y++) {
                         var actualPos = pos.offset(x, 0, y);

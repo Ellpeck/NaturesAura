@@ -88,7 +88,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     @Override
     @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        if (!player.isCrouching())
+        if (!player.isShiftKeyDown())
             return InteractionResult.FAIL;
         var tile = levelIn.getBlockEntity(pos);
         if (!(tile instanceof BlockEntityGratedChute chute))

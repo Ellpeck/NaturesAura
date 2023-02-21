@@ -41,7 +41,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
     @Override
     public void inventoryTick(ItemStack stackIn, Level levelIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (!levelIn.isClientSide && entityIn instanceof Player player) {
-            if (player.isCrouching() && stackIn.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).isPresent()) {
+            if (player.isShiftKeyDown() && stackIn.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).isPresent()) {
                 var container = stackIn.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).orElse(null);
                 if (container.getStoredAura() <= 0) {
                     return;

@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.proxy;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.compat.Compat;
@@ -45,9 +46,13 @@ public class ClientProxy implements IProxy {
         MenuScreens.register(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
 
         ItemProperties.register(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "fill_mode"),
-                (stack, levelIn, entityIn, i) -> ItemColorChanger.isFillMode(stack) ? 1F : 0F);
+                (stack, level, entity, i) -> ItemColorChanger.isFillMode(stack) ? 1 : 0);
         ItemProperties.register(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "has_color"),
-                (stack, levelIn, entityIn, i) -> ItemColorChanger.getStoredColor(stack) != null ? 1F : 0F);
+                (stack, level, entity, i) -> ItemColorChanger.getStoredColor(stack) != null ? 1 : 0);
+        for (var item : new Item[]{ModItems.SKY_AXE, ModItems.DEPTH_PICKAXE}) {
+            ItemProperties.register(item, new ResourceLocation(NaturesAura.MOD_ID, "enabled"),
+                    (stack, level, entity, i) -> Helper.isToolEnabled(stack) ? 1 : 0);
+        }
     }
 
     @Override

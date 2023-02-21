@@ -14,7 +14,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -26,7 +28,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
@@ -89,11 +90,19 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
 
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
-        if (itemstack.getItem() == ModItems.DEPTH_PICKAXE && !player.isShiftKeyDown() && player.level.getBlockState(pos).is(Tags.Blocks.ORES)) {
+        if (itemstack.getItem() == ModItems.DEPTH_PICKAXE && Helper.isToolEnabled(itemstack) && player.level.getBlockState(pos).is(Tags.Blocks.ORES)) {
             Helper.mineRecursively(player.level, pos, pos, true, 5, 5, s -> s.is(Tags.Blocks.ORES));
             return true;
         }
         return false;
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        var stack = player.getItemInHand(hand);
+        if (stack.getItem() == ModItems.DEPTH_PICKAXE && Helper.toggleToolEnabled(player, stack))
+            return InteractionResultHolder.success(stack);
+        return super.use(level, player, hand);
     }
 
     @Nullable
@@ -104,6 +113,8 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
 
     @Override
     public void generateCustomItemModel(ItemModelGenerator generator) {
+        if (this == ModItems.DEPTH_PICKAXE)
+            return;
         generator.withExistingParent(this.getBaseName(), "item/handheld").texture("layer0", "item/" + this.getBaseName());
     }
 

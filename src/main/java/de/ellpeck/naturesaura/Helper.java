@@ -359,4 +359,17 @@ public final class Helper {
             }
         }
     }
+
+    public static boolean isToolEnabled(ItemStack stack) {
+        return stack.hasTag() && !stack.getTag().getBoolean(NaturesAura.MOD_ID + ":disabled");
+    }
+
+    public static boolean toggleToolEnabled(Player player, ItemStack stack) {
+        if (!player.isShiftKeyDown())
+            return false;
+        var disabled = !Helper.isToolEnabled(stack);
+        stack.getOrCreateTag().putBoolean(NaturesAura.MOD_ID + ":disabled", !disabled);
+        player.level.playSound(null, player.getX() + 0.5, player.getY() + 0.5, player.getZ() + 0.5, SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS, 0.65F, 1F);
+        return true;
+    }
 }

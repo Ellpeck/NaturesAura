@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/handheld",
+    "textures": {
+        "layer0": "naturesaura:item/sky_axe_enabled"
+    }
+}

@@ -35,7 +35,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
         var color = DyeColor.byId(blocks.indexOf(block));
         if (firstColor == null || color == firstColor) {
             var stored = ItemColorChanger.getStoredColor(stack);
-            if (player.isCrouching()) {
+            if (player.isShiftKeyDown()) {
                 if (stored != color) {
                     level.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                             SoundEvents.BUCKET_FILL, SoundSource.PLAYERS, 0.65F, 1F);
@@ -105,7 +105,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
     @Override
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
         var stack = playerIn.getItemInHand(handIn);
-        if (playerIn.isCrouching() && ItemColorChanger.getStoredColor(stack) != null) {
+        if (playerIn.isShiftKeyDown() && ItemColorChanger.getStoredColor(stack) != null) {
             levelIn.playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.BUCKET_FILL_LAVA, SoundSource.PLAYERS, 0.65F, 1F);
             if (!levelIn.isClientSide) {
                 ItemColorChanger.setFillMode(stack, !ItemColorChanger.isFillMode(stack));

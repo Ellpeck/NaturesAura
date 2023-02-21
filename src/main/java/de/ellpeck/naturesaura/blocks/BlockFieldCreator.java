@@ -33,7 +33,7 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
             if (!levelIn.isClientSide) {
                 var key = NaturesAura.MOD_ID + ":field_creator_pos";
                 var compound = player.getPersistentData();
-                if (!player.isCrouching() && compound.contains(key)) {
+                if (!player.isShiftKeyDown() && compound.contains(key)) {
                     var stored = BlockPos.of(compound.getLong(key));
                     var creator = (BlockEntityFieldCreator) tile;
                     if (!pos.equals(stored)) {

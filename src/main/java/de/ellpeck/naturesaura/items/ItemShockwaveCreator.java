@@ -55,7 +55,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
 
             compound.putBoolean("air", false);
 
-            if (!living.isCrouching())
+            if (!living.isShiftKeyDown())
                 return;
             if (living.distanceToSqr(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z")) > 0.75F)
                 return;

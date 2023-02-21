@@ -1,0 +1,14 @@
+{
+    "parent": "minecraft:item/handheld",
+    "textures": {
+        "layer0": "naturesaura:item/sky_axe"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "naturesaura:enabled": 1
+            },
+            "model": "naturesaura:item/sky_axe_enabled"
+        }
+    ]
+}

@@ -52,7 +52,7 @@ public class ItemRangeVisualizer extends ItemImpl {
     @Override
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
         var stack = playerIn.getItemInHand(handIn);
-        if (playerIn.isCrouching()) {
+        if (playerIn.isShiftKeyDown()) {
             ItemRangeVisualizer.clear();
             playerIn.displayClientMessage(Component.translatable("info." + NaturesAura.MOD_ID + ".range_visualizer.end_all"), true);
             return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);

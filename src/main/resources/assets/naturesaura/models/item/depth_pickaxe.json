@@ -1,0 +1,14 @@
+{
+    "parent": "minecraft:item/handheld",
+    "textures": {
+        "layer0": "naturesaura:item/depth_pickaxe"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "naturesaura:enabled": 1
+            },
+            "model": "naturesaura:item/depth_pickaxe_enabled"
+        }
+    ]
+}

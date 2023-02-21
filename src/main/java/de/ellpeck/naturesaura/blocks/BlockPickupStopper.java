@@ -29,7 +29,7 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
     @SubscribeEvent
     public void onPickup(EntityItemPickupEvent event) {
         var player = event.getEntity();
-        if (player != null && !player.isCrouching()) {
+        if (player != null && !player.isShiftKeyDown()) {
             var item = event.getItem();
             var pos = item.blockPosition();
             Helper.getBlockEntitiesInArea(item.level, pos, 8, tile -> {
