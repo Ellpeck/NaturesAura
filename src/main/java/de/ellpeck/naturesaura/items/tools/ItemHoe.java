@@ -71,7 +71,7 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
                     var offset = context.getClickedPos().offset(x, 0, z);
                     var newResult = new BlockHitResult(context.getClickLocation(), context.getClickedFace(), offset, context.isInside());
                     var newContext = new UseOnContext(context.getPlayer(), context.getHand(), newResult);
-                    success |= super.useOn(newContext) == InteractionResult.SUCCESS;
+                    success |= super.useOn(newContext).consumesAction();
                 }
             }
             return success ? InteractionResult.SUCCESS : InteractionResult.PASS;
