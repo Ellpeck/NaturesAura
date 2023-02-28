@@ -8,13 +8,21 @@ import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -39,8 +47,26 @@ public class ItemSword extends SwordItem implements IModItem, ICustomItemModel {
             target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2));
         } else if (this == ModItems.SKY_SWORD) {
             target.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 60, 2));
+        } else if (this == ModItems.DEPTH_SWORD && attacker instanceof Player player) {
+            // this is just a modified copy of Player.attack's sweeping damage code
+            var damage = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.75F;
+            for (var other : player.level.getEntitiesOfClass(LivingEntity.class, stack.getSweepHitBox(player, target))) {
+                if (other != player && other != target && !player.isAlliedTo(other) && (!(other instanceof ArmorStand stand) || !stand.isMarker()) && player.canHit(other, 0)) {
+                    other.knockback(0.4F, Mth.sin(player.getYRot() * (Mth.PI / 180)), -Mth.cos(player.getYRot() * (Mth.PI / 180)));
+                    other.hurt(DamageSource.playerAttack(player), damage);
+                }
+            }
+            // this just displays the particles
+            player.sweepAttack();
         }
         return super.hurtEnemy(stack, target, attacker);
+    }
+
+    @Override
+    public @NotNull AABB getSweepHitBox(@NotNull ItemStack stack, @NotNull Player player, @NotNull Entity target) {
+        if (this == ModItems.DEPTH_SWORD)
+            return target.getBoundingBox().inflate(2, 1, 2);
+        return super.getSweepHitBox(stack, player, target);
     }
 
     @Nullable
