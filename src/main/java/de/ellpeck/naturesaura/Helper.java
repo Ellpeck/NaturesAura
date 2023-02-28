@@ -340,21 +340,24 @@ public final class Helper {
     public static void mineRecursively(Level level, BlockPos pos, BlockPos start, boolean drop, int horizontalRange, int verticalRange, Predicate<BlockState> filter) {
         if (Math.abs(pos.getX() - start.getX()) >= horizontalRange || Math.abs(pos.getZ() - start.getZ()) >= horizontalRange || Math.abs(pos.getY() - start.getY()) >= verticalRange)
             return;
+
+        if (drop) {
+            level.destroyBlock(pos, true);
+        } else {
+            // in this case we don't want the block breaking particles, so we can't use destroyBlock
+            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            PacketHandler.sendToAllAround(level, pos, 32, new PacketParticles(pos.getX(), pos.getY(), pos.getZ(), PacketParticles.Type.TR_DISAPPEAR));
+        }
+
         for (var x = -1; x <= 1; x++) {
             for (var y = -1; y <= 1; y++) {
                 for (var z = -1; z <= 1; z++) {
+                    if (x == 0 && y == 0 && z == 0)
+                        continue;
                     var offset = pos.offset(x, y, z);
                     var state = level.getBlockState(offset);
-                    if (filter.test(state)) {
-                        if (drop) {
-                            level.destroyBlock(offset, true);
-                        } else {
-                            // in this case we don't want the block breaking particles, so we can't use destroyBlock
-                            level.setBlockAndUpdate(offset, Blocks.AIR.defaultBlockState());
-                            PacketHandler.sendToAllAround(level, pos, 32, new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), PacketParticles.Type.TR_DISAPPEAR));
-                        }
+                    if (filter.test(state))
                         Helper.mineRecursively(level, offset, start, drop, horizontalRange, verticalRange, filter);
-                    }
                 }
             }
         }

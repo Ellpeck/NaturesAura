@@ -49,7 +49,7 @@ public class ClientProxy implements IProxy {
                 (stack, level, entity, i) -> ItemColorChanger.isFillMode(stack) ? 1 : 0);
         ItemProperties.register(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "has_color"),
                 (stack, level, entity, i) -> ItemColorChanger.getStoredColor(stack) != null ? 1 : 0);
-        for (var item : new Item[]{ModItems.SKY_AXE, ModItems.DEPTH_PICKAXE}) {
+        for (var item : new Item[]{ModItems.SKY_AXE, ModItems.DEPTH_PICKAXE, ModItems.DEPTH_AXE}) {
             ItemProperties.register(item, new ResourceLocation(NaturesAura.MOD_ID, "enabled"),
                     (stack, level, entity, i) -> Helper.isToolEnabled(stack) ? 1 : 0);
         }

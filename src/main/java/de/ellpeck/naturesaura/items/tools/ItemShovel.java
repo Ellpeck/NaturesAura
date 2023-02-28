@@ -74,6 +74,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
                 stack.hurtAndBreak(damage, player, p -> p.broadcastBreakEvent(context.getHand()));
                 return InteractionResult.SUCCESS;
             }
+            return InteractionResult.PASS;
         } else if (this == ModItems.SKY_SHOVEL) {
             if (this.getDestroySpeed(stack, state) <= 1)
                 return super.useOn(context);
@@ -89,7 +90,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
             stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
             return InteractionResult.SUCCESS;
         }
-        return InteractionResult.PASS;
+        return super.useOn(context);
     }
 
     @Override

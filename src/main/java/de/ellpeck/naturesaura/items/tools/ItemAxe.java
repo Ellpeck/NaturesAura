@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.items.tools;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
-import de.ellpeck.naturesaura.blocks.tiles.BlockEntityWoodStand;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
@@ -50,8 +49,9 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        if (stack.getItem() == ModItems.SKY_AXE && Helper.isToolEnabled(stack) && player.level.getBlockState(pos).is(BlockTags.LOGS)) {
-            BlockEntityWoodStand.recurseTreeDestruction(player.level, pos, pos, false, true);
+        if ((stack.getItem() == ModItems.SKY_AXE || stack.getItem() == ModItems.DEPTH_AXE) && Helper.isToolEnabled(stack) && player.level.getBlockState(pos).is(BlockTags.LOGS)) {
+            var horRange = stack.getItem() == ModItems.DEPTH_AXE ? 6 : 1;
+            Helper.mineRecursively(player.level, pos, pos, true, horRange, 32, s -> s.is(BlockTags.LOGS));
             return true;
         }
         return false;
@@ -60,7 +60,7 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         var stack = player.getItemInHand(hand);
-        if (stack.getItem() == ModItems.SKY_AXE && Helper.toggleToolEnabled(player, stack))
+        if ((stack.getItem() == ModItems.SKY_AXE || stack.getItem() == ModItems.DEPTH_AXE) && Helper.toggleToolEnabled(player, stack))
             return InteractionResultHolder.success(stack);
         return super.use(level, player, hand);
     }
@@ -73,7 +73,7 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
 
     @Override
     public void generateCustomItemModel(ItemModelGenerator generator) {
-        if (this == ModItems.SKY_AXE)
+        if (this == ModItems.SKY_AXE || this == ModItems.DEPTH_AXE)
             return;
         generator.withExistingParent(this.getBaseName(), "item/handheld").texture("layer0", "item/" + this.getBaseName());
     }

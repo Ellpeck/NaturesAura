@@ -81,7 +81,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
                                 this.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                                 return true;
                             });
-                            BlockEntityWoodStand.recurseTreeDestruction(this.level, this.ritualPos, this.ritualPos, true, false);
+                            Helper.mineRecursively(this.level, this.ritualPos, this.ritualPos, false, 6, 32, s -> s.is(BlockTags.LOGS) || s.getBlock() instanceof LeavesBlock);
 
                             var item = new ItemEntity(this.level,
                                     this.ritualPos.getX() + 0.5, this.ritualPos.getY() + 4.5, this.ritualPos.getZ() + 0.5,
@@ -120,10 +120,6 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
             }
         }
 
-    }
-
-    public static void recurseTreeDestruction(Level level, BlockPos pos, BlockPos start, boolean includeLeaves, boolean drop) {
-        Helper.mineRecursively(level, pos, start, drop, 6, 32, s -> s.is(BlockTags.LOGS) || includeLeaves && s.getBlock() instanceof LeavesBlock);
     }
 
     private boolean isRitualOkay() {
