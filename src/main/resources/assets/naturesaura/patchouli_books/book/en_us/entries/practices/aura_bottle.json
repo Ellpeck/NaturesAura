@@ -28,7 +28,7 @@
             "type": "spotlight",
             "item": "naturesaura:vacuum_bottle",
             "link_recipe": true,
-            "text": "Lastly, some areas have a severe lack of $(aura), much lower than the $(l:items/eye)Environmental Eye$() can display, and whose air is subsequently nearly devoid of oxygen. Using a $(item)Bottle and Cork$() in areas like these allows bottling up this air and capturing a nearly perfect vacuum in the bottle."
+            "text": "Lastly, some areas have a severe lack of $(aura), much lower than the $(l:items/eye)Environmental Eye$() can display, and whose air is subsequently nearly devoid of oxygen. Using a $(item)Bottle and Cork$() in areas like these allows bottling up this air and capturing a nearly perfect $(aura) vacuum in the bottle."
         }
     ]
 }
