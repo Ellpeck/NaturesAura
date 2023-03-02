@@ -12,7 +12,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -70,11 +73,16 @@ public class ItemArmor extends ArmorItem implements IModItem {
         public static void onAttack(LivingAttackEvent event) {
             var entity = event.getEntity();
             if (!entity.level.isClientSide) {
-                if (!ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.INFUSED))
-                    return;
-                var source = event.getSource().getEntity();
-                if (source instanceof LivingEntity)
-                    ((LivingEntity) source).addEffect(new MobEffectInstance(MobEffects.WITHER, 40));
+                if (ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.INFUSED)) {
+                    var source = event.getSource().getEntity();
+                    if (source instanceof LivingEntity)
+                        ((LivingEntity) source).addEffect(new MobEffectInstance(MobEffects.WITHER, 40));
+                } else if (ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.DEPTH)) {
+                    for (var other : entity.level.getEntitiesOfClass(LivingEntity.class, new AABB(entity.position(), Vec3.ZERO).inflate(2))) {
+                        if (other != entity && (!(other instanceof Player otherPlayer) || !otherPlayer.isAlliedTo(entity)))
+                            other.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 255));
+                    }
+                }
             }
         }
 
