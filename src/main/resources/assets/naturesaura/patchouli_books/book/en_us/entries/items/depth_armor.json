@@ -1,0 +1,22 @@
+{
+    "name": "Soulstrider's Armor",
+    "icon": "naturesaura:depth_chest",
+    "category": "naturesaura:items",
+    "advancement": "naturesaura:depth_ingot",
+    "pages": [
+        {
+            "type": "text",
+            "text": "When wearing $(item)Soulstrider's armor$(), a magical botanist can feel dark energy surging in them. While this armor can be repaired like its $(l:items/sky_armor)counterparts$(), it also provides a $(thing)set bonus$(): When wearing every piece of the armor (or swapping the chestplate for an $(item)Elytra$()), upon being struck, the armor causes all nearby enemies to fuse with the ground for a few seconds, causing them to $(thing)stand completely still$()."
+        },
+        {
+            "type": "crafting",
+            "recipe": "naturesaura:depth_helmet",
+            "recipe2": "naturesaura:depth_chest"
+        },
+        {
+            "type": "crafting",
+            "recipe": "naturesaura:depth_pants",
+            "recipe2": "naturesaura:depth_shoes"
+        }
+    ]
+}

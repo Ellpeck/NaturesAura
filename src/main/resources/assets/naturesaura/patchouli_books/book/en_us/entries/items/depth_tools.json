@@ -1,0 +1,36 @@
+{
+    "name": "Soulstrider's Tools",
+    "icon": "naturesaura:depth_pickaxe",
+    "category": "naturesaura:items",
+    "advancement": "naturesaura:depth_ingot",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(item)Soulstrider's tools$() are extraordinarily powerful as tools go, being forged out of a combination of materials from the Skies, the Earth, and the Depths. While also functioning as regular tools, they each have an additional $(thing)special ability$() that sets them apart from their $(item)netherite$() counterparts.$(br)Additionally, these tools can be $(thing)repaired$() in the same way as $(l:items/sky_tools)Skyseeker's tools$()."
+        },
+        {
+            "type": "crafting",
+            "text": "The $(item)Soulstrider's Pickaxe$(), when enabled by $(thing)sneak-interacting$() with it, will mine blocks in a larger area - a three-by-three block area, to be specific.",
+            "recipe": "naturesaura:depth_pickaxe"
+        },
+        {
+            "type": "crafting",
+            "text": "The $(item)Soulstrider's Handaxe$(), when enabled by $(thing)sneak-interacting$() with it, is very efficient at chopping $(thing)any type of tree$(), even extraordinarily large ones, doing so in one fell swoop.",
+            "recipe": "naturesaura:depth_axe"
+        },
+        {
+            "type": "crafting",
+            "text": "The $(item)Soulstrider's Shovel$(), when interacting with a barren block like $(item)Dirt$(), turns it into a luscious grass block, additionally doing so for a $(thing)large area$() around it in the process.",
+            "recipe": "naturesaura:depth_shovel"
+        },
+        {
+            "type": "crafting",
+            "text": "The $(item)Soulstrider's Hoe$() helps those botanists who don't enjoy waiting for a tree to fully fall on its own, allowing them to break $(item)Leaves$() in a very large area with only a single swing.",
+            "recipe": "naturesaura:depth_hoe"
+        }, {
+            "type": "crafting",
+            "text": "The sheer size of the $(item)Soulstrider's Blade$() comes to play when attacking a larger group of monsters: Upon attacking one of them, several in a rather large area are struck, as if it was enchanted with a more powerful version of $(item)Sweeping Edge$(). Of course, these two abilities are not mutually exclusive, either.",
+            "recipe": "naturesaura:depth_sword"
+        }
+    ]
+}

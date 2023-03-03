@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:depth_ingot"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.depth_ingot"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.depth_ingot.desc"
+        }
+    },
+    "parent": "naturesaura:sky_ingot",
+    "criteria": {
+        "ingot": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": ["naturesaura:depth_ingot"]
+                    }
+                ]
+            }
+        }
+    }
+}

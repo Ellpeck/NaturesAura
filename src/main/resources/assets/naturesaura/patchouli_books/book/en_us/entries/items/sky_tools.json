@@ -15,7 +15,7 @@
         },
         {
             "type": "crafting",
-            "text": "The $(item)Skyseeker's Handaxe$() is very efficient at chopping $(thing)small trees$(), doing so in one fell swoop.",
+            "text": "The $(item)Skyseeker's Handaxe$(), when enabled by $(thing)sneak-interacting$() with it, is very efficient at chopping $(thing)small trees$(), doing so in one fell swoop.",
             "recipe": "naturesaura:sky_axe"
         },
         {

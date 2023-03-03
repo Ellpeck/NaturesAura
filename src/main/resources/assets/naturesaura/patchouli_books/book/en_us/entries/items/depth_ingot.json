@@ -1,0 +1,17 @@
+{
+    "name": "Ingot of the Depths",
+    "icon": "naturesaura:depth_ingot",
+    "category": "naturesaura:items",
+    "advancement": "naturesaura:sky_ingot",
+    "pages": [
+        {
+            "type": "text",
+            "text": "Years after their original inception, magical botanists have finally found a new material able to harness the powers of $(aura) through new means: the mystical and elusive $(item)Netherite$(). With it, one can create a most powerful material: $(item)Ingots of the Depths$(). These ingots, as expected, can also be turned into $(l:items/depth_armor)armor$() and $(l:items/depth_tools)tools$()."
+        },
+        {
+            "type": "crafting",
+            "text": "Creating the $(item)Ingot of the Depths$()",
+            "recipe": "naturesaura:depth_ingot_creation"
+        }
+    ]
+}
