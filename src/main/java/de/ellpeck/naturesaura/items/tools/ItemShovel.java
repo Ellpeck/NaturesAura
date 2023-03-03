@@ -7,10 +7,12 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
@@ -25,6 +27,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel {
 
@@ -43,39 +46,65 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
         var stack = player.getItemInHand(context.getHand());
         var pos = context.getClickedPos();
         var state = level.getBlockState(pos);
-        if (this == ModItems.INFUSED_IRON_SHOVEL) {
-            var damage = 0;
-            if (state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.MYCELIUM) {
-                if (level.getBlockState(pos.above()).getMaterial() == Material.AIR) {
-                    level.setBlockAndUpdate(pos, Blocks.GRASS_BLOCK.defaultBlockState());
-                    damage = 5;
-                }
-            } else {
-                var range = player.isShiftKeyDown() ? 0 : 1;
-                for (var x = -range; x <= range; x++) {
-                    for (var y = -range; y <= range; y++) {
-                        var actualPos = pos.offset(x, 0, y);
-                        var facing = context.getClickedFace();
-                        if (player.mayUseItemAt(actualPos.relative(facing), facing, stack)) {
-                            if (facing != Direction.DOWN
-                                    && level.getBlockState(actualPos.above()).getMaterial() == Material.AIR
-                                    && level.getBlockState(actualPos).getBlock() == Blocks.GRASS_BLOCK) {
-                                if (!level.isClientSide)
-                                    level.setBlock(actualPos, Blocks.DIRT_PATH.defaultBlockState(), 11);
-                                damage = 1;
+
+        // turning dirt to grass
+        if (this == ModItems.INFUSED_IRON_SHOVEL || this == ModItems.DEPTH_SHOVEL) {
+            if ((state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.MYCELIUM) && level.getBlockState(pos.above()).getMaterial() == Material.AIR) {
+                level.setBlockAndUpdate(pos, Blocks.GRASS_BLOCK.defaultBlockState());
+                var damage = 5F;
+
+                if (this == ModItems.DEPTH_SHOVEL && !level.isClientSide) {
+                    var possible = new ArrayList<BlockPos>();
+                    for (var x = -5; x <= 5; x++) {
+                        for (var z = -5; z <= 5; z++) {
+                            for (var y = -1; y <= 1; y++) {
+                                var offset = pos.offset(x, y, z);
+                                var offState = level.getBlockState(offset);
+                                if ((offState.getBlock() == Blocks.DIRT || offState.getBlock() == Blocks.MYCELIUM) && level.getBlockState(offset.above()).getMaterial() == Material.AIR)
+                                    possible.add(offset);
                             }
+                        }
+                    }
+                    for (var i = 0; i < 63 && !possible.isEmpty(); i++) {
+                        level.setBlockAndUpdate(possible.get(level.random.nextInt(possible.size())), Blocks.GRASS_BLOCK.defaultBlockState());
+                        damage += 0.25F;
+                    }
+                }
+
+                level.playSound(player, pos, SoundEvents.GRASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                stack.hurtAndBreak(Mth.ceil(damage), player, p -> p.broadcastBreakEvent(context.getHand()));
+                return InteractionResult.SUCCESS;
+            }
+        }
+
+        // flattening a large area
+        if (this == ModItems.INFUSED_IRON_SHOVEL) {
+            var flattened = false;
+            var range = player.isShiftKeyDown() ? 0 : 1;
+            for (var x = -range; x <= range; x++) {
+                for (var y = -range; y <= range; y++) {
+                    var actualPos = pos.offset(x, 0, y);
+                    var facing = context.getClickedFace();
+                    if (player.mayUseItemAt(actualPos.relative(facing), facing, stack)) {
+                        if (facing != Direction.DOWN
+                                && level.getBlockState(actualPos.above()).getMaterial() == Material.AIR
+                                && level.getBlockState(actualPos).getBlock() == Blocks.GRASS_BLOCK) {
+                            if (!level.isClientSide)
+                                level.setBlock(actualPos, Blocks.DIRT_PATH.defaultBlockState(), 11);
+                            flattened = true;
                         }
                     }
                 }
             }
-
-            if (damage > 0) {
+            if (flattened) {
                 level.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
-                stack.hurtAndBreak(damage, player, p -> p.broadcastBreakEvent(context.getHand()));
+                stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
                 return InteractionResult.SUCCESS;
             }
-            return InteractionResult.PASS;
-        } else if (this == ModItems.SKY_SHOVEL) {
+        }
+
+        // sky shovel swapping
+        if (this == ModItems.SKY_SHOVEL) {
             if (this.getDestroySpeed(stack, state) <= 1)
                 return super.useOn(context);
             var otherHand = context.getHand() == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
@@ -90,6 +119,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
             stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
             return InteractionResult.SUCCESS;
         }
+
         return super.useOn(context);
     }
 
