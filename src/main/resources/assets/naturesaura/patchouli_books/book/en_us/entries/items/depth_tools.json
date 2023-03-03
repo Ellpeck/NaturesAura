@@ -10,7 +10,7 @@
         },
         {
             "type": "crafting",
-            "text": "The $(item)Soulstrider's Pickaxe$(), when enabled by $(thing)sneak-interacting$() with it, will mine blocks in a larger area - a three-by-three block area, to be specific.",
+            "text": "The $(item)Soulstrider's Pickaxe$(), when enabled by $(thing)sneak-interacting$() with it, will mine a whole $(thing)vein of ores$() all in one, allowing mining much more efficiently.",
             "recipe": "naturesaura:depth_pickaxe"
         },
         {
