@@ -24,6 +24,7 @@ import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,7 +34,7 @@ public class AuraChunk implements IAuraChunk {
 
     private final LevelChunk chunk;
     private final IAuraType type;
-    private final Map<BlockPos, MutableInt> drainSpots = new ConcurrentHashMap<>();
+    private final Map<BlockPos, DrainSpot> drainSpots = new ConcurrentHashMap<>();
     private final Table<BlockPos, Integer, Pair<Integer, Integer>> auraAndSpotAmountCache = HashBasedTable.create();
     private final Table<BlockPos, Integer, Pair<BlockPos, Integer>[]> limitSpotCache = HashBasedTable.create();
     private final List<IDrainSpotEffect> effects = new ArrayList<>();
@@ -103,11 +104,11 @@ public class AuraChunk implements IAuraChunk {
         return this.storeAura(pos, amount, true, false);
     }
 
-    private MutableInt getActualDrainSpot(BlockPos pos, boolean make) {
+    private DrainSpot getActualDrainSpot(BlockPos pos, boolean make) {
         var spot = this.drainSpots.get(pos);
         if (spot == null && make) {
-            spot = new MutableInt();
-            this.addDrainSpot(pos, spot);
+            spot = new DrainSpot(pos, 0);
+            this.addDrainSpot(spot);
         }
         return spot;
     }
@@ -118,20 +119,20 @@ public class AuraChunk implements IAuraChunk {
         return spot == null ? 0 : spot.intValue();
     }
 
-    private void addDrainSpot(BlockPos pos, MutableInt spot) {
-        var expX = pos.getX() >> 4;
-        var expZ = pos.getZ() >> 4;
+    private void addDrainSpot(DrainSpot spot) {
+        var expX = spot.pos.getX() >> 4;
+        var expZ = spot.pos.getZ() >> 4;
         var myPos = this.chunk.getPos();
         if (expX != myPos.x || expZ != myPos.z)
-            throw new IllegalArgumentException("Tried to add drain spot " + pos + " to chunk at " + myPos.x + ", " + myPos.z + " when it should've been added to chunk at " + expX + ", " + expZ);
+            throw new IllegalArgumentException("Tried to add drain spot " + spot.pos + " to chunk at " + myPos.x + ", " + myPos.z + " when it should've been added to chunk at " + expX + ", " + expZ);
 
-        this.drainSpots.put(pos, spot);
+        this.drainSpots.put(spot.pos, spot);
     }
 
-    public void setSpots(Map<BlockPos, MutableInt> spots) {
+    public void setSpots(Collection<DrainSpot> spots) {
         this.drainSpots.clear();
-        for (var entry : spots.entrySet())
-            this.addDrainSpot(entry.getKey(), entry.getValue());
+        for (var spot : spots)
+            this.addDrainSpot(spot);
         this.addOrRemoveAsActive();
     }
 
@@ -170,7 +171,7 @@ public class AuraChunk implements IAuraChunk {
 
     public PacketAuraChunk makePacket() {
         var pos = this.chunk.getPos();
-        return new PacketAuraChunk(pos.x, pos.z, this.drainSpots);
+        return new PacketAuraChunk(pos.x, pos.z, this.drainSpots.values());
     }
 
     public void getSpots(BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
@@ -245,13 +246,8 @@ public class AuraChunk implements IAuraChunk {
     @Override
     public CompoundTag serializeNBT() {
         var list = new ListTag();
-        for (var entry : this.drainSpots.entrySet()) {
-            var tag = new CompoundTag();
-            tag.putLong("pos", entry.getKey().asLong());
-            tag.putInt("amount", entry.getValue().intValue());
-            list.add(tag);
-        }
-
+        for (var spot : this.drainSpots.values())
+            list.add(spot.serializeNBT());
         var compound = new CompoundTag();
         compound.put("drain_spots", list);
         return compound;
@@ -261,12 +257,8 @@ public class AuraChunk implements IAuraChunk {
     public void deserializeNBT(CompoundTag compound) {
         this.drainSpots.clear();
         var list = compound.getList("drain_spots", 10);
-        for (var base : list) {
-            var tag = (CompoundTag) base;
-            this.addDrainSpot(
-                    BlockPos.of(tag.getLong("pos")),
-                    new MutableInt(tag.getInt("amount")));
-        }
+        for (var base : list)
+            this.addDrainSpot(new DrainSpot((CompoundTag) base));
         this.addOrRemoveAsActive();
     }
 
@@ -277,6 +269,27 @@ public class AuraChunk implements IAuraChunk {
             data.auraChunksWithSpots.put(chunkPos, this);
         } else {
             data.auraChunksWithSpots.remove(chunkPos);
+        }
+    }
+
+    public static class DrainSpot extends MutableInt {
+
+        public final BlockPos pos;
+
+        public DrainSpot(BlockPos pos, int value) {
+            super(value);
+            this.pos = pos;
+        }
+
+        public DrainSpot(CompoundTag tag) {
+            this(BlockPos.of(tag.getLong("pos")), tag.getInt("amount"));
+        }
+
+        public CompoundTag serializeNBT() {
+            var ret = new CompoundTag();
+            ret.putLong("pos", this.pos.asLong());
+            ret.putInt("amount", this.intValue());
+            return ret;
         }
     }
 }

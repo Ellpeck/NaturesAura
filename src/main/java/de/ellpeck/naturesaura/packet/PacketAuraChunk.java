@@ -4,23 +4,22 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.events.ClientEvents;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
-import org.apache.commons.lang3.mutable.MutableInt;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class PacketAuraChunk {
 
     private int chunkX;
     private int chunkZ;
-    private Map<BlockPos, MutableInt> drainSpots;
+    private Collection<AuraChunk.DrainSpot> drainSpots;
 
-    public PacketAuraChunk(int chunkX, int chunkZ, Map<BlockPos, MutableInt> drainSpots) {
+    public PacketAuraChunk(int chunkX, int chunkZ, Collection<AuraChunk.DrainSpot> drainSpots) {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.drainSpots = drainSpots;
@@ -34,14 +33,10 @@ public class PacketAuraChunk {
         packet.chunkX = buf.readInt();
         packet.chunkZ = buf.readInt();
 
-        packet.drainSpots = new HashMap<>();
+        packet.drainSpots = new ArrayList<>();
         var amount = buf.readInt();
-        for (var i = 0; i < amount; i++) {
-            packet.drainSpots.put(
-                    BlockPos.of(buf.readLong()),
-                    new MutableInt(buf.readInt())
-            );
-        }
+        for (var i = 0; i < amount; i++)
+            packet.drainSpots.add(new AuraChunk.DrainSpot(buf.readNbt()));
 
         return packet;
     }
@@ -51,10 +46,8 @@ public class PacketAuraChunk {
         buf.writeInt(packet.chunkZ);
 
         buf.writeInt(packet.drainSpots.size());
-        for (var entry : packet.drainSpots.entrySet()) {
-            buf.writeLong(entry.getKey().asLong());
-            buf.writeInt(entry.getValue().intValue());
-        }
+        for (var entry : packet.drainSpots)
+            buf.writeNbt(entry.serializeNBT());
     }
 
     public static void onMessage(PacketAuraChunk message, Supplier<NetworkEvent.Context> ctx) {
