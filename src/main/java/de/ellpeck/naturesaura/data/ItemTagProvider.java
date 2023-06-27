@@ -3,6 +3,9 @@ package de.ellpeck.naturesaura.data;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.items.tools.*;
+import de.ellpeck.naturesaura.reg.IModItem;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -12,6 +15,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
+
+import java.util.Comparator;
 
 public class ItemTagProvider extends ItemTagsProvider {
 
@@ -29,7 +34,22 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.copy(BlockTags.SLABS, ItemTags.SLABS);
 
         this.tag(Tags.Items.RODS_WOODEN).add(ModItems.ANCIENT_STICK);
-        this.tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(ModItems.INFUSED_IRON_PICKAXE, ModItems.SKY_PICKAXE, ModItems.DEPTH_PICKAXE);
+
+        // sort these so that they don't change the json every time we run data (because it's a set)
+        ModRegistry.ALL_ITEMS.stream().sorted(Comparator.comparing(IModItem::getBaseName)).filter(i -> i instanceof Item).map(i -> (Item) i).forEach(i -> {
+            if (i instanceof ItemPickaxe) {
+                this.tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(i);
+                this.tag(Tags.Items.TOOLS_PICKAXES).add(i);
+            } else if (i instanceof ItemAxe) {
+                this.tag(Tags.Items.TOOLS_AXES).add(i);
+            } else if (i instanceof ItemHoe) {
+                this.tag(Tags.Items.TOOLS_HOES).add(i);
+            } else if (i instanceof ItemSword) {
+                this.tag(Tags.Items.TOOLS_SWORDS).add(i);
+            } else if (i instanceof ItemShovel) {
+                this.tag(Tags.Items.TOOLS_SHOVELS).add(i);
+            }
+        });
 
         Compat.addItemTags(this);
     }
