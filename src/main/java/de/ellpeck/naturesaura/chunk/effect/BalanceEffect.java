@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.chunk.AuraChunk;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -15,7 +16,7 @@ public class BalanceEffect implements IDrainSpotEffect {
     public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "balance");
 
     @Override
-    public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
+    public void update(Level level, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot, AuraChunk.DrainSpot actualSpot) {
         if (spot < 100000)
             return;
         if (level.getGameTime() % 200 != 0)

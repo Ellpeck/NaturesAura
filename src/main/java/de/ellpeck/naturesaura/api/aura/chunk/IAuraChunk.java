@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.api.aura.chunk;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
+import de.ellpeck.naturesaura.chunk.AuraChunk;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
@@ -150,6 +151,8 @@ public interface IAuraChunk extends INBTSerializable<CompoundTag> {
      * Convenience version of {@link #storeAura(BlockPos, int, boolean, boolean)} with aimForZero set to true and simulate set to false, as this is the most likely behavior you will want. Notice that {@link #drainAura(BlockPos, int)} has aimForZero set to false.
      */
     int storeAura(BlockPos pos, int amount);
+
+    AuraChunk.DrainSpot getActualDrainSpot(BlockPos pos, boolean make);
 
     int getDrainSpot(BlockPos pos);
 

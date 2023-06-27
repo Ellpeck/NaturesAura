@@ -424,9 +424,12 @@ public class ClientEvents {
 
                 if (ClientEvents.hoveringAuraSpot != null) {
                     var format = NumberFormat.getInstance();
-                    var amount = IAuraChunk.getAuraChunk(mc.level, ClientEvents.hoveringAuraSpot).getDrainSpot(ClientEvents.hoveringAuraSpot);
-                    var color = amount > 0 ? ChatFormatting.GREEN : ChatFormatting.RED;
-                    mc.font.drawShadow(stack, color + format.format(amount), res.getGuiScaledWidth() / 2F + 5, res.getGuiScaledHeight() / 2F - 11, 0xFFFFFF);
+                    var spot = IAuraChunk.getAuraChunk(mc.level, ClientEvents.hoveringAuraSpot).getActualDrainSpot(ClientEvents.hoveringAuraSpot, false);
+                    var color = spot.intValue() > 0 ? ChatFormatting.GREEN : ChatFormatting.RED;
+                    mc.font.drawShadow(stack, "Pos: " + spot.pos.toShortString(), res.getGuiScaledWidth() / 2F + 5, res.getGuiScaledHeight() / 2F - 20, 0xFFFFFF);
+                    mc.font.drawShadow(stack, "Amount: " + color + format.format(spot.intValue()), res.getGuiScaledWidth() / 2F + 5, res.getGuiScaledHeight() / 2F - 10, 0xFFFFFF);
+                    if (spot.originalSpreadPos != null)
+                        mc.font.drawShadow(stack, "Dist from Original: " + (int) Math.sqrt(spot.pos.distSqr(spot.originalSpreadPos)) + " (" + spot.originalSpreadPos.toShortString() + ")", res.getGuiScaledWidth() / 2F + 5, res.getGuiScaledHeight() / 2F, 0xFFFFFF);
                 }
             }
         }

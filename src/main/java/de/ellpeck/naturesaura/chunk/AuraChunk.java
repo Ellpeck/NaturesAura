@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.chunk;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
@@ -104,7 +105,8 @@ public class AuraChunk implements IAuraChunk {
         return this.storeAura(pos, amount, true, false);
     }
 
-    private DrainSpot getActualDrainSpot(BlockPos pos, boolean make) {
+    @Override
+    public DrainSpot getActualDrainSpot(BlockPos pos, boolean make) {
         var spot = this.drainSpots.get(pos);
         if (spot == null && make) {
             spot = new DrainSpot(pos, 0);
@@ -153,11 +155,13 @@ public class AuraChunk implements IAuraChunk {
     public void update() {
         var level = this.chunk.getLevel();
 
-        for (var entry : this.drainSpots.entrySet()) {
-            var pos = entry.getKey();
-            var amount = entry.getValue();
+        for (var spot : this.drainSpots.values()) {
             for (var effect : this.effects)
-                effect.update(level, this.chunk, this, pos, amount.intValue());
+                effect.update(level, this.chunk, this, spot.pos, spot.intValue(), spot);
+
+            // cause this spot to fizzle out if it's over the range limit
+            if (spot.intValue() > 0 && spot.originalSpreadPos != null && !spot.originalSpreadPos.closerThan(spot.pos, ModConfig.instance.maxAuraSpreadRange.get()))
+                this.drainAura(spot.pos, spot.intValue());
         }
 
         if (this.needsSync) {
@@ -275,6 +279,7 @@ public class AuraChunk implements IAuraChunk {
     public static class DrainSpot extends MutableInt {
 
         public final BlockPos pos;
+        public BlockPos originalSpreadPos;
 
         public DrainSpot(BlockPos pos, int value) {
             super(value);
@@ -283,12 +288,16 @@ public class AuraChunk implements IAuraChunk {
 
         public DrainSpot(CompoundTag tag) {
             this(BlockPos.of(tag.getLong("pos")), tag.getInt("amount"));
+            if (tag.contains("original_spread_pos"))
+                this.originalSpreadPos = BlockPos.of(tag.getLong("original_spread_pos"));
         }
 
         public CompoundTag serializeNBT() {
             var ret = new CompoundTag();
             ret.putLong("pos", this.pos.asLong());
             ret.putInt("amount", this.intValue());
+            if (this.originalSpreadPos != null)
+                ret.putLong("original_spread_pos", this.originalSpreadPos.asLong());
             return ret;
         }
     }

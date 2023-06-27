@@ -26,6 +26,7 @@ public final class ModConfig {
     public ConfigValue<Integer> fieldCreatorRange;
     public ConfigValue<Double> auraToRFRatio;
     public ConfigValue<Integer> maxAnimalsAroundPowder;
+    public ConfigValue<Integer> maxAuraSpreadRange;
 
     public ConfigValue<Boolean> rfConverter;
     public ConfigValue<Boolean> chunkLoader;
@@ -88,6 +89,10 @@ public final class ModConfig {
                 .comment("The maximum amount of animals that can be around the powder of fertility before it stops working")
                 .translation("config." + NaturesAura.MOD_ID + ".maxAnimalsAroundPowder")
                 .define("maxAnimalsAroundPowder", 200);
+        this.maxAuraSpreadRange = builder
+                .comment("The maximum amount of blocks that aura can spread from an initial position before it starts fizzling out. It's recommended to lower this value on a large server to avoid lag caused by players chunk-loading their bases for extended amounts of time without an Aura Detector present.")
+                .translation("config." + NaturesAura.MOD_ID + ".maxAuraSpreadRange")
+                .define("maxAuraSpreadRange", 150);
         builder.pop();
 
         builder.push("features");
