@@ -25,14 +25,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ItemArmor extends ArmorItem implements IModItem {
 
     private static final AttributeModifier SKY_MOVEMENT_MODIFIER = new AttributeModifier(UUID.fromString("c1f96acc-e117-4dc1-a351-e196a4de6071"), NaturesAura.MOD_ID + ":sky_movement_speed", 0.15F, AttributeModifier.Operation.MULTIPLY_TOTAL);
-    private static final Map<ArmorMaterial, Item[]> SETS = new HashMap<>();
+    private static final Map<ArmorMaterial, Item[]> SETS = new ConcurrentHashMap<>();
     private final String baseName;
 
     public ItemArmor(String baseName, ArmorMaterial materialIn, EquipmentSlot equipmentSlotIn) {
