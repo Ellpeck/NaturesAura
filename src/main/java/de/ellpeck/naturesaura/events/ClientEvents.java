@@ -73,7 +73,7 @@ public class ClientEvents {
         if (mc.options.renderDebug && ModConfig.instance.debugText.get()) {
             var prefix = ChatFormatting.GREEN + "[" + NaturesAura.MOD_NAME + "]" + ChatFormatting.RESET + " ";
             List<String> left = event.getLeft();
-            if (mc.player.isCreative()) {
+            if (mc.player.isCreative() || mc.player.isSpectator()) {
                 left.add("");
                 var amount = new MutableInt(IAuraChunk.DEFAULT_AURA);
                 var spots = new MutableInt();
@@ -187,7 +187,7 @@ public class ClientEvents {
 
         // aura spot debug
         ClientEvents.hoveringAuraSpot = null;
-        if (mc.options.renderDebug && mc.player.isCreative() && ModConfig.instance.debugLevel.get()) {
+        if (mc.options.renderDebug && (mc.player.isCreative() || mc.player.isSpectator()) && ModConfig.instance.debugLevel.get()) {
             var playerEye = mc.player.getEyePosition(event.getPartialTick());
             var playerView = mc.player.getViewVector(event.getPartialTick()).normalize();
             var range = mc.gameMode.getPickRange();
