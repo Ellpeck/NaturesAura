@@ -34,10 +34,11 @@ public final class CommandAura {
                     source.sendSuccess(Component.literal("Removed aura from area"), true);
                     return 0;
                 })))
-                .then(Commands.literal("reset").executes(context -> {
+                .then(Commands.literal("reset").then(Commands.argument("range", IntegerArgumentType.integer(10, 1000)).executes(context -> {
+                    var range = IntegerArgumentType.getInteger(context, "range");
                     var source = context.getSource();
                     var pos = new BlockPos(source.getPosition());
-                    IAuraChunk.getSpotsInArea(source.getLevel(), pos, 35, (spot, amount) -> {
+                    IAuraChunk.getSpotsInArea(source.getLevel(), pos, range, (spot, amount) -> {
                         var chunk = IAuraChunk.getAuraChunk(source.getLevel(), spot);
                         if (amount > 0)
                             chunk.drainAura(spot, amount);
@@ -46,6 +47,6 @@ public final class CommandAura {
                     });
                     source.sendSuccess(Component.literal("Reset aura in area"), true);
                     return 0;
-                })));
+                }))));
     }
 }
