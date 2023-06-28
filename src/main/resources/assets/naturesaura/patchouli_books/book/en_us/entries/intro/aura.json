@@ -18,6 +18,11 @@
         {
             "type": "text",
             "text": "Similarly, if a draining instrument is placed close to a rich area, it will first drain that area before moving on to draining the area directly around itself.$(p)While this behavior surely sounds complicated, the consensus is that letting the apparatus and $(aura) do their thing for a while seems to be a good approach of analysis, as sometimes $(aura) tends to migrate and move around to balance itself out naturally."
+        },
+        {
+            "type": "text",
+            "text": "Lastly, and more recently, magical botanists have discovered a behavior not previously observed: $(item)Aura fizzling$(). This behavior seems to occur when $(aura) has spread far enough in all directions to be so distant from the point it originated that it starts slowly $(thing)fizzling out$(). While this does not affect the $(aura) closer to its origin in any way, it may still be something to be aware of, and mitigate using something like the $(l:devices/aura_detector)Aura Detector$().",
+            "anchor": "fizzling"
         }
     ]
 }

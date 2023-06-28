@@ -10,6 +10,10 @@
             "text": "As described in the $(l:creating/on_generating)On Creating Aura$() section, most $(thing)creational devices$() lack the ability to create $(aura) beyond a certain point. The $(item)Creational Catalyst$() easily solves this problem: Placing it directly below any creational device will cause its limit to be lifted, making it able to generate $(aura) far beyond the previously mentioned point.$(br)This comes at no cost in return."
         },
         {
+            "type": "text",
+            "text": "While generating $(aura) indefinitely may be an exciting prospect for some magical botanists, it has also recently been discovered that doing so may be of little use due to $(l:intro/aura#fizzling)Aura fizzling$(). This should be kept in mind, and mitigated using a device like the $(l:devices/aura_detector)Aura Detector$()."
+        },
+        {
             "type": "crafting",
             "recipe": "naturesaura:generator_limit_remover",
             "text": "Crafting the $(item)Creational Catalyst$() using the tokens"
