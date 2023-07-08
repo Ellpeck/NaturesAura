@@ -7,7 +7,6 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -15,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockFlowerGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockFlowerGenerator() {
-        super("flower_generator", BlockEntityFlowerGenerator.class, Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(2F));
+        super("flower_generator", BlockEntityFlowerGenerator.class, Properties.of().sound(SoundType.WOOD).strength(2F));
     }
 
     @Override

@@ -51,7 +51,7 @@ public class ItemEnderAccess extends ItemImpl {
                     @Nullable
                     @Override
                     public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-                        IItemHandler handler = ILevelData.getOverworldData(inv.player.level).getEnderStorage(name);
+                        IItemHandler handler = ILevelData.getOverworldData(inv.player.level()).getEnderStorage(name);
                         return new ContainerEnderCrate(ModContainers.ENDER_ACCESS, windowId, player, handler);
                     }
                 }, buffer -> buffer.writeUtf(name));

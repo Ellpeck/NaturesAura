@@ -14,7 +14,6 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.npc.Npc;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -28,7 +27,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockAnimalGenerator() {
-        super("animal_generator", BlockEntityAnimalGenerator.class, Properties.of(Material.STONE).strength(3F).sound(SoundType.STONE));
+        super("animal_generator", BlockEntityAnimalGenerator.class, Properties.of().strength(3F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -36,7 +35,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingTickEvent event) {
         var entity = event.getEntity();
-        if (entity.level.isClientSide || entity.level.getGameTime() % 40 != 0 || !(entity instanceof Animal) || entity instanceof Npc)
+        if (entity.level().isClientSide || entity.level().getGameTime() % 40 != 0 || !(entity instanceof Animal) || entity instanceof Npc)
             return;
         var data = entity.getPersistentData();
         var timeAlive = data.getInt(NaturesAura.MOD_ID + ":time_alive");
@@ -46,10 +45,10 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
         var entity = event.getEntity();
-        if (entity.level.isClientSide || !(entity instanceof Animal) || entity instanceof Npc)
+        if (entity.level().isClientSide || !(entity instanceof Animal) || entity instanceof Npc)
             return;
         var pos = entity.blockPosition();
-        Helper.getBlockEntitiesInArea(entity.level, pos, 5, tile -> {
+        Helper.getBlockEntitiesInArea(entity.level(), pos, 5, tile -> {
             if (!(tile instanceof BlockEntityAnimalGenerator gen))
                 return false;
 
@@ -71,7 +70,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
             gen.setGenerationValues(time, amount);
 
             var genPos = gen.getBlockPos();
-            PacketHandler.sendToAllAround(entity.level, pos, 32, new PacketParticles(
+            PacketHandler.sendToAllAround(entity.level(), pos, 32, new PacketParticles(
                     (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), PacketParticles.Type.ANIMAL_GEN_CONSUME,
                     child ? 1 : 0,
                     (int) (entity.getEyeHeight() * 10F),

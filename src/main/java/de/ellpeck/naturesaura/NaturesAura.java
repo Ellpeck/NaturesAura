@@ -32,12 +32,13 @@ public final class NaturesAura {
     public static final String MOD_NAME = "Nature's Aura";
 
     public static final Logger LOGGER = LogManager.getLogger(NaturesAura.MOD_NAME);
-    public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(NaturesAura.MOD_ID) {
+    // TODO creative tab
+   /* public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(NaturesAura.MOD_ID) {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(ModItems.GOLD_LEAF);
         }
-    };
+    };*/
     public static NaturesAura instance;
     // this causes a classloading issue if it's not wrapped like this
     @SuppressWarnings("Convert2MethodRef")

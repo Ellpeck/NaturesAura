@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura.particles;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
 import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -13,6 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.joml.Vector3f;
 
 import java.util.Collections;
 
@@ -103,7 +103,7 @@ public class ParticleMagic extends Particle {
 
         for (var i = 0; i < 4; ++i) {
             var vector3f = avector3f[i];
-            vector3f.transform(quaternion);
+            vector3f.rotate(quaternion);
             vector3f.mul(f4);
             vector3f.add(f, f1, f2);
         }

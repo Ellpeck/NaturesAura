@@ -46,7 +46,7 @@ public class BlockSpring extends BlockContainerImpl implements ICustomBlockState
                 Player player = Minecraft.getInstance().player;
                 if (player == null)
                     return 0;
-                return BiomeColors.getAverageWaterColor(player.level, player.blockPosition());
+                return BiomeColors.getAverageWaterColor(player.level(), player.blockPosition());
             }
         };
     }

@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.compat.patchouli;
 
 import de.ellpeck.naturesaura.recipes.AnimalSpawnerRecipe;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.ForgeRegistries;
 import vazkii.patchouli.api.IComponentProcessor;
@@ -13,12 +14,12 @@ public class ProcessorAnimalSpawner implements IComponentProcessor {
     private AnimalSpawnerRecipe recipe;
 
     @Override
-    public void setup(IVariableProvider provider) {
+    public void setup(Level level, IVariableProvider provider) {
         this.recipe = PatchouliCompat.getRecipe("animal_spawner", provider.get("recipe").asString());
     }
 
     @Override
-    public IVariable process(String key) {
+    public IVariable process(Level level, String key) {
         if (this.recipe == null)
             return null;
         if (key.startsWith("input")) {

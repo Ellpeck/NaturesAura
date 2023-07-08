@@ -24,7 +24,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
@@ -34,7 +33,7 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 public class BlockProjectileGenerator extends BlockContainerImpl implements ITESRProvider<BlockEntityProjectileGenerator>, ICustomBlockState {
 
     public BlockProjectileGenerator() {
-        super("projectile_generator", BlockEntityProjectileGenerator.class, Properties.of(Material.STONE).strength(2.5F).sound(SoundType.STONE));
+        super("projectile_generator", BlockEntityProjectileGenerator.class, Properties.of().strength(2.5F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
         DispenserBlock.registerBehavior(Items.ENDER_PEARL, new AbstractProjectileDispenseBehavior() {
@@ -61,7 +60,7 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
     @SubscribeEvent
     public void onProjectileImpact(ProjectileImpactEvent event) {
         var entity = event.getEntity();
-        if (entity.level.isClientSide)
+        if (entity.level().isClientSide)
             return;
         var ray = event.getRayTraceResult();
         if (!(ray instanceof BlockHitResult blockRay))
@@ -69,7 +68,7 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
         var pos = blockRay.getBlockPos();
         if (pos == null)
             return;
-        var tile = entity.level.getBlockEntity(pos);
+        var tile = entity.level().getBlockEntity(pos);
         if (!(tile instanceof BlockEntityProjectileGenerator generator))
             return;
         if (generator.nextSide != blockRay.getDirection())
@@ -81,9 +80,9 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
             return;
         generator.generateAura(amount);
 
-        PacketHandler.sendToAllAround(entity.level, pos, 32,
+        PacketHandler.sendToAllAround(entity.level(), pos, 32,
                 new PacketParticles((float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), PacketParticles.Type.PROJECTILE_GEN, pos.getX(), pos.getY(), pos.getZ()));
-        entity.level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENDER_EYE_LAUNCH, SoundSource.BLOCKS, 0.8F, 1F);
+        entity.level().playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENDER_EYE_LAUNCH, SoundSource.BLOCKS, 0.8F, 1F);
 
         generator.nextSide = generator.nextSide.getClockWise();
         generator.sendToClients();

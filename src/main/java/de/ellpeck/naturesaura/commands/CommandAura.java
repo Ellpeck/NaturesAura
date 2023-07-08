@@ -15,29 +15,29 @@ public final class CommandAura {
                 .then(Commands.literal("add").then(Commands.argument("amount", IntegerArgumentType.integer(1)).executes(context -> {
                     var amount = IntegerArgumentType.getInteger(context, "amount");
                     var source = context.getSource();
-                    var pos = new BlockPos(source.getPosition());
+                    var pos = BlockPos.containing(source.getPosition());
                     while (amount > 0) {
                         var spot = IAuraChunk.getLowestSpot(source.getLevel(), pos, 35, pos);
                         amount -= IAuraChunk.getAuraChunk(source.getLevel(), spot).storeAura(spot, amount);
                     }
-                    source.sendSuccess(Component.literal("Added aura to area"), true);
+                    source.sendSuccess(() -> Component.literal("Added aura to area"), true);
                     return 0;
                 })))
                 .then(Commands.literal("remove").then(Commands.argument("amount", IntegerArgumentType.integer(1)).executes(context -> {
                     var amount = IntegerArgumentType.getInteger(context, "amount");
                     var source = context.getSource();
-                    var pos = new BlockPos(source.getPosition());
+                    var pos = BlockPos.containing(source.getPosition());
                     while (amount > 0) {
                         var spot = IAuraChunk.getHighestSpot(source.getLevel(), pos, 35, pos);
                         amount -= IAuraChunk.getAuraChunk(source.getLevel(), spot).drainAura(spot, amount);
                     }
-                    source.sendSuccess(Component.literal("Removed aura from area"), true);
+                    source.sendSuccess(() -> Component.literal("Removed aura from area"), true);
                     return 0;
                 })))
                 .then(Commands.literal("reset").then(Commands.argument("range", IntegerArgumentType.integer(10, 1000)).executes(context -> {
                     var range = IntegerArgumentType.getInteger(context, "range");
                     var source = context.getSource();
-                    var pos = new BlockPos(source.getPosition());
+                    var pos = BlockPos.containing(source.getPosition());
                     IAuraChunk.getSpotsInArea(source.getLevel(), pos, range, (spot, amount) -> {
                         var chunk = IAuraChunk.getAuraChunk(source.getLevel(), spot);
                         if (amount > 0)
@@ -45,7 +45,7 @@ public final class CommandAura {
                         else
                             chunk.storeAura(spot, -amount);
                     });
-                    source.sendSuccess(Component.literal("Reset aura in area"), true);
+                    source.sendSuccess(() -> Component.literal("Reset aura in area"), true);
                     return 0;
                 }))));
     }

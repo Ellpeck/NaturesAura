@@ -5,7 +5,6 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntityMossGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -13,7 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockMossGenerator extends BlockContainerImpl implements IVisualizable {
 
     public BlockMossGenerator() {
-        super("moss_generator", BlockEntityMossGenerator.class, Properties.of(Material.STONE).strength(2.5F).sound(SoundType.STONE));
+        super("moss_generator", BlockEntityMossGenerator.class, Properties.of().strength(2.5F).sound(SoundType.STONE));
     }
 
     @Override

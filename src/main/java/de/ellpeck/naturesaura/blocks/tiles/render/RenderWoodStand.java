@@ -1,14 +1,14 @@
 package de.ellpeck.naturesaura.blocks.tiles.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityWoodStand;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemDisplayContext;
 
 public class RenderWoodStand implements BlockEntityRenderer<BlockEntityWoodStand> {
 
@@ -22,7 +22,7 @@ public class RenderWoodStand implements BlockEntityRenderer<BlockEntityWoodStand
         if (!stack.isEmpty()) {
             matrixStack.pushPose();
             var item = stack.getItem();
-            if (item instanceof BlockItem blockItem && blockItem.getBlock().defaultBlockState().getMaterial().isSolid()) {
+            if (item instanceof BlockItem blockItem && blockItem.getBlock().defaultBlockState().isSolid()) {
                 matrixStack.translate(0.5F, 0.755F, 0.5F);
                 var scale = 0.95F;
                 matrixStack.scale(scale, scale, scale);
@@ -30,9 +30,9 @@ public class RenderWoodStand implements BlockEntityRenderer<BlockEntityWoodStand
                 matrixStack.translate(0.5F, 0.825F, 0.4F);
                 var scale = 0.75F;
                 matrixStack.scale(scale, scale, scale);
-                matrixStack.mulPose(Vector3f.XP.rotationDegrees(90));
+                matrixStack.mulPose(Axis.XP.rotationDegrees(90));
             }
-            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, i, i1, matrixStack, iRenderTypeBuffer, 0);
+            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.GROUND, i, i1, matrixStack, iRenderTypeBuffer, tileEntityWoodStand.getLevel(), 0);
             matrixStack.popPose();
         }
     }

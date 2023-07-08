@@ -83,8 +83,8 @@ public class ItemRangeVisualizer extends ItemImpl {
                 return;
             var entity = event.getTarget();
             if (entity instanceof IVisualizable) {
-                if (entity.level.isClientSide) {
-                    var dim = entity.level.dimension().location();
+                if (entity.level().isClientSide) {
+                    var dim = entity.level().dimension().location();
                     ItemRangeVisualizer.visualize(event.getEntity(), ItemRangeVisualizer.VISUALIZED_ENTITIES, dim, entity);
                 }
                 event.getEntity().swing(event.getHand());

@@ -80,7 +80,7 @@ public class PacketParticles {
 
     public enum Type {
         TR_GOLD_POWDER((message, level) -> {
-            var pos = new BlockPos(message.posX, message.posY, message.posZ);
+            var pos = BlockPos.containing(message.posX, message.posY, message.posZ);
             Multiblocks.TREE_RITUAL.forEach(pos, 'G', (dustPos, matcher) -> {
                 var state = level.getBlockState(dustPos);
                 var box = state.getShape(level, dustPos).bounds();
@@ -333,7 +333,7 @@ public class PacketParticles {
         }),
         RF_CONVERTER((message, level) -> {
             for (var i = level.random.nextInt(5) + 2; i >= 0; i--)
-                Multiblocks.RF_CONVERTER.forEach(new BlockPos(message.posX, message.posY, message.posZ), 'R', (blockPos, matcher) -> {
+                Multiblocks.RF_CONVERTER.forEach(BlockPos.containing(message.posX, message.posY, message.posZ), 'R', (blockPos, matcher) -> {
                     if (level.random.nextFloat() < 0.35F) {
                         NaturesAuraAPI.instance().spawnParticleStream(
                                 blockPos.getX() + level.random.nextFloat(),
@@ -451,7 +451,7 @@ public class PacketParticles {
                         level.random.nextGaussian() * 0.005F);
 
             if (worked) {
-                var pos = new BlockPos(message.posX, message.posY, message.posZ);
+                var pos = BlockPos.containing(message.posX, message.posY, message.posZ);
                 var color = IAuraChunk.getAuraChunk(level, pos).getType().getColor();
                 for (var i = level.random.nextInt(10) + 10; i >= 0; i--)
                     NaturesAuraAPI.instance().spawnParticleStream(
@@ -473,7 +473,7 @@ public class PacketParticles {
                 );
         }),
         SNOW_CREATOR((message, level) -> {
-            var pos = new BlockPos(message.posX, message.posY, message.posZ);
+            var pos = BlockPos.containing(message.posX, message.posY, message.posZ);
             var color = IAuraChunk.getAuraChunk(level, pos).getType().getColor();
             for (var i = level.random.nextInt(3) + 1; i > 0; i--)
                 NaturesAuraAPI.instance().spawnParticleStream(

@@ -10,13 +10,13 @@ import de.ellpeck.naturesaura.misc.LevelData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -94,16 +94,16 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
         if (this.powderListDirty)
             this.updatePowderListStatus(this.getInhibitedEffect());
 
-        if (this.level.isClientSide) {
-            if (this.level.getGameTime() % 5 == 0) {
+        if (this.level().isClientSide) {
+            if (this.level().getGameTime() % 5 == 0) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        this.getX() + this.level.random.nextGaussian() * 0.1F,
+                        this.getX() + this.level().random.nextGaussian() * 0.1F,
                         this.getY(),
-                        this.getZ() + this.level.random.nextGaussian() * 0.1F,
-                        this.level.random.nextGaussian() * 0.005F,
-                        this.level.random.nextFloat() * 0.03F,
-                        this.level.random.nextGaussian() * 0.005F,
-                        this.getColor(), this.level.random.nextFloat() * 3F + 1F, 120, 0F, true, true);
+                        this.getZ() + this.level().random.nextGaussian() * 0.1F,
+                        this.level().random.nextGaussian() * 0.005F,
+                        this.level().random.nextFloat() * 0.03F,
+                        this.level().random.nextGaussian() * 0.005F,
+                        this.getColor(), this.level().random.nextFloat() * 3F + 1F, 120, 0F, true, true);
             }
             this.renderTicks++;
         }
@@ -124,18 +124,18 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
     public boolean skipAttackInteraction(Entity entity) {
-        return entity instanceof Player player && (!this.level.mayInteract(player, this.blockPosition()) || this.hurt(DamageSource.playerAttack(player), 0.0F));
+        return entity instanceof Player player && (!this.level().mayInteract(player, this.blockPosition()) || this.hurt(this.damageSources().playerAttack(player), 0.0F));
     }
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source instanceof EntityDamageSource && !this.level.isClientSide) {
+        if (source.getEntity() != null && !this.level().isClientSide) {
             this.spawnAtLocation(this.getDrop(), 0F);
             this.kill();
             return true;
@@ -200,7 +200,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     private void updatePowderListStatus(ResourceLocation inhibitedEffect) {
-        var powders = ((LevelData) ILevelData.getLevelData(this.level)).effectPowders;
+        var powders = ((LevelData) ILevelData.getLevelData(this.level())).effectPowders;
         if (this.lastEffect != null) {
             var oldList = powders.get(this.lastEffect);
             oldList.removeIf(t -> this.getEyePosition().equals(t.getA()));

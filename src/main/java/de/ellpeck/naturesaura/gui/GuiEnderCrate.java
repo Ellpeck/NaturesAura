@@ -1,9 +1,7 @@
 package de.ellpeck.naturesaura.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,25 +19,23 @@ public class GuiEnderCrate extends AbstractContainerScreen<ContainerEnderCrate> 
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
-        this.font.draw(matrixStack, this.title.getString(), 8, 6, 4210752);
-        this.font.draw(matrixStack, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752);
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        graphics.drawString(this.font, this.title.getString(), 8, 6, 4210752);
+        graphics.drawString(this.font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752);
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, GuiEnderCrate.CHEST_GUI_TEXTURE);
+    protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         var i = (this.width - this.imageWidth) / 2;
         var j = (this.height - this.imageHeight) / 2;
-        this.blit(matrixStack, i, j, 0, 0, this.imageWidth, 3 * 18 + 17);
-        this.blit(matrixStack, i, j + 3 * 18 + 17, 0, 126, this.imageWidth, 96);
+        graphics.blit(GuiEnderCrate.CHEST_GUI_TEXTURE, i, j, 0, 0, this.imageWidth, 3 * 18 + 17);
+        graphics.blit(GuiEnderCrate.CHEST_GUI_TEXTURE, i, j + 3 * 18 + 17, 0, 126, this.imageWidth, 96);
     }
 }

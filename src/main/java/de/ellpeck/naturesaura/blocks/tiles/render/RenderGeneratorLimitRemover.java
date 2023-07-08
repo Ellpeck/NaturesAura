@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks.tiles.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityGeneratorLimitRemover;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
@@ -44,7 +44,7 @@ public class RenderGeneratorLimitRemover implements BlockEntityRenderer<BlockEnt
         var brightness = 15 << 20 | 15 << 4;
         var alpha = ((float) Math.sin(System.currentTimeMillis() / 800D) + 1F) / 2F;
         stack.translate(-0.002F + xOff, 1 + 0.002F + yOff, 1 + 0.002F + zOff);
-        stack.mulPose(Vector3f.XP.rotationDegrees(180F));
+        stack.mulPose(Axis.XP.rotationDegrees(180F));
         stack.scale(1.004F, 1.004F, 1.004F);
         model.renderToBuffer(stack, buffer.getBuffer(model.renderType(texture)), brightness, combinedOverlayIn, 1, 1, 1, alpha * maxAlpha);
         stack.popPose();

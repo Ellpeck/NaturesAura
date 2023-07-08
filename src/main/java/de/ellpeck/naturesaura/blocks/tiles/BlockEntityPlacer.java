@@ -59,7 +59,7 @@ public class BlockEntityPlacer extends BlockEntityImpl implements ITickableBlock
 
                         var up = pos.above();
                         var state = this.level.getBlockState(up);
-                        if (state.getMaterial().isReplaceable())
+                        if (state.canBeReplaced())
                             validPositions.add(up);
                     }
             if (validPositions.isEmpty())

@@ -12,7 +12,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SaplingBlock;
-import net.minecraft.world.level.material.Material;
 
 public final class Multiblocks {
 
@@ -38,7 +37,7 @@ public final class Multiblocks {
             'G', ModBlocks.GOLD_POWDER,
             '0', new Matcher(Blocks.OAK_SAPLING.defaultBlockState(),
                     (level, start, offset, pos, state, c) -> {
-                        if (state.getBlock() instanceof SaplingBlock || state.getMaterial() == Material.WOOD)
+                        if (state.getBlock() instanceof SaplingBlock || state.is(BlockTags.LOGS))
                             return true;
                         // try-catch to prevent blocks that need to have been placed crashing here
                         try {

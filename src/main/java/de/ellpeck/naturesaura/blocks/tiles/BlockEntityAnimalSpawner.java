@@ -59,7 +59,7 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
 
                 this.time += 10;
                 if (this.time >= this.currentRecipe.time) {
-                    var entity = this.currentRecipe.makeEntity(this.level, new BlockPos(this.spawnX, this.worldPosition.getY() + 1, this.spawnZ));
+                    var entity = this.currentRecipe.makeEntity(this.level, BlockPos.containing(this.spawnX, this.worldPosition.getY() + 1, this.spawnZ));
                     this.level.addFreshEntity(entity);
 
                     this.currentRecipe = null;

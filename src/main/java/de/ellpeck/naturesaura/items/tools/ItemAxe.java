@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura.items.tools;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
@@ -18,7 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -28,7 +26,7 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
     private final String baseName;
 
     public ItemAxe(String baseName, Tier material, float damage, float speed) {
-        super(material, damage, speed, new Properties().tab(NaturesAura.CREATIVE_TAB));
+        super(material, damage, speed, new Properties());
         this.baseName = baseName;
         ModRegistry.ALL_ITEMS.add(this);
     }
@@ -40,7 +38,7 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if (state.getMaterial() == Material.LEAVES) {
+        if (state.is(BlockTags.LEAVES)) {
             return this.speed;
         } else {
             return super.getDestroySpeed(stack, state);
@@ -49,9 +47,9 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        if ((stack.getItem() == ModItems.SKY_AXE || stack.getItem() == ModItems.DEPTH_AXE) && Helper.isToolEnabled(stack) && player.level.getBlockState(pos).is(BlockTags.LOGS)) {
+        if ((stack.getItem() == ModItems.SKY_AXE || stack.getItem() == ModItems.DEPTH_AXE) && Helper.isToolEnabled(stack) && player.level().getBlockState(pos).is(BlockTags.LOGS)) {
             var horRange = stack.getItem() == ModItems.DEPTH_AXE ? 6 : 1;
-            Helper.mineRecursively(player.level, pos, pos, true, horRange, 32, s -> s.is(BlockTags.LOGS));
+            Helper.mineRecursively(player.level(), pos, pos, true, horRange, 32, s -> s.is(BlockTags.LOGS));
             return true;
         }
         return false;

@@ -57,7 +57,7 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
             return;
 
         if (output.isEmpty()) {
-            var result = recipe.getResultItem();
+            var result = recipe.getResultItem(this.level.registryAccess());
             tile.setItem(2, result.copy());
         } else {
             output.grow(1);

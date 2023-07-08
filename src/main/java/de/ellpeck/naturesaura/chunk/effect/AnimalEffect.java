@@ -49,11 +49,11 @@ public class AnimalEffect implements IDrainSpotEffect {
 
     @Override
     public ActiveType isActiveHere(Player player, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (!this.calcValues(player.level, pos, spot))
+        if (!this.calcValues(player.level(), pos, spot))
             return ActiveType.INACTIVE;
         if (!this.bb.contains(player.getEyePosition()))
             return ActiveType.INACTIVE;
-        if (!NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), AnimalEffect.NAME))
+        if (!NaturesAuraAPI.instance().isEffectPowderActive(player.level(), player.blockPosition(), AnimalEffect.NAME))
             return ActiveType.INHIBITED;
         return ActiveType.ACTIVE;
     }
@@ -132,13 +132,13 @@ public class AnimalEffect implements IDrainSpotEffect {
     private void setInLove(Animal animal) {
         animal.setInLove(null);
         for (var j = 0; j < 7; j++)
-            animal.level.addParticle(ParticleTypes.HEART,
-                    animal.getX() + (double) (animal.level.random.nextFloat() * animal.getBbWidth() * 2.0F) - animal.getBbWidth(),
-                    animal.getY() + 0.5D + (double) (animal.level.random.nextFloat() * animal.getBbHeight()),
-                    animal.getZ() + (double) (animal.level.random.nextFloat() * animal.getBbWidth() * 2.0F) - animal.getBbWidth(),
-                    animal.level.random.nextGaussian() * 0.02D,
-                    animal.level.random.nextGaussian() * 0.02D,
-                    animal.level.random.nextGaussian() * 0.02D);
+            animal.level().addParticle(ParticleTypes.HEART,
+                    animal.getX() + (double) (animal.level().random.nextFloat() * animal.getBbWidth() * 2.0F) - animal.getBbWidth(),
+                    animal.getY() + 0.5D + (double) (animal.level().random.nextFloat() * animal.getBbHeight()),
+                    animal.getZ() + (double) (animal.level().random.nextFloat() * animal.getBbWidth() * 2.0F) - animal.getBbWidth(),
+                    animal.level().random.nextGaussian() * 0.02D,
+                    animal.level().random.nextGaussian() * 0.02D,
+                    animal.level().random.nextGaussian() * 0.02D);
     }
 
     @Override

@@ -16,7 +16,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -27,7 +26,7 @@ public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvi
     private static final VoxelShape SHAPE = Shapes.create(2 / 16F, 0F, 2 / 16F, 14 / 16F, 1F, 14 / 16F);
 
     public BlockOfferingTable() {
-        super("offering_table", BlockEntityOfferingTable.class, Properties.of(Material.WOOD).strength(2F).sound(SoundType.WOOD));
+        super("offering_table", BlockEntityOfferingTable.class, Properties.of().strength(2F).sound(SoundType.WOOD));
     }
 
     @Override

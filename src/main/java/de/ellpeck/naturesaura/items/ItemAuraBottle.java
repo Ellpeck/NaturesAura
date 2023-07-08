@@ -52,7 +52,8 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
         });
     }
 
-    @Override
+    // TODO aura bottle creative
+/*    @Override
     public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
         if (this.allowedIn(tab)) {
             for (var type : NaturesAuraAPI.AURA_TYPES.values()) {
@@ -61,7 +62,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
                 items.add(stack);
             }
         }
-    }
+    }*/
 
     @Override
     public Component getName(ItemStack stack) {
@@ -116,19 +117,19 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
             if (held.isEmpty() || held.getItem() != ModItems.BOTTLE_TWO_THE_REBOTTLING)
                 return;
             var player = event.getEntity();
-            HitResult ray = Item.getPlayerPOVHitResult(player.level, player, ClipContext.Fluid.NONE);
+            HitResult ray = Item.getPlayerPOVHitResult(player.level(), player, ClipContext.Fluid.NONE);
             if (ray.getType() == HitResult.Type.BLOCK)
                 return;
-            var bottle = ItemAuraBottle.create(player.level, player.blockPosition());
+            var bottle = ItemAuraBottle.create(player.level(), player.blockPosition());
             if (bottle.isEmpty())
                 return;
 
-            if (!player.level.isClientSide) {
+            if (!player.level().isClientSide) {
                 held.shrink(1);
                 if (!player.addItem(bottle))
-                    player.level.addFreshEntity(new ItemEntity(player.level, player.getX(), player.getY(), player.getZ(), bottle));
+                    player.level().addFreshEntity(new ItemEntity(player.level(), player.getX(), player.getY(), player.getZ(), bottle));
 
-                player.level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.PLAYERS, 1F, 1F);
             }
 

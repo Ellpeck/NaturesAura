@@ -14,7 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -22,7 +21,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockFieldCreator extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockFieldCreator() {
-        super("field_creator", BlockEntityFieldCreator.class, Properties.of(Material.STONE).strength(2F).noCollission().sound(SoundType.STONE));
+        super("field_creator", BlockEntityFieldCreator.class, Properties.of().strength(2F).noCollission().sound(SoundType.STONE));
     }
 
     @Override

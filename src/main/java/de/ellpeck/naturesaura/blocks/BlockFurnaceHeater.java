@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
@@ -37,7 +36,7 @@ public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlo
     };
 
     public BlockFurnaceHeater() {
-        super("furnace_heater", BlockEntityFurnaceHeater.class, Properties.of(Material.STONE).strength(3F));
+        super("furnace_heater", BlockEntityFurnaceHeater.class, Properties.of().strength(3F));
     }
 
     @Override

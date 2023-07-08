@@ -8,12 +8,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 public class BlockDecayedLeaves extends BlockImpl implements ICustomBlockState {
 
     public BlockDecayedLeaves() {
-        super("decayed_leaves", Properties.of(Material.LEAVES).strength(0.2F).sound(SoundType.GRASS).noOcclusion().randomTicks());
+        super("decayed_leaves", Properties.of().strength(0.2F).sound(SoundType.GRASS).noOcclusion().randomTicks());
     }
 
     @Override

@@ -45,7 +45,7 @@ public class GrassDieEffect implements IDrainSpotEffect {
 
     @Override
     public ActiveType isActiveHere(Player player, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (!this.calcValues(player.level, pos, spot))
+        if (!this.calcValues(player.level(), pos, spot))
             return ActiveType.INACTIVE;
         if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return ActiveType.INACTIVE;
@@ -62,7 +62,7 @@ public class GrassDieEffect implements IDrainSpotEffect {
         if (!this.calcValues(level, pos, spot))
             return;
         for (var i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
-            var grassPos = new BlockPos(
+            var grassPos = BlockPos.containing(
                     pos.getX() + level.random.nextGaussian() * this.dist,
                     pos.getY() + level.random.nextGaussian() * this.dist,
                     pos.getZ() + level.random.nextGaussian() * this.dist

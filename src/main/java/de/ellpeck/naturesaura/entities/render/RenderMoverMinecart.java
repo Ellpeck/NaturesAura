@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.entities.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.entities.EntityMoverMinecart;
 import net.minecraft.client.model.Model;
@@ -35,7 +35,7 @@ public class RenderMoverMinecart extends MinecartRenderer<EntityMoverMinecart> {
         matrixStackIn.pushPose();
         matrixStackIn.translate(0, 22 / 16F, 0);
         matrixStackIn.translate(0, 0, 1);
-        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(180));
         this.model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(this.model.renderType(RenderMoverMinecart.RES)), packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         matrixStackIn.popPose();
     }

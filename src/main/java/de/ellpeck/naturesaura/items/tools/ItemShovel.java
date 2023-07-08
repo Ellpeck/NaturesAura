@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura.items.tools;
 
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
@@ -22,7 +21,6 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
@@ -34,7 +32,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
     private final String baseName;
 
     public ItemShovel(String baseName, Tier material, float damage, float speed) {
-        super(material, damage, speed, new Properties().tab(NaturesAura.CREATIVE_TAB));
+        super(material, damage, speed, new Properties());
         this.baseName = baseName;
         ModRegistry.ALL_ITEMS.add(this);
     }
@@ -49,7 +47,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
 
         // turning dirt to grass
         if (this == ModItems.INFUSED_IRON_SHOVEL || this == ModItems.DEPTH_SHOVEL) {
-            if ((state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.MYCELIUM) && level.getBlockState(pos.above()).getMaterial() == Material.AIR) {
+            if ((state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.MYCELIUM) && level.getBlockState(pos.above()).isAir()) {
                 level.setBlockAndUpdate(pos, Blocks.GRASS_BLOCK.defaultBlockState());
                 var damage = 5F;
 
@@ -60,7 +58,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
                             for (var y = -1; y <= 1; y++) {
                                 var offset = pos.offset(x, y, z);
                                 var offState = level.getBlockState(offset);
-                                if ((offState.getBlock() == Blocks.DIRT || offState.getBlock() == Blocks.MYCELIUM) && level.getBlockState(offset.above()).getMaterial() == Material.AIR)
+                                if ((offState.getBlock() == Blocks.DIRT || offState.getBlock() == Blocks.MYCELIUM) && level.getBlockState(offset.above()).isAir())
                                     possible.add(offset);
                             }
                         }
@@ -87,7 +85,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
                     var facing = context.getClickedFace();
                     if (player.mayUseItemAt(actualPos.relative(facing), facing, stack)) {
                         if (facing != Direction.DOWN
-                                && level.getBlockState(actualPos.above()).getMaterial() == Material.AIR
+                                && level.getBlockState(actualPos.above()).isAir()
                                 && level.getBlockState(actualPos).getBlock() == Blocks.GRASS_BLOCK) {
                             if (!level.isClientSide)
                                 level.setBlock(actualPos, Blocks.DIRT_PATH.defaultBlockState(), 11);

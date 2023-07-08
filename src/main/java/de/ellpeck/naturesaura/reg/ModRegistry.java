@@ -22,12 +22,10 @@ import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
 import de.ellpeck.naturesaura.recipes.EnabledCondition;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
-import net.minecraft.data.worldgen.features.FeatureUtils;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -35,10 +33,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -62,7 +57,7 @@ public final class ModRegistry {
             ModRegistry.registerAll(h,
                     new BlockAncientLog("ancient_log"),
                     new BlockAncientLog("ancient_bark"),
-                    temp = new BlockImpl("ancient_planks", Block.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(2F)),
+                    temp = new BlockImpl("ancient_planks", Block.Properties.of().sound(SoundType.WOOD).strength(2F)),
                     new BlockStairsNA("ancient_stairs", "ancient_planks", temp::defaultBlockState, Block.Properties.copy(temp)),
                     new Slab("ancient_slab", "ancient_planks", Block.Properties.copy(temp)),
                     new BlockAncientLeaves(),
@@ -72,23 +67,23 @@ public final class ModRegistry {
                     new BlockGoldenLeaves(),
                     new BlockGoldPowder(),
                     new BlockWoodStand(),
-                    temp = new BlockImpl("infused_stone", Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(1.75F)),
+                    temp = new BlockImpl("infused_stone", Block.Properties.of().sound(SoundType.STONE).strength(1.75F)),
                     new BlockStairsNA("infused_stairs", "infused_stone", temp::defaultBlockState, Block.Properties.copy(temp)),
                     new Slab("infused_slab", "infused_stone", Block.Properties.copy(temp)),
-                    temp = new BlockImpl("infused_brick", Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(1.5F)),
+                    temp = new BlockImpl("infused_brick", Block.Properties.of().sound(SoundType.STONE).strength(1.5F)),
                     new BlockStairsNA("infused_brick_stairs", "infused_brick", temp::defaultBlockState, Block.Properties.copy(temp)),
                     new Slab("infused_brick_slab", "infused_brick", Block.Properties.copy(temp)),
                     new BlockFurnaceHeater(),
                     new BlockPotionGenerator(),
                     new BlockAuraDetector(),
-                    new BlockImpl("conversion_catalyst", Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2.5F)),
-                    new BlockImpl("crushing_catalyst", Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2.5F)),
+                    new BlockImpl("conversion_catalyst", Block.Properties.of().sound(SoundType.STONE).strength(2.5F)),
+                    new BlockImpl("crushing_catalyst", Block.Properties.of().sound(SoundType.STONE).strength(2.5F)),
                     new BlockFlowerGenerator(),
                     new BlockPlacer(),
                     new BlockHopperUpgrade(),
                     new BlockFieldCreator(),
                     new BlockOakGenerator(),
-                    new BlockImpl("infused_iron_block", Block.Properties.of(Material.METAL).sound(SoundType.METAL).strength(3F)),
+                    new BlockImpl("infused_iron_block", Block.Properties.of().sound(SoundType.METAL).strength(3F)),
                     new BlockOfferingTable(),
                     new BlockPickupStopper(),
                     new BlockSpawnLamp(),
@@ -124,7 +119,7 @@ public final class ModRegistry {
                     ModRegistry.createFlowerPot(temp),
                     temp = new BlockAuraBloom("aura_mushroom", Blocks.MYCELIUM),
                     ModRegistry.createFlowerPot(temp),
-                    new BlockImpl("tainted_gold_block", Block.Properties.of(Material.METAL).sound(SoundType.METAL).strength(3F)),
+                    new BlockImpl("tainted_gold_block", Block.Properties.of().sound(SoundType.METAL).strength(3F)),
                     new BlockNetherGrass(),
                     new BlockLight(),
                     new BlockChorusGenerator(),
@@ -135,8 +130,8 @@ public final class ModRegistry {
                     new BlockRFConverter(),
                     new BlockChunkLoader(),
                     new BlockLowerLimiter(),
-                    new BlockImpl("sky_ingot_block", Block.Properties.of(Material.METAL).sound(SoundType.METAL).strength(4F)),
-                    new BlockImpl("depth_ingot_block", Block.Properties.of(Material.METAL).sound(SoundType.METAL).strength(6F))
+                    new BlockImpl("sky_ingot_block", Block.Properties.of().sound(SoundType.METAL).strength(4F)),
+                    new BlockImpl("depth_ingot_block", Block.Properties.of().sound(SoundType.METAL).strength(6F))
             );
             Helper.populateObjectHolders(ModBlocks.class, event.getForgeRegistry());
         });
@@ -144,7 +139,7 @@ public final class ModRegistry {
         event.register(ForgeRegistries.Keys.ITEMS, h -> {
             for (var block : ModRegistry.ALL_ITEMS) {
                 if (block instanceof Block && !(block instanceof INoItemBlock)) {
-                    var item = new BlockItem((Block) block, new Item.Properties().tab(NaturesAura.CREATIVE_TAB));
+                    var item = new BlockItem((Block) block, new Item.Properties());
                     h.register(new ResourceLocation(NaturesAura.MOD_ID, block.getBaseName()), item);
                 }
             }
@@ -156,10 +151,10 @@ public final class ModRegistry {
                     new ItemShovel("infused_iron_shovel", ModItemTier.INFUSED, 1.5F, -3.0F),
                     new ItemHoe("infused_iron_hoe", ModItemTier.INFUSED, -1),
                     new ItemSword("infused_iron_sword", ModItemTier.INFUSED, 3, -2.4F),
-                    new ItemArmor("infused_iron_helmet", ModArmorMaterial.INFUSED, EquipmentSlot.HEAD),
-                    new ItemArmor("infused_iron_chest", ModArmorMaterial.INFUSED, EquipmentSlot.CHEST),
-                    new ItemArmor("infused_iron_pants", ModArmorMaterial.INFUSED, EquipmentSlot.LEGS),
-                    new ItemArmor("infused_iron_shoes", ModArmorMaterial.INFUSED, EquipmentSlot.FEET),
+                    new ItemArmor("infused_iron_helmet", ModArmorMaterial.INFUSED, ArmorItem.Type.HELMET),
+                    new ItemArmor("infused_iron_chest", ModArmorMaterial.INFUSED, ArmorItem.Type.CHESTPLATE),
+                    new ItemArmor("infused_iron_pants", ModArmorMaterial.INFUSED, ArmorItem.Type.LEGGINGS),
+                    new ItemArmor("infused_iron_shoes", ModArmorMaterial.INFUSED, ArmorItem.Type.BOOTS),
                     new ItemEye("eye"),
                     new ItemEye("eye_improved"),
                     new ItemGoldFiber(),
@@ -201,10 +196,10 @@ public final class ModRegistry {
                     new ItemShovel("sky_shovel", ModItemTier.SKY, 1.5F, -3.0F),
                     new ItemHoe("sky_hoe", ModItemTier.SKY, -1),
                     new ItemSword("sky_sword", ModItemTier.SKY, 3, -2.4F),
-                    new ItemArmor("sky_helmet", ModArmorMaterial.SKY, EquipmentSlot.HEAD),
-                    new ItemArmor("sky_chest", ModArmorMaterial.SKY, EquipmentSlot.CHEST),
-                    new ItemArmor("sky_pants", ModArmorMaterial.SKY, EquipmentSlot.LEGS),
-                    new ItemArmor("sky_shoes", ModArmorMaterial.SKY, EquipmentSlot.FEET),
+                    new ItemArmor("sky_helmet", ModArmorMaterial.SKY, ArmorItem.Type.HELMET),
+                    new ItemArmor("sky_chest", ModArmorMaterial.SKY, ArmorItem.Type.CHESTPLATE),
+                    new ItemArmor("sky_pants", ModArmorMaterial.SKY, ArmorItem.Type.LEGGINGS),
+                    new ItemArmor("sky_shoes", ModArmorMaterial.SKY, ArmorItem.Type.BOOTS),
                     new ItemStructureFinder("fortress_finder", BuiltinStructures.FORTRESS, 0xba2800, 1024),
                     new ItemStructureFinder("end_city_finder", BuiltinStructures.END_CITY, 0xca5cd6, 1024),
                     new ItemStructureFinder("outpost_finder", BuiltinStructures.PILLAGER_OUTPOST, 0xab9f98, 2048),
@@ -218,10 +213,10 @@ public final class ModRegistry {
                     new ItemShovel("depth_shovel", ModItemTier.DEPTH, 1.5F, -3),
                     new ItemHoe("depth_hoe", ModItemTier.DEPTH, -1),
                     new ItemSword("depth_sword", ModItemTier.DEPTH, 3, -2.4F),
-                    new ItemArmor("depth_helmet", ModArmorMaterial.DEPTH, EquipmentSlot.HEAD),
-                    new ItemArmor("depth_chest", ModArmorMaterial.DEPTH, EquipmentSlot.CHEST),
-                    new ItemArmor("depth_pants", ModArmorMaterial.DEPTH, EquipmentSlot.LEGS),
-                    new ItemArmor("depth_shoes", ModArmorMaterial.DEPTH, EquipmentSlot.FEET)
+                    new ItemArmor("depth_helmet", ModArmorMaterial.DEPTH, ArmorItem.Type.HELMET),
+                    new ItemArmor("depth_chest", ModArmorMaterial.DEPTH, ArmorItem.Type.CHESTPLATE),
+                    new ItemArmor("depth_pants", ModArmorMaterial.DEPTH, ArmorItem.Type.LEGGINGS),
+                    new ItemArmor("depth_shoes", ModArmorMaterial.DEPTH, ArmorItem.Type.BOOTS)
             );
             Helper.populateObjectHolders(ModItems.class, event.getForgeRegistry());
         });
@@ -244,13 +239,13 @@ public final class ModRegistry {
 
         event.register(ForgeRegistries.Keys.MENU_TYPES, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "ender_crate"), IForgeMenuType.create((windowId, inv, data) -> {
-                var tile = inv.player.level.getBlockEntity(data.readBlockPos());
+                var tile = inv.player.level().getBlockEntity(data.readBlockPos());
                 if (tile instanceof BlockEntityEnderCrate crate)
                     return new ContainerEnderCrate(ModContainers.ENDER_CRATE, windowId, inv.player, crate.getItemHandler());
                 return null;
             }));
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "ender_access"), IForgeMenuType.create((windowId, inv, data) -> {
-                IItemHandler handler = ILevelData.getOverworldData(inv.player.level).getEnderStorage(data.readUtf());
+                IItemHandler handler = ILevelData.getOverworldData(inv.player.level()).getEnderStorage(data.readUtf());
                 return new ContainerEnderCrate(ModContainers.ENDER_ACCESS, windowId, inv.player, handler);
             }));
             Helper.populateObjectHolders(ModContainers.class, event.getForgeRegistry());
@@ -309,7 +304,8 @@ public final class ModRegistry {
     }
 
     public static void init() {
-        ModFeatures.Configured.AURA_BLOOM = FeatureUtils.register(NaturesAura.MOD_ID + ":aura_bloom", ModFeatures.AURA_BLOOM, NoneFeatureConfiguration.INSTANCE);
+        // TODO fucking features changed again
+        /*ModFeatures.Configured.AURA_BLOOM = FeatureUtils.register(NaturesAura.MOD_ID + ":aura_bloom", ModFeatures.AURA_BLOOM, NoneFeatureConfiguration.INSTANCE);
         ModFeatures.Configured.AURA_CACTUS = FeatureUtils.register(NaturesAura.MOD_ID + ":aura_cactus", ModFeatures.AURA_CACTUS, NoneFeatureConfiguration.INSTANCE);
         ModFeatures.Configured.WARPED_AURA_MUSHROOM = FeatureUtils.register(NaturesAura.MOD_ID + ":warped_aura_mushroom", ModFeatures.WARPED_AURA_MUSHROOM, NoneFeatureConfiguration.INSTANCE);
         ModFeatures.Configured.CRIMSON_AURA_MUSHROOM = FeatureUtils.register(NaturesAura.MOD_ID + ":crimson_aura_mushroom", ModFeatures.CRIMSON_AURA_MUSHROOM, NoneFeatureConfiguration.INSTANCE);
@@ -321,11 +317,11 @@ public final class ModRegistry {
         ModFeatures.Placed.AURA_CACTUS = PlacementUtils.register(NaturesAura.MOD_ID + ":aura_cactus", ModFeatures.Configured.AURA_CACTUS);
         ModFeatures.Placed.WARPED_AURA_MUSHROOM = PlacementUtils.register(NaturesAura.MOD_ID + ":warped_aura_mushroom", ModFeatures.Configured.WARPED_AURA_MUSHROOM);
         ModFeatures.Placed.CRIMSON_AURA_MUSHROOM = PlacementUtils.register(NaturesAura.MOD_ID + ":crimson_aura_mushroom", ModFeatures.Configured.CRIMSON_AURA_MUSHROOM);
-        ModFeatures.Placed.AURA_MUSHROOM = PlacementUtils.register(NaturesAura.MOD_ID + ":aura_mushroom", ModFeatures.Configured.AURA_MUSHROOM);
+        ModFeatures.Placed.AURA_MUSHROOM = PlacementUtils.register(NaturesAura.MOD_ID + ":aura_mushroom", ModFeatures.Configured.AURA_MUSHROOM);*/
     }
 
     public static Block createFlowerPot(Block block) {
-        var props = Block.Properties.of(Material.DECORATION).strength(0F);
+        var props = Block.Properties.of().strength(0F);
         Block potted = new BlockFlowerPot(() -> (FlowerPotBlock) Blocks.FLOWER_POT, () -> block, props);
         ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ForgeRegistries.BLOCKS.getKey(block), () -> potted);
         return potted;

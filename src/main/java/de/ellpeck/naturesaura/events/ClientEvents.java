@@ -2,7 +2,10 @@ package de.ellpeck.naturesaura.events;
 
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
@@ -18,8 +21,8 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ChatScreen;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
@@ -197,7 +200,7 @@ public class ClientEvents {
                 // dirty raytrace to see if we're looking at roughly this spot
                 if (playerEye.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= range * range) {
                     for (var d = 0F; d <= range; d += 0.5F) {
-                        if (pos.equals(new BlockPos(playerEye.add(playerView.scale(d))))) {
+                        if (pos.equals(BlockPos.containing(playerEye.add(playerView.scale(d))))) {
                             ClientEvents.hoveringAuraSpot = pos;
                             break;
                         }
@@ -250,7 +253,8 @@ public class ClientEvents {
     @SubscribeEvent
     public void onOverlayRender(RenderGuiOverlayEvent.Post event) {
         var mc = Minecraft.getInstance();
-        var stack = event.getPoseStack();
+        var graphics = event.getGuiGraphics();
+        var stack = graphics.pose();
         if (event.getOverlay() == VanillaGuiOverlay.HOTBAR.type()) {
             var res = event.getWindow();
             if (mc.player != null) {
@@ -266,17 +270,16 @@ public class ClientEvents {
 
                     var color = container.getAuraColor();
                     RenderSystem.setShaderColor((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 1);
-                    RenderSystem.setShaderTexture(0, ClientEvents.OVERLAYS);
                     if (width < 80)
-                        Screen.blit(stack, x + width, y, width, 0, 80 - width, 6, 256, 256);
+                        graphics.blit(ClientEvents.OVERLAYS, x + width, y, width, 0, 80 - width, 6, 256, 256);
                     if (width > 0)
-                        Screen.blit(stack, x, y, 0, 6, width, 6, 256, 256);
+                        graphics.blit(ClientEvents.OVERLAYS, x, y, 0, 6, width, 6, 256, 256);
 
                     var scale = 0.75F;
                     stack.pushPose();
                     stack.scale(scale, scale, scale);
                     var s = ClientEvents.heldCache.getHoverName().getString();
-                    mc.font.drawShadow(stack, s, conf == 1 ? x / scale : (x + 80) / scale - mc.font.width(s), (y - 7) / scale, color);
+                    graphics.drawString(mc.font, s, conf == 1 ? x / scale : (x + 80) / scale - mc.font.width(s), (y - 7) / scale, color, true);
                     stack.popPose();
 
                     RenderSystem.setShaderColor(1F, 1F, 1F, 1);
@@ -285,7 +288,6 @@ public class ClientEvents {
 
                 if (!ClientEvents.heldEye.isEmpty() || !ClientEvents.heldOcular.isEmpty()) {
                     stack.pushPose();
-                    RenderSystem.setShaderTexture(0, ClientEvents.OVERLAYS);
 
                     int conf = ModConfig.instance.auraBarLocation.get();
                     if (!mc.options.renderDebug && (conf != 2 || !(mc.screen instanceof ChatScreen))) {
@@ -306,33 +308,33 @@ public class ClientEvents {
                         var tHeight = Mth.ceil(Mth.clamp(totalPercentage, 0F, 1F) * 50);
                         var y = !ClientEvents.heldOcular.isEmpty() && totalPercentage > 1F ? startY + 26 : startY;
                         if (tHeight < 50)
-                            Screen.blit(stack, startX, y, 6, 12, 6, 50 - tHeight, 256, 256);
+                            graphics.blit(ClientEvents.OVERLAYS, startX, y, 6, 12, 6, 50 - tHeight, 256, 256);
                         if (tHeight > 0)
-                            Screen.blit(stack, startX, y + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
+                            graphics.blit(ClientEvents.OVERLAYS, startX, y + 50 - tHeight, 0, 12 + 50 - tHeight, 6, tHeight, 256, 256);
 
                         if (!ClientEvents.heldOcular.isEmpty()) {
                             var topHeight = Mth.ceil(Mth.clamp((totalPercentage - 1F) * 2F, 0F, 1F) * 25);
                             if (topHeight > 0) {
                                 if (topHeight < 25)
-                                    Screen.blit(stack, startX, startY, 18, 12, 6, 25 - topHeight, 256, 256);
-                                Screen.blit(stack, startX, startY + 25 - topHeight, 12, 12 + 25 - topHeight, 6, topHeight, 256, 256);
+                                    graphics.blit(ClientEvents.OVERLAYS, startX, startY, 18, 12, 6, 25 - topHeight, 256, 256);
+                                graphics.blit(ClientEvents.OVERLAYS, startX, startY + 25 - topHeight, 12, 12 + 25 - topHeight, 6, topHeight, 256, 256);
                             }
                             var bottomHeight = Mth.floor(Mth.clamp((totalPercentage + 1F) * 2F - 1F, 0F, 1F) * 25);
                             if (bottomHeight < 25) {
-                                Screen.blit(stack, startX, startY + 51, 18, 12, 6, 25 - bottomHeight, 256, 256);
+                                graphics.blit(ClientEvents.OVERLAYS, startX, startY + 51, 18, 12, 6, 25 - bottomHeight, 256, 256);
                                 if (bottomHeight > 0)
-                                    Screen.blit(stack, startX, startY + 51 + 25 - bottomHeight, 12, 12 + 25 - bottomHeight, 6, bottomHeight, 256, 256);
+                                    graphics.blit(ClientEvents.OVERLAYS, startX, startY + 51 + 25 - bottomHeight, 12, 12 + 25 - bottomHeight, 6, bottomHeight, 256, 256);
                             }
                         }
 
                         if (totalPercentage > (ClientEvents.heldOcular.isEmpty() ? 1F : 1.5F))
-                            mc.font.drawShadow(stack, "+", startX + plusOffX, startY - 0.5F, color);
+                            graphics.drawString(mc.font, "+", startX + plusOffX, startY - 0.5F, color, true);
                         if (totalPercentage < (ClientEvents.heldOcular.isEmpty() ? 0F : -0.5F))
-                            mc.font.drawShadow(stack, "-", startX + plusOffX, startY - 0.5F + (ClientEvents.heldOcular.isEmpty() ? 44 : 70), color);
+                            graphics.drawString(mc.font, "-", startX + plusOffX, startY - 0.5F + (ClientEvents.heldOcular.isEmpty() ? 44 : 70), color, true);
 
                         stack.pushPose();
                         stack.scale(textScale, textScale, textScale);
-                        mc.font.drawShadow(stack, text, textX / textScale, textY / textScale, color);
+                        graphics.drawString(mc.font, text, textX / textScale, textY / textScale, color, true);
                         stack.popPose();
 
                         if (!ClientEvents.heldOcular.isEmpty()) {
@@ -342,11 +344,10 @@ public class ClientEvents {
                             var stackY = conf < 2 ? 10 : res.getGuiScaledHeight() - 60;
                             for (var effect : ClientEvents.SHOWING_EFFECTS.values()) {
                                 var itemStack = effect.getA();
-                                Helper.renderItemInGui(itemStack, stackX, stackY, 1F);
+                                Helper.renderItemInGui(graphics, itemStack, stackX, stackY, 1F);
                                 if (effect.getB()) {
                                     RenderSystem.disableDepthTest();
-                                    RenderSystem.setShaderTexture(0, ClientEvents.OVERLAYS);
-                                    Screen.blit(stack, stackX, stackY, 240, 0, 16, 16, 256, 256);
+                                    graphics.blit(ClientEvents.OVERLAYS, stackX, stackY, 240, 0, 16, 16, 256, 256);
                                     RenderSystem.enableDepthTest();
                                 }
                                 stackY += 12;
@@ -365,7 +366,7 @@ public class ClientEvents {
                             if (tile != null && (container = tile.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null)) != null) {
                                 var state = mc.level.getBlockState(pos);
                                 var blockStack = state.getBlock().getCloneItemStack(state, blockHitResult, mc.level, pos, mc.player);
-                                this.drawContainerInfo(stack, container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
+                                this.drawContainerInfo(graphics, container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
                                         mc, res, 35, blockStack.getHoverName().getString(), null);
 
                                 if (tile instanceof BlockEntityNatureAltar) {
@@ -373,46 +374,44 @@ public class ClientEvents {
                                     if (!tileStack.isEmpty()) {
                                         var stackCont = tileStack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null);
                                         if (stackCont != null) {
-                                            this.drawContainerInfo(stack, stackCont.getStoredAura(), stackCont.getMaxAura(), stackCont.getAuraColor(),
+                                            this.drawContainerInfo(graphics, stackCont.getStoredAura(), stackCont.getMaxAura(), stackCont.getAuraColor(),
                                                     mc, res, 55, tileStack.getHoverName().getString(), null);
                                         }
                                     }
                                 }
                             } else if (tile instanceof BlockEntityRFConverter) {
                                 EnergyStorage storage = ((BlockEntityRFConverter) tile).storage;
-                                this.drawContainerInfo(stack, storage.getEnergyStored(), storage.getMaxEnergyStored(), 0xcc4916,
+                                this.drawContainerInfo(graphics, storage.getEnergyStored(), storage.getMaxEnergyStored(), 0xcc4916,
                                         mc, res, 35, I18n.get("block.naturesaura.rf_converter"),
                                         storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
                             } else if (tile instanceof BlockEntityGratedChute chute) {
                                 var itemStack = chute.getItemHandler().getStackInSlot(0);
 
                                 if (itemStack.isEmpty()) {
-                                    mc.font.drawShadow(stack,
+                                    graphics.drawString(mc.font,
                                             ChatFormatting.GRAY.toString() + ChatFormatting.ITALIC + I18n.get("info.naturesaura.empty"),
                                             x + 5, y - 11, 0xFFFFFF);
                                 } else {
-                                    Helper.renderItemInGui(itemStack, x + 2, y - 18, 1F);
+                                    Helper.renderItemInGui(graphics, itemStack, x + 2, y - 18, 1F);
                                 }
 
-                                Helper.renderItemInGui(ClientEvents.ITEM_FRAME, x - 24, y - 24, 1F);
-                                RenderSystem.setShaderTexture(0, ClientEvents.OVERLAYS);
+                                Helper.renderItemInGui(graphics, ClientEvents.ITEM_FRAME, x - 24, y - 24, 1F);
                                 var u = chute.isBlacklist ? 240 : 224;
                                 RenderSystem.disableDepthTest();
-                                Screen.blit(stack, x - 18, y - 18, u, 0, 16, 16, 256, 256);
+                                graphics.blit(ClientEvents.OVERLAYS, x - 18, y - 18, u, 0, 16, 16, 256, 256);
                                 RenderSystem.enableDepthTest();
                             } else if (tile instanceof BlockEntityItemDistributor distributor) {
-                                Helper.renderItemInGui(ClientEvents.DISPENSER, x - 24, y - 24, 1F);
-                                RenderSystem.setShaderTexture(0, ClientEvents.OVERLAYS);
+                                Helper.renderItemInGui(graphics, ClientEvents.DISPENSER, x - 24, y - 24, 1F);
                                 var u = !distributor.isRandomMode ? 240 : 224;
                                 RenderSystem.disableDepthTest();
-                                Screen.blit(stack, x - 18, y - 18, u, 0, 16, 16, 256, 256);
+                                graphics.blit(ClientEvents.OVERLAYS, x - 18, y - 18, u, 0, 16, 16, 256, 256);
                                 RenderSystem.enableDepthTest();
                             } else if (tile instanceof BlockEntityAuraTimer timer) {
                                 var itemStack = timer.getItemHandler().getStackInSlot(0);
                                 if (!itemStack.isEmpty()) {
-                                    Helper.renderItemInGui(itemStack, x - 20, y - 20, 1);
-                                    mc.font.drawShadow(stack, ChatFormatting.GRAY + this.createTimeString(timer.getTotalTime()), x + 5, y - 11, 0xFFFFFF);
-                                    mc.font.drawShadow(stack, ChatFormatting.GRAY + I18n.get("info.naturesaura.remaining", this.createTimeString(timer.getTimeLeft())), x + 5, y + 3, 0xFFFFFF);
+                                    Helper.renderItemInGui(graphics, itemStack, x - 20, y - 20, 1);
+                                    graphics.drawString(mc.font, ChatFormatting.GRAY + this.createTimeString(timer.getTotalTime()), x + 5, y - 11, 0xFFFFFF);
+                                    graphics.drawString(mc.font, ChatFormatting.GRAY + I18n.get("info.naturesaura.remaining", this.createTimeString(timer.getTimeLeft())), x + 5, y + 3, 0xFFFFFF);
                                 }
                             }
                         }
@@ -426,10 +425,10 @@ public class ClientEvents {
                     var format = NumberFormat.getInstance();
                     var spot = IAuraChunk.getAuraChunk(mc.level, ClientEvents.hoveringAuraSpot).getActualDrainSpot(ClientEvents.hoveringAuraSpot, false);
                     var color = spot.intValue() > 0 ? ChatFormatting.GREEN : ChatFormatting.RED;
-                    mc.font.drawShadow(stack, "Pos: " + spot.pos.toShortString(), res.getGuiScaledWidth() / 2F + 5, res.getGuiScaledHeight() / 2F - 20, 0xFFFFFF);
-                    mc.font.drawShadow(stack, "Amount: " + color + format.format(spot.intValue()), res.getGuiScaledWidth() / 2F + 5, res.getGuiScaledHeight() / 2F - 10, 0xFFFFFF);
+                    graphics.drawString(mc.font, "Pos: " + spot.pos.toShortString(), res.getGuiScaledWidth() / 2F + 5, res.getGuiScaledHeight() / 2F - 20, 0xFFFFFF, true);
+                    graphics.drawString(mc.font, "Amount: " + color + format.format(spot.intValue()), res.getGuiScaledWidth() / 2F + 5, res.getGuiScaledHeight() / 2F - 10, 0xFFFFFF, true);
                     if (spot.originalSpreadPos != null)
-                        mc.font.drawShadow(stack, "Dist from Original: " + (int) Math.sqrt(spot.pos.distSqr(spot.originalSpreadPos)) + " (" + spot.originalSpreadPos.toShortString() + ")", res.getGuiScaledWidth() / 2F + 5, res.getGuiScaledHeight() / 2F, 0xFFFFFF);
+                        graphics.drawString(mc.font, "Dist from Original: " + (int) Math.sqrt(spot.pos.distSqr(spot.originalSpreadPos)) + " (" + spot.originalSpreadPos.toShortString() + ")", res.getGuiScaledWidth() / 2F + 5, res.getGuiScaledHeight() / 2F, 0xFFFFFF, true);
                 }
             }
         }
@@ -443,22 +442,21 @@ public class ClientEvents {
         return String.format("%02d:%02d:%02d.%02d", hours, minutes, seconds, ticks);
     }
 
-    private void drawContainerInfo(PoseStack stack, int stored, int max, int color, Minecraft mc, Window res, int yOffset, String name, String textBelow) {
+    private void drawContainerInfo(GuiGraphics graphics, int stored, int max, int color, Minecraft mc, Window res, int yOffset, String name, String textBelow) {
         RenderSystem.setShaderColor((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 1);
 
         var x = res.getGuiScaledWidth() / 2 - 40;
         var y = res.getGuiScaledHeight() / 2 + yOffset;
         var width = Mth.ceil(stored / (float) max * 80);
 
-        RenderSystem.setShaderTexture(0, ClientEvents.OVERLAYS);
         if (width < 80)
-            Screen.blit(stack, x + width, y, width, 0, 80 - width, 6, 256, 256);
+            graphics.blit(ClientEvents.OVERLAYS, x + width, y, width, 0, 80 - width, 6, 256, 256);
         if (width > 0)
-            Screen.blit(stack, x, y, 0, 6, width, 6, 256, 256);
+            graphics.blit(ClientEvents.OVERLAYS, x, y, 0, 6, width, 6, 256, 256);
 
-        mc.font.drawShadow(stack, name, x + 40 - mc.font.width(name) / 2F, y - 9, color);
+        graphics.drawString(mc.font, name, x + 40 - mc.font.width(name) / 2F, y - 9, color, true);
 
         if (textBelow != null)
-            mc.font.drawShadow(stack, textBelow, x + 40 - mc.font.width(textBelow) / 2F, y + 7, color);
+            graphics.drawString(mc.font, textBelow, x + 40 - mc.font.width(textBelow) / 2F, y + 7, color, true);
     }
 }

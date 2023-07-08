@@ -4,12 +4,11 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntityTimeChanger;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 
 public class BlockTimeChanger extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockTimeChanger() {
-        super("time_changer", BlockEntityTimeChanger.class, Properties.of(Material.STONE).strength(2.5F).sound(SoundType.STONE));
+        super("time_changer", BlockEntityTimeChanger.class, Properties.of().strength(2.5F).sound(SoundType.STONE));
     }
 
     @Override

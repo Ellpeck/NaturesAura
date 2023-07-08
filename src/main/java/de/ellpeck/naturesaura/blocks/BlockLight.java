@@ -11,7 +11,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
@@ -22,7 +21,7 @@ public class BlockLight extends BlockImpl implements ICustomBlockState, INoItemB
     private static final VoxelShape SHAPE = Block.box(4, 4, 4, 12, 12, 12);
 
     public BlockLight() {
-        super("light", Properties.of(Material.WOOL).noCollission().lightLevel(s -> 15));
+        super("light", Properties.of().noCollission().lightLevel(s -> 15));
     }
 
     @Override

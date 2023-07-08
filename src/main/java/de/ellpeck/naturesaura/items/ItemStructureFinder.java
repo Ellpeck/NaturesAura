@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.items;
 import de.ellpeck.naturesaura.entities.EntityStructureFinder;
 import de.ellpeck.naturesaura.entities.ModEntities;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -31,7 +31,7 @@ public class ItemStructureFinder extends ItemImpl {
     public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn) {
         var stack = playerIn.getItemInHand(handIn);
         if (!levelIn.isClientSide && ((ServerLevel) levelIn).structureManager().shouldGenerateStructures()) {
-            var registry = levelIn.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY);
+            var registry = levelIn.registryAccess().registryOrThrow(Registries.STRUCTURE);
             var holderSet = registry.getHolder(this.structure).map(HolderSet::direct).orElse(null);
             if (holderSet != null) {
                 var pos = ((ServerLevel) levelIn).getChunkSource().getGenerator().findNearestMapStructure((ServerLevel) levelIn, holderSet, playerIn.blockPosition(), this.radius, false);

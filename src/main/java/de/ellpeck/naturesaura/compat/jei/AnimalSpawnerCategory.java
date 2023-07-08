@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.compat.jei;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.recipes.AnimalSpawnerRecipe;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -15,6 +15,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -47,8 +48,8 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
         RenderSystem.applyModelViewMatrix();
         matrixstack.translate(0.0D, 0.0D, 1000.0D);
         matrixstack.scale(scale, scale, scale);
-        var quaternion = Vector3f.ZP.rotationDegrees(180.0F);
-        var quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
+        var quaternion = Axis.ZP.rotationDegrees(180.0F);
+        var quaternion1 = Axis.XP.rotationDegrees(f1 * 20.0F);
         quaternion.mul(quaternion1);
         matrixstack.mulPose(quaternion);
         var f2 = entity.yBodyRot;
@@ -63,7 +64,7 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
         entity.yHeadRotO = entity.getYRot();
         Lighting.setupForEntityInInventory();
         var entityrenderermanager = Minecraft.getInstance().getEntityRenderDispatcher();
-        quaternion1.conj();
+        quaternion1.conjugate();
         entityrenderermanager.overrideCameraOrientation(quaternion1);
         entityrenderermanager.setRenderShadow(false);
         var buff = Minecraft.getInstance().renderBuffers().bufferSource();
@@ -108,7 +109,7 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
     }
 
     @Override
-    public void draw(AnimalSpawnerRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
+    public void draw(AnimalSpawnerRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
         var minecraft = Minecraft.getInstance();
         var entity = this.entityCache.get(recipe.entity);
         if (entity == null) {
@@ -116,13 +117,13 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
             this.entityCache.put(recipe.entity, entity);
         }
 
-        matrixStack.pushPose();
+        graphics.pose().pushPose();
         var size = Math.max(1F, Math.max(recipe.entity.getWidth(), recipe.entity.getHeight()));
-        AnimalSpawnerCategory.renderEntity(matrixStack, 36, 56, 100F / size * 0.4F, 40, size * 0.5F, (LivingEntity) entity);
-        matrixStack.popPose();
+        AnimalSpawnerCategory.renderEntity(graphics.pose(), 36, 56, 100F / size * 0.4F, 40, size * 0.5F, (LivingEntity) entity);
+        graphics.pose().popPose();
 
         var name = recipe.entity.getDescription().getString();
-        minecraft.font.drawShadow(matrixStack, name, 36 - minecraft.font.width(name) / 2F, 55, 0xFFFFFF);
+        graphics.drawString(minecraft.font, name, 36 - minecraft.font.width(name) / 2F, 55, 0xFFFFFF, true);
 
     }
 }

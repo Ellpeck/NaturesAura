@@ -46,7 +46,8 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
         return InteractionResult.SUCCESS;
     }
 
-    @Override
+    // TODO effect powder creative tab
+ /*   @Override
     public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
         if (this.allowedIn(tab)) {
             for (var effect : NaturesAuraAPI.EFFECT_POWDERS.keySet()) {
@@ -55,7 +56,7 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem {
                 items.add(stack);
             }
         }
-    }
+    }*/
 
     @Override
     public Component getName(ItemStack stack) {

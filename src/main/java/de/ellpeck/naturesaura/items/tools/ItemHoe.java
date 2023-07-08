@@ -31,7 +31,7 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
     private final String baseName;
 
     public ItemHoe(String baseName, Tier material, int speed) {
-        super(material, speed, 0, new Properties().tab(NaturesAura.CREATIVE_TAB));
+        super(material, speed, 0, new Properties());
         this.baseName = baseName;
         ModRegistry.ALL_ITEMS.add(this);
     }
@@ -82,10 +82,10 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
         if (!player.isShiftKeyDown() && (stack.getItem() == ModItems.SKY_HOE || stack.getItem() == ModItems.DEPTH_HOE)) {
-            var block = player.level.getBlockState(pos).getBlock();
+            var block = player.level().getBlockState(pos).getBlock();
             if (!(block instanceof BushBlock) && (stack.getItem() != ModItems.DEPTH_HOE || !(block instanceof LeavesBlock)))
                 return false;
-            if (!player.level.isClientSide) {
+            if (!player.level().isClientSide) {
                 var range = 3;
                 for (var x = -range; x <= range; x++) {
                     for (var y = -range; y <= range; y++) {
@@ -93,11 +93,11 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
                             if (x == 0 && y == 0 && z == 0)
                                 continue;
                             var offset = pos.offset(x, y, z);
-                            var offState = player.level.getBlockState(offset);
+                            var offState = player.level().getBlockState(offset);
                             if (offState.getBlock() instanceof BushBlock || stack.getItem() == ModItems.DEPTH_HOE && offState.getBlock() instanceof LeavesBlock) {
-                                var entity = offState.hasBlockEntity() ? player.level.getBlockEntity(offset) : null;
-                                Block.dropResources(offState, player.level, offset, entity, null, ItemStack.EMPTY);
-                                player.level.setBlock(offset, Blocks.AIR.defaultBlockState(), 3);
+                                var entity = offState.hasBlockEntity() ? player.level().getBlockEntity(offset) : null;
+                                Block.dropResources(offState, player.level(), offset, entity, null, ItemStack.EMPTY);
+                                player.level().setBlock(offset, Blocks.AIR.defaultBlockState(), 3);
                             }
                         }
                     }

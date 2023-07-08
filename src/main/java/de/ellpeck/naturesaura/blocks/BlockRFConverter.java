@@ -4,12 +4,11 @@ import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityRFConverter;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 
 public class BlockRFConverter extends BlockContainerImpl {
 
     public BlockRFConverter() {
-        super("rf_converter", BlockEntityRFConverter.class, Properties.of(Material.STONE).sound(SoundType.STONE).strength(3));
+        super("rf_converter", BlockEntityRFConverter.class, Properties.of().sound(SoundType.STONE).strength(3));
     }
 
     @Override

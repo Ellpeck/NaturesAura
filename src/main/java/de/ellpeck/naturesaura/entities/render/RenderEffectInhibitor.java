@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.entities.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.items.ItemEffectPowder;
 import de.ellpeck.naturesaura.items.ModItems;
@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -40,11 +41,11 @@ public class RenderEffectInhibitor extends EntityRenderer<EntityEffectInhibitor>
         var time = entity.renderTicks + entity.getId() + partialTicks;
         var bob = (float) Math.sin(time / 10F) * 0.05F;
         matrixStackIn.translate(0, 0.15F + bob, 0);
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(time * 3 % 360));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(time * 3 % 360));
         var effect = entity.getInhibitedEffect();
         var stack = this.items.computeIfAbsent(effect,
                 res -> ItemEffectPowder.setEffect(new ItemStack(ModItems.EFFECT_POWDER), effect));
-        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
+        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.GROUND, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, entity.level(), 0);
         matrixStackIn.popPose();
     }
 }

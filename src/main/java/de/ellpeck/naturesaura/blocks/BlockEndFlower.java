@@ -21,8 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -38,7 +37,7 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
     protected static final VoxelShape SHAPE = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 
     public BlockEndFlower() {
-        super(Properties.of(Material.GRASS).noCollission().strength(0.5F).sound(SoundType.GRASS));
+        super(Properties.of().noCollission().strength(0.5F).sound(SoundType.GRASS));
         MinecraftForge.EVENT_BUS.register(this);
         ModRegistry.ALL_ITEMS.add(this);
         ModRegistry.ALL_ITEMS.add(new ModTileType<>(BlockEntityEndFlower::new, this));
@@ -54,20 +53,20 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
     @SubscribeEvent
     public void onDragonTick(LivingEvent.LivingTickEvent event) {
         var living = event.getEntity();
-        if (living.level.isClientSide || !(living instanceof EnderDragon dragon))
+        if (living.level().isClientSide || !(living instanceof EnderDragon dragon))
             return;
         if (dragon.dragonDeathTime < 150 || dragon.dragonDeathTime % 10 != 0)
             return;
 
         for (var i = 0; i < 6; i++) {
-            var x = dragon.level.random.nextInt(256) - 128;
-            var z = dragon.level.random.nextInt(256) - 128;
-            var pos = new BlockPos(x, dragon.level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z);
-            if (!dragon.level.isLoaded(pos))
+            var x = dragon.level().random.nextInt(256) - 128;
+            var z = dragon.level().random.nextInt(256) - 128;
+            var pos = new BlockPos(x, dragon.level().getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z);
+            if (!dragon.level().isLoaded(pos))
                 continue;
-            if (dragon.level.getBlockState(pos.below()).getBlock() != Blocks.END_STONE)
+            if (dragon.level().getBlockState(pos.below()).getBlock() != Blocks.END_STONE)
                 continue;
-            dragon.level.setBlockAndUpdate(pos, this.defaultBlockState());
+            dragon.level().setBlockAndUpdate(pos, this.defaultBlockState());
         }
     }
 
@@ -104,9 +103,10 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
         levelIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
     }
 
+
     @Override
     @SuppressWarnings("deprecation")
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         var tile = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (tile instanceof BlockEntityEndFlower f && f.isDrainMode)
             return NonNullList.create();

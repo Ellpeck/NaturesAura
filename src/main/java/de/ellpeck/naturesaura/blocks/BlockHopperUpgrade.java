@@ -5,7 +5,6 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntityHopperUpgrade;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -13,7 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockHopperUpgrade extends BlockContainerImpl implements IVisualizable {
 
     public BlockHopperUpgrade() {
-        super("hopper_upgrade", BlockEntityHopperUpgrade.class, Properties.of(Material.METAL).strength(2.5F).sound(SoundType.METAL));
+        super("hopper_upgrade", BlockEntityHopperUpgrade.class, Properties.of().strength(2.5F).sound(SoundType.METAL));
     }
 
     @Override

@@ -12,10 +12,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -26,7 +26,7 @@ public class BlockAncientSapling extends BushBlock implements BonemealableBlock,
     protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
     public BlockAncientSapling() {
-        super(Properties.of(Material.GRASS).strength(0.0F).sound(SoundType.GRASS));
+        super(Properties.of().strength(0.0F).sound(SoundType.GRASS));
         ModRegistry.ALL_ITEMS.add(this);
     }
 
@@ -58,7 +58,7 @@ public class BlockAncientSapling extends BushBlock implements BonemealableBlock,
     }
 
     @Override
-    public boolean isValidBonemealTarget(BlockGetter level, BlockPos pos, BlockState state, boolean b) {
+    public boolean isValidBonemealTarget(LevelReader p_256559_, BlockPos p_50898_, BlockState p_50899_, boolean p_50900_) {
         return true;
     }
 

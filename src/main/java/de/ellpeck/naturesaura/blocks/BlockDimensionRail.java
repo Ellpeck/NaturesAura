@@ -99,7 +99,7 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
             @Override
             public Entity placeEntity(Entity entity, ServerLevel currentLevel, ServerLevel destLevel, float yaw, Function<Boolean, Entity> repositionEntity) {
                 // repositionEntity always causes a NPE because why wouldn't it, so this is a fixed copy
-                entity.level.getProfiler().popPush("reloading");
+                entity.level().getProfiler().popPush("reloading");
                 var result = entity.getType().create(destLevel);
                 if (result != null) {
                     result.restoreFrom(entity);

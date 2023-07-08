@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.api.render.ITrinketItem.RenderType;
@@ -48,9 +48,9 @@ public class PlayerLayerTrinkets extends RenderLayer<AbstractClientPlayer, Playe
         var yaw = player.yHeadRotO + (player.yHeadRot - player.yHeadRotO) * partialTicks;
         var yawOffset = player.yBodyRotO + (player.yBodyRot - player.yBodyRotO) * partialTicks;
         var pitch = player.xRotO + (player.getXRot() - player.xRotO) * partialTicks;
-        matrixStackIn.mulPose(Vector3f.YN.rotationDegrees(yawOffset));
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(yaw - 270));
-        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(pitch));
+        matrixStackIn.mulPose(Axis.YN.rotationDegrees(yawOffset));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(yaw - 270));
+        matrixStackIn.mulPose(Axis.ZP.rotationDegrees(pitch));
         this.render(player, RenderType.HEAD, main, second, matrixStackIn, bufferIn, packedLightIn);
         matrixStackIn.popPose();
     }
@@ -76,7 +76,7 @@ public class PlayerLayerTrinkets extends RenderLayer<AbstractClientPlayer, Playe
                 matrices.pushPose();
                 if (type == RenderType.BODY && player.getPose() == Pose.CROUCHING) {
                     matrices.translate(0F, 0.2F, 0F);
-                    matrices.mulPose(Vector3f.XP.rotationDegrees(90F / (float) Math.PI));
+                    matrices.mulPose(Axis.XP.rotationDegrees(90F / (float) Math.PI));
                 }
                 ((ITrinketItem) item).render(stack, player, type, matrices, buffer, packedLight, stack == main || stack == second);
                 matrices.popPose();

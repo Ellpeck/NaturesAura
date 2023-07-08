@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.recipes;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -38,11 +39,11 @@ public class AnimalSpawnerRecipe extends ModRecipe {
         // passed position is zero on the client, so we don't want to do initialization stuff for the entity
         if (pos == BlockPos.ZERO)
             return this.entity.create(level);
-        return this.entity.create((ServerLevel) level, null, null, null, pos, MobSpawnType.SPAWNER, false, false);
+        return this.entity.create((ServerLevel) level, null, null, pos, MobSpawnType.SPAWNER, false, false);
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess access) {
         return ItemStack.EMPTY;
     }
 

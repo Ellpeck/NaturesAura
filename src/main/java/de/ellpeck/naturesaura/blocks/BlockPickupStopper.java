@@ -10,7 +10,6 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -21,7 +20,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockPickupStopper() {
-        super("pickup_stopper", BlockEntityPickupStopper.class, Properties.of(Material.STONE).strength(2F).sound(SoundType.STONE));
+        super("pickup_stopper", BlockEntityPickupStopper.class, Properties.of().strength(2F).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -32,7 +31,7 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
         if (player != null && !player.isShiftKeyDown()) {
             var item = event.getItem();
             var pos = item.blockPosition();
-            Helper.getBlockEntitiesInArea(item.level, pos, 8, tile -> {
+            Helper.getBlockEntitiesInArea(item.level(), pos, 8, tile -> {
                 if (!(tile instanceof BlockEntityPickupStopper stopper))
                     return false;
                 var radius = stopper.getRadius();
@@ -44,8 +43,8 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
 
                 event.setCanceled(true);
 
-                if (item.level.getGameTime() % 3 == 0)
-                    PacketHandler.sendToAllAround(item.level, pos, 32,
+                if (item.level().getGameTime() % 3 == 0)
+                    PacketHandler.sendToAllAround(item.level(), pos, 32,
                             new PacketParticles((float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.PICKUP_STOPPER));
                 return true;
             });

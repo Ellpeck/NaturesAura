@@ -36,7 +36,7 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
     private final String baseName;
 
     public ItemPickaxe(String baseName, Tier material, int damage, float speed) {
-        super(material, damage, speed, new Properties().tab(NaturesAura.CREATIVE_TAB));
+        super(material, damage, speed, new Properties());
         this.baseName = baseName;
         ModRegistry.ALL_ITEMS.add(this);
     }
@@ -90,8 +90,8 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
 
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
-        if (itemstack.getItem() == ModItems.DEPTH_PICKAXE && Helper.isToolEnabled(itemstack) && player.level.getBlockState(pos).is(Tags.Blocks.ORES)) {
-            Helper.mineRecursively(player.level, pos, pos, true, 5, 5, s -> s.is(Tags.Blocks.ORES));
+        if (itemstack.getItem() == ModItems.DEPTH_PICKAXE && Helper.isToolEnabled(itemstack) && player.level().getBlockState(pos).is(Tags.Blocks.ORES)) {
+            Helper.mineRecursively(player.level(), pos, pos, true, 5, 5, s -> s.is(Tags.Blocks.ORES));
             return true;
         }
         return false;

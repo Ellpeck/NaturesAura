@@ -13,6 +13,7 @@ import de.ellpeck.naturesaura.misc.LevelData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -117,22 +118,19 @@ public final class Helper {
     }
 
     public static boolean areItemsEqual(ItemStack first, ItemStack second, boolean nbt) {
-        if (!ItemStack.isSame(first, second))
-            return false;
-        return !nbt || ItemStack.tagMatches(first, second);
+        // TODO see if this is the correct new comparison method?
+        return nbt ? ItemStack.isSameItemSameTags(first, second) : ItemStack.isSameItem(first, second);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void renderItemInGui(ItemStack stack, int x, int y, float scale) {
-        var poseStack = RenderSystem.getModelViewStack();
+    public static void renderItemInGui(GuiGraphics graphics, ItemStack stack, int x, int y, float scale) {
+        var poseStack = graphics.pose();
         poseStack.pushPose();
         poseStack.translate(x, y, 0);
         poseStack.scale(scale, scale, scale);
-        RenderSystem.applyModelViewMatrix();
-        Minecraft.getInstance().getItemRenderer().renderGuiItem(stack, 0, 0);
-        Minecraft.getInstance().getItemRenderer().renderGuiItemDecorations(Minecraft.getInstance().font, stack, 0, 0, null);
+        graphics.renderItem(stack, 0, 0);
+        graphics.renderItemDecorations(Minecraft.getInstance().font, stack, 0, 0, null);
         poseStack.popPose();
-        RenderSystem.applyModelViewMatrix();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -164,18 +162,18 @@ public final class Helper {
     }
 
     public static InteractionResult putStackOnTile(Player player, InteractionHand hand, BlockPos pos, int slot, boolean sound) {
-        var tile = player.level.getBlockEntity(pos);
+        var tile = player.level().getBlockEntity(pos);
         if (tile instanceof BlockEntityImpl) {
             var handler = ((BlockEntityImpl) tile).getItemHandler();
             if (handler != null) {
                 var handStack = player.getItemInHand(hand);
                 if (!handStack.isEmpty()) {
-                    var remain = handler.insertItem(slot, handStack, player.level.isClientSide);
+                    var remain = handler.insertItem(slot, handStack, player.level().isClientSide);
                     if (!ItemStack.matches(remain, handStack)) {
                         if (sound)
-                            player.level.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                            player.level().playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                                     SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.PLAYERS, 0.75F, 1F);
-                        if (!player.level.isClientSide)
+                        if (!player.level().isClientSide)
                             player.setItemInHand(hand, remain);
                         return InteractionResult.SUCCESS;
                     }
@@ -183,13 +181,13 @@ public final class Helper {
 
                 if (!handler.getStackInSlot(slot).isEmpty()) {
                     if (sound)
-                        player.level.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                        player.level().playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                                 SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.PLAYERS, 0.75F, 1F);
-                    if (!player.level.isClientSide) {
+                    if (!player.level().isClientSide) {
                         var stack = handler.getStackInSlot(slot);
                         if (!player.addItem(stack)) {
-                            var item = new ItemEntity(player.level, player.getX(), player.getY(), player.getZ(), stack);
-                            player.level.addFreshEntity(item);
+                            var item = new ItemEntity(player.level(), player.getX(), player.getY(), player.getZ(), stack);
+                            player.level().addFreshEntity(item);
                         }
                         handler.setStackInSlot(slot, ItemStack.EMPTY);
                     }
@@ -260,7 +258,7 @@ public final class Helper {
     public static void addAdvancement(Player player, ResourceLocation advancement, String criterion) {
         if (!(player instanceof ServerPlayer playerMp))
             return;
-        var adv = playerMp.getLevel().getServer().getAdvancements().getAdvancement(advancement);
+        var adv = playerMp.level().getServer().getAdvancements().getAdvancement(advancement);
         if (adv != null)
             playerMp.getAdvancements().award(adv, criterion);
     }
@@ -372,7 +370,7 @@ public final class Helper {
             return false;
         var disabled = !Helper.isToolEnabled(stack);
         stack.getOrCreateTag().putBoolean(NaturesAura.MOD_ID + ":disabled", !disabled);
-        player.level.playSound(null, player.getX() + 0.5, player.getY() + 0.5, player.getZ() + 0.5, SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS, 0.65F, 1F);
+        player.level().playSound(null, player.getX() + 0.5, player.getY() + 0.5, player.getZ() + 0.5, SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS, 0.65F, 1F);
         return true;
     }
 }

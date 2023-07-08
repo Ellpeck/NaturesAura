@@ -10,6 +10,8 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.LongTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -57,15 +59,15 @@ public class EntityMoverMinecart extends Minecart {
             return;
         var pos = this.blockPosition();
 
-        if (!this.spotOffsets.isEmpty() && this.level.getGameTime() % 10 == 0)
-            PacketHandler.sendToAllAround(this.level, pos, 32, new PacketParticles(
+        if (!this.spotOffsets.isEmpty() && this.level().getGameTime() % 10 == 0)
+            PacketHandler.sendToAllAround(this.level(), pos, 32, new PacketParticles(
                     (float) this.getX(), (float) this.getY(), (float) this.getZ(), PacketParticles.Type.MOVER_CART,
                     Mth.floor(this.getDeltaMovement().x * 100F), Mth.floor(this.getDeltaMovement().y * 100F), Mth.floor(this.getDeltaMovement().z * 100F)));
 
         if (pos.distSqr(this.lastPosition) < 8 * 8)
             return;
 
-        this.moveAura(this.level, this.lastPosition, this.level, pos);
+        this.moveAura(this.level(), this.lastPosition, this.level(), pos);
         this.lastPosition = pos;
     }
 
@@ -93,13 +95,13 @@ public class EntityMoverMinecart extends Minecart {
 
             var pos = this.blockPosition();
             if (!this.isActive) {
-                this.moveAura(this.level, this.lastPosition, this.level, pos);
+                this.moveAura(this.level(), this.lastPosition, this.level(), pos);
                 this.spotOffsets.clear();
                 this.lastPosition = BlockPos.ZERO;
                 return;
             }
 
-            IAuraChunk.getSpotsInArea(this.level, pos, 25, (spot, amount) -> {
+            IAuraChunk.getSpotsInArea(this.level(), pos, 25, (spot, amount) -> {
                 if (amount > 0)
                     this.spotOffsets.add(spot.subtract(pos));
             });
@@ -110,7 +112,7 @@ public class EntityMoverMinecart extends Minecart {
     @Override
     public void destroy(DamageSource source) {
         this.kill();
-        if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS))
+        if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS))
             this.spawnAtLocation(new ItemStack(ModItems.MOVER_CART), 0);
     }
 
@@ -145,7 +147,7 @@ public class EntityMoverMinecart extends Minecart {
         var entity = super.changeDimension(destination, teleporter);
         if (entity instanceof EntityMoverMinecart) {
             var pos = entity.blockPosition();
-            this.moveAura(this.level, this.lastPosition, entity.level, pos);
+            this.moveAura(this.level(), this.lastPosition, entity.level(), pos);
             ((EntityMoverMinecart) entity).lastPosition = pos;
         }
         return entity;
@@ -183,7 +185,7 @@ public class EntityMoverMinecart extends Minecart {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

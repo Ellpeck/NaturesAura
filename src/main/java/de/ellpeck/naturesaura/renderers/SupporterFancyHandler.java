@@ -34,7 +34,7 @@ public class SupporterFancyHandler {
         if (event.phase != TickEvent.Phase.END)
             return;
         var player = event.player;
-        if (!player.level.isClientSide)
+        if (!player.level().isClientSide)
             return;
         if (player.isInvisible() || !player.isModelPartShown(PlayerModelPart.CAPE))
             return;
@@ -45,12 +45,12 @@ public class SupporterFancyHandler {
         if (info == null)
             return;
 
-        var rand = player.level.random;
+        var rand = player.level().random;
         if (rand.nextFloat() >= 0.75F) {
             int color;
             if (info.tier == 1) {
                 var pos = player.blockPosition();
-                color = BiomeColors.getAverageGrassColor(player.level, pos);
+                color = BiomeColors.getAverageGrassColor(player.level(), pos);
             } else {
                 color = info.color;
             }

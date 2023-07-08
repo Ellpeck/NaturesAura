@@ -9,7 +9,6 @@ import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -31,7 +30,7 @@ public class ItemSword extends SwordItem implements IModItem, ICustomItemModel {
     private final String baseName;
 
     public ItemSword(String baseName, Tier material, int damage, float speed) {
-        super(material, damage, speed, new Properties().tab(NaturesAura.CREATIVE_TAB));
+        super(material, damage, speed, new Properties());
         this.baseName = baseName;
         ModRegistry.ALL_ITEMS.add(this);
     }
@@ -50,10 +49,11 @@ public class ItemSword extends SwordItem implements IModItem, ICustomItemModel {
         } else if (this == ModItems.DEPTH_SWORD && attacker instanceof Player player) {
             // this is just a modified copy of Player.attack's sweeping damage code
             var damage = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.75F;
-            for (var other : player.level.getEntitiesOfClass(LivingEntity.class, stack.getSweepHitBox(player, target))) {
-                if (other != player && other != target && !player.isAlliedTo(other) && (!(other instanceof ArmorStand stand) || !stand.isMarker()) && player.canHit(other, 0)) {
+            for (var other : player.level().getEntitiesOfClass(LivingEntity.class, stack.getSweepHitBox(player, target))) {
+                // TODO we removed canHit here, is that okay?
+                if (other != player && other != target && !player.isAlliedTo(other) && (!(other instanceof ArmorStand stand) || !stand.isMarker())) {
                     other.knockback(0.4F, Mth.sin(player.getYRot() * (Mth.PI / 180)), -Mth.cos(player.getYRot() * (Mth.PI / 180)));
-                    other.hurt(DamageSource.playerAttack(player), damage);
+                    other.hurt(other.damageSources().playerAttack(player), damage);
                 }
             }
             // this just displays the particles

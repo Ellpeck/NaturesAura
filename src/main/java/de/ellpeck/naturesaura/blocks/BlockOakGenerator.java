@@ -14,7 +14,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -25,7 +24,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class BlockOakGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockOakGenerator() {
-        super("oak_generator", BlockEntityOakGenerator.class, Properties.of(Material.WOOD).strength(2F).sound(SoundType.WOOD));
+        super("oak_generator", BlockEntityOakGenerator.class, Properties.of().strength(2F).sound(SoundType.WOOD));
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -39,11 +38,11 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
             Helper.getBlockEntitiesInArea(level, pos, 10, tile -> {
                 if (!(tile instanceof BlockEntityOakGenerator oak))
                     return false;
-                var replacement = BlockOakGenerator.getReplacement(event.getFeature());
+               /* var replacement = BlockOakGenerator.getReplacement(event.getFeature());
                 if (replacement != null) {
                     oak.scheduledBigTrees.add(pos);
                     event.setFeature(replacement);
-                }
+                }*/
                 return true;
             });
         }
@@ -69,7 +68,8 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
                 generator.modLoc("block/" + this.getBaseName() + "_top")));
     }
 
-    private static Holder<? extends ConfiguredFeature<?, ?>> getReplacement(Holder<? extends ConfiguredFeature<?, ?>> feature) {
+    // TODO oak gen replacements
+    /*private static Holder<? extends ConfiguredFeature<?, ?>> getReplacement(Holder<? extends ConfiguredFeature<?, ?>> feature) {
         if (feature == TreeFeatures.FANCY_OAK || feature == TreeFeatures.FANCY_OAK_BEES) {
             return TreeFeatures.OAK;
         } else if (feature == TreeFeatures.FANCY_OAK_BEES_002) {
@@ -81,5 +81,5 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
         } else {
             return null;
         }
-    }
+    }*/
 }

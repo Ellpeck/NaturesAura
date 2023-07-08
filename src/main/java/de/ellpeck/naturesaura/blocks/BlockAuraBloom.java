@@ -10,7 +10,6 @@ import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -23,7 +22,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +35,7 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
     private final Block[] allowedGround;
 
     public BlockAuraBloom(String baseName, Block... allowedGround) {
-        super(Properties.of(Material.PLANT).noCollission().strength(0).sound(SoundType.GRASS));
+        super(Properties.of().noCollission().strength(0).sound(SoundType.GRASS));
         this.baseName = baseName;
         this.allowedGround = allowedGround;
         ModRegistry.ALL_ITEMS.add(this);
@@ -58,7 +56,7 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
     @SuppressWarnings("deprecation")
     public void entityInside(BlockState state, Level levelIn, BlockPos pos, Entity entityIn) {
         if (this == ModBlocks.AURA_CACTUS)
-            entityIn.hurt(DamageSource.CACTUS, 1);
+            entityIn.hurt(entityIn.damageSources().cactus(), 1);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.recipes;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -21,7 +22,7 @@ public abstract class ModRecipe implements Recipe<RecipeWrapper> {
     }
 
     @Override
-    public ItemStack assemble(RecipeWrapper inv) {
+    public ItemStack assemble(RecipeWrapper inv, RegistryAccess access) {
         return ItemStack.EMPTY;
     }
 

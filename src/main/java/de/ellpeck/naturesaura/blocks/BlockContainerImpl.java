@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 import javax.annotation.Nullable;
@@ -113,7 +113,7 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
 
     @Override
     @SuppressWarnings("deprecation")
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         var drops = super.getDrops(state, builder);
 
         var tile = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
@@ -176,7 +176,8 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     private BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         try {
             return this.tileClass.getConstructor(BlockPos.class, BlockState.class).newInstance(pos, state);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
             throw new IllegalStateException("Cannot construct block entity from class " + this.tileClass, e);
         }
     }

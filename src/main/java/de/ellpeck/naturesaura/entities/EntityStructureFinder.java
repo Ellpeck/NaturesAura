@@ -92,7 +92,7 @@ public class EntityStructureFinder extends EyeOfEnder {
             this.yRotO += 360.0F;
         this.setXRot(Mth.lerp(0.2F, this.xRotO, this.getXRot()));
         this.setYRot(Mth.lerp(0.2F, this.yRotO, this.getYRot()));
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             var d3 = this.targetX - d0;
             var d4 = this.targetZ - d2;
             var f1 = (float) Math.sqrt(d3 * d3 + d4 * d4);
@@ -111,21 +111,21 @@ public class EntityStructureFinder extends EyeOfEnder {
 
         if (this.isInWater()) {
             for (var i = 0; i < 4; ++i)
-                this.level.addParticle(ParticleTypes.BUBBLE, d0 - vec3d.x * 0.25D, d1 - vec3d.y * 0.25D, d2 - vec3d.z * 0.25D, vec3d.x, vec3d.y, vec3d.z);
-        } else if (this.level.isClientSide) {
+                this.level().addParticle(ParticleTypes.BUBBLE, d0 - vec3d.x * 0.25D, d1 - vec3d.y * 0.25D, d2 - vec3d.z * 0.25D, vec3d.x, vec3d.y, vec3d.z);
+        } else if (this.level().isClientSide) {
             NaturesAuraAPI.instance().spawnMagicParticle(d0 - vec3d.x * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, d1 - vec3d.y * 0.25D - 0.5D, d2 - vec3d.z * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, vec3d.x * 0.25F, vec3d.y * 0.25F, vec3d.z * 0.25F, this.entityData.get(EntityStructureFinder.COLOR), 1, 50, 0, false, true);
         }
 
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.setPos(d0, d1, d2);
             ++this.despawnTimer;
-            if (this.despawnTimer > 80 && !this.level.isClientSide) {
+            if (this.despawnTimer > 80 && !this.level().isClientSide) {
                 this.playSound(SoundEvents.ENDER_EYE_DEATH, 1.0F, 1.0F);
                 this.remove(RemovalReason.DISCARDED);
                 if (this.shatterOrDrop) {
-                    this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.getItem()));
+                    this.level().addFreshEntity(new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getItem()));
                 } else {
-                    PacketHandler.sendToAllAround(this.level, this.blockPosition(), 32, new PacketParticles((float) this.getX(), (float) this.getY(), (float) this.getZ(), PacketParticles.Type.STRUCTURE_FINDER, this.getId()));
+                    PacketHandler.sendToAllAround(this.level(), this.blockPosition(), 32, new PacketParticles((float) this.getX(), (float) this.getY(), (float) this.getZ(), PacketParticles.Type.STRUCTURE_FINDER, this.getId()));
                 }
             }
         } else {

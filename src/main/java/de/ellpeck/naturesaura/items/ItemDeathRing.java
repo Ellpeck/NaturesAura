@@ -23,7 +23,7 @@ public class ItemDeathRing extends ItemImpl {
         @SubscribeEvent
         public void onDeath(LivingDeathEvent event) {
             var entity = event.getEntity();
-            if (!entity.level.isClientSide && entity instanceof Player) {
+            if (!entity.level().isClientSide && entity instanceof Player) {
                 var equipped = Helper.getEquippedItem(s -> s.getItem() == ModItems.DEATH_RING, (Player) entity);
                 if (!equipped.isEmpty()) {
                     entity.setHealth(entity.getMaxHealth() / 2);
@@ -32,7 +32,7 @@ public class ItemDeathRing extends ItemImpl {
 
                     var data = new CompoundTag();
                     data.putInt("id", entity.getId());
-                    PacketHandler.sendToAllAround(entity.level, entity.blockPosition(), 32, new PacketClient(1, data));
+                    PacketHandler.sendToAllAround(entity.level(), entity.blockPosition(), 32, new PacketClient(1, data));
 
                     equipped.shrink(1);
                     event.setCanceled(true);

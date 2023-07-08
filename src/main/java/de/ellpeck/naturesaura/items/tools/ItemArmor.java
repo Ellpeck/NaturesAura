@@ -35,8 +35,8 @@ public class ItemArmor extends ArmorItem implements IModItem {
     private static final Map<ArmorMaterial, Item[]> SETS = new ConcurrentHashMap<>();
     private final String baseName;
 
-    public ItemArmor(String baseName, ArmorMaterial materialIn, EquipmentSlot equipmentSlotIn) {
-        super(materialIn, equipmentSlotIn, new Properties().tab(NaturesAura.CREATIVE_TAB));
+    public ItemArmor(String baseName, ArmorMaterial materialIn, ArmorItem.Type equipmentSlotIn) {
+        super(materialIn, equipmentSlotIn, new Properties());
         this.baseName = baseName;
         ModRegistry.ALL_ITEMS.add(this);
     }
@@ -44,7 +44,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
     public static boolean isFullSetEquipped(LivingEntity entity, ArmorMaterial material) {
         var set = ItemArmor.SETS.computeIfAbsent(material, m -> ForgeRegistries.ITEMS.getValues().stream()
                 .filter(i -> i instanceof ItemArmor && ((ItemArmor) i).getMaterial() == material)
-                .sorted(Comparator.comparingInt(i -> ((ItemArmor) i).getSlot().ordinal()))
+                .sorted(Comparator.comparingInt(i -> ((ItemArmor) i).getEquipmentSlot().ordinal()))
                 .toArray(Item[]::new));
         for (var i = 0; i < 4; i++) {
             var slot = EquipmentSlot.values()[i + 2];
@@ -72,13 +72,13 @@ public class ItemArmor extends ArmorItem implements IModItem {
         @SubscribeEvent
         public static void onAttack(LivingAttackEvent event) {
             var entity = event.getEntity();
-            if (!entity.level.isClientSide) {
+            if (!entity.level().isClientSide) {
                 if (ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.INFUSED)) {
                     var source = event.getSource().getEntity();
                     if (source instanceof LivingEntity)
                         ((LivingEntity) source).addEffect(new MobEffectInstance(MobEffects.WITHER, 40));
                 } else if (ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.DEPTH)) {
-                    for (var other : entity.level.getEntitiesOfClass(LivingEntity.class, new AABB(entity.position(), Vec3.ZERO).inflate(2))) {
+                    for (var other : entity.level().getEntitiesOfClass(LivingEntity.class, new AABB(entity.position(), Vec3.ZERO).inflate(2))) {
                         if (other != entity && (!(other instanceof Player otherPlayer) || !otherPlayer.isAlliedTo(entity)))
                             other.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 255));
                     }
@@ -97,13 +97,13 @@ public class ItemArmor extends ArmorItem implements IModItem {
                 // we just equipped it
                 nbt.putBoolean(key, true);
                 // TODO use new forge attribute for step height
-                player.maxUpStep = 1.1F;
+                player.setMaxUpStep(1.1F);
                 if (!speed.hasModifier(ItemArmor.SKY_MOVEMENT_MODIFIER))
                     speed.addPermanentModifier(ItemArmor.SKY_MOVEMENT_MODIFIER);
             } else if (!equipped && nbt.getBoolean(key)) {
                 // we just unequipped it
                 nbt.putBoolean(key, false);
-                player.maxUpStep = 0.6F;
+                player.setMaxUpStep(0.6F);
                 speed.removeModifier(ItemArmor.SKY_MOVEMENT_MODIFIER);
             }
         }

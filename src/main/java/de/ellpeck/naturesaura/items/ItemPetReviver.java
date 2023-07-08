@@ -33,19 +33,19 @@ public class ItemPetReviver extends ItemImpl {
         @SubscribeEvent
         public void onEntityTick(LivingEvent.LivingTickEvent event) {
             var entity = event.getEntity();
-            if (entity.level.isClientSide || entity.level.getGameTime() % 20 != 0 || !(entity instanceof TamableAnimal tameable))
+            if (entity.level().isClientSide || entity.level().getGameTime() % 20 != 0 || !(entity instanceof TamableAnimal tameable))
                 return;
             if (!tameable.isTame() || !tameable.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":pet_reviver"))
                 return;
             var owner = tameable.getOwner();
             if (owner == null || owner.distanceToSqr(tameable) > 5 * 5)
                 return;
-            if (entity.level.random.nextFloat() >= 0.65F) {
-                ((ServerLevel) entity.level).sendParticles(ParticleTypes.HEART,
-                        entity.getX() + entity.level.random.nextGaussian() * 0.25F,
-                        entity.getEyeY() + entity.level.random.nextGaussian() * 0.25F,
-                        entity.getZ() + entity.level.random.nextGaussian() * 0.25F,
-                        entity.level.random.nextInt(2) + 1, 0, 0, 0, 0);
+            if (entity.level().random.nextFloat() >= 0.65F) {
+                ((ServerLevel) entity.level()).sendParticles(ParticleTypes.HEART,
+                        entity.getX() + entity.level().random.nextGaussian() * 0.25F,
+                        entity.getEyeY() + entity.level().random.nextGaussian() * 0.25F,
+                        entity.getZ() + entity.level().random.nextGaussian() * 0.25F,
+                        entity.level().random.nextInt(2) + 1, 0, 0, 0, 0);
             }
         }
 
@@ -61,7 +61,7 @@ public class ItemPetReviver extends ItemImpl {
             if (stack.getItem() != ModItems.PET_REVIVER)
                 return;
             target.getPersistentData().putBoolean(NaturesAura.MOD_ID + ":pet_reviver", true);
-            if (!target.level.isClientSide)
+            if (!target.level().isClientSide)
                 stack.shrink(1);
             event.setCancellationResult(InteractionResult.SUCCESS);
             event.setCanceled(true);
@@ -71,13 +71,13 @@ public class ItemPetReviver extends ItemImpl {
         @SubscribeEvent(priority = EventPriority.LOWEST)
         public void onLivingDeath(LivingDeathEvent event) {
             var entity = event.getEntity();
-            if (entity.level.isClientSide || !(entity instanceof TamableAnimal tameable))
+            if (entity.level().isClientSide || !(entity instanceof TamableAnimal tameable))
                 return;
             if (!tameable.isTame() || !tameable.getPersistentData().getBoolean(NaturesAura.MOD_ID + ":pet_reviver"))
                 return;
 
             // get the overworld, and the overworld's spawn point, by default
-            var spawnLevel = tameable.level.getServer().overworld();
+            var spawnLevel = tameable.level().getServer().overworld();
             var spawn = Vec3.atBottomCenterOf(spawnLevel.getSharedSpawnPos());
 
             // check if the owner is online, and respawn at the bed if they are
@@ -87,18 +87,18 @@ public class ItemPetReviver extends ItemImpl {
                 if (pos != null) {
                     var f = player.getRespawnAngle();
                     var b = player.isRespawnForced();
-                    var bed = Player.findRespawnPositionAndUseSpawnBlock((ServerLevel) player.level, pos, f, b, false);
+                    var bed = Player.findRespawnPositionAndUseSpawnBlock((ServerLevel) player.level(), pos, f, b, false);
                     if (bed.isPresent()) {
-                        spawnLevel = (ServerLevel) player.level;
+                        spawnLevel = (ServerLevel) player.level();
                         spawn = bed.get();
                     }
                 }
             }
 
-            PacketHandler.sendToAllAround(tameable.level, tameable.blockPosition(), 32, new PacketParticles((float) tameable.getX(), (float) tameable.getEyeY(), (float) tameable.getZ(), PacketParticles.Type.PET_REVIVER, 0xc2461d));
+            PacketHandler.sendToAllAround(tameable.level(), tameable.blockPosition(), 32, new PacketParticles((float) tameable.getX(), (float) tameable.getEyeY(), (float) tameable.getZ(), PacketParticles.Type.PET_REVIVER, 0xc2461d));
 
             var spawnedPet = tameable;
-            if (tameable.level != spawnLevel) {
+            if (tameable.level() != spawnLevel) {
                 tameable.remove(Entity.RemovalReason.DISCARDED);
                 spawnedPet = (TamableAnimal) tameable.getType().create(spawnLevel);
             }
@@ -114,7 +114,7 @@ public class ItemPetReviver extends ItemImpl {
             spawnedPet.setInSittingPose(true);
             spawnedPet.setJumping(false);
             spawnedPet.setTarget(null);
-            if (tameable.level != spawnLevel) {
+            if (tameable.level() != spawnLevel) {
                 spawnLevel.addFreshEntity(spawnedPet);
                 tameable.remove(Entity.RemovalReason.DISCARDED);
             }
@@ -123,7 +123,7 @@ public class ItemPetReviver extends ItemImpl {
             var auraPos = IAuraChunk.getHighestSpot(spawnLevel, spawnedPet.blockPosition(), 35, spawnedPet.blockPosition());
             IAuraChunk.getAuraChunk(spawnLevel, auraPos).drainAura(auraPos, 200000);
 
-            PacketHandler.sendToAllAround(spawnedPet.level, spawnedPet.blockPosition(), 32, new PacketParticles((float) spawnedPet.getX(), (float) spawnedPet.getEyeY(), (float) spawnedPet.getZ(), PacketParticles.Type.PET_REVIVER, 0x4dba2f));
+            PacketHandler.sendToAllAround(spawnedPet.level(), spawnedPet.blockPosition(), 32, new PacketParticles((float) spawnedPet.getX(), (float) spawnedPet.getEyeY(), (float) spawnedPet.getZ(), PacketParticles.Type.PET_REVIVER, 0x4dba2f));
 
             if (owner instanceof Player)
                 owner.sendSystemMessage(Component.translatable("info." + NaturesAura.MOD_ID + ".pet_reviver", spawnedPet.getDisplayName()).withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY));

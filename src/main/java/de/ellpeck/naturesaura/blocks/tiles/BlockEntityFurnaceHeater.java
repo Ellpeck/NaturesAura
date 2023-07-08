@@ -105,7 +105,7 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
             var recipe = this.level.getRecipeManager().getRecipeFor(BlockEntityFurnaceHeater.getRecipeType(furnace), furnace, this.level).orElse(null);
             if (recipe == null)
                 return false;
-            var output = recipe.getResultItem();
+            var output = recipe.getResultItem(this.level.registryAccess());
             var currOutput = furnace.getItem(2);
             return currOutput.isEmpty() || Helper.areItemsEqual(currOutput, output, true) && currOutput.getCount() + output.getCount() <= output.getMaxStackSize();
         } else

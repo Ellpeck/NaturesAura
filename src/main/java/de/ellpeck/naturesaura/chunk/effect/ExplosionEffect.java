@@ -42,7 +42,7 @@ public class ExplosionEffect implements IDrainSpotEffect {
 
     @Override
     public ActiveType isActiveHere(Player player, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (!this.calcValues(player.level, pos, spot))
+        if (!this.calcValues(player.level(), pos, spot))
             return ActiveType.INACTIVE;
         if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) > this.dist * this.dist)
             return ActiveType.INACTIVE;
@@ -65,9 +65,11 @@ public class ExplosionEffect implements IDrainSpotEffect {
         var z = Mth.floor(pos.getZ() + level.random.nextGaussian() * this.dist);
         var chosenPos = new BlockPos(x, level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z);
         if (chosenPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(chosenPos)) {
-            level.explode(null,
-                    chosenPos.getX() + 0.5, chosenPos.getY() + 0.5, chosenPos.getZ() + 0.5,
-                    this.strength, false, Explosion.BlockInteraction.DESTROY);
+            var explosion = new Explosion(level, null, chosenPos.getX() + 0.5, chosenPos.getY() + 0.5, chosenPos.getZ() + 0.5, this.strength, false, Explosion.BlockInteraction.DESTROY);
+            if (!net.minecraftforge.event.ForgeEventFactory.onExplosionStart(level, explosion)) {
+                explosion.explode();
+                explosion.finalizeExplosion(true);
+            }
         }
     }
 

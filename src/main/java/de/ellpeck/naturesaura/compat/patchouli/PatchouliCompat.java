@@ -10,8 +10,6 @@ import de.ellpeck.naturesaura.events.ClientEvents;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -29,10 +27,7 @@ import vazkii.patchouli.api.PatchouliAPI;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PatchouliCompat implements ICompat {
@@ -100,26 +95,24 @@ public class PatchouliCompat implements ICompat {
             var x = gui.width / 2 + 272 / 2 - 16;
             var y = gui.height / 2 - 180 / 2 - 26;
 
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, ClientEvents.BOOK_GUI);
-            Screen.blit(event.getPoseStack(), x, y, 469, 0, 43, 42, 512, 256);
+            event.getGraphics().blit(ClientEvents.BOOK_GUI, x, y, 469, 0, 43, 42, 512, 256);
 
             if (event.getMouseX() >= x && event.getMouseY() >= y && event.getMouseX() < x + 43 && event.getMouseY() < y + 42)
-                gui.renderComponentTooltip(event.getPoseStack(),
+                event.getGraphics().renderTooltip(Minecraft.getInstance().font,
                         Collections.singletonList(Component.literal("It's the author Ellpeck's birthday!").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GOLD))),
-                        event.getMouseX(), event.getMouseY(), gui.getMinecraft().font);
+                        Optional.empty(),
+                        event.getMouseX(), event.getMouseY());
         } else if (now.getMonth() == Month.JUNE) {
             var x = gui.width / 2 + 272 / 2;
             var y = gui.height / 2 + 32;
 
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, ClientEvents.BOOK_GUI);
-            Screen.blit(event.getPoseStack(), x, y, 424, 0, 45, 26, 512, 256);
+            event.getGraphics().blit(ClientEvents.BOOK_GUI, x, y, 424, 0, 45, 26, 512, 256);
 
             if (event.getMouseX() >= x && event.getMouseY() >= y && event.getMouseX() < x + 45 && event.getMouseY() < y + 26)
-                gui.renderComponentTooltip(event.getPoseStack(),
-                        Collections.singletonList(Component.literal("\u00A76Happy \u00A74P\u00A76r\u00A7ei\u00A72d\u00A79e\u00A75!")),
-                        event.getMouseX(), event.getMouseY(), gui.getMinecraft().font);
+                //noinspection UnnecessaryUnicodeEscape
+                event.getGraphics().renderTooltip(gui.getMinecraft().font,
+                        Collections.singletonList(Component.literal("\u00A76Happy \u00A74P\u00A76r\u00A7ei\u00A72d\u00A79e\u00A75!")), Optional.empty(),
+                        event.getMouseX(), event.getMouseY());
         }
 
         var name = gui.getMinecraft().player.getName().getString();
@@ -128,24 +121,21 @@ public class PatchouliCompat implements ICompat {
             var x = gui.width / 2 - 272 / 2 + 20;
             var y = gui.height / 2 + 180 / 2;
 
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, ClientEvents.BOOK_GUI);
-
-            Screen.blit(event.getPoseStack(), x, y, 496, 44, 16, 18, 512, 256);
+            event.getGraphics().blit(ClientEvents.BOOK_GUI, x, y, 496, 44, 16, 18, 512, 256);
             if (info.tier() == 1) {
-                Screen.blit(event.getPoseStack(), x, y, 496 - 16, 44, 16, 18, 512, 256);
+                event.getGraphics().blit(ClientEvents.BOOK_GUI, x, y, 496 - 16, 44, 16, 18, 512, 256);
             } else {
                 var r = (info.color() >> 16 & 255) / 255F;
                 var g = (info.color() >> 8 & 255) / 255F;
                 var b = (info.color() & 255) / 255F;
                 RenderSystem.setShaderColor(r, g, b, 1);
-                Screen.blit(event.getPoseStack(), x, y, 496 - 32, 44, 16, 18, 512, 256);
+                event.getGraphics().blit(ClientEvents.BOOK_GUI, x, y, 496 - 32, 44, 16, 18, 512, 256);
             }
 
             if (event.getMouseX() >= x && event.getMouseY() >= y && event.getMouseX() < x + 16 && event.getMouseY() < y + 18)
-                gui.renderComponentTooltip(event.getPoseStack(),
-                        Collections.singletonList(Component.literal("Thanks for your support, " + name + "!").setStyle(Style.EMPTY.applyFormat(ChatFormatting.YELLOW))),
-                        event.getMouseX(), event.getMouseY(), gui.getMinecraft().font);
+                event.getGraphics().renderTooltip(gui.getMinecraft().font,
+                        Collections.singletonList(Component.literal("Thanks for your support, " + name + "!").setStyle(Style.EMPTY.applyFormat(ChatFormatting.YELLOW))), Optional.empty(),
+                        event.getMouseX(), event.getMouseY());
 
         }
     }

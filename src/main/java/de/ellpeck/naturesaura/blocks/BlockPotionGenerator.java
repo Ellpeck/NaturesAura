@@ -3,12 +3,11 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityPotionGenerator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
-import net.minecraft.world.level.material.Material;
 
 public class BlockPotionGenerator extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockPotionGenerator() {
-        super("potion_generator", BlockEntityPotionGenerator.class, Properties.of(Material.STONE).strength(5F));
+        super("potion_generator", BlockEntityPotionGenerator.class, Properties.of().strength(5F));
     }
 
     @Override

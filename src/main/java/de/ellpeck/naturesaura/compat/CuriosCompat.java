@@ -60,7 +60,7 @@ public class CuriosCompat implements ICompat {
                 private final LazyOptional<ICurio> curio = LazyOptional.of(() -> new ICurio() {
                     @Override
                     public void curioTick(SlotContext slotContext) {
-                        stack.getItem().inventoryTick(stack, slotContext.entity().level, slotContext.entity(), -1, false);
+                        stack.getItem().inventoryTick(stack, slotContext.entity().level(), slotContext.entity(), -1, false);
                     }
 
                     @Override

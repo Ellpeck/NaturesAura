@@ -18,8 +18,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -29,7 +28,7 @@ public class BlockGoldenLeaves extends LeavesBlock implements IModItem, IColorPr
     public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, BlockGoldenLeaves.HIGHEST_STAGE);
 
     public BlockGoldenLeaves() {
-        super(Properties.of(Material.LEAVES, MaterialColor.GOLD).strength(0.2F).randomTicks().noOcclusion().sound(SoundType.GRASS));
+        super(Properties.of().mapColor(MapColor.GOLD).strength(0.2F).randomTicks().noOcclusion().sound(SoundType.GRASS));
         ModRegistry.ALL_ITEMS.add(this);
     }
 

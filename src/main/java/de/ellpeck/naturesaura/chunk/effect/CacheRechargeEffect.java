@@ -39,11 +39,11 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
 
     @Override
     public ActiveType isActiveHere(Player player, LevelChunk chunk, IAuraChunk auraChunk, BlockPos pos, Integer spot) {
-        if (!this.calcValues(player.level, pos, spot))
+        if (!this.calcValues(player.level(), pos, spot))
             return ActiveType.INACTIVE;
         if (!this.bb.contains(player.getEyePosition()))
             return ActiveType.INACTIVE;
-        if (NaturesAuraAPI.instance().isEffectPowderActive(player.level, player.blockPosition(), CacheRechargeEffect.NAME))
+        if (NaturesAuraAPI.instance().isEffectPowderActive(player.level(), player.blockPosition(), CacheRechargeEffect.NAME))
             return ActiveType.INHIBITED;
         return ActiveType.ACTIVE;
     }

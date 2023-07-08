@@ -29,7 +29,7 @@ public class EntityLightProjectile extends ThrowableProjectile {
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide && this.tickCount > 1) {
+        if (this.level().isClientSide && this.tickCount > 1) {
             for (float i = 0; i <= 1; i += 0.2F) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
                         Mth.lerp(i, this.xOld, this.getX()),
@@ -43,12 +43,12 @@ public class EntityLightProjectile extends ThrowableProjectile {
 
     @Override
     protected void onHit(HitResult result) {
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (result instanceof BlockHitResult res) {
                 var pos = res.getBlockPos().relative(res.getDirection());
-                var state = this.level.getBlockState(pos);
-                if (state.getMaterial().isReplaceable())
-                    this.level.setBlockAndUpdate(pos, ModBlocks.LIGHT.defaultBlockState());
+                var state = this.level().getBlockState(pos);
+                if (state.canBeReplaced())
+                    this.level().setBlockAndUpdate(pos, ModBlocks.LIGHT.defaultBlockState());
             } else if (result instanceof EntityHitResult entity) {
                 entity.getEntity().setSecondsOnFire(5);
             }

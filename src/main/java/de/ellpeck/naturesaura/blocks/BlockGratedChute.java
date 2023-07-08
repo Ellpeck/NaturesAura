@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.entity.Hopper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -51,7 +50,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     private static final VoxelShape WEST_RAYTRACE_SHAPE = Shapes.or(Hopper.INSIDE, Block.box(0.0D, 8.0D, 6.0D, 4.0D, 10.0D, 10.0D));
 
     public BlockGratedChute() {
-        super("grated_chute", BlockEntityGratedChute.class, Properties.of(Material.METAL).strength(3.0F, 8.0F).sound(SoundType.METAL));
+        super("grated_chute", BlockEntityGratedChute.class, Properties.of().strength(3.0F, 8.0F).sound(SoundType.METAL));
     }
 
     @Override

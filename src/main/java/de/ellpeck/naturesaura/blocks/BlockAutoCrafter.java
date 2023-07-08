@@ -10,14 +10,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
 
 public class BlockAutoCrafter extends BlockContainerImpl implements ICustomBlockState {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockAutoCrafter() {
-        super("auto_crafter", BlockEntityAutoCrafter.class, Properties.of(Material.WOOD).strength(1.5F).sound(SoundType.WOOD));
+        super("auto_crafter", BlockEntityAutoCrafter.class, Properties.of().strength(1.5F).sound(SoundType.WOOD));
     }
 
     @Override

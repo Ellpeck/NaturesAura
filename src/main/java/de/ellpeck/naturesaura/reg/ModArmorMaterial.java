@@ -4,7 +4,7 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
@@ -41,13 +41,13 @@ public enum ModArmorMaterial implements ArmorMaterial {
     }
 
     @Override
-    public int getDurabilityForSlot(EquipmentSlot slotIn) {
-        return ModArmorMaterial.MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
+    public int getDurabilityForType(ArmorItem.Type p_266807_) {
+        return ModArmorMaterial.MAX_DAMAGE_ARRAY[p_266807_.getSlot().getIndex()] * this.maxDamageFactor;
     }
 
     @Override
-    public int getDefenseForSlot(EquipmentSlot slotIn) {
-        return this.damageReductionAmountArray[slotIn.getIndex()];
+    public int getDefenseForType(ArmorItem.Type p_266807_) {
+        return this.damageReductionAmountArray[p_266807_.getSlot().getIndex()];
     }
 
     @Override

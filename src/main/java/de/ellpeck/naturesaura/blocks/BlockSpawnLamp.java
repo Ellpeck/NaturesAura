@@ -15,7 +15,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -24,7 +23,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -33,7 +32,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     private static final VoxelShape SHAPE = Shapes.create(4 / 16F, 0F, 4 / 16F, 12 / 16F, 13 / 16F, 12 / 16F);
 
     public BlockSpawnLamp() {
-        super("spawn_lamp", BlockEntitySpawnLamp.class, Properties.of(Material.METAL).strength(3F).lightLevel(s -> 15).sound(SoundType.METAL));
+        super("spawn_lamp", BlockEntitySpawnLamp.class, Properties.of().strength(3F).lightLevel(s -> 15).sound(SoundType.METAL));
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -43,12 +42,12 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     }
 
     @SubscribeEvent
-    public void onSpawn(LivingSpawnEvent.CheckSpawn event) {
+    public void onSpawn(MobSpawnEvent.PositionCheck event) {
         var amountToUse = 200;
         if (event.getSpawner() != null)
             return;
         var accessor = event.getLevel();
-        var pos = new BlockPos(event.getX(), event.getY(), event.getZ());
+        var pos = BlockPos.containing(event.getX(), event.getY(), event.getZ());
         if (!(accessor instanceof Level level))
             return;
         var data = (LevelData) ILevelData.getLevelData(level);
@@ -65,7 +64,7 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
                 continue;
 
             var entity = (Mob) event.getEntity();
-            if (entity.checkSpawnRules(level, event.getSpawnReason()) && entity.checkSpawnObstruction(level)) {
+            if (entity.checkSpawnRules(level, event.getSpawnType()) && entity.checkSpawnObstruction(level)) {
                 var spot = IAuraChunk.getHighestSpot(level, lampPos, 32, lampPos);
                 IAuraChunk.getAuraChunk(level, spot).drainAura(spot, amountToUse);
 

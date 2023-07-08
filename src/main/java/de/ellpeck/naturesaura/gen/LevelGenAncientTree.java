@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.gen;
 import com.mojang.serialization.Codec;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -14,9 +15,9 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.material.Material;
 
 import static net.minecraft.core.Direction.Axis;
+import static net.minecraft.world.level.block.state.BlockBehaviour.BlockStateBase;
 
 public class LevelGenAncientTree extends Feature<NoneFeatureConfiguration> {
 
@@ -41,8 +42,8 @@ public class LevelGenAncientTree extends Feature<NoneFeatureConfiguration> {
             var x = (float) Math.sin(angle) * length;
             var z = (float) Math.cos(angle) * length;
 
-            var goal = pos.offset(x, 0, z);
-            while (level.isStateAtPosition(goal, state -> state.getMaterial().isReplaceable())) {
+            var goal = pos.offset(Mth.floor(x), 0, Mth.floor(z));
+            while (level.isStateAtPosition(goal, BlockStateBase::canBeReplaced)) {
                 goal = goal.below();
                 if (goal.distSqr(pos) >= 10 * 10)
                     break;
@@ -71,7 +72,7 @@ public class LevelGenAncientTree extends Feature<NoneFeatureConfiguration> {
             var x = (float) Math.sin(angle) * length;
             var z = (float) Math.cos(angle) * length;
 
-            var goal = trunkTop.offset(x, rand.nextInt(3) + 1, z);
+            var goal = trunkTop.offset(Mth.floor(x), rand.nextInt(3) + 1, Mth.floor(z));
             this.makeBranch(level, trunkTop, goal, ModBlocks.ANCIENT_LOG.defaultBlockState(), true);
             this.makeLeaves(level, goal, ModBlocks.ANCIENT_LEAVES.defaultBlockState(), rand.nextInt(2) + 2, rand);
         }
@@ -87,7 +88,7 @@ public class LevelGenAncientTree extends Feature<NoneFeatureConfiguration> {
         var stepZ = (float) pos.getZ() / (float) length;
 
         for (var i = 0; i <= length; i++) {
-            var goal = first.offset(0.5F + i * stepX, 0.5F + i * stepY, 0.5F + i * stepZ);
+            var goal = first.offset(Mth.floor(0.5F + i * stepX), Mth.floor(0.5F + i * stepY), Mth.floor(0.5F + i * stepZ));
             if (!level.isStateAtPosition(goal, s -> !TreeFeature.validTreePos(level, goal))) {
                 if (hasAxis) {
                     var axis = this.getLogAxis(first, goal);
@@ -105,8 +106,8 @@ public class LevelGenAncientTree extends Feature<NoneFeatureConfiguration> {
                 for (var z = -radius; z <= radius; z++) {
                     var goal = pos.offset(x, y, z);
                     if (pos.distSqr(goal) <= radius * radius + rand.nextInt(3) - 1) {
-                        if (!level.isStateAtPosition(goal, s -> s.getMaterial() == Material.LEAVES)) {
-                            if (level.isStateAtPosition(goal, st -> st.getMaterial() != Material.WOOD && st.getBlock() != Blocks.DIRT && st.getBlock() != Blocks.GRASS))
+                        if (!level.isStateAtPosition(goal, s -> s.is(BlockTags.LEAVES))) {
+                            if (level.isStateAtPosition(goal, st -> !st.is(BlockTags.LOGS) && st.getBlock() != Blocks.DIRT && st.getBlock() != Blocks.GRASS))
                                 this.setBlock(level, goal, state);
                         }
                     }

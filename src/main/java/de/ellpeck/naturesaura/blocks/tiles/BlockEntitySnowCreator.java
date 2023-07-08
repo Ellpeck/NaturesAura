@@ -49,15 +49,15 @@ public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickable
 
             for (var i = 0; i < 10; i++) {
                 var angle = this.level.random.nextFloat() * Math.PI * 2;
-                var pos = this.worldPosition.offset(Math.cos(angle) * range * this.level.random.nextFloat(), 0, Math.sin(angle) * range * this.level.random.nextFloat());
+                var pos = this.worldPosition.offset(Mth.floor(Math.cos(angle) * range * this.level.random.nextFloat()), 0, Mth.floor(Math.sin(angle) * range * this.level.random.nextFloat()));
                 pos = this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, pos);
                 var down = pos.below();
 
                 var fluid = this.level.getFluidState(down).getType();
                 if (fluid == Fluids.WATER) {
-                    if (this.level.getBlockState(down).getMaterial().isReplaceable())
+                    if (this.level.getBlockState(down).canBeReplaced())
                         this.level.setBlockAndUpdate(down, Blocks.ICE.defaultBlockState());
-                } else if (Blocks.SNOW.defaultBlockState().canSurvive(this.level, pos) && this.level.getBlockState(pos).getBlock() != Blocks.SNOW && this.level.getBlockState(pos).getMaterial().isReplaceable()) {
+                } else if (Blocks.SNOW.defaultBlockState().canSurvive(this.level, pos) && this.level.getBlockState(pos).getBlock() != Blocks.SNOW && this.level.getBlockState(pos).canBeReplaced()) {
                     this.level.setBlockAndUpdate(pos, Blocks.SNOW.defaultBlockState());
 
                     if (this.snowmanCount < range / 2 && this.level.random.nextFloat() >= 0.995F) {
@@ -83,9 +83,9 @@ public class BlockEntitySnowCreator extends BlockEntityImpl implements ITickable
             for (var i = range * 4; i >= 0; i--) {
                 var angle = this.level.random.nextFloat() * Math.PI * 2;
                 var pos = this.worldPosition.offset(
-                        Math.cos(angle) * range * this.level.random.nextFloat(),
+                        Mth.floor(Math.cos(angle) * range * this.level.random.nextFloat()),
                         Mth.nextInt(this.level.random, range / 2, range),
-                        Math.sin(angle) * range * this.level.random.nextFloat());
+                        Mth.floor(Math.sin(angle) * range * this.level.random.nextFloat()));
                 NaturesAuraAPI.instance().spawnMagicParticle(
                         pos.getX() + this.level.random.nextFloat(), pos.getY() + 1, pos.getZ() + this.level.random.nextFloat(),
                         this.level.random.nextGaussian() * 0.05, 0, this.level.random.nextGaussian() * 0.05,

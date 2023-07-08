@@ -27,7 +27,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -42,7 +41,7 @@ import java.util.List;
 public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider<BlockEntityEnderCrate>, ICustomBlockState {
 
     public BlockEnderCrate() {
-        super("ender_crate", BlockEntityEnderCrate.class, Properties.of(Material.STONE).strength(5F).lightLevel(s -> 7).sound(SoundType.STONE));
+        super("ender_crate", BlockEntityEnderCrate.class, Properties.of().strength(5F).lightLevel(s -> 7).sound(SoundType.STONE));
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -77,7 +76,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
         var name = event.getName();
         if (name == null || name.isEmpty())
             return;
-        if (ILevelData.getOverworldData(player.level).isEnderStorageLocked(name))
+        if (ILevelData.getOverworldData(player.level()).isEnderStorageLocked(name))
             return;
         var output = stack.copy();
         output.getOrCreateTag().putString(NaturesAura.MOD_ID + ":ender_name", name);

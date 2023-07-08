@@ -42,7 +42,7 @@ public class ItemCaveFinder extends ItemImpl {
 
                         var offUp = offset.above();
                         var stateUp = levelIn.getBlockState(offUp);
-                        if (stateUp.isCollisionShapeFullBlock(levelIn, offUp) || stateUp.getMaterial().isLiquid())
+                        if (stateUp.isCollisionShapeFullBlock(levelIn, offUp) || stateUp.liquid())
                             continue;
 
                         var sky = levelIn.getBrightness(LightLayer.SKY, offUp);

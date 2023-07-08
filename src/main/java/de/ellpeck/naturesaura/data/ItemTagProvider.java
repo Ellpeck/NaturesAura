@@ -8,6 +8,7 @@ import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -39,15 +40,15 @@ public class ItemTagProvider extends ItemTagsProvider {
         ModRegistry.ALL_ITEMS.stream().sorted(Comparator.comparing(IModItem::getBaseName)).filter(i -> i instanceof Item).map(i -> (Item) i).forEach(i -> {
             if (i instanceof ItemPickaxe) {
                 this.tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(i);
-                this.tag(Tags.Items.TOOLS_PICKAXES).add(i);
+                this.tag(ItemTags.PICKAXES).add(i);
             } else if (i instanceof ItemAxe) {
-                this.tag(Tags.Items.TOOLS_AXES).add(i);
+                this.tag(ItemTags.AXES).add(i);
             } else if (i instanceof ItemHoe) {
-                this.tag(Tags.Items.TOOLS_HOES).add(i);
+                this.tag(ItemTags.HOES).add(i);
             } else if (i instanceof ItemSword) {
-                this.tag(Tags.Items.TOOLS_SWORDS).add(i);
+                this.tag(ItemTags.SWORDS).add(i);
             } else if (i instanceof ItemShovel) {
-                this.tag(Tags.Items.TOOLS_SHOVELS).add(i);
+                this.tag(ItemTags.SHOVELS).add(i);
             }
         });
 
@@ -55,7 +56,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     }
 
     @Override
-    public TagAppender<Item> tag(TagKey<Item> tag) {
+    public IntrinsicHolderTagsProvider.IntrinsicTagAppender<Item> tag(TagKey<Item> tag) {
         // super is protected, but CuriosCompat needs this
         return super.tag(tag);
     }

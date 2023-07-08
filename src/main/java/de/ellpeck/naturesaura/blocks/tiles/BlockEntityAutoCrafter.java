@@ -10,6 +10,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,7 +18,7 @@ import net.minecraft.world.phys.AABB;
 
 public class BlockEntityAutoCrafter extends BlockEntityImpl implements ITickableBlockEntity {
 
-    public final CraftingContainer crafting = new CraftingContainer(new AbstractContainerMenu(null, 0) {
+    public final CraftingContainer crafting = new TransientCraftingContainer(new AbstractContainerMenu(null, 0) {
         @Override
         public ItemStack quickMoveStack(Player p_38941_, int p_38942_) {
             return ItemStack.EMPTY;
@@ -81,7 +82,7 @@ public class BlockEntityAutoCrafter extends BlockEntityImpl implements ITickable
             if (recipe == null)
                 return;
 
-            var result = recipe.assemble(this.crafting);
+            var result = recipe.assemble(this.crafting, this.level.registryAccess());
             if (result.isEmpty())
                 return;
             var resultItem = new ItemEntity(this.level,

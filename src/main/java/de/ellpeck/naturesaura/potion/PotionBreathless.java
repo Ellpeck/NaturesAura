@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.potion;
 
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,6 +36,6 @@ public class PotionBreathless extends PotionImpl {
 
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
-        entity.hurt(DamageSource.MAGIC, 1F);
+        entity.hurt(entity.damageSources().magic(), 1F);
     }
 }

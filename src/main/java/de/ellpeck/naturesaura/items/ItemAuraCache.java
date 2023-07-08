@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.items;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.ItemAuraContainer;
@@ -9,15 +9,13 @@ import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -63,7 +61,8 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
         }
     }
 
-    @Override
+    // TODO creative tabs for items with variations
+   /* @Override
     public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
         if (this.allowedIn(tab)) {
             items.add(new ItemStack(this));
@@ -74,7 +73,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
                 items.add(stack);
             });
         }
-    }
+    }*/
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
@@ -122,8 +121,8 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
             var legs = !player.getInventory().armor.get(EquipmentSlot.LEGS.getIndex()).isEmpty();
             matrices.translate(-0.15F, 0.65F, chest ? -0.195F : legs ? -0.165F : -0.1475F);
             matrices.scale(0.5F, 0.5F, 0.5F);
-            matrices.mulPose(Vector3f.XP.rotationDegrees(180F));
-            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, packedLight, OverlayTexture.NO_OVERLAY, matrices, buffer, 0);
+            matrices.mulPose(Axis.XP.rotationDegrees(180F));
+            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.GROUND, packedLight, OverlayTexture.NO_OVERLAY, matrices, buffer, player.level(), 0);
         }
     }
 }

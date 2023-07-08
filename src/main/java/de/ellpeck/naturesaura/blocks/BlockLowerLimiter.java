@@ -8,12 +8,11 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 
 public class BlockLowerLimiter extends BlockContainerImpl implements ICustomBlockState, ITESRProvider<BlockEntityLowerLimiter> {
 
     public BlockLowerLimiter() {
-        super("lower_limiter", BlockEntityLowerLimiter.class, Properties.of(Material.STONE).strength(2F).sound(SoundType.STONE));
+        super("lower_limiter", BlockEntityLowerLimiter.class, Properties.of().strength(2F).sound(SoundType.STONE));
     }
 
     @Override

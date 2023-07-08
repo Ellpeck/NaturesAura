@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.blocks.tiles.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityProjectileGenerator;
 import net.minecraft.client.model.Model;
@@ -34,13 +34,13 @@ public class RenderProjectileGenerator implements BlockEntityRenderer<BlockEntit
     public void render(BlockEntityProjectileGenerator te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
         stack.pushPose();
         if (te.nextSide == Direction.NORTH) {
-            stack.mulPose(Vector3f.YP.rotationDegrees(270));
+            stack.mulPose(Axis.YP.rotationDegrees(270));
             stack.translate(-0.002F, 0, -1);
         } else if (te.nextSide == Direction.EAST) {
-            stack.mulPose(Vector3f.YP.rotationDegrees(180));
+            stack.mulPose(Axis.YP.rotationDegrees(180));
             stack.translate(-1.002F, 0, -1);
         } else if (te.nextSide == Direction.SOUTH) {
-            stack.mulPose(Vector3f.YP.rotationDegrees(90));
+            stack.mulPose(Axis.YP.rotationDegrees(90));
             stack.translate(-1.002F, 0, 0);
         } else {
             stack.translate(-0.002F, 0, 0);

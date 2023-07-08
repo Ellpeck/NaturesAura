@@ -16,8 +16,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 public class BlockAncientLeaves extends LeavesBlock implements IModItem, IColorProvidingBlock, IColorProvidingItem, ICustomBlockState, EntityBlock {
 
     public BlockAncientLeaves() {
-        super(Block.Properties.of(Material.LEAVES, MaterialColor.COLOR_PINK).strength(0.2F).randomTicks().noOcclusion().sound(SoundType.GRASS));
+        super(Block.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2F).randomTicks().noOcclusion().sound(SoundType.GRASS));
         ModRegistry.ALL_ITEMS.add(this);
         ModRegistry.ALL_ITEMS.add(new ModTileType<>(BlockEntityAncientLeaves::new, this));
     }

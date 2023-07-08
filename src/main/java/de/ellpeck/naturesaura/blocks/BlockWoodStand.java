@@ -20,7 +20,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -39,7 +38,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
     private static final VoxelShape SHAPE = Shapes.create(3 / 16F, 0F, 3 / 16F, 13 / 16F, 13 / 16F, 13 / 16F);
 
     public BlockWoodStand() {
-        super("wood_stand", BlockEntityWoodStand.class, Properties.of(Material.WOOD).strength(1.5F).sound(SoundType.WOOD));
+        super("wood_stand", BlockEntityWoodStand.class, Properties.of().strength(1.5F).sound(SoundType.WOOD));
         MinecraftForge.EVENT_BUS.register(this);
     }
 
