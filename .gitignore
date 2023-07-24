@@ -12,6 +12,7 @@
 /classes
 /bin/
 /run/
+/run-data/
 /logs
 
 *.classpath

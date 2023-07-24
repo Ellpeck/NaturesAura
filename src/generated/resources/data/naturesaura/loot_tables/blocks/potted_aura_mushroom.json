@@ -26,10 +26,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "naturesaura:aura_mushroom"
+          "name": "minecraft:air"
         }
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "naturesaura:blocks/potted_aura_mushroom"
 }

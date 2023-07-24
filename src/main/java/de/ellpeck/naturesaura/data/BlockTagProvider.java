@@ -4,18 +4,19 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Material;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
+import java.util.concurrent.CompletableFuture;
 
 public class BlockTagProvider extends BlockTagsProvider {
 
@@ -24,12 +25,12 @@ public class BlockTagProvider extends BlockTagsProvider {
     public static final TagKey<Block> ALTAR_GOLD_BRICK = BlockTags.create(new ResourceLocation(NaturesAura.MOD_ID, "altar_gold_brick"));
     public static final TagKey<Block> ALTAR_FANCY_BRICK = BlockTags.create(new ResourceLocation(NaturesAura.MOD_ID, "altar_fancy_brick"));
 
-    public BlockTagProvider(DataGenerator gen, @Nullable ExistingFileHelper existingFileHelper) {
-        super(gen, NaturesAura.MOD_ID, existingFileHelper);
+    public BlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
+        super(output, lookupProvider, NaturesAura.MOD_ID, existingFileHelper);
     }
 
     @Override
-    protected void addTags() {
+    protected void addTags(HolderLookup.Provider provider) {
         this.tag(BlockTags.LOGS).add(ModBlocks.ANCIENT_LOG, ModBlocks.ANCIENT_BARK);
         this.tag(BlockTags.PLANKS).add(ModBlocks.ANCIENT_PLANKS);
         this.tag(BlockTags.STAIRS).add(ModBlocks.ANCIENT_STAIRS, ModBlocks.INFUSED_BRICK_STAIRS, ModBlocks.INFUSED_STAIRS);
@@ -45,12 +46,13 @@ public class BlockTagProvider extends BlockTagsProvider {
 
         // sort these so that they don't change the json every time we run data (because it's a set)
         ModRegistry.ALL_ITEMS.stream().sorted(Comparator.comparing(IModItem::getBaseName)).filter(i -> i instanceof Block).map(i -> (Block) i).forEach(b -> {
-            var material = b.defaultBlockState().getMaterial();
+            // TODO figure out what to do about materials for mineability
+            /*var material = b.defaultBlockState().getMaterial();
             if (material == Material.STONE || material == Material.METAL) {
                 this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(b);
             } else if (material == Material.WOOD) {
                 this.tag(BlockTags.MINEABLE_WITH_AXE).add(b);
-            }
+            }*/
         });
     }
 }
