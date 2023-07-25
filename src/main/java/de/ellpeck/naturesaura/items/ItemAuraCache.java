@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.ItemAuraContainer;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
+import de.ellpeck.naturesaura.reg.ICustomCreativeTab;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -26,8 +27,10 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ItemAuraCache extends ItemImpl implements ITrinketItem {
+public class ItemAuraCache extends ItemImpl implements ITrinketItem, ICustomCreativeTab {
 
     private final int capacity;
 
@@ -61,19 +64,17 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem {
         }
     }
 
-    // TODO creative tabs for items with variations
-   /* @Override
-    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
-        if (this.allowedIn(tab)) {
-            items.add(new ItemStack(this));
-
-            var stack = new ItemStack(this);
-            stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).ifPresent(container -> {
-                container.storeAura(container.getMaxAura(), false);
-                items.add(stack);
-            });
-        }
-    }*/
+    @Override
+    public List<ItemStack> getCreativeTabItems() {
+        var ret = new ArrayList<ItemStack>();
+        ret.add(new ItemStack(this));
+        var full = new ItemStack(this);
+        full.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).ifPresent(container -> {
+            container.storeAura(container.getMaxAura(), false);
+            ret.add(full);
+        });
+        return ret;
+    }
 
     @Override
     public boolean isBarVisible(ItemStack stack) {

@@ -7,13 +7,10 @@ import de.ellpeck.naturesaura.blocks.*;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraBloom;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEnderCrate;
 import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
+import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import de.ellpeck.naturesaura.entities.*;
-import de.ellpeck.naturesaura.gen.LevelGenAncientTree;
-import de.ellpeck.naturesaura.gen.LevelGenAuraBloom;
-import de.ellpeck.naturesaura.gen.LevelGenNetherWartMushroom;
-import de.ellpeck.naturesaura.gen.ModFeatures;
 import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
 import de.ellpeck.naturesaura.items.*;
@@ -22,12 +19,13 @@ import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
 import de.ellpeck.naturesaura.recipes.EnabledCondition;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -41,14 +39,16 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
+import vazkii.patchouli.api.PatchouliAPI;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ModRegistry {
 
-    public static final Set<IModItem> ALL_ITEMS = new HashSet<>();
+    // we use a list so that the creative tab maintains addition order
+    public static final List<IModItem> ALL_ITEMS = new ArrayList<>();
 
     @SubscribeEvent
     public static void register(RegisterEvent event) {
@@ -276,6 +276,7 @@ public final class ModRegistry {
             Helper.populateObjectHolders(ModEntities.class, event.getForgeRegistry());
         });
 
+/*
         event.register(ForgeRegistries.Keys.FEATURES, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "aura_bloom"), new LevelGenAuraBloom(ModBlocks.AURA_BLOOM, 60, false));
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "aura_cactus"), new LevelGenAuraBloom(ModBlocks.AURA_CACTUS, 60, false));
@@ -286,6 +287,7 @@ public final class ModRegistry {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "nether_wart_mushroom"), new LevelGenNetherWartMushroom());
             Helper.populateObjectHolders(ModFeatures.class, event.getForgeRegistry());
         });
+*/
 
         event.register(ForgeRegistries.Keys.RECIPE_TYPES, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "altar"), ModRecipes.ALTAR_TYPE);
@@ -300,6 +302,25 @@ public final class ModRegistry {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "offering"), ModRecipes.OFFERING_SERIALIZER);
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "tree_ritual"), ModRecipes.TREE_RITUAL_SERIALIZER);
             CraftingHelper.register(new EnabledCondition.Serializer());
+        });
+
+        event.register(BuiltInRegistries.CREATIVE_MODE_TAB.key(), h -> {
+            h.register(new ResourceLocation(NaturesAura.MOD_ID, "tab"), CreativeModeTab.builder()
+                    .title(Component.translatable("item_group." + NaturesAura.MOD_ID + ".tab"))
+                    .icon(() -> new ItemStack(ModItems.GOLD_LEAF))
+                    .displayItems((params, output) -> {
+                        output.accept(PatchouliAPI.get().getBookStack(PatchouliCompat.BOOK));
+                        ModRegistry.ALL_ITEMS.forEach(i -> {
+                            if (i instanceof ICustomCreativeTab c) {
+                                output.acceptAll(c.getCreativeTabItems());
+                            } else if (i instanceof ItemLike l) {
+                                if (l.asItem() != Items.AIR)
+                                    output.accept(l);
+                            }
+                        });
+                    })
+                    .build()
+            );
         });
     }
 
@@ -332,4 +353,5 @@ public final class ModRegistry {
         for (var item : items)
             helper.register(new ResourceLocation(NaturesAura.MOD_ID, ((IModItem) item).getBaseName()), item);
     }
+
 }

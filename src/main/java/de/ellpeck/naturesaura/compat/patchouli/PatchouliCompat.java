@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 public class PatchouliCompat implements ICompat {
 
-    private static final ResourceLocation BOOK = new ResourceLocation(NaturesAura.MOD_ID, "book");
+    public static final ResourceLocation BOOK = new ResourceLocation(NaturesAura.MOD_ID, "book");
     private static final Map<ResourceLocation, IMultiblock> MULTIBLOCKS = new HashMap<>();
 
     public static void addPatchouliMultiblock(ResourceLocation name, String[][] pattern, Object... rawMatchers) {

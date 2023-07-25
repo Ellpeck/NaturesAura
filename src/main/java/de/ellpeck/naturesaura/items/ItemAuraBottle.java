@@ -5,17 +5,16 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
+import de.ellpeck.naturesaura.reg.ICustomCreativeTab;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -28,7 +27,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICustomItemModel {
+import java.util.List;
+
+public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICustomItemModel, ICustomCreativeTab {
 
     public ItemAuraBottle(Item emptyBottle) {
         super("aura_bottle");
@@ -52,17 +53,10 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
         });
     }
 
-    // TODO aura bottle creative
-/*    @Override
-    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
-        if (this.allowedIn(tab)) {
-            for (var type : NaturesAuraAPI.AURA_TYPES.values()) {
-                var stack = new ItemStack(this);
-                ItemAuraBottle.setType(stack, type);
-                items.add(stack);
-            }
-        }
-    }*/
+    @Override
+    public List<ItemStack> getCreativeTabItems() {
+        return NaturesAuraAPI.AURA_TYPES.values().stream().map(t -> ItemAuraBottle.setType(new ItemStack(this), t)).toList();
+    }
 
     @Override
     public Component getName(ItemStack stack) {
