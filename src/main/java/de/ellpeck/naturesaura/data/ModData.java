@@ -1,13 +1,24 @@
 package de.ellpeck.naturesaura.data;
 
+import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.gen.ModFeatures;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ModData {
@@ -25,5 +36,20 @@ public final class ModData {
         gen.addProvider(event.includeServer(), new LootTableProvider(out, Set.of(), List.of(new LootTableProvider.SubProviderEntry(BlockLootProvider::new, LootContextParamSets.BLOCK))));
         gen.addProvider(event.includeServer(), new BlockStateGenerator(out, existing));
         gen.addProvider(event.includeServer(), new ItemModelGenerator(out, existing));
+        gen.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(out, CompletableFuture.supplyAsync(ModData::getProvider), Set.of(NaturesAura.MOD_ID)));
+    }
+
+    private static HolderLookup.Provider getProvider() {
+        final RegistrySetBuilder registryBuilder = new RegistrySetBuilder();
+        registryBuilder.add(Registries.CONFIGURED_FEATURE, ModFeatures.Configured::bootstrap);
+        registryBuilder.add(Registries.PLACED_FEATURE, ModFeatures.Placed::bootstrap);
+        registryBuilder.add(ForgeRegistries.Keys.BIOME_MODIFIERS, context -> {
+
+        });
+        // We need the BIOME registry to be present, so we can use a biome tag, doesn't matter that it's empty
+        registryBuilder.add(Registries.BIOME, context -> {
+        });
+        RegistryAccess.Frozen regAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
+        return registryBuilder.buildPatch(regAccess, VanillaRegistries.createLookup());
     }
 }

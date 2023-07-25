@@ -11,7 +11,6 @@ import de.ellpeck.naturesaura.proxy.ClientProxy;
 import de.ellpeck.naturesaura.proxy.IProxy;
 import de.ellpeck.naturesaura.proxy.ServerProxy;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
-import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
@@ -63,7 +62,6 @@ public final class NaturesAura {
         event.enqueueWork(ModConfig.instance::apply);
 
         ModRecipes.init();
-        ModRegistry.init();
         DrainSpotEffects.init();
 
         NaturesAura.proxy.init(event);
