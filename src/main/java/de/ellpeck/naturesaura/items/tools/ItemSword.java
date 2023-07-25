@@ -50,8 +50,7 @@ public class ItemSword extends SwordItem implements IModItem, ICustomItemModel {
             // this is just a modified copy of Player.attack's sweeping damage code
             var damage = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.75F;
             for (var other : player.level().getEntitiesOfClass(LivingEntity.class, stack.getSweepHitBox(player, target))) {
-                // TODO we removed canHit here, is that okay?
-                if (other != player && other != target && !player.isAlliedTo(other) && (!(other instanceof ArmorStand stand) || !stand.isMarker())) {
+                if (other != player && other != target && !player.isAlliedTo(other) && (!(other instanceof ArmorStand stand) || !stand.isMarker()) && player.distanceToSqr(other) < Mth.square(player.getEntityReach())) {
                     other.knockback(0.4F, Mth.sin(player.getYRot() * (Mth.PI / 180)), -Mth.cos(player.getYRot() * (Mth.PI / 180)));
                     other.hurt(other.damageSources().playerAttack(player), damage);
                 }
