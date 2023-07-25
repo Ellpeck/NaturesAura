@@ -1,12 +1,15 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.gen.ModFeatures;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NetherWartBlock;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 
 public class ItemCrimsonMeal extends ItemImpl {
 
@@ -24,7 +27,8 @@ public class ItemCrimsonMeal extends ItemImpl {
                 if (level.random.nextInt(5) == 0) {
                     int age = state.getValue(NetherWartBlock.AGE);
                     if (age >= 3) {
-                        ModFeatures.Configured.NETHER_WART_MUSHROOM.value().place((ServerLevel) level, ((ServerLevel) level).getChunkSource().getGenerator(), level.random, pos);
+                        Registry<ConfiguredFeature<?, ?>> registry = level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
+                        registry.getHolderOrThrow(ModFeatures.Configured.NETHER_WART_MUSHROOM).value().place((ServerLevel) level, ((ServerLevel) level).getChunkSource().getGenerator(), level.random, pos);
                     } else {
                         level.setBlockAndUpdate(pos, state.setValue(NetherWartBlock.AGE, age + 1));
                     }

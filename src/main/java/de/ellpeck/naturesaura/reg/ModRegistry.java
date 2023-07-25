@@ -11,6 +11,10 @@ import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import de.ellpeck.naturesaura.entities.*;
+import de.ellpeck.naturesaura.gen.LevelGenAncientTree;
+import de.ellpeck.naturesaura.gen.LevelGenAuraBloom;
+import de.ellpeck.naturesaura.gen.LevelGenNetherWartMushroom;
+import de.ellpeck.naturesaura.gen.ModFeatures;
 import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
 import de.ellpeck.naturesaura.items.*;
@@ -276,7 +280,7 @@ public final class ModRegistry {
             Helper.populateObjectHolders(ModEntities.class, event.getForgeRegistry());
         });
 
-/*
+
         event.register(ForgeRegistries.Keys.FEATURES, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "aura_bloom"), new LevelGenAuraBloom(ModBlocks.AURA_BLOOM, 60, false));
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "aura_cactus"), new LevelGenAuraBloom(ModBlocks.AURA_CACTUS, 60, false));
@@ -287,7 +291,7 @@ public final class ModRegistry {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "nether_wart_mushroom"), new LevelGenNetherWartMushroom());
             Helper.populateObjectHolders(ModFeatures.class, event.getForgeRegistry());
         });
-*/
+
 
         event.register(ForgeRegistries.Keys.RECIPE_TYPES, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "altar"), ModRecipes.ALTAR_TYPE);
@@ -322,23 +326,6 @@ public final class ModRegistry {
                     .build()
             );
         });
-    }
-
-    public static void init() {
-        // TODO fucking features changed again
-        /*ModFeatures.Configured.AURA_BLOOM = FeatureUtils.register(NaturesAura.MOD_ID + ":aura_bloom", ModFeatures.AURA_BLOOM, NoneFeatureConfiguration.INSTANCE);
-        ModFeatures.Configured.AURA_CACTUS = FeatureUtils.register(NaturesAura.MOD_ID + ":aura_cactus", ModFeatures.AURA_CACTUS, NoneFeatureConfiguration.INSTANCE);
-        ModFeatures.Configured.WARPED_AURA_MUSHROOM = FeatureUtils.register(NaturesAura.MOD_ID + ":warped_aura_mushroom", ModFeatures.WARPED_AURA_MUSHROOM, NoneFeatureConfiguration.INSTANCE);
-        ModFeatures.Configured.CRIMSON_AURA_MUSHROOM = FeatureUtils.register(NaturesAura.MOD_ID + ":crimson_aura_mushroom", ModFeatures.CRIMSON_AURA_MUSHROOM, NoneFeatureConfiguration.INSTANCE);
-        ModFeatures.Configured.AURA_MUSHROOM = FeatureUtils.register(NaturesAura.MOD_ID + ":aura_mushroom", ModFeatures.AURA_MUSHROOM, NoneFeatureConfiguration.INSTANCE);
-        ModFeatures.Configured.ANCIENT_TREE = FeatureUtils.register(NaturesAura.MOD_ID + ":ancient_tree", ModFeatures.ANCIENT_TREE, new TreeConfiguration.TreeConfigurationBuilder(null, null, null, null, null).build());
-        ModFeatures.Configured.NETHER_WART_MUSHROOM = FeatureUtils.register(NaturesAura.MOD_ID + ":nether_wart_mushroom", ModFeatures.NETHER_WART_MUSHROOM, NoneFeatureConfiguration.INSTANCE);
-
-        ModFeatures.Placed.AURA_BLOOM = PlacementUtils.register(NaturesAura.MOD_ID + ":aura_bloom", ModFeatures.Configured.AURA_BLOOM);
-        ModFeatures.Placed.AURA_CACTUS = PlacementUtils.register(NaturesAura.MOD_ID + ":aura_cactus", ModFeatures.Configured.AURA_CACTUS);
-        ModFeatures.Placed.WARPED_AURA_MUSHROOM = PlacementUtils.register(NaturesAura.MOD_ID + ":warped_aura_mushroom", ModFeatures.Configured.WARPED_AURA_MUSHROOM);
-        ModFeatures.Placed.CRIMSON_AURA_MUSHROOM = PlacementUtils.register(NaturesAura.MOD_ID + ":crimson_aura_mushroom", ModFeatures.Configured.CRIMSON_AURA_MUSHROOM);
-        ModFeatures.Placed.AURA_MUSHROOM = PlacementUtils.register(NaturesAura.MOD_ID + ":aura_mushroom", ModFeatures.Configured.AURA_MUSHROOM);*/
     }
 
     public static Block createFlowerPot(Block block) {
