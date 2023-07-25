@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_nether",
+  "features": "naturesaura:crimson_aura_mushroom",
+  "step": "vegetal_decoration"
+}

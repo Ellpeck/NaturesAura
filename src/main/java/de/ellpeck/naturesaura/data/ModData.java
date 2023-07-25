@@ -43,9 +43,7 @@ public final class ModData {
         final RegistrySetBuilder registryBuilder = new RegistrySetBuilder();
         registryBuilder.add(Registries.CONFIGURED_FEATURE, ModFeatures.Configured::bootstrap);
         registryBuilder.add(Registries.PLACED_FEATURE, ModFeatures.Placed::bootstrap);
-        registryBuilder.add(ForgeRegistries.Keys.BIOME_MODIFIERS, context -> {
-
-        });
+        registryBuilder.add(ForgeRegistries.Keys.BIOME_MODIFIERS, BiomeModifiers::bootstrap);
         // We need the BIOME registry to be present, so we can use a biome tag, doesn't matter that it's empty
         registryBuilder.add(Registries.BIOME, context -> {
         });
