@@ -28,6 +28,7 @@ public final class ModBlocks {
     public static Block AURA_DETECTOR;
     public static Block CONVERSION_CATALYST;
     public static Block CRUSHING_CATALYST;
+    public static Block DEPTH_INGOT_BLOCK;
     public static Block FLOWER_GENERATOR;
     public static Block PLACER;
     public static Block HOPPER_UPGRADE;
@@ -45,6 +46,7 @@ public final class ModBlocks {
     public static Block GOLD_BRICK;
     public static Block GOLD_NETHER_BRICK;
     public static Block RF_CONVERTER;
+    public static Block SKY_INGOT_BLOCK;
     public static Block MOSS_GENERATOR;
     public static Block TIME_CHANGER;
     public static Block GENERATOR_LIMIT_REMOVER;
