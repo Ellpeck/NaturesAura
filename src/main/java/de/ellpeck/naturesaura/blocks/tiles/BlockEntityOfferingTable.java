@@ -38,7 +38,7 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
     }
 
     private OfferingRecipe getRecipe(ItemStack input) {
-        for (var recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.OFFERING_TYPE, null, null))
+        for (var recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.OFFERING_TYPE, null, this.level))
             if (recipe.input.test(input))
                 return recipe;
         return null;
@@ -139,4 +139,5 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
     public IItemHandlerModifiable getItemHandler() {
         return this.items;
     }
+
 }

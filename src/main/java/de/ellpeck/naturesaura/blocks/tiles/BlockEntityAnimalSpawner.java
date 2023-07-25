@@ -70,7 +70,7 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
                 var items = this.level.getEntitiesOfClass(ItemEntity.class,
                         new AABB(this.worldPosition).inflate(2));
 
-                for (var recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.ANIMAL_SPAWNER_TYPE, null, null)) {
+                for (var recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.ANIMAL_SPAWNER_TYPE, null, this.level)) {
                     if (recipe.ingredients.length != items.size())
                         continue;
                     List<Ingredient> required = new ArrayList<>(Arrays.asList(recipe.ingredients));

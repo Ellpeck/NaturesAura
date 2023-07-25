@@ -269,7 +269,7 @@ public class ClientEvents {
                     stack.pushPose();
 
                     var color = container.getAuraColor();
-                    RenderSystem.setShaderColor((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 1);
+                    graphics.setColor((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 1);
                     if (width < 80)
                         graphics.blit(ClientEvents.OVERLAYS, x + width, y, width, 0, 80 - width, 6, 256, 256);
                     if (width > 0)
@@ -282,7 +282,7 @@ public class ClientEvents {
                     graphics.drawString(mc.font, s, conf == 1 ? x / scale : (x + 80) / scale - mc.font.width(s), (y - 7) / scale, color, true);
                     stack.popPose();
 
-                    RenderSystem.setShaderColor(1F, 1F, 1F, 1);
+                    graphics.setColor(1F, 1F, 1F, 1);
                     stack.pushPose();
                 }
 
@@ -292,7 +292,7 @@ public class ClientEvents {
                     int conf = ModConfig.instance.auraBarLocation.get();
                     if (!mc.options.renderDebug && (conf != 2 || !(mc.screen instanceof ChatScreen))) {
                         var color = IAuraType.forLevel(mc.level).getColor();
-                        RenderSystem.setShaderColor((color >> 16 & 0xFF) / 255F, (color >> 8 & 0xFF) / 255F, (color & 0xFF) / 255F, 1);
+                        graphics.setColor((color >> 16 & 0xFF) / 255F, (color >> 8 & 0xFF) / 255F, (color & 0xFF) / 255F, 1);
 
                         var totalAmount = IAuraChunk.triangulateAuraInArea(mc.level, mc.player.blockPosition(), 35);
                         var totalPercentage = totalAmount / (IAuraChunk.DEFAULT_AURA * 2F);
@@ -417,7 +417,7 @@ public class ClientEvents {
                         }
                     }
 
-                    RenderSystem.setShaderColor(1F, 1F, 1F, 1);
+                    graphics.setColor(1F, 1F, 1F, 1);
                     stack.popPose();
                 }
 
@@ -443,7 +443,7 @@ public class ClientEvents {
     }
 
     private void drawContainerInfo(GuiGraphics graphics, int stored, int max, int color, Minecraft mc, Window res, int yOffset, String name, String textBelow) {
-        RenderSystem.setShaderColor((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 1);
+        graphics.setColor((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 1);
 
         var x = res.getGuiScaledWidth() / 2 - 40;
         var y = res.getGuiScaledHeight() / 2 + yOffset;
@@ -459,4 +459,5 @@ public class ClientEvents {
         if (textBelow != null)
             graphics.drawString(mc.font, textBelow, x + 40 - mc.font.width(textBelow) / 2F, y + 7, color, true);
     }
+
 }

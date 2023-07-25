@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
@@ -128,6 +127,7 @@ public final class Helper {
         poseStack.pushPose();
         poseStack.translate(x, y, 0);
         poseStack.scale(scale, scale, scale);
+        graphics.setColor(1, 1, 1, 1);
         graphics.renderItem(stack, 0, 0);
         graphics.renderItemDecorations(Minecraft.getInstance().font, stack, 0, 0, null);
         poseStack.popPose();
@@ -373,4 +373,5 @@ public final class Helper {
         player.level().playSound(null, player.getX() + 0.5, player.getY() + 0.5, player.getZ() + 0.5, SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS, 0.65F, 1F);
         return true;
     }
+
 }

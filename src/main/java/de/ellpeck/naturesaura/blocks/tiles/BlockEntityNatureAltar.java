@@ -198,7 +198,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
     }
 
     private AltarRecipe getRecipeForInput(ItemStack input) {
-        for (var recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.ALTAR_TYPE, null, null)) {
+        for (var recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.ALTAR_TYPE, null, this.level)) {
             if (recipe.input.test(input)) {
                 if (recipe.catalyst == Ingredient.EMPTY)
                     return recipe;
