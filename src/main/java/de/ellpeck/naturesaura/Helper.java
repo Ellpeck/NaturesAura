@@ -309,13 +309,14 @@ public final class Helper {
         }
     }
 
-    public static ItemStack getEquippedItem(Predicate<ItemStack> predicate, Player player) {
+    public static ItemStack getEquippedItem(Predicate<ItemStack> predicate, Player player, boolean hotbarOnly) {
         if (Compat.hasCompat("curios")) {
             var stack = CuriosApi.getCuriosHelper().findFirstCurio(player, predicate).map(SlotResult::stack);
             if (stack.isPresent())
                 return stack.get();
         }
-        for (var i = 0; i < player.getInventory().getContainerSize(); i++) {
+        var invSize = hotbarOnly ? 9 : player.getInventory().getContainerSize();
+        for (var i = 0; i < invSize; i++) {
             var slot = player.getInventory().getItem(i);
             if (!slot.isEmpty() && predicate.test(slot))
                 return slot;

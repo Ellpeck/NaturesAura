@@ -24,7 +24,7 @@ public class ItemDeathRing extends ItemImpl {
         public void onDeath(LivingDeathEvent event) {
             var entity = event.getEntity();
             if (!entity.level().isClientSide && entity instanceof Player) {
-                var equipped = Helper.getEquippedItem(s -> s.getItem() == ModItems.DEATH_RING, (Player) entity);
+                var equipped = Helper.getEquippedItem(s -> s.getItem() == ModItems.DEATH_RING, (Player) entity, false);
                 if (!equipped.isEmpty()) {
                     entity.setHealth(entity.getMaxHealth() / 2);
                     entity.removeAllEffects();
@@ -39,5 +39,7 @@ public class ItemDeathRing extends ItemImpl {
                 }
             }
         }
+
     }
+
 }

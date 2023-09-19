@@ -153,9 +153,9 @@ public class ClientEvents {
                         inst.setParticleSpawnRange(32);
                     }
 
-                    ClientEvents.heldCache = Helper.getEquippedItem(s -> s.getItem() instanceof ItemAuraCache, mc.player);
-                    ClientEvents.heldEye = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE, mc.player);
-                    ClientEvents.heldOcular = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE_IMPROVED, mc.player);
+                    ClientEvents.heldCache = Helper.getEquippedItem(s -> s.getItem() instanceof ItemAuraCache, mc.player, false);
+                    ClientEvents.heldEye = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE, mc.player, true);
+                    ClientEvents.heldOcular = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE_IMPROVED, mc.player, false);
 
                     if (!ClientEvents.heldOcular.isEmpty() && mc.level.getGameTime() % 20 == 0) {
                         ClientEvents.SHOWING_EFFECTS.clear();

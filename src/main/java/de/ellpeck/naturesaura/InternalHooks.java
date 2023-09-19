@@ -37,7 +37,7 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     private boolean auraPlayerInteraction(Player player, int amount, boolean extract, boolean simulate) {
         if (extract && player.isCreative())
             return true;
-        var stack = Helper.getEquippedItem(s -> s.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).isPresent(), player);
+        var stack = Helper.getEquippedItem(s -> s.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).isPresent(), player, false);
         if (!stack.isEmpty()) {
             var container = stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).orElse(null);
             if (extract) {
@@ -181,4 +181,5 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
             highest = defaultSpot;
         return highest;
     }
+
 }
