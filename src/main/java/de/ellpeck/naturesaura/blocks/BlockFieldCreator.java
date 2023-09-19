@@ -21,7 +21,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockFieldCreator extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockFieldCreator() {
-        super("field_creator", BlockEntityFieldCreator.class, Properties.of().strength(2F).noCollission().sound(SoundType.STONE));
+        super("field_creator", BlockEntityFieldCreator.class, Properties.of().strength(2F).noOcclusion().sound(SoundType.STONE));
     }
 
     @Override
