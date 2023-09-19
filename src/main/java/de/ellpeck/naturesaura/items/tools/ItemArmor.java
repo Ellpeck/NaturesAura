@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -32,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ItemArmor extends ArmorItem implements IModItem {
 
     private static final AttributeModifier SKY_MOVEMENT_MODIFIER = new AttributeModifier(UUID.fromString("c1f96acc-e117-4dc1-a351-e196a4de6071"), NaturesAura.MOD_ID + ":sky_movement_speed", 0.15F, AttributeModifier.Operation.MULTIPLY_TOTAL);
+    private static final AttributeModifier SKY_STEP_MODIFIER = new AttributeModifier(UUID.fromString("ac3ce414-7243-418c-97f8-ac84c2c102f6"), NaturesAura.MOD_ID + ":sky_step_modifier", 0.5F, AttributeModifier.Operation.ADDITION);
     private static final Map<ArmorMaterial, Item[]> SETS = new ConcurrentHashMap<>();
     private final String baseName;
 
@@ -90,22 +92,25 @@ public class ItemArmor extends ArmorItem implements IModItem {
         public static void update(TickEvent.PlayerTickEvent event) {
             var player = event.player;
             var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
+            var step = player.getAttribute(ForgeMod.STEP_HEIGHT_ADDITION.get());
             var key = NaturesAura.MOD_ID + ":sky_equipped";
             var nbt = player.getPersistentData();
             var equipped = ItemArmor.isFullSetEquipped(player, ModArmorMaterial.SKY);
             if (equipped && !nbt.getBoolean(key)) {
                 // we just equipped it
                 nbt.putBoolean(key, true);
-                // TODO use new forge attribute for step height
-                player.setMaxUpStep(1.1F);
+                if (!step.hasModifier(ItemArmor.SKY_STEP_MODIFIER))
+                    step.addPermanentModifier(ItemArmor.SKY_STEP_MODIFIER);
                 if (!speed.hasModifier(ItemArmor.SKY_MOVEMENT_MODIFIER))
                     speed.addPermanentModifier(ItemArmor.SKY_MOVEMENT_MODIFIER);
             } else if (!equipped && nbt.getBoolean(key)) {
                 // we just unequipped it
                 nbt.putBoolean(key, false);
-                player.setMaxUpStep(0.6F);
+                step.removeModifier(ItemArmor.SKY_STEP_MODIFIER);
                 speed.removeModifier(ItemArmor.SKY_MOVEMENT_MODIFIER);
             }
         }
+
     }
+
 }
