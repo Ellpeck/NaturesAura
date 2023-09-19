@@ -33,7 +33,7 @@ public class BlockSpring extends BlockContainerImpl implements ICustomBlockState
     @Override
     @OnlyIn(Dist.CLIENT)
     public BlockColor getBlockColor() {
-        return (state, level, pos, i) -> BiomeColors.getAverageWaterColor(level, pos);
+        return (state, level, pos, i) -> level == null || pos == null ? -1 : BiomeColors.getAverageWaterColor(level, pos);
     }
 
     @Override
