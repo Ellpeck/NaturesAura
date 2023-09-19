@@ -14,11 +14,11 @@
         },
         {
             "type": "text",
-            "text": "Additionally, the $(item)Adept Hopper$()'s functionality can be $(thing)inverted$() simply by interacting with it while sneaking: This will cause not items $(italic)in$() the frames to be accepted, but all items that are $(italic)not$() in the frames. This, additionally, allows for throughput of any item, simply by not placing down any frames at all."
+            "text": "Additionally, the $(item)Adept Hopper$()'s functionality can be $(thing)inverted$() simply by interacting with it: This will cause not items $(italic)in$() the frames to be accepted, but all items that are $(italic)not$() in the frames. This, additionally, allows for throughput of any item, simply by not placing down any frames at all."
         },
         {
             "type": "crafting",
-            "text": "Creating the $(item)Adept Hopper$()$(p)It should be noted that, when equipping an $(l:items/eye)Environmental Eye$(), the amount of items currently stored in the hopper can be seen.",
+            "text": "Creating the $(item)Adept Hopper$()$(p)It should be noted that, when equipping an $(l:items/eye)Environmental Eye$(), the amount of items currently stored in the hopper, as well as its current mode, can be seen.",
             "recipe": "naturesaura:grated_chute"
         }
     ]
