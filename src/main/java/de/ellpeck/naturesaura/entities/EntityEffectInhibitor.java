@@ -68,7 +68,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
 
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(EntityEffectInhibitor.INHIBITED_EFFECT, null);
+        this.entityData.define(EntityEffectInhibitor.INHIBITED_EFFECT, "");
         this.entityData.define(EntityEffectInhibitor.COLOR, 0);
         this.entityData.define(EntityEffectInhibitor.AMOUNT, 0);
     }
@@ -168,7 +168,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     public void setInhibitedEffect(ResourceLocation effect) {
-        this.entityData.set(EntityEffectInhibitor.INHIBITED_EFFECT, effect != null ? effect.toString() : null);
+        this.entityData.set(EntityEffectInhibitor.INHIBITED_EFFECT, effect != null ? effect.toString() : "");
     }
 
     public int getColor() {
@@ -212,4 +212,5 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
         this.powderListDirty = false;
         this.lastEffect = inhibitedEffect;
     }
+
 }
