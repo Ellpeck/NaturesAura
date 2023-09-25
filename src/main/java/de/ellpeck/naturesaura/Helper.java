@@ -67,9 +67,11 @@ public final class Helper {
                 var chunk = Helper.getLoadedChunk(level, x, z);
                 if (chunk != null) {
                     for (var tilePos : chunk.getBlockEntitiesPos()) {
-                        if (tilePos.distSqr(pos) <= radius * radius)
-                            if (consumer.apply(chunk.getBlockEntity(tilePos)))
+                        if (tilePos.distSqr(pos) <= radius * radius) {
+                            var tile = chunk.getBlockEntity(tilePos);
+                            if (tile != null && consumer.apply(tile))
                                 return true;
+                        }
                     }
                 }
             }
