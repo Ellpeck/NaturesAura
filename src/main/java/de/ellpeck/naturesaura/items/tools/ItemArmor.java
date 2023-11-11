@@ -81,7 +81,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
                         ((LivingEntity) source).addEffect(new MobEffectInstance(MobEffects.WITHER, 40));
                 } else if (ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.DEPTH)) {
                     for (var other : entity.level().getEntitiesOfClass(LivingEntity.class, new AABB(entity.position(), Vec3.ZERO).inflate(2))) {
-                        if (other != entity && (!(other instanceof Player otherPlayer) || !otherPlayer.isAlliedTo(entity)))
+                        if (other != entity && (!(entity instanceof Player player) || !player.isAlliedTo(other)))
                             other.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 255));
                     }
                 }
