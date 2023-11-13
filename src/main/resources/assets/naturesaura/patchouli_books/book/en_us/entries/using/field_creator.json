@@ -14,7 +14,7 @@
         },
         {
             "type": "text",
-            "text": "Of course, breaking blocks and especially the initial channel time will require a bit of $(aura) from the environment. Additionally, while the field is active, a small amount is consumed as a sort of upkeep cost.$(br)Any botanist that requires items gained from $(thing)shearing$() certain blocks doesn't have to worry: Placing an $(item)Item Frame$() with $(item)Shears$() on any of the two $(item)Aura Field Creators$() will cause all shearable blocks inbetween to be sheared with all others being harvested normally."
+            "text": "Of course, breaking blocks and especially the initial channel time will require a bit of $(aura) from the environment. Additionally, while the field is active, a small amount is consumed as a sort of upkeep cost.$(br)Any botanist that requires that blocks be broken in a specific manner doesn't have to worry: Placing an $(item)Item Frame$() with $(item)Shears$() or an $(item)enchanted tool$() on any of the two $(item)Aura Field Creators$() will cause all blocks inbetween to be broken as if using that tool."
         },
         {
             "type": "crafting",
