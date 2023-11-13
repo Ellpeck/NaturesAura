@@ -1,9 +1,9 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "SGS",
-        "GIG",
-        "SGS"
+        " I ",
+        "GSG",
+        " I "
     ],
     "key": {
         "I": {
