@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemLootFinder extends ItemImpl {
 
@@ -33,7 +34,7 @@ public class ItemLootFinder extends ItemImpl {
 
             var pos = playerIn.blockPosition();
             Helper.getBlockEntitiesInArea(levelIn, pos, 64, tile -> {
-                if (tile.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent() || tile instanceof SpawnerBlockEntity) {
+                if (tile.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent() || tile instanceof SpawnerBlockEntity || ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(tile.getType()).getNamespace().equals("lootr")) {
                     inst.spawnMagicParticle(
                             tile.getBlockPos().getX() + 0.5F, tile.getBlockPos().getY() + 0.5F, tile.getBlockPos().getZ() + 0.5F,
                             0F, 0F, 0F, 0xf5f10a, 6F, 20 * 60, 0F, false, true);
@@ -57,4 +58,5 @@ public class ItemLootFinder extends ItemImpl {
         playerIn.getCooldowns().addCooldown(this, 20 * 60);
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
+
 }
