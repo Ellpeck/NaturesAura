@@ -96,7 +96,7 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
                             var offState = player.level().getBlockState(offset);
                             if (offState.getBlock() instanceof BushBlock || stack.getItem() == ModItems.DEPTH_HOE && offState.getBlock() instanceof LeavesBlock) {
                                 var entity = offState.hasBlockEntity() ? player.level().getBlockEntity(offset) : null;
-                                Block.dropResources(offState, player.level(), offset, entity, null, ItemStack.EMPTY);
+                                Block.dropResources(offState, player.level(), offset, entity, null, stack);
                                 player.level().setBlock(offset, Blocks.AIR.defaultBlockState(), 3);
                             }
                         }
