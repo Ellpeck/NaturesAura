@@ -81,7 +81,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
                                 this.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                                 return true;
                             });
-                            Helper.mineRecursively(this.level, this.ritualPos, this.ritualPos, false, 6, 32, s -> s.is(BlockTags.LOGS) || s.getBlock() instanceof LeavesBlock);
+                            Helper.mineRecursively(this.level, this.ritualPos, this.ritualPos, ItemStack.EMPTY, 6, 32, s -> s.is(BlockTags.LOGS) || s.getBlock() instanceof LeavesBlock);
 
                             var item = new ItemEntity(this.level,
                                     this.ritualPos.getX() + 0.5, this.ritualPos.getY() + 4.5, this.ritualPos.getZ() + 0.5,
@@ -190,4 +190,5 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
     public IItemHandlerModifiable getItemHandler() {
         return this.items;
     }
+
 }

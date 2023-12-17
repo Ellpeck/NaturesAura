@@ -31,6 +31,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -338,12 +339,14 @@ public final class Helper {
         return pos;
     }
 
-    public static void mineRecursively(Level level, BlockPos pos, BlockPos start, boolean drop, int horizontalRange, int verticalRange, Predicate<BlockState> filter) {
+    public static void mineRecursively(Level level, BlockPos pos, BlockPos start, ItemStack tool, int horizontalRange, int verticalRange, Predicate<BlockState> filter) {
         if (Math.abs(pos.getX() - start.getX()) >= horizontalRange || Math.abs(pos.getZ() - start.getZ()) >= horizontalRange || Math.abs(pos.getY() - start.getY()) >= verticalRange)
             return;
 
-        if (drop) {
-            level.destroyBlock(pos, true);
+        if (!tool.isEmpty()) {
+            var state = level.getBlockState(pos);
+            level.destroyBlock(pos, false);
+            Block.dropResources(state, level, pos, state.hasBlockEntity() ? level.getBlockEntity(pos) : null, null, tool);
         } else {
             // in this case we don't want the block breaking particles, so we can't use destroyBlock
             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
@@ -358,7 +361,7 @@ public final class Helper {
                     var offset = pos.offset(x, y, z);
                     var state = level.getBlockState(offset);
                     if (filter.test(state))
-                        Helper.mineRecursively(level, offset, start, drop, horizontalRange, verticalRange, filter);
+                        Helper.mineRecursively(level, offset, start, tool, horizontalRange, verticalRange, filter);
                 }
             }
         }

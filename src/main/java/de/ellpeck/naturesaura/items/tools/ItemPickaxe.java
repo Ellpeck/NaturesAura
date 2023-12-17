@@ -91,7 +91,7 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
         if (itemstack.getItem() == ModItems.DEPTH_PICKAXE && Helper.isToolEnabled(itemstack) && player.level().getBlockState(pos).is(Tags.Blocks.ORES)) {
-            Helper.mineRecursively(player.level(), pos, pos, true, 5, 5, s -> s.is(Tags.Blocks.ORES));
+            Helper.mineRecursively(player.level(), pos, pos, itemstack, 5, 5, s -> s.is(Tags.Blocks.ORES));
             return true;
         }
         return false;

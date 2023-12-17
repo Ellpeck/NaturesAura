@@ -49,7 +49,7 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
         if ((stack.getItem() == ModItems.SKY_AXE || stack.getItem() == ModItems.DEPTH_AXE) && Helper.isToolEnabled(stack) && player.level().getBlockState(pos).is(BlockTags.LOGS)) {
             var horRange = stack.getItem() == ModItems.DEPTH_AXE ? 6 : 1;
-            Helper.mineRecursively(player.level(), pos, pos, true, horRange, 32, s -> s.is(BlockTags.LOGS));
+            Helper.mineRecursively(player.level(), pos, pos, stack, horRange, 32, s -> s.is(BlockTags.LOGS));
             return true;
         }
         return false;

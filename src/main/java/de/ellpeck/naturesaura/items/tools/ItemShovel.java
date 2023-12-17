@@ -111,7 +111,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
                 return super.useOn(context);
             level.removeBlock(pos, false);
             var tile = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
-            Block.dropResources(state, level, pos, tile, null, ItemStack.EMPTY);
+            Block.dropResources(state, level, pos, tile, null, stack);
             var newContext = new UseOnContext(player, otherHand, new BlockHitResult(context.getClickLocation(), context.getClickedFace(), context.getClickedPos(), context.isInside()));
             other.useOn(newContext);
             stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
