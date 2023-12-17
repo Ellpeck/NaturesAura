@@ -23,8 +23,7 @@ public class ProcessorAltar implements IComponentProcessor {
         return switch (key) {
             case "input" -> PatchouliCompat.ingredientVariable(this.recipe.input);
             case "output" -> IVariable.from(this.recipe.output);
-            case "catalyst" ->
-                    this.recipe.catalyst != Ingredient.EMPTY ? PatchouliCompat.ingredientVariable(this.recipe.catalyst) : null;
+            case "catalyst" -> this.recipe.catalyst != Ingredient.EMPTY ? PatchouliCompat.ingredientVariable(this.recipe.catalyst) : null;
             case "name" -> IVariable.wrap(this.recipe.output.getHoverName().getString());
             default -> null;
         };
@@ -32,6 +31,7 @@ public class ProcessorAltar implements IComponentProcessor {
 
     @Override
     public boolean allowRender(String group) {
-        return group.isEmpty() || group.equals(this.recipe.catalyst == Ingredient.EMPTY ? "altar" : "catalyst");
+        return group.isEmpty() || this.recipe != null && group.equals(this.recipe.catalyst == Ingredient.EMPTY ? "altar" : "catalyst");
     }
+
 }
