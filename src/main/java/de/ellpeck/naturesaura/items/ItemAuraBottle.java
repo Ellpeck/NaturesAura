@@ -21,11 +21,11 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
 
     public ItemAuraBottle(Item emptyBottle) {
         super("aura_bottle");
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
+        NeoForge.EVENT_BUS.register(new EventHandler());
 
         DispenserBlock.registerBehavior(emptyBottle, (source, stack) -> {
             Level level = source.getLevel();

@@ -33,14 +33,14 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class ClientProxy implements IProxy {
 
     @Override
     public void preInit(FMLCommonSetupEvent event) {
-        MinecraftForge.EVENT_BUS.register(new ClientEvents());
+        NeoForge.EVENT_BUS.register(new ClientEvents());
         Compat.setupClient();
         MenuScreens.register(ModContainers.ENDER_CRATE, GuiEnderCrate::new);
         MenuScreens.register(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);

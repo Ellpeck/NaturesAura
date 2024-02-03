@@ -7,15 +7,15 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 
 public class ItemDeathRing extends ItemImpl {
 
     public ItemDeathRing() {
         super("death_ring", new Properties().stacksTo(1));
-        MinecraftForge.EVENT_BUS.register(new Events());
+        NeoForge.EVENT_BUS.register(new Events());
     }
 
     public static class Events {

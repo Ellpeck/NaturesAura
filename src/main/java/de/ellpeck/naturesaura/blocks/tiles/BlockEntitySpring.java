@@ -13,15 +13,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.FarmlandWaterManager;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.ticket.AABBTicket;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.common.FarmlandWaterManager;
+import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.common.ticket.AABBTicket;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.IFluidTank;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.common.util.LazyOptional;
 
 public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlockEntity {
 
@@ -89,7 +89,7 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         for (var dir : Direction.Plane.HORIZONTAL) {
             var side = this.worldPosition.relative(dir);
             if (this.isLava(side, true) && this.tryConsumeAura(1500)) {
-                this.level.setBlockAndUpdate(side, ForgeEventFactory.fireFluidPlaceBlockEvent(this.level, side, side, Blocks.OBSIDIAN.defaultBlockState()));
+                this.level.setBlockAndUpdate(side, EventHooks.fireFluidPlaceBlockEvent(this.level, side, side, Blocks.OBSIDIAN.defaultBlockState()));
                 this.level.levelEvent(1501, side, 0);
                 return;
             }
@@ -98,7 +98,7 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         // generate stone
         var twoUp = this.worldPosition.above(2);
         if (this.isLava(twoUp, false) && (this.level.getBlockState(up).isAir() || this.isLava(up, false)) && this.tryConsumeAura(150)) {
-            this.level.setBlockAndUpdate(up, ForgeEventFactory.fireFluidPlaceBlockEvent(this.level, up, twoUp, Blocks.STONE.defaultBlockState()));
+            this.level.setBlockAndUpdate(up, EventHooks.fireFluidPlaceBlockEvent(this.level, up, twoUp, Blocks.STONE.defaultBlockState()));
             this.level.levelEvent(1501, up, 0);
             return;
         }
@@ -108,7 +108,7 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
             var twoSide = this.worldPosition.relative(dir, 2);
             var side = this.worldPosition.relative(dir);
             if (this.isLava(twoSide, false) && (this.level.getBlockState(side).isAir() || this.isLava(side, false)) && this.tryConsumeAura(100)) {
-                this.level.setBlockAndUpdate(side, ForgeEventFactory.fireFluidPlaceBlockEvent(this.level, side, twoSide, Blocks.COBBLESTONE.defaultBlockState()));
+                this.level.setBlockAndUpdate(side, EventHooks.fireFluidPlaceBlockEvent(this.level, side, twoSide, Blocks.COBBLESTONE.defaultBlockState()));
                 this.level.levelEvent(1501, side, 0);
                 return;
             }
@@ -117,7 +117,7 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-        if (capability == ForgeCapabilities.FLUID_HANDLER)
+        if (capability == Capabilities.FLUID_HANDLER)
             return this.tank.cast();
         return LazyOptional.empty();
     }

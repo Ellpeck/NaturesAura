@@ -36,13 +36,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
+import net.neoforged.neoforge.common.crafting.CraftingHelper;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.registries.RegisterEvent;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.ArrayList;
@@ -242,13 +242,13 @@ public final class ModRegistry {
         });
 
         event.register(ForgeRegistries.Keys.MENU_TYPES, h -> {
-            h.register(new ResourceLocation(NaturesAura.MOD_ID, "ender_crate"), IForgeMenuType.create((windowId, inv, data) -> {
+            h.register(new ResourceLocation(NaturesAura.MOD_ID, "ender_crate"), IMenuTypeExtension.create((windowId, inv, data) -> {
                 var tile = inv.player.level().getBlockEntity(data.readBlockPos());
                 if (tile instanceof BlockEntityEnderCrate crate)
                     return new ContainerEnderCrate(ModContainers.ENDER_CRATE, windowId, inv.player, crate.getItemHandler());
                 return null;
             }));
-            h.register(new ResourceLocation(NaturesAura.MOD_ID, "ender_access"), IForgeMenuType.create((windowId, inv, data) -> {
+            h.register(new ResourceLocation(NaturesAura.MOD_ID, "ender_access"), IMenuTypeExtension.create((windowId, inv, data) -> {
                 IItemHandler handler = ILevelData.getOverworldData(inv.player.level()).getEnderStorage(data.readUtf());
                 return new ContainerEnderCrate(ModContainers.ENDER_ACCESS, windowId, inv.player, handler);
             }));

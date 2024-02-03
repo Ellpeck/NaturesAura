@@ -6,9 +6,9 @@ import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import de.ellpeck.naturesaura.chunk.effect.OreSpawnEffect;
 import de.ellpeck.naturesaura.chunk.effect.PlantBoostEffect;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +51,7 @@ public final class ModConfig {
     public ConfigValue<Boolean> debugLevel;
     public ConfigValue<Boolean> renderItemsOnPlayer;
 
-    public ModConfig(ForgeConfigSpec.Builder builder) {
+    public ModConfig(ModConfigSpec.Builder builder) {
         builder.push("general");
         this.additionalBotanistPickaxeConversions = builder
                 .comment("Additional conversion recipes for the Botanist's Pickaxe right click function. Each entry needs to be formatted as modid:input_block[prop1=value1,...]->modid:output_block[prop1=value1,...] where block state properties are optional, and entries follow standard TOML array formatting (https://toml.io/en/v1.0.0#array).")

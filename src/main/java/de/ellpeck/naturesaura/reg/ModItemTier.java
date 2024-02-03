@@ -3,7 +3,7 @@ package de.ellpeck.naturesaura.reg;
 import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.util.Lazy;
+import net.neoforged.neoforge.common.util.Lazy;
 
 import java.util.function.Supplier;
 

@@ -7,7 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
 
 public class BlockEntityPowderPlacer extends BlockEntityImpl {
 
@@ -25,7 +25,7 @@ public class BlockEntityPowderPlacer extends BlockEntityImpl {
                 var tile = this.level.getBlockEntity(this.worldPosition.relative(facing));
                 if (tile == null)
                     continue;
-                var handler = tile.getCapability(ForgeCapabilities.ITEM_HANDLER, facing.getOpposite()).orElse(null);
+                var handler = tile.getCapability(Capabilities.ITEM_HANDLER, facing.getOpposite()).orElse(null);
                 if (handler == null)
                     continue;
 

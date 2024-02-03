@@ -25,9 +25,9 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -38,7 +38,7 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
 
     public BlockEndFlower() {
         super(Properties.of().noCollission().strength(0.5F).sound(SoundType.GRASS));
-        MinecraftForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(this);
         ModRegistry.ALL_ITEMS.add(this);
         ModRegistry.ALL_ITEMS.add(new ModTileType<>(BlockEntityEndFlower::new, this));
     }

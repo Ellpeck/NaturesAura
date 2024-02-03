@@ -21,8 +21,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.bus.api.Event;
 
 public class BlockAncientSapling extends BushBlock implements BonemealableBlock, IModItem, ICustomBlockState, ICustomItemModel {
 
@@ -74,7 +74,7 @@ public class BlockAncientSapling extends BushBlock implements BonemealableBlock,
     public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state) {
         if (state.getValue(SaplingBlock.STAGE) == 0) {
             level.setBlock(pos, state.cycle(SaplingBlock.STAGE), 4);
-        } else if (!ForgeEventFactory.blockGrowFeature(level, rand, pos, null).getResult().equals(Event.Result.DENY)) {
+        } else if (!EventHooks.blockGrowFeature(level, rand, pos, null).getResult().equals(Event.Result.DENY)) {
             Registry<ConfiguredFeature<?, ?>> registry = level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
             registry.getHolderOrThrow(ModFeatures.Configured.ANCIENT_TREE).value().place(level, level.getChunkSource().getGenerator(), rand, pos);
         }

@@ -12,8 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 
 public class ItemLootFinder extends ItemImpl {
 
@@ -34,7 +34,7 @@ public class ItemLootFinder extends ItemImpl {
 
             var pos = playerIn.blockPosition();
             Helper.getBlockEntitiesInArea(levelIn, pos, 64, tile -> {
-                if (tile.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent() || tile instanceof SpawnerBlockEntity || ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(tile.getType()).getNamespace().equals("lootr")) {
+                if (tile.getCapability(Capabilities.ITEM_HANDLER).isPresent() || tile instanceof SpawnerBlockEntity || ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(tile.getType()).getNamespace().equals("lootr")) {
                     inst.spawnMagicParticle(
                             tile.getBlockPos().getX() + 0.5F, tile.getBlockPos().getY() + 0.5F, tile.getBlockPos().getZ() + 0.5F,
                             0F, 0F, 0F, 0xf5f10a, 6F, 20 * 60, 0F, false, true);
@@ -42,7 +42,7 @@ public class ItemLootFinder extends ItemImpl {
                 return false;
             });
             for (var entity : levelIn.getEntitiesOfClass(Entity.class, new AABB(pos).inflate(64))) {
-                if (!(entity instanceof LivingEntity) && entity.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
+                if (!(entity instanceof LivingEntity) && entity.getCapability(Capabilities.ITEM_HANDLER).isPresent()) {
                     inst.spawnMagicParticle(
                             entity.getX(), entity.getEyeY(), entity.getZ(),
                             0F, 0F, 0F, 0xf5f10a, 6F, 20 * 60, 0F, false, true);

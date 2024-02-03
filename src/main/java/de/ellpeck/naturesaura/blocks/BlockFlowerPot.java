@@ -7,7 +7,7 @@ import de.ellpeck.naturesaura.reg.INoItemBlock;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerPotBlock;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 

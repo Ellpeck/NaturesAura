@@ -6,11 +6,10 @@ import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.events.ClientEvents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Supplier;
 
 public class PacketAuraChunk {

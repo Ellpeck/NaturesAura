@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.neoforge.event.EventHooks;
 
 public class ExplosionEffect implements IDrainSpotEffect {
 
@@ -66,7 +67,7 @@ public class ExplosionEffect implements IDrainSpotEffect {
         var chosenPos = new BlockPos(x, level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z), z);
         if (chosenPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(chosenPos)) {
             var explosion = new Explosion(level, null, chosenPos.getX() + 0.5, chosenPos.getY() + 0.5, chosenPos.getZ() + 0.5, this.strength, false, Explosion.BlockInteraction.DESTROY);
-            if (!net.minecraftforge.event.ForgeEventFactory.onExplosionStart(level, explosion)) {
+            if (!EventHooks.onExplosionStart(level, explosion)) {
                 explosion.explode();
                 explosion.finalizeExplosion(true);
             }

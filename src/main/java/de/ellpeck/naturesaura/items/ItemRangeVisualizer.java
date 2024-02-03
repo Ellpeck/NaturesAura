@@ -15,9 +15,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 
 public class ItemRangeVisualizer extends ItemImpl {
 
@@ -27,7 +27,7 @@ public class ItemRangeVisualizer extends ItemImpl {
 
     public ItemRangeVisualizer() {
         super("range_visualizer", new Properties().stacksTo(1));
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
+        NeoForge.EVENT_BUS.register(new EventHandler());
     }
 
     public static void clear() {

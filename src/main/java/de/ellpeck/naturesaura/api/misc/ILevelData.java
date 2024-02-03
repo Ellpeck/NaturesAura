@@ -3,9 +3,9 @@ package de.ellpeck.naturesaura.api.misc;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
 
 public interface ILevelData extends ICapabilityProvider, INBTSerializable<CompoundTag> {
 

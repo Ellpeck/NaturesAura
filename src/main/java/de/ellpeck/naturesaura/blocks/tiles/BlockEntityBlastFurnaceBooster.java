@@ -10,9 +10,9 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -85,7 +85,7 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
         var below = this.level.getBlockEntity(this.worldPosition.below());
         if (!(below instanceof BlastFurnaceBlockEntity))
             return null;
-        var handler = below.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP).orElse(null);
+        var handler = below.getCapability(Capabilities.ITEM_HANDLER, Direction.UP).orElse(null);
         if (handler == null)
             return null;
         return new IItemHandlerModifiable() {

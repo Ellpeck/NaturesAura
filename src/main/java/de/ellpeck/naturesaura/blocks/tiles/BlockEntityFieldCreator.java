@@ -17,9 +17,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.event.level.BlockEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import net.neoforged.neoforge.event.level.BlockEvent;
 
 public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickableBlockEntity {
 
@@ -108,7 +108,7 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
                 var state = this.level.getBlockState(pos);
                 if (!state.isAir() && state.getDestroySpeed(this.level, pos) >= 0F) {
                     var fake = FakePlayerFactory.getMinecraft((ServerLevel) this.level);
-                    if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.level, pos, state, fake))) {
+                    if (!NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.level, pos, state, fake))) {
                         var drops = state.getDrops(new LootParams.Builder((ServerLevel) this.level)
                                 .withParameter(LootContextParams.THIS_ENTITY, fake)
                                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))

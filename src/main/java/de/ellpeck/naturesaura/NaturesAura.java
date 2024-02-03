@@ -11,13 +11,13 @@ import de.ellpeck.naturesaura.proxy.ClientProxy;
 import de.ellpeck.naturesaura.proxy.IProxy;
 import de.ellpeck.naturesaura.proxy.ServerProxy;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.DistExecutor;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,9 +37,9 @@ public final class NaturesAura {
         NaturesAura.instance = this;
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
-        var builder = new ForgeConfigSpec.Builder();
+        var builder = new ModConfigSpec.Builder();
         ModConfig.instance = new ModConfig(builder);
-        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, builder.build());
+        ModLoadingContext.get().registerConfig(net.neoforged.fml.config.ModConfig.Type.COMMON, builder.build());
     }
 
     public void setup(FMLCommonSetupEvent event) {
@@ -53,7 +53,7 @@ public final class NaturesAura {
         PacketHandler.init();
         new Multiblocks();
 
-        MinecraftForge.EVENT_BUS.register(new CommonEvents());
+        NeoForge.EVENT_BUS.register(new CommonEvents());
 
         NaturesAura.proxy.preInit(event);
     }

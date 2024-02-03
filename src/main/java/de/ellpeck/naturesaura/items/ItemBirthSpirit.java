@@ -4,15 +4,15 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 
 public class ItemBirthSpirit extends ItemGlowing {
 
     public ItemBirthSpirit() {
         super("birth_spirit");
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
+        NeoForge.EVENT_BUS.register(new EventHandler());
     }
 
     private static class EventHandler {

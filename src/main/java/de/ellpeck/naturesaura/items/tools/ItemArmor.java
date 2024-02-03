@@ -15,14 +15,13 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -92,7 +91,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
         public static void update(TickEvent.PlayerTickEvent event) {
             var player = event.player;
             var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
-            var step = player.getAttribute(ForgeMod.STEP_HEIGHT_ADDITION.get());
+            var step = player.getAttribute(NeoForgeMod.STEP_HEIGHT_ADDITION.get());
             var key = NaturesAura.MOD_ID + ":sky_equipped";
             var nbt = player.getPersistentData();
             var equipped = ItemArmor.isFullSetEquipped(player, ModArmorMaterial.SKY);

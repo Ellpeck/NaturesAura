@@ -1,7 +1,7 @@
 package de.ellpeck.naturesaura.compat;
 
 import de.ellpeck.naturesaura.data.ItemTagProvider;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public interface ICompat {
 

@@ -5,21 +5,21 @@ import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.crafting.conditions.ICondition;
+import net.neoforged.neoforge.common.crafting.conditions.IConditionSerializer;
 
 public class EnabledCondition implements ICondition {
 
     private static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "enabled");
-    private ForgeConfigSpec.ConfigValue<Boolean> config;
+    private ModConfigSpec.ConfigValue<Boolean> config;
     private final String name;
 
     @SuppressWarnings("unchecked")
     public EnabledCondition(String name) {
         this.name = name;
         try {
-            this.config = (ForgeConfigSpec.ConfigValue<Boolean>) ModConfig.class.getField(name).get(ModConfig.instance);
+            this.config = (ModConfigSpec.ConfigValue<Boolean>) ModConfig.class.getField(name).get(ModConfig.instance);
         } catch (IllegalAccessException | NoSuchFieldException e) {
             NaturesAura.LOGGER.error(e);
         }
