@@ -5,18 +5,22 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.events.ClientEvents;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-public class PacketAuraChunk {
+public class PacketAuraChunk implements CustomPacketPayload {
 
-    private int chunkX;
-    private int chunkZ;
-    private Collection<AuraChunk.DrainSpot> drainSpots;
+    public static final ResourceLocation ID = new ResourceLocation(NaturesAura.MOD_ID, "aura_chunk");
+
+    private final int chunkX;
+    private final int chunkZ;
+    private final Collection<AuraChunk.DrainSpot> drainSpots;
 
     public PacketAuraChunk(int chunkX, int chunkZ, Collection<AuraChunk.DrainSpot> drainSpots) {
         this.chunkX = chunkX;
@@ -24,34 +28,33 @@ public class PacketAuraChunk {
         this.drainSpots = drainSpots;
     }
 
-    private PacketAuraChunk() {
-    }
+    public PacketAuraChunk(FriendlyByteBuf buf) {
+        this.chunkX = buf.readInt();
+        this.chunkZ = buf.readInt();
 
-    public static PacketAuraChunk fromBytes(FriendlyByteBuf buf) {
-        var packet = new PacketAuraChunk();
-        packet.chunkX = buf.readInt();
-        packet.chunkZ = buf.readInt();
-
-        packet.drainSpots = new ArrayList<>();
+        this.drainSpots = new ArrayList<>();
         var amount = buf.readInt();
         for (var i = 0; i < amount; i++)
-            packet.drainSpots.add(new AuraChunk.DrainSpot(buf.readNbt()));
-
-        return packet;
+            this.drainSpots.add(new AuraChunk.DrainSpot(buf.readNbt()));
     }
 
-    public static void toBytes(PacketAuraChunk packet, FriendlyByteBuf buf) {
-        buf.writeInt(packet.chunkX);
-        buf.writeInt(packet.chunkZ);
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeInt(this.chunkX);
+        buf.writeInt(this.chunkZ);
 
-        buf.writeInt(packet.drainSpots.size());
-        for (var entry : packet.drainSpots)
+        buf.writeInt(this.drainSpots.size());
+        for (var entry : this.drainSpots)
             buf.writeNbt(entry.serializeNBT());
     }
 
-    public static void onMessage(PacketAuraChunk message, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> ClientEvents.PENDING_AURA_CHUNKS.add(message));
-        ctx.get().setPacketHandled(true);
+    @Override
+    public ResourceLocation id() {
+        return PacketAuraChunk.ID;
+    }
+
+    public static void onMessage(PacketAuraChunk message, PlayPayloadContext ctx) {
+        ctx.workHandler().execute(() -> ClientEvents.PENDING_AURA_CHUNKS.add(message));
     }
 
     public boolean tryHandle(Level level) {
@@ -69,4 +72,5 @@ public class PacketAuraChunk {
             return true;
         }
     }
+
 }

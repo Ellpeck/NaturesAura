@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.packet;
 
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
@@ -11,19 +12,22 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
-public class PacketParticles {
+public class PacketParticles implements CustomPacketPayload {
 
-    private float posX;
-    private float posY;
-    private float posZ;
-    private Type type;
-    private int[] data;
+    public static final ResourceLocation ID = new ResourceLocation(NaturesAura.MOD_ID, "particles");
+
+    private final float posX;
+    private final float posY;
+    private final float posZ;
+    private final Type type;
+    private final int[] data;
 
     public PacketParticles(float posX, float posY, float posZ, Type type, int... data) {
         this.posX = posX;
@@ -33,49 +37,40 @@ public class PacketParticles {
         this.data = data;
     }
 
-    private PacketParticles() {
+    public PacketParticles(FriendlyByteBuf buf) {
+        this.posX = buf.readFloat();
+        this.posY = buf.readFloat();
+        this.posZ = buf.readFloat();
+        this.type = Type.values()[buf.readByte()];
+
+        this.data = new int[buf.readByte()];
+        for (var i = 0; i < this.data.length; i++)
+            this.data[i] = buf.readInt();
     }
 
-    public static PacketParticles fromBytes(FriendlyByteBuf buf) {
-        var packet = new PacketParticles();
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeFloat(this.posX);
+        buf.writeFloat(this.posY);
+        buf.writeFloat(this.posZ);
+        buf.writeByte(this.type.ordinal());
 
-        packet.posX = buf.readFloat();
-        packet.posY = buf.readFloat();
-        packet.posZ = buf.readFloat();
-        packet.type = Type.values()[buf.readByte()];
-
-        packet.data = new int[buf.readByte()];
-        for (var i = 0; i < packet.data.length; i++) {
-            packet.data[i] = buf.readInt();
-        }
-
-        return packet;
-    }
-
-    public static void toBytes(PacketParticles packet, FriendlyByteBuf buf) {
-        buf.writeFloat(packet.posX);
-        buf.writeFloat(packet.posY);
-        buf.writeFloat(packet.posZ);
-        buf.writeByte(packet.type.ordinal());
-
-        buf.writeByte(packet.data.length);
-        for (var i : packet.data) {
+        buf.writeByte(this.data.length);
+        for (var i : this.data)
             buf.writeInt(i);
-        }
     }
 
-    // lambda causes classloading issues on a server here
-    @SuppressWarnings("Convert2Lambda")
-    public static void onMessage(PacketParticles message, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(new Runnable() {
-            @Override
-            public void run() {
-                Level level = Minecraft.getInstance().level;
-                if (level != null)
-                    message.type.action.accept(message, level);
-            }
+    @Override
+    public ResourceLocation id() {
+        return null;
+    }
+
+    public static void onMessage(PacketParticles message, PlayPayloadContext ctx) {
+        ctx.workHandler().execute(() -> {
+            Level level = Minecraft.getInstance().level;
+            if (level != null)
+                message.type.action.accept(message, level);
         });
-        ctx.get().setPacketHandled(true);
     }
 
     public enum Type {
@@ -578,4 +573,5 @@ public class PacketParticles {
             this.action = action;
         }
     }
+
 }

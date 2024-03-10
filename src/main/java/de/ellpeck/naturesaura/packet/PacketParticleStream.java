@@ -1,24 +1,27 @@
 package de.ellpeck.naturesaura.packet;
 
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.network.FriendlyByteBuf;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-import java.util.function.Supplier;
+public class PacketParticleStream implements CustomPacketPayload {
 
-public class PacketParticleStream {
+    public static final ResourceLocation ID = new ResourceLocation(NaturesAura.MOD_ID, "particle_stream");
 
-    private float startX;
-    private float startY;
-    private float startZ;
+    private final float startX;
+    private final float startY;
+    private final float startZ;
 
-    private float endX;
-    private float endY;
-    private float endZ;
+    private final float endX;
+    private final float endY;
+    private final float endZ;
 
-    private float speed;
-    private int color;
-    private float scale;
+    private final float speed;
+    private final int color;
+    private final float scale;
 
     public PacketParticleStream(float startX, float startY, float startZ, float endX, float endY, float endZ, float speed, int color, float scale) {
         this.startX = startX;
@@ -32,43 +35,41 @@ public class PacketParticleStream {
         this.scale = scale;
     }
 
-    private PacketParticleStream() {
+    public PacketParticleStream(FriendlyByteBuf buf) {
+        this.startX = buf.readFloat();
+        this.startY = buf.readFloat();
+        this.startZ = buf.readFloat();
+        this.endX = buf.readFloat();
+        this.endY = buf.readFloat();
+        this.endZ = buf.readFloat();
+        this.speed = buf.readFloat();
+        this.color = buf.readInt();
+        this.scale = buf.readFloat();
     }
 
-    public static PacketParticleStream fromBytes(FriendlyByteBuf buf) {
-        var packet = new PacketParticleStream();
-
-        packet.startX = buf.readFloat();
-        packet.startY = buf.readFloat();
-        packet.startZ = buf.readFloat();
-        packet.endX = buf.readFloat();
-        packet.endY = buf.readFloat();
-        packet.endZ = buf.readFloat();
-        packet.speed = buf.readFloat();
-        packet.color = buf.readInt();
-        packet.scale = buf.readFloat();
-
-        return packet;
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeFloat(this.startX);
+        buf.writeFloat(this.startY);
+        buf.writeFloat(this.startZ);
+        buf.writeFloat(this.endX);
+        buf.writeFloat(this.endY);
+        buf.writeFloat(this.endZ);
+        buf.writeFloat(this.speed);
+        buf.writeInt(this.color);
+        buf.writeFloat(this.scale);
     }
 
-    public static void toBytes(PacketParticleStream packet, FriendlyByteBuf buf) {
-        buf.writeFloat(packet.startX);
-        buf.writeFloat(packet.startY);
-        buf.writeFloat(packet.startZ);
-        buf.writeFloat(packet.endX);
-        buf.writeFloat(packet.endY);
-        buf.writeFloat(packet.endZ);
-        buf.writeFloat(packet.speed);
-        buf.writeInt(packet.color);
-        buf.writeFloat(packet.scale);
+    @Override
+    public ResourceLocation id() {
+        return PacketParticleStream.ID;
     }
 
-    public static void onMessage(PacketParticleStream message, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> NaturesAuraAPI.instance().spawnParticleStream(
+    public static void onMessage(PacketParticleStream message, PlayPayloadContext ctx) {
+        ctx.workHandler().execute(() -> NaturesAuraAPI.instance().spawnParticleStream(
                 message.startX, message.startY, message.startZ,
                 message.endX, message.endY, message.endZ,
                 message.speed, message.color, message.scale));
-
-        ctx.get().setPacketHandled(true);
     }
+
 }
