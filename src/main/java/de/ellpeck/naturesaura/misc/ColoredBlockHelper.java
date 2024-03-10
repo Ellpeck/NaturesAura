@@ -1,10 +1,10 @@
 package de.ellpeck.naturesaura.misc;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -24,7 +24,7 @@ public final class ColoredBlockHelper {
     private static List<Block> collectBlocks(String name) {
         return Arrays.stream(DyeColor.values()).sorted(Comparator.comparingInt(DyeColor::getId)).map(c -> {
             var loc = new ResourceLocation(c.getName() + '_' + name);
-            var block = ForgeRegistries.BLOCKS.getValue(loc);
+            var block = BuiltInRegistries.BLOCK.get(loc);
             if (block == null || block == Blocks.AIR)
                 throw new IllegalStateException("Couldn't find block with name " + loc);
             return block;
@@ -38,4 +38,5 @@ public final class ColoredBlockHelper {
         }
         return null;
     }
+
 }

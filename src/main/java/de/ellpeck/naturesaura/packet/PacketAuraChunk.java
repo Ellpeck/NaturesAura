@@ -12,7 +12,6 @@ import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.function.Supplier;
 
 public class PacketAuraChunk implements CustomPacketPayload {
 
@@ -62,7 +61,7 @@ public class PacketAuraChunk implements CustomPacketPayload {
             var chunk = level.getChunk(this.chunkX, this.chunkZ);
             if (chunk.isEmpty())
                 return false;
-            var auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.CAP_AURA_CHUNK).orElse(null);
+            var auraChunk = (AuraChunk) chunk.getData(NaturesAuraAPI.AURA_CHUNK_ATTACHMENT);
             if (auraChunk == null)
                 return false;
             auraChunk.setSpots(this.drainSpots);

@@ -9,7 +9,6 @@ import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -23,7 +22,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -42,7 +40,7 @@ public class ItemEnderAccess extends ItemImpl {
         var name = BlockEnderCrate.getEnderName(stack);
         if (!Strings.isNullOrEmpty(name)) {
             if (!levelIn.isClientSide && NaturesAuraAPI.instance().extractAuraFromPlayer(playerIn, 10000, false)) {
-                NetworkHooks.openScreen((ServerPlayer) playerIn, new MenuProvider() {
+                playerIn.openMenu(new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
                         return Component.translatable("info." + NaturesAura.MOD_ID + ".ender_access", ChatFormatting.ITALIC + name + ChatFormatting.RESET);
@@ -66,4 +64,5 @@ public class ItemEnderAccess extends ItemImpl {
     public void appendHoverText(ItemStack stack, @Nullable Level levelIn, List<Component> tooltip, TooltipFlag flagIn) {
         BlockEnderCrate.addEnderNameInfo(stack, tooltip);
     }
+
 }

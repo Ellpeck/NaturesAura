@@ -1,16 +1,13 @@
 package de.ellpeck.naturesaura.api.misc;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
 
-public interface ILevelData extends ICapabilityProvider, INBTSerializable<CompoundTag> {
+public interface ILevelData {
 
     static ILevelData getLevelData(Level level) {
-        return level.getCapability(NaturesAuraAPI.CAP_LEVEL_DATA, null).orElse(null);
+        return NaturesAuraAPI.instance().getLevelData(level);
     }
 
     static ILevelData getOverworldData(Level level) {
@@ -22,4 +19,5 @@ public interface ILevelData extends ICapabilityProvider, INBTSerializable<Compou
     IItemHandlerModifiable getEnderStorage(String name);
 
     boolean isEnderStorageLocked(String name);
+
 }

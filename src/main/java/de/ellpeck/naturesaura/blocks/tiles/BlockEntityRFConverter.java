@@ -10,18 +10,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.util.LazyOptional;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.EnergyStorage;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-
-import javax.annotation.Nullable;
 
 public class BlockEntityRFConverter extends BlockEntityImpl implements ITickableBlockEntity {
 
     public final RFStorage storage = new RFStorage();
-    private final LazyOptional<IEnergyStorage> storageOptional = LazyOptional.of(() -> this.storage);
     private int lastEnergy;
 
     public BlockEntityRFConverter(BlockPos pos, BlockState state) {
@@ -52,7 +46,7 @@ public class BlockEntityRFConverter extends BlockEntityImpl implements ITickable
                 var tile = this.level.getBlockEntity(this.worldPosition.relative(facing));
                 if (tile == null)
                     continue;
-                var storage = tile.getCapability(Capabilities.ENERGY, facing.getOpposite()).orElse(null);
+                var storage = this.level.getCapability(Capabilities.EnergyStorage.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, facing.getOpposite());
                 if (storage == null)
                     continue;
                 var canStore = storage.receiveEnergy(Integer.MAX_VALUE, true);
@@ -88,19 +82,9 @@ public class BlockEntityRFConverter extends BlockEntityImpl implements ITickable
         }
     }
 
-    @Nullable
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (capability == Capabilities.ENERGY)
-            return this.storageOptional.cast();
-        else
-            return super.getCapability(capability, facing);
-    }
-
     @Override
     public void setRemoved() {
         super.setRemoved();
-        this.storageOptional.invalidate();
     }
 
     public static class RFStorage extends EnergyStorage {
@@ -112,5 +96,7 @@ public class BlockEntityRFConverter extends BlockEntityImpl implements ITickable
         public void setEnergy(int energy) {
             this.energy = energy;
         }
+
     }
+
 }

@@ -33,7 +33,6 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -92,7 +91,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
             var tile = levelIn.getBlockEntity(pos);
             if (tile instanceof BlockEntityEnderCrate crate && crate.canOpen() && crate.canUseRightNow(2500)) {
                 crate.drainAura(2500);
-                NetworkHooks.openScreen((ServerPlayer) player, crate, pos);
+                player.openMenu(crate, pos);
             }
         }
         return InteractionResult.SUCCESS;
@@ -132,4 +131,5 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     public void registerTESR() {
         BlockEntityRenderers.register(ModBlockEntities.ENDER_CRATE, RenderEnderCrate::new);
     }
+
 }

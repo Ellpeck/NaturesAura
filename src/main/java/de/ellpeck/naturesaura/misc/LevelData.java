@@ -3,7 +3,6 @@ package de.ellpeck.naturesaura.misc;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import de.ellpeck.naturesaura.Helper;
-import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntitySpawnLamp;
 import de.ellpeck.naturesaura.blocks.tiles.ItemStackHandlerNA;
@@ -11,40 +10,47 @@ import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.LongTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.util.LazyOptional;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 
-public class LevelData implements ILevelData {
+public class LevelData extends SavedData implements ILevelData {
+
+    public static final SavedData.Factory<LevelData> FACTORY = new SavedData.Factory<>(LevelData::new, LevelData::new);
+    public static LevelData client;
 
     public final ListMultimap<ResourceLocation, Tuple<Vec3, Integer>> effectPowders = ArrayListMultimap.create();
     public final Long2ObjectOpenHashMap<AuraChunk> auraChunksWithSpots = new Long2ObjectOpenHashMap<>();
     public final List<BlockPos> recentlyConvertedMossStones = new ArrayList<>();
     public final Set<BlockEntitySpawnLamp> spawnLamps = new HashSet<>();
     private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();
-    private final LazyOptional<LevelData> lazyThis = LazyOptional.of(() -> this);
 
-    @Nullable
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-        return capability == NaturesAuraAPI.CAP_LEVEL_DATA ? this.lazyThis.cast() : LazyOptional.empty();
+    public Level level;
+
+    public LevelData() {
+
+    }
+
+    public LevelData(CompoundTag compound) {
+        for (var base : compound.getList("storages", 10)) {
+            var storageComp = (CompoundTag) base;
+            var storage = this.getEnderStorage(storageComp.getString("name"));
+            storage.deserializeNBT(storageComp);
+        }
+        for (var base : compound.getList("converted_moss", Tag.TAG_LONG))
+            this.recentlyConvertedMossStones.add(BlockPos.of(((LongTag) base).getAsLong()));
     }
 
     @Override
-    public CompoundTag serializeNBT() {
-        var compound = new CompoundTag();
-
+    public CompoundTag save(CompoundTag compound) {
         var storages = new ListTag();
         for (var entry : this.enderStorages.entrySet()) {
             var handler = entry.getValue();
@@ -62,20 +68,6 @@ public class LevelData implements ILevelData {
         compound.put("converted_moss", moss);
 
         return compound;
-    }
-
-    @Override
-    public void deserializeNBT(CompoundTag compound) {
-        this.enderStorages.clear();
-        for (var base : compound.getList("storages", 10)) {
-            var storageComp = (CompoundTag) base;
-            var storage = this.getEnderStorage(storageComp.getString("name"));
-            storage.deserializeNBT(storageComp);
-        }
-
-        this.recentlyConvertedMossStones.clear();
-        for (var base : compound.getList("converted_moss", Tag.TAG_LONG))
-            this.recentlyConvertedMossStones.add(BlockPos.of(((LongTag) base).getAsLong()));
     }
 
     @Override
@@ -99,4 +91,5 @@ public class LevelData implements ILevelData {
         if (this.recentlyConvertedMossStones.size() > 512)
             this.recentlyConvertedMossStones.remove(0);
     }
+
 }

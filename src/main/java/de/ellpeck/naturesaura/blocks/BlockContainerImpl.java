@@ -129,11 +129,11 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         var tile = level.getBlockEntity(pos);
         if (tile instanceof BlockEntityImpl impl)
             impl.dropInventory();
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -181,4 +181,5 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
             throw new IllegalStateException("Cannot construct block entity from class " + this.tileClass, e);
         }
     }
+
 }

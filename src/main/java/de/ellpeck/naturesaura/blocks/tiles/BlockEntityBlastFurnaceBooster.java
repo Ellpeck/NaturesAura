@@ -10,8 +10,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
@@ -35,7 +35,7 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
         var below = this.level.getBlockEntity(this.worldPosition.below());
         if (!(below instanceof BlastFurnaceBlockEntity tile))
             return;
-        Recipe<?> recipe = this.level.getRecipeManager().getRecipeFor(BlockEntityFurnaceHeater.getRecipeType(tile), tile, this.level).orElse(null);
+        Recipe<?> recipe = this.level.getRecipeManager().getRecipeFor(BlockEntityFurnaceHeater.getRecipeType(tile), tile, this.level).orElse(null).value();
         if (recipe == null)
             return;
         if (!this.isApplicable(recipe.getIngredients()))
@@ -80,12 +80,11 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
         return false;
     }
 
-    @Override
     public IItemHandlerModifiable getItemHandler() {
         var below = this.level.getBlockEntity(this.worldPosition.below());
         if (!(below instanceof BlastFurnaceBlockEntity))
             return null;
-        var handler = below.getCapability(Capabilities.ITEM_HANDLER, Direction.UP).orElse(null);
+        var handler = this.level.getCapability(Capabilities.ItemHandler.BLOCK, below.getBlockPos(), below.getBlockState(), below, Direction.UP);
         if (handler == null)
             return null;
         return new IItemHandlerModifiable() {
@@ -138,4 +137,5 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
     public boolean allowsLowerLimiter() {
         return true;
     }
+
 }

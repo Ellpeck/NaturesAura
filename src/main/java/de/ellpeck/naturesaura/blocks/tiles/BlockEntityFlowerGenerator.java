@@ -7,12 +7,12 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.ArrayList;
@@ -106,7 +106,7 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
                 var block = state.getBlock();
 
                 var tag = new CompoundTag();
-                tag.putString("block", ForgeRegistries.BLOCKS.getKey(block).toString());
+                tag.putString("block", BuiltInRegistries.BLOCK.getKey(block).toString());
                 tag.putInt("amount", entry.getValue().intValue());
                 list.add(tag);
             }
@@ -122,11 +122,12 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
             var list = compound.getList("consumed_recently", 10);
             for (var base : list) {
                 var tag = (CompoundTag) base;
-                var block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tag.getString("block")));
+                var block = BuiltInRegistries.BLOCK.get(new ResourceLocation(tag.getString("block")));
                 if (block != null)
                     this.consumedRecently.put(block.defaultBlockState(), new MutableInt(tag.getInt("amount")));
             }
 
         }
     }
+
 }

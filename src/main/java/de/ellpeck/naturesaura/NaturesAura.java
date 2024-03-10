@@ -6,18 +6,17 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.chunk.effect.DrainSpotEffects;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.events.CommonEvents;
-import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.proxy.ClientProxy;
 import de.ellpeck.naturesaura.proxy.IProxy;
 import de.ellpeck.naturesaura.proxy.ServerProxy;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.fml.DistExecutor;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,13 +28,13 @@ public final class NaturesAura {
 
     public static final Logger LOGGER = LogManager.getLogger(NaturesAura.MOD_NAME);
     public static NaturesAura instance;
-    // this causes a classloading issue if it's not wrapped like this
-    @SuppressWarnings("Convert2MethodRef")
-    public static IProxy proxy = DistExecutor.unsafeRunForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
+    public static IProxy proxy;
 
-    public NaturesAura() {
+    public NaturesAura(IEventBus eventBus) {
         NaturesAura.instance = this;
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        NaturesAura.proxy = FMLEnvironment.dist.isClient() ? new ClientProxy() : new ServerProxy();
+
+        eventBus.addListener(this::setup);
 
         var builder = new ModConfigSpec.Builder();
         ModConfig.instance = new ModConfig(builder);
@@ -50,7 +49,6 @@ public final class NaturesAura {
 
     private void preInit(FMLCommonSetupEvent event) {
         Compat.setup(event);
-        PacketHandler.init();
         new Multiblocks();
 
         NeoForge.EVENT_BUS.register(new CommonEvents());

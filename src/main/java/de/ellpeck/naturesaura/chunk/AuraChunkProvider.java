@@ -14,10 +14,9 @@ import net.neoforged.neoforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AuraChunkProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+public class AuraChunkProvider implements INBTSerializable<CompoundTag> {
 
     private final LevelChunk chunk;
-    private final LazyOptional<IAuraChunk> lazyChunk = LazyOptional.of(this::getAuraChunk);
     private IAuraChunk auraChunk;
 
     public AuraChunkProvider(LevelChunk chunk) {

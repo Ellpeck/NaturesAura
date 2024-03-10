@@ -9,7 +9,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 public class BlockEntityGratedChute extends BlockEntityImpl implements ITickableBlockEntity {
@@ -48,7 +48,7 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
                     var tile = this.level.getBlockEntity(this.worldPosition.relative(facing));
                     if (tile == null)
                         break push;
-                    var handler = tile.getCapability(Capabilities.ITEM_HANDLER, facing.getOpposite()).orElse(null);
+                    var handler = this.level.getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, facing.getOpposite());
                     if (handler == null)
                         break push;
                     for (var i = 0; i < handler.getSlots(); i++) {
@@ -87,7 +87,7 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
                     var tileUp = this.level.getBlockEntity(this.worldPosition.above());
                     if (tileUp == null)
                         break pull;
-                    var handlerUp = tileUp.getCapability(Capabilities.ITEM_HANDLER, Direction.DOWN).orElse(null);
+                    var handlerUp = this.level.getCapability(Capabilities.ItemHandler.BLOCK, tileUp.getBlockPos(), tileUp.getBlockState(), tileUp, Direction.DOWN);
                     if (handlerUp == null)
                         break pull;
                     for (var i = 0; i < handlerUp.getSlots(); i++) {
@@ -143,4 +143,5 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
     public IItemHandlerModifiable getItemHandler() {
         return this.items;
     }
+
 }

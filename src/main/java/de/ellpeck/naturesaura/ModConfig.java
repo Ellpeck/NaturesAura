@@ -5,10 +5,10 @@ import de.ellpeck.naturesaura.api.aura.type.BasicAuraType;
 import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import de.ellpeck.naturesaura.chunk.effect.OreSpawnEffect;
 import de.ellpeck.naturesaura.chunk.effect.PlantBoostEffect;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import java.util.Collections;
 import java.util.List;
@@ -239,18 +239,18 @@ public final class ModConfig {
         }
 
         try {
-            for (String s : this.plantBoostExceptions.get())
-                PlantBoostEffect.EXCEPTIONS.add(Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s))));
+            for (var s : this.plantBoostExceptions.get())
+                PlantBoostEffect.EXCEPTIONS.add(Objects.requireNonNull(BuiltInRegistries.BLOCK.get(new ResourceLocation(s))));
         } catch (Exception e) {
             NaturesAura.LOGGER.warn("Error parsing plantBoostExceptions", e);
 
         }
 
         try {
-            for (String s : this.additionalProjectiles.get()) {
+            for (var s : this.additionalProjectiles.get()) {
                 var split = s.split("->");
                 var name = new ResourceLocation(split[0]);
-                var type = Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getValue(name));
+                var type = Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.get(name));
                 var amount = Integer.parseInt(split[1]);
                 NaturesAuraAPI.PROJECTILE_GENERATIONS.put(type, amount);
             }
@@ -258,4 +258,5 @@ public final class ModConfig {
             NaturesAura.LOGGER.warn("Error parsing additionalProjectiles", e);
         }
     }
+
 }

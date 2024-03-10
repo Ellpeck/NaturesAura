@@ -10,6 +10,8 @@ import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -29,7 +31,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
 import java.util.List;
@@ -114,11 +115,14 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                     var ore = WeightedRandom.getRandomItem(level.random, ores, totalWeight).orElse(null);
                     if (ore == null)
                         continue;
-                    var tag = TagKey.create(ForgeRegistries.Keys.BLOCKS, ore.tag);
+                    var tag = TagKey.create(Registries.BLOCK, ore.tag);
                     if (tag == null)
                         continue;
-                    for (var toPlace : ForgeRegistries.BLOCKS.tags().getTag(tag)) {
-                        if (toPlace == null || toPlace == Blocks.AIR)
+                    for (var toPlaceHolder : BuiltInRegistries.BLOCK.getTag(tag).orElseThrow()) {
+                        if (toPlaceHolder == null)
+                            continue;
+                        var toPlace = toPlaceHolder.value();
+                        if (toPlace == Blocks.AIR)
                             continue;
 
                         var player = FakePlayerFactory.getMinecraft((ServerLevel) level);
@@ -152,4 +156,5 @@ public class OreSpawnEffect implements IDrainSpotEffect {
     public ResourceLocation getName() {
         return OreSpawnEffect.NAME;
     }
+
 }

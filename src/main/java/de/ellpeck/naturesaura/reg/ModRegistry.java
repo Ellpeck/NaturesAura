@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.blocks.*;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraBloom;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEnderCrate;
 import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
+import de.ellpeck.naturesaura.chunk.AuraChunkProvider;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
@@ -24,6 +25,7 @@ import de.ellpeck.naturesaura.potion.PotionBreathless;
 import de.ellpeck.naturesaura.recipes.EnabledCondition;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -36,14 +38,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
-import net.neoforged.neoforge.common.crafting.CraftingHelper;
-import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.crafting.CraftingHelper;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.registries.RegisterEvent;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,14 +58,14 @@ public final class ModRegistry {
 
     @SubscribeEvent
     public static void register(RegisterEvent event) {
-        event.register(ForgeRegistries.Keys.BLOCKS, h -> {
+        event.register(Registries.BLOCK, h -> {
             Block temp;
             ModRegistry.registerAll(h,
                     new BlockAncientLog("ancient_log"),
                     new BlockAncientLog("ancient_bark"),
                     temp = new BlockImpl("ancient_planks", Block.Properties.of().sound(SoundType.WOOD).strength(2F)),
-                    new BlockStairsNA("ancient_stairs", "ancient_planks", temp::defaultBlockState, Block.Properties.copy(temp)),
-                    new Slab("ancient_slab", "ancient_planks", Block.Properties.copy(temp)),
+                    new BlockStairsNA("ancient_stairs", "ancient_planks", temp::defaultBlockState, Block.Properties.ofFullCopy(temp)),
+                    new Slab("ancient_slab", "ancient_planks", Block.Properties.ofFullCopy(temp)),
                     new BlockAncientLeaves(),
                     new BlockAncientSapling(),
                     new BlockNatureAltar(),
@@ -72,11 +74,11 @@ public final class ModRegistry {
                     new BlockGoldPowder(),
                     new BlockWoodStand(),
                     temp = new BlockImpl("infused_stone", Block.Properties.of().sound(SoundType.STONE).strength(1.75F)),
-                    new BlockStairsNA("infused_stairs", "infused_stone", temp::defaultBlockState, Block.Properties.copy(temp)),
-                    new Slab("infused_slab", "infused_stone", Block.Properties.copy(temp)),
+                    new BlockStairsNA("infused_stairs", "infused_stone", temp::defaultBlockState, Block.Properties.ofFullCopy(temp)),
+                    new Slab("infused_slab", "infused_stone", Block.Properties.ofFullCopy(temp)),
                     temp = new BlockImpl("infused_brick", Block.Properties.of().sound(SoundType.STONE).strength(1.5F)),
-                    new BlockStairsNA("infused_brick_stairs", "infused_brick", temp::defaultBlockState, Block.Properties.copy(temp)),
-                    new Slab("infused_brick_slab", "infused_brick", Block.Properties.copy(temp)),
+                    new BlockStairsNA("infused_brick_stairs", "infused_brick", temp::defaultBlockState, Block.Properties.ofFullCopy(temp)),
+                    new Slab("infused_brick_slab", "infused_brick", Block.Properties.ofFullCopy(temp)),
                     new BlockFurnaceHeater(),
                     new BlockPotionGenerator(),
                     new BlockAuraDetector(),
@@ -96,8 +98,8 @@ public final class ModRegistry {
                     new BlockGratedChute(),
                     new BlockAnimalSpawner(),
                     new BlockAutoCrafter(),
-                    new BlockImpl("gold_brick", Block.Properties.copy(Blocks.STONE_BRICKS)),
-                    new BlockImpl("gold_nether_brick", Block.Properties.copy(Blocks.NETHER_BRICKS)),
+                    new BlockImpl("gold_brick", Block.Properties.ofFullCopy(Blocks.STONE_BRICKS)),
+                    new BlockImpl("gold_nether_brick", Block.Properties.ofFullCopy(Blocks.NETHER_BRICKS)),
                     new BlockMossGenerator(),
                     new BlockTimeChanger(),
                     new BlockGeneratorLimitRemover(),
@@ -109,7 +111,7 @@ public final class ModRegistry {
                     new BlockDimensionRail("nether", Level.NETHER, Level.OVERWORLD),
                     new BlockDimensionRail("end", Level.END, Level.OVERWORLD),
                     new BlockBlastFurnaceBooster(),
-                    new BlockImpl("nether_wart_mushroom", Block.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)),
+                    new BlockImpl("nether_wart_mushroom", Block.Properties.ofFullCopy(Blocks.RED_MUSHROOM_BLOCK)),
                     new BlockAnimalContainer(),
                     new BlockSnowCreator(),
                     new BlockItemDistributor(),
@@ -137,10 +139,10 @@ public final class ModRegistry {
                     new BlockImpl("sky_ingot_block", Block.Properties.of().sound(SoundType.METAL).strength(4F)),
                     new BlockImpl("depth_ingot_block", Block.Properties.of().sound(SoundType.METAL).strength(6F))
             );
-            Helper.populateObjectHolders(ModBlocks.class, event.getForgeRegistry());
+            Helper.populateObjectHolders(ModBlocks.class, BuiltInRegistries.BLOCK);
         });
 
-        event.register(ForgeRegistries.Keys.ITEMS, h -> {
+        event.register(Registries.ITEM, h -> {
             for (var block : ModRegistry.ALL_ITEMS) {
                 if (block instanceof Block && !(block instanceof INoItemBlock)) {
                     var item = new BlockItem((Block) block, new Item.Properties());
@@ -222,10 +224,10 @@ public final class ModRegistry {
                     new ItemArmor("depth_pants", ModArmorMaterial.DEPTH, ArmorItem.Type.LEGGINGS),
                     new ItemArmor("depth_shoes", ModArmorMaterial.DEPTH, ArmorItem.Type.BOOTS)
             );
-            Helper.populateObjectHolders(ModItems.class, event.getForgeRegistry());
+            Helper.populateObjectHolders(ModItems.class, BuiltInRegistries.ITEM);
         });
 
-        event.register(ForgeRegistries.Keys.BLOCK_ENTITY_TYPES, h -> {
+        event.register(Registries.BLOCK_ENTITY_TYPE, h -> {
             // add tile entities that support multiple blocks
             ModRegistry.ALL_ITEMS.add(new ModTileType<>(BlockEntityAuraBloom::new, "aura_bloom", ModRegistry.ALL_ITEMS.stream().filter(i -> i instanceof BlockAuraBloom).toArray(IModItem[]::new)));
 
@@ -233,15 +235,15 @@ public final class ModRegistry {
                 if (item instanceof ModTileType<?> type)
                     h.register(new ResourceLocation(NaturesAura.MOD_ID, type.getBaseName()), type.type);
             }
-            Helper.populateObjectHolders(ModBlockEntities.class, event.getForgeRegistry());
+            Helper.populateObjectHolders(ModBlockEntities.class, BuiltInRegistries.BLOCK_ENTITY_TYPE);
         });
 
-        event.register(ForgeRegistries.Keys.MOB_EFFECTS, h -> {
+        event.register(Registries.MOB_EFFECT, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "breathless"), new PotionBreathless());
-            Helper.populateObjectHolders(ModPotions.class, event.getForgeRegistry());
+            Helper.populateObjectHolders(ModPotions.class, BuiltInRegistries.MOB_EFFECT);
         });
 
-        event.register(ForgeRegistries.Keys.MENU_TYPES, h -> {
+        event.register(Registries.MENU, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "ender_crate"), IMenuTypeExtension.create((windowId, inv, data) -> {
                 var tile = inv.player.level().getBlockEntity(data.readBlockPos());
                 if (tile instanceof BlockEntityEnderCrate crate)
@@ -252,15 +254,15 @@ public final class ModRegistry {
                 IItemHandler handler = ILevelData.getOverworldData(inv.player.level()).getEnderStorage(data.readUtf());
                 return new ContainerEnderCrate(ModContainers.ENDER_ACCESS, windowId, inv.player, handler);
             }));
-            Helper.populateObjectHolders(ModContainers.class, event.getForgeRegistry());
+            Helper.populateObjectHolders(ModContainers.class, BuiltInRegistries.MENU);
         });
 
-        event.register(ForgeRegistries.Keys.ENCHANTMENTS, h -> {
+        event.register(Registries.ENCHANTMENT, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "aura_mending"), new AuraMendingEnchantment());
-            Helper.populateObjectHolders(ModEnchantments.class, event.getForgeRegistry());
+            Helper.populateObjectHolders(ModEnchantments.class, BuiltInRegistries.ENCHANTMENT);
         });
 
-        event.register(ForgeRegistries.Keys.ENTITY_TYPES, h -> {
+        event.register(Registries.ENTITY_TYPE, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "mover_cart"), EntityType.Builder
                     .of(EntityMoverMinecart::new, MobCategory.MISC)
                     .sized(1, 1).setShouldReceiveVelocityUpdates(true)
@@ -277,11 +279,10 @@ public final class ModRegistry {
                     .of(EntityStructureFinder::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(true)
                     .setTrackingRange(64).setUpdateInterval(2).fireImmune().build(NaturesAura.MOD_ID + ":structure_finder"));
-            Helper.populateObjectHolders(ModEntities.class, event.getForgeRegistry());
+            Helper.populateObjectHolders(ModEntities.class, BuiltInRegistries.ENTITY_TYPE);
         });
 
-
-        event.register(ForgeRegistries.Keys.FEATURES, h -> {
+        event.register(Registries.FEATURE, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "aura_bloom"), new LevelGenAuraBloom(ModBlocks.AURA_BLOOM, 60, false));
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "aura_cactus"), new LevelGenAuraBloom(ModBlocks.AURA_CACTUS, 60, false));
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "warped_aura_mushroom"), new LevelGenAuraBloom(ModBlocks.WARPED_AURA_MUSHROOM, 10, true));
@@ -289,18 +290,17 @@ public final class ModRegistry {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "aura_mushroom"), new LevelGenAuraBloom(ModBlocks.AURA_MUSHROOM, 20, false));
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "ancient_tree"), new LevelGenAncientTree());
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "nether_wart_mushroom"), new LevelGenNetherWartMushroom());
-            Helper.populateObjectHolders(ModFeatures.class, event.getForgeRegistry());
+            Helper.populateObjectHolders(ModFeatures.class, BuiltInRegistries.FEATURE);
         });
 
-
-        event.register(ForgeRegistries.Keys.RECIPE_TYPES, h -> {
+        event.register(Registries.RECIPE_TYPE, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "altar"), ModRecipes.ALTAR_TYPE);
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "animal_spawner"), ModRecipes.ANIMAL_SPAWNER_TYPE);
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "offering"), ModRecipes.OFFERING_TYPE);
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "tree_ritual"), ModRecipes.TREE_RITUAL_TYPE);
         });
 
-        event.register(ForgeRegistries.Keys.RECIPE_SERIALIZERS, h -> {
+        event.register(Registries.RECIPE_SERIALIZER, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "altar"), ModRecipes.ALTAR_SERIALIZER);
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "animal_spawner"), ModRecipes.ANIMAL_SPAWNER_SERIALIZER);
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "offering"), ModRecipes.OFFERING_SERIALIZER);
@@ -308,7 +308,7 @@ public final class ModRegistry {
             CraftingHelper.register(new EnabledCondition.Serializer());
         });
 
-        event.register(BuiltInRegistries.CREATIVE_MODE_TAB.key(), h -> {
+        event.register(Registries.CREATIVE_MODE_TAB, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "tab"), CreativeModeTab.builder()
                     .title(Component.translatable("item_group." + NaturesAura.MOD_ID + ".tab"))
                     .icon(() -> new ItemStack(ModItems.GOLD_LEAF))
@@ -328,10 +328,17 @@ public final class ModRegistry {
         });
     }
 
+    @SubscribeEvent
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.SPRING, (e, c) -> e.tank);
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.RF_CONVERTER, (e, c) -> e.storage);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.BLAST_FURNACE_BOOSTER, (e, c) -> e.getItemHandler());
+    }
+
     public static Block createFlowerPot(Block block) {
         var props = Block.Properties.of().strength(0F);
         Block potted = new BlockFlowerPot(() -> (FlowerPotBlock) Blocks.FLOWER_POT, () -> block, props);
-        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ForgeRegistries.BLOCKS.getKey(block), () -> potted);
+        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(BuiltInRegistries.BLOCK.getKey(block), () -> potted);
         return potted;
     }
 

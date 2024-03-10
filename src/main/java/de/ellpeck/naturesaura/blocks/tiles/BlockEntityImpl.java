@@ -1,8 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
-import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
-import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,19 +14,11 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.util.LazyOptional;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import net.neoforged.neoforge.common.capabilities.Capability;
-
-import javax.annotation.Nullable;
+import net.neoforged.neoforge.capabilities.Capabilities;
 
 public class BlockEntityImpl extends BlockEntity {
 
     public int redstonePower;
-    private LazyOptional<IItemHandler> itemHandler;
-    private LazyOptional<IAuraContainer> auraContainer;
 
     public BlockEntityImpl(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -97,45 +87,8 @@ public class BlockEntityImpl extends BlockEntity {
             e.connection.send(packet);
     }
 
-    public IItemHandlerModifiable getItemHandler() {
-        return null;
-    }
-
-    public IAuraContainer getAuraContainer() {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (capability == Capabilities.ITEM_HANDLER) {
-            if (this.itemHandler == null) {
-                IItemHandler handler = this.getItemHandler();
-                this.itemHandler = handler == null ? LazyOptional.empty() : LazyOptional.of(() -> handler);
-            }
-            return this.itemHandler.cast();
-        } else if (capability == NaturesAuraAPI.CAP_AURA_CONTAINER) {
-            if (this.auraContainer == null) {
-                var container = this.getAuraContainer();
-                this.auraContainer = container == null ? LazyOptional.empty() : LazyOptional.of(() -> container);
-            }
-            return this.auraContainer.cast();
-        } else {
-            return super.getCapability(capability, facing);
-        }
-    }
-
-    @Override
-    public void setRemoved() {
-        super.setRemoved();
-        if (this.itemHandler != null)
-            this.itemHandler.invalidate();
-        if (this.auraContainer != null)
-            this.auraContainer.invalidate();
-    }
-
     public void dropInventory() {
-        IItemHandler handler = this.getItemHandler();
+        var handler = this.level.getCapability(Capabilities.ItemHandler.BLOCK, this.worldPosition, this.getBlockState(), this, null);
         if (handler != null) {
             for (var i = 0; i < handler.getSlots(); i++) {
                 var stack = handler.getStackInSlot(i);
@@ -207,4 +160,5 @@ public class BlockEntityImpl extends BlockEntity {
     public enum SaveType {
         TILE, SYNC, BLOCK
     }
+
 }

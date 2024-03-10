@@ -7,7 +7,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.capabilities.Capabilities;
 
 public class BlockEntityPowderPlacer extends BlockEntityImpl {
 
@@ -18,14 +19,14 @@ public class BlockEntityPowderPlacer extends BlockEntityImpl {
     @Override
     public void onRedstonePowerChange(int newPower) {
         if (this.redstonePower <= 0 && newPower > 0) {
-            var powders = this.level.getEntitiesOfClass(EntityEffectInhibitor.class, new AABB(this.worldPosition, this.worldPosition.offset(1, 2, 1)), Entity::isAlive);
+            var powders = this.level.getEntitiesOfClass(EntityEffectInhibitor.class, new AABB(Vec3.atCenterOf(this.worldPosition), Vec3.atCenterOf(this.worldPosition.offset(1, 2, 1))), Entity::isAlive);
             for (var facing : Direction.values()) {
                 if (!facing.getAxis().isHorizontal())
                     continue;
                 var tile = this.level.getBlockEntity(this.worldPosition.relative(facing));
                 if (tile == null)
                     continue;
-                var handler = tile.getCapability(Capabilities.ITEM_HANDLER, facing.getOpposite()).orElse(null);
+                var handler = this.level.getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, facing.getOpposite());
                 if (handler == null)
                     continue;
 
@@ -56,4 +57,5 @@ public class BlockEntityPowderPlacer extends BlockEntityImpl {
         }
         super.onRedstonePowerChange(newPower);
     }
+
 }

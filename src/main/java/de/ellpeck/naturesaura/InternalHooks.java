@@ -8,6 +8,7 @@ import de.ellpeck.naturesaura.blocks.multi.Multiblock;
 import de.ellpeck.naturesaura.misc.LevelData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -37,9 +38,9 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     private boolean auraPlayerInteraction(Player player, int amount, boolean extract, boolean simulate) {
         if (extract && player.isCreative())
             return true;
-        var stack = Helper.getEquippedItem(s -> s.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).isPresent(), player, false);
+        var stack = Helper.getEquippedItem(s -> s.getCapability(NaturesAuraAPI.AURA_CONTAINER_CAPABILITY) != null, player, false);
         if (!stack.isEmpty()) {
-            var container = stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).orElse(null);
+            var container = stack.getCapability(NaturesAuraAPI.AURA_CONTAINER_CAPABILITY);
             if (extract) {
                 return container.drainAura(amount, simulate) > 0;
             } else {
@@ -180,6 +181,22 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
         if (highest == null || highestAmount.intValue() <= 0)
             highest = defaultSpot;
         return highest;
+    }
+
+    @Override
+    public ILevelData getLevelData(Level level) {
+        if (level instanceof ServerLevel server) {
+            var ret = server.getDataStorage().computeIfAbsent(LevelData.FACTORY, "level_data");
+            if (ret.level == null)
+                ret.level = level;
+            return ret;
+        } else {
+            if (LevelData.client == null || LevelData.client.level != level) {
+                LevelData.client = new LevelData();
+                LevelData.client.level = level;
+            }
+            return LevelData.client;
+        }
     }
 
 }

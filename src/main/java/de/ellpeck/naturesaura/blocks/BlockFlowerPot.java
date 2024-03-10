@@ -5,9 +5,9 @@ import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.INoItemBlock;
 import de.ellpeck.naturesaura.reg.ModRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerPotBlock;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
@@ -20,12 +20,12 @@ public class BlockFlowerPot extends FlowerPotBlock implements ICustomBlockState,
 
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
-        generator.simpleBlock(this, generator.models().withExistingParent(this.getBaseName(), "block/flower_pot_cross").texture("plant", "block/" + ForgeRegistries.BLOCKS.getKey(this.getContent()).getPath()).renderType("cutout"));
+        generator.simpleBlock(this, generator.models().withExistingParent(this.getBaseName(), "block/flower_pot_cross").texture("plant", "block/" + BuiltInRegistries.BLOCK.getKey(this.getPotted()).getPath()).renderType("cutout"));
     }
 
     @Override
     public String getBaseName() {
-        return "potted_" + ForgeRegistries.BLOCKS.getKey(this.getContent()).getPath();
+        return "potted_" + BuiltInRegistries.BLOCK.getKey(this.getPotted()).getPath();
     }
 
 }

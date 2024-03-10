@@ -15,6 +15,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerPlayer;
@@ -42,12 +44,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.util.LazyOptional;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.IForgeRegistry;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
@@ -167,7 +166,7 @@ public final class Helper {
     public static InteractionResult putStackOnTile(Player player, InteractionHand hand, BlockPos pos, int slot, boolean sound) {
         var tile = player.level().getBlockEntity(pos);
         if (tile instanceof BlockEntityImpl) {
-            var handler = ((BlockEntityImpl) tile).getItemHandler();
+            var handler = (IItemHandlerModifiable) tile.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, null);
             if (handler != null) {
                 var handStack = player.getItemInHand(hand);
                 if (!handStack.isEmpty()) {
@@ -230,7 +229,7 @@ public final class Helper {
 
     public static BlockState getStateFromString(String raw) {
         var split = raw.split("\\[");
-        var block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(split[0]));
+        var block = BuiltInRegistries.BLOCK.get(new ResourceLocation(split[0]));
         if (block != null) {
             var state = block.defaultBlockState();
             if (split.length > 1) {
@@ -261,7 +260,7 @@ public final class Helper {
     public static void addAdvancement(Player player, ResourceLocation advancement, String criterion) {
         if (!(player instanceof ServerPlayer playerMp))
             return;
-        var adv = playerMp.level().getServer().getAdvancements().getAdvancement(advancement);
+        var adv = playerMp.level().getServer().getAdvancements().get(advancement);
         if (adv != null)
             playerMp.getAdvancements().award(adv, criterion);
     }
@@ -295,17 +294,17 @@ public final class Helper {
     }
 
     // This is how @ObjectHolder SHOULD work...
-    public static <T> void populateObjectHolders(Class<?> clazz, IForgeRegistry<T> registry) {
+    public static <T> void populateObjectHolders(Class<?> clazz, Registry<T> registry) {
         for (var entry : clazz.getFields()) {
             if (!Modifier.isStatic(entry.getModifiers()))
                 continue;
             var location = new ResourceLocation(NaturesAura.MOD_ID, entry.getName().toLowerCase(Locale.ROOT));
             if (!registry.containsKey(location)) {
-                NaturesAura.LOGGER.fatal("Couldn't find entry named " + location + " in registry " + registry.getRegistryName());
+                NaturesAura.LOGGER.fatal("Couldn't find entry named " + location + " in registry");
                 continue;
             }
             try {
-                entry.set(null, registry.getValue(location));
+                entry.set(null, registry.get(location));
             } catch (IllegalAccessException e) {
                 NaturesAura.LOGGER.error(e);
             }

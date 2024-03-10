@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.recipes;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.misc.WeatherType;
 import de.ellpeck.naturesaura.api.misc.WeightedOre;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
@@ -10,7 +11,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -115,11 +115,13 @@ public final class ModRecipes {
         list.add(new WeightedOre(res, weight));
     }
 
-    private static class RecipeType<T extends Recipe<?>> implements net.minecraft.world.item.crafting.RecipeType<T> {
+    public static class RecipeType<T extends Recipe<?>> implements net.minecraft.world.item.crafting.RecipeType<T> {
 
         @Override
         public String toString() {
-            return ForgeRegistries.RECIPE_TYPES.getKey(this).toString();
+            return BuiltInRegistries.RECIPE_TYPE.getKey(this).toString();
         }
+
     }
+
 }

@@ -5,7 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class BlockEntityItemDistributor extends BlockEntityImpl implements ITick
         var tile = this.level.getBlockEntity(offset);
         if (tile == null)
             return null;
-        return tile.getCapability(Capabilities.ITEM_HANDLER, direction.getOpposite()).orElse(null);
+        return this.level.getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, direction.getOpposite());
     }
 
     private IItemHandler getNextSide() {
@@ -103,4 +103,5 @@ public class BlockEntityItemDistributor extends BlockEntityImpl implements ITick
         if (type != SaveType.BLOCK)
             this.isRandomMode = compound.getBoolean("random");
     }
+
 }

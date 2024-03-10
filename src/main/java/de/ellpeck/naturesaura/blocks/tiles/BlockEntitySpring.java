@@ -14,18 +14,15 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.FarmlandWaterManager;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
 import net.neoforged.neoforge.common.ticket.AABBTicket;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.IFluidTank;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.common.util.LazyOptional;
 
 public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlockEntity {
 
-    private final LazyOptional<IFluidHandler> tank = LazyOptional.of(InfiniteTank::new);
+    public final IFluidHandler tank = new InfiniteTank();
     private AABBTicket waterTicket;
 
     public BlockEntitySpring(BlockPos pos, BlockState state) {
@@ -49,7 +46,6 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
             this.waterTicket.invalidate();
             this.waterTicket = null;
         }
-        this.tank.invalidate();
     }
 
     @Override
@@ -113,13 +109,6 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
                 return;
             }
         }
-    }
-
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-        if (capability == Capabilities.FLUID_HANDLER)
-            return this.tank.cast();
-        return LazyOptional.empty();
     }
 
     @Override
@@ -204,5 +193,7 @@ public class BlockEntitySpring extends BlockEntityImpl implements ITickableBlock
         public boolean isFluidValid(int tank, FluidStack stack) {
             return this.isFluidValid(stack);
         }
+
     }
+
 }
