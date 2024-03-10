@@ -19,7 +19,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 public class BlockSlimeSplitGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockSlimeSplitGenerator() {
-        super("slime_split_generator", BlockEntitySlimeSplitGenerator.class, Properties.copy(Blocks.SLIME_BLOCK).strength(2));
+        super("slime_split_generator", BlockEntitySlimeSplitGenerator.class, Properties.ofFullCopy(Blocks.SLIME_BLOCK).strength(2));
         NeoForge.EVENT_BUS.register(new Events());
     }
 

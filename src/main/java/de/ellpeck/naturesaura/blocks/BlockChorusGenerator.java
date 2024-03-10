@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.Blocks;
 public class BlockChorusGenerator extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockChorusGenerator() {
-        super("chorus_generator", BlockEntityChorusGenerator.class, Properties.copy(Blocks.END_STONE));
+        super("chorus_generator", BlockEntityChorusGenerator.class, Properties.ofFullCopy(Blocks.END_STONE));
     }
 
     @Override

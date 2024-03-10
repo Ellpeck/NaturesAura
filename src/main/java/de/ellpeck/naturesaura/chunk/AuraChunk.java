@@ -33,17 +33,23 @@ import java.util.function.BiConsumer;
 
 public class AuraChunk implements IAuraChunk {
 
-    private final LevelChunk chunk;
-    private final IAuraType type;
     private final Map<BlockPos, DrainSpot> drainSpots = new ConcurrentHashMap<>();
     private final Table<BlockPos, Integer, Pair<Integer, Integer>> auraAndSpotAmountCache = HashBasedTable.create();
     private final Table<BlockPos, Integer, Pair<BlockPos, Integer>[]> limitSpotCache = HashBasedTable.create();
     private final List<IDrainSpotEffect> effects = new ArrayList<>();
+
+    private LevelChunk chunk;
+    private IAuraType type;
     private boolean needsSync;
 
-    public AuraChunk(LevelChunk chunk, IAuraType type) {
+    @Override
+    public void ensureInitialized(LevelChunk chunk) {
+        // are we already initialized?
+        if (this.chunk != null)
+            return;
+
         this.chunk = chunk;
-        this.type = type;
+        this.type = IAuraType.forLevel(chunk.getLevel());
 
         for (var supplier : NaturesAuraAPI.DRAIN_SPOT_EFFECTS.values()) {
             var effect = supplier.get();
@@ -269,7 +275,7 @@ public class AuraChunk implements IAuraChunk {
     private void addOrRemoveAsActive() {
         var chunkPos = this.chunk.getPos().toLong();
         var data = (LevelData) ILevelData.getLevelData(this.chunk.getLevel());
-        if (this.drainSpots.size() > 0) {
+        if (!this.drainSpots.isEmpty()) {
             data.auraChunksWithSpots.put(chunkPos, this);
         } else {
             data.auraChunksWithSpots.remove(chunkPos);
@@ -300,5 +306,7 @@ public class AuraChunk implements IAuraChunk {
                 ret.putLong("original_spread_pos", this.originalSpreadPos.asLong());
             return ret;
         }
+
     }
+
 }

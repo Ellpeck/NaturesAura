@@ -34,7 +34,7 @@ public class BlockGoldPowder extends BlockImpl implements IColorProvidingBlock, 
     protected static final VoxelShape[] SHAPES = {Block.box(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.box(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.box(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.box(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.box(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D)};
 
     public BlockGoldPowder() {
-        super("gold_powder", Properties.copy(Blocks.REDSTONE_WIRE));
+        super("gold_powder", Properties.ofFullCopy(Blocks.REDSTONE_WIRE));
         this.registerDefaultState(this.defaultBlockState().setValue(BlockGoldPowder.NORTH, RedstoneSide.NONE).setValue(BlockGoldPowder.EAST, RedstoneSide.NONE).setValue(BlockGoldPowder.SOUTH, RedstoneSide.NONE).setValue(BlockGoldPowder.WEST, RedstoneSide.NONE));
     }
 

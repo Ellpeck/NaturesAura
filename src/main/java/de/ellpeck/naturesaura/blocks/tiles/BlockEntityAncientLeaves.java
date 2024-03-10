@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
-import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.container.NaturalAuraContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -9,7 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockEntityAncientLeaves extends BlockEntityImpl {
 
-    private final NaturalAuraContainer container = new NaturalAuraContainer(NaturesAuraAPI.TYPE_OVERWORLD, 2000, 500) {
+    public final NaturalAuraContainer container = new NaturalAuraContainer(NaturesAuraAPI.TYPE_OVERWORLD, 2000, 500) {
         @Override
         public int getAuraColor() {
             return 0xCE5489;
@@ -27,11 +26,6 @@ public class BlockEntityAncientLeaves extends BlockEntityImpl {
 
     public BlockEntityAncientLeaves(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ANCIENT_LEAVES, pos, state);
-    }
-
-    @Override
-    public IAuraContainer getAuraContainer() {
-        return this.container;
     }
 
     @Override

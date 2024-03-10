@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
+import com.mojang.serialization.MapCodec;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEndFlower;
 import de.ellpeck.naturesaura.blocks.tiles.ITickableBlockEntity;
 import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
@@ -68,6 +69,11 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
                 continue;
             dragon.level().setBlockAndUpdate(pos, this.defaultBlockState());
         }
+    }
+
+    @Override
+    protected MapCodec<? extends BushBlock> codec() {
+        return null;
     }
 
     @Override

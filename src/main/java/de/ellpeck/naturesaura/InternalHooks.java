@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.blocks.multi.Multiblock;
+import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.misc.LevelData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -38,9 +39,9 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
     private boolean auraPlayerInteraction(Player player, int amount, boolean extract, boolean simulate) {
         if (extract && player.isCreative())
             return true;
-        var stack = Helper.getEquippedItem(s -> s.getCapability(NaturesAuraAPI.AURA_CONTAINER_CAPABILITY) != null, player, false);
+        var stack = Helper.getEquippedItem(s -> s.getCapability(NaturesAuraAPI.AURA_CONTAINER_ITEM_CAPABILITY) != null, player, false);
         if (!stack.isEmpty()) {
-            var container = stack.getCapability(NaturesAuraAPI.AURA_CONTAINER_CAPABILITY);
+            var container = stack.getCapability(NaturesAuraAPI.AURA_CONTAINER_ITEM_CAPABILITY);
             if (extract) {
                 return container.drainAura(amount, simulate) > 0;
             } else {
@@ -197,6 +198,11 @@ public class InternalHooks implements NaturesAuraAPI.IInternalHooks {
             }
             return LevelData.client;
         }
+    }
+
+    @Override
+    public IAuraChunk createAuraChunk() {
+        return new AuraChunk();
     }
 
 }

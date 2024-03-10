@@ -8,17 +8,16 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
-import de.ellpeck.naturesaura.chunk.AuraChunkProvider;
 import de.ellpeck.naturesaura.commands.CommandAura;
 import de.ellpeck.naturesaura.misc.LevelData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -26,8 +25,6 @@ import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.level.ChunkWatchEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.event.AttachCapabilitiesEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 import java.lang.reflect.InvocationTargetException;
@@ -40,21 +37,10 @@ public class CommonEvents {
     private static final ListMultimap<UUID, ChunkPos> PENDING_AURA_CHUNKS = ArrayListMultimap.create();
 
     @SubscribeEvent
-    public void onChunkCapsAttach(AttachCapabilitiesEvent<LevelChunk> event) {
-        var chunk = event.getObject();
-        event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "aura"), new AuraChunkProvider(chunk));
-    }
-
-    @SubscribeEvent
-    public void onLevelCapsAttach(AttachCapabilitiesEvent<Level> event) {
-        event.addCapability(new ResourceLocation(NaturesAura.MOD_ID, "data"), new LevelData());
-    }
-
-    @SubscribeEvent
     public void onChunkUnload(ChunkEvent.Unload event) {
         var iChunk = event.getChunk();
         if (iChunk instanceof LevelChunk chunk) {
-            var auraChunk = chunk.getCapability(NaturesAuraAPI.CAP_AURA_CHUNK).orElse(null);
+            var auraChunk = chunk.getData(NaturesAuraAPI.AURA_CHUNK_ATTACHMENT).get(chunk);
             if (auraChunk instanceof AuraChunk) {
                 var data = (LevelData) ILevelData.getLevelData(chunk.getLevel());
                 data.auraChunksWithSpots.remove(chunk.getPos().toLong());
@@ -68,7 +54,7 @@ public class CommonEvents {
         if (player.level().isClientSide)
             return;
         var held = event.getItemStack();
-        if (!held.isEmpty() && ForgeRegistries.ITEMS.getKey(held.getItem()).getPath().contains("chisel")) {
+        if (!held.isEmpty() && BuiltInRegistries.ITEM.getKey(held.getItem()).getPath().contains("chisel")) {
             var state = player.level().getBlockState(event.getPos());
             if (NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.containsKey(state)) {
                 var data = (LevelData) ILevelData.getLevelData(player.level());
@@ -90,7 +76,7 @@ public class CommonEvents {
                         var chunk = holder.getTickingChunk();
                         if (chunk == null)
                             continue;
-                        var auraChunk = (AuraChunk) chunk.getCapability(NaturesAuraAPI.CAP_AURA_CHUNK, null).orElse(null);
+                        var auraChunk = (AuraChunk) chunk.getData(NaturesAuraAPI.AURA_CHUNK_ATTACHMENT).get(chunk);
                         if (auraChunk != null)
                             auraChunk.update();
                     }
@@ -130,7 +116,7 @@ public class CommonEvents {
         var chunk = Helper.getLoadedChunk(player.level(), pos.x, pos.z);
         if (!(chunk instanceof LevelChunk levelChunk))
             return false;
-        var auraChunk = (AuraChunk) levelChunk.getCapability(NaturesAuraAPI.CAP_AURA_CHUNK, null).orElse(null);
+        var auraChunk = (AuraChunk) levelChunk.getData(NaturesAuraAPI.AURA_CHUNK_ATTACHMENT).get(levelChunk);
         if (auraChunk == null)
             return false;
         PacketHandler.sendTo(player, auraChunk.makePacket());
@@ -141,4 +127,5 @@ public class CommonEvents {
     public void onCommands(RegisterCommandsEvent event) {
         CommandAura.register(event.getDispatcher());
     }
+
 }

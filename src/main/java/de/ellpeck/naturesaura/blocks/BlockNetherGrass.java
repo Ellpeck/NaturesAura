@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, BonemealableBlock {
 
     public BlockNetherGrass() {
-        super("nether_grass", Properties.copy(Blocks.NETHERRACK).randomTicks());
+        super("nether_grass", Properties.ofFullCopy(Blocks.NETHERRACK).randomTicks());
     }
 
     @Override
@@ -36,7 +36,7 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, Bo
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader levelIn, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader levelIn, BlockPos pos, BlockState state) {
         return levelIn.getBlockState(pos.above()).isAir();
     }
 
@@ -48,7 +48,7 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, Bo
     @Override
     public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state) {
         var blockpos = pos.above();
-        var blockstate = Blocks.GRASS.defaultBlockState();
+        var blockstate = Blocks.GRASS_BLOCK.defaultBlockState();
 
         for (var i = 0; i < 128; ++i) {
             var blockpos1 = blockpos;
@@ -81,4 +81,5 @@ public class BlockNetherGrass extends BlockImpl implements ICustomBlockState, Bo
         }
 
     }
+
 }

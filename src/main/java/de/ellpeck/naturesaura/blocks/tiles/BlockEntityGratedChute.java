@@ -10,12 +10,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 public class BlockEntityGratedChute extends BlockEntityImpl implements ITickableBlockEntity {
 
     public boolean isBlacklist;
-    private final ItemStackHandlerNA items = new ItemStackHandlerNA(1, this, true) {
+    public final ItemStackHandlerNA items = new ItemStackHandlerNA(1, this, true) {
         @Override
         protected boolean canExtract(ItemStack stack, int slot, int amount) {
             return BlockEntityGratedChute.this.redstonePower <= 0;
@@ -139,9 +138,5 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
         }
     }
 
-    @Override
-    public IItemHandlerModifiable getItemHandler() {
-        return this.items;
-    }
 
 }

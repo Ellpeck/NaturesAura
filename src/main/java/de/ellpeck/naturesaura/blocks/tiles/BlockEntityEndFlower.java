@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.BasicAuraContainer;
-import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
@@ -16,7 +15,7 @@ import net.minecraft.world.phys.AABB;
 
 public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBlockEntity {
 
-    private final BasicAuraContainer container = new BasicAuraContainer(null, 500000) {
+    public final BasicAuraContainer container = new BasicAuraContainer(null, 500000) {
         {
             this.aura = this.maxAura;
         }
@@ -95,11 +94,6 @@ public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBl
     }
 
     @Override
-    public IAuraContainer getAuraContainer() {
-        return this.container;
-    }
-
-    @Override
     public void writeNBT(CompoundTag compound, SaveType type) {
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
@@ -116,4 +110,5 @@ public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBl
             this.isDrainMode = compound.getBoolean("drain_mode");
         }
     }
+
 }

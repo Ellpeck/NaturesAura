@@ -12,6 +12,7 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -19,6 +20,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -27,7 +29,7 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickableBlockEntity {
 
-    private final BasicAuraContainer container = new BasicAuraContainer(null, 500000) {
+    public final BasicAuraContainer container = new BasicAuraContainer(null, 500000) {
         @Override
         public int getAuraColor() {
             return IAuraType.forLevel(BlockEntityNatureAltar.this.level).getColor();
@@ -42,12 +44,12 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
 
         @Override
         protected boolean canInsert(ItemStack stack, int slot) {
-            return BlockEntityNatureAltar.this.getRecipeForInput(stack) != null || stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).isPresent();
+            return BlockEntityNatureAltar.this.getRecipeForInput(stack) != null || stack.getCapability(NaturesAuraAPI.AURA_CONTAINER_ITEM_CAPABILITY, null) != null;
         }
 
         @Override
         protected boolean canExtract(ItemStack stack, int slot, int amount) {
-            var cap = stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null);
+            var cap = stack.getCapability(NaturesAuraAPI.AURA_CONTAINER_ITEM_CAPABILITY);
             if (cap != null) {
                 return cap.storeAura(1, true) <= 0;
             } else {
@@ -59,7 +61,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
     public int bobTimer;
     public boolean isComplete;
 
-    private AltarRecipe currentRecipe;
+    private RecipeHolder<AltarRecipe> currentRecipe;
     private int timer;
     private int lastAura;
     private boolean firstTick = true;
@@ -118,7 +120,7 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
                 }
 
                 var stack = this.items.getStackInSlot(0);
-                var container = stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null);
+                var container = stack.getCapability(NaturesAuraAPI.AURA_CONTAINER_ITEM_CAPABILITY);
                 if (!stack.isEmpty() && container != null) {
                     var theoreticalDrain = this.container.drainAura(1000, true);
                     if (theoreticalDrain > 0) {
@@ -136,11 +138,11 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
                             this.currentRecipe = this.getRecipeForInput(stack);
                         }
                     } else {
-                        if (stack.isEmpty() || !this.currentRecipe.input.test(stack)) {
+                        if (stack.isEmpty() || !this.currentRecipe.value().input.test(stack)) {
                             this.currentRecipe = null;
                             this.timer = 0;
                         } else {
-                            var req = Mth.ceil(this.currentRecipe.aura / (double) this.currentRecipe.time);
+                            var req = Mth.ceil(this.currentRecipe.value().aura / (double) this.currentRecipe.value().time);
                             if (this.container.getStoredAura() >= req) {
                                 this.container.drainAura(req, false);
 
@@ -148,8 +150,8 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
                                     PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.ALTAR_CONVERSION, this.container.getAuraColor()));
 
                                 this.timer++;
-                                if (this.timer >= this.currentRecipe.time) {
-                                    this.items.setStackInSlot(0, this.currentRecipe.output.copy());
+                                if (this.timer >= this.currentRecipe.value().time) {
+                                    this.items.setStackInSlot(0, this.currentRecipe.value().output.copy());
                                     this.currentRecipe = null;
                                     this.timer = 0;
 
@@ -197,14 +199,15 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
         }
     }
 
-    private AltarRecipe getRecipeForInput(ItemStack input) {
-        for (var recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.ALTAR_TYPE, null, this.level)) {
+    private RecipeHolder<AltarRecipe> getRecipeForInput(ItemStack input) {
+        for (var holder : this.level.getRecipeManager().getRecipesFor(ModRecipes.ALTAR_TYPE, null, this.level)) {
+            var recipe = holder.value();
             if (recipe.input.test(input)) {
                 if (recipe.catalyst == Ingredient.EMPTY)
-                    return recipe;
+                    return holder;
                 for (var stack : this.catalysts) {
                     if (recipe.catalyst.test(stack))
-                        return recipe;
+                        return holder;
                 }
             }
         }
@@ -221,12 +224,13 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
         }
         if (type == SaveType.TILE) {
             if (this.currentRecipe != null) {
-                compound.putString("recipe", this.currentRecipe.name.toString());
+                compound.putString("recipe", this.currentRecipe.id().toString());
                 compound.putInt("timer", this.timer);
             }
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
@@ -238,19 +242,10 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
         if (type == SaveType.TILE) {
             if (compound.contains("recipe")) {
                 if (this.hasLevel())
-                    this.currentRecipe = (AltarRecipe) this.level.getRecipeManager().byKey(new ResourceLocation(compound.getString("recipe"))).orElse(null);
+                    this.currentRecipe = (RecipeHolder<AltarRecipe>) this.level.getRecipeManager().byKey(new ResourceLocation(compound.getString("recipe"))).orElse(null);
                 this.timer = compound.getInt("timer");
             }
         }
     }
 
-    @Override
-    public IAuraContainer getAuraContainer() {
-        return this.container;
-    }
-
-    @Override
-    public IItemHandlerModifiable getItemHandler() {
-        return this.items;
-    }
 }

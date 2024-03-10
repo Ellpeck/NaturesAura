@@ -107,7 +107,7 @@ public class LevelGenAncientTree extends Feature<NoneFeatureConfiguration> {
                     var goal = pos.offset(x, y, z);
                     if (pos.distSqr(goal) <= radius * radius + rand.nextInt(3) - 1) {
                         if (!level.isStateAtPosition(goal, s -> s.is(BlockTags.LEAVES))) {
-                            if (level.isStateAtPosition(goal, st -> !st.is(BlockTags.LOGS) && st.getBlock() != Blocks.DIRT && st.getBlock() != Blocks.GRASS))
+                            if (level.isStateAtPosition(goal, st -> !st.is(BlockTags.LOGS) && st.getBlock() != Blocks.DIRT && st.getBlock() != Blocks.GRASS_BLOCK))
                                 this.setBlock(level, goal, state);
                         }
                     }

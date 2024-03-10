@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.api;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import de.ellpeck.naturesaura.api.aura.chunk.AuraChunkProvider;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
@@ -14,6 +15,7 @@ import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
 import de.ellpeck.naturesaura.api.multiblock.Matcher;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.EntityType;
@@ -24,6 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.attachment.AttachmentType;
+import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.ItemCapability;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -82,9 +85,13 @@ public final class NaturesAuraAPI {
      */
     public static final Map<ItemStack, WeatherType> WEATHER_CHANGER_CONVERSIONS = new HashMap<>();
     /**
-     * The capability for any item or block that stores Aura in the form of an {@link IAuraContainer}
+     * The capability for any item that stores Aura in the form of an {@link IAuraContainer}
      */
-    public static final ItemCapability<IAuraContainer, Void> AURA_CONTAINER_CAPABILITY = ItemCapability.createVoid(new ResourceLocation(NaturesAuraAPI.MOD_ID, "aura_container"), IAuraContainer.class);
+    public static final ItemCapability<IAuraContainer, Void> AURA_CONTAINER_ITEM_CAPABILITY = ItemCapability.createVoid(new ResourceLocation(NaturesAuraAPI.MOD_ID, "aura_container_item"), IAuraContainer.class);
+    /**
+     * The capability for any block that stores Aura in the form of an {@link IAuraContainer}
+     */
+    public static final BlockCapability<IAuraContainer, Direction> AURA_CONTAINER_BLOCK_CAPABILITY = BlockCapability.create(new ResourceLocation(NaturesAuraAPI.MOD_ID, "aura_container_block"), IAuraContainer.class, Direction.class);
     /**
      * The capability for any item that can be recharged from an Aura storage container like the Aura Cache in the form of {@link IAuraRecharge} by a player holding it in their hand
      */
@@ -92,7 +99,7 @@ public final class NaturesAuraAPI {
     /**
      * The capability that any chunk in a level has to store Aura in it. As this is only applicable to chunks and all chunks in the level automatically get assigned this capability, using it directly is not necessary for addon developers. To retrieve this capability from any chunk, use the helper method {@link IAuraChunk#getAuraChunk(net.minecraft.world.level.Level, BlockPos)}.
      */
-    public static final AttachmentType<IAuraChunk> AURA_CHUNK_ATTACHMENT = AttachmentType.serializable(() -> (IAuraChunk) null).build();
+    public static final AttachmentType<AuraChunkProvider> AURA_CHUNK_ATTACHMENT = AttachmentType.serializable(AuraChunkProvider::new).build();
     private static final IInternalHooks INSTANCE;
 
     static {
@@ -252,6 +259,8 @@ public final class NaturesAuraAPI {
         BlockPos getHighestAuraDrainSpot(Level level, BlockPos pos, int radius, BlockPos defaultSpot);
 
         ILevelData getLevelData(Level level);
+
+        IAuraChunk createAuraChunk();
 
     }
 

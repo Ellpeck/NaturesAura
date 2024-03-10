@@ -2,12 +2,12 @@ package de.ellpeck.naturesaura.reg;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
+import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.*;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraBloom;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEnderCrate;
 import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
-import de.ellpeck.naturesaura.chunk.AuraChunkProvider;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
@@ -22,7 +22,6 @@ import de.ellpeck.naturesaura.items.*;
 import de.ellpeck.naturesaura.items.tools.*;
 import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
-import de.ellpeck.naturesaura.recipes.EnabledCondition;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -40,12 +39,15 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.Capabilities.EnergyStorage;
+import net.neoforged.neoforge.capabilities.Capabilities.FluidHandler;
+import net.neoforged.neoforge.capabilities.Capabilities.ItemHandler;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.crafting.CraftingHelper;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
+import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -305,7 +307,6 @@ public final class ModRegistry {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "animal_spawner"), ModRecipes.ANIMAL_SPAWNER_SERIALIZER);
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "offering"), ModRecipes.OFFERING_SERIALIZER);
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "tree_ritual"), ModRecipes.TREE_RITUAL_SERIALIZER);
-            CraftingHelper.register(new EnabledCondition.Serializer());
         });
 
         event.register(Registries.CREATIVE_MODE_TAB, h -> {
@@ -326,13 +327,29 @@ public final class ModRegistry {
                     .build()
             );
         });
+
+        event.register(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, h -> {
+            h.register(new ResourceLocation(NaturesAura.MOD_ID, "aura_chunk"), NaturesAuraAPI.AURA_CHUNK_ATTACHMENT);
+        });
     }
 
     @SubscribeEvent
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.SPRING, (e, c) -> e.tank);
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.RF_CONVERTER, (e, c) -> e.storage);
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.BLAST_FURNACE_BOOSTER, (e, c) -> e.getItemHandler());
+        event.registerBlockEntity(FluidHandler.BLOCK, ModBlockEntities.SPRING, (e, c) -> e.tank);
+
+        event.registerBlockEntity(EnergyStorage.BLOCK, ModBlockEntities.RF_CONVERTER, (e, c) -> e.storage);
+
+        event.registerBlockEntity(NaturesAuraAPI.AURA_CONTAINER_BLOCK_CAPABILITY, ModBlockEntities.NATURE_ALTAR, (e, c) -> e.container);
+        event.registerBlockEntity(NaturesAuraAPI.AURA_CONTAINER_BLOCK_CAPABILITY, ModBlockEntities.ANCIENT_LEAVES, (e, c) -> e.container);
+        event.registerBlockEntity(NaturesAuraAPI.AURA_CONTAINER_BLOCK_CAPABILITY, ModBlockEntities.END_FLOWER, (e, c) -> e.container);
+
+        event.registerBlockEntity(ItemHandler.BLOCK, ModBlockEntities.BLAST_FURNACE_BOOSTER, (e, c) -> e.getItemHandler());
+        event.registerBlockEntity(ItemHandler.BLOCK, ModBlockEntities.OFFERING_TABLE, (e, c) -> e.items);
+        event.registerBlockEntity(ItemHandler.BLOCK, ModBlockEntities.GRATED_CHUTE, (e, c) -> e.items);
+        event.registerBlockEntity(ItemHandler.BLOCK, ModBlockEntities.NATURE_ALTAR, (e, c) -> e.items);
+        event.registerBlockEntity(ItemHandler.BLOCK, ModBlockEntities.WOOD_STAND, (e, c) -> e.items);
+        event.registerBlockEntity(ItemHandler.BLOCK, ModBlockEntities.ENDER_CRATE, (e, c) -> e.canOpen() ? e.wrappedEnderStorage : null);
+        event.registerBlockEntity(ItemHandler.BLOCK, ModBlockEntities.AURA_TIMER, (e, c) -> e.itemHandler);
     }
 
     public static Block createFlowerPot(Block block) {

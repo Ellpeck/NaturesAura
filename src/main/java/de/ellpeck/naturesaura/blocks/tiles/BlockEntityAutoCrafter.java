@@ -82,7 +82,7 @@ public class BlockEntityAutoCrafter extends BlockEntityImpl implements ITickable
             if (recipe == null)
                 return;
 
-            var result = recipe.assemble(this.crafting, this.level.registryAccess());
+            var result = recipe.value().assemble(this.crafting, this.level.registryAccess());
             if (result.isEmpty())
                 return;
             var resultItem = new ItemEntity(this.level,
@@ -90,7 +90,7 @@ public class BlockEntityAutoCrafter extends BlockEntityImpl implements ITickable
             resultItem.setDeltaMovement(0, 0, 0);
             this.level.addFreshEntity(resultItem);
 
-            var remainingItems = recipe.getRemainingItems(this.crafting);
+            var remainingItems = recipe.value().getRemainingItems(this.crafting);
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
                 if (item == null)

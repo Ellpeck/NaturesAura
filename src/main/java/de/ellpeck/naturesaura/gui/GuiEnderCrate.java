@@ -20,7 +20,6 @@ public class GuiEnderCrate extends AbstractContainerScreen<ContainerEnderCrate> 
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.renderTooltip(graphics, mouseX, mouseY);
     }
@@ -38,4 +37,5 @@ public class GuiEnderCrate extends AbstractContainerScreen<ContainerEnderCrate> 
         graphics.blit(GuiEnderCrate.CHEST_GUI_TEXTURE, i, j, 0, 0, this.imageWidth, 3 * 18 + 17);
         graphics.blit(GuiEnderCrate.CHEST_GUI_TEXTURE, i, j + 3 * 18 + 17, 0, 126, this.imageWidth, 96);
     }
+
 }

@@ -14,7 +14,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 public class BlockSnowCreator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
     public BlockSnowCreator() {
-        super("snow_creator", BlockEntitySnowCreator.class, Properties.copy(Blocks.STONE_BRICKS));
+        super("snow_creator", BlockEntitySnowCreator.class, Properties.ofFullCopy(Blocks.STONE_BRICKS));
     }
 
     @Override

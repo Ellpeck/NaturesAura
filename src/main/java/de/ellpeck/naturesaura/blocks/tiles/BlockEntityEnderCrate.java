@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvider {
 
     public String name;
-    private final IItemHandlerModifiable wrappedEnderStorage = new IItemHandlerModifiable() {
+    public final IItemHandlerModifiable wrappedEnderStorage = new IItemHandlerModifiable() {
         @Override
         public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
             this.getStorage().setStackInSlot(slot, stack);
@@ -80,13 +80,6 @@ public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvid
 
     public BlockEntityEnderCrate(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ENDER_CRATE, pos, state);
-    }
-
-    @Override
-    public IItemHandlerModifiable getItemHandler() {
-        if (this.canOpen())
-            return this.wrappedEnderStorage;
-        return null;
     }
 
     public boolean canOpen() {
@@ -149,11 +142,12 @@ public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvid
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int window, Inventory inv, Player player) {
-        return new ContainerEnderCrate(ModContainers.ENDER_CRATE, window, player, this.getItemHandler());
+        return new ContainerEnderCrate(ModContainers.ENDER_CRATE, window, player, this.wrappedEnderStorage);
     }
 
     @Override
     public boolean allowsLowerLimiter() {
         return true;
     }
+
 }

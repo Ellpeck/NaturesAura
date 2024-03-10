@@ -21,7 +21,7 @@ public class ProcessorTreeRitual implements IComponentProcessor {
             return null;
         if (key.startsWith("input")) {
             var id = Integer.parseInt(key.substring(5)) - 1;
-            return this.recipe.ingredients.length > id ? PatchouliCompat.ingredientVariable(this.recipe.ingredients[id]) : null;
+            return this.recipe.ingredients.size() > id ? PatchouliCompat.ingredientVariable(this.recipe.ingredients.get(id)) : null;
         } else {
             return switch (key) {
                 case "output" -> IVariable.from(this.recipe.result);

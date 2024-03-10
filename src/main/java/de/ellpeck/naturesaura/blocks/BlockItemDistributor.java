@@ -15,7 +15,7 @@ import net.minecraft.world.phys.BlockHitResult;
 public class BlockItemDistributor extends BlockContainerImpl implements ICustomBlockState {
 
     public BlockItemDistributor() {
-        super("item_distributor", BlockEntityItemDistributor.class, Properties.copy(Blocks.STONE_BRICKS));
+        super("item_distributor", BlockEntityItemDistributor.class, Properties.ofFullCopy(Blocks.STONE_BRICKS));
     }
 
     @Override

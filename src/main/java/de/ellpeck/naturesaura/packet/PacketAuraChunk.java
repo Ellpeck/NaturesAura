@@ -61,7 +61,7 @@ public class PacketAuraChunk implements CustomPacketPayload {
             var chunk = level.getChunk(this.chunkX, this.chunkZ);
             if (chunk.isEmpty())
                 return false;
-            var auraChunk = (AuraChunk) chunk.getData(NaturesAuraAPI.AURA_CHUNK_ATTACHMENT);
+            var auraChunk = (AuraChunk) chunk.getData(NaturesAuraAPI.AURA_CHUNK_ATTACHMENT).get(chunk);
             if (auraChunk == null)
                 return false;
             auraChunk.setSpots(this.drainSpots);

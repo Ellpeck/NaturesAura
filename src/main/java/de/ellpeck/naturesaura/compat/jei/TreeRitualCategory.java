@@ -48,8 +48,8 @@ public class TreeRitualCategory implements IRecipeCategory<TreeRitualRecipe> {
         builder.addSlot(RecipeIngredientRole.OUTPUT, 125, 35).addItemStack(recipe.result);
 
         var positions = new int[][]{{35, 1}, {35, 69}, {1, 35}, {69, 35}, {12, 12}, {58, 58}, {58, 12}, {12, 58}};
-        for (var i = 0; i < recipe.ingredients.length; i++)
-            builder.addSlot(RecipeIngredientRole.INPUT, positions[i][0], positions[i][1]).addItemStacks(Arrays.asList(recipe.ingredients[i].getItems()));
+        for (var i = 0; i < recipe.ingredients.size(); i++)
+            builder.addSlot(RecipeIngredientRole.INPUT, positions[i][0], positions[i][1]).addItemStacks(Arrays.asList(recipe.ingredients.get(i).getItems()));
     }
 
 }

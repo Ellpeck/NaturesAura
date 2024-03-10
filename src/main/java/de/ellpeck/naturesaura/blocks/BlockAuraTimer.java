@@ -31,7 +31,7 @@ public class BlockAuraTimer extends BlockContainerImpl implements ICustomBlockSt
     private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 15, 15);
 
     public BlockAuraTimer() {
-        super("aura_timer", BlockEntityAuraTimer.class, Properties.copy(Blocks.SMOOTH_STONE));
+        super("aura_timer", BlockEntityAuraTimer.class, Properties.ofFullCopy(Blocks.SMOOTH_STONE));
         this.registerDefaultState(this.defaultBlockState().setValue(BlockStateProperties.POWERED, false));
     }
 

@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
+import com.mojang.serialization.MapCodec;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.gen.ModFeatures;
@@ -61,7 +62,7 @@ public class BlockAncientSapling extends BushBlock implements BonemealableBlock,
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_256559_, BlockPos p_50898_, BlockState p_50899_, boolean p_50900_) {
+    public boolean isValidBonemealTarget(LevelReader pLevel, BlockPos pPos, BlockState pState) {
         return true;
     }
 
@@ -89,4 +90,10 @@ public class BlockAncientSapling extends BushBlock implements BonemealableBlock,
     public void generateCustomItemModel(ItemModelGenerator generator) {
         generator.withExistingParent(this.getBaseName(), "item/generated").texture("layer0", "block/" + this.getBaseName());
     }
+
+    @Override
+    protected MapCodec<? extends BushBlock> codec() {
+        return null;
+    }
+
 }

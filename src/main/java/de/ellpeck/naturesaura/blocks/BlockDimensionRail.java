@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
+import com.mojang.serialization.MapCodec;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
@@ -49,7 +50,7 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
 
     @SafeVarargs
     public BlockDimensionRail(String name, ResourceKey<Level> goalDim, ResourceKey<Level>... canUseDims) {
-        super(false, Properties.copy(Blocks.RAIL));
+        super(false, Properties.ofFullCopy(Blocks.RAIL));
         this.name = name;
         this.goalDim = goalDim;
         this.canUseDims = canUseDims;
@@ -134,6 +135,11 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
                 return ret.above(overworld.getHeight(Heightmap.Types.WORLD_SURFACE, spawn.getX(), spawn.getZ()));
             }
         }
+    }
+
+    @Override
+    protected MapCodec<? extends BaseRailBlock> codec() {
+        return null;
     }
 
     @Override

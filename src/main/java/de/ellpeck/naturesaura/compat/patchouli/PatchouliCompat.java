@@ -54,7 +54,7 @@ public class PatchouliCompat implements ICompat {
         var manager = Minecraft.getInstance().level.getRecipeManager();
         var res = new ResourceLocation(name);
         var pre = new ResourceLocation(res.getNamespace(), type + "/" + res.getPath());
-        return (T) manager.byKey(pre).orElse(null);
+        return (T) manager.byKey(pre).orElse(null).value();
     }
 
     public static IVariable ingredientVariable(Ingredient ingredient) {

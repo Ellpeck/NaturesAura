@@ -62,8 +62,8 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
                 var saplingStack = new ItemStack(level.getBlockState(pos).getBlock());
                 if (!saplingStack.isEmpty()) {
                     for (var recipe : ((Level) level).getRecipeManager().getRecipesFor(ModRecipes.TREE_RITUAL_TYPE, null, (Level) level)) {
-                        if (recipe.saplingType.test(saplingStack)) {
-                            List<Ingredient> required = new ArrayList<>(Arrays.asList(recipe.ingredients));
+                        if (recipe.value().saplingType.test(saplingStack)) {
+                            List<Ingredient> required = new ArrayList<>(recipe.value().ingredients);
                             var toPick = new MutableObject<BlockEntityWoodStand>();
 
                             var fine = Multiblocks.TREE_RITUAL.forEach(pos, 'W', (tilePos, matcher) -> {
@@ -89,7 +89,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
                             });
 
                             if (fine && required.isEmpty()) {
-                                toPick.getValue().setRitual(pos, recipe);
+                                toPick.getValue().setRitual(pos, recipe.value());
                                 break;
                             }
                         }

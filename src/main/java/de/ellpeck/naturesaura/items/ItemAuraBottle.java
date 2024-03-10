@@ -36,10 +36,10 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
         NeoForge.EVENT_BUS.register(new EventHandler());
 
         DispenserBlock.registerBehavior(emptyBottle, (source, stack) -> {
-            Level level = source.getLevel();
-            var state = source.getBlockState();
+            Level level = source.level();
+            var state = source.state();
             var facing = state.getValue(DispenserBlock.FACING);
-            var offset = source.getPos().relative(facing);
+            var offset = source.pos().relative(facing);
             var offsetState = level.getBlockState(offset);
 
             var dispense = stack.split(1);

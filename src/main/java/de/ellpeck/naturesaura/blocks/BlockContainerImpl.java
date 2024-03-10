@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
+import com.mojang.serialization.MapCodec;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
 import de.ellpeck.naturesaura.blocks.tiles.ITickableBlockEntity;
 import de.ellpeck.naturesaura.reg.IModItem;
@@ -104,6 +105,11 @@ public class BlockContainerImpl extends BaseEntityBlock implements IModItem {
     @Override
     public String getBaseName() {
         return this.baseName;
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return null;
     }
 
     @Override

@@ -20,16 +20,11 @@ public class AuraMendingEnchantment extends ModEnchantment {
 
     @Override
     public boolean canEnchant(ItemStack stack) {
-        return super.canEnchant(stack) && !stack.getCapability(NaturesAuraAPI.CAP_AURA_RECHARGE).isPresent();
+        return super.canEnchant(stack) && stack.getCapability(NaturesAuraAPI.AURA_RECHARGE_CAPABILITY) == null;
     }
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
-        return super.canApplyAtEnchantingTable(stack) && !stack.getCapability(NaturesAuraAPI.CAP_AURA_RECHARGE).isPresent();
-    }
-
-    @Override
-    public int getMaxLevel() {
-        return 1;
+        return super.canApplyAtEnchantingTable(stack) && stack.getCapability(NaturesAuraAPI.AURA_RECHARGE_CAPABILITY) == null;
     }
 }

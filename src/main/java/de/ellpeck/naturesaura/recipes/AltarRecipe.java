@@ -1,14 +1,13 @@
 package de.ellpeck.naturesaura.recipes;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.neoforged.neoforge.common.crafting.CraftingHelper;
 
 import javax.annotation.Nullable;
 
@@ -20,8 +19,7 @@ public class AltarRecipe extends ModRecipe {
     public final int aura;
     public final int time;
 
-    public AltarRecipe(ResourceLocation name, Ingredient input, ItemStack output, Ingredient catalyst, int aura, int time) {
-        super(name);
+    public AltarRecipe(Ingredient input, ItemStack output, Ingredient catalyst, int aura, int time) {
         this.input = input;
         this.output = output;
         this.catalyst = catalyst;
@@ -46,27 +44,23 @@ public class AltarRecipe extends ModRecipe {
 
     public static class Serializer implements RecipeSerializer<AltarRecipe> {
 
+        private static final Codec<AltarRecipe> CODEC = RecordCodecBuilder.create(i -> i.group(
+                Ingredient.CODEC.fieldOf("input").forGetter(r -> r.input),
+                ItemStack.CODEC.fieldOf("output").forGetter(r -> r.output),
+                Ingredient.CODEC.fieldOf("catalyst").forGetter(r -> r.catalyst),
+                Codec.INT.fieldOf("aura").forGetter(r -> r.aura),
+                Codec.INT.fieldOf("time").forGetter(r -> r.time)
+        ).apply(i, AltarRecipe::new));
+
         @Override
-        public AltarRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            return new AltarRecipe(
-                    recipeId,
-                    Ingredient.fromJson(json.getAsJsonObject("input")),
-                    CraftingHelper.getItemStack(json.getAsJsonObject("output"), true),
-                    json.has("catalyst") ? Ingredient.fromJson(json.getAsJsonObject("catalyst")) : Ingredient.EMPTY,
-                    json.get("aura").getAsInt(),
-                    json.get("time").getAsInt());
+        public Codec<AltarRecipe> codec() {
+            return Serializer.CODEC;
         }
 
         @Nullable
         @Override
-        public AltarRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            return new AltarRecipe(
-                    recipeId,
-                    Ingredient.fromNetwork(buffer),
-                    buffer.readItem(),
-                    Ingredient.fromNetwork(buffer),
-                    buffer.readInt(),
-                    buffer.readInt());
+        public AltarRecipe fromNetwork(FriendlyByteBuf buffer) {
+            return new AltarRecipe(Ingredient.fromNetwork(buffer), buffer.readItem(), Ingredient.fromNetwork(buffer), buffer.readInt(), buffer.readInt());
         }
 
         @Override
@@ -77,5 +71,7 @@ public class AltarRecipe extends ModRecipe {
             buffer.writeInt(recipe.aura);
             buffer.writeInt(recipe.time);
         }
+
     }
+
 }

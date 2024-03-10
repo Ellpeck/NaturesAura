@@ -1,14 +1,13 @@
 package de.ellpeck.naturesaura.recipes;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.neoforged.neoforge.common.crafting.CraftingHelper;
 
 import javax.annotation.Nullable;
 
@@ -18,8 +17,7 @@ public class OfferingRecipe extends ModRecipe {
     public final Ingredient startItem;
     public final ItemStack output;
 
-    public OfferingRecipe(ResourceLocation name, Ingredient input, Ingredient startItem, ItemStack output) {
-        super(name);
+    public OfferingRecipe(Ingredient input, Ingredient startItem, ItemStack output) {
         this.input = input;
         this.startItem = startItem;
         this.output = output;
@@ -42,23 +40,21 @@ public class OfferingRecipe extends ModRecipe {
 
     public static class Serializer implements RecipeSerializer<OfferingRecipe> {
 
+        private static final Codec<OfferingRecipe> CODEC = RecordCodecBuilder.create(i -> i.group(
+                Ingredient.CODEC.fieldOf("input").forGetter(r -> r.input),
+                Ingredient.CODEC.fieldOf("start_item").forGetter(r -> r.startItem),
+                ItemStack.CODEC.fieldOf("output").forGetter(r -> r.output)
+        ).apply(i, OfferingRecipe::new));
+
         @Override
-        public OfferingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            return new OfferingRecipe(
-                    recipeId,
-                    Ingredient.fromJson(json.get("input")),
-                    Ingredient.fromJson(json.get("start_item")),
-                    CraftingHelper.getItemStack(json.getAsJsonObject("output"), true));
+        public Codec<OfferingRecipe> codec() {
+            return Serializer.CODEC;
         }
 
         @Nullable
         @Override
-        public OfferingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            return new OfferingRecipe(
-                    recipeId,
-                    Ingredient.fromNetwork(buffer),
-                    Ingredient.fromNetwork(buffer),
-                    buffer.readItem());
+        public OfferingRecipe fromNetwork(FriendlyByteBuf buffer) {
+            return new OfferingRecipe(Ingredient.fromNetwork(buffer), Ingredient.fromNetwork(buffer), buffer.readItem());
         }
 
         @Override
@@ -67,5 +63,7 @@ public class OfferingRecipe extends ModRecipe {
             recipe.startItem.toNetwork(buffer);
             buffer.writeItem(recipe.output);
         }
+
     }
+
 }

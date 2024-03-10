@@ -27,6 +27,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
@@ -122,7 +123,7 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     public int getAnalogOutputSignal(BlockState blockState, Level levelIn, BlockPos pos) {
         var tile = levelIn.getBlockEntity(pos);
         if (tile instanceof BlockEntityGratedChute) {
-            IItemHandler handler = ((BlockEntityGratedChute) tile).getItemHandler();
+            var handler = levelIn.getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, null);
             var stack = handler.getStackInSlot(0);
             if (stack.isEmpty())
                 return 0;
@@ -146,4 +147,5 @@ public class BlockGratedChute extends BlockContainerImpl implements ICustomBlock
     public void generateCustomItemModel(ItemModelGenerator generator) {
         generator.withExistingParent(this.getBaseName(), generator.modLoc("block/" + this.getBaseName() + "_down"));
     }
+
 }

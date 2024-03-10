@@ -15,14 +15,13 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBlockEntity {
@@ -34,7 +33,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
         }
     };
 
-    private TreeRitualRecipe recipe;
+    private RecipeHolder<TreeRitualRecipe> recipe;
     private BlockPos ritualPos;
     private int timer;
 
@@ -42,7 +41,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
         super(ModBlockEntities.WOOD_STAND, pos, state);
     }
 
-    public void setRitual(BlockPos pos, TreeRitualRecipe recipe) {
+    public void setRitual(BlockPos pos, RecipeHolder<TreeRitualRecipe> recipe) {
         this.ritualPos = pos;
         this.recipe = recipe;
     }
@@ -53,9 +52,9 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
             if (this.ritualPos != null && this.recipe != null) {
                 if (this.level.getGameTime() % 5 == 0) {
                     if (this.isRitualOkay()) {
-                        var wasOverHalf = this.timer >= this.recipe.time / 2;
+                        var wasOverHalf = this.timer >= this.recipe.value().time / 2;
                         this.timer += 5;
-                        var isOverHalf = this.timer >= this.recipe.time / 2;
+                        var isOverHalf = this.timer >= this.recipe.value().time / 2;
 
                         if (!isOverHalf)
                             Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'W', (pos, matcher) -> {
@@ -75,7 +74,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
                         PacketHandler.sendToAllAround(this.level, this.ritualPos, 32,
                                 new PacketParticles(this.ritualPos.getX(), this.ritualPos.getY(), this.ritualPos.getZ(), PacketParticles.Type.TR_GOLD_POWDER));
 
-                        if (this.timer >= this.recipe.time) {
+                        if (this.timer >= this.recipe.value().time) {
                             Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'G', (pos, matcher) -> {
                                 this.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                                 return true;
@@ -84,7 +83,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
 
                             var item = new ItemEntity(this.level,
                                     this.ritualPos.getX() + 0.5, this.ritualPos.getY() + 4.5, this.ritualPos.getZ() + 0.5,
-                                    this.recipe.result.copy());
+                                    this.recipe.value().result.copy());
                             this.level.addFreshEntity(item);
 
                             PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
@@ -130,8 +129,8 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
             if (!state.is(BlockTags.LOGS))
                 return false;
         }
-        if (this.timer < this.recipe.time / 2) {
-            List<Ingredient> required = new ArrayList<>(Arrays.asList(this.recipe.ingredients));
+        if (this.timer < this.recipe.value().time / 2) {
+            List<Ingredient> required = new ArrayList<>(this.recipe.value().ingredients);
             var fine = Multiblocks.TREE_RITUAL.forEach(this.ritualPos, 'W', (pos, matcher) -> {
                 var tile = this.level.getBlockEntity(pos);
                 if (tile instanceof BlockEntityWoodStand) {
@@ -164,11 +163,12 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
             if (this.ritualPos != null && this.recipe != null) {
                 compound.putLong("ritual_pos", this.ritualPos.asLong());
                 compound.putInt("timer", this.timer);
-                compound.putString("recipe", this.recipe.name.toString());
+                compound.putString("recipe", this.recipe.toString());
             }
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
@@ -180,14 +180,9 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
                 this.ritualPos = BlockPos.of(compound.getLong("ritual_pos"));
                 this.timer = compound.getInt("timer");
                 if (this.hasLevel())
-                    this.recipe = (TreeRitualRecipe) this.level.getRecipeManager().byKey(new ResourceLocation(compound.getString("recipe"))).orElse(null);
+                    this.recipe = (RecipeHolder<TreeRitualRecipe>) this.level.getRecipeManager().byKey(new ResourceLocation(compound.getString("recipe"))).orElse(null);
             }
         }
-    }
-
-    @Override
-    public IItemHandlerModifiable getItemHandler() {
-        return this.items;
     }
 
 }

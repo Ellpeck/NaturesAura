@@ -1,8 +1,10 @@
 package de.ellpeck.naturesaura.recipes;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -14,23 +16,20 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AnimalSpawnerRecipe extends ModRecipe {
 
-    public final Ingredient[] ingredients;
+    public final List<Ingredient> ingredients;
     public final EntityType<?> entity;
     public final int aura;
     public final int time;
 
-    public AnimalSpawnerRecipe(ResourceLocation name, EntityType<?> entity, int aura, int time, Ingredient... ingredients) {
-        super(name);
+    public AnimalSpawnerRecipe(ResourceLocation entityType, int aura, int time, List<Ingredient> ingredients) {
         this.ingredients = ingredients;
-        this.entity = entity;
+        this.entity = BuiltInRegistries.ENTITY_TYPE.get(entityType);
         this.aura = aura;
         this.time = time;
     }
@@ -59,40 +58,36 @@ public class AnimalSpawnerRecipe extends ModRecipe {
 
     public static class Serializer implements RecipeSerializer<AnimalSpawnerRecipe> {
 
+        private static final Codec<AnimalSpawnerRecipe> CODEC = RecordCodecBuilder.create(i -> i.group(
+                ResourceLocation.CODEC.fieldOf("entity").forGetter(r -> BuiltInRegistries.ENTITY_TYPE.getKey(r.entity)),
+                Codec.INT.fieldOf("aura").forGetter(r -> r.aura),
+                Codec.INT.fieldOf("time").forGetter(r -> r.time),
+                Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(r -> r.ingredients)
+        ).apply(i, AnimalSpawnerRecipe::new));
+
         @Override
-        public AnimalSpawnerRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            List<Ingredient> ingredients = new ArrayList<>();
-            for (var e : json.getAsJsonArray("ingredients"))
-                ingredients.add(Ingredient.fromJson(e));
-            return new AnimalSpawnerRecipe(recipeId,
-                    ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(json.get("entity").getAsString())),
-                    json.get("aura").getAsInt(),
-                    json.get("time").getAsInt(),
-                    ingredients.toArray(new Ingredient[0]));
+        public Codec<AnimalSpawnerRecipe> codec() {
+            return Serializer.CODEC;
         }
 
-        @Nullable
         @Override
-        public AnimalSpawnerRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            var ings = new Ingredient[buffer.readInt()];
-            for (var i = 0; i < ings.length; i++)
-                ings[i] = Ingredient.fromNetwork(buffer);
-            return new AnimalSpawnerRecipe(
-                    recipeId,
-                    ForgeRegistries.ENTITY_TYPES.getValue(buffer.readResourceLocation()),
-                    buffer.readInt(),
-                    buffer.readInt(),
-                    ings);
+        public AnimalSpawnerRecipe fromNetwork(FriendlyByteBuf buffer) {
+            var ingredients = new ArrayList<Ingredient>();
+            for (var i = buffer.readInt(); i > 0; i--)
+                ingredients.add(Ingredient.fromNetwork(buffer));
+            return new AnimalSpawnerRecipe(buffer.readResourceLocation(), buffer.readInt(), buffer.readInt(), ingredients);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, AnimalSpawnerRecipe recipe) {
-            buffer.writeInt(recipe.ingredients.length);
+            buffer.writeInt(recipe.ingredients.size());
             for (var ing : recipe.ingredients)
                 ing.toNetwork(buffer);
-            buffer.writeResourceLocation(ForgeRegistries.ENTITY_TYPES.getKey(recipe.entity));
+            buffer.writeResourceLocation(BuiltInRegistries.ENTITY_TYPE.getKey(recipe.entity));
             buffer.writeInt(recipe.aura);
             buffer.writeInt(recipe.time);
         }
+
     }
+
 }

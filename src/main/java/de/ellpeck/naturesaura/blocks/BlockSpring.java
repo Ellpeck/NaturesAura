@@ -21,13 +21,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 public class BlockSpring extends BlockContainerImpl implements ICustomBlockState, IColorProvidingBlock, IColorProvidingItem, BucketPickup {
 
     public BlockSpring() {
-        super("spring", BlockEntitySpring.class, Properties.copy(Blocks.STONE_BRICKS));
+        super("spring", BlockEntitySpring.class, Properties.ofFullCopy(Blocks.STONE_BRICKS));
     }
 
     @Override
@@ -57,8 +58,8 @@ public class BlockSpring extends BlockContainerImpl implements ICustomBlockState
     }
 
     @Override
-    public ItemStack pickupBlock(LevelAccessor levelIn, BlockPos pos, BlockState state) {
-        if (levelIn.getBlockEntity(pos) instanceof BlockEntitySpring spring && spring.tryConsumeAura(2500))
+    public ItemStack pickupBlock(@Nullable Player pPlayer, LevelAccessor pLevel, BlockPos pPos, BlockState pState) {
+        if (pLevel.getBlockEntity(pPos) instanceof BlockEntitySpring spring && spring.tryConsumeAura(2500))
             return new ItemStack(Items.WATER_BUCKET);
         return ItemStack.EMPTY;
     }
@@ -68,4 +69,5 @@ public class BlockSpring extends BlockContainerImpl implements ICustomBlockState
     public Optional<SoundEvent> getPickupSound() {
         return Fluids.WATER.getPickupSound();
     }
+
 }

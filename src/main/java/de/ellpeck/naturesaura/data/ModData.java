@@ -14,7 +14,7 @@ import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.List;
 import java.util.Set;
@@ -43,11 +43,12 @@ public final class ModData {
         final RegistrySetBuilder registryBuilder = new RegistrySetBuilder();
         registryBuilder.add(Registries.CONFIGURED_FEATURE, ModFeatures.Configured::bootstrap);
         registryBuilder.add(Registries.PLACED_FEATURE, ModFeatures.Placed::bootstrap);
-        registryBuilder.add(ForgeRegistries.Keys.BIOME_MODIFIERS, BiomeModifiers::bootstrap);
+        registryBuilder.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, BiomeModifiers::bootstrap);
         // We need the BIOME registry to be present, so we can use a biome tag, doesn't matter that it's empty
         registryBuilder.add(Registries.BIOME, context -> {
         });
-        RegistryAccess.Frozen regAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
+        var regAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
         return registryBuilder.buildPatch(regAccess, VanillaRegistries.createLookup());
     }
+
 }

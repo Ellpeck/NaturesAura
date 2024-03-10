@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.blocks;
 
+import com.mojang.serialization.MapCodec;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraBloom;
 import de.ellpeck.naturesaura.blocks.tiles.ITickableBlockEntity;
 import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
@@ -48,6 +49,11 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
     }
 
     @Override
+    protected MapCodec<? extends BushBlock> codec() {
+        return null;
+    }
+
+    @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter levelIn, BlockPos pos) {
         return Arrays.stream(this.allowedGround).anyMatch(state::is);
     }
@@ -92,4 +98,5 @@ public class BlockAuraBloom extends BushBlock implements IModItem, ICustomBlockS
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return ITickableBlockEntity.createTickerHelper(type, ModBlockEntities.AURA_BLOOM);
     }
+
 }

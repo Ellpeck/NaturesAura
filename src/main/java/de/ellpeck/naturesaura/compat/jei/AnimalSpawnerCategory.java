@@ -23,6 +23,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 
 import java.util.Arrays;
@@ -103,9 +104,9 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, AnimalSpawnerRecipe recipe, IFocusGroup focuses) {
-        for (var i = 0; i < recipe.ingredients.length; i++)
-            builder.addSlot(RecipeIngredientRole.INPUT, i * 18 + 1, 69).addItemStacks(Arrays.asList(recipe.ingredients[i].getItems()));
-        builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(new ItemStack(DeferredSpawnEggItem.fromEntityType(recipe.entity)));
+        for (var i = 0; i < recipe.ingredients.size(); i++)
+            builder.addSlot(RecipeIngredientRole.INPUT, i * 18 + 1, 69).addItemStacks(Arrays.asList(recipe.ingredients.get(i).getItems()));
+        builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(new ItemStack(SpawnEggItem.byId(recipe.entity)));
     }
 
     @Override

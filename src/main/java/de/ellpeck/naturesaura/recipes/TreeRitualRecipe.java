@@ -1,14 +1,13 @@
 package de.ellpeck.naturesaura.recipes;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.neoforged.neoforge.common.crafting.CraftingHelper;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -17,12 +16,11 @@ import java.util.List;
 public class TreeRitualRecipe extends ModRecipe {
 
     public final Ingredient saplingType;
-    public final Ingredient[] ingredients;
+    public final List<Ingredient> ingredients;
     public final ItemStack result;
     public final int time;
 
-    public TreeRitualRecipe(ResourceLocation name, Ingredient saplingType, ItemStack result, int time, Ingredient... ingredients) {
-        super(name);
+    public TreeRitualRecipe(Ingredient saplingType, ItemStack result, int time, List<Ingredient> ingredients) {
         this.saplingType = saplingType;
         this.ingredients = ingredients;
         this.result = result;
@@ -46,41 +44,37 @@ public class TreeRitualRecipe extends ModRecipe {
 
     public static class Serializer implements RecipeSerializer<TreeRitualRecipe> {
 
+        private static final Codec<TreeRitualRecipe> CODEC = RecordCodecBuilder.create(i -> i.group(
+                Ingredient.CODEC.fieldOf("sapling").forGetter(r -> r.saplingType),
+                ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result),
+                Codec.INT.fieldOf("time").forGetter(r -> r.time),
+                Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(recipe -> recipe.ingredients)
+        ).apply(i, TreeRitualRecipe::new));
+
         @Override
-        public TreeRitualRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            List<Ingredient> ings = new ArrayList<>();
-            for (var element : json.getAsJsonArray("ingredients"))
-                ings.add(Ingredient.fromJson(element));
-            return new TreeRitualRecipe(
-                    recipeId,
-                    Ingredient.fromJson(json.getAsJsonObject("sapling")),
-                    CraftingHelper.getItemStack(json.getAsJsonObject("output"), true),
-                    json.get("time").getAsInt(),
-                    ings.toArray(new Ingredient[0]));
+        public Codec<TreeRitualRecipe> codec() {
+            return Serializer.CODEC;
         }
 
         @Nullable
         @Override
-        public TreeRitualRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            var ings = new Ingredient[buffer.readInt()];
-            for (var i = 0; i < ings.length; i++)
-                ings[i] = Ingredient.fromNetwork(buffer);
-            return new TreeRitualRecipe(
-                    recipeId,
-                    Ingredient.fromNetwork(buffer),
-                    buffer.readItem(),
-                    buffer.readInt(),
-                    ings);
+        public TreeRitualRecipe fromNetwork(FriendlyByteBuf buffer) {
+            var ingredients = new ArrayList<Ingredient>();
+            for (var i = buffer.readInt(); i > 0; i--)
+                ingredients.add(Ingredient.fromNetwork(buffer));
+            return new TreeRitualRecipe(Ingredient.fromNetwork(buffer), buffer.readItem(), buffer.readInt(), ingredients);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, TreeRitualRecipe recipe) {
-            buffer.writeInt(recipe.ingredients.length);
+            buffer.writeInt(recipe.ingredients.size());
             for (var ing : recipe.ingredients)
                 ing.toNetwork(buffer);
             recipe.saplingType.toNetwork(buffer);
             buffer.writeItem(recipe.result);
             buffer.writeInt(recipe.time);
         }
+
     }
+
 }

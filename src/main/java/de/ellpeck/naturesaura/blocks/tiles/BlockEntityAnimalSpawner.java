@@ -16,6 +16,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickableBlockEntity {
 
-    private AnimalSpawnerRecipe currentRecipe;
+    private RecipeHolder<AnimalSpawnerRecipe> currentRecipe;
     private double spawnX;
     private double spawnZ;
     private int time;
@@ -50,7 +51,7 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
             }
 
             if (this.currentRecipe != null) {
-                var drain = Mth.ceil(this.currentRecipe.aura / (float) this.currentRecipe.time * 10F);
+                var drain = Mth.ceil(this.currentRecipe.value().aura / (float) this.currentRecipe.value().time * 10F);
                 if (!this.canUseRightNow(drain))
                     return;
 
@@ -58,8 +59,8 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
                 IAuraChunk.getAuraChunk(this.level, spot).drainAura(spot, drain);
 
                 this.time += 10;
-                if (this.time >= this.currentRecipe.time) {
-                    var entity = this.currentRecipe.makeEntity(this.level, BlockPos.containing(this.spawnX, this.worldPosition.getY() + 1, this.spawnZ));
+                if (this.time >= this.currentRecipe.value().time) {
+                    var entity = this.currentRecipe.value().makeEntity(this.level, BlockPos.containing(this.spawnX, this.worldPosition.getY() + 1, this.spawnZ));
                     this.level.addFreshEntity(entity);
 
                     this.currentRecipe = null;
@@ -71,9 +72,9 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
                         new AABB(this.worldPosition).inflate(2));
 
                 for (var recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.ANIMAL_SPAWNER_TYPE, null, this.level)) {
-                    if (recipe.ingredients.length != items.size())
+                    if (recipe.value().ingredients.size() != items.size())
                         continue;
-                    List<Ingredient> required = new ArrayList<>(Arrays.asList(recipe.ingredients));
+                    List<Ingredient> required = new ArrayList<>(recipe.value().ingredients);
                     for (var item : items) {
                         if (!item.isAlive() || item.hasPickUpDelay())
                             break;
@@ -123,7 +124,7 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
                     this.level.random.nextFloat() + 0.5F);
 
             if (this.entityClient == null) {
-                this.entityClient = this.currentRecipe.makeEntity(this.level, BlockPos.ZERO);
+                this.entityClient = this.currentRecipe.value().makeEntity(this.level, BlockPos.ZERO);
                 this.entityClient.setPos(this.spawnX, this.worldPosition.getY() + 1, this.spawnZ);
             }
             var bounds = this.entityClient.getBoundingBox();
@@ -141,7 +142,7 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
         super.writeNBT(compound, type);
         if (type != SaveType.BLOCK) {
             if (this.currentRecipe != null) {
-                compound.putString("recipe", this.currentRecipe.name.toString());
+                compound.putString("recipe", this.currentRecipe.id().toString());
                 compound.putDouble("spawn_x", this.spawnX);
                 compound.putDouble("spawn_z", this.spawnZ);
                 compound.putInt("time", this.time);
@@ -149,6 +150,7 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void readNBT(CompoundTag compound, SaveType type) {
         super.readNBT(compound, type);
@@ -156,7 +158,7 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
             if (compound.contains("recipe")) {
                 if (this.hasLevel()) {
                     var name = new ResourceLocation(compound.getString("recipe"));
-                    this.currentRecipe = (AnimalSpawnerRecipe) this.level.getRecipeManager().byKey(name).orElse(null);
+                    this.currentRecipe = (RecipeHolder<AnimalSpawnerRecipe>) this.level.getRecipeManager().byKey(name).orElse(null);
                 }
                 this.spawnX = compound.getDouble("spawn_x");
                 this.spawnZ = compound.getDouble("spawn_z");
@@ -172,4 +174,5 @@ public class BlockEntityAnimalSpawner extends BlockEntityImpl implements ITickab
     public boolean allowsLowerLimiter() {
         return true;
     }
+
 }

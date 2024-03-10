@@ -19,6 +19,7 @@ import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 @JeiPlugin
 public class JEINaturesAuraPlugin implements IModPlugin {
@@ -50,7 +51,7 @@ public class JEINaturesAuraPlugin implements IModPlugin {
         registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ModItems.AURA_BOTTLE, (stack, context) -> ItemAuraBottle.getType(stack).getName().toString());
 
         var auraInterpreter = (IIngredientSubtypeInterpreter<ItemStack>) (stack, context) -> {
-            var container = stack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER).orElse(null);
+            var container = stack.getCapability(NaturesAuraAPI.AURA_CONTAINER_ITEM_CAPABILITY);
             if (container != null)
                 return String.valueOf(container.getStoredAura());
             return IIngredientSubtypeInterpreter.NONE;
@@ -71,9 +72,10 @@ public class JEINaturesAuraPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         var manager = Minecraft.getInstance().level.getRecipeManager();
-        registration.addRecipes(JEINaturesAuraPlugin.TREE_RITUAL, manager.getAllRecipesFor(ModRecipes.TREE_RITUAL_TYPE));
-        registration.addRecipes(JEINaturesAuraPlugin.ALTAR, manager.getAllRecipesFor(ModRecipes.ALTAR_TYPE));
-        registration.addRecipes(JEINaturesAuraPlugin.OFFERING, manager.getAllRecipesFor(ModRecipes.OFFERING_TYPE));
-        registration.addRecipes(JEINaturesAuraPlugin.SPAWNER, manager.getAllRecipesFor(ModRecipes.ANIMAL_SPAWNER_TYPE));
+        registration.addRecipes(JEINaturesAuraPlugin.TREE_RITUAL, manager.getAllRecipesFor(ModRecipes.TREE_RITUAL_TYPE).stream().map(RecipeHolder::value).toList());
+        registration.addRecipes(JEINaturesAuraPlugin.ALTAR, manager.getAllRecipesFor(ModRecipes.ALTAR_TYPE).stream().map(RecipeHolder::value).toList());
+        registration.addRecipes(JEINaturesAuraPlugin.OFFERING, manager.getAllRecipesFor(ModRecipes.OFFERING_TYPE).stream().map(RecipeHolder::value).toList());
+        registration.addRecipes(JEINaturesAuraPlugin.SPAWNER, manager.getAllRecipesFor(ModRecipes.ANIMAL_SPAWNER_TYPE).stream().map(RecipeHolder::value).toList());
     }
+
 }

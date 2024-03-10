@@ -12,7 +12,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 import java.util.Map;
 
@@ -22,7 +21,7 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
             .put(NaturesAuraAPI.TYPE_OVERWORLD, 20)
             .put(NaturesAuraAPI.TYPE_NETHER, 20 * 60)
             .put(NaturesAuraAPI.TYPE_END, 20 * 60 * 60).build();
-    private final ItemStackHandlerNA itemHandler = new ItemStackHandlerNA(1, this, true) {
+    public final ItemStackHandlerNA itemHandler = new ItemStackHandlerNA(1, this, true) {
         @Override
         protected boolean canInsert(ItemStack stack, int slot) {
             return stack.getItem() == ModItems.AURA_BOTTLE;
@@ -96,11 +95,6 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
 
     public float getTimerPercentage() {
         return this.timer / (float) this.getTotalTime();
-    }
-
-    @Override
-    public IItemHandlerModifiable getItemHandler() {
-        return this.itemHandler;
     }
 
     @Override

@@ -1,10 +1,10 @@
 package de.ellpeck.naturesaura.compat.patchouli;
 
 import de.ellpeck.naturesaura.recipes.AnimalSpawnerRecipe;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
@@ -24,12 +24,12 @@ public class ProcessorAnimalSpawner implements IComponentProcessor {
             return null;
         if (key.startsWith("input")) {
             var id = Integer.parseInt(key.substring(5)) - 1;
-            return this.recipe.ingredients.length > id ? PatchouliCompat.ingredientVariable(this.recipe.ingredients[id]) : null;
+            return this.recipe.ingredients.size() > id ? PatchouliCompat.ingredientVariable(this.recipe.ingredients.get(id)) : null;
         } else {
             return switch (key) {
                 case "name" -> IVariable.wrap(this.recipe.entity.getDescription().getString());
-                case "entity" -> IVariable.wrap(ForgeRegistries.ENTITY_TYPES.getKey(this.recipe.entity).toString());
-                case "egg" -> IVariable.from(new ItemStack(DeferredSpawnEggItem.fromEntityType(this.recipe.entity)));
+                case "entity" -> IVariable.wrap(BuiltInRegistries.ENTITY_TYPE.getKey(this.recipe.entity).toString());
+                case "egg" -> IVariable.from(new ItemStack(SpawnEggItem.byId(this.recipe.entity)));
                 default -> null;
             };
         }
@@ -39,4 +39,5 @@ public class ProcessorAnimalSpawner implements IComponentProcessor {
     public boolean allowRender(String group) {
         return !"seekrit".equals(group);
     }
+
 }

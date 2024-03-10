@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 import java.util.ArrayDeque;
@@ -39,8 +38,8 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
 
     private OfferingRecipe getRecipe(ItemStack input) {
         for (var recipe : this.level.getRecipeManager().getRecipesFor(ModRecipes.OFFERING_TYPE, null, this.level))
-            if (recipe.input.test(input))
-                return recipe;
+            if (recipe.value().input.test(input))
+                return recipe.value();
         return null;
     }
 
@@ -114,7 +113,7 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
             if (type != SaveType.SYNC) {
                 var list = new ListTag();
                 for (var stack : this.itemsToSpawn)
-                    list.add(stack.serializeNBT());
+                    list.add(stack.save(new CompoundTag()));
                 compound.put("items_to_spawn", list);
             }
         }
@@ -133,11 +132,6 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
                     this.itemsToSpawn.add(ItemStack.of((CompoundTag) base));
             }
         }
-    }
-
-    @Override
-    public IItemHandlerModifiable getItemHandler() {
-        return this.items;
     }
 
 }

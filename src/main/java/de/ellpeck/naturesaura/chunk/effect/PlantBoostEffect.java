@@ -79,7 +79,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
                 var state = level.getBlockState(plantPos);
                 var block = state.getBlock();
                 if (block instanceof BonemealableBlock growable && !PlantBoostEffect.EXCEPTIONS.contains(block) && !(block instanceof DoublePlantBlock) && !(block instanceof TallGrassBlock)) {
-                    if (growable.isValidBonemealTarget(level, plantPos, state, false)) {
+                    if (growable.isValidBonemealTarget(level, plantPos, state)) {
                         try {
                             growable.performBonemeal((ServerLevel) level, level.random, plantPos, state);
                         } catch (Exception e) {

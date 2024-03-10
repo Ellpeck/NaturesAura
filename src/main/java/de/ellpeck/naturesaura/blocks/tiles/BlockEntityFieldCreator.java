@@ -108,7 +108,7 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
                 var state = this.level.getBlockState(pos);
                 if (!state.isAir() && state.getDestroySpeed(this.level, pos) >= 0F) {
                     var fake = FakePlayerFactory.getMinecraft((ServerLevel) this.level);
-                    if (!NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.level, pos, state, fake))) {
+                    if (!NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.level, pos, state, fake)).isCanceled()) {
                         var drops = state.getDrops(new LootParams.Builder((ServerLevel) this.level)
                                 .withParameter(LootContextParams.THIS_ENTITY, fake)
                                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
@@ -208,4 +208,5 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
     public boolean allowsLowerLimiter() {
         return true;
     }
+
 }

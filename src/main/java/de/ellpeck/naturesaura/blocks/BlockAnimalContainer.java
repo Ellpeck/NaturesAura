@@ -21,7 +21,7 @@ public class BlockAnimalContainer extends BlockContainerImpl implements IVisuali
     private static final VoxelShape SHAPE = Block.box(5, 0, 5, 11, 13, 11);
 
     public BlockAnimalContainer() {
-        super("animal_container", BlockEntityAnimalContainer.class, Properties.copy(Blocks.STONE));
+        super("animal_container", BlockEntityAnimalContainer.class, Properties.ofFullCopy(Blocks.STONE));
     }
 
     @Override
@@ -57,4 +57,5 @@ public class BlockAnimalContainer extends BlockContainerImpl implements IVisuali
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
     }
+
 }
