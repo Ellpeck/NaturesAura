@@ -116,7 +116,6 @@ public final class Helper {
     }
 
     public static boolean areItemsEqual(ItemStack first, ItemStack second, boolean nbt) {
-        // TODO see if this is the correct new comparison method?
         return nbt ? ItemStack.isSameItemSameTags(first, second) : ItemStack.isSameItem(first, second);
     }
 
