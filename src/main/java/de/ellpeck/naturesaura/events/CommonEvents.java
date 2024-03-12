@@ -33,14 +33,14 @@ import java.util.UUID;
 
 public class CommonEvents {
 
-    private static final Method GET_LOADED_CHUNKS_METHOD = ObfuscationReflectionHelper.findMethod(ChunkMap.class, "m_140416_");
+    private static final Method GET_LOADED_CHUNKS_METHOD = ObfuscationReflectionHelper.findMethod(ChunkMap.class, "getChunks");
     private static final ListMultimap<UUID, ChunkPos> PENDING_AURA_CHUNKS = ArrayListMultimap.create();
 
     @SubscribeEvent
     public void onChunkUnload(ChunkEvent.Unload event) {
         var iChunk = event.getChunk();
         if (iChunk instanceof LevelChunk chunk) {
-            var auraChunk = chunk.getData(NaturesAuraAPI.AURA_CHUNK_ATTACHMENT).get(chunk);
+            var auraChunk = chunk.getData(NaturesAuraAPI.AURA_CHUNK_ATTACHMENT);
             if (auraChunk instanceof AuraChunk) {
                 var data = (LevelData) ILevelData.getLevelData(chunk.getLevel());
                 data.auraChunksWithSpots.remove(chunk.getPos().toLong());
@@ -76,7 +76,7 @@ public class CommonEvents {
                         var chunk = holder.getTickingChunk();
                         if (chunk == null)
                             continue;
-                        var auraChunk = (AuraChunk) chunk.getData(NaturesAuraAPI.AURA_CHUNK_ATTACHMENT).get(chunk);
+                        var auraChunk = (AuraChunk) chunk.getData(NaturesAuraAPI.AURA_CHUNK_ATTACHMENT);
                         if (auraChunk != null)
                             auraChunk.update();
                     }
@@ -116,7 +116,7 @@ public class CommonEvents {
         var chunk = Helper.getLoadedChunk(player.level(), pos.x, pos.z);
         if (!(chunk instanceof LevelChunk levelChunk))
             return false;
-        var auraChunk = (AuraChunk) levelChunk.getData(NaturesAuraAPI.AURA_CHUNK_ATTACHMENT).get(levelChunk);
+        var auraChunk = (AuraChunk) levelChunk.getData(NaturesAuraAPI.AURA_CHUNK_ATTACHMENT);
         if (auraChunk == null)
             return false;
         PacketHandler.sendTo(player, auraChunk.makePacket());

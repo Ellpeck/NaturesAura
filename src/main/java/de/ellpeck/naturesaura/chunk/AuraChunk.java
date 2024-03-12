@@ -37,17 +37,12 @@ public class AuraChunk implements IAuraChunk {
     private final Table<BlockPos, Integer, Pair<Integer, Integer>> auraAndSpotAmountCache = HashBasedTable.create();
     private final Table<BlockPos, Integer, Pair<BlockPos, Integer>[]> limitSpotCache = HashBasedTable.create();
     private final List<IDrainSpotEffect> effects = new ArrayList<>();
+    private final LevelChunk chunk;
+    private final IAuraType type;
 
-    private LevelChunk chunk;
-    private IAuraType type;
     private boolean needsSync;
 
-    @Override
-    public void ensureInitialized(LevelChunk chunk) {
-        // are we already initialized?
-        if (this.chunk != null)
-            return;
-
+    public AuraChunk(LevelChunk chunk) {
         this.chunk = chunk;
         this.type = IAuraType.forLevel(chunk.getLevel());
 

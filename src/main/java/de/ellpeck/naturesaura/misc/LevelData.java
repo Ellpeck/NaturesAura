@@ -71,6 +71,11 @@ public class LevelData extends SavedData implements ILevelData {
     }
 
     @Override
+    public boolean isDirty() {
+        return true;
+    }
+
+    @Override
     public ItemStackHandlerNA getEnderStorage(String name) {
         return this.enderStorages.computeIfAbsent(name, n -> new ItemStackHandlerNA(27));
     }

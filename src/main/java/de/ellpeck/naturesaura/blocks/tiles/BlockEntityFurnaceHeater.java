@@ -24,7 +24,7 @@ import java.lang.reflect.Field;
 
 public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickableBlockEntity {
 
-    private static final Field FURNACE_DATA_FIELD = ObfuscationReflectionHelper.findField(AbstractFurnaceBlockEntity.class, "f_58311_");
+    private static final Field FURNACE_DATA_FIELD = ObfuscationReflectionHelper.findField(AbstractFurnaceBlockEntity.class, "dataAccess");
     public boolean isActive;
 
     public BlockEntityFurnaceHeater(BlockPos pos, BlockState state) {

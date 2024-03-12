@@ -2,7 +2,6 @@ package de.ellpeck.naturesaura.api;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import de.ellpeck.naturesaura.api.aura.chunk.AuraChunkProvider;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
@@ -23,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -99,7 +99,7 @@ public final class NaturesAuraAPI {
     /**
      * The capability that any chunk in a level has to store Aura in it. As this is only applicable to chunks and all chunks in the level automatically get assigned this capability, using it directly is not necessary for addon developers. To retrieve this capability from any chunk, use the helper method {@link IAuraChunk#getAuraChunk(net.minecraft.world.level.Level, BlockPos)}.
      */
-    public static final AttachmentType<AuraChunkProvider> AURA_CHUNK_ATTACHMENT = AttachmentType.serializable(AuraChunkProvider::new).build();
+    public static final AttachmentType<IAuraChunk> AURA_CHUNK_ATTACHMENT = AttachmentType.serializable(h -> NaturesAuraAPI.instance().createAuraChunk((LevelChunk) h)).build();
     private static final IInternalHooks INSTANCE;
 
     static {
@@ -260,7 +260,7 @@ public final class NaturesAuraAPI {
 
         ILevelData getLevelData(Level level);
 
-        IAuraChunk createAuraChunk();
+        IAuraChunk createAuraChunk(LevelChunk chunk);
 
     }
 
