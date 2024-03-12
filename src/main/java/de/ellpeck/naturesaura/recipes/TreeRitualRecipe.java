@@ -17,19 +17,19 @@ public class TreeRitualRecipe extends ModRecipe {
 
     public final Ingredient saplingType;
     public final List<Ingredient> ingredients;
-    public final ItemStack result;
+    public final ItemStack output;
     public final int time;
 
-    public TreeRitualRecipe(Ingredient saplingType, ItemStack result, int time, List<Ingredient> ingredients) {
+    public TreeRitualRecipe(Ingredient saplingType, ItemStack output, int time, List<Ingredient> ingredients) {
         this.saplingType = saplingType;
         this.ingredients = ingredients;
-        this.result = result;
+        this.output = output;
         this.time = time;
     }
 
     @Override
     public ItemStack getResultItem(RegistryAccess access) {
-        return this.result;
+        return this.output;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class TreeRitualRecipe extends ModRecipe {
 
         private static final Codec<TreeRitualRecipe> CODEC = RecordCodecBuilder.create(i -> i.group(
                 Ingredient.CODEC.fieldOf("sapling").forGetter(r -> r.saplingType),
-                ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result),
+                ItemStack.ITEM_WITH_COUNT_CODEC.fieldOf("output").forGetter(r -> r.output),
                 Codec.INT.fieldOf("time").forGetter(r -> r.time),
                 Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(recipe -> recipe.ingredients)
         ).apply(i, TreeRitualRecipe::new));
@@ -71,7 +71,7 @@ public class TreeRitualRecipe extends ModRecipe {
             for (var ing : recipe.ingredients)
                 ing.toNetwork(buffer);
             recipe.saplingType.toNetwork(buffer);
-            buffer.writeItem(recipe.result);
+            buffer.writeItem(recipe.output);
             buffer.writeInt(recipe.time);
         }
 

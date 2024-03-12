@@ -43,7 +43,7 @@ public class OfferingRecipe extends ModRecipe {
         private static final Codec<OfferingRecipe> CODEC = RecordCodecBuilder.create(i -> i.group(
                 Ingredient.CODEC.fieldOf("input").forGetter(r -> r.input),
                 Ingredient.CODEC.fieldOf("start_item").forGetter(r -> r.startItem),
-                ItemStack.CODEC.fieldOf("output").forGetter(r -> r.output)
+                ItemStack.ITEM_WITH_COUNT_CODEC.fieldOf("output").forGetter(r -> r.output)
         ).apply(i, OfferingRecipe::new));
 
         @Override

@@ -83,7 +83,7 @@ public class BlockEntityWoodStand extends BlockEntityImpl implements ITickableBl
 
                             var item = new ItemEntity(this.level,
                                     this.ritualPos.getX() + 0.5, this.ritualPos.getY() + 4.5, this.ritualPos.getZ() + 0.5,
-                                    this.recipe.value().result.copy());
+                                    this.recipe.value().output.copy());
                             this.level.addFreshEntity(item);
 
                             PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,

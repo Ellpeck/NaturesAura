@@ -46,8 +46,8 @@ public class AltarRecipe extends ModRecipe {
 
         private static final Codec<AltarRecipe> CODEC = RecordCodecBuilder.create(i -> i.group(
                 Ingredient.CODEC.fieldOf("input").forGetter(r -> r.input),
-                ItemStack.CODEC.fieldOf("output").forGetter(r -> r.output),
-                Ingredient.CODEC.fieldOf("catalyst").forGetter(r -> r.catalyst),
+                ItemStack.ITEM_WITH_COUNT_CODEC.fieldOf("output").forGetter(r -> r.output),
+                Ingredient.CODEC.optionalFieldOf("catalyst", Ingredient.EMPTY).forGetter(r -> r.catalyst),
                 Codec.INT.fieldOf("aura").forGetter(r -> r.aura),
                 Codec.INT.fieldOf("time").forGetter(r -> r.time)
         ).apply(i, AltarRecipe::new));
