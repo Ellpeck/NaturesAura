@@ -1,13 +1,11 @@
 package de.ellpeck.naturesaura.items.tools;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -21,9 +19,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
-
-import javax.annotation.Nullable;
 
 public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
 
@@ -109,12 +104,6 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
     @Override
     public String getBaseName() {
         return this.baseName;
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return Helper.makeRechargeProvider(stack, true);
     }
 
     @Override

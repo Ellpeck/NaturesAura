@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
@@ -14,7 +13,6 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -45,13 +43,12 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Locale;
@@ -200,21 +197,11 @@ public final class Helper {
         return InteractionResult.CONSUME;
     }
 
-    public static ICapabilityProvider makeRechargeProvider(ItemStack stack, boolean needsSelected) {
-        return new ICapabilityProvider() {
-            private final LazyOptional<IAuraRecharge> recharge = LazyOptional.of(() -> (container, containerSlot, itemSlot, isSelected) -> {
-                if (isSelected || !needsSelected)
-                    return Helper.rechargeAuraItem(stack, container, 300);
-                return false;
-            });
-
-            @Nullable
-            @Override
-            public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-                if (capability == NaturesAuraAPI.CAP_AURA_RECHARGE)
-                    return this.recharge.cast();
-                return LazyOptional.empty();
-            }
+    public static ICapabilityProvider<ItemStack, Void, IAuraRecharge> makeRechargeProvider(boolean needsSelected) {
+        return (stack, ctx) -> (container, containerSlot, itemSlot, isSelected) -> {
+            if (isSelected || !needsSelected)
+                return Helper.rechargeAuraItem(stack, container, 300);
+            return false;
         };
     }
 
@@ -313,9 +300,12 @@ public final class Helper {
 
     public static ItemStack getEquippedItem(Predicate<ItemStack> predicate, Player player, boolean hotbarOnly) {
         if (Compat.hasCompat("curios")) {
-            var stack = CuriosApi.getCuriosHelper().findFirstCurio(player, predicate).map(SlotResult::stack);
-            if (stack.isPresent())
-                return stack.get();
+            var inventory = CuriosApi.getCuriosInventory(player);
+            if (inventory.isPresent()) {
+                var stack = inventory.get().findFirstCurio(predicate).map(SlotResult::stack);
+                if (stack.isPresent())
+                    return stack.get();
+            }
         }
         var invSize = hotbarOnly ? 9 : player.getInventory().getContainerSize();
         for (var i = 0; i < invSize; i++) {

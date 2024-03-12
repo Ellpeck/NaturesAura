@@ -1,11 +1,10 @@
 package de.ellpeck.naturesaura.items.tools;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModArmorMaterial;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -13,15 +12,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.UUID;
@@ -41,7 +42,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
     }
 
     public static boolean isFullSetEquipped(LivingEntity entity, ArmorMaterial material) {
-        var set = ItemArmor.SETS.computeIfAbsent(material, m -> ForgeRegistries.ITEMS.getValues().stream()
+        var set = ItemArmor.SETS.computeIfAbsent(material, m -> BuiltInRegistries.ITEM.stream()
                 .filter(i -> i instanceof ItemArmor && ((ItemArmor) i).getMaterial() == material)
                 .sorted(Comparator.comparingInt(i -> ((ItemArmor) i).getEquipmentSlot().ordinal()))
                 .toArray(Item[]::new));
@@ -57,12 +58,6 @@ public class ItemArmor extends ArmorItem implements IModItem {
     @Override
     public String getBaseName() {
         return this.baseName;
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return Helper.makeRechargeProvider(stack, false);
     }
 
     @Mod.EventBusSubscriber
@@ -89,7 +84,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
         public static void update(TickEvent.PlayerTickEvent event) {
             var player = event.player;
             var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
-            var step = player.getAttribute(NeoForgeMod.STEP_HEIGHT_ADDITION.get());
+            var step = player.getAttribute(NeoForgeMod.STEP_HEIGHT.value());
             var key = NaturesAura.MOD_ID + ":sky_equipped";
             var nbt = player.getPersistentData();
             var equipped = ItemArmor.isFullSetEquipped(player, ModArmorMaterial.SKY);
@@ -103,8 +98,8 @@ public class ItemArmor extends ArmorItem implements IModItem {
             } else if (!equipped && nbt.getBoolean(key)) {
                 // we just unequipped it
                 nbt.putBoolean(key, false);
-                step.removeModifier(ItemArmor.SKY_STEP_MODIFIER);
-                speed.removeModifier(ItemArmor.SKY_MOVEMENT_MODIFIER);
+                step.removeModifier(ItemArmor.SKY_STEP_MODIFIER.getId());
+                speed.removeModifier(ItemArmor.SKY_MOVEMENT_MODIFIER.getId());
             }
         }
 

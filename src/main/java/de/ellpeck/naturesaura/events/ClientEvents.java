@@ -40,6 +40,7 @@ import net.minecraft.world.level.block.MyceliumBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.event.CustomizeGuiOverlayEvent;
 import net.neoforged.neoforge.client.event.RenderGuiOverlayEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
@@ -73,9 +74,9 @@ public class ClientEvents {
     @SubscribeEvent
     public void onDebugRender(CustomizeGuiOverlayEvent.DebugText event) {
         var mc = Minecraft.getInstance();
-        if (mc.options.renderDebug && ModConfig.instance.debugText.get()) {
+        if (mc.getDebugOverlay().showDebugScreen() && ModConfig.instance.debugText.get()) {
             var prefix = ChatFormatting.GREEN + "[" + NaturesAura.MOD_NAME + "]" + ChatFormatting.RESET + " ";
-            List<String> left = event.getLeft();
+            var left = event.getLeft();
             if (mc.player.isCreative() || mc.player.isSpectator()) {
                 left.add("");
                 var amount = new MutableInt(IAuraChunk.DEFAULT_AURA);
@@ -190,7 +191,7 @@ public class ClientEvents {
 
         // aura spot debug
         ClientEvents.hoveringAuraSpot = null;
-        if (mc.options.renderDebug && (mc.player.isCreative() || mc.player.isSpectator()) && ModConfig.instance.debugLevel.get()) {
+        if (mc.getDebugOverlay().showDebugScreen() && (mc.player.isCreative() || mc.player.isSpectator()) && ModConfig.instance.debugLevel.get()) {
             var playerEye = mc.player.getEyePosition(event.getPartialTick());
             var playerView = mc.player.getViewVector(event.getPartialTick()).normalize();
             var range = mc.gameMode.getPickRange();
@@ -259,7 +260,7 @@ public class ClientEvents {
             var res = event.getWindow();
             if (mc.player != null) {
                 if (!ClientEvents.heldCache.isEmpty()) {
-                    var container = ClientEvents.heldCache.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null);
+                    var container = ClientEvents.heldCache.getCapability(NaturesAuraAPI.AURA_CONTAINER_ITEM_CAPABILITY, null);
                     var width = Mth.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
 
                     int conf = ModConfig.instance.cacheBarLocation.get();
@@ -290,7 +291,7 @@ public class ClientEvents {
                     stack.pushPose();
 
                     int conf = ModConfig.instance.auraBarLocation.get();
-                    if (!mc.options.renderDebug && (conf != 2 || !(mc.screen instanceof ChatScreen))) {
+                    if (!mc.getDebugOverlay().showDebugScreen() && (conf != 2 || !(mc.screen instanceof ChatScreen))) {
                         var color = IAuraType.forLevel(mc.level).getColor();
                         graphics.setColor((color >> 16 & 0xFF) / 255F, (color >> 8 & 0xFF) / 255F, (color & 0xFF) / 255F, 1);
 
@@ -363,16 +364,17 @@ public class ClientEvents {
                             IAuraContainer container;
                             var x = res.getGuiScaledWidth() / 2;
                             var y = res.getGuiScaledHeight() / 2;
-                            if (tile != null && (container = tile.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null)) != null) {
+                            if (tile != null && (container = tile.getLevel().getCapability(NaturesAuraAPI.AURA_CONTAINER_BLOCK_CAPABILITY, tile.getBlockPos(), tile.getBlockState(), tile, null)) != null) {
                                 var state = mc.level.getBlockState(pos);
                                 var blockStack = state.getBlock().getCloneItemStack(state, blockHitResult, mc.level, pos, mc.player);
                                 this.drawContainerInfo(graphics, container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
                                         mc, res, 35, blockStack.getHoverName().getString(), null);
 
                                 if (tile instanceof BlockEntityNatureAltar) {
-                                    var tileStack = ((BlockEntityNatureAltar) tile).getItemHandler().getStackInSlot(0);
+                                    var itemHandler = tile.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, null);
+                                    var tileStack = itemHandler.getStackInSlot(0);
                                     if (!tileStack.isEmpty()) {
-                                        var stackCont = tileStack.getCapability(NaturesAuraAPI.CAP_AURA_CONTAINER, null).orElse(null);
+                                        var stackCont = tileStack.getCapability(NaturesAuraAPI.AURA_CONTAINER_ITEM_CAPABILITY);
                                         if (stackCont != null) {
                                             this.drawContainerInfo(graphics, stackCont.getStoredAura(), stackCont.getMaxAura(), stackCont.getAuraColor(),
                                                     mc, res, 55, tileStack.getHoverName().getString(), null);
@@ -385,7 +387,8 @@ public class ClientEvents {
                                         mc, res, 35, I18n.get("block.naturesaura.rf_converter"),
                                         storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
                             } else if (tile instanceof BlockEntityGratedChute chute) {
-                                var itemStack = chute.getItemHandler().getStackInSlot(0);
+                                var itemHandler = tile.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, null);
+                                var itemStack = itemHandler.getStackInSlot(0);
 
                                 if (itemStack.isEmpty()) {
                                     graphics.drawString(mc.font,
@@ -407,7 +410,8 @@ public class ClientEvents {
                                 graphics.blit(ClientEvents.OVERLAYS, x - 18, y - 18, u, 0, 16, 16, 256, 256);
                                 RenderSystem.enableDepthTest();
                             } else if (tile instanceof BlockEntityAuraTimer timer) {
-                                var itemStack = timer.getItemHandler().getStackInSlot(0);
+                                var itemHandler = tile.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, null);
+                                var itemStack = itemHandler.getStackInSlot(0);
                                 if (!itemStack.isEmpty()) {
                                     Helper.renderItemInGui(graphics, itemStack, x - 20, y - 20, 1);
                                     graphics.drawString(mc.font, ChatFormatting.GRAY + this.createTimeString(timer.getTotalTime()), x + 5, y - 11, 0xFFFFFF);

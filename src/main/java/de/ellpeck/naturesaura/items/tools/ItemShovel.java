@@ -1,6 +1,5 @@
 package de.ellpeck.naturesaura.items.tools;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
@@ -8,23 +7,19 @@ import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel {
@@ -124,12 +119,6 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
     @Override
     public String getBaseName() {
         return this.baseName;
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return Helper.makeRechargeProvider(stack, true);
     }
 
     @Override

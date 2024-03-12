@@ -9,8 +9,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.LongTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -27,7 +25,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.common.util.ITeleporter;
-import net.neoforged.neoforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -158,11 +155,6 @@ public class EntityMoverMinecart extends Minecart {
     }
 
     @Override
-    public Type getMinecartType() {
-        return Type.RIDEABLE;
-    }
-
-    @Override
     public ItemStack getPickResult() {
         return new ItemStack(ModItems.MOVER_CART);
     }
@@ -181,11 +173,6 @@ public class EntityMoverMinecart extends Minecart {
     protected void applyNaturalSlowdown() {
         var motion = this.getDeltaMovement();
         this.setDeltaMovement(motion.x * 0.99F, 0, motion.z * 0.99F);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override

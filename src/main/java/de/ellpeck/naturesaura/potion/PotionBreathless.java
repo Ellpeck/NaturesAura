@@ -29,7 +29,7 @@ public class PotionBreathless extends PotionImpl {
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         var mod = 200 >> amplifier;
         return mod > 0 && duration % mod == 0 && this.random.nextBoolean();
     }
@@ -38,4 +38,5 @@ public class PotionBreathless extends PotionImpl {
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         entity.hurt(entity.damageSources().magic(), 1F);
     }
+
 }

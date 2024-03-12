@@ -1,12 +1,10 @@
 package de.ellpeck.naturesaura.items.tools;
 
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -19,10 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
 
 public class ItemSword extends SwordItem implements IModItem, ICustomItemModel {
 
@@ -65,12 +60,6 @@ public class ItemSword extends SwordItem implements IModItem, ICustomItemModel {
         if (this == ModItems.DEPTH_SWORD)
             return target.getBoundingBox().inflate(2, 1, 2);
         return super.getSweepHitBox(stack, player, target);
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return Helper.makeRechargeProvider(stack, true);
     }
 
     @Override

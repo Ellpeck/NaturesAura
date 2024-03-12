@@ -3,11 +3,13 @@ package de.ellpeck.naturesaura.reg;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.api.aura.container.ItemAuraContainer;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.*;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraBloom;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEnderCrate;
 import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
+import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
@@ -170,8 +172,8 @@ public final class ModRegistry {
                     new ItemImpl("infused_iron"),
                     new ItemImpl("ancient_stick"),
                     new ItemColorChanger(),
-                    new ItemAuraCache("aura_cache", 400000),
-                    new ItemAuraCache("aura_trove", 1200000),
+                    new ItemAuraCache("aura_cache"),
+                    new ItemAuraCache("aura_trove"),
                     new ItemShockwaveCreator(),
                     new ItemMultiblockMaker(),
                     temp = new ItemImpl("bottle_two_the_rebottling"),
@@ -248,8 +250,10 @@ public final class ModRegistry {
         event.register(Registries.MENU, h -> {
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "ender_crate"), IMenuTypeExtension.create((windowId, inv, data) -> {
                 var tile = inv.player.level().getBlockEntity(data.readBlockPos());
-                if (tile instanceof BlockEntityEnderCrate crate)
-                    return new ContainerEnderCrate(ModContainers.ENDER_CRATE, windowId, inv.player, crate.getItemHandler());
+                if (tile instanceof BlockEntityEnderCrate) {
+                    var handler = tile.getLevel().getCapability(ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, null);
+                    return new ContainerEnderCrate(ModContainers.ENDER_CRATE, windowId, inv.player, handler);
+                }
                 return null;
             }));
             h.register(new ResourceLocation(NaturesAura.MOD_ID, "ender_access"), IMenuTypeExtension.create((windowId, inv, data) -> {
@@ -336,13 +340,10 @@ public final class ModRegistry {
     @SubscribeEvent
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(FluidHandler.BLOCK, ModBlockEntities.SPRING, (e, c) -> e.tank);
-
         event.registerBlockEntity(EnergyStorage.BLOCK, ModBlockEntities.RF_CONVERTER, (e, c) -> e.storage);
-
         event.registerBlockEntity(NaturesAuraAPI.AURA_CONTAINER_BLOCK_CAPABILITY, ModBlockEntities.NATURE_ALTAR, (e, c) -> e.container);
         event.registerBlockEntity(NaturesAuraAPI.AURA_CONTAINER_BLOCK_CAPABILITY, ModBlockEntities.ANCIENT_LEAVES, (e, c) -> e.container);
         event.registerBlockEntity(NaturesAuraAPI.AURA_CONTAINER_BLOCK_CAPABILITY, ModBlockEntities.END_FLOWER, (e, c) -> e.container);
-
         event.registerBlockEntity(ItemHandler.BLOCK, ModBlockEntities.BLAST_FURNACE_BOOSTER, (e, c) -> e.getItemHandler());
         event.registerBlockEntity(ItemHandler.BLOCK, ModBlockEntities.OFFERING_TABLE, (e, c) -> e.items);
         event.registerBlockEntity(ItemHandler.BLOCK, ModBlockEntities.GRATED_CHUTE, (e, c) -> e.items);
@@ -350,6 +351,18 @@ public final class ModRegistry {
         event.registerBlockEntity(ItemHandler.BLOCK, ModBlockEntities.WOOD_STAND, (e, c) -> e.items);
         event.registerBlockEntity(ItemHandler.BLOCK, ModBlockEntities.ENDER_CRATE, (e, c) -> e.canOpen() ? e.wrappedEnderStorage : null);
         event.registerBlockEntity(ItemHandler.BLOCK, ModBlockEntities.AURA_TIMER, (e, c) -> e.itemHandler);
+
+        event.registerItem(NaturesAuraAPI.AURA_CONTAINER_ITEM_CAPABILITY, (s, c) -> new ItemAuraContainer(s, null, 400000), ModItems.AURA_CACHE);
+        event.registerItem(NaturesAuraAPI.AURA_CONTAINER_ITEM_CAPABILITY, (s, c) -> new ItemAuraContainer(s, null, 1200000), ModItems.AURA_TROVE);
+        for (var item : ModRegistry.ALL_ITEMS) {
+            if (item instanceof ItemArmor) {
+                event.registerItem(NaturesAuraAPI.AURA_RECHARGE_CAPABILITY, Helper.makeRechargeProvider(false), (Item) item);
+            } else if (item instanceof ItemAxe || item instanceof ItemPickaxe || item instanceof ItemShovel || item instanceof ItemHoe || item instanceof ItemSword) {
+                event.registerItem(NaturesAuraAPI.AURA_RECHARGE_CAPABILITY, Helper.makeRechargeProvider(true), (Item) item);
+            }
+        }
+
+        Compat.addCapabilities(event);
     }
 
     public static Block createFlowerPot(Block block) {

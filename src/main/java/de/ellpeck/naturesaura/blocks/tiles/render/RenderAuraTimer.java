@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.capabilities.Capabilities;
 
 public class RenderAuraTimer implements BlockEntityRenderer<BlockEntityAuraTimer> {
 
@@ -27,7 +28,7 @@ public class RenderAuraTimer implements BlockEntityRenderer<BlockEntityAuraTimer
 
     @Override
     public void render(BlockEntityAuraTimer tile, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
-        var bottle = tile.getItemHandler().getStackInSlot(0);
+        var bottle = tile.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, null).getStackInSlot(0);
         if (bottle.isEmpty())
             return;
         stack.pushPose();
@@ -61,5 +62,7 @@ public class RenderAuraTimer implements BlockEntityRenderer<BlockEntityAuraTimer
         public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
             this.model.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         }
+
     }
+
 }

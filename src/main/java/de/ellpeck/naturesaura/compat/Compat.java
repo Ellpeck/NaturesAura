@@ -6,6 +6,8 @@ import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
 import de.ellpeck.naturesaura.data.ItemTagProvider;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,10 +36,18 @@ public final class Compat {
         return Compat.MODULES.containsKey(mod);
     }
 
-    public static void addItemTags(ItemTagProvider provider) {
+    public static void gatherData(GatherDataEvent event) {
         // since other mods don't get loaded in runData, just populate all modules
         Compat.populateModules(s -> true);
+        Compat.MODULES.values().forEach(m -> m.gatherData(event));
+    }
+
+    public static void addItemTags(ItemTagProvider provider) {
         Compat.MODULES.values().forEach(m -> m.addItemTags(provider));
+    }
+
+    public static void addCapabilities(RegisterCapabilitiesEvent event) {
+        Compat.MODULES.values().forEach(c -> c.addCapabilities(event));
     }
 
     private static void populateModules(Predicate<String> isLoaded) {
@@ -49,4 +59,5 @@ public final class Compat {
             }
         }
     }
+
 }
