@@ -1,5 +1,5 @@
 {
-  "type": "forge:add_features",
+  "type": "neoforge:add_features",
   "biomes": "#minecraft:is_nether",
   "features": "naturesaura:warped_aura_mushroom",
   "step": "vegetal_decoration"
