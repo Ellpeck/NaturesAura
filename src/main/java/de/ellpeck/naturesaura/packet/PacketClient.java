@@ -42,22 +42,26 @@ public class PacketClient implements CustomPacketPayload {
         return PacketClient.ID;
     }
 
+    @SuppressWarnings("Convert2Lambda")
     public static void onMessage(PacketClient message, PlayPayloadContext ctx) {
-        ctx.workHandler().execute(() -> {
-            var mc = Minecraft.getInstance();
-            if (mc.level != null) {
-                switch (message.type) {
-                    case 0: // dimension rail visualization
-                        var goalDim = new ResourceLocation(message.data.getString("dim"));
-                        var goalPos = BlockPos.of(message.data.getLong("pos"));
-                        ItemRangeVisualizer.visualize(mc.player, ItemRangeVisualizer.VISUALIZED_RAILS, goalDim, goalPos);
-                    case 1:
-                        var entity = mc.level.getEntity(message.data.getInt("id"));
-                        mc.particleEngine.createTrackingEmitter(entity, ParticleTypes.TOTEM_OF_UNDYING, 30);
-                        mc.level.playLocalSound(entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TOTEM_USE, entity.getSoundSource(), 1.0F, 1.0F, false);
-                        if (entity == mc.player) {
-                            mc.gameRenderer.displayItemActivation(new ItemStack(ModItems.DEATH_RING));
-                        }
+        ctx.workHandler().execute(new Runnable() {
+            @Override
+            public void run() {
+                var mc = Minecraft.getInstance();
+                if (mc.level != null) {
+                    switch (message.type) {
+                        case 0: // dimension rail visualization
+                            var goalDim = new ResourceLocation(message.data.getString("dim"));
+                            var goalPos = BlockPos.of(message.data.getLong("pos"));
+                            ItemRangeVisualizer.visualize(mc.player, ItemRangeVisualizer.VISUALIZED_RAILS, goalDim, goalPos);
+                        case 1:
+                            var entity = mc.level.getEntity(message.data.getInt("id"));
+                            mc.particleEngine.createTrackingEmitter(entity, ParticleTypes.TOTEM_OF_UNDYING, 30);
+                            mc.level.playLocalSound(entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TOTEM_USE, entity.getSoundSource(), 1.0F, 1.0F, false);
+                            if (entity == mc.player) {
+                                mc.gameRenderer.displayItemActivation(new ItemStack(ModItems.DEATH_RING));
+                            }
+                    }
                 }
             }
         });

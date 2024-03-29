@@ -67,7 +67,7 @@ public class PacketParticles implements CustomPacketPayload {
 
     public static void onMessage(PacketParticles message, PlayPayloadContext ctx) {
         ctx.workHandler().execute(() -> {
-            Level level = Minecraft.getInstance().level;
+            var level = ctx.level().orElseThrow();
             if (level != null)
                 message.type.action.accept(message, level);
         });
