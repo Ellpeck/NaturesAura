@@ -10,7 +10,7 @@
             "tag": "forge:nuggets/gold"
         },
         "G": {
-            "item": "minecraft:grass_block"
+            "item": "minecraft:short_grass"
         },
         "L": {
             "tag": "minecraft:leaves"
