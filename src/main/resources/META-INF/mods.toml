@@ -72,3 +72,10 @@ side = "BOTH"
 # stop your mod loading on the server for example.
 #[features.${mod_id}]
 #openGLVersion="[3.2,)"
+
+[[dependencies.${mod_id}]]
+modId="patchouli"
+type = "required"
+versionRange="[${patchouli_version},)"
+ordering="NONE"
+side="BOTH"

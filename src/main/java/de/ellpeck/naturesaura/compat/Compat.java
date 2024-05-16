@@ -16,9 +16,10 @@ import java.util.function.Supplier;
 
 public final class Compat {
 
+    @SuppressWarnings("Convert2MethodRef") // bleh classloading compat issues
     private static final Map<String, Supplier<ICompat>> MODULE_TYPES = ImmutableMap.<String, Supplier<ICompat>>builder()
-            .put("patchouli", PatchouliCompat::new)
-            .put("curios", CuriosCompat::new)
+            .put("patchouli", () -> new PatchouliCompat())
+            .put("curios", () -> new CuriosCompat())
             //.put("enchantability", EnchantibilityCompat::new)
             .build();
     private static final Map<String, ICompat> MODULES = new HashMap<>();
