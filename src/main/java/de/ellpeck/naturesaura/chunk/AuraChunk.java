@@ -132,10 +132,10 @@ public class AuraChunk implements IAuraChunk {
         this.drainSpots.put(spot.pos, spot);
     }
 
-    public void setSpots(Collection<DrainSpot> spots) {
+    public void setSpots(Collection<CompoundTag> spots) {
         this.drainSpots.clear();
         for (var spot : spots)
-            this.addDrainSpot(spot);
+            this.addDrainSpot(new DrainSpot(spot));
         this.addOrRemoveAsActive();
     }
 

@@ -1,15 +1,21 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.AreaEffectCloud;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
+
+import java.lang.reflect.Field;
 
 public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITickableBlockEntity {
+
+    private static final Field POTION_CONTENTS_FIELD = ObfuscationReflectionHelper.findField(AreaEffectCloud.class, "potionContents");
 
     public BlockEntityPotionGenerator(BlockPos pos, BlockState state) {
         super(ModBlockEntities.POTION_GENERATOR, pos, state);
@@ -27,12 +33,17 @@ public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITick
                         continue;
 
                     if (!addedOne) {
-                        var type = cloud.getPotion();
-                        if (type == null)
+                        PotionContents type;
+                        try {
+                            // TODO check if this new private value getter works
+                            type = (PotionContents) BlockEntityPotionGenerator.POTION_CONTENTS_FIELD.get(cloud);
+                        } catch (IllegalAccessException e) {
+                            NaturesAura.LOGGER.fatal("Couldn't reflect furnace field", e);
                             continue;
+                        }
 
-                        for (var effect : type.getEffects()) {
-                            var potion = effect.getEffect();
+                        for (var effect : type.getAllEffects()) {
+                            var potion = effect.getEffect().value();
                             if (!potion.isBeneficial() || potion.isInstantenous()) {
                                 continue;
                             }
@@ -43,8 +54,8 @@ public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITick
                                 this.generateAura(toAdd);
 
                             PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(
-                                    this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.POTION_GEN,
-                                    PotionUtils.getColor(type), canGen ? 1 : 0));
+                                this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.POTION_GEN,
+                                type.getColor(), canGen ? 1 : 0));
 
                             addedOne = true;
                             break;
@@ -66,4 +77,5 @@ public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITick
     public boolean wantsLimitRemover() {
         return true;
     }
+
 }

@@ -20,6 +20,7 @@ import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 public class ItemPetReviver extends ItemImpl {
 
@@ -31,7 +32,7 @@ public class ItemPetReviver extends ItemImpl {
     private static class Events {
 
         @SubscribeEvent
-        public void onEntityTick(LivingEvent.LivingTickEvent event) {
+        public void onEntityTick(EntityTickEvent event) {
             var entity = event.getEntity();
             if (entity.level().isClientSide || entity.level().getGameTime() % 20 != 0 || !(entity instanceof TamableAnimal tameable))
                 return;
@@ -42,10 +43,10 @@ public class ItemPetReviver extends ItemImpl {
                 return;
             if (entity.level().random.nextFloat() >= 0.65F) {
                 ((ServerLevel) entity.level()).sendParticles(ParticleTypes.HEART,
-                        entity.getX() + entity.level().random.nextGaussian() * 0.25F,
-                        entity.getEyeY() + entity.level().random.nextGaussian() * 0.25F,
-                        entity.getZ() + entity.level().random.nextGaussian() * 0.25F,
-                        entity.level().random.nextInt(2) + 1, 0, 0, 0, 0);
+                    entity.getX() + entity.level().random.nextGaussian() * 0.25F,
+                    entity.getEyeY() + entity.level().random.nextGaussian() * 0.25F,
+                    entity.getZ() + entity.level().random.nextGaussian() * 0.25F,
+                    entity.level().random.nextInt(2) + 1, 0, 0, 0, 0);
             }
         }
 
@@ -129,5 +130,7 @@ public class ItemPetReviver extends ItemImpl {
                 owner.sendSystemMessage(Component.translatable("info." + NaturesAura.MOD_ID + ".pet_reviver", spawnedPet.getDisplayName()).withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY));
             event.setCanceled(true);
         }
+
     }
+
 }

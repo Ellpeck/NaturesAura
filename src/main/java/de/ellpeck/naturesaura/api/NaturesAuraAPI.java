@@ -52,10 +52,10 @@ public final class NaturesAuraAPI {
      * A map of all {@link IAuraType} instances which are types of Aura present in different types of levels. {@link BasicAuraType} instances can be easily registered using {@link BasicAuraType#register()}.
      */
     public static final Map<ResourceLocation, IAuraType> AURA_TYPES = new HashMap<>();
-    public static final BasicAuraType TYPE_OVERWORLD = new BasicAuraType(new ResourceLocation(NaturesAuraAPI.MOD_ID, "overworld"), Level.OVERWORLD, 0x89cc37, 0).register();
-    public static final BasicAuraType TYPE_NETHER = new BasicAuraType(new ResourceLocation(NaturesAuraAPI.MOD_ID, "nether"), Level.NETHER, 0x871c0c, 0).register();
-    public static final BasicAuraType TYPE_END = new BasicAuraType(new ResourceLocation(NaturesAuraAPI.MOD_ID, "end"), Level.END, 0x302624, 0).register();
-    public static final BasicAuraType TYPE_OTHER = new BasicAuraType(new ResourceLocation(NaturesAuraAPI.MOD_ID, "other"), null, 0x2fa8a0, Integer.MIN_VALUE).register();
+    public static final BasicAuraType TYPE_OVERWORLD = new BasicAuraType(ResourceLocation.fromNamespaceAndPath(NaturesAuraAPI.MOD_ID, "overworld"), Level.OVERWORLD, 0x89cc37, 0).register();
+    public static final BasicAuraType TYPE_NETHER = new BasicAuraType(ResourceLocation.fromNamespaceAndPath(NaturesAuraAPI.MOD_ID, "nether"), Level.NETHER, 0x871c0c, 0).register();
+    public static final BasicAuraType TYPE_END = new BasicAuraType(ResourceLocation.fromNamespaceAndPath(NaturesAuraAPI.MOD_ID, "end"), Level.END, 0x302624, 0).register();
+    public static final BasicAuraType TYPE_OTHER = new BasicAuraType(ResourceLocation.fromNamespaceAndPath(NaturesAuraAPI.MOD_ID, "other"), null, 0x2fa8a0, Integer.MIN_VALUE).register();
     /**
      * A map of all {@link IDrainSpotEffect} suppliers which are effects that happen passively at every spot that Aura has been drained from in the level. These effects include things like vegetational increase and natural decay. To register your own drain spot effects, just add a supplier for them to this map, and they will automatically be executed once a second for every drain spot currently loaded.
      */
@@ -87,15 +87,15 @@ public final class NaturesAuraAPI {
     /**
      * The capability for any item that stores Aura in the form of an {@link IAuraContainer}
      */
-    public static final ItemCapability<IAuraContainer, Void> AURA_CONTAINER_ITEM_CAPABILITY = ItemCapability.createVoid(new ResourceLocation(NaturesAuraAPI.MOD_ID, "aura_container_item"), IAuraContainer.class);
+    public static final ItemCapability<IAuraContainer, Void> AURA_CONTAINER_ITEM_CAPABILITY = ItemCapability.createVoid(ResourceLocation.fromNamespaceAndPath(NaturesAuraAPI.MOD_ID, "aura_container_item"), IAuraContainer.class);
     /**
      * The capability for any block that stores Aura in the form of an {@link IAuraContainer}
      */
-    public static final BlockCapability<IAuraContainer, Direction> AURA_CONTAINER_BLOCK_CAPABILITY = BlockCapability.create(new ResourceLocation(NaturesAuraAPI.MOD_ID, "aura_container_block"), IAuraContainer.class, Direction.class);
+    public static final BlockCapability<IAuraContainer, Direction> AURA_CONTAINER_BLOCK_CAPABILITY = BlockCapability.create(ResourceLocation.fromNamespaceAndPath(NaturesAuraAPI.MOD_ID, "aura_container_block"), IAuraContainer.class, Direction.class);
     /**
      * The capability for any item that can be recharged from an Aura storage container like the Aura Cache in the form of {@link IAuraRecharge} by a player holding it in their hand
      */
-    public static final ItemCapability<IAuraRecharge, Void> AURA_RECHARGE_CAPABILITY = ItemCapability.createVoid(new ResourceLocation(NaturesAuraAPI.MOD_ID, "aura_recharge"), IAuraRecharge.class);
+    public static final ItemCapability<IAuraRecharge, Void> AURA_RECHARGE_CAPABILITY = ItemCapability.createVoid(ResourceLocation.fromNamespaceAndPath(NaturesAuraAPI.MOD_ID, "aura_recharge"), IAuraRecharge.class);
     /**
      * The capability that any chunk in a level has to store Aura in it. As this is only applicable to chunks and all chunks in the level automatically get assigned this capability, using it directly is not necessary for addon developers. To retrieve this capability from any chunk, use the helper method {@link IAuraChunk#getAuraChunk(net.minecraft.world.level.Level, BlockPos)}.
      */

@@ -19,7 +19,7 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.level.SaplingGrowTreeEvent;
+import net.neoforged.neoforge.event.level.BlockGrowFeatureEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 
 public class BlockOakGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
@@ -31,11 +31,11 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
     }
 
     @SubscribeEvent
-    public void onTreeGrow(SaplingGrowTreeEvent event) {
+    public void onTreeGrow(BlockGrowFeatureEvent event) {
         var level = event.getLevel();
         var pos = event.getPos();
         if (level instanceof Level && !level.isClientSide() && IAuraType.forLevel((Level) level).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD)
-                && level.getBlockState(pos).getBlock() instanceof SaplingBlock) {
+            && level.getBlockState(pos).getBlock() instanceof SaplingBlock) {
             Helper.getBlockEntitiesInArea(level, pos, 10, tile -> {
                 if (!(tile instanceof BlockEntityOakGenerator oak))
                     return false;
@@ -64,13 +64,13 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().cubeBottomTop(this.getBaseName(),
-                generator.modLoc("block/" + this.getBaseName()),
-                generator.modLoc("block/" + this.getBaseName() + "_bottom"),
-                generator.modLoc("block/" + this.getBaseName() + "_top")));
+            generator.modLoc("block/" + this.getBaseName()),
+            generator.modLoc("block/" + this.getBaseName() + "_bottom"),
+            generator.modLoc("block/" + this.getBaseName() + "_top")));
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> getReplacement(Holder<ConfiguredFeature<?, ?>> holder) {
-        if(holder == null || !holder.unwrapKey().isPresent())
+        if (holder == null || !holder.unwrapKey().isPresent())
             return null;
 
         ResourceKey<ConfiguredFeature<?, ?>> feature = holder.unwrapKey().get();
@@ -86,4 +86,5 @@ public class BlockOakGenerator extends BlockContainerImpl implements IVisualizab
             return null;
         }
     }
+
 }

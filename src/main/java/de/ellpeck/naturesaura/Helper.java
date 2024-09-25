@@ -21,7 +21,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -37,7 +37,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -46,8 +46,6 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotResult;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -116,7 +114,7 @@ public final class Helper {
     }
 
     public static boolean areItemsEqual(ItemStack first, ItemStack second, boolean nbt) {
-        return nbt ? ItemStack.isSameItemSameTags(first, second) : ItemStack.isSameItem(first, second);
+        return nbt ? ItemStack.isSameItemSameComponents(first, second) : ItemStack.isSameItem(first, second);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -132,34 +130,34 @@ public final class Helper {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void renderWeirdBox(VertexConsumer buffer, double x, double y, double z, double width, double height, double depth, float r, float g, float b, float a) {
-        buffer.vertex(x, y + height, z).color(r, g, b, a).endVertex();
-        buffer.vertex(x + width, y + height, z).color(r, g, b, a).endVertex();
-        buffer.vertex(x + width, y, z).color(r, g, b, a).endVertex();
-        buffer.vertex(x, y, z).color(r, g, b, a).endVertex();
-        buffer.vertex(x + width, y, z + depth).color(r, g, b, a).endVertex();
-        buffer.vertex(x + width, y, z).color(r, g, b, a).endVertex();
-        buffer.vertex(x + width, y + height, z).color(r, g, b, a).endVertex();
-        buffer.vertex(x + width, y + height, z + depth).color(r, g, b, a).endVertex();
-        buffer.vertex(x + width, y + height, z + depth).color(r, g, b, a).endVertex();
-        buffer.vertex(x, y + height, z + depth).color(r, g, b, a).endVertex();
-        buffer.vertex(x, y, z + depth).color(r, g, b, a).endVertex();
-        buffer.vertex(x + width, y, z + depth).color(r, g, b, a).endVertex();
-        buffer.vertex(x, y + height, z + depth).color(r, g, b, a).endVertex();
-        buffer.vertex(x, y + height, z).color(r, g, b, a).endVertex();
-        buffer.vertex(x, y, z).color(r, g, b, a).endVertex();
-        buffer.vertex(x, y, z + depth).color(r, g, b, a).endVertex();
-        buffer.vertex(x, y + height, z).color(r, g, b, a).endVertex();
-        buffer.vertex(x, y + height, z + depth).color(r, g, b, a).endVertex();
-        buffer.vertex(x + width, y + height, z + depth).color(r, g, b, a).endVertex();
-        buffer.vertex(x + width, y + height, z).color(r, g, b, a).endVertex();
-        buffer.vertex(x + width, y, z).color(r, g, b, a).endVertex();
-        buffer.vertex(x + width, y, z + depth).color(r, g, b, a).endVertex();
-        buffer.vertex(x, y, z + depth).color(r, g, b, a).endVertex();
-        buffer.vertex(x, y, z).color(r, g, b, a).endVertex();
+    public static void renderWeirdBox(VertexConsumer buffer, float x, float y, float z, float width, float height, float depth, float r, float g, float b, float a) {
+        buffer.addVertex(x, y + height, z).setColor(r, g, b, a);
+        buffer.addVertex(x + width, y + height, z).setColor(r, g, b, a);
+        buffer.addVertex(x + width, y, z).setColor(r, g, b, a);
+        buffer.addVertex(x, y, z).setColor(r, g, b, a);
+        buffer.addVertex(x + width, y, z + depth).setColor(r, g, b, a);
+        buffer.addVertex(x + width, y, z).setColor(r, g, b, a);
+        buffer.addVertex(x + width, y + height, z).setColor(r, g, b, a);
+        buffer.addVertex(x + width, y + height, z + depth).setColor(r, g, b, a);
+        buffer.addVertex(x + width, y + height, z + depth).setColor(r, g, b, a);
+        buffer.addVertex(x, y + height, z + depth).setColor(r, g, b, a);
+        buffer.addVertex(x, y, z + depth).setColor(r, g, b, a);
+        buffer.addVertex(x + width, y, z + depth).setColor(r, g, b, a);
+        buffer.addVertex(x, y + height, z + depth).setColor(r, g, b, a);
+        buffer.addVertex(x, y + height, z).setColor(r, g, b, a);
+        buffer.addVertex(x, y, z).setColor(r, g, b, a);
+        buffer.addVertex(x, y, z + depth).setColor(r, g, b, a);
+        buffer.addVertex(x, y + height, z).setColor(r, g, b, a);
+        buffer.addVertex(x, y + height, z + depth).setColor(r, g, b, a);
+        buffer.addVertex(x + width, y + height, z + depth).setColor(r, g, b, a);
+        buffer.addVertex(x + width, y + height, z).setColor(r, g, b, a);
+        buffer.addVertex(x + width, y, z).setColor(r, g, b, a);
+        buffer.addVertex(x + width, y, z + depth).setColor(r, g, b, a);
+        buffer.addVertex(x, y, z + depth).setColor(r, g, b, a);
+        buffer.addVertex(x, y, z).setColor(r, g, b, a);
     }
 
-    public static InteractionResult putStackOnTile(Player player, InteractionHand hand, BlockPos pos, int slot, boolean sound) {
+    public static ItemInteractionResult putStackOnTile(Player player, InteractionHand hand, BlockPos pos, int slot, boolean sound) {
         var tile = player.level().getBlockEntity(pos);
         if (tile instanceof BlockEntityImpl) {
             var handler = (IItemHandlerModifiable) tile.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, null);
@@ -170,17 +168,17 @@ public final class Helper {
                     if (!ItemStack.matches(remain, handStack)) {
                         if (sound)
                             player.level().playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                                    SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.PLAYERS, 0.75F, 1F);
+                                SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.PLAYERS, 0.75F, 1F);
                         if (!player.level().isClientSide)
                             player.setItemInHand(hand, remain);
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                 }
 
                 if (!handler.getStackInSlot(slot).isEmpty()) {
                     if (sound)
                         player.level().playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                                SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.PLAYERS, 0.75F, 1F);
+                            SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.PLAYERS, 0.75F, 1F);
                     if (!player.level().isClientSide) {
                         var stack = handler.getStackInSlot(slot);
                         if (!player.addItem(stack)) {
@@ -189,11 +187,11 @@ public final class Helper {
                         }
                         handler.setStackInSlot(slot, ItemStack.EMPTY);
                     }
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
             }
         }
-        return InteractionResult.CONSUME;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     public static ICapabilityProvider<ItemStack, Void, IAuraRecharge> makeRechargeProvider(boolean needsSelected) {
@@ -215,7 +213,7 @@ public final class Helper {
 
     public static BlockState getStateFromString(String raw) {
         var split = raw.split("\\[");
-        var block = BuiltInRegistries.BLOCK.get(new ResourceLocation(split[0]));
+        var block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(split[0]));
         if (block != null) {
             var state = block.defaultBlockState();
             if (split.length > 1) {
@@ -284,7 +282,7 @@ public final class Helper {
         for (var entry : clazz.getFields()) {
             if (!Modifier.isStatic(entry.getModifiers()))
                 continue;
-            var location = new ResourceLocation(NaturesAura.MOD_ID, entry.getName().toLowerCase(Locale.ROOT));
+            var location = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, entry.getName().toLowerCase(Locale.ROOT));
             if (!registry.containsKey(location)) {
                 NaturesAura.LOGGER.fatal("Couldn't find entry named " + location + " in registry");
                 continue;
@@ -298,14 +296,15 @@ public final class Helper {
     }
 
     public static ItemStack getEquippedItem(Predicate<ItemStack> predicate, Player player, boolean hotbarOnly) {
-        if (Compat.hasCompat("curios")) {
+        // TODO curios?
+      /*  if (Compat.hasCompat("curios")) {
             var inventory = CuriosApi.getCuriosInventory(player);
             if (inventory.isPresent()) {
                 var stack = inventory.get().findFirstCurio(predicate).map(SlotResult::stack);
                 if (stack.isPresent())
                     return stack.get();
             }
-        }
+        }*/
         var invSize = hotbarOnly ? 9 : player.getInventory().getContainerSize();
         for (var i = 0; i < invSize; i++) {
             var slot = player.getInventory().getItem(i);

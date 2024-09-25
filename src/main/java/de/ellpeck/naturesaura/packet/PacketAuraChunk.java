@@ -4,56 +4,36 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.events.ClientEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class PacketAuraChunk implements CustomPacketPayload {
+public record PacketAuraChunk(int chunkX, int chunkZ, Collection<CompoundTag> drainSpots) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(NaturesAura.MOD_ID, "aura_chunk");
-
-    private final int chunkX;
-    private final int chunkZ;
-    private final Collection<AuraChunk.DrainSpot> drainSpots;
-
-    public PacketAuraChunk(int chunkX, int chunkZ, Collection<AuraChunk.DrainSpot> drainSpots) {
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
-        this.drainSpots = drainSpots;
-    }
-
-    public PacketAuraChunk(FriendlyByteBuf buf) {
-        this.chunkX = buf.readInt();
-        this.chunkZ = buf.readInt();
-
-        this.drainSpots = new ArrayList<>();
-        var amount = buf.readInt();
-        for (var i = 0; i < amount; i++)
-            this.drainSpots.add(new AuraChunk.DrainSpot(buf.readNbt()));
-    }
+    public static final Type<PacketAuraChunk> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "aura_chunk"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, PacketAuraChunk> CODEC = StreamCodec.composite(
+        ByteBufCodecs.INT, PacketAuraChunk::chunkX,
+        ByteBufCodecs.INT, PacketAuraChunk::chunkZ,
+        ByteBufCodecs.collection(ArrayList::new, ByteBufCodecs.COMPOUND_TAG), PacketAuraChunk::drainSpots,
+        PacketAuraChunk::new);
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.chunkX);
-        buf.writeInt(this.chunkZ);
-
-        buf.writeInt(this.drainSpots.size());
-        for (var entry : this.drainSpots)
-            buf.writeNbt(entry.serializeNBT());
+    public Type<? extends CustomPacketPayload> type() {
+        return PacketAuraChunk.TYPE;
     }
 
-    @Override
-    public ResourceLocation id() {
-        return PacketAuraChunk.ID;
-    }
-
-    public static void onMessage(PacketAuraChunk message, PlayPayloadContext ctx) {
-        ctx.workHandler().execute(() -> ClientEvents.PENDING_AURA_CHUNKS.add(message));
+    public static void onMessage(PacketAuraChunk message, IPayloadContext ctx) {
+        ClientEvents.PENDING_AURA_CHUNKS.add(message);
     }
 
     public boolean tryHandle(Level level) {
@@ -62,8 +42,6 @@ public class PacketAuraChunk implements CustomPacketPayload {
             if (chunk.isEmpty())
                 return false;
             var auraChunk = (AuraChunk) chunk.getData(NaturesAuraAPI.AURA_CHUNK_ATTACHMENT);
-            if (auraChunk == null)
-                return false;
             auraChunk.setSpots(this.drainSpots);
             return true;
         } catch (Exception e) {

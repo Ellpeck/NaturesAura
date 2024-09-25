@@ -29,6 +29,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -52,7 +53,7 @@ public class BlockEndFlower extends BushBlock implements IModItem, ICustomBlockS
     }
 
     @SubscribeEvent
-    public void onDragonTick(LivingEvent.LivingTickEvent event) {
+    public void onDragonTick(EntityTickEvent.Pre event) {
         var living = event.getEntity();
         if (living.level().isClientSide || !(living instanceof EnderDragon dragon))
             return;

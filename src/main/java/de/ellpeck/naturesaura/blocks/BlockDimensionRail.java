@@ -20,9 +20,11 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
@@ -35,10 +37,8 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.common.util.ITeleporter;
-
-import java.util.function.Function;
 
 public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICustomBlockState, ICustomItemModel {
 
@@ -66,20 +66,18 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        var stack = player.getItemInHand(hand);
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (stack.getItem() == ModItems.RANGE_VISUALIZER) {
-            if (!levelIn.isClientSide) {
-                var goalPos = this.getGoalCoords(levelIn, pos);
+            if (!level.isClientSide) {
+                var goalPos = this.getGoalCoords(level, pos);
                 var data = new CompoundTag();
                 data.putString("dim", this.goalDim.location().toString());
                 data.putLong("pos", goalPos.asLong());
                 PacketHandler.sendTo(player, new PacketClient(0, data));
             }
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return InteractionResult.FAIL;
+        return ItemInteractionResult.FAIL;
     }
 
     @Override
@@ -95,21 +93,9 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
         PacketHandler.sendToAllAround(level, pos, 32, new PacketParticles((float) box.minX, (float) box.minY, (float) box.minZ, PacketParticles.Type.DIMENSION_RAIL, (int) ((box.maxX - box.minX) * 100F), (int) ((box.maxY - box.minY) * 100F), (int) ((box.maxZ - box.minZ) * 100F)));
         level.playSound(null, pos, SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1F, 1F);
 
-        var goalCoords = this.getGoalCoords(level, pos);
-        cart.changeDimension(level.getServer().getLevel(this.goalDim), new ITeleporter() {
-            @Override
-            public Entity placeEntity(Entity entity, ServerLevel currentLevel, ServerLevel destLevel, float yaw, Function<Boolean, Entity> repositionEntity) {
-                // repositionEntity always causes a NPE because why wouldn't it, so this is a fixed copy
-                entity.level().getProfiler().popPush("reloading");
-                var result = entity.getType().create(destLevel);
-                if (result != null) {
-                    result.restoreFrom(entity);
-                    destLevel.addDuringTeleport(result);
-                    result.moveTo(goalCoords, yaw, result.getXRot());
-                }
-                return result;
-            }
-        });
+        // TODO test if this new dimension change works!
+        var goalCoords = this.getGoalCoords(level, pos).getCenter();
+        cart.changeDimension(new DimensionTransition(level.getServer().getLevel(this.goalDim), goalCoords, cart.getDeltaMovement(), cart.getYRot(), cart.getXRot(), DimensionTransition.PLAY_PORTAL_SOUND));
 
         var spot = IAuraChunk.getHighestSpot(level, pos, 35, pos);
         IAuraChunk.getAuraChunk(level, spot).drainAura(spot, 50000);
@@ -177,4 +163,5 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
     public void generateCustomItemModel(ItemModelGenerator generator) {
         generator.withExistingParent(this.getBaseName(), "item/generated").texture("layer0", "block/" + this.getBaseName());
     }
+
 }

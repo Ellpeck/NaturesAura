@@ -4,7 +4,7 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.gen.ModFeatures;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
@@ -23,37 +23,37 @@ public class BiomeModifiers {
     public static final ResourceKey<BiomeModifier> AURA_MUSHROOM = BiomeModifiers.createKey("aura_mushroom");
 
     private static ResourceKey<BiomeModifier> createKey(String id) {
-        return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, new ResourceLocation(NaturesAura.MOD_ID, id));
+        return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, id));
     }
 
-    public static void bootstrap(BootstapContext<BiomeModifier> context) {
+    public static void bootstrap(BootstrapContext<BiomeModifier> context) {
         var biomeGetter = context.lookup(Registries.BIOME);
         var placedGetter = context.lookup(Registries.PLACED_FEATURE);
 
         context.register(BiomeModifiers.AURA_BLOOM, new AddFeaturesBiomeModifier(
-                biomeGetter.getOrThrow(BiomeTags.IS_OVERWORLD),
-                HolderSet.direct(placedGetter.getOrThrow(ModFeatures.Placed.AURA_BLOOM)),
-                GenerationStep.Decoration.VEGETAL_DECORATION));
+            biomeGetter.getOrThrow(BiomeTags.IS_OVERWORLD),
+            HolderSet.direct(placedGetter.getOrThrow(ModFeatures.Placed.AURA_BLOOM)),
+            GenerationStep.Decoration.VEGETAL_DECORATION));
 
         context.register(BiomeModifiers.AURA_CACTUS, new AddFeaturesBiomeModifier(
-                biomeGetter.getOrThrow(Tags.Biomes.IS_SANDY),
-                HolderSet.direct(placedGetter.getOrThrow(ModFeatures.Placed.AURA_CACTUS)),
-                GenerationStep.Decoration.VEGETAL_DECORATION));
+            biomeGetter.getOrThrow(Tags.Biomes.IS_SANDY),
+            HolderSet.direct(placedGetter.getOrThrow(ModFeatures.Placed.AURA_CACTUS)),
+            GenerationStep.Decoration.VEGETAL_DECORATION));
 
         context.register(BiomeModifiers.AURA_MUSHROOM, new AddFeaturesBiomeModifier(
-                biomeGetter.getOrThrow(Tags.Biomes.IS_MUSHROOM),
-                HolderSet.direct(placedGetter.getOrThrow(ModFeatures.Placed.AURA_MUSHROOM)),
-                GenerationStep.Decoration.VEGETAL_DECORATION));
+            biomeGetter.getOrThrow(Tags.Biomes.IS_MUSHROOM),
+            HolderSet.direct(placedGetter.getOrThrow(ModFeatures.Placed.AURA_MUSHROOM)),
+            GenerationStep.Decoration.VEGETAL_DECORATION));
 
         context.register(BiomeModifiers.CRIMSON_AURA_MUSHROOM, new AddFeaturesBiomeModifier(
-                biomeGetter.getOrThrow(BiomeTags.IS_NETHER),
-                HolderSet.direct(placedGetter.getOrThrow(ModFeatures.Placed.CRIMSON_AURA_MUSHROOM)),
-                GenerationStep.Decoration.VEGETAL_DECORATION));
+            biomeGetter.getOrThrow(BiomeTags.IS_NETHER),
+            HolderSet.direct(placedGetter.getOrThrow(ModFeatures.Placed.CRIMSON_AURA_MUSHROOM)),
+            GenerationStep.Decoration.VEGETAL_DECORATION));
 
         context.register(BiomeModifiers.WARPED_AURA_MUSHROOM, new AddFeaturesBiomeModifier(
-                biomeGetter.getOrThrow(BiomeTags.IS_NETHER),
-                HolderSet.direct(placedGetter.getOrThrow(ModFeatures.Placed.WARPED_AURA_MUSHROOM)),
-                GenerationStep.Decoration.VEGETAL_DECORATION));
+            biomeGetter.getOrThrow(BiomeTags.IS_NETHER),
+            HolderSet.direct(placedGetter.getOrThrow(ModFeatures.Placed.WARPED_AURA_MUSHROOM)),
+            GenerationStep.Decoration.VEGETAL_DECORATION));
     }
 
 }

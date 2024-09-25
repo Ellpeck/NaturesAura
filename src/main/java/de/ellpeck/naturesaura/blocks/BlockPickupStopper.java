@@ -14,8 +14,9 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.player.EntityItemPickupEvent;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 
 public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
@@ -26,10 +27,10 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
     }
 
     @SubscribeEvent
-    public void onPickup(EntityItemPickupEvent event) {
-        var player = event.getEntity();
+    public void onPickup(ItemEntityPickupEvent.Pre event) {
+        var player = event.getPlayer();
         if (player != null && !player.isShiftKeyDown()) {
-            var item = event.getItem();
+            var item = event.getItemEntity();
             var pos = item.blockPosition();
             Helper.getBlockEntitiesInArea(item.level(), pos, 8, tile -> {
                 if (!(tile instanceof BlockEntityPickupStopper stopper))
@@ -41,11 +42,11 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
                 if (!new AABB(stopperPos).inflate(radius).intersects(item.getBoundingBox()))
                     return false;
 
-                event.setCanceled(true);
+                event.setCanPickup(TriState.FALSE);
 
                 if (item.level().getGameTime() % 3 == 0)
                     PacketHandler.sendToAllAround(item.level(), pos, 32,
-                            new PacketParticles((float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.PICKUP_STOPPER));
+                        new PacketParticles((float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.PICKUP_STOPPER));
                 return true;
             });
         }
@@ -72,8 +73,9 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().cubeBottomTop(this.getBaseName(),
-                generator.modLoc("block/" + this.getBaseName()),
-                generator.modLoc("block/" + this.getBaseName() + "_top"),
-                generator.modLoc("block/" + this.getBaseName() + "_top")));
+            generator.modLoc("block/" + this.getBaseName()),
+            generator.modLoc("block/" + this.getBaseName() + "_top"),
+            generator.modLoc("block/" + this.getBaseName() + "_top")));
     }
+
 }

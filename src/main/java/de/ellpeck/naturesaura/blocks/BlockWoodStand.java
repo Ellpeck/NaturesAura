@@ -12,7 +12,7 @@ import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -26,7 +26,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.level.SaplingGrowTreeEvent;
+import net.neoforged.neoforge.event.level.BlockGrowFeatureEvent;
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
     }
 
     @SubscribeEvent
-    public void onTreeGrow(SaplingGrowTreeEvent event) {
+    public void onTreeGrow(BlockGrowFeatureEvent event) {
         var level = event.getLevel();
         var pos = event.getPos();
         if (!level.isClientSide() && level instanceof Level) {
@@ -99,9 +99,8 @@ public class BlockWoodStand extends BlockContainerImpl implements ITESRProvider<
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        return Helper.putStackOnTile(player, handIn, pos, 0, true);
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        return Helper.putStackOnTile(player, hand, pos, 0, true);
     }
 
     @Override
