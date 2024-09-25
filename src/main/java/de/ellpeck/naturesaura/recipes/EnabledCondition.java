@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.recipes;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
@@ -9,8 +10,8 @@ import net.neoforged.neoforge.common.conditions.ICondition;
 
 public class EnabledCondition implements ICondition {
 
-    private static final Codec<EnabledCondition> CODEC = RecordCodecBuilder.create(i ->
-            i.group(Codec.STRING.fieldOf("name").forGetter(c -> c.name)).apply(i, EnabledCondition::new)
+    private static final MapCodec<EnabledCondition> CODEC = RecordCodecBuilder.mapCodec(i ->
+        i.group(Codec.STRING.fieldOf("name").forGetter(c -> c.name)).apply(i, EnabledCondition::new)
     );
 
     private ModConfigSpec.ConfigValue<Boolean> config;
@@ -32,7 +33,7 @@ public class EnabledCondition implements ICondition {
     }
 
     @Override
-    public Codec<? extends ICondition> codec() {
+    public MapCodec<? extends ICondition> codec() {
         return EnabledCondition.CODEC;
     }
 

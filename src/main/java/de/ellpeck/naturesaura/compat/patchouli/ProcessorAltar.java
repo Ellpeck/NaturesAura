@@ -13,7 +13,7 @@ public class ProcessorAltar implements IComponentProcessor {
 
     @Override
     public void setup(Level level, IVariableProvider provider) {
-        this.recipe = PatchouliCompat.getRecipe("altar", provider.get("recipe").asString());
+        this.recipe = PatchouliCompat.getRecipe("altar", provider.get("recipe", level.registryAccess()).asString());
     }
 
     @Override
@@ -21,10 +21,10 @@ public class ProcessorAltar implements IComponentProcessor {
         if (this.recipe == null)
             return null;
         return switch (key) {
-            case "input" -> PatchouliCompat.ingredientVariable(this.recipe.input);
-            case "output" -> IVariable.from(this.recipe.output);
-            case "catalyst" -> this.recipe.catalyst != Ingredient.EMPTY ? PatchouliCompat.ingredientVariable(this.recipe.catalyst) : null;
-            case "name" -> IVariable.wrap(this.recipe.output.getHoverName().getString());
+            case "input" -> PatchouliCompat.ingredientVariable(this.recipe.input, level.registryAccess());
+            case "output" -> IVariable.from(this.recipe.output, level.registryAccess());
+            case "catalyst" -> this.recipe.catalyst != Ingredient.EMPTY ? PatchouliCompat.ingredientVariable(this.recipe.catalyst, level.registryAccess()) : null;
+            case "name" -> IVariable.wrap(this.recipe.output.getHoverName().getString(), level.registryAccess());
             default -> null;
         };
     }

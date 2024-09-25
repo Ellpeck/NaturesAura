@@ -23,7 +23,7 @@ public final class ColoredBlockHelper {
 
     private static List<Block> collectBlocks(String name) {
         return Arrays.stream(DyeColor.values()).sorted(Comparator.comparingInt(DyeColor::getId)).map(c -> {
-            var loc = new ResourceLocation(c.getName() + '_' + name);
+            var loc = ResourceLocation.parse(c.getName() + '_' + name);
             var block = BuiltInRegistries.BLOCK.get(loc);
             if (block == null || block == Blocks.AIR)
                 throw new IllegalStateException("Couldn't find block with name " + loc);

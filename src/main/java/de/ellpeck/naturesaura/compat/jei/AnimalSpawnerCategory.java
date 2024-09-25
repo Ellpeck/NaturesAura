@@ -24,7 +24,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -36,15 +35,15 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
     private final Map<EntityType<?>, Entity> entityCache = new HashMap<>();
 
     public AnimalSpawnerCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/jei/animal_spawner.png"), 0, 0, 72, 86);
+        this.background = helper.createDrawable(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "textures/gui/jei/animal_spawner.png"), 0, 0, 72, 86);
     }
 
     private static void renderEntity(PoseStack matrixstack, int x, int y, float scale, float yaw, float pitch, LivingEntity entity) {
         var f = (float) Math.atan(yaw / 40.0F);
         var f1 = (float) Math.atan(pitch / 40.0F);
         var posestack = RenderSystem.getModelViewStack();
-        posestack.pushPose();
-        posestack.translate(x, y, 1050.0D);
+        posestack.pushMatrix();
+        posestack.translate(x, y, 1050.0F);
         posestack.scale(1.0F, 1.0F, -1.0F);
         RenderSystem.applyModelViewMatrix();
         matrixstack.translate(0.0D, 0.0D, 1000.0D);
@@ -77,7 +76,7 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
         entity.setXRot(f4);
         entity.yHeadRotO = f5;
         entity.yHeadRot = f6;
-        posestack.popPose();
+        posestack.popMatrix();
         RenderSystem.applyModelViewMatrix();
         Lighting.setupFor3DItems();
     }
@@ -127,4 +126,5 @@ public class AnimalSpawnerCategory implements IRecipeCategory<AnimalSpawnerRecip
         graphics.drawString(minecraft.font, name, 36 - minecraft.font.width(name) / 2F, 55, 0xFFFFFF, true);
 
     }
+
 }

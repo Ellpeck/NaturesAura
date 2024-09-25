@@ -1,16 +1,17 @@
 package de.ellpeck.naturesaura.recipes;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TreeRitualRecipe extends ModRecipe {
@@ -28,7 +29,7 @@ public class TreeRitualRecipe extends ModRecipe {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess access) {
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
         return this.output;
     }
 
@@ -44,35 +45,22 @@ public class TreeRitualRecipe extends ModRecipe {
 
     public static class Serializer implements RecipeSerializer<TreeRitualRecipe> {
 
-        private static final Codec<TreeRitualRecipe> CODEC = RecordCodecBuilder.create(i -> i.group(
-                Ingredient.CODEC.fieldOf("sapling").forGetter(r -> r.saplingType),
-                ItemStack.ITEM_WITH_COUNT_CODEC.fieldOf("output").forGetter(r -> r.output),
-                Codec.INT.fieldOf("time").forGetter(r -> r.time),
-                Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(recipe -> recipe.ingredients)
+        private static final MapCodec<TreeRitualRecipe> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            Ingredient.CODEC.fieldOf("sapling").forGetter(r -> r.saplingType),
+            ItemStack.CODEC.fieldOf("output").forGetter(r -> r.output),
+            Codec.INT.fieldOf("time").forGetter(r -> r.time),
+            Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(recipe -> recipe.ingredients)
         ).apply(i, TreeRitualRecipe::new));
+        private static final StreamCodec<RegistryFriendlyByteBuf, TreeRitualRecipe> STREAM_CODEC = ByteBufCodecs.fromCodecWithRegistries(TreeRitualRecipe.Serializer.CODEC.codec());
 
         @Override
-        public Codec<TreeRitualRecipe> codec() {
+        public MapCodec<TreeRitualRecipe> codec() {
             return Serializer.CODEC;
         }
 
-        @Nullable
         @Override
-        public TreeRitualRecipe fromNetwork(FriendlyByteBuf buffer) {
-            var ingredients = new ArrayList<Ingredient>();
-            for (var i = buffer.readInt(); i > 0; i--)
-                ingredients.add(Ingredient.fromNetwork(buffer));
-            return new TreeRitualRecipe(Ingredient.fromNetwork(buffer), buffer.readItem(), buffer.readInt(), ingredients);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, TreeRitualRecipe recipe) {
-            buffer.writeInt(recipe.ingredients.size());
-            for (var ing : recipe.ingredients)
-                ing.toNetwork(buffer);
-            recipe.saplingType.toNetwork(buffer);
-            buffer.writeItem(recipe.output);
-            buffer.writeInt(recipe.time);
+        public StreamCodec<RegistryFriendlyByteBuf, TreeRitualRecipe> streamCodec() {
+            return Serializer.STREAM_CODEC;
         }
 
     }

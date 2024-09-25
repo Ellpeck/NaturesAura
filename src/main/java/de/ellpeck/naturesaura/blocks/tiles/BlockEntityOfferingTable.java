@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.recipes.OfferingRecipe;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.EntityType;
@@ -92,8 +93,8 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
                     lightningboltentity.moveTo(Vec3.atCenterOf(this.worldPosition));
                     this.level.addFreshEntity(lightningboltentity);
                     PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(
-                            (float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.OFFERING_TABLE,
-                            this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()));
+                        (float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.OFFERING_TABLE,
+                        this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()));
 
                     break;
                 }
@@ -105,31 +106,31 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
     }
 
     @Override
-    public void writeNBT(CompoundTag compound, SaveType type) {
-        super.writeNBT(compound, type);
+    public void writeNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.writeNBT(compound, type, registries);
         if (type != SaveType.BLOCK) {
-            compound.put("items", this.items.serializeNBT());
+            compound.put("items", this.items.serializeNBT(registries));
 
             if (type != SaveType.SYNC) {
                 var list = new ListTag();
                 for (var stack : this.itemsToSpawn)
-                    list.add(stack.save(new CompoundTag()));
+                    list.add(stack.save(registries, new CompoundTag()));
                 compound.put("items_to_spawn", list);
             }
         }
     }
 
     @Override
-    public void readNBT(CompoundTag compound, SaveType type) {
-        super.readNBT(compound, type);
+    public void readNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.readNBT(compound, type, registries);
         if (type != SaveType.BLOCK) {
-            this.items.deserializeNBT(compound.getCompound("items"));
+            this.items.deserializeNBT(registries, compound.getCompound("items"));
 
             if (type != SaveType.SYNC) {
                 this.itemsToSpawn.clear();
                 var list = compound.getList("items_to_spawn", 10);
                 for (var base : list)
-                    this.itemsToSpawn.add(ItemStack.of((CompoundTag) base));
+                    this.itemsToSpawn.add(ItemStack.parseOptional(registries, (CompoundTag) base));
             }
         }
     }

@@ -20,7 +20,7 @@ import net.neoforged.neoforge.event.EventHooks;
 
 public class ExplosionEffect implements IDrainSpotEffect {
 
-    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "explosions");
+    public static final ResourceLocation NAME = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "explosions");
 
     private float strength;
     private int dist;

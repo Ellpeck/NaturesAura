@@ -2,10 +2,7 @@ package de.ellpeck.naturesaura.events;
 
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.NaturesAura;
@@ -40,15 +37,14 @@ import net.minecraft.world.level.block.MyceliumBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.client.event.CustomizeGuiOverlayEvent;
-import net.neoforged.neoforge.client.event.RenderGuiOverlayEvent;
-import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.client.gui.overlay.VanillaGuiOverlay;
-import net.neoforged.neoforge.common.IPlantable;
-import net.neoforged.neoforge.energy.EnergyStorage;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.CustomizeGuiOverlayEvent;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.energy.EnergyStorage;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.text.NumberFormat;
@@ -60,8 +56,8 @@ import java.util.Map;
 @OnlyIn(Dist.CLIENT)
 public class ClientEvents {
 
-    public static final ResourceLocation OVERLAYS = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/overlays.png");
-    public static final ResourceLocation BOOK_GUI = new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/book.png");
+    public static final ResourceLocation OVERLAYS = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "textures/gui/overlays.png");
+    public static final ResourceLocation BOOK_GUI = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "textures/gui/book.png");
     public static final List<PacketAuraChunk> PENDING_AURA_CHUNKS = new ArrayList<>();
     private static final ItemStack ITEM_FRAME = new ItemStack(Items.ITEM_FRAME);
     private static final ItemStack DISPENSER = new ItemStack(Blocks.DISPENSER);
@@ -95,74 +91,72 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) {
-            ClientEvents.heldCache = ItemStack.EMPTY;
-            ClientEvents.heldEye = ItemStack.EMPTY;
-            ClientEvents.heldOcular = ItemStack.EMPTY;
+    public void onClientTick(ClientTickEvent.Post event) {
+        ClientEvents.heldCache = ItemStack.EMPTY;
+        ClientEvents.heldEye = ItemStack.EMPTY;
+        ClientEvents.heldOcular = ItemStack.EMPTY;
 
-            var mc = Minecraft.getInstance();
-            if (mc.level == null) {
-                ItemRangeVisualizer.clear();
-                ClientEvents.PENDING_AURA_CHUNKS.clear();
-            } else {
-                ClientEvents.PENDING_AURA_CHUNKS.removeIf(next -> next.tryHandle(mc.level));
+        var mc = Minecraft.getInstance();
+        if (mc.level == null) {
+            ItemRangeVisualizer.clear();
+            ClientEvents.PENDING_AURA_CHUNKS.clear();
+        } else {
+            ClientEvents.PENDING_AURA_CHUNKS.removeIf(next -> next.tryHandle(mc.level));
 
-                if (!mc.isPaused()) {
-                    if (mc.level.getGameTime() % 20 == 0) {
-                        var amount = Mth.floor(190 * ModConfig.instance.excessParticleAmount.get());
-                        for (var i = 0; i < amount; i++) {
-                            var x = Mth.floor(mc.player.getX()) + mc.level.random.nextInt(64) - 32;
-                            var y = Mth.floor(mc.player.getY()) + mc.level.random.nextInt(32) - 16;
-                            var z = Mth.floor(mc.player.getZ()) + mc.level.random.nextInt(64) - 32;
-                            var pos = Helper.getClosestAirAboveGround(mc.level, new BlockPos(x, y, z), 16).below();
-                            var state = mc.level.getBlockState(pos);
-                            var block = state.getBlock();
-                            if (block instanceof BonemealableBlock || block instanceof IPlantable || block instanceof LeavesBlock || block instanceof MyceliumBlock) {
-                                var excess = IAuraChunk.triangulateAuraInArea(mc.level, pos, 45) - IAuraChunk.DEFAULT_AURA;
-                                if (excess > 0) {
-                                    var chance = Math.max(10, 50 - excess / 25000);
-                                    if (mc.level.random.nextInt(chance) <= 0)
-                                        NaturesAuraAPI.instance().spawnMagicParticle(
-                                                pos.getX() + mc.level.random.nextFloat(),
-                                                pos.getY() + 0.5F,
-                                                pos.getZ() + mc.level.random.nextFloat(),
-                                                mc.level.random.nextGaussian() * 0.01F,
-                                                mc.level.random.nextFloat() * 0.025F,
-                                                mc.level.random.nextGaussian() * 0.01F,
-                                                block instanceof MyceliumBlock ? 0x875ca1 : BiomeColors.getAverageGrassColor(mc.level, pos),
-                                                Math.min(2F, 1F + mc.level.random.nextFloat() * (excess / 30000F)),
-                                                Math.min(300, 100 + mc.level.random.nextInt(excess / 3000 + 1)),
-                                                0F, false, true);
-                                }
+            if (!mc.isPaused()) {
+                if (mc.level.getGameTime() % 20 == 0) {
+                    var amount = Mth.floor(190 * ModConfig.instance.excessParticleAmount.get());
+                    for (var i = 0; i < amount; i++) {
+                        var x = Mth.floor(mc.player.getX()) + mc.level.random.nextInt(64) - 32;
+                        var y = Mth.floor(mc.player.getY()) + mc.level.random.nextInt(32) - 16;
+                        var z = Mth.floor(mc.player.getZ()) + mc.level.random.nextInt(64) - 32;
+                        var pos = Helper.getClosestAirAboveGround(mc.level, new BlockPos(x, y, z), 16).below();
+                        var state = mc.level.getBlockState(pos);
+                        var block = state.getBlock();
+                        if (block instanceof BonemealableBlock || block instanceof LeavesBlock || block instanceof MyceliumBlock) {
+                            var excess = IAuraChunk.triangulateAuraInArea(mc.level, pos, 45) - IAuraChunk.DEFAULT_AURA;
+                            if (excess > 0) {
+                                var chance = Math.max(10, 50 - excess / 25000);
+                                if (mc.level.random.nextInt(chance) <= 0)
+                                    NaturesAuraAPI.instance().spawnMagicParticle(
+                                        pos.getX() + mc.level.random.nextFloat(),
+                                        pos.getY() + 0.5F,
+                                        pos.getZ() + mc.level.random.nextFloat(),
+                                        mc.level.random.nextGaussian() * 0.01F,
+                                        mc.level.random.nextFloat() * 0.025F,
+                                        mc.level.random.nextGaussian() * 0.01F,
+                                        block instanceof MyceliumBlock ? 0x875ca1 : BiomeColors.getAverageGrassColor(mc.level, pos),
+                                        Math.min(2F, 1F + mc.level.random.nextFloat() * (excess / 30000F)),
+                                        Math.min(300, 100 + mc.level.random.nextInt(excess / 3000 + 1)),
+                                        0F, false, true);
                             }
                         }
                     }
+                }
 
-                    if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER) && mc.level.getGameTime() % 5 == 0) {
-                        var inst = NaturesAuraAPI.instance();
-                        inst.setParticleSpawnRange(512);
-                        inst.setParticleDepth(false);
-                        for (var pos : ItemRangeVisualizer.VISUALIZED_RAILS.get(mc.level.dimension().location())) {
-                            NaturesAuraAPI.instance().spawnMagicParticle(
-                                    pos.getX() + mc.level.random.nextFloat(),
-                                    pos.getY() + mc.level.random.nextFloat(),
-                                    pos.getZ() + mc.level.random.nextFloat(),
-                                    0F, 0F, 0F, 0xe0faff, mc.level.random.nextFloat() * 5 + 1, 100, 0F, false, true);
-                        }
-                        inst.setParticleDepth(true);
-                        inst.setParticleSpawnRange(32);
+                if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER) && mc.level.getGameTime() % 5 == 0) {
+                    var inst = NaturesAuraAPI.instance();
+                    inst.setParticleSpawnRange(512);
+                    inst.setParticleDepth(false);
+                    for (var pos : ItemRangeVisualizer.VISUALIZED_RAILS.get(mc.level.dimension().location())) {
+                        NaturesAuraAPI.instance().spawnMagicParticle(
+                            pos.getX() + mc.level.random.nextFloat(),
+                            pos.getY() + mc.level.random.nextFloat(),
+                            pos.getZ() + mc.level.random.nextFloat(),
+                            0F, 0F, 0F, 0xe0faff, mc.level.random.nextFloat() * 5 + 1, 100, 0F, false, true);
                     }
+                    inst.setParticleDepth(true);
+                    inst.setParticleSpawnRange(32);
+                }
 
-                    ClientEvents.heldCache = Helper.getEquippedItem(s -> s.getItem() instanceof ItemAuraCache, mc.player, false);
-                    ClientEvents.heldEye = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE, mc.player, true);
-                    ClientEvents.heldOcular = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE_IMPROVED, mc.player, false);
+                ClientEvents.heldCache = Helper.getEquippedItem(s -> s.getItem() instanceof ItemAuraCache, mc.player, false);
+                ClientEvents.heldEye = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE, mc.player, true);
+                ClientEvents.heldOcular = Helper.getEquippedItem(s -> s.getItem() == ModItems.EYE_IMPROVED, mc.player, false);
 
-                    if (!ClientEvents.heldOcular.isEmpty() && mc.level.getGameTime() % 20 == 0) {
-                        ClientEvents.SHOWING_EFFECTS.clear();
-                        Helper.getAuraChunksWithSpotsInArea(mc.level, mc.player.blockPosition(), 100,
-                                chunk -> chunk.getActiveEffectIcons(mc.player, ClientEvents.SHOWING_EFFECTS));
-                    }
+                if (!ClientEvents.heldOcular.isEmpty() && mc.level.getGameTime() % 20 == 0) {
+                    ClientEvents.SHOWING_EFFECTS.clear();
+                    Helper.getAuraChunksWithSpotsInArea(mc.level, mc.player.blockPosition(), 100,
+                        chunk -> chunk.getActiveEffectIcons(mc.player, ClientEvents.SHOWING_EFFECTS));
                 }
             }
         }
@@ -175,15 +169,14 @@ public class ClientEvents {
         var mc = Minecraft.getInstance();
         var view = mc.gameRenderer.getMainCamera().getPosition();
         var tesselator = Tesselator.getInstance();
-        var buffer = tesselator.getBuilder();
 
         mc.getProfiler().push(NaturesAura.MOD_ID + ":onLevelRender");
 
         RenderSystem.enableDepthTest();
         var mv = RenderSystem.getModelViewStack();
-        mv.pushPose();
-        mv.mulPoseMatrix(event.getPoseStack().last().pose());
-        mv.translate(-view.x, -view.y, -view.z);
+        mv.pushMatrix();
+        mv.mul(event.getPoseStack().last().pose());
+        mv.translate((float) -view.x, (float) -view.y, (float) -view.z);
         RenderSystem.applyModelViewMatrix();
         RenderSystem.enableBlend();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
@@ -192,12 +185,12 @@ public class ClientEvents {
         // aura spot debug
         ClientEvents.hoveringAuraSpot = null;
         if (mc.getDebugOverlay().showDebugScreen() && (mc.player.isCreative() || mc.player.isSpectator()) && ModConfig.instance.debugLevel.get()) {
-            var playerEye = mc.player.getEyePosition(event.getPartialTick());
-            var playerView = mc.player.getViewVector(event.getPartialTick()).normalize();
-            var range = mc.gameMode.getPickRange();
-            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+            var playerEye = mc.player.getEyePosition(event.getPartialTick().getGameTimeDeltaPartialTick(true));
+            var playerView = mc.player.getViewVector(event.getPartialTick().getGameTimeDeltaPartialTick(true)).normalize();
+            var range = mc.gameMode.getDestroyStage();
+            var builder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
             IAuraChunk.getSpotsInArea(mc.level, mc.player.blockPosition(), 64, (pos, spot) -> {
-                Helper.renderWeirdBox(buffer, pos.getX(), pos.getY(), pos.getZ(), 1, 1, 1, spot > 0 ? 0F : 1F, spot > 0 ? 1F : 0F, 0F, 0.35F);
+                Helper.renderWeirdBox(builder, pos.getX(), pos.getY(), pos.getZ(), 1, 1, 1, spot > 0 ? 0F : 1F, spot > 0 ? 1F : 0F, 0F, 0.35F);
                 // dirty raytrace to see if we're looking at roughly this spot
                 if (playerEye.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= range * range) {
                     for (var d = 0F; d <= range; d += 0.5F) {
@@ -209,14 +202,14 @@ public class ClientEvents {
                 }
 
             });
-            tesselator.end();
+            BufferUploader.drawWithShader(builder.build());
         }
 
         // range visualizer
         if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER)) {
             RenderSystem.disableCull();
             var dim = mc.level.dimension().location();
-            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+            var builder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
             for (var pos : ItemRangeVisualizer.VISUALIZED_BLOCKS.get(dim)) {
                 if (!mc.level.isLoaded(pos))
                     continue;
@@ -224,18 +217,18 @@ public class ClientEvents {
                 var block = state.getBlock();
                 if (!(block instanceof IVisualizable))
                     continue;
-                this.renderVisualize(buffer, (IVisualizable) block, mc.level, pos);
+                this.renderVisualize(builder, (IVisualizable) block, mc.level, pos);
             }
             for (var entity : ItemRangeVisualizer.VISUALIZED_ENTITIES.get(dim)) {
                 if (!entity.isAlive() || !(entity instanceof IVisualizable))
                     continue;
-                this.renderVisualize(buffer, (IVisualizable) entity, mc.level, entity.blockPosition());
+                this.renderVisualize(builder, (IVisualizable) entity, mc.level, entity.blockPosition());
             }
-            tesselator.end();
+            BufferUploader.drawWithShader(builder.build());
             RenderSystem.enableCull();
         }
 
-        mv.popPose();
+        mv.popMatrix();
         RenderSystem.applyModelViewMatrix();
         RenderSystem.disableBlend();
 
@@ -247,17 +240,17 @@ public class ClientEvents {
         if (box != null) {
             box = box.inflate(0.05F);
             var color = visualize.getVisualizationColor(level, pos);
-            Helper.renderWeirdBox(buffer, box.minX, box.minY, box.minZ, box.maxX - box.minX, box.maxY - box.minY, box.maxZ - box.minZ, (color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 0.5F);
+            Helper.renderWeirdBox(buffer, (float) box.minX, (float) box.minY, (float) box.minZ, (float) (box.maxX - box.minX), (float) (box.maxY - box.minY), (float) (box.maxZ - box.minZ), (color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 0.5F);
         }
     }
 
     @SubscribeEvent
-    public void onOverlayRender(RenderGuiOverlayEvent.Post event) {
+    public void onOverlayRender(RenderGuiLayerEvent.Post event) {
         var mc = Minecraft.getInstance();
         var graphics = event.getGuiGraphics();
         var stack = graphics.pose();
-        if (event.getOverlay() == VanillaGuiOverlay.HOTBAR.type()) {
-            var res = event.getWindow();
+        if (event.getName() == VanillaGuiLayers.HOTBAR) {
+            var res = mc.getWindow();
             if (mc.player != null) {
                 if (!ClientEvents.heldCache.isEmpty()) {
                     var container = ClientEvents.heldCache.getCapability(NaturesAuraAPI.AURA_CONTAINER_ITEM_CAPABILITY, null);
@@ -368,7 +361,7 @@ public class ClientEvents {
                                 var state = mc.level.getBlockState(pos);
                                 var blockStack = state.getBlock().getCloneItemStack(state, blockHitResult, mc.level, pos, mc.player);
                                 this.drawContainerInfo(graphics, container.getStoredAura(), container.getMaxAura(), container.getAuraColor(),
-                                        mc, res, 35, blockStack.getHoverName().getString(), null);
+                                    mc, res, 35, blockStack.getHoverName().getString(), null);
 
                                 if (tile instanceof BlockEntityNatureAltar) {
                                     var itemHandler = tile.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, null);
@@ -377,23 +370,23 @@ public class ClientEvents {
                                         var stackCont = tileStack.getCapability(NaturesAuraAPI.AURA_CONTAINER_ITEM_CAPABILITY);
                                         if (stackCont != null) {
                                             this.drawContainerInfo(graphics, stackCont.getStoredAura(), stackCont.getMaxAura(), stackCont.getAuraColor(),
-                                                    mc, res, 55, tileStack.getHoverName().getString(), null);
+                                                mc, res, 55, tileStack.getHoverName().getString(), null);
                                         }
                                     }
                                 }
                             } else if (tile instanceof BlockEntityRFConverter) {
                                 EnergyStorage storage = ((BlockEntityRFConverter) tile).storage;
                                 this.drawContainerInfo(graphics, storage.getEnergyStored(), storage.getMaxEnergyStored(), 0xcc4916,
-                                        mc, res, 35, I18n.get("block.naturesaura.rf_converter"),
-                                        storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
+                                    mc, res, 35, I18n.get("block.naturesaura.rf_converter"),
+                                    storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
                             } else if (tile instanceof BlockEntityGratedChute chute) {
                                 var itemHandler = tile.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, null);
                                 var itemStack = itemHandler.getStackInSlot(0);
 
                                 if (itemStack.isEmpty()) {
                                     graphics.drawString(mc.font,
-                                            ChatFormatting.GRAY.toString() + ChatFormatting.ITALIC + I18n.get("info.naturesaura.empty"),
-                                            x + 5, y - 11, 0xFFFFFF);
+                                        ChatFormatting.GRAY.toString() + ChatFormatting.ITALIC + I18n.get("info.naturesaura.empty"),
+                                        x + 5, y - 11, 0xFFFFFF);
                                 } else {
                                     Helper.renderItemInGui(graphics, itemStack, x + 2, y - 18, 1F);
                                 }

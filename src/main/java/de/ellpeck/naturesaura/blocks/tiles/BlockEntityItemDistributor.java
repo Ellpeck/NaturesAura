@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.blocks.tiles;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -83,8 +84,8 @@ public class BlockEntityItemDistributor extends BlockEntityImpl implements ITick
     }
 
     @Override
-    public void writeNBT(CompoundTag compound, SaveType type) {
-        super.writeNBT(compound, type);
+    public void writeNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.writeNBT(compound, type, registries);
         if (type == SaveType.TILE) {
             compound.putInt("cooldown", this.cooldown);
             compound.putInt("side", this.currentSide.ordinal());
@@ -94,8 +95,8 @@ public class BlockEntityItemDistributor extends BlockEntityImpl implements ITick
     }
 
     @Override
-    public void readNBT(CompoundTag compound, SaveType type) {
-        super.readNBT(compound, type);
+    public void readNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.readNBT(compound, type, registries);
         if (type == SaveType.TILE) {
             this.cooldown = compound.getInt("cooldown");
             this.currentSide = Direction.values()[compound.getInt("side")];

@@ -1,9 +1,11 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -43,7 +45,7 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
         PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.CHORUS_GENERATOR, pos.getX(), pos.getY(), pos.getZ()));
         this.level.removeBlock(pos, false);
         this.level.playSound(null, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5,
-                SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.BLOCKS, 0.5F, 1F);
+            SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.BLOCKS, 0.5F, 1F);
         this.generateAura(this.auraPerBlock);
     }
 
@@ -97,8 +99,8 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
     }
 
     @Override
-    public void writeNBT(CompoundTag compound, SaveType type) {
-        super.writeNBT(compound, type);
+    public void writeNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.writeNBT(compound, type, registries);
         if (type == SaveType.TILE) {
             var list = new ListTag();
             for (var pos : this.currentlyBreaking)
@@ -109,14 +111,15 @@ public class BlockEntityChorusGenerator extends BlockEntityImpl implements ITick
     }
 
     @Override
-    public void readNBT(CompoundTag compound, SaveType type) {
-        super.readNBT(compound, type);
+    public void readNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.readNBT(compound, type, registries);
         if (type == SaveType.TILE) {
             this.currentlyBreaking.clear();
-            var list = compound.getList("breaking", 10);
-            for (var i = 0; i < list.size(); i++)
-                this.currentlyBreaking.add(NbtUtils.readBlockPos(list.getCompound(i)));
+            var list = compound.getList("breaking", ListTag.TAG_INT_ARRAY);
+            for (var tag : list)
+                this.currentlyBreaking.add(Helper.readBlockPos(tag));
             this.auraPerBlock = compound.getInt("aura");
         }
     }
+
 }

@@ -7,17 +7,19 @@ import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
@@ -25,7 +27,7 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
     private final String baseName;
 
     public ItemHoe(String baseName, Tier material, int speed) {
-        super(material, speed, 0, new Properties());
+        super(material, new Properties().attributes(HoeItem.createAttributes(material, 0, speed)));
         this.baseName = baseName;
         ModRegistry.ALL_ITEMS.add(this);
     }
@@ -74,31 +76,31 @@ public class ItemHoe extends HoeItem implements IModItem, ICustomItemModel {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        if (!player.isShiftKeyDown() && (stack.getItem() == ModItems.SKY_HOE || stack.getItem() == ModItems.DEPTH_HOE)) {
-            var block = player.level().getBlockState(pos).getBlock();
-            if (!(block instanceof BushBlock) && (stack.getItem() != ModItems.DEPTH_HOE || !(block instanceof LeavesBlock)))
-                return false;
-            if (!player.level().isClientSide) {
-                var range = 3;
-                for (var x = -range; x <= range; x++) {
-                    for (var y = -range; y <= range; y++) {
-                        for (var z = -range; z <= range; z++) {
-                            if (x == 0 && y == 0 && z == 0)
-                                continue;
-                            var offset = pos.offset(x, y, z);
-                            var offState = player.level().getBlockState(offset);
-                            if (offState.getBlock() instanceof BushBlock || stack.getItem() == ModItems.DEPTH_HOE && offState.getBlock() instanceof LeavesBlock) {
-                                var entity = offState.hasBlockEntity() ? player.level().getBlockEntity(offset) : null;
-                                Block.dropResources(offState, player.level(), offset, entity, null, stack);
-                                player.level().setBlock(offset, Blocks.AIR.defaultBlockState(), 3);
+    public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
+        if (!miningEntity.isShiftKeyDown() && (stack.getItem() == ModItems.SKY_HOE || stack.getItem() == ModItems.DEPTH_HOE)) {
+            var block = level.getBlockState(pos).getBlock();
+            if (block instanceof BushBlock || stack.getItem() == ModItems.DEPTH_HOE && block instanceof LeavesBlock) {
+                if (!level.isClientSide) {
+                    var range = 3;
+                    for (var x = -range; x <= range; x++) {
+                        for (var y = -range; y <= range; y++) {
+                            for (var z = -range; z <= range; z++) {
+                                if (x == 0 && y == 0 && z == 0)
+                                    continue;
+                                var offset = pos.offset(x, y, z);
+                                var offState = level.getBlockState(offset);
+                                if (offState.getBlock() instanceof BushBlock || stack.getItem() == ModItems.DEPTH_HOE && offState.getBlock() instanceof LeavesBlock) {
+                                    var entity = offState.hasBlockEntity() ? level.getBlockEntity(offset) : null;
+                                    Block.dropResources(offState, level, offset, entity, null, stack);
+                                    level.setBlock(offset, Blocks.AIR.defaultBlockState(), 3);
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        return false;
+        return super.mineBlock(stack, level, state, pos, miningEntity);
     }
 
     @Override

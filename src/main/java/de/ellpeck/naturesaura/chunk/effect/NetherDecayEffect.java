@@ -23,7 +23,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 
 public class NetherDecayEffect implements IDrainSpotEffect {
 
-    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "nether_decay");
+    public static final ResourceLocation NAME = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "nether_decay");
 
     private int amount;
     private int dist;
@@ -62,9 +62,9 @@ public class NetherDecayEffect implements IDrainSpotEffect {
             return;
         for (var i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
             var offset = BlockPos.containing(
-                    pos.getX() + level.random.nextGaussian() * this.dist,
-                    pos.getY() + level.random.nextGaussian() * this.dist,
-                    pos.getZ() + level.random.nextGaussian() * this.dist);
+                pos.getX() + level.random.nextGaussian() * this.dist,
+                pos.getY() + level.random.nextGaussian() * this.dist,
+                pos.getZ() + level.random.nextGaussian() * this.dist);
             if (offset.distSqr(pos) > this.dist * this.dist || !level.isLoaded(offset))
                 continue;
 
@@ -101,4 +101,5 @@ public class NetherDecayEffect implements IDrainSpotEffect {
     public ResourceLocation getName() {
         return NetherDecayEffect.NAME;
     }
+
 }

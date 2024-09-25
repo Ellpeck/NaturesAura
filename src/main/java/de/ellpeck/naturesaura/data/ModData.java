@@ -13,7 +13,6 @@ import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DataPackRegistriesHooks;
@@ -38,7 +37,7 @@ public final class ModData {
         var blockTags = new BlockTagProvider(out, lookup, existing);
         gen.addProvider(event.includeServer(), blockTags);
         gen.addProvider(event.includeServer(), new ItemTagProvider(out, lookup, blockTags.contentsGetter(), existing));
-        gen.addProvider(event.includeServer(), new LootTableProvider(out, Set.of(), List.of(new LootTableProvider.SubProviderEntry(BlockLootProvider::new, LootContextParamSets.BLOCK))));
+        gen.addProvider(event.includeServer(), new LootTableProvider(out, Set.of(), List.of(new LootTableProvider.SubProviderEntry(BlockLootProvider::new, LootContextParamSets.BLOCK)), lookup));
         gen.addProvider(event.includeServer(), new BlockStateGenerator(out, existing));
         gen.addProvider(event.includeServer(), new ItemModelGenerator(out, existing));
         gen.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(out, CompletableFuture.supplyAsync(ModData::getProvider), Set.of(NaturesAura.MOD_ID)));

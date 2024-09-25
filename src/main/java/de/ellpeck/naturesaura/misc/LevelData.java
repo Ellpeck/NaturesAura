@@ -10,6 +10,7 @@ import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.LongTag;
@@ -39,24 +40,24 @@ public class LevelData extends SavedData implements ILevelData {
 
     }
 
-    public LevelData(CompoundTag compound) {
+    public LevelData(CompoundTag compound, HolderLookup.Provider registries) {
         for (var base : compound.getList("storages", 10)) {
             var storageComp = (CompoundTag) base;
             var storage = this.getEnderStorage(storageComp.getString("name"));
-            storage.deserializeNBT(storageComp);
+            storage.deserializeNBT(registries, storageComp);
         }
         for (var base : compound.getList("converted_moss", Tag.TAG_LONG))
             this.recentlyConvertedMossStones.add(BlockPos.of(((LongTag) base).getAsLong()));
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
+    public CompoundTag save(CompoundTag compound, HolderLookup.Provider registries) {
         var storages = new ListTag();
         for (var entry : this.enderStorages.entrySet()) {
             var handler = entry.getValue();
             if (Helper.isEmpty(handler))
                 continue;
-            var storageComp = handler.serializeNBT();
+            var storageComp = handler.serializeNBT(registries);
             storageComp.putString("name", entry.getKey());
             storages.add(storageComp);
         }
@@ -94,7 +95,7 @@ public class LevelData extends SavedData implements ILevelData {
     public void addMossStone(BlockPos pos) {
         this.recentlyConvertedMossStones.add(pos);
         if (this.recentlyConvertedMossStones.size() > 512)
-            this.recentlyConvertedMossStones.remove(0);
+            this.recentlyConvertedMossStones.removeFirst();
     }
 
 }

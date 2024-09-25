@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.blocks.Slab;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
@@ -25,8 +26,8 @@ import java.util.Set;
 
 public class BlockLootProvider extends BlockLootSubProvider {
 
-    public BlockLootProvider() {
-        super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+    public BlockLootProvider(HolderLookup.Provider registries) {
+        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
     }
 
     @Override
@@ -43,15 +44,16 @@ public class BlockLootProvider extends BlockLootSubProvider {
             }
         }
 
-        this.add(ModBlocks.ANCIENT_LEAVES, BlockLootProvider::createSilkTouchOnlyTable);
-        this.add(ModBlocks.DECAYED_LEAVES, BlockLootProvider::createSilkTouchOnlyTable);
+        this.add(ModBlocks.ANCIENT_LEAVES, this::createSilkTouchOnlyTable);
+        this.add(ModBlocks.DECAYED_LEAVES, this::createSilkTouchOnlyTable);
         this.add(ModBlocks.GOLDEN_LEAVES, b -> LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(this.applyExplosionCondition(b, LootItem.lootTableItem(ModItems.GOLD_LEAF)).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(b).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockGoldenLeaves.STAGE, BlockGoldenLeaves.HIGHEST_STAGE)))).when(LootItemRandomChanceCondition.randomChance(0.75F))));
-        this.add(ModBlocks.NETHER_WART_MUSHROOM, b -> BlockLootSubProvider.createSilkTouchDispatchTable(b, LootItem.lootTableItem(Items.NETHER_WART).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))));
-        this.add(ModBlocks.NETHER_GRASS, b -> BlockLootSubProvider.createSilkTouchDispatchTable(b, LootItem.lootTableItem(Blocks.NETHERRACK)));
+        this.add(ModBlocks.NETHER_WART_MUSHROOM, b -> this.createSilkTouchDispatchTable(b, LootItem.lootTableItem(Items.NETHER_WART).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))));
+        this.add(ModBlocks.NETHER_GRASS, b -> this.createSilkTouchDispatchTable(b, LootItem.lootTableItem(Blocks.NETHERRACK)));
     }
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
         return ModRegistry.ALL_ITEMS.stream().filter(i -> i instanceof Block).map(i -> (Block) i).toList();
     }
+
 }

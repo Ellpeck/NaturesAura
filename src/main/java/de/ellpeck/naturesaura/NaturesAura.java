@@ -10,8 +10,7 @@ import de.ellpeck.naturesaura.proxy.ClientProxy;
 import de.ellpeck.naturesaura.proxy.IProxy;
 import de.ellpeck.naturesaura.proxy.ServerProxy;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
@@ -30,15 +29,16 @@ public final class NaturesAura {
     public static NaturesAura instance;
     public static IProxy proxy;
 
-    public NaturesAura(IEventBus eventBus) {
+    public NaturesAura(ModContainer container) {
         NaturesAura.instance = this;
         NaturesAura.proxy = FMLEnvironment.dist.isClient() ? new ClientProxy() : new ServerProxy();
 
-        eventBus.addListener(this::setup);
+        container.getEventBus().addListener(this::setup);
+        container.getEventBus().register(NaturesAura.proxy);
 
         var builder = new ModConfigSpec.Builder();
         ModConfig.instance = new ModConfig(builder);
-        ModLoadingContext.get().registerConfig(net.neoforged.fml.config.ModConfig.Type.COMMON, builder.build());
+        container.registerConfig(net.neoforged.fml.config.ModConfig.Type.COMMON, builder.build());
     }
 
     public void setup(FMLCommonSetupEvent event) {

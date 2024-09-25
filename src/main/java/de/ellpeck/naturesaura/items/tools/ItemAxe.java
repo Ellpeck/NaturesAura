@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
@@ -20,10 +21,12 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
 
     private final String baseName;
+    private final float defaultSpeed;
 
     public ItemAxe(String baseName, Tier material, float damage, float speed) {
-        super(material, damage, speed, new Properties());
+        super(material, new Properties().attributes(AxeItem.createAttributes(material, damage, speed)));
         this.baseName = baseName;
+        this.defaultSpeed = speed;
         ModRegistry.ALL_ITEMS.add(this);
     }
 
@@ -35,20 +38,19 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
         if (state.is(BlockTags.LEAVES)) {
-            return this.speed;
+            return this.defaultSpeed;
         } else {
             return super.getDestroySpeed(stack, state);
         }
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        if ((stack.getItem() == ModItems.SKY_AXE || stack.getItem() == ModItems.DEPTH_AXE) && Helper.isToolEnabled(stack) && player.level().getBlockState(pos).is(BlockTags.LOGS)) {
+    public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
+        if ((stack.getItem() == ModItems.SKY_AXE || stack.getItem() == ModItems.DEPTH_AXE) && Helper.isToolEnabled(stack) && level.getBlockState(pos).is(BlockTags.LOGS)) {
             var horRange = stack.getItem() == ModItems.DEPTH_AXE ? 6 : 1;
-            Helper.mineRecursively(player.level(), pos, pos, stack, horRange, 32, s -> s.is(BlockTags.LOGS));
-            return true;
+            Helper.mineRecursively(level, pos, pos, stack, horRange, 32, s -> s.is(BlockTags.LOGS));
         }
-        return false;
+        return super.mineBlock(stack, level, state, pos, miningEntity);
     }
 
     @Override

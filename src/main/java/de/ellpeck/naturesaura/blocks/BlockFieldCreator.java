@@ -9,8 +9,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,11 +26,10 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult result) {
-        var tile = levelIn.getBlockEntity(pos);
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        var tile = level.getBlockEntity(pos);
         if (tile instanceof BlockEntityFieldCreator) {
-            if (!levelIn.isClientSide) {
+            if (!level.isClientSide) {
                 var key = NaturesAura.MOD_ID + ":field_creator_pos";
                 var compound = player.getPersistentData();
                 if (!player.isShiftKeyDown() && compound.contains(key)) {
@@ -37,7 +37,7 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
                     var creator = (BlockEntityFieldCreator) tile;
                     if (!pos.equals(stored)) {
                         if (creator.isCloseEnough(stored)) {
-                            var otherTile = levelIn.getBlockEntity(stored);
+                            var otherTile = level.getBlockEntity(stored);
                             if (otherTile instanceof BlockEntityFieldCreator otherCreator) {
                                 creator.connectionOffset = stored.subtract(pos);
                                 creator.isMain = true;
@@ -60,9 +60,9 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
                     player.displayClientMessage(Component.translatable("info." + NaturesAura.MOD_ID + ".stored_pos"), true);
                 }
             }
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         } else
-            return InteractionResult.FAIL;
+            return ItemInteractionResult.FAIL;
     }
 
     @Override
@@ -73,13 +73,13 @@ public class BlockFieldCreator extends BlockContainerImpl implements ICustomBloc
             var connected = creator.getConnectedPos();
             if (connected != null)
                 NaturesAuraAPI.instance().spawnParticleStream(
-                        pos.getX() + 0.25F + rand.nextFloat() * 0.5F,
-                        pos.getY() + 0.25F + rand.nextFloat() * 0.5F,
-                        pos.getZ() + 0.25F + rand.nextFloat() * 0.5F,
-                        connected.getX() + 0.25F + rand.nextFloat() * 0.5F,
-                        connected.getY() + 0.25F + rand.nextFloat() * 0.5F,
-                        connected.getZ() + 0.25F + rand.nextFloat() * 0.5F,
-                        0.65F, 0x4245f4, 1F
+                    pos.getX() + 0.25F + rand.nextFloat() * 0.5F,
+                    pos.getY() + 0.25F + rand.nextFloat() * 0.5F,
+                    pos.getZ() + 0.25F + rand.nextFloat() * 0.5F,
+                    connected.getX() + 0.25F + rand.nextFloat() * 0.5F,
+                    connected.getY() + 0.25F + rand.nextFloat() * 0.5F,
+                    connected.getZ() + 0.25F + rand.nextFloat() * 0.5F,
+                    0.65F, 0x4245f4, 1F
                 );
         }
     }

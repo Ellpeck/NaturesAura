@@ -1,6 +1,6 @@
 package de.ellpeck.naturesaura.recipes;
 
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
@@ -15,7 +15,7 @@ public abstract class ModRecipe implements Recipe<RecipeWrapper> {
     }
 
     @Override
-    public ItemStack assemble(RecipeWrapper inv, RegistryAccess access) {
+    public ItemStack assemble(RecipeWrapper input, HolderLookup.Provider registries) {
         return ItemStack.EMPTY;
     }
 
@@ -23,6 +23,5 @@ public abstract class ModRecipe implements Recipe<RecipeWrapper> {
     public boolean canCraftInDimensions(int width, int height) {
         return false;
     }
-
 
 }

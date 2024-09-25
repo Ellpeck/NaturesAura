@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.blocks.BlockGratedChute;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -64,8 +65,8 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
                 pull:
                 if (curr.isEmpty() || curr.getCount() < curr.getMaxStackSize()) {
                     var items = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(
-                            this.worldPosition.getX(), this.worldPosition.getY() + 0.5, this.worldPosition.getZ(),
-                            this.worldPosition.getX() + 1, this.worldPosition.getY() + 2, this.worldPosition.getZ() + 1));
+                        this.worldPosition.getX(), this.worldPosition.getY() + 0.5, this.worldPosition.getZ(),
+                        this.worldPosition.getX() + 1, this.worldPosition.getY() + 2, this.worldPosition.getZ() + 1));
                     for (var item : items) {
                         if (!item.isAlive())
                             continue;
@@ -119,24 +120,23 @@ public class BlockEntityGratedChute extends BlockEntityImpl implements ITickable
     }
 
     @Override
-    public void writeNBT(CompoundTag compound, SaveType type) {
-        super.writeNBT(compound, type);
+    public void writeNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.writeNBT(compound, type, registries);
         if (type != SaveType.BLOCK) {
             compound.putInt("cooldown", this.cooldown);
-            compound.put("items", this.items.serializeNBT());
+            compound.put("items", this.items.serializeNBT(registries));
             compound.putBoolean("blacklist", this.isBlacklist);
         }
     }
 
     @Override
-    public void readNBT(CompoundTag compound, SaveType type) {
-        super.readNBT(compound, type);
+    public void readNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.readNBT(compound, type, registries);
         if (type != SaveType.BLOCK) {
             this.cooldown = compound.getInt("cooldown");
-            this.items.deserializeNBT(compound.getCompound("items"));
+            this.items.deserializeNBT(registries, compound.getCompound("items"));
             this.isBlacklist = compound.getBoolean("blacklist");
         }
     }
-
 
 }

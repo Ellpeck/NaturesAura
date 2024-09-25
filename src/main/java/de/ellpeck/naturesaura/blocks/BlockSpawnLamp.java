@@ -22,10 +22,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
-import net.neoforged.bus.api.Event;
-import net.neoforged.bus.api.SubscribeEvent;
 
 public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
@@ -69,10 +68,10 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
                 IAuraChunk.getAuraChunk(level, spot).drainAura(spot, amountToUse);
 
                 PacketHandler.sendToAllAround(level, lampPos, 32,
-                        new PacketParticles(lampPos.getX(), lampPos.getY(), lampPos.getZ(), PacketParticles.Type.SPAWN_LAMP));
+                    new PacketParticles(lampPos.getX(), lampPos.getY(), lampPos.getZ(), PacketParticles.Type.SPAWN_LAMP));
             }
 
-            event.setResult(Event.Result.DENY);
+            event.setResult(MobSpawnEvent.PositionCheck.Result.FAIL);
             break;
         }
     }
@@ -105,4 +104,5 @@ public class BlockSpawnLamp extends BlockContainerImpl implements IVisualizable,
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().getExistingFile(generator.modLoc(this.getBaseName())));
     }
+
 }

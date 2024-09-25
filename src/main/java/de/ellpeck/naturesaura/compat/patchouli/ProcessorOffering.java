@@ -12,7 +12,7 @@ public class ProcessorOffering implements IComponentProcessor {
 
     @Override
     public void setup(Level level, IVariableProvider provider) {
-        this.recipe = PatchouliCompat.getRecipe("offering", provider.get("recipe").asString());
+        this.recipe = PatchouliCompat.getRecipe("offering", provider.get("recipe", level.registryAccess()).asString());
     }
 
     @Override
@@ -20,10 +20,10 @@ public class ProcessorOffering implements IComponentProcessor {
         if (this.recipe == null)
             return null;
         return switch (key) {
-            case "input" -> PatchouliCompat.ingredientVariable(this.recipe.input);
-            case "output" -> IVariable.from(this.recipe.output);
-            case "start" -> PatchouliCompat.ingredientVariable(this.recipe.startItem);
-            case "name" -> IVariable.wrap(this.recipe.output.getHoverName().getString());
+            case "input" -> PatchouliCompat.ingredientVariable(this.recipe.input, level.registryAccess());
+            case "output" -> IVariable.from(this.recipe.output, level.registryAccess());
+            case "start" -> PatchouliCompat.ingredientVariable(this.recipe.startItem, level.registryAccess());
+            case "name" -> IVariable.wrap(this.recipe.output.getHoverName().getString(), level.registryAccess());
             default -> null;
         };
     }

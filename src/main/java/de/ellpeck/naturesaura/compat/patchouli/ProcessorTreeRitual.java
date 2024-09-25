@@ -12,7 +12,7 @@ public class ProcessorTreeRitual implements IComponentProcessor {
 
     @Override
     public void setup(Level level, IVariableProvider provider) {
-        this.recipe = PatchouliCompat.getRecipe("tree_ritual", provider.get("recipe").asString());
+        this.recipe = PatchouliCompat.getRecipe("tree_ritual", provider.get("recipe", level.registryAccess()).asString());
     }
 
     @Override
@@ -21,14 +21,15 @@ public class ProcessorTreeRitual implements IComponentProcessor {
             return null;
         if (key.startsWith("input")) {
             var id = Integer.parseInt(key.substring(5)) - 1;
-            return this.recipe.ingredients.size() > id ? PatchouliCompat.ingredientVariable(this.recipe.ingredients.get(id)) : null;
+            return this.recipe.ingredients.size() > id ? PatchouliCompat.ingredientVariable(this.recipe.ingredients.get(id), level.registryAccess()) : null;
         } else {
             return switch (key) {
-                case "output" -> IVariable.from(this.recipe.output);
-                case "sapling" -> PatchouliCompat.ingredientVariable(this.recipe.saplingType);
-                case "name" -> IVariable.wrap(this.recipe.output.getHoverName().getString());
+                case "output" -> IVariable.from(this.recipe.output, level.registryAccess());
+                case "sapling" -> PatchouliCompat.ingredientVariable(this.recipe.saplingType, level.registryAccess());
+                case "name" -> IVariable.wrap(this.recipe.output.getHoverName().getString(), level.registryAccess());
                 default -> null;
             };
         }
     }
+
 }

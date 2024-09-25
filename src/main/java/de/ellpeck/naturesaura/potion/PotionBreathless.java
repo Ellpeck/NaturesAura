@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.potion;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.neoforge.common.NeoForge;
@@ -19,7 +20,7 @@ public class PotionBreathless extends PotionImpl {
 
     @SubscribeEvent
     public void onHeal(LivingHealEvent event) {
-        var effect = event.getEntity().getEffect(this);
+        var effect = event.getEntity().getEffect(Holder.direct(this));
         if (effect == null)
             return;
         var chance = (effect.getAmplifier() + 1) / 15F;
@@ -35,8 +36,9 @@ public class PotionBreathless extends PotionImpl {
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         entity.hurt(entity.damageSources().magic(), 1F);
+        return true;
     }
 
 }

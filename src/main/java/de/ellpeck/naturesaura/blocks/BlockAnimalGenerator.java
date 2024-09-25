@@ -17,11 +17,12 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.living.*;
-import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
 
@@ -32,7 +33,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
     }
 
     @SubscribeEvent
-    public void onLivingUpdate(LivingEvent.LivingTickEvent event) {
+    public void onLivingUpdate(EntityTickEvent event) {
         var entity = event.getEntity();
         if (entity.level().isClientSide || entity.level().getGameTime() % 40 != 0 || !(entity instanceof Animal) || entity instanceof Npc)
             return;
@@ -70,10 +71,10 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
 
             var genPos = gen.getBlockPos();
             PacketHandler.sendToAllAround(entity.level(), pos, 32, new PacketParticles(
-                    (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), PacketParticles.Type.ANIMAL_GEN_CONSUME,
-                    child ? 1 : 0,
-                    (int) (entity.getEyeHeight() * 10F),
-                    genPos.getX(), genPos.getY(), genPos.getZ()));
+                (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), PacketParticles.Type.ANIMAL_GEN_CONSUME,
+                child ? 1 : 0,
+                (int) (entity.getEyeHeight() * 10F),
+                genPos.getX(), genPos.getY(), genPos.getZ()));
 
             return true;
         });
@@ -108,8 +109,9 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().cubeBottomTop(this.getBaseName(),
-                generator.modLoc("block/" + this.getBaseName()),
-                generator.modLoc("block/" + this.getBaseName() + "_bottom"),
-                generator.modLoc("block/" + this.getBaseName() + "_top")));
+            generator.modLoc("block/" + this.getBaseName()),
+            generator.modLoc("block/" + this.getBaseName() + "_bottom"),
+            generator.modLoc("block/" + this.getBaseName() + "_top")));
     }
+
 }

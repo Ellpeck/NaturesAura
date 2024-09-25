@@ -16,6 +16,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +24,7 @@ import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.Tags;
 
@@ -31,7 +33,7 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
     private final String baseName;
 
     public ItemPickaxe(String baseName, Tier material, int damage, float speed) {
-        super(material, damage, speed, new Properties());
+        super(material, new Properties().attributes(PickaxeItem.createAttributes(material, damage, speed)));
         this.baseName = baseName;
         ModRegistry.ALL_ITEMS.add(this);
     }
@@ -58,7 +60,7 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
                     data.addMossStone(pos);
                 }
                 level.playSound(player, pos, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
-                stack.hurtAndBreak(15, player, p -> p.broadcastBreakEvent(context.getHand()));
+                stack.hurtAndBreak(15, player, LivingEntity.getSlotForHand(context.getHand()));
                 return InteractionResult.SUCCESS;
             }
         }
@@ -84,12 +86,11 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
-        if (itemstack.getItem() == ModItems.DEPTH_PICKAXE && Helper.isToolEnabled(itemstack) && player.level().getBlockState(pos).is(Tags.Blocks.ORES)) {
-            Helper.mineRecursively(player.level(), pos, pos, itemstack, 5, 5, s -> s.is(Tags.Blocks.ORES));
-            return true;
-        }
-        return false;
+    public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
+        // TODO test depth pickaxe vein mining
+        if (stack.getItem() == ModItems.DEPTH_PICKAXE && Helper.isToolEnabled(stack) && level.getBlockState(pos).is(Tags.Blocks.ORES))
+            Helper.mineRecursively(level, pos, pos, stack, 5, 5, s -> s.is(Tags.Blocks.ORES));
+        return super.mineBlock(stack, level, state, pos, miningEntity);
     }
 
     @Override

@@ -24,7 +24,7 @@ public class ItemSword extends SwordItem implements IModItem, ICustomItemModel {
     private final String baseName;
 
     public ItemSword(String baseName, Tier material, int damage, float speed) {
-        super(material, damage, speed, new Properties());
+        super(material, new Properties().attributes(SwordItem.createAttributes(material, damage, speed)));
         this.baseName = baseName;
         ModRegistry.ALL_ITEMS.add(this);
     }

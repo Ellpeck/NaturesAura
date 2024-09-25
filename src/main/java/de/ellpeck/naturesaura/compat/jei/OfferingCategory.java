@@ -19,7 +19,7 @@ public class OfferingCategory implements IRecipeCategory<OfferingRecipe> {
     private final IDrawable background;
 
     public OfferingCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/jei/offering.png"), 0, 0, 87, 36);
+        this.background = helper.createDrawable(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "textures/gui/jei/offering.png"), 0, 0, 87, 36);
     }
 
     @Override
@@ -48,4 +48,5 @@ public class OfferingCategory implements IRecipeCategory<OfferingRecipe> {
         builder.addSlot(RecipeIngredientRole.OUTPUT, 66, 15).addItemStack(recipe.output);
         builder.addSlot(RecipeIngredientRole.INPUT, 28, 1).addItemStacks(Arrays.asList(recipe.startItem.getItems()));
     }
+
 }

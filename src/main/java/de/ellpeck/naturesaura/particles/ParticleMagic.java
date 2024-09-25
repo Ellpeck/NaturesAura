@@ -19,7 +19,7 @@ import java.util.Collections;
 @OnlyIn(Dist.CLIENT)
 public class ParticleMagic extends Particle {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(NaturesAura.MOD_ID, "textures/particles/magic_round.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "textures/particles/magic_round.png");
 
     private final float desiredScale;
     private final boolean fade;
@@ -109,10 +109,10 @@ public class ParticleMagic extends Particle {
         }
 
         var j = this.getLightColor(partialTicks);
-        buffer.vertex(avector3f[0].x(), avector3f[0].y(), avector3f[0].z()).uv(0, 1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-        buffer.vertex(avector3f[1].x(), avector3f[1].y(), avector3f[1].z()).uv(1, 1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-        buffer.vertex(avector3f[2].x(), avector3f[2].y(), avector3f[2].z()).uv(1, 0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
-        buffer.vertex(avector3f[3].x(), avector3f[3].y(), avector3f[3].z()).uv(0, 0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
+        buffer.addVertex(avector3f[0].x(), avector3f[0].y(), avector3f[0].z()).setUv(0, 1).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(j);
+        buffer.addVertex(avector3f[1].x(), avector3f[1].y(), avector3f[1].z()).setUv(1, 1).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(j);
+        buffer.addVertex(avector3f[2].x(), avector3f[2].y(), avector3f[2].z()).setUv(1, 0).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(j);
+        buffer.addVertex(avector3f[3].x(), avector3f[3].y(), avector3f[3].z()).setUv(0, 0).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(j);
     }
 
     @Override
@@ -124,4 +124,5 @@ public class ParticleMagic extends Particle {
     protected int getLightColor(float p_107249_) {
         return 15 << 20 | 15 << 4;
     }
+
 }

@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.api.aura.container.BasicAuraContainer;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -94,8 +95,8 @@ public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBl
     }
 
     @Override
-    public void writeNBT(CompoundTag compound, SaveType type) {
-        super.writeNBT(compound, type);
+    public void writeNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.writeNBT(compound, type, registries);
         if (type != SaveType.BLOCK) {
             this.container.writeNBT(compound);
             compound.putBoolean("drain_mode", this.isDrainMode);
@@ -103,8 +104,8 @@ public class BlockEntityEndFlower extends BlockEntityImpl implements ITickableBl
     }
 
     @Override
-    public void readNBT(CompoundTag compound, SaveType type) {
-        super.readNBT(compound, type);
+    public void readNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.readNBT(compound, type, registries);
         if (type != SaveType.BLOCK) {
             this.container.readNBT(compound);
             this.isDrainMode = compound.getBoolean("drain_mode");

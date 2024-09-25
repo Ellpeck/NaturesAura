@@ -23,7 +23,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 
 public class GrassDieEffect implements IDrainSpotEffect {
 
-    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "grass_die");
+    public static final ResourceLocation NAME = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "grass_die");
 
     private int amount;
     private int dist;
@@ -63,9 +63,9 @@ public class GrassDieEffect implements IDrainSpotEffect {
             return;
         for (var i = this.amount / 2 + level.random.nextInt(this.amount / 2); i >= 0; i--) {
             var grassPos = BlockPos.containing(
-                    pos.getX() + level.random.nextGaussian() * this.dist,
-                    pos.getY() + level.random.nextGaussian() * this.dist,
-                    pos.getZ() + level.random.nextGaussian() * this.dist
+                pos.getX() + level.random.nextGaussian() * this.dist,
+                pos.getY() + level.random.nextGaussian() * this.dist,
+                pos.getZ() + level.random.nextGaussian() * this.dist
             );
             if (grassPos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(grassPos)) {
                 var state = level.getBlockState(grassPos);
@@ -96,4 +96,5 @@ public class GrassDieEffect implements IDrainSpotEffect {
     public ResourceLocation getName() {
         return GrassDieEffect.NAME;
     }
+
 }

@@ -28,7 +28,7 @@ import java.util.Set;
 public class PlantBoostEffect implements IDrainSpotEffect {
 
     public static final Set<Block> EXCEPTIONS = new HashSet<>(List.of(Blocks.GRASS_BLOCK, Blocks.MOSS_BLOCK, Blocks.GLOW_LICHEN, Blocks.SMALL_DRIPLEAF, Blocks.BIG_DRIPLEAF, Blocks.BIG_DRIPLEAF_STEM));
-    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "plant_boost");
+    public static final ResourceLocation NAME = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "plant_boost");
 
     private int amount;
     private int dist;
@@ -90,7 +90,7 @@ public class PlantBoostEffect implements IDrainSpotEffect {
                         IAuraChunk.getAuraChunk(level, closestSpot).drainAura(closestSpot, 3500);
 
                         PacketHandler.sendToAllAround(level, plantPos, 32,
-                                new PacketParticles(plantPos.getX(), plantPos.getY(), plantPos.getZ(), PacketParticles.Type.PLANT_BOOST));
+                            new PacketParticles(plantPos.getX(), plantPos.getY(), plantPos.getZ(), PacketParticles.Type.PLANT_BOOST));
                     }
                 }
             }
@@ -106,4 +106,5 @@ public class PlantBoostEffect implements IDrainSpotEffect {
     public ResourceLocation getName() {
         return PlantBoostEffect.NAME;
     }
+
 }

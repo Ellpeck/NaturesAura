@@ -19,7 +19,7 @@ import net.minecraft.world.phys.AABB;
 
 public class AngerEffect implements IDrainSpotEffect {
 
-    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "anger");
+    public static final ResourceLocation NAME = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "anger");
 
     private AABB bb;
 
@@ -77,4 +77,5 @@ public class AngerEffect implements IDrainSpotEffect {
     public ResourceLocation getName() {
         return AngerEffect.NAME;
     }
+
 }

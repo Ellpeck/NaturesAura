@@ -22,7 +22,6 @@ import de.ellpeck.naturesaura.reg.ModRegistry;
 import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -30,35 +29,43 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 public class ClientProxy implements IProxy {
+
+    // TODO check ender crate registry functions
+    @SubscribeEvent
+    public void registerMenuScreens(RegisterMenuScreensEvent event) {
+        event.register(ModContainers.ENDER_CRATE, GuiEnderCrate::new);
+        event.register(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
+    }
 
     @Override
     public void preInit(FMLCommonSetupEvent event) {
         NeoForge.EVENT_BUS.register(new ClientEvents());
         Compat.setupClient();
-        MenuScreens.register(ModContainers.ENDER_CRATE, GuiEnderCrate::new);
-        MenuScreens.register(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
 
-        ItemProperties.register(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "fill_mode"),
-                (stack, level, entity, i) -> ItemColorChanger.isFillMode(stack) ? 1 : 0);
-        ItemProperties.register(ModItems.COLOR_CHANGER, new ResourceLocation(NaturesAura.MOD_ID, "has_color"),
-                (stack, level, entity, i) -> ItemColorChanger.getStoredColor(stack) != null ? 1 : 0);
+        ItemProperties.register(ModItems.COLOR_CHANGER, ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "fill_mode"),
+            (stack, level, entity, i) -> ItemColorChanger.isFillMode(stack) ? 1 : 0);
+        ItemProperties.register(ModItems.COLOR_CHANGER, ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "has_color"),
+            (stack, level, entity, i) -> ItemColorChanger.getStoredColor(stack) != null ? 1 : 0);
         for (var item : new Item[]{ModItems.SKY_AXE, ModItems.DEPTH_PICKAXE, ModItems.DEPTH_AXE}) {
-            ItemProperties.register(item, new ResourceLocation(NaturesAura.MOD_ID, "enabled"),
-                    (stack, level, entity, i) -> Helper.isToolEnabled(stack) ? 1 : 0);
+            ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "enabled"),
+                (stack, level, entity, i) -> Helper.isToolEnabled(stack) ? 1 : 0);
         }
     }
 
     @Override
     public void init(FMLCommonSetupEvent event) {
         var skinMap = Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap();
-        for (var render : new EntityRenderer[]{skinMap.get("default"), skinMap.get("slim")}) {
+        for (var render : new EntityRenderer[]{skinMap.get(PlayerSkin.Model.WIDE), skinMap.get(PlayerSkin.Model.SLIM)}) {
             if (render instanceof PlayerRenderer living)
                 living.addLayer(new PlayerLayerTrinkets(living));
         }
@@ -89,9 +96,9 @@ public class ClientProxy implements IProxy {
     @Override
     public void spawnMagicParticle(double posX, double posY, double posZ, double motionX, double motionY, double motionZ, int color, float scale, int maxAge, float gravity, boolean collision, boolean fade) {
         ParticleHandler.spawnParticle(() -> new ParticleMagic(Minecraft.getInstance().level,
-                posX, posY, posZ,
-                motionX, motionY, motionZ,
-                color, scale, maxAge, gravity, collision, fade, ParticleHandler.depthEnabled), posX, posY, posZ);
+            posX, posY, posZ,
+            motionX, motionY, motionZ,
+            color, scale, maxAge, gravity, collision, fade, ParticleHandler.depthEnabled), posX, posY, posZ);
     }
 
     @Override

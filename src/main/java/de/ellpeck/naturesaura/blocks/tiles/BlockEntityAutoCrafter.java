@@ -49,26 +49,26 @@ public class BlockEntityAutoCrafter extends BlockEntityImpl implements ITickable
             var topPos = middlePos.relative(facing, 2);
             var bottomPos = middlePos.relative(facing.getOpposite(), 2);
             var poses = new BlockPos[]{
-                    topPos.relative(facing.getCounterClockWise(), 2),
-                    topPos,
-                    topPos.relative(facing.getClockWise(), 2),
-                    middlePos.relative(facing.getCounterClockWise(), 2),
-                    middlePos,
-                    middlePos.relative(facing.getClockWise(), 2),
-                    bottomPos.relative(facing.getCounterClockWise(), 2),
-                    bottomPos,
-                    bottomPos.relative(facing.getClockWise(), 2)
+                topPos.relative(facing.getCounterClockWise(), 2),
+                topPos,
+                topPos.relative(facing.getClockWise(), 2),
+                middlePos.relative(facing.getCounterClockWise(), 2),
+                middlePos,
+                middlePos.relative(facing.getClockWise(), 2),
+                bottomPos.relative(facing.getCounterClockWise(), 2),
+                bottomPos,
+                bottomPos.relative(facing.getClockWise(), 2)
             };
 
             var items = new ItemEntity[9];
             for (var i = 0; i < poses.length; i++) {
                 var entities = this.level.getEntitiesOfClass(
-                        ItemEntity.class, new AABB(poses[i]).inflate(0.25), EntitySelector.ENTITY_STILL_ALIVE);
+                    ItemEntity.class, new AABB(poses[i]).inflate(0.25), EntitySelector.ENTITY_STILL_ALIVE);
                 if (entities.size() > 1)
                     return;
                 if (entities.isEmpty())
                     continue;
-                var entity = entities.get(0);
+                var entity = entities.getFirst();
                 if (entity.hasPickUpDelay())
                     return;
                 var stack = entity.getItem();
@@ -78,19 +78,19 @@ public class BlockEntityAutoCrafter extends BlockEntityImpl implements ITickable
                 this.crafting.setItem(i, stack.copy());
             }
 
-            var recipe = this.level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, this.crafting, this.level).orElse(null);
+            var recipe = this.level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, this.crafting.asCraftInput(), this.level).orElse(null);
             if (recipe == null)
                 return;
 
-            var result = recipe.value().assemble(this.crafting, this.level.registryAccess());
+            var result = recipe.value().assemble(this.crafting.asCraftInput(), this.level.registryAccess());
             if (result.isEmpty())
                 return;
             var resultItem = new ItemEntity(this.level,
-                    this.worldPosition.getX() + 0.5F, this.worldPosition.getY() - 0.35F, this.worldPosition.getZ() + 0.5F, result.copy());
+                this.worldPosition.getX() + 0.5F, this.worldPosition.getY() - 0.35F, this.worldPosition.getZ() + 0.5F, result.copy());
             resultItem.setDeltaMovement(0, 0, 0);
             this.level.addFreshEntity(resultItem);
 
-            var remainingItems = recipe.value().getRemainingItems(this.crafting);
+            var remainingItems = recipe.value().getRemainingItems(this.crafting.asCraftInput());
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
                 if (item == null)
@@ -111,8 +111,9 @@ public class BlockEntityAutoCrafter extends BlockEntityImpl implements ITickable
                 }
 
                 PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
-                        new PacketParticles((float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.ANIMAL_SPAWNER));
+                    new PacketParticles((float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.ANIMAL_SPAWNER));
             }
         }
     }
+
 }

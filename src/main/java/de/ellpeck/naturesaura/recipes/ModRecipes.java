@@ -30,18 +30,19 @@ public final class ModRecipes {
 
     public static void init() {
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
-                Blocks.COBBLESTONE.defaultBlockState(),
-                Blocks.MOSSY_COBBLESTONE.defaultBlockState());
+            Blocks.COBBLESTONE.defaultBlockState(),
+            Blocks.MOSSY_COBBLESTONE.defaultBlockState());
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
-                Blocks.STONE_BRICKS.defaultBlockState(),
-                Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
+            Blocks.STONE_BRICKS.defaultBlockState(),
+            Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
-                Blocks.COBBLESTONE_WALL.defaultBlockState(),
-                Blocks.MOSSY_COBBLESTONE_WALL.defaultBlockState());
+            Blocks.COBBLESTONE_WALL.defaultBlockState(),
+            Blocks.MOSSY_COBBLESTONE_WALL.defaultBlockState());
         NaturesAuraAPI.BOTANIST_PICKAXE_CONVERSIONS.put(
-                Blocks.STONE_BRICK_WALL.defaultBlockState(),
-                Blocks.MOSSY_STONE_BRICK_WALL.defaultBlockState());
+            Blocks.STONE_BRICK_WALL.defaultBlockState(),
+            Blocks.MOSSY_STONE_BRICK_WALL.defaultBlockState());
 
+        // TODO test if these ores still work!
         ModRecipes.ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/coal", 5000);
         ModRecipes.ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/coal", 5000);
         ModRecipes.ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/iron", 3000);
@@ -111,7 +112,7 @@ public final class ModRecipes {
     }
 
     private static void ore(List<WeightedOre> list, String name, int weight) {
-        var res = new ResourceLocation("forge", name);
+        var res = ResourceLocation.fromNamespaceAndPath("c", name);
         list.add(new WeightedOre(res, weight));
     }
 

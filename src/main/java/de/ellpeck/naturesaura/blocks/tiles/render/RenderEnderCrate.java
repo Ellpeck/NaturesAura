@@ -26,10 +26,10 @@ public class RenderEnderCrate implements BlockEntityRenderer<BlockEntityEnderCra
     }
 
     private static void renderFace(Matrix4f p_173696_, VertexConsumer p_173697_, float p_173700_, float p_173701_) {
-        p_173697_.vertex(p_173696_, (float) 1 / 16F, p_173700_, (float) 15 / 16F).endVertex();
-        p_173697_.vertex(p_173696_, (float) 15 / 16F, p_173700_, (float) 15 / 16F).endVertex();
-        p_173697_.vertex(p_173696_, (float) 15 / 16F, p_173701_, (float) 1 / 16F).endVertex();
-        p_173697_.vertex(p_173696_, (float) 1 / 16F, p_173701_, (float) 1 / 16F).endVertex();
+        p_173697_.addVertex(p_173696_, (float) 1 / 16F, p_173700_, (float) 15 / 16F);
+        p_173697_.addVertex(p_173696_, (float) 15 / 16F, p_173700_, (float) 15 / 16F);
+        p_173697_.addVertex(p_173696_, (float) 15 / 16F, p_173701_, (float) 1 / 16F);
+        p_173697_.addVertex(p_173696_, (float) 1 / 16F, p_173701_, (float) 1 / 16F);
     }
 
     private static float getOffsetUp() {
@@ -39,4 +39,5 @@ public class RenderEnderCrate implements BlockEntityRenderer<BlockEntityEnderCra
     private static RenderType renderType() {
         return RenderType.endPortal();
     }
+
 }

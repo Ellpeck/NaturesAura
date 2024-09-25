@@ -9,7 +9,6 @@ import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -19,11 +18,9 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.event.EventHooks;
-import net.neoforged.bus.api.Event;
 
 public class BlockAncientSapling extends BushBlock implements BonemealableBlock, IModItem, ICustomBlockState, ICustomItemModel {
 
@@ -75,9 +72,12 @@ public class BlockAncientSapling extends BushBlock implements BonemealableBlock,
     public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state) {
         if (state.getValue(SaplingBlock.STAGE) == 0) {
             level.setBlock(pos, state.cycle(SaplingBlock.STAGE), 4);
-        } else if (!EventHooks.blockGrowFeature(level, rand, pos, null).getResult().equals(Event.Result.DENY)) {
-            Registry<ConfiguredFeature<?, ?>> registry = level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
-            registry.getHolderOrThrow(ModFeatures.Configured.ANCIENT_TREE).value().place(level, level.getChunkSource().getGenerator(), rand, pos);
+        } else {
+            var event = EventHooks.fireBlockGrowFeature(level, rand, pos, null);
+            if (!event.isCanceled()) {
+                var registry = level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
+                registry.getHolderOrThrow(ModFeatures.Configured.ANCIENT_TREE).value().place(level, level.getChunkSource().getGenerator(), rand, pos);
+            }
         }
     }
 

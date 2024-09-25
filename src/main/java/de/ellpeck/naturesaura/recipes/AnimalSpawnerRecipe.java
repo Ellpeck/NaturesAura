@@ -1,11 +1,14 @@
 package de.ellpeck.naturesaura.recipes;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -17,7 +20,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AnimalSpawnerRecipe extends ModRecipe {
@@ -38,11 +40,11 @@ public class AnimalSpawnerRecipe extends ModRecipe {
         // passed position is zero on the client, so we don't want to do initialization stuff for the entity
         if (pos == BlockPos.ZERO)
             return this.entity.create(level);
-        return this.entity.create((ServerLevel) level, null, null, pos, MobSpawnType.SPAWNER, false, false);
+        return this.entity.create((ServerLevel) level, null, pos, MobSpawnType.SPAWNER, false, false);
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess access) {
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
         return ItemStack.EMPTY;
     }
 
@@ -58,34 +60,22 @@ public class AnimalSpawnerRecipe extends ModRecipe {
 
     public static class Serializer implements RecipeSerializer<AnimalSpawnerRecipe> {
 
-        private static final Codec<AnimalSpawnerRecipe> CODEC = RecordCodecBuilder.create(i -> i.group(
-                ResourceLocation.CODEC.fieldOf("entity").forGetter(r -> BuiltInRegistries.ENTITY_TYPE.getKey(r.entity)),
-                Codec.INT.fieldOf("aura").forGetter(r -> r.aura),
-                Codec.INT.fieldOf("time").forGetter(r -> r.time),
-                Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(r -> r.ingredients)
+        private static final MapCodec<AnimalSpawnerRecipe> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            ResourceLocation.CODEC.fieldOf("entity").forGetter(r -> BuiltInRegistries.ENTITY_TYPE.getKey(r.entity)),
+            Codec.INT.fieldOf("aura").forGetter(r -> r.aura),
+            Codec.INT.fieldOf("time").forGetter(r -> r.time),
+            Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(r -> r.ingredients)
         ).apply(i, AnimalSpawnerRecipe::new));
+        private static final StreamCodec<RegistryFriendlyByteBuf, AnimalSpawnerRecipe> STREAM_CODEC = ByteBufCodecs.fromCodecWithRegistries(AnimalSpawnerRecipe.Serializer.CODEC.codec());
 
         @Override
-        public Codec<AnimalSpawnerRecipe> codec() {
+        public MapCodec<AnimalSpawnerRecipe> codec() {
             return Serializer.CODEC;
         }
 
         @Override
-        public AnimalSpawnerRecipe fromNetwork(FriendlyByteBuf buffer) {
-            var ingredients = new ArrayList<Ingredient>();
-            for (var i = buffer.readInt(); i > 0; i--)
-                ingredients.add(Ingredient.fromNetwork(buffer));
-            return new AnimalSpawnerRecipe(buffer.readResourceLocation(), buffer.readInt(), buffer.readInt(), ingredients);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, AnimalSpawnerRecipe recipe) {
-            buffer.writeInt(recipe.ingredients.size());
-            for (var ing : recipe.ingredients)
-                ing.toNetwork(buffer);
-            buffer.writeResourceLocation(BuiltInRegistries.ENTITY_TYPE.getKey(recipe.entity));
-            buffer.writeInt(recipe.aura);
-            buffer.writeInt(recipe.time);
+        public StreamCodec<RegistryFriendlyByteBuf, AnimalSpawnerRecipe> streamCodec() {
+            return Serializer.STREAM_CODEC;
         }
 
     }

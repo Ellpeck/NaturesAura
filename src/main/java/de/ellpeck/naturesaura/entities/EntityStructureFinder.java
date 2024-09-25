@@ -32,9 +32,9 @@ public class EntityStructureFinder extends EyeOfEnder {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(EntityStructureFinder.COLOR, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(EntityStructureFinder.COLOR, 0);
     }
 
     @Override

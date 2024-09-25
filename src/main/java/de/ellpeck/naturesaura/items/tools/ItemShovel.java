@@ -12,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.Tier;
@@ -27,7 +28,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
     private final String baseName;
 
     public ItemShovel(String baseName, Tier material, float damage, float speed) {
-        super(material, damage, speed, new Properties());
+        super(material, new Properties().attributes(ShovelItem.createAttributes(material, damage, speed)));
         this.baseName = baseName;
         ModRegistry.ALL_ITEMS.add(this);
     }
@@ -65,7 +66,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
                 }
 
                 level.playSound(player, pos, SoundEvents.GRASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
-                stack.hurtAndBreak(Mth.ceil(damage), player, p -> p.broadcastBreakEvent(context.getHand()));
+                stack.hurtAndBreak(Mth.ceil(damage), player, LivingEntity.getSlotForHand(context.getHand()));
                 return InteractionResult.SUCCESS;
             }
         }
@@ -80,8 +81,8 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
                     var facing = context.getClickedFace();
                     if (player.mayUseItemAt(actualPos.relative(facing), facing, stack)) {
                         if (facing != Direction.DOWN
-                                && level.getBlockState(actualPos.above()).isAir()
-                                && level.getBlockState(actualPos).getBlock() == Blocks.GRASS_BLOCK) {
+                            && level.getBlockState(actualPos.above()).isAir()
+                            && level.getBlockState(actualPos).getBlock() == Blocks.GRASS_BLOCK) {
                             if (!level.isClientSide)
                                 level.setBlock(actualPos, Blocks.DIRT_PATH.defaultBlockState(), 11);
                             flattened = true;
@@ -91,7 +92,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
             }
             if (flattened) {
                 level.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
-                stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
+                stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(context.getHand()));
                 return InteractionResult.SUCCESS;
             }
         }
@@ -109,7 +110,7 @@ public class ItemShovel extends ShovelItem implements IModItem, ICustomItemModel
             Block.dropResources(state, level, pos, tile, null, stack);
             var newContext = new UseOnContext(player, otherHand, new BlockHitResult(context.getClickLocation(), context.getClickedFace(), context.getClickedPos(), context.isInside()));
             other.useOn(newContext);
-            stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
+            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(context.getHand()));
             return InteractionResult.SUCCESS;
         }
 

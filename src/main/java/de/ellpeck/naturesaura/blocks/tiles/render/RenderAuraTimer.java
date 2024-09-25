@@ -16,11 +16,12 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.neoforged.neoforge.capabilities.Capabilities;
 
 public class RenderAuraTimer implements BlockEntityRenderer<BlockEntityAuraTimer> {
 
-    private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/aura_timer_aura.png");
+    private static final ResourceLocation RES = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "textures/models/aura_timer_aura.png");
     private final AuraModel model = new AuraModel();
 
     public RenderAuraTimer(BlockEntityRendererProvider.Context context) {
@@ -41,7 +42,7 @@ public class RenderAuraTimer implements BlockEntityRenderer<BlockEntityAuraTimer
         var r = (type.getColor() >> 16 & 255) / 255F;
         var g = (type.getColor() >> 8 & 255) / 255F;
         var b = (type.getColor() & 255) / 255F;
-        this.model.renderToBuffer(stack, buffer.getBuffer(this.model.renderType(RenderAuraTimer.RES)), combinedLightIn, combinedOverlayIn, r, g, b, 0.75F);
+        this.model.renderToBuffer(stack, buffer.getBuffer(this.model.renderType(RenderAuraTimer.RES)), combinedLightIn, combinedOverlayIn, FastColor.ARGB32.colorFromFloat(r, g, b, 0.75F));
         stack.popPose();
 
     }
@@ -59,8 +60,8 @@ public class RenderAuraTimer implements BlockEntityRenderer<BlockEntityAuraTimer
         }
 
         @Override
-        public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-            this.model.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+            this.model.render(poseStack, buffer, packedLight, packedOverlay, color);
         }
 
     }

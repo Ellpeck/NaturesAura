@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -108,15 +109,15 @@ public class BlockEntityChunkLoader extends BlockEntityImpl implements ITickable
     }
 
     @Override
-    public void writeNBT(CompoundTag compound, SaveType type) {
-        super.writeNBT(compound, type);
+    public void writeNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.writeNBT(compound, type, registries);
         if (type == SaveType.TILE)
             compound.putLongArray("forced_chunks", this.forcedChunks.stream().map(ChunkPos::toLong).collect(Collectors.toList()));
     }
 
     @Override
-    public void readNBT(CompoundTag compound, SaveType type) {
-        super.readNBT(compound, type);
+    public void readNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.readNBT(compound, type, registries);
 
         if (type == SaveType.TILE) {
             this.forcedChunks.clear();

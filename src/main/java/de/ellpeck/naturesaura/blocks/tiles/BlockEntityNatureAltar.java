@@ -3,7 +3,6 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.container.BasicAuraContainer;
-import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.blocks.multi.Multiblocks;
 import de.ellpeck.naturesaura.packet.PacketHandler;
@@ -12,7 +11,7 @@ import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.recipes.AltarRecipe;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -24,7 +23,6 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickableBlockEntity {
@@ -110,11 +108,11 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
 
                         if (this.level.getGameTime() % 3 == 0)
                             PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticleStream(
-                                    this.worldPosition.getX() + (float) rand.nextGaussian() * 10F,
-                                    this.worldPosition.getY() + rand.nextFloat() * 10F,
-                                    this.worldPosition.getZ() + (float) rand.nextGaussian() * 10F,
-                                    this.worldPosition.getX() + 0.5F, this.worldPosition.getY() + 0.5F, this.worldPosition.getZ() + 0.5F,
-                                    rand.nextFloat() * 0.1F + 0.1F, this.container.getAuraColor(), rand.nextFloat() + 1F
+                                this.worldPosition.getX() + (float) rand.nextGaussian() * 10F,
+                                this.worldPosition.getY() + rand.nextFloat() * 10F,
+                                this.worldPosition.getZ() + (float) rand.nextGaussian() * 10F,
+                                this.worldPosition.getX() + 0.5F, this.worldPosition.getY() + 0.5F, this.worldPosition.getZ() + 0.5F,
+                                rand.nextFloat() * 0.1F + 0.1F, this.container.getAuraColor(), rand.nextFloat() + 1F
                             ));
                     }
                 }
@@ -173,23 +171,23 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
                     var fourths = this.container.getMaxAura() / 4;
                     if (this.container.getStoredAura() > 0) {
                         NaturesAuraAPI.instance().spawnMagicParticle(
-                                this.worldPosition.getX() - 4F + rand.nextFloat(), this.worldPosition.getY() + 3F, this.worldPosition.getZ() + rand.nextFloat(),
-                                0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
+                            this.worldPosition.getX() - 4F + rand.nextFloat(), this.worldPosition.getY() + 3F, this.worldPosition.getZ() + rand.nextFloat(),
+                            0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
                     if (this.container.getStoredAura() >= fourths) {
                         NaturesAuraAPI.instance().spawnMagicParticle(
-                                this.worldPosition.getX() + 4F + rand.nextFloat(), this.worldPosition.getY() + 3F, this.worldPosition.getZ() + rand.nextFloat(),
-                                0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
+                            this.worldPosition.getX() + 4F + rand.nextFloat(), this.worldPosition.getY() + 3F, this.worldPosition.getZ() + rand.nextFloat(),
+                            0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
                     if (this.container.getStoredAura() >= fourths * 2) {
                         NaturesAuraAPI.instance().spawnMagicParticle(
-                                this.worldPosition.getX() + rand.nextFloat(), this.worldPosition.getY() + 3F, this.worldPosition.getZ() - 4F + rand.nextFloat(),
-                                0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
+                            this.worldPosition.getX() + rand.nextFloat(), this.worldPosition.getY() + 3F, this.worldPosition.getZ() - 4F + rand.nextFloat(),
+                            0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
                     if (this.container.getStoredAura() >= fourths * 3) {
                         NaturesAuraAPI.instance().spawnMagicParticle(
-                                this.worldPosition.getX() + rand.nextFloat(), this.worldPosition.getY() + 3F, this.worldPosition.getZ() + 4F + rand.nextFloat(),
-                                0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
+                            this.worldPosition.getX() + rand.nextFloat(), this.worldPosition.getY() + 3F, this.worldPosition.getZ() + 4F + rand.nextFloat(),
+                            0F, 0F, 0F, this.container.getAuraColor(), rand.nextFloat() * 3F + 1F, rand.nextInt(100) + 50, -0.05F, true, true);
                     }
 
                 }
@@ -215,10 +213,10 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
     }
 
     @Override
-    public void writeNBT(CompoundTag compound, SaveType type) {
-        super.writeNBT(compound, type);
+    public void writeNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.writeNBT(compound, type, registries);
         if (type != SaveType.BLOCK) {
-            compound.put("items", this.items.serializeNBT());
+            compound.put("items", this.items.serializeNBT(registries));
             compound.putBoolean("complete", this.isComplete);
             this.container.writeNBT(compound);
         }
@@ -232,17 +230,17 @@ public class BlockEntityNatureAltar extends BlockEntityImpl implements ITickable
 
     @SuppressWarnings("unchecked")
     @Override
-    public void readNBT(CompoundTag compound, SaveType type) {
-        super.readNBT(compound, type);
+    public void readNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.readNBT(compound, type, registries);
         if (type != SaveType.BLOCK) {
-            this.items.deserializeNBT(compound.getCompound("items"));
+            this.items.deserializeNBT(registries, compound.getCompound("items"));
             this.isComplete = compound.getBoolean("complete");
             this.container.readNBT(compound);
         }
         if (type == SaveType.TILE) {
             if (compound.contains("recipe")) {
                 if (this.hasLevel())
-                    this.currentRecipe = (RecipeHolder<AltarRecipe>) this.level.getRecipeManager().byKey(new ResourceLocation(compound.getString("recipe"))).orElse(null);
+                    this.currentRecipe = (RecipeHolder<AltarRecipe>) this.level.getRecipeManager().byKey(ResourceLocation.parse(compound.getString("recipe"))).orElse(null);
                 this.timer = compound.getInt("timer");
             }
         }

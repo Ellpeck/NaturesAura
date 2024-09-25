@@ -8,14 +8,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.function.Supplier;
-
 public class BlockStairsNA extends StairBlock implements IModItem, ICustomBlockState {
 
     public final String textureName;
     private final String baseName;
 
-    public BlockStairsNA(String baseName, String textureName, Supplier<BlockState> modelState, Block.Properties properties) {
+    public BlockStairsNA(String baseName, String textureName, BlockState modelState, Block.Properties properties) {
         super(modelState, properties.dynamicShape());
         this.baseName = baseName;
         this.textureName = textureName;
@@ -31,4 +29,5 @@ public class BlockStairsNA extends StairBlock implements IModItem, ICustomBlockS
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.stairsBlock(this, generator.modLoc("block/" + this.textureName));
     }
+
 }

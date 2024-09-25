@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.entities;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,7 +23,7 @@ public class EntityLightProjectile extends ThrowableProjectile {
     }
 
     @Override
-    protected void defineSynchedData() {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
 
     }
 
@@ -32,11 +33,11 @@ public class EntityLightProjectile extends ThrowableProjectile {
         if (this.level().isClientSide && this.tickCount > 1) {
             for (float i = 0; i <= 1; i += 0.2F) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        Mth.lerp(i, this.xOld, this.getX()),
-                        Mth.lerp(i, this.yOld, this.getY()),
-                        Mth.lerp(i, this.zOld, this.getZ()),
-                        this.random.nextGaussian() * 0.01F, this.random.nextGaussian() * 0.01F, this.random.nextGaussian() * 0.01F,
-                        0xffcb5c, this.random.nextFloat() * 0.5F + 1, 20, 0, false, true);
+                    Mth.lerp(i, this.xOld, this.getX()),
+                    Mth.lerp(i, this.yOld, this.getY()),
+                    Mth.lerp(i, this.zOld, this.getZ()),
+                    this.random.nextGaussian() * 0.01F, this.random.nextGaussian() * 0.01F, this.random.nextGaussian() * 0.01F,
+                    0xffcb5c, this.random.nextFloat() * 0.5F + 1, 20, 0, false, true);
             }
         }
     }
@@ -50,7 +51,7 @@ public class EntityLightProjectile extends ThrowableProjectile {
                 if (state.canBeReplaced())
                     this.level().setBlockAndUpdate(pos, ModBlocks.LIGHT.defaultBlockState());
             } else if (result instanceof EntityHitResult entity) {
-                entity.getEntity().setSecondsOnFire(5);
+                entity.getEntity().setRemainingFireTicks(5 * 20);
             }
         }
         this.discard();

@@ -22,7 +22,7 @@ import net.neoforged.neoforge.common.Tags;
 
 public class NetherGrassEffect implements IDrainSpotEffect {
 
-    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "nether_grass");
+    public static final ResourceLocation NAME = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "nether_grass");
 
     private int amount;
     private int dist;
@@ -78,14 +78,14 @@ public class NetherGrassEffect implements IDrainSpotEffect {
                         continue;
 
                     var state = level.getBlockState(goalPos);
-                    if (state.is(Tags.Blocks.NETHERRACK)) {
+                    if (state.is(Tags.Blocks.NETHERRACKS)) {
                         level.setBlockAndUpdate(goalPos, ModBlocks.NETHER_GRASS.defaultBlockState());
 
                         var closestSpot = IAuraChunk.getHighestSpot(level, goalPos, 25, pos);
                         IAuraChunk.getAuraChunk(level, closestSpot).drainAura(closestSpot, 500);
 
                         PacketHandler.sendToAllAround(level, goalPos, 32,
-                                new PacketParticles(goalPos.getX(), goalPos.getY() + 0.5F, goalPos.getZ(), PacketParticles.Type.PLANT_BOOST));
+                            new PacketParticles(goalPos.getX(), goalPos.getY() + 0.5F, goalPos.getZ(), PacketParticles.Type.PLANT_BOOST));
                         break;
                     }
                 }
@@ -102,4 +102,5 @@ public class NetherGrassEffect implements IDrainSpotEffect {
     public ResourceLocation getName() {
         return NetherGrassEffect.NAME;
     }
+
 }

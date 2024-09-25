@@ -39,7 +39,7 @@ import java.util.Set;
 public class OreSpawnEffect implements IDrainSpotEffect {
 
     public static final Set<BlockState> SPAWN_EXCEPTIONS = new HashSet<>();
-    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "ore_spawn");
+    public static final ResourceLocation NAME = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "ore_spawn");
 
     private int amount;
     private int dist;
@@ -93,7 +93,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
         var totalWeight = WeightedRandom.getTotalWeight(ores);
 
         var powders = NaturesAuraAPI.instance().getActiveEffectPowders(level,
-                new AABB(pos).inflate(this.dist), OreSpawnEffect.NAME);
+            new AABB(pos).inflate(this.dist), OreSpawnEffect.NAME);
         if (powders.isEmpty())
             return;
         for (var i = 0; i < this.amount; i++) {
@@ -105,7 +105,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
             var z = Mth.floor(powderPos.z + level.random.nextGaussian() * range);
             var orePos = new BlockPos(x, y, z);
             if (orePos.distToCenterSqr(powderPos.x, powderPos.y, powderPos.z) <= range * range
-                    && orePos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(orePos)) {
+                && orePos.distSqr(pos) <= this.dist * this.dist && level.isLoaded(orePos)) {
                 var state = level.getBlockState(orePos);
                 if (state.getBlock() != requiredBlock)
                     continue;
@@ -149,7 +149,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
     @Override
     public boolean appliesHere(LevelChunk chunk, IAuraChunk auraChunk, IAuraType type) {
         return ModConfig.instance.oreEffect.get() &&
-                (type.isSimilar(NaturesAuraAPI.TYPE_OVERWORLD) || type.isSimilar(NaturesAuraAPI.TYPE_NETHER));
+            (type.isSimilar(NaturesAuraAPI.TYPE_OVERWORLD) || type.isSimilar(NaturesAuraAPI.TYPE_NETHER));
     }
 
     @Override

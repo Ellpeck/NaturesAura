@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -96,8 +97,8 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
     }
 
     @Override
-    public void writeNBT(CompoundTag compound, SaveType type) {
-        super.writeNBT(compound, type);
+    public void writeNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.writeNBT(compound, type, registries);
 
         if (type != SaveType.SYNC && !this.consumedRecently.isEmpty()) {
             var list = new ListTag();
@@ -115,14 +116,14 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
     }
 
     @Override
-    public void readNBT(CompoundTag compound, SaveType type) {
-        super.readNBT(compound, type);
+    public void readNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.readNBT(compound, type, registries);
         if (type != SaveType.SYNC) {
             this.consumedRecently.clear();
             var list = compound.getList("consumed_recently", 10);
             for (var base : list) {
                 var tag = (CompoundTag) base;
-                var block = BuiltInRegistries.BLOCK.get(new ResourceLocation(tag.getString("block")));
+                var block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(tag.getString("block")));
                 if (block != null)
                     this.consumedRecently.put(block.defaultBlockState(), new MutableInt(tag.getInt("amount")));
             }

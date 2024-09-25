@@ -17,7 +17,7 @@ import static de.ellpeck.naturesaura.blocks.tiles.render.RenderGeneratorLimitRem
 @OnlyIn(Dist.CLIENT)
 public class RenderLowerLimiter implements BlockEntityRenderer<BlockEntityLowerLimiter> {
 
-    private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/lower_limiter_glint.png");
+    private static final ResourceLocation RES = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "textures/models/lower_limiter_glint.png");
     private final ModelLimitRemoverGlint model = new ModelLimitRemoverGlint();
 
     public RenderLowerLimiter(BlockEntityRendererProvider.Context context) {}

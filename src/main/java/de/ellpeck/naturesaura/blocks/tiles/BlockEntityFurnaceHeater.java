@@ -8,11 +8,13 @@ import de.ellpeck.naturesaura.blocks.BlockFurnaceHeater;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
@@ -77,13 +79,13 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
 
                     if (this.level.getGameTime() % 15 == 0) {
                         PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticleStream(
-                                this.worldPosition.getX() + (float) this.level.random.nextGaussian() * 5F,
-                                this.worldPosition.getY() + 1 + this.level.random.nextFloat() * 5F,
-                                this.worldPosition.getZ() + (float) this.level.random.nextGaussian() * 5F,
-                                tilePos.getX() + this.level.random.nextFloat(),
-                                tilePos.getY() + this.level.random.nextFloat(),
-                                tilePos.getZ() + this.level.random.nextFloat(),
-                                this.level.random.nextFloat() * 0.07F + 0.07F, IAuraType.forLevel(this.level).getColor(), this.level.random.nextFloat() + 0.5F
+                            this.worldPosition.getX() + (float) this.level.random.nextGaussian() * 5F,
+                            this.worldPosition.getY() + 1 + this.level.random.nextFloat() * 5F,
+                            this.worldPosition.getZ() + (float) this.level.random.nextGaussian() * 5F,
+                            tilePos.getX() + this.level.random.nextFloat(),
+                            tilePos.getY() + this.level.random.nextFloat(),
+                            tilePos.getZ() + this.level.random.nextFloat(),
+                            this.level.random.nextFloat() * 0.07F + 0.07F, IAuraType.forLevel(this.level).getColor(), this.level.random.nextFloat() + 0.5F
                         ));
                     }
                 }
@@ -102,7 +104,7 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
 
         var input = furnace.getItem(0);
         if (!input.isEmpty()) {
-            var recipe = this.level.getRecipeManager().getRecipeFor(BlockEntityFurnaceHeater.getRecipeType(furnace), furnace, this.level).orElse(null);
+            var recipe = this.level.getRecipeManager().getRecipeFor(BlockEntityFurnaceHeater.getRecipeType(furnace), new SingleRecipeInput(input), this.level).orElse(null);
             if (recipe == null)
                 return false;
             var output = recipe.value().getResultItem(this.level.registryAccess());
@@ -113,16 +115,16 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
     }
 
     @Override
-    public void writeNBT(CompoundTag compound, SaveType type) {
-        super.writeNBT(compound, type);
+    public void writeNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.writeNBT(compound, type, registries);
 
         if (type == SaveType.SYNC)
             compound.putBoolean("active", this.isActive);
     }
 
     @Override
-    public void readNBT(CompoundTag compound, SaveType type) {
-        super.readNBT(compound, type);
+    public void readNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.readNBT(compound, type, registries);
 
         if (type == SaveType.SYNC)
             this.isActive = compound.getBoolean("active");
@@ -132,4 +134,5 @@ public class BlockEntityFurnaceHeater extends BlockEntityImpl implements ITickab
     public boolean allowsLowerLimiter() {
         return true;
     }
+
 }

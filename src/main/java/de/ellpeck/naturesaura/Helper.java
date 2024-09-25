@@ -6,7 +6,6 @@ import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
-import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.misc.LevelData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
@@ -15,6 +14,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerPlayer;
@@ -365,6 +366,15 @@ public final class Helper {
         stack.getOrCreateTag().putBoolean(NaturesAura.MOD_ID + ":disabled", !disabled);
         player.level().playSound(null, player.getX() + 0.5, player.getY() + 0.5, player.getZ() + 0.5, SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS, 0.65F, 1F);
         return true;
+    }
+
+    public static BlockPos readBlockPos(Tag tag) {
+        if (tag instanceof IntArrayTag i) {
+            var arr = i.getAsIntArray();
+            if (arr.length == 3)
+                return new BlockPos(arr[0], arr[1], arr[2]);
+        }
+        return null;
     }
 
 }

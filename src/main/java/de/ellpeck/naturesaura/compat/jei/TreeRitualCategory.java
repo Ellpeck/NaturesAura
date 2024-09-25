@@ -19,7 +19,7 @@ public class TreeRitualCategory implements IRecipeCategory<TreeRitualRecipe> {
     private final IDrawable background;
 
     public TreeRitualCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/jei/tree_ritual.png"), 0, 0, 146, 86);
+        this.background = helper.createDrawable(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "textures/gui/jei/tree_ritual.png"), 0, 0, 146, 86);
     }
 
     @Override

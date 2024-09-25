@@ -51,23 +51,23 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
     }
 
     @Override
-    public void onAddedToWorld() {
-        super.onAddedToWorld();
+    public void onAddedToLevel() {
+        super.onAddedToLevel();
         this.powderListDirty = true;
     }
 
     @Override
-    public void onRemovedFromWorld() {
-        super.onRemovedFromWorld();
+    public void onRemovedFromLevel() {
+        super.onRemovedFromLevel();
         // we pass a null effect because we want to remove our effect from the world
         this.updatePowderListStatus(null);
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(EntityEffectInhibitor.INHIBITED_EFFECT, "");
-        this.entityData.define(EntityEffectInhibitor.COLOR, 0);
-        this.entityData.define(EntityEffectInhibitor.AMOUNT, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(EntityEffectInhibitor.INHIBITED_EFFECT, "");
+        builder.define(EntityEffectInhibitor.COLOR, 0);
+        builder.define(EntityEffectInhibitor.AMOUNT, 0);
     }
 
     @Override
@@ -94,13 +94,13 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
         if (this.level().isClientSide) {
             if (this.level().getGameTime() % 5 == 0) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        this.getX() + this.level().random.nextGaussian() * 0.1F,
-                        this.getY(),
-                        this.getZ() + this.level().random.nextGaussian() * 0.1F,
-                        this.level().random.nextGaussian() * 0.005F,
-                        this.level().random.nextFloat() * 0.03F,
-                        this.level().random.nextGaussian() * 0.005F,
-                        this.getColor(), this.level().random.nextFloat() * 3F + 1F, 120, 0F, true, true);
+                    this.getX() + this.level().random.nextGaussian() * 0.1F,
+                    this.getY(),
+                    this.getZ() + this.level().random.nextGaussian() * 0.1F,
+                    this.level().random.nextGaussian() * 0.005F,
+                    this.level().random.nextFloat() * 0.03F,
+                    this.level().random.nextGaussian() * 0.005F,
+                    this.getColor(), this.level().random.nextFloat() * 3F + 1F, 120, 0F, true, true);
             }
             this.renderTicks++;
         }
@@ -108,7 +108,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
-        this.setInhibitedEffect(new ResourceLocation(compound.getString("effect")));
+        this.setInhibitedEffect(ResourceLocation.parse(compound.getString("effect")));
         this.setColor(compound.getInt("color"));
         this.setAmount(compound.contains("amount") ? compound.getInt("amount") : 24);
     }
@@ -156,7 +156,7 @@ public class EntityEffectInhibitor extends Entity implements IVisualizable {
         var effect = this.entityData.get(EntityEffectInhibitor.INHIBITED_EFFECT);
         if (effect == null || effect.isEmpty())
             return null;
-        return new ResourceLocation(effect);
+        return ResourceLocation.parse(effect);
     }
 
     public void setInhibitedEffect(ResourceLocation effect) {

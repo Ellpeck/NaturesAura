@@ -11,7 +11,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class GuiEnderCrate extends AbstractContainerScreen<ContainerEnderCrate> {
 
-    private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
+    private static final ResourceLocation CHEST_GUI_TEXTURE = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
 
     public GuiEnderCrate(ContainerEnderCrate container, Inventory inv, Component title) {
         super(container, inv, title);

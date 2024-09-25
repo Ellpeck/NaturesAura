@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -25,25 +26,25 @@ public class BlockEntityImpl extends BlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
-        this.writeNBT(compound, SaveType.TILE);
+    public void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+        this.writeNBT(compound, SaveType.TILE, registries);
     }
 
     @Override
-    public void load(CompoundTag compound) {
-        this.readNBT(compound, SaveType.TILE);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        this.readNBT(tag, SaveType.TILE, registries);
     }
 
-    public void writeNBT(CompoundTag compound, SaveType type) {
+    public void writeNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
         if (type != SaveType.BLOCK) {
-            super.saveAdditional(compound);
+            super.saveAdditional(compound, registries);
             compound.putInt("redstone", this.redstonePower);
         }
     }
 
-    public void readNBT(CompoundTag compound, SaveType type) {
+    public void readNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
         if (type != SaveType.BLOCK) {
-            super.load(compound);
+            super.loadWithComponents(compound, registries);
             this.redstonePower = compound.getInt("redstone");
         }
     }
@@ -54,29 +55,28 @@ public class BlockEntityImpl extends BlockEntity {
 
     @Override
     public final ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this, e -> {
+        return ClientboundBlockEntityDataPacket.create(this, (e, r) -> {
             var compound = new CompoundTag();
-            this.writeNBT(compound, SaveType.SYNC);
+            this.writeNBT(compound, SaveType.SYNC, r);
             return compound;
         });
     }
 
     @Override
-    public final CompoundTag getUpdateTag() {
+    public final CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         var compound = new CompoundTag();
-        this.writeNBT(compound, SaveType.SYNC);
+        this.writeNBT(compound, SaveType.SYNC, registries);
         return compound;
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag) {
-        this.readNBT(tag, SaveType.SYNC);
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
+        this.readNBT(tag, SaveType.SYNC, registries);
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        super.onDataPacket(net, pkt);
-        this.readNBT(pkt.getTag(), SaveType.SYNC);
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
+        this.readNBT(pkt.getTag(), SaveType.SYNC, registries);
     }
 
     public void sendToClients() {
@@ -102,7 +102,7 @@ public class BlockEntityImpl extends BlockEntity {
 
     public void modifyDrop(ItemStack regularItem) {
         var compound = new CompoundTag();
-        this.writeNBT(compound, SaveType.BLOCK);
+        this.writeNBT(compound, SaveType.BLOCK, this.getLevel().registryAccess());
         if (!compound.isEmpty()) {
             if (!regularItem.hasTag())
                 regularItem.setTag(new CompoundTag());
@@ -114,7 +114,7 @@ public class BlockEntityImpl extends BlockEntity {
         if (stack.hasTag()) {
             var compound = stack.getTag().getCompound("data");
             if (compound != null)
-                this.readNBT(compound, SaveType.BLOCK);
+                this.readNBT(compound, SaveType.BLOCK, this.level.registryAccess());
         }
     }
 

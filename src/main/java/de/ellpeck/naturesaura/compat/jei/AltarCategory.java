@@ -24,7 +24,7 @@ public class AltarCategory implements IRecipeCategory<AltarRecipe> {
     private final ItemStack altar = new ItemStack(ModBlocks.NATURE_ALTAR);
 
     public AltarCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(new ResourceLocation(NaturesAura.MOD_ID, "textures/gui/jei/altar.png"), 0, 0, 103, 57);
+        this.background = helper.createDrawable(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "textures/gui/jei/altar.png"), 0, 0, 103, 57);
     }
 
     @Override
@@ -53,4 +53,5 @@ public class AltarCategory implements IRecipeCategory<AltarRecipe> {
         builder.addSlot(RecipeIngredientRole.OUTPUT, 81, 19).addItemStack(recipe.output);
         builder.addSlot(RecipeIngredientRole.CATALYST, 38, 19).addItemStacks(recipe.catalyst == Ingredient.EMPTY ? Collections.singletonList(this.altar) : Arrays.asList(recipe.catalyst.getItems()));
     }
+
 }

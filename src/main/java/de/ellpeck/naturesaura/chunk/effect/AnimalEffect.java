@@ -27,7 +27,7 @@ import java.util.Comparator;
 
 public class AnimalEffect implements IDrainSpotEffect {
 
-    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "animal");
+    public static final ResourceLocation NAME = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "animal");
 
     private int chance;
     private AABB bb;
@@ -113,8 +113,8 @@ public class AnimalEffect implements IDrainSpotEffect {
                 return;
 
             var secondOptional = animals.stream()
-                    .filter(e -> e != first && !e.isInLove() && !e.isBaby())
-                    .min(Comparator.comparingDouble(e -> e.distanceToSqr(first)));
+                .filter(e -> e != first && !e.isInLove() && !e.isBaby())
+                .min(Comparator.comparingDouble(e -> e.distanceToSqr(first)));
             if (secondOptional.isEmpty())
                 return;
             var second = secondOptional.get();
@@ -133,12 +133,12 @@ public class AnimalEffect implements IDrainSpotEffect {
         animal.setInLove(null);
         for (var j = 0; j < 7; j++)
             animal.level().addParticle(ParticleTypes.HEART,
-                    animal.getX() + (double) (animal.level().random.nextFloat() * animal.getBbWidth() * 2.0F) - animal.getBbWidth(),
-                    animal.getY() + 0.5D + (double) (animal.level().random.nextFloat() * animal.getBbHeight()),
-                    animal.getZ() + (double) (animal.level().random.nextFloat() * animal.getBbWidth() * 2.0F) - animal.getBbWidth(),
-                    animal.level().random.nextGaussian() * 0.02D,
-                    animal.level().random.nextGaussian() * 0.02D,
-                    animal.level().random.nextGaussian() * 0.02D);
+                animal.getX() + (double) (animal.level().random.nextFloat() * animal.getBbWidth() * 2.0F) - animal.getBbWidth(),
+                animal.getY() + 0.5D + (double) (animal.level().random.nextFloat() * animal.getBbHeight()),
+                animal.getZ() + (double) (animal.level().random.nextFloat() * animal.getBbWidth() * 2.0F) - animal.getBbWidth(),
+                animal.level().random.nextGaussian() * 0.02D,
+                animal.level().random.nextGaussian() * 0.02D,
+                animal.level().random.nextGaussian() * 0.02D);
     }
 
     @Override
@@ -150,4 +150,5 @@ public class AnimalEffect implements IDrainSpotEffect {
     public ResourceLocation getName() {
         return AnimalEffect.NAME;
     }
+
 }

@@ -20,6 +20,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
@@ -85,10 +86,9 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        if (!levelIn.isClientSide) {
-            var tile = levelIn.getBlockEntity(pos);
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (!level.isClientSide) {
+            var tile = level.getBlockEntity(pos);
             if (tile instanceof BlockEntityEnderCrate crate && crate.canOpen() && crate.canUseRightNow(2500)) {
                 crate.drainAura(2500);
                 player.openMenu(crate, pos);
@@ -98,9 +98,8 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter levelIn, List<Component> tooltip, TooltipFlag flagIn) {
-        BlockEnderCrate.addEnderNameInfo(stack, tooltip);
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        BlockEnderCrate.addEnderNameInfo(stack, tooltipComponents);
     }
 
     @Override
@@ -122,9 +121,9 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().cubeBottomTop(this.getBaseName(),
-                generator.modLoc("block/" + this.getBaseName()),
-                generator.modLoc("block/" + this.getBaseName() + "_bottom"),
-                generator.modLoc("block/" + this.getBaseName() + "_top")));
+            generator.modLoc("block/" + this.getBaseName()),
+            generator.modLoc("block/" + this.getBaseName() + "_bottom"),
+            generator.modLoc("block/" + this.getBaseName() + "_top")));
     }
 
     @Override

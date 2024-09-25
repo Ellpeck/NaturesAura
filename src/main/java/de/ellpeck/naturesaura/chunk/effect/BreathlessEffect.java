@@ -8,6 +8,7 @@ import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.potion.ModPotions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -21,7 +22,7 @@ import net.minecraft.world.phys.AABB;
 
 public class BreathlessEffect implements IDrainSpotEffect {
 
-    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "breathless");
+    public static final ResourceLocation NAME = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "breathless");
 
     private int amp;
     private AABB bb;
@@ -62,7 +63,7 @@ public class BreathlessEffect implements IDrainSpotEffect {
             return;
         var entities = level.getEntitiesOfClass(LivingEntity.class, this.bb);
         for (var entity : entities)
-            entity.addEffect(new MobEffectInstance(ModPotions.BREATHLESS, 300, this.amp));
+            entity.addEffect(new MobEffectInstance(Holder.direct(ModPotions.BREATHLESS), 300, this.amp));
     }
 
     @Override
@@ -74,4 +75,5 @@ public class BreathlessEffect implements IDrainSpotEffect {
     public ResourceLocation getName() {
         return BreathlessEffect.NAME;
     }
+
 }

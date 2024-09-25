@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.blocks.tiles;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.monster.MagmaCube;
 import net.minecraft.world.entity.monster.Slime;
@@ -52,8 +53,8 @@ public class BlockEntitySlimeSplitGenerator extends BlockEntityImpl implements I
     }
 
     @Override
-    public void writeNBT(CompoundTag compound, SaveType type) {
-        super.writeNBT(compound, type);
+    public void writeNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.writeNBT(compound, type, registries);
         if (type == SaveType.TILE) {
             compound.putInt("timer", this.generationTimer);
             compound.putInt("amount", this.amountToRelease);
@@ -62,8 +63,8 @@ public class BlockEntitySlimeSplitGenerator extends BlockEntityImpl implements I
     }
 
     @Override
-    public void readNBT(CompoundTag compound, SaveType type) {
-        super.readNBT(compound, type);
+    public void readNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.readNBT(compound, type, registries);
         if (type == SaveType.TILE) {
             this.generationTimer = compound.getInt("timer");
             this.amountToRelease = compound.getInt("amount");

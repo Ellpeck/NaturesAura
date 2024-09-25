@@ -8,6 +8,7 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,9 +19,9 @@ import java.util.Map;
 public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBlockEntity {
 
     private static final Map<IAuraType, Integer> TIMES = ImmutableMap.<IAuraType, Integer>builder()
-            .put(NaturesAuraAPI.TYPE_OVERWORLD, 20)
-            .put(NaturesAuraAPI.TYPE_NETHER, 20 * 60)
-            .put(NaturesAuraAPI.TYPE_END, 20 * 60 * 60).build();
+        .put(NaturesAuraAPI.TYPE_OVERWORLD, 20)
+        .put(NaturesAuraAPI.TYPE_NETHER, 20 * 60)
+        .put(NaturesAuraAPI.TYPE_END, 20 * 60 * 60).build();
     public final ItemStackHandlerNA itemHandler = new ItemStackHandlerNA(1, this, true) {
         @Override
         protected boolean canInsert(ItemStack stack, int slot) {
@@ -56,10 +57,10 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
             if (this.level.getGameTime() % 8 == 0) {
                 var color = ItemAuraBottle.getType(this.itemHandler.getStackInSlot(0)).getColor();
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        this.worldPosition.getX() + 1 / 16F + this.level.random.nextFloat() * 14 / 16F,
-                        this.worldPosition.getY() + 1 / 16F + this.level.random.nextFloat() * 14 / 16F,
-                        this.worldPosition.getZ() + 1 / 16F + this.level.random.nextFloat() * 14 / 16F,
-                        0, 0, 0, color, 1, 80 + this.level.random.nextInt(50), 0, false, true);
+                    this.worldPosition.getX() + 1 / 16F + this.level.random.nextFloat() * 14 / 16F,
+                    this.worldPosition.getY() + 1 / 16F + this.level.random.nextFloat() * 14 / 16F,
+                    this.worldPosition.getZ() + 1 / 16F + this.level.random.nextFloat() * 14 / 16F,
+                    0, 0, 0, color, 1, 80 + this.level.random.nextInt(50), 0, false, true);
             }
             return;
         }
@@ -98,20 +99,21 @@ public class BlockEntityAuraTimer extends BlockEntityImpl implements ITickableBl
     }
 
     @Override
-    public void writeNBT(CompoundTag compound, SaveType type) {
-        super.writeNBT(compound, type);
+    public void writeNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.writeNBT(compound, type, registries);
         if (type != SaveType.BLOCK) {
-            compound.put("items", this.itemHandler.serializeNBT());
+            compound.put("items", this.itemHandler.serializeNBT(registries));
             compound.putInt("timer", this.timer);
         }
     }
 
     @Override
-    public void readNBT(CompoundTag compound, SaveType type) {
-        super.readNBT(compound, type);
+    public void readNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
+        super.readNBT(compound, type, registries);
         if (type != SaveType.BLOCK) {
-            this.itemHandler.deserializeNBT(compound.getCompound("items"));
+            this.itemHandler.deserializeNBT(registries, compound.getCompound("items"));
             this.timer = compound.getInt("timer");
         }
     }
+
 }

@@ -9,7 +9,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.LongTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -23,10 +22,9 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.common.util.ITeleporter;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,8 +55,8 @@ public class EntityMoverMinecart extends Minecart {
 
         if (!this.spotOffsets.isEmpty() && this.level().getGameTime() % 10 == 0)
             PacketHandler.sendToAllAround(this.level(), pos, 32, new PacketParticles(
-                    (float) this.getX(), (float) this.getY(), (float) this.getZ(), PacketParticles.Type.MOVER_CART,
-                    Mth.floor(this.getDeltaMovement().x * 100F), Mth.floor(this.getDeltaMovement().y * 100F), Mth.floor(this.getDeltaMovement().z * 100F)));
+                (float) this.getX(), (float) this.getY(), (float) this.getZ(), PacketParticles.Type.MOVER_CART,
+                Mth.floor(this.getDeltaMovement().x * 100F), Mth.floor(this.getDeltaMovement().y * 100F), Mth.floor(this.getDeltaMovement().z * 100F)));
 
         if (pos.distSqr(this.lastPosition) < 8 * 8)
             return;
@@ -113,8 +111,8 @@ public class EntityMoverMinecart extends Minecart {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
-        var compound = super.serializeNBT();
+    protected void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
         compound.putBoolean("active", this.isActive);
         compound.putLong("last_pos", this.lastPosition.asLong());
 
@@ -122,12 +120,11 @@ public class EntityMoverMinecart extends Minecart {
         for (var offset : this.spotOffsets)
             list.add(LongTag.valueOf(offset.asLong()));
         compound.put("offsets", list);
-        return compound;
     }
 
     @Override
-    public void deserializeNBT(CompoundTag compound) {
-        super.deserializeNBT(compound);
+    protected void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
         this.isActive = compound.getBoolean("active");
         this.lastPosition = BlockPos.of(compound.getLong("last_pos"));
 
@@ -137,10 +134,9 @@ public class EntityMoverMinecart extends Minecart {
             this.spotOffsets.add(BlockPos.of(((LongTag) base).getAsLong()));
     }
 
-    @Nullable
     @Override
-    public Entity changeDimension(ServerLevel destination, ITeleporter teleporter) {
-        var entity = super.changeDimension(destination, teleporter);
+    public @org.jetbrains.annotations.Nullable Entity changeDimension(DimensionTransition transition) {
+        var entity = super.changeDimension(transition);
         if (entity instanceof EntityMoverMinecart) {
             var pos = entity.blockPosition();
             this.moveAura(this.level(), this.lastPosition, entity.level(), pos);
@@ -179,4 +175,5 @@ public class EntityMoverMinecart extends Minecart {
     public InteractionResult interact(Player p_38483_, InteractionHand p_38484_) {
         return InteractionResult.PASS;
     }
+
 }

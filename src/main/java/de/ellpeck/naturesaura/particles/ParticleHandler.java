@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 import java.util.function.Supplier;
@@ -26,15 +27,10 @@ public final class ParticleHandler {
     public static final ParticleRenderType MAGIC = new ParticleRenderType() {
 
         @Override
-        public void begin(BufferBuilder buffer, TextureManager textureManager) {
+        public @Nullable BufferBuilder begin(Tesselator tesselator, TextureManager textureManager) {
             ParticleHandler.setupRendering();
             RenderSystem.enableDepthTest();
-            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
-        }
-
-        @Override
-        public void end(Tesselator tessellator) {
-            tessellator.end();
+            return tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
         }
 
         @Override
@@ -45,15 +41,10 @@ public final class ParticleHandler {
 
     public static final ParticleRenderType MAGIC_NO_DEPTH = new ParticleRenderType() {
         @Override
-        public void begin(BufferBuilder buffer, TextureManager textureManager) {
+        public @Nullable BufferBuilder begin(Tesselator tesselator, TextureManager textureManager) {
             ParticleHandler.setupRendering();
             RenderSystem.disableDepthTest();
-            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
-        }
-
-        @Override
-        public void end(Tesselator tessellator) {
-            tessellator.end();
+            return tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
         }
 
         @Override
@@ -73,8 +64,8 @@ public final class ParticleHandler {
                 if (ModConfig.instance.respectVanillaParticleSettings.get()) {
                     var setting = mc.options.particles().get();
                     if (setting != ParticleStatus.ALL &&
-                            (setting != ParticleStatus.DECREASED || mc.level.random.nextInt(3) != 0) &&
-                            (setting != ParticleStatus.MINIMAL || mc.level.random.nextInt(10) != 0))
+                        (setting != ParticleStatus.DECREASED || mc.level.random.nextInt(3) != 0) &&
+                        (setting != ParticleStatus.MINIMAL || mc.level.random.nextInt(10) != 0))
                         return;
                 }
                 double setting = ModConfig.instance.particleAmount.get();
@@ -94,4 +85,5 @@ public final class ParticleHandler {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, ParticleMagic.TEXTURE);
     }
+
 }

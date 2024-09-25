@@ -19,7 +19,7 @@ import net.minecraft.world.phys.AABB;
 
 public class CacheRechargeEffect implements IDrainSpotEffect {
 
-    public static final ResourceLocation NAME = new ResourceLocation(NaturesAura.MOD_ID, "cache_recharge");
+    public static final ResourceLocation NAME = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "cache_recharge");
 
     private int amount;
     private AABB bb;
@@ -77,4 +77,5 @@ public class CacheRechargeEffect implements IDrainSpotEffect {
     public ResourceLocation getName() {
         return CacheRechargeEffect.NAME;
     }
+
 }

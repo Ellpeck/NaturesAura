@@ -15,7 +15,7 @@ public class ProcessorAnimalSpawner implements IComponentProcessor {
 
     @Override
     public void setup(Level level, IVariableProvider provider) {
-        this.recipe = PatchouliCompat.getRecipe("animal_spawner", provider.get("recipe").asString());
+        this.recipe = PatchouliCompat.getRecipe("animal_spawner", provider.get("recipe", level.registryAccess()).asString());
     }
 
     @Override
@@ -24,12 +24,12 @@ public class ProcessorAnimalSpawner implements IComponentProcessor {
             return null;
         if (key.startsWith("input")) {
             var id = Integer.parseInt(key.substring(5)) - 1;
-            return this.recipe.ingredients.size() > id ? PatchouliCompat.ingredientVariable(this.recipe.ingredients.get(id)) : null;
+            return this.recipe.ingredients.size() > id ? PatchouliCompat.ingredientVariable(this.recipe.ingredients.get(id), level.registryAccess()) : null;
         } else {
             return switch (key) {
-                case "name" -> IVariable.wrap(this.recipe.entity.getDescription().getString());
-                case "entity" -> IVariable.wrap(BuiltInRegistries.ENTITY_TYPE.getKey(this.recipe.entity).toString());
-                case "egg" -> IVariable.from(new ItemStack(SpawnEggItem.byId(this.recipe.entity)));
+                case "name" -> IVariable.wrap(this.recipe.entity.getDescription().getString(), level.registryAccess());
+                case "entity" -> IVariable.wrap(BuiltInRegistries.ENTITY_TYPE.getKey(this.recipe.entity).toString(), level.registryAccess());
+                case "egg" -> IVariable.from(new ItemStack(SpawnEggItem.byId(this.recipe.entity)), level.registryAccess());
                 default -> null;
             };
         }

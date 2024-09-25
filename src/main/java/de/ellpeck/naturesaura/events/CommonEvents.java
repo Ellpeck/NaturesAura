@@ -19,13 +19,14 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.level.ChunkWatchEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -65,12 +66,12 @@ public class CommonEvents {
 
     @SubscribeEvent
     @SuppressWarnings("unchecked")
-    public void onLevelTick(TickEvent.LevelTickEvent event) {
-        if (!event.level.isClientSide && event.phase == TickEvent.Phase.END) {
-            if (event.level.getGameTime() % 20 == 0) {
-                event.level.getProfiler().push(NaturesAura.MOD_ID + ":onLevelTick");
+    public void onLevelTick(LevelTickEvent.Post event) {
+        if (!event.getLevel().isClientSide) {
+            if (event.getLevel().getGameTime() % 20 == 0) {
+                event.getLevel().getProfiler().push(NaturesAura.MOD_ID + ":onLevelTick");
                 try {
-                    var manager = ((ServerChunkCache) event.level.getChunkSource()).chunkMap;
+                    var manager = ((ServerChunkCache) event.getLevel().getChunkSource()).chunkMap;
                     var chunks = (Iterable<ChunkHolder>) CommonEvents.GET_LOADED_CHUNKS_METHOD.invoke(manager);
                     for (var holder : chunks) {
                         var chunk = holder.getTickingChunk();
@@ -83,27 +84,27 @@ public class CommonEvents {
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     NaturesAura.LOGGER.fatal(e);
                 }
-                event.level.getProfiler().pop();
+                event.getLevel().getProfiler().pop();
             }
         }
     }
 
     @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (!event.player.level().isClientSide && event.phase == TickEvent.Phase.END) {
-            if (event.player.level().getGameTime() % 10 == 0) {
-                var pending = CommonEvents.PENDING_AURA_CHUNKS.get(event.player.getUUID());
-                pending.removeIf(p -> this.handleChunkWatchDeferred(event.player, p));
+    public void onPlayerTick(PlayerTickEvent.Post event) {
+        if (!event.getEntity().level().isClientSide) {
+            if (event.getEntity().level().getGameTime() % 10 == 0) {
+                var pending = CommonEvents.PENDING_AURA_CHUNKS.get(event.getEntity().getUUID());
+                pending.removeIf(p -> this.handleChunkWatchDeferred(event.getEntity(), p));
             }
 
-            if (event.player.level().getGameTime() % 200 != 0)
+            if (event.getEntity().level().getGameTime() % 200 != 0)
                 return;
 
-            var aura = IAuraChunk.triangulateAuraInArea(event.player.level(), event.player.blockPosition(), 25);
+            var aura = IAuraChunk.triangulateAuraInArea(event.getEntity().level(), event.getEntity().blockPosition(), 25);
             if (aura <= 0)
-                Helper.addAdvancement(event.player, new ResourceLocation(NaturesAura.MOD_ID, "negative_imbalance"), "triggered_in_code");
+                Helper.addAdvancement(event.getEntity(), ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "negative_imbalance"), "triggered_in_code");
             else if (aura >= 1500000)
-                Helper.addAdvancement(event.player, new ResourceLocation(NaturesAura.MOD_ID, "positive_imbalance"), "triggered_in_code");
+                Helper.addAdvancement(event.getEntity(), ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "positive_imbalance"), "triggered_in_code");
         }
     }
 

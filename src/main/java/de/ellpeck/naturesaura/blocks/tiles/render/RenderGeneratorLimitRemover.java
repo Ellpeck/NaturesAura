@@ -17,13 +17,14 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderGeneratorLimitRemover implements BlockEntityRenderer<BlockEntityGeneratorLimitRemover> {
 
-    private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/generator_limit_remover_glint.png");
+    private static final ResourceLocation RES = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "textures/models/generator_limit_remover_glint.png");
     private final ModelLimitRemoverGlint model = new ModelLimitRemoverGlint();
 
     public RenderGeneratorLimitRemover(BlockEntityRendererProvider.Context context) {
@@ -46,7 +47,7 @@ public class RenderGeneratorLimitRemover implements BlockEntityRenderer<BlockEnt
         stack.translate(-0.002F + xOff, 1 + 0.002F + yOff, 1 + 0.002F + zOff);
         stack.mulPose(Axis.XP.rotationDegrees(180F));
         stack.scale(1.004F, 1.004F, 1.004F);
-        model.renderToBuffer(stack, buffer.getBuffer(model.renderType(texture)), brightness, combinedOverlayIn, 1, 1, 1, alpha * maxAlpha);
+        model.renderToBuffer(stack, buffer.getBuffer(model.renderType(texture)), brightness, combinedOverlayIn, FastColor.ARGB32.colorFromFloat(1, 1, 1, alpha * maxAlpha));
         stack.popPose();
     }
 
@@ -63,8 +64,10 @@ public class RenderGeneratorLimitRemover implements BlockEntityRenderer<BlockEnt
         }
 
         @Override
-        public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-            this.model.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
+            this.model.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
         }
+
     }
+
 }

@@ -18,11 +18,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class RenderMoverMinecart extends MinecartRenderer<EntityMoverMinecart> {
 
-    private static final ResourceLocation RES = new ResourceLocation(NaturesAura.MOD_ID, "textures/models/mover_cart.png");
+    private static final ResourceLocation RES = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "textures/models/mover_cart.png");
 
     public RenderMoverMinecart(EntityRendererProvider.Context p_174300_) {
         super(p_174300_, ModelLayers.MINECART);
@@ -36,7 +37,7 @@ public class RenderMoverMinecart extends MinecartRenderer<EntityMoverMinecart> {
         matrixStackIn.translate(0, 22 / 16F, 0);
         matrixStackIn.translate(0, 0, 1);
         matrixStackIn.mulPose(Axis.XP.rotationDegrees(180));
-        this.model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(this.model.renderType(RenderMoverMinecart.RES)), packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        this.model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(this.model.renderType(RenderMoverMinecart.RES)), packedLightIn, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(1, 1, 1, 1));
         matrixStackIn.popPose();
     }
 
@@ -53,8 +54,10 @@ public class RenderMoverMinecart extends MinecartRenderer<EntityMoverMinecart> {
         }
 
         @Override
-        public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-            this.model.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
+            this.model.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
         }
+
     }
+
 }

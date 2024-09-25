@@ -3,8 +3,8 @@ package de.ellpeck.naturesaura.enchant;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 public class AuraMendingEnchantment extends ModEnchantment {

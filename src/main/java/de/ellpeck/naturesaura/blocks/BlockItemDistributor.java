@@ -4,7 +4,6 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntityItemDistributor;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -19,14 +18,13 @@ public class BlockItemDistributor extends BlockContainerImpl implements ICustomB
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public InteractionResult use(BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (!player.isShiftKeyDown())
             return InteractionResult.FAIL;
-        var tile = levelIn.getBlockEntity(pos);
+        var tile = level.getBlockEntity(pos);
         if (!(tile instanceof BlockEntityItemDistributor))
             return InteractionResult.FAIL;
-        if (!levelIn.isClientSide) {
+        if (!level.isClientSide) {
             var distributor = (BlockEntityItemDistributor) tile;
             distributor.isRandomMode = !distributor.isRandomMode;
             distributor.sendToClients();
@@ -37,8 +35,9 @@ public class BlockItemDistributor extends BlockContainerImpl implements ICustomB
     @Override
     public void generateCustomBlockState(BlockStateGenerator generator) {
         generator.simpleBlock(this, generator.models().cubeBottomTop(this.getBaseName(),
-                generator.modLoc("block/" + this.getBaseName()),
-                generator.modLoc("block/" + this.getBaseName() + "_bottom"),
-                generator.modLoc("block/" + this.getBaseName() + "_top")));
+            generator.modLoc("block/" + this.getBaseName()),
+            generator.modLoc("block/" + this.getBaseName() + "_bottom"),
+            generator.modLoc("block/" + this.getBaseName() + "_top")));
     }
+
 }

@@ -10,12 +10,12 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.io.InputStreamReader;
-import java.net.URL;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,10 +30,8 @@ public class SupporterFancyHandler {
     }
 
     @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END)
-            return;
-        var player = event.player;
+    public void onPlayerTick(PlayerTickEvent.Post event) {
+        var player = event.getEntity();
         if (!player.level().isClientSide)
             return;
         if (player.isInvisible() || !player.isModelPartShown(PlayerModelPart.CAPE))
@@ -56,13 +54,13 @@ public class SupporterFancyHandler {
             }
 
             NaturesAuraAPI.instance().spawnMagicParticle(
-                    player.getX() + rand.nextGaussian() * 0.15F,
-                    player.getY() + rand.nextFloat() * 1.8F,
-                    player.getZ() + rand.nextGaussian() * 0.15F,
-                    rand.nextGaussian() * 0.01F,
-                    rand.nextFloat() * 0.01F,
-                    rand.nextGaussian() * 0.01F,
-                    color, rand.nextFloat() + 1F, rand.nextInt(50) + 50, 0F, false, true);
+                player.getX() + rand.nextGaussian() * 0.15F,
+                player.getY() + rand.nextFloat() * 1.8F,
+                player.getZ() + rand.nextGaussian() * 0.15F,
+                rand.nextGaussian() * 0.01F,
+                rand.nextFloat() * 0.01F,
+                rand.nextGaussian() * 0.01F,
+                color, rand.nextFloat() + 1F, rand.nextInt(50) + 50, 0F, false, true);
         }
     }
 
@@ -81,8 +79,8 @@ public class SupporterFancyHandler {
         @Override
         public void run() {
             try {
-                var url = new URL("https://raw.githubusercontent.com/Ellpeck/NaturesAura/main/supporters.json");
-                var reader = new JsonReader(new InputStreamReader(url.openStream()));
+                var url = new URI("https://raw.githubusercontent.com/Ellpeck/NaturesAura/main/supporters.json");
+                var reader = new JsonReader(new InputStreamReader(url.toURL().openStream()));
 
                 var main = JsonParser.parseReader(reader).getAsJsonObject();
                 for (var entry : main.entrySet()) {
@@ -97,5 +95,7 @@ public class SupporterFancyHandler {
                 NaturesAura.LOGGER.warn("Fetching supporter information failed", e);
             }
         }
+
     }
+
 }

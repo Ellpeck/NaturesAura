@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -35,7 +36,8 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
         var below = this.level.getBlockEntity(this.worldPosition.below());
         if (!(below instanceof BlastFurnaceBlockEntity tile))
             return;
-        Recipe<?> recipe = this.level.getRecipeManager().getRecipeFor(BlockEntityFurnaceHeater.getRecipeType(tile), tile, this.level).orElse(null).value();
+        var input = new SingleRecipeInput(tile.getItem(0));
+        Recipe<?> recipe = this.level.getRecipeManager().getRecipeFor(BlockEntityFurnaceHeater.getRecipeType(tile), input, this.level).orElse(null).value();
         if (recipe == null)
             return;
         if (!this.isApplicable(recipe.getIngredients()))
@@ -48,7 +50,7 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
 
         if (this.level.random.nextFloat() > 0.45F) {
             PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
-                    new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.BLAST_FURNACE_BOOSTER, 0));
+                new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.BLAST_FURNACE_BOOSTER, 0));
             return;
         }
 
@@ -67,7 +69,7 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
         IAuraChunk.getAuraChunk(this.level, pos).drainAura(pos, toUse);
 
         PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
-                new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.BLAST_FURNACE_BOOSTER, 1));
+            new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.BLAST_FURNACE_BOOSTER, 1));
     }
 
     private boolean isApplicable(List<Ingredient> ingredients) {

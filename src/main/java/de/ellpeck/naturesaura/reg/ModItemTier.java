@@ -1,27 +1,30 @@
 package de.ellpeck.naturesaura.reg;
 
 import de.ellpeck.naturesaura.items.ModItems;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.util.Lazy;
 
 import java.util.function.Supplier;
 
 public enum ModItemTier implements Tier {
 
-    INFUSED(2, 250, 6, 2, 16, () -> Ingredient.of(ModItems.INFUSED_IRON)),
-    SKY(3, 1500, 8, 3, 12, () -> Ingredient.of(ModItems.SKY_INGOT)),
-    DEPTH(4, 2500, 10, 5, 18, () -> Ingredient.of(ModItems.DEPTH_INGOT));
+    INFUSED(BlockTags.INCORRECT_FOR_IRON_TOOL, 250, 6, 2, 16, () -> Ingredient.of(ModItems.INFUSED_IRON)),
+    SKY(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1500, 8, 3, 12, () -> Ingredient.of(ModItems.SKY_INGOT)),
+    DEPTH(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 2500, 10, 5, 18, () -> Ingredient.of(ModItems.DEPTH_INGOT));
 
-    private final int harvestLevel;
+    private final TagKey<Block> incorrectBlocksForDrops;
     private final int maxUses;
     private final float efficiency;
     private final float attackDamage;
     private final int enchantability;
     private final Lazy<Ingredient> repairMaterial;
 
-    ModItemTier(int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn, int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
-        this.harvestLevel = harvestLevelIn;
+    ModItemTier(TagKey<Block> incorrectBlocksForDrops, int maxUsesIn, float efficiencyIn, float attackDamageIn, int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
+        this.incorrectBlocksForDrops = incorrectBlocksForDrops;
         this.maxUses = maxUsesIn;
         this.efficiency = efficiencyIn;
         this.attackDamage = attackDamageIn;
@@ -45,9 +48,8 @@ public enum ModItemTier implements Tier {
     }
 
     @Override
-    @SuppressWarnings({"deprecation", "RedundantSuppression"})
-    public int getLevel() {
-        return this.harvestLevel;
+    public TagKey<Block> getIncorrectBlocksForDrops() {
+        return this.incorrectBlocksForDrops;
     }
 
     @Override
