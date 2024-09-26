@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " B ",
+        "CEC",
+        " B "
+    ],
+    "key": {
+        "E": {
+            "item": "minecraft:ender_pearl"
+        },
+        "C": {
+            "type": "neoforge:components",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:nether"
+                }
+            },
+            "items": "naturesaura:aura_bottle"
+        },
+        "B": {
+            "item": "minecraft:nether_brick"
+        }
+    },
+    "result": {
+        "id": "naturesaura:fortress_finder"
+    }
+}

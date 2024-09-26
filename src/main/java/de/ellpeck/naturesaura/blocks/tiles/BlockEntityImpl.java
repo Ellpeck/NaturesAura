@@ -47,7 +47,7 @@ public class BlockEntityImpl extends BlockEntity {
 
     public void readNBT(CompoundTag compound, SaveType type, HolderLookup.Provider registries) {
         if (type != SaveType.BLOCK) {
-            super.loadWithComponents(compound, registries);
+            super.loadAdditional(compound, registries);
             this.redstonePower = compound.getInt("redstone");
         }
     }

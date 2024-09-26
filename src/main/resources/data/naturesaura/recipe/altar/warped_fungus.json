@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:brown_mushroom"
+    },
+    "output": {
+        "id": "minecraft:warped_fungus"
+    },
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 30000,
+    "time": 250
+}

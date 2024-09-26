@@ -39,7 +39,7 @@ public class ItemPetReviver extends ItemImpl {
     private static class Events {
 
         @SubscribeEvent
-        public void onEntityTick(EntityTickEvent event) {
+        public void onEntityTick(EntityTickEvent.Post event) {
             var entity = event.getEntity();
             if (entity.level().isClientSide || entity.level().getGameTime() % 20 != 0 || !(entity instanceof TamableAnimal tameable))
                 return;

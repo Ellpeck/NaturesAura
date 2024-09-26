@@ -187,7 +187,7 @@ public class ClientEvents {
         if (mc.getDebugOverlay().showDebugScreen() && (mc.player.isCreative() || mc.player.isSpectator()) && ModConfig.instance.debugLevel.get()) {
             var playerEye = mc.player.getEyePosition(event.getPartialTick().getGameTimeDeltaPartialTick(true));
             var playerView = mc.player.getViewVector(event.getPartialTick().getGameTimeDeltaPartialTick(true)).normalize();
-            var range = mc.gameMode.getDestroyStage();
+            var range = mc.player.blockInteractionRange();
             var builder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
             IAuraChunk.getSpotsInArea(mc.level, mc.player.blockPosition(), 64, (pos, spot) -> {
                 Helper.renderWeirdBox(builder, pos.getX(), pos.getY(), pos.getZ(), 1, 1, 1, spot > 0 ? 0F : 1F, spot > 0 ? 1F : 0F, 0F, 0.35F);
@@ -202,7 +202,9 @@ public class ClientEvents {
                 }
 
             });
-            BufferUploader.drawWithShader(builder.build());
+            var data = builder.build();
+            if (data != null)
+                BufferUploader.drawWithShader(data);
         }
 
         // range visualizer
@@ -224,7 +226,9 @@ public class ClientEvents {
                     continue;
                 this.renderVisualize(builder, (IVisualizable) entity, mc.level, entity.blockPosition());
             }
-            BufferUploader.drawWithShader(builder.build());
+            var data = builder.build();
+            if (data != null)
+                BufferUploader.drawWithShader(data);
             RenderSystem.enableCull();
         }
 

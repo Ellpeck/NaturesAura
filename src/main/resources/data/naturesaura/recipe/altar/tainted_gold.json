@@ -1,0 +1,11 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:gold_ingot"
+    },
+    "output": {
+        "id": "naturesaura:tainted_gold"
+    },
+    "aura": 3000,
+    "time": 300
+}

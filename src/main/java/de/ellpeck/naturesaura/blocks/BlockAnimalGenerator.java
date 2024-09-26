@@ -33,7 +33,7 @@ public class BlockAnimalGenerator extends BlockContainerImpl implements IVisuali
     }
 
     @SubscribeEvent
-    public void onLivingUpdate(EntityTickEvent event) {
+    public void onLivingUpdate(EntityTickEvent.Post event) {
         var entity = event.getEntity();
         if (entity.level().isClientSide || entity.level().getGameTime() % 40 != 0 || !(entity instanceof Animal) || entity instanceof Npc)
             return;

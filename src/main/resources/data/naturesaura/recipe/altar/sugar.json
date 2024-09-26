@@ -1,0 +1,15 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:sugar_cane"
+    },
+    "output": {
+        "id": "minecraft:sugar",
+        "count": 3
+    },
+    "catalyst": {
+        "item": "naturesaura:crushing_catalyst"
+    },
+    "aura": 3000,
+    "time": 40
+}

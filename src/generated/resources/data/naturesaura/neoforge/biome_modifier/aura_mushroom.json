@@ -1,6 +1,6 @@
 {
   "type": "neoforge:add_features",
-  "biomes": "#forge:is_mushroom",
+  "biomes": "#c:is_mushroom",
   "features": "naturesaura:aura_mushroom",
   "step": "vegetal_decoration"
 }

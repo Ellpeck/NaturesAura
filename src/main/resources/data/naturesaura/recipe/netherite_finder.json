@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " XE",
+        "IRI",
+        "RY "
+    ],
+    "key": {
+        "R": {
+            "item": "naturesaura:ancient_stick"
+        },
+        "I": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "E": {
+            "item": "minecraft:netherite_ingot"
+        },
+        "X": {
+            "item": "minecraft:warped_stem"
+        },
+        "Y": {
+            "item": "minecraft:crimson_stem"
+        }
+    },
+    "result": {
+        "id": "naturesaura:netherite_finder"
+    }
+}

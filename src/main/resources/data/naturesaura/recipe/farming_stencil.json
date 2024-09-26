@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "WHW",
+        "WDW",
+        "WWW"
+    ],
+    "key": {
+        "W": {
+            "tag": "minecraft:planks"
+        },
+        "D": {
+            "item": "minecraft:dirt"
+        },
+        "H": {
+            "item": "naturesaura:infused_iron_hoe"
+        }
+    },
+    "result": {
+        "id": "naturesaura:farming_stencil"
+    }
+}

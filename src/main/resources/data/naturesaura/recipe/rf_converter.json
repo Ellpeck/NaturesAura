@@ -1,0 +1,34 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "RWR",
+        "ITI",
+        "ROR"
+    ],
+    "key": {
+        "T": {
+            "item": "naturesaura:conversion_catalyst"
+        },
+        "R": {
+            "item": "minecraft:redstone_block"
+        },
+        "I": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "W": {
+            "item": "naturesaura:token_fear"
+        },
+        "O": {
+            "item": "naturesaura:token_anger"
+        }
+    },
+    "result": {
+        "id": "naturesaura:rf_converter"
+    },
+    "conditions": [
+        {
+            "type": "naturesaura:enabled",
+            "config": "rfConverter"
+        }
+    ]
+}

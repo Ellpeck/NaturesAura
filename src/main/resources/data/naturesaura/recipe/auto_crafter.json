@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "AWA",
+        "ACA",
+        "ASA"
+    ],
+    "key": {
+        "C": {
+            "item": "minecraft:crafting_table"
+        },
+        "S": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "A": {
+            "item": "naturesaura:ancient_planks"
+        },
+        "W": {
+            "item": "naturesaura:token_joy"
+        }
+    },
+    "result": {
+        "id": "naturesaura:auto_crafter"
+    }
+}

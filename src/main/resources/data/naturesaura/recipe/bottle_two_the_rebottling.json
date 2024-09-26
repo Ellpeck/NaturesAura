@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:glass_bottle"
+        },
+        {
+            "tag": "minecraft:planks"
+        }
+    ],
+    "result": {
+        "id": "naturesaura:bottle_two_the_rebottling"
+    }
+}

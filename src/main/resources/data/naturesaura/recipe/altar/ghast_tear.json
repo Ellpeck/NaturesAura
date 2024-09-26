@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:soul_soil"
+    },
+    "output": {
+        "id": "minecraft:ghast_tear"
+    },
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 90000,
+    "time": 300
+}

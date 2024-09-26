@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "W",
+        "W"
+    ],
+    "key": {
+        "W": {
+            "item": "naturesaura:ancient_slab"
+        }
+    },
+    "result": {
+        "id": "naturesaura:ancient_stick",
+        "count": 2
+    }
+}

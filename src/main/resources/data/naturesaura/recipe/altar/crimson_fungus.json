@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:red_mushroom"
+    },
+    "output": {
+        "id": "minecraft:crimson_fungus"
+    },
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 30000,
+    "time": 250
+}

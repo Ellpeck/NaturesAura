@@ -1,0 +1,34 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "NJS",
+        "ISI",
+        "SWN"
+    ],
+    "key": {
+        "S": {
+            "item": "minecraft:slime_block"
+        },
+        "J": {
+            "item": "naturesaura:token_joy"
+        },
+        "W": {
+            "item": "naturesaura:token_sorrow"
+        },
+        "N": {
+            "type": "neoforge:components",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:nether"
+                }
+            },
+            "items": "naturesaura:aura_bottle"
+        },
+        "I": {
+            "item": "naturesaura:tainted_gold"
+        }
+    },
+    "result": {
+        "id": "naturesaura:slime_split_generator"
+    }
+}

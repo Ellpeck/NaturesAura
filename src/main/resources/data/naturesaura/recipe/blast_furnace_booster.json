@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "CCC",
+        "THT",
+        "IBI"
+    ],
+    "key": {
+        "H": {
+            "item": "naturesaura:furnace_heater"
+        },
+        "B": {
+            "item": "minecraft:blast_furnace"
+        },
+        "T": {
+            "item": "naturesaura:token_terror"
+        },
+        "C": {
+            "item": "minecraft:cobblestone"
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        }
+    },
+    "result": {
+        "id": "naturesaura:blast_furnace_booster"
+    }
+}

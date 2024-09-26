@@ -1,0 +1,11 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:iron_block"
+    },
+    "output": {
+        "id": "naturesaura:infused_iron_block"
+    },
+    "aura": 135000,
+    "time": 700
+}

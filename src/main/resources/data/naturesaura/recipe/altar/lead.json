@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:string"
+    },
+    "output": {
+        "id": "minecraft:lead"
+    },
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 10000,
+    "time": 50
+}

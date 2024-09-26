@@ -1,0 +1,34 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "SFS",
+        "GIG",
+        "TLJ"
+    ],
+    "key": {
+        "F": {
+            "item": "minecraft:firework_rocket"
+        },
+        "G": {
+            "item": "minecraft:gunpowder"
+        },
+        "S": {
+            "item": "naturesaura:infused_stone"
+        },
+        "T": {
+            "item": "naturesaura:token_rage"
+        },
+        "J": {
+            "item": "naturesaura:token_joy"
+        },
+        "I": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "L": {
+            "item": "minecraft:lightning_rod"
+        }
+    },
+    "result": {
+        "id": "naturesaura:firework_generator"
+    }
+}

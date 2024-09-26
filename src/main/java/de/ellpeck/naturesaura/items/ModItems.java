@@ -2,7 +2,7 @@ package de.ellpeck.naturesaura.items;
 
 import net.minecraft.world.item.Item;
 
-@SuppressWarnings("NonConstantFieldWithUpperCaseName")
+@SuppressWarnings({"NonConstantFieldWithUpperCaseName", "FieldNamingConvention"})
 public final class ModItems {
 
     public static Item INFUSED_IRON_PICKAXE;
@@ -75,4 +75,5 @@ public final class ModItems {
     public static Item DEPTH_CHEST;
     public static Item DEPTH_PANTS;
     public static Item DEPTH_SHOES;
+
 }

@@ -1,0 +1,30 @@
+{
+    "type": "naturesaura:tree_ritual",
+    "ingredients": [
+        {
+            "item": "naturesaura:gold_powder"
+        },
+        {
+            "item": "naturesaura:gold_powder"
+        },
+        {
+            "item": "naturesaura:sky_ingot"
+        },
+        {
+            "item": "minecraft:wheat"
+        }
+    ],
+    "sapling": {
+        "item": "minecraft:oak_sapling"
+    },
+    "output": {
+        "components": {
+            "naturesaura:effect_powder_data": {
+                "effect": "naturesaura:plant_boost"
+            }
+        },
+        "id": "naturesaura:effect_powder",
+        "count": 24
+    },
+    "time": 400
+}

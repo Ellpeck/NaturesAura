@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:crimson_fungus"
+    },
+    "output": {
+        "id": "minecraft:nether_wart"
+    },
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 30000,
+    "time": 250
+}

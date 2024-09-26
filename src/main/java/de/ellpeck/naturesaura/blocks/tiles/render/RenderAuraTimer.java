@@ -42,7 +42,7 @@ public class RenderAuraTimer implements BlockEntityRenderer<BlockEntityAuraTimer
         var r = (type.getColor() >> 16 & 255) / 255F;
         var g = (type.getColor() >> 8 & 255) / 255F;
         var b = (type.getColor() & 255) / 255F;
-        this.model.renderToBuffer(stack, buffer.getBuffer(this.model.renderType(RenderAuraTimer.RES)), combinedLightIn, combinedOverlayIn, FastColor.ARGB32.colorFromFloat(r, g, b, 0.75F));
+        this.model.renderToBuffer(stack, buffer.getBuffer(this.model.renderType(RenderAuraTimer.RES)), combinedLightIn, combinedOverlayIn, FastColor.ARGB32.colorFromFloat(0.75F, r, g, b));
         stack.popPose();
 
     }

@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:blackstone"
+    },
+    "output": {
+        "id": "minecraft:gilded_blackstone"
+    },
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 50000,
+    "time": 300
+}

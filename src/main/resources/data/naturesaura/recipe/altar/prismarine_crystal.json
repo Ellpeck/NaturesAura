@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:prismarine_shard"
+    },
+    "output": {
+        "id": "minecraft:prismarine_crystals"
+    },
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 55000,
+    "time": 200
+}

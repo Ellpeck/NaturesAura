@@ -1,6 +1,6 @@
 {
     "name": "This Book",
-    "icon": "patchouli:guide_book{'patchouli:book':'naturesaura:book'}",
+    "icon": "patchouli:guide_book[patchouli:book='naturesaura:book']",
     "category": "naturesaura:intro",
     "priority": true,
     "pages": [

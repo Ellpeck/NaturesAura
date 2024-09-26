@@ -1,0 +1,30 @@
+{
+    "type": "naturesaura:tree_ritual",
+    "ingredients": [
+        {
+            "item": "naturesaura:gold_brick"
+        },
+        {
+            "item": "naturesaura:infused_stone"
+        },
+        {
+            "item": "minecraft:brewing_stand"
+        },
+        {
+            "item": "naturesaura:sky_ingot"
+        },
+        {
+            "item": "naturesaura:gold_leaf"
+        },
+        {
+            "item": "minecraft:glowstone"
+        }
+    ],
+    "sapling": {
+        "item": "minecraft:jungle_sapling"
+    },
+    "output": {
+        "id": "naturesaura:conversion_catalyst"
+    },
+    "time": 600
+}

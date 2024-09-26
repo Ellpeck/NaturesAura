@@ -1,0 +1,15 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "I"
+    ],
+    "key": {
+        "I": {
+            "item": "naturesaura:depth_ingot_block"
+        }
+    },
+    "result": {
+        "id": "naturesaura:depth_ingot",
+        "count": 9
+    }
+}

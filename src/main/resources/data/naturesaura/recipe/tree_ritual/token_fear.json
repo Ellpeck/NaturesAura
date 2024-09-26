@@ -1,0 +1,37 @@
+{
+    "type": "naturesaura:tree_ritual",
+    "ingredients": [
+        {
+            "type": "neoforge:components",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:nether"
+                }
+            },
+            "items": "naturesaura:aura_bottle"
+        },
+        {
+            "item": "naturesaura:gold_leaf"
+        },
+        {
+            "item": "minecraft:rotten_flesh"
+        },
+        {
+            "item": "minecraft:feather"
+        },
+        {
+            "item": "minecraft:bone"
+        },
+        {
+            "item": "minecraft:soul_sand"
+        }
+    ],
+    "sapling": {
+        "item": "minecraft:oak_sapling"
+    },
+    "output": {
+        "id": "naturesaura:token_fear",
+        "count": 2
+    },
+    "time": 200
+}

@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "GIG",
+        "GPG",
+        "GEG"
+    ],
+    "key": {
+        "G": {
+            "item": "minecraft:glass"
+        },
+        "I": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "P": {
+            "item": "minecraft:piston"
+        },
+        "E": {
+            "item": "naturesaura:token_rage"
+        }
+    },
+    "result": {
+        "id": "naturesaura:field_creator",
+        "count": 2
+    }
+}

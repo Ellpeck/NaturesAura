@@ -1,0 +1,15 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "L"
+    ],
+    "key": {
+        "L": {
+            "item": "naturesaura:gold_leaf"
+        }
+    },
+    "result": {
+        "id": "naturesaura:gold_powder",
+        "count": 2
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "SIS",
+        "IBI",
+        "SIS"
+    ],
+    "key": {
+        "S": {
+            "item": "naturesaura:infused_stone"
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        },
+        "B": {
+            "item": "minecraft:bucket"
+        }
+    },
+    "result": {
+        "id": "naturesaura:aura_cache"
+    }
+}

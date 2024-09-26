@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:arrow"
+    },
+    "output": {
+        "id": "minecraft:spectral_arrow"
+    },
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 10000,
+    "time": 50
+}

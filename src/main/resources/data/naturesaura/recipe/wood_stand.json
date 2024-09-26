@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "L",
+        "W"
+    ],
+    "key": {
+        "W": {
+            "tag": "minecraft:logs"
+        },
+        "L": {
+            "item": "naturesaura:gold_leaf"
+        }
+    },
+    "result": {
+        "id": "naturesaura:wood_stand"
+    }
+}

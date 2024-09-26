@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "S1S",
+        "2I3",
+        "S4S"
+    ],
+    "key": {
+        "S": {
+            "item": "naturesaura:infused_stone"
+        },
+        "1": {
+            "item": "naturesaura:token_euphoria"
+        },
+        "2": {
+            "item": "naturesaura:token_terror"
+        },
+        "3": {
+            "item": "naturesaura:token_rage"
+        },
+        "4": {
+            "item": "naturesaura:token_grief"
+        },
+        "I": {
+            "item": "naturesaura:vacuum_bottle"
+        }
+    },
+    "result": {
+        "id": "naturesaura:lower_limiter"
+    }
+}

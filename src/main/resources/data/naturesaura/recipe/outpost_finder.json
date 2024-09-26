@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " B ",
+        "CEC",
+        " B "
+    ],
+    "key": {
+        "E": {
+            "item": "minecraft:ender_eye"
+        },
+        "C": {
+            "item": "minecraft:tripwire_hook"
+        },
+        "B": {
+            "type": "neoforge:components",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:overworld"
+                }
+            },
+            "items": "naturesaura:aura_bottle"
+        }
+    },
+    "result": {
+        "id": "naturesaura:outpost_finder"
+    }
+}

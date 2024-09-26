@@ -1,0 +1,12 @@
+{
+    "type": "naturesaura:offering",
+    "input": {
+        "item": "naturesaura:infused_iron"
+    },
+    "start_item": {
+        "item": "naturesaura:calling_spirit"
+    },
+    "output": {
+        "id": "naturesaura:sky_ingot"
+    }
+}

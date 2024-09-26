@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:poisonous_potato"
+    },
+    "output": {
+        "id": "minecraft:potato"
+    },
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 10000,
+    "time": 50
+}

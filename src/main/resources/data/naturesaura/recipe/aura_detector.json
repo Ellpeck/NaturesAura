@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "RSR",
+        "SIS",
+        "RSR"
+    ],
+    "key": {
+        "S": {
+            "item": "naturesaura:infused_stone"
+        },
+        "R": {
+            "item": "minecraft:redstone"
+        },
+        "I": {
+            "item": "naturesaura:eye"
+        }
+    },
+    "result": {
+        "id": "naturesaura:aura_detector"
+    }
+}

@@ -1,0 +1,41 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " O ",
+        "GDH",
+        " N "
+    ],
+    "key": {
+        "G": {
+            "item": "naturesaura:infused_iron"
+        },
+        "H": {
+            "item": "naturesaura:tainted_gold"
+        },
+        "O": {
+            "type": "neoforge:components",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:overworld"
+                }
+            },
+            "items": "naturesaura:aura_bottle"
+        },
+        "N": {
+            "type": "neoforge:components",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:nether"
+                }
+            },
+            "items": "naturesaura:aura_bottle"
+        },
+        "D": {
+            "item": "minecraft:diamond"
+        }
+    },
+    "result": {
+        "id": "naturesaura:calling_spirit",
+        "count": 3
+    }
+}

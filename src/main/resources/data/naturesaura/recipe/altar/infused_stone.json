@@ -1,0 +1,11 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:stone"
+    },
+    "output": {
+        "id": "naturesaura:infused_stone"
+    },
+    "aura": 7500,
+    "time": 40
+}

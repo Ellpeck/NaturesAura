@@ -1,0 +1,15 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "WWW"
+    ],
+    "key": {
+        "W": {
+            "item": "naturesaura:ancient_planks"
+        }
+    },
+    "result": {
+        "id": "naturesaura:ancient_slab",
+        "count": 6
+    }
+}

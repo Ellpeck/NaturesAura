@@ -1,6 +1,6 @@
 {
   "type": "neoforge:add_features",
-  "biomes": "#forge:is_sandy",
+  "biomes": "#c:is_sandy",
   "features": "naturesaura:aura_cactus",
   "step": "vegetal_decoration"
 }

@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " B ",
+        "CEC",
+        " B "
+    ],
+    "key": {
+        "E": {
+            "item": "minecraft:ender_eye"
+        },
+        "C": {
+            "item": "minecraft:chorus_fruit"
+        },
+        "B": {
+            "type": "neoforge:components",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:end"
+                }
+            },
+            "items": "naturesaura:aura_bottle"
+        }
+    },
+    "result": {
+        "id": "naturesaura:end_city_finder"
+    }
+}

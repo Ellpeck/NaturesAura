@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "RYB",
+        "ITI",
+        " I "
+    ],
+    "key": {
+        "I": {
+            "item": "naturesaura:infused_iron"
+        },
+        "R": {
+            "tag": "forge:dyes/red"
+        },
+        "Y": {
+            "tag": "forge:dyes/yellow"
+        },
+        "B": {
+            "tag": "forge:dyes/blue"
+        },
+        "T": {
+            "item": "naturesaura:token_euphoria"
+        }
+    },
+    "result": {
+        "id": "naturesaura:color_changer"
+    }
+}

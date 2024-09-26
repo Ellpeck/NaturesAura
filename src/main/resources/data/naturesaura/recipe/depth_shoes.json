@@ -1,0 +1,15 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "A A",
+        "A A"
+    ],
+    "key": {
+        "A": {
+            "item": "naturesaura:depth_ingot"
+        }
+    },
+    "result": {
+        "id": "naturesaura:depth_shoes"
+    }
+}

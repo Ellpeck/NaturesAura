@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "OOO",
+        "OEO",
+        "OOO"
+    ],
+    "key": {
+        "E": {
+            "type": "neoforge:components",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:nether"
+                }
+            },
+            "items": "naturesaura:aura_bottle"
+        },
+        "O": {
+            "item": "minecraft:bone_meal"
+        }
+    },
+    "result": {
+        "id": "naturesaura:crimson_meal",
+        "count": 8
+    }
+}

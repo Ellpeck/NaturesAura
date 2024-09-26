@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "AAA",
+        "ASA"
+    ],
+    "key": {
+        "A": {
+            "item": "naturesaura:infused_iron"
+        },
+        "S": {
+            "item": "naturesaura:ancient_stick"
+        }
+    },
+    "result": {
+        "id": "naturesaura:infused_iron_helmet"
+    }
+}

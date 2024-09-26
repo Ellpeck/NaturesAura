@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "AA",
+        "AS",
+        " S"
+    ],
+    "key": {
+        "A": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "S": {
+            "item": "naturesaura:ancient_stick"
+        }
+    },
+    "result": {
+        "id": "naturesaura:sky_axe"
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "type": "naturesaura:tree_ritual",
+    "ingredients": [
+        {
+            "item": "naturesaura:gold_powder"
+        },
+        {
+            "item": "naturesaura:gold_powder"
+        },
+        {
+            "tag": "forge:ores/diamond"
+        },
+        {
+            "tag": "forge:ores/redstone"
+        }
+    ],
+    "sapling": {
+        "item": "minecraft:oak_sapling"
+    },
+    "output": {
+        "components": {
+            "naturesaura:effect_powder_data": {
+                "effect": "naturesaura:ore_spawn"
+            }
+        },
+        "id": "naturesaura:effect_powder",
+        "count": 4
+    },
+    "time": 400
+}

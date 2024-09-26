@@ -1,0 +1,37 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "MTI",
+        "SOS",
+        "IBM"
+    ],
+    "key": {
+        "O": {
+            "tag": "minecraft:logs"
+        },
+        "S": {
+            "tag": "minecraft:saplings"
+        },
+        "B": {
+            "type": "neoforge:components",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:overworld"
+                }
+            },
+            "items": "naturesaura:aura_bottle"
+        },
+        "M": {
+            "item": "minecraft:bone_meal"
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        },
+        "T": {
+            "item": "naturesaura:token_fear"
+        }
+    },
+    "result": {
+        "id": "naturesaura:oak_generator"
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:soul_soil"
+    },
+    "output": {
+        "id": "minecraft:soul_sand"
+    },
+    "catalyst": {
+        "item": "naturesaura:crushing_catalyst"
+    },
+    "aura": 6000,
+    "time": 40
+}

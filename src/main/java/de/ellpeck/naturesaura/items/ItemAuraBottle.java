@@ -17,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -69,7 +70,7 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
     @Override
     @OnlyIn(Dist.CLIENT)
     public ItemColor getItemColor() {
-        return (stack, tintIndex) -> tintIndex > 0 ? ItemAuraBottle.getType(stack).getColor() : 0xFFFFFF;
+        return (stack, tintIndex) -> tintIndex > 0 ? FastColor.ARGB32.opaque(ItemAuraBottle.getType(stack).getColor()) : 0xFFFFFFFF;
     }
 
     @Override

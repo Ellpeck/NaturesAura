@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "ASA",
+        "AAA",
+        "AAA"
+    ],
+    "key": {
+        "A": {
+            "item": "naturesaura:depth_ingot"
+        },
+        "S": {
+            "item": "naturesaura:ancient_stick"
+        }
+    },
+    "result": {
+        "id": "naturesaura:depth_chest"
+    }
+}

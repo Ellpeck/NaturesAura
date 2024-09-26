@@ -1,0 +1,30 @@
+{
+    "type": "naturesaura:tree_ritual",
+    "ingredients": [
+        {
+            "item": "naturesaura:gold_powder"
+        },
+        {
+            "item": "naturesaura:gold_powder"
+        },
+        {
+            "item": "naturesaura:sky_ingot"
+        },
+        {
+            "item": "minecraft:egg"
+        }
+    ],
+    "sapling": {
+        "item": "minecraft:jungle_sapling"
+    },
+    "output": {
+        "components": {
+            "naturesaura:effect_powder_data": {
+                "effect": "naturesaura:animal"
+            }
+        },
+        "id": "naturesaura:effect_powder",
+        "count": 8
+    },
+    "time": 400
+}

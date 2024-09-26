@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "BSB",
+        "IGI",
+        "BSB"
+    ],
+    "key": {
+        "G": {
+            "item": "minecraft:pumpkin"
+        },
+        "S": {
+            "item": "minecraft:ice"
+        },
+        "B": {
+            "item": "naturesaura:infused_brick"
+        },
+        "I": {
+            "item": "naturesaura:sky_ingot"
+        }
+    },
+    "result": {
+        "id": "naturesaura:snow_creator"
+    }
+}

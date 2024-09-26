@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " I ",
+        "RTR",
+        "SBS"
+    ],
+    "key": {
+        "I": {
+            "item": "naturesaura:token_rage"
+        },
+        "B": {
+            "item": "minecraft:diamond_boots"
+        },
+        "T": {
+            "item": "minecraft:tnt"
+        },
+        "R": {
+            "item": "naturesaura:infused_stone"
+        },
+        "S": {
+            "item": "naturesaura:tainted_gold"
+        }
+    },
+    "result": {
+        "id": "naturesaura:shockwave_creator"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:iron_ingot"
+    },
+    "output": {
+        "id": "naturesaura:infused_iron"
+    },
+    "aura": 15000,
+    "time": 80
+}

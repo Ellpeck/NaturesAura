@@ -1,0 +1,13 @@
+{
+    "type": "naturesaura:offering",
+    "input": {
+        "item": "naturesaura:tainted_gold"
+    },
+    "start_item": {
+        "item": "naturesaura:calling_spirit"
+    },
+    "output": {
+        "id": "naturesaura:sky_ingot",
+        "count": 2
+    }
+}

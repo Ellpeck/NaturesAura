@@ -1,0 +1,34 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "ILI",
+        "SGE",
+        "ILI"
+    ],
+    "key": {
+        "I": {
+            "tag": "forge:ingots/iron"
+        },
+        "L": {
+            "item": "minecraft:glass"
+        },
+        "S": {
+            "item": "naturesaura:token_terror"
+        },
+        "G": {
+            "item": "minecraft:glowstone"
+        },
+        "E": {
+            "type": "neoforge:components",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:end"
+                }
+            },
+            "items": "naturesaura:aura_bottle"
+        }
+    },
+    "result": {
+        "id": "naturesaura:spawn_lamp"
+    }
+}

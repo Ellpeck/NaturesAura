@@ -13,6 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -119,10 +120,10 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
             if (tintIndex > 0) {
                 var color = ItemColorChanger.getStoredColor(stack);
                 if (color != null) {
-                    return color.getFireworkColor();
+                    return FastColor.ARGB32.opaque(color.getFireworkColor());
                 }
             }
-            return 0xFFFFFF;
+            return 0xFFFFFFFF;
         };
     }
 

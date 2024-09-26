@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "IHI",
+        "ICI",
+        " I "
+    ],
+    "key": {
+        "C": {
+            "tag": "forge:chests/wooden"
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        },
+        "H": {
+            "item": "minecraft:hopper"
+        }
+    },
+    "result": {
+        "id": "naturesaura:grated_chute"
+    }
+}

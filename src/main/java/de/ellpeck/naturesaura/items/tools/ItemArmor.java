@@ -80,7 +80,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
         }
 
         @SubscribeEvent
-        public static void update(PlayerTickEvent event) {
+        public static void update(PlayerTickEvent.Post event) {
             var player = event.getEntity();
             var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
             var step = player.getAttribute(Attributes.STEP_HEIGHT);

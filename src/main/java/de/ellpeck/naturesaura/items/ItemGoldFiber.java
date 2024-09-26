@@ -14,7 +14,7 @@ public class ItemGoldFiber extends ItemImpl implements IColorProvidingItem {
 
     @Override
     public ItemColor getItemColor() {
-        return (stack, tintIndex) -> 0xF2FF00;
+        return (stack, tintIndex) -> 0xFFF2FF00;
     }
 
     @Override

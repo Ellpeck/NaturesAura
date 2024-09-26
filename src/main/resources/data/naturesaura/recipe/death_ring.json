@@ -1,0 +1,37 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "TKE",
+        "GSG",
+        "NGN"
+    ],
+    "key": {
+        "G": {
+            "item": "minecraft:gold_ingot"
+        },
+        "S": {
+            "item": "naturesaura:sky_ingot"
+        },
+        "T": {
+            "item": "naturesaura:token_terror"
+        },
+        "E": {
+            "item": "naturesaura:token_euphoria"
+        },
+        "N": {
+            "type": "neoforge:components",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:end"
+                }
+            },
+            "items": "naturesaura:aura_bottle"
+        },
+        "K": {
+            "item": "minecraft:wither_skeleton_skull"
+        }
+    },
+    "result": {
+        "id": "naturesaura:death_ring"
+    }
+}

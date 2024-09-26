@@ -1,0 +1,20 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "type": "neoforge:components",
+        "components": {
+            "naturesaura:aura_bottle_data": {
+                "aura_type": "naturesaura:end"
+            }
+        },
+        "items": "naturesaura:aura_bottle"
+    },
+    "output": {
+        "id": "minecraft:dragon_breath"
+    },
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 20000,
+    "time": 80
+}

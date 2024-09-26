@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "IA ",
+        "AGA",
+        " AS"
+    ],
+    "key": {
+        "A": {
+            "item": "naturesaura:ancient_planks"
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        },
+        "G": {
+            "item": "minecraft:glass"
+        },
+        "S": {
+            "item": "naturesaura:ancient_stick"
+        }
+    },
+    "result": {
+        "id": "naturesaura:range_visualizer"
+    }
+}

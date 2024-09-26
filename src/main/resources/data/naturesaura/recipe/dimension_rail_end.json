@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "IEI",
+        "ISI",
+        "IOI"
+    ],
+    "key": {
+        "E": {
+            "item": "naturesaura:token_rage"
+        },
+        "O": {
+            "type": "neoforge:components",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:end"
+                }
+            },
+            "items": "naturesaura:aura_bottle"
+        },
+        "S": {
+            "tag": "forge:rods/wooden"
+        },
+        "I": {
+            "item": "naturesaura:sky_ingot"
+        }
+    },
+    "result": {
+        "id": "naturesaura:dimension_rail_end"
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:spider_eye"
+    },
+    "output": {
+        "id": "minecraft:fermented_spider_eye"
+    },
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 10000,
+    "time": 50
+}

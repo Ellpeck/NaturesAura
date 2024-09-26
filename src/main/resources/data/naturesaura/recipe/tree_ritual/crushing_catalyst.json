@@ -1,0 +1,27 @@
+{
+    "type": "naturesaura:tree_ritual",
+    "ingredients": [
+        {
+            "item": "naturesaura:gold_brick"
+        },
+        {
+            "item": "naturesaura:infused_stone"
+        },
+        {
+            "item": "minecraft:piston"
+        },
+        {
+            "item": "minecraft:flint"
+        },
+        {
+            "item": "naturesaura:token_anger"
+        }
+    ],
+    "sapling": {
+        "item": "minecraft:oak_sapling"
+    },
+    "output": {
+        "id": "naturesaura:crushing_catalyst"
+    },
+    "time": 600
+}

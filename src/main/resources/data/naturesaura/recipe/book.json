@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:paper"
+        },
+        {
+            "item": "minecraft:paper"
+        },
+        {
+            "item": "minecraft:leather"
+        },
+        {
+            "tag": "minecraft:saplings"
+        }
+    ],
+    "result": {
+        "id": "patchouli:guide_book",
+        "nbt": {
+            "patchouli:book": "naturesaura:book"
+        }
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " O ",
+        "BCB",
+        " N "
+    ],
+    "key": {
+        "C": {
+            "item": "minecraft:clock"
+        },
+        "B": {
+            "item": "naturesaura:infused_brick"
+        },
+        "N": {
+            "item": "naturesaura:token_terror"
+        },
+        "O": {
+            "item": "naturesaura:token_euphoria"
+        }
+    },
+    "result": {
+        "id": "naturesaura:time_changer"
+    }
+}

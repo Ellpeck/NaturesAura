@@ -10,6 +10,7 @@ import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -63,7 +64,7 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem, I
     @Override
     @OnlyIn(Dist.CLIENT)
     public ItemColor getItemColor() {
-        return (stack, tintIndex) -> NaturesAuraAPI.EFFECT_POWDERS.getOrDefault(ItemEffectPowder.getEffect(stack), 0xFFFFFF);
+        return (stack, tintIndex) -> FastColor.ARGB32.opaque(NaturesAuraAPI.EFFECT_POWDERS.getOrDefault(ItemEffectPowder.getEffect(stack), 0xFFFFFF));
     }
 
     public record Data(String effect) {

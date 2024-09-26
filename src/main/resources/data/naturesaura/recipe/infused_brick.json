@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "WW",
+        "WW"
+    ],
+    "key": {
+        "W": {
+            "item": "naturesaura:infused_stone"
+        }
+    },
+    "result": {
+        "id": "naturesaura:infused_brick",
+        "count": 4
+    }
+}

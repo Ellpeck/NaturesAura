@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:altar",
+    "input": {
+        "item": "minecraft:popped_chorus_fruit"
+    },
+    "output": {
+        "id": "minecraft:chorus_flower"
+    },
+    "catalyst": {
+        "item": "naturesaura:conversion_catalyst"
+    },
+    "aura": 15000,
+    "time": 80
+}

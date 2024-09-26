@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "SIS",
+        "FST",
+        "WWW"
+    ],
+    "key": {
+        "S": {
+            "tag": "forge:stone"
+        },
+        "W": {
+            "tag": "minecraft:logs"
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        },
+        "F": {
+            "item": "naturesaura:token_fear"
+        },
+        "T": {
+            "item": "naturesaura:token_sorrow"
+        }
+    },
+    "result": {
+        "id": "naturesaura:offering_table"
+    }
+}

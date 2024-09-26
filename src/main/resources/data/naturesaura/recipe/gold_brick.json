@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:stone_bricks"
+        },
+        {
+            "item": "naturesaura:gold_fiber"
+        }
+    ],
+    "result": {
+        "id": "naturesaura:gold_brick"
+    }
+}

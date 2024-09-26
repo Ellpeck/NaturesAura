@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "CHC",
+        "CDC",
+        "CIC"
+    ],
+    "key": {
+        "D": {
+            "item": "minecraft:dispenser"
+        },
+        "I": {
+            "item": "naturesaura:infused_iron"
+        },
+        "H": {
+            "item": "minecraft:hopper"
+        },
+        "C": {
+            "item": "minecraft:cobblestone"
+        }
+    },
+    "result": {
+        "id": "naturesaura:placer"
+    }
+}

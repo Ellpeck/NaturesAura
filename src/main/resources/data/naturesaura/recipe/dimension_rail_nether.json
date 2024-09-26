@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "IEI",
+        "ISI",
+        "IOI"
+    ],
+    "key": {
+        "E": {
+            "item": "naturesaura:token_terror"
+        },
+        "O": {
+            "type": "neoforge:components",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:nether"
+                }
+            },
+            "items": "naturesaura:aura_bottle"
+        },
+        "S": {
+            "tag": "forge:rods/wooden"
+        },
+        "I": {
+            "item": "naturesaura:tainted_gold"
+        }
+    },
+    "result": {
+        "id": "naturesaura:dimension_rail_nether"
+    }
+}
