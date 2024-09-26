@@ -24,7 +24,6 @@ import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -35,16 +34,22 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
 public class ClientProxy implements IProxy {
 
-    // TODO check ender crate registry functions
     @SubscribeEvent
     public void registerMenuScreens(RegisterMenuScreensEvent event) {
         event.register(ModContainers.ENDER_CRATE, GuiEnderCrate::new);
         event.register(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
+    }
+
+    @SubscribeEvent
+    public void registerRenderLayers(EntityRenderersEvent.AddLayers event) {
+        for (var render : new PlayerRenderer[]{event.getSkin(PlayerSkin.Model.WIDE), event.getSkin(PlayerSkin.Model.SLIM)})
+            render.addLayer(new PlayerLayerTrinkets(render));
     }
 
     @Override
@@ -64,11 +69,6 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void init(FMLCommonSetupEvent event) {
-        var skinMap = Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap();
-        for (var render : new EntityRenderer[]{skinMap.get(PlayerSkin.Model.WIDE), skinMap.get(PlayerSkin.Model.SLIM)}) {
-            if (render instanceof PlayerRenderer living)
-                living.addLayer(new PlayerLayerTrinkets(living));
-        }
         new SupporterFancyHandler();
 
         for (var item : ModRegistry.ALL_ITEMS) {
