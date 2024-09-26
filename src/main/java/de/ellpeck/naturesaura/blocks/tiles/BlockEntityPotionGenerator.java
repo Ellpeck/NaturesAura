@@ -35,7 +35,6 @@ public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITick
                     if (!addedOne) {
                         PotionContents type;
                         try {
-                            // TODO check if this new private value getter works
                             type = (PotionContents) BlockEntityPotionGenerator.POTION_CONTENTS_FIELD.get(cloud);
                         } catch (IllegalAccessException e) {
                             NaturesAura.LOGGER.fatal("Couldn't reflect furnace field", e);

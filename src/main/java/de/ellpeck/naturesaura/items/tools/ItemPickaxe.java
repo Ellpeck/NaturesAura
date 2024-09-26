@@ -87,7 +87,6 @@ public class ItemPickaxe extends PickaxeItem implements IModItem, ICustomItemMod
 
     @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
-        // TODO test depth pickaxe vein mining
         if (stack.getItem() == ModItems.DEPTH_PICKAXE && Helper.isToolEnabled(stack) && level.getBlockState(pos).is(Tags.Blocks.ORES))
             Helper.mineRecursively(level, pos, pos, stack, 5, 5, s -> s.is(Tags.Blocks.ORES));
         return super.mineBlock(stack, level, state, pos, miningEntity);

@@ -118,7 +118,10 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                     var tag = TagKey.create(Registries.BLOCK, ore.tag);
                     if (tag == null)
                         continue;
-                    for (var toPlaceHolder : BuiltInRegistries.BLOCK.getTag(tag).orElseThrow()) {
+                    var values = BuiltInRegistries.BLOCK.getTag(tag);
+                    if (values.isEmpty())
+                        continue;
+                    for (var toPlaceHolder : values.get()) {
                         if (toPlaceHolder == null)
                             continue;
                         var toPlace = toPlaceHolder.value();

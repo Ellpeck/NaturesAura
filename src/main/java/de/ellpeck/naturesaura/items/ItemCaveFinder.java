@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -32,13 +33,8 @@ public class ItemCaveFinder extends ItemImpl {
                     for (var z = -range; z <= range; z++) {
                         var offset = pos.offset(x, y, z);
                         var state = levelIn.getBlockState(offset);
-                        // TODO figure out an entity-independent way of checking if a block is a valid spawn (just checking for air & ground below?)
-/*                        try {
-                            if (!state.getBlock().isValidSpawn(state, levelIn, offset, SpawnPlacements.Type.ON_GROUND, null))
-                                continue;
-                        } catch (Exception e) {
+                        if (!state.isFaceSturdy(levelIn, offset, Direction.UP))
                             continue;
-                        }*/
 
                         var offUp = offset.above();
                         var stateUp = levelIn.getBlockState(offUp);

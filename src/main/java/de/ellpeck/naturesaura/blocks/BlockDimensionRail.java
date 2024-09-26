@@ -19,9 +19,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.item.ItemStack;
@@ -93,7 +91,6 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
         PacketHandler.sendToAllAround(level, pos, 32, new PacketParticles((float) box.minX, (float) box.minY, (float) box.minZ, PacketParticles.Type.DIMENSION_RAIL, (int) ((box.maxX - box.minX) * 100F), (int) ((box.maxY - box.minY) * 100F), (int) ((box.maxZ - box.minZ) * 100F)));
         level.playSound(null, pos, SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1F, 1F);
 
-        // TODO test if this new dimension change works!
         var goalCoords = this.getGoalCoords(level, pos).getCenter();
         cart.changeDimension(new DimensionTransition(level.getServer().getLevel(this.goalDim), goalCoords, cart.getDeltaMovement(), cart.getYRot(), cart.getXRot(), DimensionTransition.PLAY_PORTAL_SOUND));
 

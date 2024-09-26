@@ -42,7 +42,6 @@ public final class ModRecipes {
             Blocks.STONE_BRICK_WALL.defaultBlockState(),
             Blocks.MOSSY_STONE_BRICK_WALL.defaultBlockState());
 
-        // TODO test if these ores still work!
         ModRecipes.ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/coal", 5000);
         ModRecipes.ore(NaturesAuraAPI.NETHER_ORES, "ores/nether/coal", 5000);
         ModRecipes.ore(NaturesAuraAPI.OVERWORLD_ORES, "ores/iron", 3000);
