@@ -4,7 +4,7 @@ import com.google.common.primitives.Ints;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -57,35 +57,33 @@ public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITi
             }
 
             if (this.trackedEntity != null && !this.trackedEntity.isAlive()) {
-                if (this.trackedItem.hasTag()) {
+                if (this.trackedItem.has(DataComponents.FIREWORKS)) {
                     float generateFactor = 0;
                     Set<Integer> usedColors = new HashSet<>();
 
-                    var compound = this.trackedItem.getTag();
-                    var fireworks = compound.getCompound("Fireworks");
+                    var fireworks = this.trackedItem.get(DataComponents.FIREWORKS);
 
-                    var flightTime = fireworks.getInt("Flight");
-                    var explosions = fireworks.getList("Explosions", 10);
+                    var flightTime = fireworks.flightDuration();
+                    var explosions = fireworks.explosions();
                     if (!explosions.isEmpty()) {
                         generateFactor += flightTime;
 
-                        for (var base : explosions) {
-                            var explosion = (CompoundTag) base;
+                        for (var explosion : explosions) {
                             generateFactor += 1.5F;
 
-                            var flicker = explosion.getBoolean("Flicker");
+                            var flicker = explosion.hasTwinkle();
                             if (flicker)
                                 generateFactor += 1;
 
-                            var trail = explosion.getBoolean("Trail");
+                            var trail = explosion.hasTrail();
                             if (trail)
                                 generateFactor += 8;
 
-                            var type = explosion.getByte("Type");
-                            generateFactor += new float[]{0, 1, 0.5F, 20, 0.5F}[type];
+                            var type = explosion.shape();
+                            generateFactor += new float[]{0, 1, 0.5F, 20, 0.5F}[type.getId()];
 
                             Set<Integer> colors = new HashSet<>();
-                            for (var color : explosion.getIntArray("Colors")) {
+                            for (var color : explosion.colors()) {
                                 usedColors.add(color);
                                 colors.add(color);
                             }
@@ -106,8 +104,8 @@ public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITi
                         data.add(this.worldPosition.getZ());
                         data.addAll(usedColors);
                         PacketHandler.sendToAllLoaded(this.level, this.worldPosition, new PacketParticles(
-                                (float) this.trackedEntity.getX(), (float) this.trackedEntity.getY(), (float) this.trackedEntity.getZ(),
-                                PacketParticles.Type.FIREWORK_GEN, Ints.toArray(data)));
+                            (float) this.trackedEntity.getX(), (float) this.trackedEntity.getY(), (float) this.trackedEntity.getZ(),
+                            PacketParticles.Type.FIREWORK_GEN, Ints.toArray(data)));
                     }
                 }
 
@@ -122,7 +120,7 @@ public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITi
                     this.toRelease = 0;
 
                     PacketHandler.sendToAllLoaded(this.level, this.worldPosition,
-                            new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.FLOWER_GEN_AURA_CREATION));
+                        new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.FLOWER_GEN_AURA_CREATION));
                 }
             }
         }
@@ -132,4 +130,5 @@ public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITi
     public boolean wantsLimitRemover() {
         return true;
     }
+
 }

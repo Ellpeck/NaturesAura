@@ -4,7 +4,6 @@ import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModArmorMaterial;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -35,8 +34,8 @@ public class ItemArmor extends ArmorItem implements IModItem {
     private static final Map<ArmorMaterial, Item[]> SETS = new ConcurrentHashMap<>();
     private final String baseName;
 
-    public ItemArmor(String baseName, Holder<ArmorMaterial> materialIn, ArmorItem.Type equipmentSlotIn) {
-        super(materialIn, equipmentSlotIn, new Properties());
+    public ItemArmor(String baseName, ModArmorMaterial materialIn, ArmorItem.Type equipmentSlotIn) {
+        super(materialIn.material, equipmentSlotIn, new Properties());
         this.baseName = baseName;
         ModRegistry.ALL_ITEMS.add(this);
     }
@@ -67,11 +66,11 @@ public class ItemArmor extends ArmorItem implements IModItem {
         public static void onAttack(LivingIncomingDamageEvent event) {
             var entity = event.getEntity();
             if (!entity.level().isClientSide) {
-                if (ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.INFUSED)) {
+                if (ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.INFUSED.material.value())) {
                     var source = event.getSource().getEntity();
                     if (source instanceof LivingEntity)
                         ((LivingEntity) source).addEffect(new MobEffectInstance(MobEffects.WITHER, 40));
-                } else if (ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.DEPTH)) {
+                } else if (ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.DEPTH.material.value())) {
                     for (var other : entity.level().getEntitiesOfClass(LivingEntity.class, new AABB(entity.position(), entity.position()).inflate(2))) {
                         if (other != entity && (!(entity instanceof Player player) || !player.isAlliedTo(other)))
                             other.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 255));
@@ -87,7 +86,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
             var step = player.getAttribute(Attributes.STEP_HEIGHT);
             var key = NaturesAura.MOD_ID + ":sky_equipped";
             var nbt = player.getPersistentData();
-            var equipped = ItemArmor.isFullSetEquipped(player, ModArmorMaterial.SKY);
+            var equipped = ItemArmor.isFullSetEquipped(player, ModArmorMaterial.SKY.material.value());
             if (equipped && !nbt.getBoolean(key)) {
                 // we just equipped it
                 nbt.putBoolean(key, true);

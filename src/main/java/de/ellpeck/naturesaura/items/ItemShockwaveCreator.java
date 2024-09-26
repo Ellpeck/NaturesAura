@@ -2,6 +2,8 @@ package de.ellpeck.naturesaura.items;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.items.tools.ItemArmor;
@@ -11,6 +13,7 @@ import de.ellpeck.naturesaura.reg.ModArmorMaterial;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -37,35 +40,29 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
         if (levelIn.isClientSide || !(entityIn instanceof LivingEntity living))
             return;
         if (!living.onGround()) {
-            var compound = stack.getOrCreateTag();
-            if (compound.getBoolean("air"))
+            if (stack.has(Data.TYPE) && stack.get(Data.TYPE).air)
                 return;
-
-            compound.putBoolean("air", true);
-            compound.putDouble("x", living.getX());
-            compound.putDouble("y", living.getY());
-            compound.putDouble("z", living.getZ());
+            stack.set(Data.TYPE, new Data(true, living.getX(), living.getY(), living.getZ()));
         } else {
-            if (!stack.hasTag())
+            if (!stack.has(Data.TYPE))
                 return;
-            var compound = stack.getTag();
-            if (!compound.getBoolean("air"))
+            var data = stack.get(Data.TYPE);
+            if (!data.air)
                 return;
-
-            compound.putBoolean("air", false);
+            stack.remove(Data.TYPE);
 
             if (!living.isShiftKeyDown())
                 return;
-            if (living.distanceToSqr(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z")) > 0.75F)
+            if (living.distanceToSqr(data.x, data.y, data.z) > 0.75F)
                 return;
             if (living instanceof Player && !NaturesAuraAPI.instance().extractAuraFromPlayer((Player) living, 1000, false))
                 return;
 
-            var infusedSet = ItemArmor.isFullSetEquipped(living, ModArmorMaterial.INFUSED);
+            var infusedSet = ItemArmor.isFullSetEquipped(living, ModArmorMaterial.INFUSED.material.value());
             var range = 5;
             var mobs = levelIn.getEntitiesOfClass(LivingEntity.class, new AABB(
-                    living.getX() - range, living.getY() - 0.5, living.getZ() - range,
-                    living.getX() + range, living.getY() + 0.5, living.getZ() + range));
+                living.getX() - range, living.getY() - 0.5, living.getZ() - range,
+                living.getX() + range, living.getY() + 0.5, living.getZ() + range));
             for (var mob : mobs) {
                 if (!mob.isAlive() || mob == living)
                     continue;
@@ -109,4 +106,17 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
             Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.GROUND, packedLight, OverlayTexture.NO_OVERLAY, matrices, buffer, player.level(), 0);
         }
     }
+
+    public record Data(boolean air, double x, double y, double z) {
+
+        public static final Codec<Data> CODEC = RecordCodecBuilder.create(i -> i.group(
+            Codec.BOOL.fieldOf("air").forGetter(d -> d.air),
+            Codec.DOUBLE.fieldOf("x").forGetter(d -> d.x),
+            Codec.DOUBLE.fieldOf("y").forGetter(d -> d.y),
+            Codec.DOUBLE.fieldOf("z").forGetter(d -> d.z)
+        ).apply(i, Data::new));
+        public static final DataComponentType<Data> TYPE = DataComponentType.<Data>builder().persistent(Data.CODEC).cacheEncoding().build();
+
+    }
+
 }

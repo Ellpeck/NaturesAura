@@ -1,5 +1,7 @@
 package de.ellpeck.naturesaura.items;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.misc.ColoredBlockHelper;
@@ -8,6 +10,7 @@ import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -38,7 +41,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
             if (player.isShiftKeyDown()) {
                 if (stored != color) {
                     level.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                            SoundEvents.BUCKET_FILL, SoundSource.PLAYERS, 0.65F, 1F);
+                        SoundEvents.BUCKET_FILL, SoundSource.PLAYERS, 0.65F, 1F);
                     if (!level.isClientSide)
                         ItemColorChanger.storeColor(stack, color);
                     return true;
@@ -48,7 +51,7 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
                     if (NaturesAuraAPI.instance().extractAuraFromPlayer(player, 1000, level.isClientSide)) {
                         if (firstColor == null) {
                             level.playSound(player, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                                    SoundEvents.BUCKET_EMPTY, SoundSource.PLAYERS, 0.65F, 1F);
+                                SoundEvents.BUCKET_EMPTY, SoundSource.PLAYERS, 0.65F, 1F);
                         }
                         if (!level.isClientSide) {
                             level.setBlockAndUpdate(pos, blocks.get(stored.getId()).defaultBlockState());
@@ -68,28 +71,21 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
     }
 
     public static DyeColor getStoredColor(ItemStack stack) {
-        if (!stack.hasTag()) {
-            return null;
-        } else {
-            var color = stack.getTag().getInt("color");
-            return DyeColor.byId(color);
-        }
+        return stack.has(Data.TYPE) ? DyeColor.byId(stack.get(Data.TYPE).color) : null;
     }
 
     private static void storeColor(ItemStack stack, DyeColor color) {
-        stack.getOrCreateTag().putInt("color", color.getId());
+        var previous = stack.getOrDefault(Data.TYPE, new Data(0, false));
+        stack.set(Data.TYPE, new Data(color.getId(), previous.fill));
     }
 
     public static boolean isFillMode(ItemStack stack) {
-        if (!stack.hasTag()) {
-            return false;
-        } else {
-            return stack.getTag().getBoolean("fill");
-        }
+        return stack.has(Data.TYPE) && stack.get(Data.TYPE).fill;
     }
 
     private static void setFillMode(ItemStack stack, boolean fill) {
-        stack.getOrCreateTag().putBoolean("fill", fill);
+        var previous = stack.getOrDefault(Data.TYPE, new Data(0, false));
+        stack.set(Data.TYPE, new Data(previous.color, fill));
     }
 
     @Override
@@ -134,4 +130,15 @@ public class ItemColorChanger extends ItemImpl implements IColorProvidingItem, I
     public void generateCustomItemModel(ItemModelGenerator generator) {
         // noop
     }
+
+    public record Data(int color, boolean fill) {
+
+        public static final Codec<Data> CODEC = RecordCodecBuilder.create(i -> i.group(
+            Codec.INT.fieldOf("color").forGetter(d -> d.color),
+            Codec.BOOL.fieldOf("fill").forGetter(d -> d.fill)
+        ).apply(i, Data::new));
+        public static final DataComponentType<Data> TYPE = DataComponentType.<Data>builder().persistent(Data.CODEC).cacheEncoding().build();
+
+    }
+
 }

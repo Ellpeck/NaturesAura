@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -44,7 +45,7 @@ public class ItemSword extends SwordItem implements IModItem, ICustomItemModel {
             // this is just a modified copy of Player.attack's sweeping damage code
             var damage = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.75F;
             for (var other : player.level().getEntitiesOfClass(LivingEntity.class, stack.getSweepHitBox(player, target))) {
-                if (other != player && other != target && !player.isAlliedTo(other) && (!(other instanceof ArmorStand stand) || !stand.isMarker()) && player.distanceToSqr(other) < Mth.square(player.getEntityReach())) {
+                if (other != player && other != target && !player.isAlliedTo(other) && (!(other instanceof ArmorStand stand) || !stand.isMarker()) && player.distanceToSqr(other) < Mth.square(player.entityInteractionRange())) {
                     other.knockback(0.4F, Mth.sin(player.getYRot() * (Mth.PI / 180)), -Mth.cos(player.getYRot() * (Mth.PI / 180)));
                     other.hurt(other.damageSources().playerAttack(player), damage);
                 }

@@ -1,10 +1,13 @@
 package de.ellpeck.naturesaura.items;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.entities.EntityEffectInhibitor;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import de.ellpeck.naturesaura.reg.ICustomCreativeTab;
 import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
@@ -22,16 +25,16 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem, I
     }
 
     public static ResourceLocation getEffect(ItemStack stack) {
-        if (!stack.hasTag())
+        if (!stack.has(Data.TYPE))
             return null;
-        var effect = stack.getTag().getString("effect");
+        var effect = stack.get(Data.TYPE).effect;
         if (effect.isEmpty())
             return null;
-        return new ResourceLocation(effect);
+        return ResourceLocation.parse(effect);
     }
 
     public static ItemStack setEffect(ItemStack stack, ResourceLocation effect) {
-        stack.getOrCreateTag().putString("effect", effect != null ? effect.toString() : "");
+        stack.set(Data.TYPE, new Data(effect != null ? effect.toString() : ""));
         return stack;
     }
 
@@ -61,6 +64,15 @@ public class ItemEffectPowder extends ItemImpl implements IColorProvidingItem, I
     @OnlyIn(Dist.CLIENT)
     public ItemColor getItemColor() {
         return (stack, tintIndex) -> NaturesAuraAPI.EFFECT_POWDERS.getOrDefault(ItemEffectPowder.getEffect(stack), 0xFFFFFF);
+    }
+
+    public record Data(String effect) {
+
+        public static final Codec<Data> CODEC = RecordCodecBuilder.create(i -> i.group(
+            Codec.STRING.fieldOf("effect").forGetter(d -> d.effect)
+        ).apply(i, Data::new));
+        public static final DataComponentType<Data> TYPE = DataComponentType.<Data>builder().persistent(Data.CODEC).cacheEncoding().build();
+
     }
 
 }

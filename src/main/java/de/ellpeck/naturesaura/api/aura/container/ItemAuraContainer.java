@@ -1,7 +1,9 @@
 package de.ellpeck.naturesaura.api.aura.container;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemAuraContainer implements IAuraContainer {
@@ -37,16 +39,13 @@ public class ItemAuraContainer implements IAuraContainer {
     }
 
     private void setAura(int amount) {
-        if (!this.stack.hasTag()) {
-            this.stack.setTag(new CompoundTag());
-        }
-        this.stack.getTag().putInt("aura", amount);
+        this.stack.set(Data.TYPE, new Data(amount));
     }
 
     @Override
     public int getStoredAura() {
-        if (this.stack.hasTag()) {
-            return this.stack.getTag().getInt("aura");
+        if (this.stack.has(Data.TYPE)) {
+            return this.stack.get(Data.TYPE).auraAmount;
         } else {
             return 0;
         }
@@ -66,4 +65,14 @@ public class ItemAuraContainer implements IAuraContainer {
     public boolean isAcceptableType(IAuraType type) {
         return this.type == null || this.type == type;
     }
+
+    public record Data(int auraAmount) {
+
+        public static final Codec<Data> CODEC = RecordCodecBuilder.create(i -> i.group(
+            Codec.INT.fieldOf("aura_amount").forGetter(d -> d.auraAmount)
+        ).apply(i, Data::new));
+        public static final DataComponentType<Data> TYPE = DataComponentType.<Data>builder().persistent(Data.CODEC).cacheEncoding().build();
+
+    }
+
 }

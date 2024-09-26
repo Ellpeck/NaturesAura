@@ -1,5 +1,7 @@
 package de.ellpeck.naturesaura.items;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
@@ -9,6 +11,7 @@ import de.ellpeck.naturesaura.reg.ICustomCreativeTab;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -23,9 +26,9 @@ import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.bus.api.SubscribeEvent;
 
 import java.util.List;
 
@@ -72,21 +75,21 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
     @Override
     public void generateCustomItemModel(ItemModelGenerator generator) {
         generator.withExistingParent(this.getBaseName(), "item/generated")
-                .texture("layer0", "item/" + this.getBaseName())
-                .texture("layer1", "item/" + this.getBaseName() + "_overlay");
+            .texture("layer0", "item/" + this.getBaseName())
+            .texture("layer1", "item/" + this.getBaseName() + "_overlay");
     }
 
     public static IAuraType getType(ItemStack stack) {
-        if (!stack.hasTag())
+        if (!stack.has(Data.TYPE))
             return NaturesAuraAPI.TYPE_OTHER;
-        var type = stack.getTag().getString("stored_type");
+        var type = stack.get(Data.TYPE).auraType;
         if (type.isEmpty())
             return NaturesAuraAPI.TYPE_OTHER;
-        return NaturesAuraAPI.AURA_TYPES.get(new ResourceLocation(type));
+        return NaturesAuraAPI.AURA_TYPES.get(ResourceLocation.parse(type));
     }
 
     public static ItemStack setType(ItemStack stack, IAuraType type) {
-        stack.getOrCreateTag().putString("stored_type", type.getName().toString());
+        stack.set(Data.TYPE, new Data(type.getName().toString()));
         return stack;
     }
 
@@ -124,11 +127,21 @@ public class ItemAuraBottle extends ItemImpl implements IColorProvidingItem, ICu
                     player.level().addFreshEntity(new ItemEntity(player.level(), player.getX(), player.getY(), player.getZ(), bottle));
 
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
-                        SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.PLAYERS, 1F, 1F);
+                    SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.PLAYERS, 1F, 1F);
             }
 
             player.swing(event.getHand());
         }
 
     }
+
+    public record Data(String auraType) {
+
+        public static final Codec<Data> CODEC = RecordCodecBuilder.create(i -> i.group(
+            Codec.STRING.fieldOf("aura_type").forGetter(d -> d.auraType)
+        ).apply(i, Data::new));
+        public static final DataComponentType<Data> TYPE = DataComponentType.<Data>builder().persistent(Data.CODEC).cacheEncoding().build();
+
+    }
+
 }

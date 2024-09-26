@@ -1,5 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEnderCrate;
@@ -13,29 +15,26 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
-import net.neoforged.bus.api.SubscribeEvent;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider<BlockEntityEnderCrate>, ICustomBlockState {
@@ -47,9 +46,9 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     }
 
     public static String getEnderName(ItemStack stack) {
-        if (!stack.hasTag())
+        if (!stack.has(Data.TYPE))
             return "";
-        return stack.getTag().getString(NaturesAura.MOD_ID + ":ender_name");
+        return stack.get(Data.TYPE).enderName;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -79,7 +78,7 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
         if (ILevelData.getOverworldData(player.level()).isEnderStorageLocked(name))
             return;
         var output = stack.copy();
-        output.getOrCreateTag().putString(NaturesAura.MOD_ID + ":ender_name", name);
+        output.set(Data.TYPE, new Data(name));
         event.setOutput(output);
         event.setMaterialCost(stack.getCount());
         event.setCost(1);
@@ -129,6 +128,15 @@ public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider
     @Override
     public void registerTESR() {
         BlockEntityRenderers.register(ModBlockEntities.ENDER_CRATE, RenderEnderCrate::new);
+    }
+
+    public record Data(String enderName) {
+
+        public static final Codec<Data> CODEC = RecordCodecBuilder.create(i -> i.group(
+            Codec.STRING.fieldOf("name").forGetter(d -> d.enderName)
+        ).apply(i, Data::new));
+        public static final DataComponentType<Data> TYPE = DataComponentType.<Data>builder().persistent(Data.CODEC).cacheEncoding().build();
+
     }
 
 }

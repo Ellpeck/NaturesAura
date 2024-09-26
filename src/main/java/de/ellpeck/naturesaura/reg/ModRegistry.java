@@ -8,10 +8,10 @@ import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.*;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAuraBloom;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityEnderCrate;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
 import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
-import de.ellpeck.naturesaura.enchant.AuraMendingEnchantment;
 import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import de.ellpeck.naturesaura.entities.*;
 import de.ellpeck.naturesaura.gen.LevelGenAncientTree;
@@ -41,7 +41,6 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.capabilities.Capabilities.EnergyStorage;
 import net.neoforged.neoforge.capabilities.Capabilities.FluidHandler;
 import net.neoforged.neoforge.capabilities.Capabilities.ItemHandler;
@@ -265,8 +264,7 @@ public final class ModRegistry {
         });
 
         event.register(Registries.ENCHANTMENT, h -> {
-            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "aura_mending"), new AuraMendingEnchantment());
-            Helper.populateObjectHolders(ModEnchantments.class, BuiltInRegistries.ENCHANTMENT);
+            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "aura_mending"), ModEnchantments.AURA_MENDING);
         });
 
         event.register(Registries.ENTITY_TYPE, h -> {
@@ -335,6 +333,19 @@ public final class ModRegistry {
 
         event.register(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, h -> {
             h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "aura_chunk"), NaturesAuraAPI.AURA_CHUNK_ATTACHMENT);
+        });
+
+        event.register(Registries.DATA_COMPONENT_TYPE, h -> {
+            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "multiblock_maker_data"), ItemMultiblockMaker.Data.TYPE);
+            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "aura_data"), ItemAuraContainer.Data.TYPE);
+            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "dropped_item_data"), BlockEntityImpl.DroppedItemData.TYPE);
+            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "ender_crate_data"), BlockEnderCrate.Data.TYPE);
+            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "aura_bottle_data"), ItemAuraBottle.Data.TYPE);
+            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "break_prevention_data"), ItemBreakPrevention.Data.TYPE);
+            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "color_changer_data"), ItemColorChanger.Data.TYPE);
+            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "effect_powder_data"), ItemEffectPowder.Data.TYPE);
+            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "shockwave_creator_data"), ItemShockwaveCreator.Data.TYPE);
+            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "disableable_tool_data"), Helper.DisableableToolData.TYPE);
         });
     }
 

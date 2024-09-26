@@ -13,6 +13,7 @@ import de.ellpeck.naturesaura.misc.LevelData;
 import de.ellpeck.naturesaura.packet.PacketAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
@@ -168,15 +169,15 @@ public class AuraChunk implements IAuraChunk {
         if (this.needsSync) {
             var pos = this.chunk.getPos();
             PacketHandler.sendToAllLoaded(level,
-                    new BlockPos(pos.x * 16, 0, pos.z * 16),
-                    this.makePacket());
+                new BlockPos(pos.x * 16, 0, pos.z * 16),
+                this.makePacket());
             this.needsSync = false;
         }
     }
 
     public PacketAuraChunk makePacket() {
         var pos = this.chunk.getPos();
-        return new PacketAuraChunk(pos.x, pos.z, this.drainSpots.values());
+        return new PacketAuraChunk(pos.x, pos.z, this.drainSpots.values().stream().map(DrainSpot::serializeNBT).toList());
     }
 
     public void getSpots(BlockPos pos, int radius, BiConsumer<BlockPos, Integer> consumer) {
@@ -222,8 +223,8 @@ public class AuraChunk implements IAuraChunk {
                 }
             });
             ret = new Pair[]{
-                    Pair.of(lowestSpot.getValue(), lowestAmount.intValue()),
-                    Pair.of(highestSpot.getValue(), highestAmount.intValue())};
+                Pair.of(lowestSpot.getValue(), lowestAmount.intValue()),
+                Pair.of(highestSpot.getValue(), highestAmount.intValue())};
             this.limitSpotCache.put(pos, radius, ret);
         }
         return ret;
@@ -249,7 +250,7 @@ public class AuraChunk implements IAuraChunk {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider registries) {
         var list = new ListTag();
         for (var spot : this.drainSpots.values())
             list.add(spot.serializeNBT());
@@ -259,7 +260,7 @@ public class AuraChunk implements IAuraChunk {
     }
 
     @Override
-    public void deserializeNBT(CompoundTag compound) {
+    public void deserializeNBT(HolderLookup.Provider registries, CompoundTag compound) {
         this.drainSpots.clear();
         var list = compound.getList("drain_spots", 10);
         for (var base : list)

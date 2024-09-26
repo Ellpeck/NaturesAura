@@ -5,22 +5,29 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RespawnAnchorBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
+
+import java.util.Optional;
 
 public class ItemPetReviver extends ItemImpl {
 
@@ -88,10 +95,10 @@ public class ItemPetReviver extends ItemImpl {
                 if (pos != null) {
                     var f = player.getRespawnAngle();
                     var b = player.isRespawnForced();
-                    var bed = Player.findRespawnPositionAndUseSpawnBlock((ServerLevel) player.level(), pos, f, b, false);
+                    var bed = ItemPetReviver.findRespawnAndUseSpawnBlock((ServerLevel) player.level(), pos, f, b, false);
                     if (bed.isPresent()) {
                         spawnLevel = (ServerLevel) player.level();
-                        spawn = bed.get();
+                        spawn = bed.get().position();
                     }
                 }
             }
@@ -131,6 +138,40 @@ public class ItemPetReviver extends ItemImpl {
             event.setCanceled(true);
         }
 
+    }
+
+    // copy of private ServerPlayer.findRespawnAndUseSpawnBlock
+    private static Optional<ServerPlayer.RespawnPosAngle> findRespawnAndUseSpawnBlock(ServerLevel level, BlockPos pos, float angle, boolean forced, boolean keepInventory) {
+        BlockState blockstate = level.getBlockState(pos);
+        Block block = blockstate.getBlock();
+        if (block instanceof RespawnAnchorBlock
+            && (forced || blockstate.getValue(RespawnAnchorBlock.CHARGE) > 0)
+            && RespawnAnchorBlock.canSetSpawn(level)) {
+            Optional<Vec3> optional = RespawnAnchorBlock.findStandUpPosition(EntityType.PLAYER, level, pos);
+            if (!forced && !keepInventory && optional.isPresent()) {
+                level.setBlock(
+                    pos, blockstate.setValue(RespawnAnchorBlock.CHARGE, Integer.valueOf(blockstate.getValue(RespawnAnchorBlock.CHARGE) - 1)), 3
+                );
+            }
+
+            return optional.map(p_348139_ -> ServerPlayer.RespawnPosAngle.of(p_348139_, pos));
+        } else if (block instanceof BedBlock && BedBlock.canSetSpawn(level)) {
+            return BedBlock.findStandUpPosition(EntityType.PLAYER, level, pos, blockstate.getValue(BedBlock.FACING), angle)
+                .map(p_348148_ -> ServerPlayer.RespawnPosAngle.of(p_348148_, pos));
+        } else if (!forced) {
+            return blockstate.getRespawnPosition(EntityType.PLAYER, level, pos, angle);
+        } else {
+            boolean flag = block.isPossibleToRespawnInThis(blockstate);
+            BlockState blockstate1 = level.getBlockState(pos.above());
+            boolean flag1 = blockstate1.getBlock().isPossibleToRespawnInThis(blockstate1);
+            return flag && flag1
+                ? Optional.of(
+                new ServerPlayer.RespawnPosAngle(
+                    new Vec3((double) pos.getX() + 0.5, (double) pos.getY() + 0.1, (double) pos.getZ() + 0.5), angle
+                )
+            )
+                : Optional.empty();
+        }
     }
 
 }

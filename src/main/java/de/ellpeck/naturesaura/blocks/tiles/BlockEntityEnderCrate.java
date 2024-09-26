@@ -93,11 +93,8 @@ public class BlockEntityEnderCrate extends BlockEntityImpl implements MenuProvid
 
     @Override
     public void modifyDrop(ItemStack regularItem) {
-        if (this.name != null) {
-            if (!regularItem.hasTag())
-                regularItem.setTag(new CompoundTag());
-            regularItem.getTag().putString(NaturesAura.MOD_ID + ":ender_name", this.name);
-        }
+        if (this.name != null)
+            regularItem.set(BlockEnderCrate.Data.TYPE, new BlockEnderCrate.Data(this.name));
     }
 
     @Override

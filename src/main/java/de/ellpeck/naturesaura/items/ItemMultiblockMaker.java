@@ -1,7 +1,10 @@
 package de.ellpeck.naturesaura.items;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.multiblock.IMultiblock;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
@@ -20,7 +23,7 @@ public class ItemMultiblockMaker extends ItemImpl {
     private static List<IMultiblock> multiblocks;
 
     public ItemMultiblockMaker() {
-        super("multiblock_maker");
+        super("multiblock_maker", new Properties().component(Data.TYPE, new Data(0)));
     }
 
     @Override
@@ -29,7 +32,7 @@ public class ItemMultiblockMaker extends ItemImpl {
         if (!levelIn.isClientSide && playerIn.isCreative()) {
             var curr = ItemMultiblockMaker.getMultiblockId(stack);
             var next = (curr + 1) % ItemMultiblockMaker.multiblocks().size();
-            stack.getOrCreateTag().putInt("multiblock", next);
+            stack.set(Data.TYPE, new Data(next));
         }
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
@@ -72,9 +75,7 @@ public class ItemMultiblockMaker extends ItemImpl {
     }
 
     private static int getMultiblockId(ItemStack stack) {
-        if (!stack.hasTag())
-            return -1;
-        return stack.getTag().getInt("multiblock");
+        return stack.get(Data.TYPE).multiblockId();
     }
 
     private static IMultiblock getMultiblock(ItemStack stack) {
@@ -86,4 +87,14 @@ public class ItemMultiblockMaker extends ItemImpl {
             return null;
         return multiblocks.get(id);
     }
+
+    public record Data(int multiblockId) {
+
+        public static final Codec<Data> CODEC = RecordCodecBuilder.create(i -> i.group(
+            Codec.INT.fieldOf("multiblock_id").forGetter(d -> d.multiblockId)
+        ).apply(i, Data::new));
+        public static final DataComponentType<Data> TYPE = DataComponentType.<Data>builder().persistent(Data.CODEC).cacheEncoding().build();
+
+    }
+
 }

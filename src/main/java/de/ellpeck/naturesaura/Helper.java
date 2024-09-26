@@ -1,6 +1,8 @@
 package de.ellpeck.naturesaura;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.ellpeck.naturesaura.api.aura.container.IAuraContainer;
 import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
@@ -13,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.Tag;
@@ -356,14 +359,13 @@ public final class Helper {
     }
 
     public static boolean isToolEnabled(ItemStack stack) {
-        return stack.hasTag() && !stack.getTag().getBoolean(NaturesAura.MOD_ID + ":disabled");
+        return stack.has(DisableableToolData.TYPE) && !stack.get(DisableableToolData.TYPE).disabled;
     }
 
     public static boolean toggleToolEnabled(Player player, ItemStack stack) {
         if (!player.isShiftKeyDown())
             return false;
-        var disabled = !Helper.isToolEnabled(stack);
-        stack.getOrCreateTag().putBoolean(NaturesAura.MOD_ID + ":disabled", !disabled);
+        stack.set(DisableableToolData.TYPE, new DisableableToolData(Helper.isToolEnabled(stack)));
         player.level().playSound(null, player.getX() + 0.5, player.getY() + 0.5, player.getZ() + 0.5, SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS, 0.65F, 1F);
         return true;
     }
@@ -375,6 +377,15 @@ public final class Helper {
                 return new BlockPos(arr[0], arr[1], arr[2]);
         }
         return null;
+    }
+
+    public record DisableableToolData(boolean disabled) {
+
+        public static final Codec<DisableableToolData> CODEC = RecordCodecBuilder.create(i -> i.group(
+            Codec.BOOL.fieldOf("disabled").forGetter(d -> d.disabled)
+        ).apply(i, DisableableToolData::new));
+        public static final DataComponentType<DisableableToolData> TYPE = DataComponentType.<DisableableToolData>builder().persistent(DisableableToolData.CODEC).cacheEncoding().build();
+
     }
 
 }

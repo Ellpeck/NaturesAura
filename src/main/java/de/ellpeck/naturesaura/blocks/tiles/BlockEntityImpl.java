@@ -1,10 +1,13 @@
 package de.ellpeck.naturesaura.blocks.tiles;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -103,16 +106,13 @@ public class BlockEntityImpl extends BlockEntity {
     public void modifyDrop(ItemStack regularItem) {
         var compound = new CompoundTag();
         this.writeNBT(compound, SaveType.BLOCK, this.getLevel().registryAccess());
-        if (!compound.isEmpty()) {
-            if (!regularItem.hasTag())
-                regularItem.setTag(new CompoundTag());
-            regularItem.getTag().put("data", compound);
-        }
+        if (!compound.isEmpty())
+            regularItem.set(DroppedItemData.TYPE, new DroppedItemData(compound));
     }
 
     public void loadDataOnPlace(ItemStack stack) {
-        if (stack.hasTag()) {
-            var compound = stack.getTag().getCompound("data");
+        if (stack.has(DroppedItemData.TYPE)) {
+            var compound = stack.get(DroppedItemData.TYPE).data;
             if (compound != null)
                 this.readNBT(compound, SaveType.BLOCK, this.level.registryAccess());
         }
@@ -159,6 +159,15 @@ public class BlockEntityImpl extends BlockEntity {
 
     public enum SaveType {
         TILE, SYNC, BLOCK
+    }
+
+    public record DroppedItemData(CompoundTag data) {
+
+        public static final Codec<DroppedItemData> CODEC = RecordCodecBuilder.create(i -> i.group(
+            CompoundTag.CODEC.fieldOf("data").forGetter(d -> d.data)
+        ).apply(i, DroppedItemData::new));
+        public static final DataComponentType<DroppedItemData> TYPE = DataComponentType.<DroppedItemData>builder().persistent(DroppedItemData.CODEC).cacheEncoding().build();
+
     }
 
 }
