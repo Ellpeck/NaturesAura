@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import de.ellpeck.naturesaura.ModConfig;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
 import de.ellpeck.naturesaura.api.render.ITrinketItem.RenderType;
+import de.ellpeck.naturesaura.compat.Compat;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -57,15 +59,14 @@ public class PlayerLayerTrinkets extends RenderLayer<AbstractClientPlayer, Playe
             this.renderStack(player.getInventory().getItem(i), player, type, main, second, matrices, buffer, packedLight);
         }
 
-        // TODO curios?
-/*        if (Compat.hasCompat("curios")) {
+        if (Compat.hasCompat("curios")) {
             var inventory = CuriosApi.getCuriosInventory(player).orElse(null);
             if (inventory != null) {
                 var handler = inventory.getEquippedCurios();
                 for (var i = 0; i < handler.getSlots(); i++)
                     this.renderStack(handler.getStackInSlot(i), player, type, main, second, matrices, buffer, packedLight);
             }
-        }*/
+        }
     }
 
     private void renderStack(ItemStack stack, Player player, RenderType type, ItemStack main, ItemStack second, PoseStack matrices, MultiBufferSource buffer, int packedLight) {

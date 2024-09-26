@@ -1,5 +1,3 @@
-// TODO curios?
-/*
 package de.ellpeck.naturesaura.compat;
 
 import com.google.common.collect.ImmutableMap;
@@ -26,13 +24,13 @@ import java.util.concurrent.CompletableFuture;
 public class CuriosCompat implements ICompat {
 
     private static final Map<Item, String> TYPES = ImmutableMap.<Item, String>builder()
-            .put(ModItems.EYE, "charm")
-            .put(ModItems.EYE_IMPROVED, "charm")
-            .put(ModItems.AURA_CACHE, "belt")
-            .put(ModItems.AURA_TROVE, "belt")
-            .put(ModItems.SHOCKWAVE_CREATOR, "necklace")
-            .put(ModItems.DEATH_RING, "ring")
-            .build();
+        .put(ModItems.EYE, "charm")
+        .put(ModItems.EYE_IMPROVED, "charm")
+        .put(ModItems.AURA_CACHE, "belt")
+        .put(ModItems.AURA_TROVE, "belt")
+        .put(ModItems.SHOCKWAVE_CREATOR, "necklace")
+        .put(ModItems.DEATH_RING, "ring")
+        .build();
 
     @Override
     public void addCapabilities(RegisterCapabilitiesEvent event) {
@@ -69,7 +67,7 @@ public class CuriosCompat implements ICompat {
     @Override
     public void addItemTags(ItemTagProvider provider) {
         for (var entry : CuriosCompat.TYPES.entrySet()) {
-            var tag = ItemTags.create(new ResourceLocation("curios", entry.getValue()));
+            var tag = ItemTags.create(ResourceLocation.fromNamespaceAndPath("curios", entry.getValue()));
             provider.tag(tag).add(entry.getKey());
         }
     }
@@ -82,12 +80,12 @@ public class CuriosCompat implements ICompat {
 
         @Override
         public void generate(HolderLookup.Provider provider, ExistingFileHelper existingFileHelper) {
-            for (var type : CuriosCompat.TYPES.values()) {
-                this.createSlot(type);
-            }
+            var types = CuriosCompat.TYPES.values().stream().distinct().toArray(String[]::new);
+            this.createEntities("entities").addPlayer().addSlots(types);
+            for (var type : types)
+                this.createSlot(type).size(1).addCosmetic(true);
         }
 
     }
 
 }
-*/

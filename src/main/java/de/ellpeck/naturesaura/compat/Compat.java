@@ -19,8 +19,7 @@ public final class Compat {
     @SuppressWarnings("Convert2MethodRef") // bleh classloading compat issues
     private static final Map<String, Supplier<ICompat>> MODULE_TYPES = ImmutableMap.<String, Supplier<ICompat>>builder()
         .put("patchouli", () -> new PatchouliCompat())
-        // TODO curios?
-        //.put("curios", () -> new CuriosCompat())
+        .put("curios", () -> new CuriosCompat())
         //.put("enchantability", EnchantibilityCompat::new)
         .build();
     private static final Map<String, ICompat> MODULES = new HashMap<>();

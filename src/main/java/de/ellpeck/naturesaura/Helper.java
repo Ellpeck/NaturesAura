@@ -8,6 +8,7 @@ import de.ellpeck.naturesaura.api.aura.item.IAuraRecharge;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.misc.LevelData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
@@ -50,6 +51,8 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -300,15 +303,14 @@ public final class Helper {
     }
 
     public static ItemStack getEquippedItem(Predicate<ItemStack> predicate, Player player, boolean hotbarOnly) {
-        // TODO curios?
-      /*  if (Compat.hasCompat("curios")) {
+        if (Compat.hasCompat("curios")) {
             var inventory = CuriosApi.getCuriosInventory(player);
             if (inventory.isPresent()) {
                 var stack = inventory.get().findFirstCurio(predicate).map(SlotResult::stack);
                 if (stack.isPresent())
                     return stack.get();
             }
-        }*/
+        }
         var invSize = hotbarOnly ? 9 : player.getInventory().getContainerSize();
         for (var i = 0; i < invSize; i++) {
             var slot = player.getInventory().getItem(i);
