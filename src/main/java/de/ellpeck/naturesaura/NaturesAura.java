@@ -34,7 +34,6 @@ public final class NaturesAura {
         NaturesAura.proxy = FMLEnvironment.dist.isClient() ? new ClientProxy() : new ServerProxy();
 
         container.getEventBus().addListener(this::setup);
-        container.getEventBus().register(NaturesAura.proxy);
 
         var builder = new ModConfigSpec.Builder();
         ModConfig.instance = new ModConfig(builder);

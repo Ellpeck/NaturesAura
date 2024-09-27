@@ -17,12 +17,13 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 public final class PacketHandler {
 
     @SubscribeEvent
+    @SuppressWarnings("Convert2MethodRef")
     public static void onPayloadRegister(RegisterPayloadHandlersEvent event) {
         var registrar = event.registrar(NaturesAura.MOD_ID);
-        registrar.playBidirectional(PacketAuraChunk.TYPE, PacketAuraChunk.CODEC, PacketAuraChunk::onMessage);
-        registrar.playBidirectional(PacketClient.TYPE, PacketClient.CODEC, PacketClient::onMessage);
-        registrar.playBidirectional(PacketParticles.TYPE, PacketParticles.CODEC, PacketParticles::onMessage);
-        registrar.playBidirectional(PacketParticleStream.TYPE, PacketParticleStream.CODEC, PacketParticleStream::onMessage);
+        registrar.playToClient(PacketAuraChunk.TYPE, PacketAuraChunk.CODEC, (m, c) -> PacketAuraChunk.onMessage(m, c));
+        registrar.playToClient(PacketClient.TYPE, PacketClient.CODEC, (m, c) -> PacketClient.onMessage(m, c));
+        registrar.playToClient(PacketParticles.TYPE, PacketParticles.CODEC, (m, c) -> PacketParticles.onMessage(m, c));
+        registrar.playToClient(PacketParticleStream.TYPE, PacketParticleStream.CODEC, (m, c) -> PacketParticleStream.onMessage(m, c));
     }
 
     public static void sendToAllLoaded(Level level, BlockPos pos, CustomPacketPayload message) {

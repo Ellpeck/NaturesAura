@@ -9,8 +9,6 @@ import de.ellpeck.naturesaura.entities.render.RenderEffectInhibitor;
 import de.ellpeck.naturesaura.entities.render.RenderMoverMinecart;
 import de.ellpeck.naturesaura.entities.render.RenderStub;
 import de.ellpeck.naturesaura.events.ClientEvents;
-import de.ellpeck.naturesaura.gui.GuiEnderCrate;
-import de.ellpeck.naturesaura.gui.ModContainers;
 import de.ellpeck.naturesaura.items.ItemColorChanger;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.particles.ParticleHandler;
@@ -19,38 +17,20 @@ import de.ellpeck.naturesaura.reg.IColorProvidingBlock;
 import de.ellpeck.naturesaura.reg.IColorProvidingItem;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import de.ellpeck.naturesaura.reg.ModRegistry;
-import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import de.ellpeck.naturesaura.renderers.SupporterFancyHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
 public class ClientProxy implements IProxy {
-
-    @SubscribeEvent
-    public void registerMenuScreens(RegisterMenuScreensEvent event) {
-        event.register(ModContainers.ENDER_CRATE, GuiEnderCrate::new);
-        event.register(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
-    }
-
-    @SubscribeEvent
-    public void registerRenderLayers(EntityRenderersEvent.AddLayers event) {
-        for (var render : new PlayerRenderer[]{event.getSkin(PlayerSkin.Model.WIDE), event.getSkin(PlayerSkin.Model.SLIM)})
-            render.addLayer(new PlayerLayerTrinkets(render));
-    }
 
     @Override
     public void preInit(FMLCommonSetupEvent event) {

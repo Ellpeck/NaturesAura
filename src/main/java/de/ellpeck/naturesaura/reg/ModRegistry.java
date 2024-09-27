@@ -19,12 +19,16 @@ import de.ellpeck.naturesaura.gen.LevelGenAuraBloom;
 import de.ellpeck.naturesaura.gen.LevelGenNetherWartMushroom;
 import de.ellpeck.naturesaura.gen.ModFeatures;
 import de.ellpeck.naturesaura.gui.ContainerEnderCrate;
+import de.ellpeck.naturesaura.gui.GuiEnderCrate;
 import de.ellpeck.naturesaura.gui.ModContainers;
 import de.ellpeck.naturesaura.items.*;
 import de.ellpeck.naturesaura.items.tools.*;
 import de.ellpeck.naturesaura.potion.ModPotions;
 import de.ellpeck.naturesaura.potion.PotionBreathless;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
+import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -39,12 +43,15 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities.EnergyStorage;
 import net.neoforged.neoforge.capabilities.Capabilities.FluidHandler;
 import net.neoforged.neoforge.capabilities.Capabilities.ItemHandler;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -388,6 +395,23 @@ public final class ModRegistry {
     private static <T> void registerAll(RegisterEvent.RegisterHelper<T> helper, T... items) {
         for (var item : items)
             helper.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, ((IModItem) item).getBaseName()), item);
+    }
+
+    @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+    public static final class Client {
+
+        @SubscribeEvent
+        public static void registerMenuScreens(RegisterMenuScreensEvent event) {
+            event.register(ModContainers.ENDER_CRATE, GuiEnderCrate::new);
+            event.register(ModContainers.ENDER_ACCESS, GuiEnderCrate::new);
+        }
+
+        @SubscribeEvent
+        public static void registerRenderLayers(EntityRenderersEvent.AddLayers event) {
+            for (var render : new PlayerRenderer[]{event.getSkin(PlayerSkin.Model.WIDE), event.getSkin(PlayerSkin.Model.SLIM)})
+                render.addLayer(new PlayerLayerTrinkets(render));
+        }
+
     }
 
 }

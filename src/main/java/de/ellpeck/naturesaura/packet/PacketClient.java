@@ -15,6 +15,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public record PacketClient(int packetType, CompoundTag data) implements CustomPa
         return PacketClient.TYPE;
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static void onMessage(PacketClient message, IPayloadContext ctx) {
         var mc = Minecraft.getInstance();
         if (mc.level != null) {

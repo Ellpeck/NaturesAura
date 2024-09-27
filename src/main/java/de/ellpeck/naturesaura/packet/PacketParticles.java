@@ -17,6 +17,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ public record PacketParticles(float posX, float posY, float posZ, int particleTy
         return PacketParticles.TYPE;
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static void onMessage(PacketParticles message, IPayloadContext ctx) {
         var level = Minecraft.getInstance().level;
         if (level != null)

@@ -7,6 +7,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.joml.Vector3f;
 
@@ -30,6 +32,7 @@ public record PacketParticleStream(Vector3f start, Vector3f end, float speed, in
         return PacketParticleStream.TYPE;
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static void onMessage(PacketParticleStream message, IPayloadContext ctx) {
         NaturesAuraAPI.instance().spawnParticleStream(
             message.start.x, message.start.y, message.start.z,
