@@ -7,7 +7,7 @@
     ],
     "key": {
         "N": {
-            "tag": "forge:nuggets/gold"
+            "tag": "c:nuggets/gold"
         },
         "G": {
             "item": "minecraft:short_grass"

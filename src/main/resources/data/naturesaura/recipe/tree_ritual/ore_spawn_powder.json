@@ -8,10 +8,10 @@
             "item": "naturesaura:gold_powder"
         },
         {
-            "tag": "forge:ores/diamond"
+            "tag": "c:ores/diamond"
         },
         {
-            "tag": "forge:ores/redstone"
+            "tag": "c:ores/redstone"
         }
     ],
     "sapling": {

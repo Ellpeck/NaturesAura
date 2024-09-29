@@ -10,13 +10,13 @@
             "item": "naturesaura:infused_iron"
         },
         "R": {
-            "tag": "forge:dyes/red"
+            "tag": "c:dyes/red"
         },
         "Y": {
-            "tag": "forge:dyes/yellow"
+            "tag": "c:dyes/yellow"
         },
         "B": {
-            "tag": "forge:dyes/blue"
+            "tag": "c:dyes/blue"
         },
         "T": {
             "item": "naturesaura:token_euphoria"

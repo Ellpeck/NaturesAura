@@ -13,7 +13,7 @@
             "item": "naturesaura:infused_iron"
         },
         "R": {
-            "tag": "forge:ingots/iron"
+            "tag": "c:ingots/iron"
         },
         "E": {
             "item": "minecraft:ender_pearl"

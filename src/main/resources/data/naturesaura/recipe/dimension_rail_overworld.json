@@ -19,7 +19,7 @@
             "items": "naturesaura:aura_bottle"
         },
         "S": {
-            "tag": "forge:rods/wooden"
+            "tag": "c:rods/wooden"
         },
         "I": {
             "item": "naturesaura:infused_iron"
