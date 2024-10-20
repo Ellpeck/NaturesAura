@@ -57,7 +57,8 @@ public class JEINaturesAuraPlugin implements IModPlugin {
 
             @Override
             public String getLegacyStringSubtypeInfo(ItemStack ingredient, UidContext context) {
-                return ItemEffectPowder.getEffect(ingredient).toString();
+                var effect = ItemEffectPowder.getEffect(ingredient);
+                return effect != null ? effect.toString() : "";
             }
         });
         registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ModItems.AURA_BOTTLE, new ISubtypeInterpreter<>() {
