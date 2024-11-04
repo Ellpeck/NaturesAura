@@ -172,7 +172,7 @@ publishMods {
     def cfToken = providers.environmentVariable("CF_TOKEN")
     def mrToken = providers.environmentVariable("MR_TOKEN")
     dryRun = !cfToken.isPresent() || !mrToken.isPresent()
-    changelog = providers.environmentVariable("COMMIT_MESSAGE").orElse("")
+    changelog = providers.environmentVariable("CHANGELOG").orElse("")
     version = mod_version
     type = me.modmuss50.mpp.ReleaseType.valueOf(mod_release_state)
     file = jar.archiveFile
