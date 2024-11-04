@@ -34,3 +34,6 @@ jobs:
         run: |
           chmod +x ./gradlew
           ./gradlew publishMods --no-daemon
+        env:
+          MR_TOKEN: ${{ secrets.MR_TOKEN }}
+          CF_TOKEN: ${{ secrets.CF_TOKEN }}
