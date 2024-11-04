@@ -12,7 +12,6 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntityImpl;
 import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.compat.patchouli.PatchouliCompat;
-import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import de.ellpeck.naturesaura.entities.*;
 import de.ellpeck.naturesaura.gen.LevelGenAncientTree;
 import de.ellpeck.naturesaura.gen.LevelGenAuraBloom;
@@ -273,7 +272,7 @@ public final class ModRegistry {
             Helper.populateObjectHolders(ModContainers.class, event.getRegistry(), false);
         });
 
-        event.register(Registries.ENCHANTMENT, h -> {
+/*        event.register(Registries.ENCHANTMENT, h -> {
             h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "aura_mending"), Enchantment.enchantment(
                 Enchantment.definition(
                     HolderSet.direct(BuiltInRegistries.ITEM.holders().filter(i -> new ItemStack(i).getCapability(NaturesAuraAPI.AURA_RECHARGE_CAPABILITY) == null).toList()),
@@ -281,7 +280,7 @@ public final class ModRegistry {
                     5, 1, Enchantment.dynamicCost(5, 8), Enchantment.dynamicCost(55, 8), 2, EquipmentSlotGroup.ANY)
             ).build(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "aura_mending")));
             Helper.populateObjectHolders(ModEnchantments.class, event.getRegistry(), true);
-        });
+        });*/
 
         event.register(Registries.ENTITY_TYPE, h -> {
             h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "mover_cart"), EntityType.Builder

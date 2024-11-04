@@ -2,15 +2,12 @@ package de.ellpeck.naturesaura.items;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.render.ITrinketItem;
-import de.ellpeck.naturesaura.enchant.ModEnchantments;
 import de.ellpeck.naturesaura.reg.ICustomCreativeTab;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.Holder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -41,12 +38,14 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem, ICustomCrea
                 if (recharge != null) {
                     if (recharge.rechargeFromContainer(container, itemSlot, i, player.getInventory().selected == i))
                         break;
-                } else if (stack.getEnchantmentLevel(ModEnchantments.AURA_MENDING) > 0) {
+                }
+                // TODO fix enchantments, https://gist.github.com/ChampionAsh5357/d895a7b1a34341e19c80870720f9880f#the-enchantment-datapack-object
+                /*else if (stack.getEnchantmentLevel(ModEnchantments.AURA_MENDING) > 0) {
                     var mainSize = player.getInventory().items.size();
                     var isArmor = i >= mainSize && i < mainSize + player.getInventory().armor.size();
                     if ((isArmor || player.getInventory().selected == i) && Helper.rechargeAuraItem(stack, container, 1000))
                         break;
-                }
+                }*/
             }
         }
 
