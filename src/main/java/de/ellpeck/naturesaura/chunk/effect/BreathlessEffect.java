@@ -63,7 +63,7 @@ public class BreathlessEffect implements IDrainSpotEffect {
             return;
         var entities = level.getEntitiesOfClass(LivingEntity.class, this.bb);
         for (var entity : entities)
-            entity.addEffect(new MobEffectInstance(Holder.direct(ModPotions.BREATHLESS), 300, this.amp));
+            entity.addEffect(new MobEffectInstance(ModPotions.BREATHLESS, 300, this.amp));
     }
 
     @Override

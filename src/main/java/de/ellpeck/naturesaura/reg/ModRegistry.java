@@ -29,13 +29,16 @@ import de.ellpeck.naturesaura.recipes.ModRecipes;
 import de.ellpeck.naturesaura.renderers.PlayerLayerTrinkets;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -150,7 +153,7 @@ public final class ModRegistry {
                 new BlockImpl("sky_ingot_block", Block.Properties.of().sound(SoundType.METAL).strength(4F)),
                 new BlockImpl("depth_ingot_block", Block.Properties.of().sound(SoundType.METAL).strength(6F))
             );
-            Helper.populateObjectHolders(ModBlocks.class, BuiltInRegistries.BLOCK);
+            Helper.populateObjectHolders(ModBlocks.class, event.getRegistry(), false);
         });
 
         event.register(Registries.ITEM, h -> {
@@ -235,7 +238,7 @@ public final class ModRegistry {
                 new ItemArmor("depth_pants", ModArmorMaterial.DEPTH, ArmorItem.Type.LEGGINGS),
                 new ItemArmor("depth_shoes", ModArmorMaterial.DEPTH, ArmorItem.Type.BOOTS)
             );
-            Helper.populateObjectHolders(ModItems.class, BuiltInRegistries.ITEM);
+            Helper.populateObjectHolders(ModItems.class, event.getRegistry(), false);
         });
 
         event.register(Registries.BLOCK_ENTITY_TYPE, h -> {
@@ -246,12 +249,12 @@ public final class ModRegistry {
                 if (item instanceof ModTileType<?> type)
                     h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, type.getBaseName()), type.type);
             }
-            Helper.populateObjectHolders(ModBlockEntities.class, BuiltInRegistries.BLOCK_ENTITY_TYPE);
+            Helper.populateObjectHolders(ModBlockEntities.class, event.getRegistry(), false);
         });
 
         event.register(Registries.MOB_EFFECT, h -> {
             h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "breathless"), new PotionBreathless());
-            Helper.populateObjectHolders(ModPotions.class, BuiltInRegistries.MOB_EFFECT);
+            Helper.populateObjectHolders(ModPotions.class, event.getRegistry(), true);
         });
 
         event.register(Registries.MENU, h -> {
@@ -267,11 +270,17 @@ public final class ModRegistry {
                 IItemHandler handler = ILevelData.getOverworldData(inv.player.level()).getEnderStorage(data.readUtf());
                 return new ContainerEnderCrate(ModContainers.ENDER_ACCESS, windowId, inv.player, handler);
             }));
-            Helper.populateObjectHolders(ModContainers.class, BuiltInRegistries.MENU);
+            Helper.populateObjectHolders(ModContainers.class, event.getRegistry(), false);
         });
 
         event.register(Registries.ENCHANTMENT, h -> {
-            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "aura_mending"), ModEnchantments.AURA_MENDING);
+            h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "aura_mending"), Enchantment.enchantment(
+                Enchantment.definition(
+                    HolderSet.direct(BuiltInRegistries.ITEM.holders().filter(i -> new ItemStack(i).getCapability(NaturesAuraAPI.AURA_RECHARGE_CAPABILITY) == null).toList()),
+                    // same values as unbreaking, except for the max level
+                    5, 1, Enchantment.dynamicCost(5, 8), Enchantment.dynamicCost(55, 8), 2, EquipmentSlotGroup.ANY)
+            ).build(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "aura_mending")));
+            Helper.populateObjectHolders(ModEnchantments.class, event.getRegistry(), true);
         });
 
         event.register(Registries.ENTITY_TYPE, h -> {
@@ -291,7 +300,7 @@ public final class ModRegistry {
                 .of(EntityStructureFinder::new, MobCategory.MISC)
                 .sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(true)
                 .setTrackingRange(64).setUpdateInterval(2).fireImmune().build(NaturesAura.MOD_ID + ":structure_finder"));
-            Helper.populateObjectHolders(ModEntities.class, BuiltInRegistries.ENTITY_TYPE);
+            Helper.populateObjectHolders(ModEntities.class, event.getRegistry(), false);
         });
 
         event.register(Registries.FEATURE, h -> {
@@ -302,7 +311,7 @@ public final class ModRegistry {
             h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "aura_mushroom"), new LevelGenAuraBloom(ModBlocks.AURA_MUSHROOM, 20, false));
             h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "ancient_tree"), new LevelGenAncientTree());
             h.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "nether_wart_mushroom"), new LevelGenNetherWartMushroom());
-            Helper.populateObjectHolders(ModFeatures.class, BuiltInRegistries.FEATURE);
+            Helper.populateObjectHolders(ModFeatures.class, event.getRegistry(), false);
         });
 
         event.register(Registries.RECIPE_TYPE, h -> {

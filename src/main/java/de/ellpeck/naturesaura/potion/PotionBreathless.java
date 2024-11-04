@@ -20,7 +20,7 @@ public class PotionBreathless extends PotionImpl {
 
     @SubscribeEvent
     public void onHeal(LivingHealEvent event) {
-        var effect = event.getEntity().getEffect(Holder.direct(this));
+        var effect = event.getEntity().getEffect(ModPotions.BREATHLESS);
         if (effect == null)
             return;
         var chance = (effect.getAmplifier() + 1) / 15F;

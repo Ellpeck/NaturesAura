@@ -285,7 +285,7 @@ public final class Helper {
     }
 
     // This is how @ObjectHolder SHOULD work...
-    public static <T> void populateObjectHolders(Class<?> clazz, Registry<T> registry) {
+    public static <T> void populateObjectHolders(Class<?> clazz, Registry<T> registry, boolean useHolders) {
         for (var entry : clazz.getFields()) {
             if (!Modifier.isStatic(entry.getModifiers()))
                 continue;
@@ -295,7 +295,7 @@ public final class Helper {
                 continue;
             }
             try {
-                entry.set(null, registry.get(location));
+                entry.set(null, useHolders ? registry.getHolder(location).orElseThrow() : registry.get(location));
             } catch (IllegalAccessException e) {
                 NaturesAura.LOGGER.error(e);
             }

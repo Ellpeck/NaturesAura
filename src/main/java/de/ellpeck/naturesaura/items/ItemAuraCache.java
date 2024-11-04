@@ -41,7 +41,7 @@ public class ItemAuraCache extends ItemImpl implements ITrinketItem, ICustomCrea
                 if (recharge != null) {
                     if (recharge.rechargeFromContainer(container, itemSlot, i, player.getInventory().selected == i))
                         break;
-                } else if (stack.getEnchantmentLevel(Holder.direct(ModEnchantments.AURA_MENDING)) > 0) {
+                } else if (stack.getEnchantmentLevel(ModEnchantments.AURA_MENDING) > 0) {
                     var mainSize = player.getInventory().items.size();
                     var isArmor = i >= mainSize && i < mainSize + player.getInventory().armor.size();
                     if ((isArmor || player.getInventory().selected == i) && Helper.rechargeAuraItem(stack, container, 1000))
