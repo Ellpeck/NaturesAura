@@ -1,0 +1,32 @@
+on:
+  push:
+    tags: ["*"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ hashFiles('**/build.gradle', '**/gradle-wrapper.properties', '**/gradle.properties') }}
+      - name: Grab Changelog from Commit Message Body
+        run: |
+          changelog=$(echo -e "$MESSAGE" | sed -n '/^$/,$p' | sed '1d')
+          echo $changelog
+          echo "CHANGELOG=$changelog" >> $GITHUB_ENV
+        env:
+          MESSAGE: ${{ github.event.head_commit.message }}
+      - name: Release
+        run: |
+          chmod +x ./gradlew
+          ./gradlew publishMods --no-daemon
