@@ -28,7 +28,6 @@ jobs:
             echo -e "$changelog"
             echo EOF
           } >> "$GITHUB_ENV"
-          echo -e "CHANGELOG=$changelog" >> $GITHUB_ENV
         env:
           MESSAGE: ${{ github.event.head_commit.message }}
       - name: Release
