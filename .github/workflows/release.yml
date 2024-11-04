@@ -22,8 +22,13 @@ jobs:
       - name: Grab Changelog from Commit Message Body
         run: |
           changelog=$(echo -e "$MESSAGE" | sed -n '/^$/,$p' | sed '1d')
-          echo $changelog
-          echo "CHANGELOG=$changelog" >> $GITHUB_ENV
+          echo -e "$changelog"
+          {
+            echo 'CHANGELOG<<EOF'
+            echo -e "$changelog"
+            echo EOF
+          } >> "$GITHUB_ENV"
+          echo -e "CHANGELOG=$changelog" >> $GITHUB_ENV
         env:
           MESSAGE: ${{ github.event.head_commit.message }}
       - name: Release
