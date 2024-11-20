@@ -51,6 +51,16 @@ public class ItemTagProvider extends ItemTagsProvider {
                 this.tag(ItemTags.SWORDS).add(i);
             } else if (i instanceof ItemShovel) {
                 this.tag(ItemTags.SHOVELS).add(i);
+            } else if (i instanceof ItemArmor a) {
+                var tag = switch (a.getType()) {
+                    case HELMET -> ItemTags.HEAD_ARMOR;
+                    case CHESTPLATE -> ItemTags.CHEST_ARMOR;
+                    case LEGGINGS -> ItemTags.LEG_ARMOR;
+                    case BOOTS -> ItemTags.FOOT_ARMOR;
+                    default -> null;
+                };
+                if (tag != null)
+                    this.tag(tag).add(i);
             }
         });
 
@@ -62,4 +72,5 @@ public class ItemTagProvider extends ItemTagsProvider {
         // super is protected, but CuriosCompat needs this
         return super.tag(tag);
     }
+
 }
