@@ -37,10 +37,10 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
         if (!(below instanceof BlastFurnaceBlockEntity tile))
             return;
         var input = new SingleRecipeInput(tile.getItem(0));
-        Recipe<?> recipe = this.level.getRecipeManager().getRecipeFor(BlockEntityFurnaceHeater.getRecipeType(tile), input, this.level).orElse(null).value();
+        var recipe = this.level.getRecipeManager().getRecipeFor(BlockEntityFurnaceHeater.getRecipeType(tile), input, this.level).orElse(null);
         if (recipe == null)
             return;
-        if (!this.isApplicable(recipe.getIngredients()))
+        if (!this.isApplicable(recipe.value().getIngredients()))
             return;
 
         var data = BlockEntityFurnaceHeater.getFurnaceData(tile);
@@ -59,7 +59,7 @@ public class BlockEntityBlastFurnaceBooster extends BlockEntityImpl implements I
             return;
 
         if (output.isEmpty()) {
-            var result = recipe.getResultItem(this.level.registryAccess());
+            var result = recipe.value().getResultItem(this.level.registryAccess());
             tile.setItem(2, result.copy());
         } else {
             output.grow(1);
