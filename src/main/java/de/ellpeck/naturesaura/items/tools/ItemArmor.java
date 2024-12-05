@@ -35,7 +35,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
     private final String baseName;
 
     public ItemArmor(String baseName, ModArmorMaterial materialIn, ArmorItem.Type equipmentSlotIn) {
-        super(materialIn.material, equipmentSlotIn, new Properties());
+        super(materialIn.material, equipmentSlotIn, new Properties().durability(materialIn.getDurability(equipmentSlotIn)));
         this.baseName = baseName;
         ModRegistry.ALL_ITEMS.add(this);
     }
