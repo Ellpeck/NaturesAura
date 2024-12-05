@@ -79,6 +79,7 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
                     stack.shrink(recipeCount * amount);
                     item.kill();
                     this.sendToClients();
+                    this.setChanged();
 
                     for (var i = 0; i < recipeCount; i++)
                         this.itemsToSpawn.add(recipe.output.copy());
