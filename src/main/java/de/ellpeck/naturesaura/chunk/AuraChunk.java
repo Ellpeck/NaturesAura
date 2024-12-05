@@ -278,31 +278,4 @@ public class AuraChunk implements IAuraChunk {
         }
     }
 
-    public static class DrainSpot extends MutableInt {
-
-        public final BlockPos pos;
-        public BlockPos originalSpreadPos;
-
-        public DrainSpot(BlockPos pos, int value) {
-            super(value);
-            this.pos = pos;
-        }
-
-        public DrainSpot(CompoundTag tag) {
-            this(BlockPos.of(tag.getLong("pos")), tag.getInt("amount"));
-            if (tag.contains("original_spread_pos"))
-                this.originalSpreadPos = BlockPos.of(tag.getLong("original_spread_pos"));
-        }
-
-        public CompoundTag serializeNBT() {
-            var ret = new CompoundTag();
-            ret.putLong("pos", this.pos.asLong());
-            ret.putInt("amount", this.intValue());
-            if (this.originalSpreadPos != null)
-                ret.putLong("original_spread_pos", this.originalSpreadPos.asLong());
-            return ret;
-        }
-
-    }
-
 }

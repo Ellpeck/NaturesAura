@@ -2,12 +2,12 @@ package de.ellpeck.naturesaura.api.aura.chunk;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
-import de.ellpeck.naturesaura.chunk.AuraChunk;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.function.BiConsumer;
@@ -152,12 +152,39 @@ public interface IAuraChunk extends INBTSerializable<CompoundTag> {
      */
     int storeAura(BlockPos pos, int amount);
 
-    AuraChunk.DrainSpot getActualDrainSpot(BlockPos pos, boolean make);
+    DrainSpot getActualDrainSpot(BlockPos pos, boolean make);
 
     int getDrainSpot(BlockPos pos);
 
     IAuraType getType();
 
     void markDirty();
+
+    class DrainSpot extends MutableInt {
+
+        public final BlockPos pos;
+        public BlockPos originalSpreadPos;
+
+        public DrainSpot(BlockPos pos, int value) {
+            super(value);
+            this.pos = pos;
+        }
+
+        public DrainSpot(CompoundTag tag) {
+            this(BlockPos.of(tag.getLong("pos")), tag.getInt("amount"));
+            if (tag.contains("original_spread_pos"))
+                this.originalSpreadPos = BlockPos.of(tag.getLong("original_spread_pos"));
+        }
+
+        public CompoundTag serializeNBT() {
+            var ret = new CompoundTag();
+            ret.putLong("pos", this.pos.asLong());
+            ret.putInt("amount", this.intValue());
+            if (this.originalSpreadPos != null)
+                ret.putLong("original_spread_pos", this.originalSpreadPos.asLong());
+            return ret;
+        }
+
+    }
 
 }
