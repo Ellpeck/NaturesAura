@@ -27,7 +27,7 @@ import java.util.Set;
 
 public class PlantBoostEffect implements IDrainSpotEffect {
 
-    public static final Set<Block> EXCEPTIONS = new HashSet<>(List.of(Blocks.GRASS_BLOCK, Blocks.MOSS_BLOCK, Blocks.GLOW_LICHEN, Blocks.SMALL_DRIPLEAF, Blocks.BIG_DRIPLEAF, Blocks.BIG_DRIPLEAF_STEM));
+    public static final Set<Block> EXCEPTIONS = new HashSet<>(List.of(Blocks.GRASS_BLOCK, Blocks.MOSS_BLOCK, Blocks.GLOW_LICHEN, Blocks.SMALL_DRIPLEAF, Blocks.BIG_DRIPLEAF, Blocks.BIG_DRIPLEAF_STEM, Blocks.PINK_PETALS, Blocks.AZALEA, Blocks.FLOWERING_AZALEA));
     public static final ResourceLocation NAME = ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "plant_boost");
 
     private int amount;
