@@ -21,12 +21,10 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
 
     private final String baseName;
-    private final float defaultSpeed;
 
     public ItemAxe(String baseName, Tier material, float damage, float speed) {
         super(material, new Properties().attributes(AxeItem.createAttributes(material, damage, speed)));
         this.baseName = baseName;
-        this.defaultSpeed = speed;
         ModRegistry.ALL_ITEMS.add(this);
     }
 
@@ -38,7 +36,7 @@ public class ItemAxe extends AxeItem implements IModItem, ICustomItemModel {
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
         if (state.is(BlockTags.LEAVES)) {
-            return this.defaultSpeed;
+            return this.getTier().getSpeed();
         } else {
             return super.getDestroySpeed(stack, state);
         }
