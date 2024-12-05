@@ -44,7 +44,7 @@ public class BlockEntityHopperUpgrade extends BlockEntityImpl implements ITickab
             if (items.isEmpty())
                 return;
 
-            var drainPerItem = 500;
+            var drainPerItem = 100;
             if (!this.canUseRightNow(drainPerItem * items.size()))
                 return;
 

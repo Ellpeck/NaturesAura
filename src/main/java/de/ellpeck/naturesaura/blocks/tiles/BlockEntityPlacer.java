@@ -44,7 +44,7 @@ public class BlockEntityPlacer extends BlockEntityImpl implements ITickableBlock
             if (frames.isEmpty())
                 return;
 
-            var toDrain = 1000;
+            var toDrain = 200;
             if (!this.canUseRightNow(toDrain))
                 return;
 
