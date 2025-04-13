@@ -1,6 +1,6 @@
 {
     "name": "灵气装瓶",
-    "icon": "naturesaura:aura_bottle{stored_type:'naturesaura:overworld'}",
+    "icon": "naturesaura:aura_bottle[naturesaura:aura_bottle_data={'aura_type':'naturesaura:overworld'}]",
     "category": "naturesaura:practices",
     "advancement": "naturesaura:wood_stand",
     "turnin": "naturesaura:aura_bottle_overworld",
@@ -16,7 +16,7 @@
         },
         {
             "type": "spotlight",
-            "item": "naturesaura:aura_bottle{stored_type:'naturesaura:overworld'}",
+            "item": "naturesaura:aura_bottle[naturesaura:aura_bottle_data={'aura_type':'naturesaura:overworld'}]",
             "link_recipe": true,
             "text": "当然，根据你当前所在世界的不同，$(aura-zh-cn)的种类也会稍微不同。例如，在普通世界，$(aura-zh-cn)可以以阳光的形式被收集。但在下界领域，$(aura-zh-cn)只能被以鬼魂的形式收集。在末路之地领域，$(aura-zh-cn)则会以过剩黑暗的形式出现。"
         },
