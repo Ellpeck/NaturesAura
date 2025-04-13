@@ -1,6 +1,6 @@
 {
     "name": "오라 보틀링",
-    "icon": "naturesaura:aura_bottle{stored_type:'naturesaura:overworld'}",
+    "icon": "naturesaura:aura_bottle[naturesaura:aura_bottle_data={'aura_type':'naturesaura:overworld'}]",
     "category": "naturesaura:practices",
     "advancement": "naturesaura:wood_stand",
     "turnin": "naturesaura:aura_bottle_overworld",
@@ -16,7 +16,7 @@
         },
         {
             "type": "spotlight",
-            "item": "naturesaura:aura_bottle{stored_type:'naturesaura:overworld'}",
+            "item": "naturesaura:aura_bottle[naturesaura:aura_bottle_data={'aura_type':'naturesaura:overworld'}]",
             "link_recipe": true,
             "text": "물론, 현재 당신이 살고 있는 월드를 기준으로 하면, 수집된 $(#419600)오라$()의 종류는 약간 다를 것이다. 예를 들어, 정상적인 월드에서는 $(#419600)오라$()를 햇빛의 형태로 모을 수 있고, 네더에서는 $(#419600)오라$()를 유령의 형태로 모을 수 있고, 엔더 지역에서는 $(#419600)오라$()가 과다한 어둠의 형태로 존재한다."
         },

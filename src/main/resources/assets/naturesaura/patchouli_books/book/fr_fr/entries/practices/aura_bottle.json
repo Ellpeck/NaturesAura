@@ -1,6 +1,6 @@
 {
     "name": "Aura Bottling",
-    "icon": "naturesaura:aura_bottle{stored_type:'naturesaura:overworld'}",
+    "icon": "naturesaura:aura_bottle[naturesaura:aura_bottle_data={'aura_type':'naturesaura:overworld'}]",
     "category": "naturesaura:practices",
     "advancement": "naturesaura:wood_stand",
     "turnin": "naturesaura:aura_bottle_overworld",
@@ -16,7 +16,7 @@
         },
         {
             "type": "spotlight",
-            "item": "naturesaura:aura_bottle{stored_type:'naturesaura:overworld'}",
+            "item": "naturesaura:aura_bottle[naturesaura:aura_bottle_data={'aura_type':'naturesaura:overworld'}]",
             "link_recipe": true,
             "text": "Of course, based on the world that you are currently in, the type of $(aura) collected will slightly vary. For instance, in the normal world, $(aura) can be gathered in the form of sunlight, while in the Nether realm, $(aura) can be gathered in the form of ghosts, and in the End realm, $(aura) is present in the form of an overabundance of darkness."
         },
