@@ -57,7 +57,7 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
                 var direction = blockSource.state().getValue(DispenserBlock.FACING);
                 var position = DispenseConfig.DEFAULT.positionFunction().getDispensePosition(blockSource, direction);
                 var projectile = new ThrownTrident(EntityType.TRIDENT, level);
-                ObfuscationReflectionHelper.setPrivateValue(ThrownTrident.class, projectile, item.copy(), "pickupItemStack");
+                ObfuscationReflectionHelper.setPrivateValue(AbstractArrow.class, projectile, item.copy(), "pickupItemStack");
                 projectile.pickup = AbstractArrow.Pickup.ALLOWED;
                 projectile.setPos(position.x(), position.y(), position.z());
                 projectile.shoot(direction.getStepX(), direction.getStepY(), direction.getStepZ(), DispenseConfig.DEFAULT.power(), DispenseConfig.DEFAULT.uncertainty());
