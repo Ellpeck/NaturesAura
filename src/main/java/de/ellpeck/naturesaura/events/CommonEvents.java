@@ -35,7 +35,7 @@ import java.util.UUID;
 public class CommonEvents {
 
     private static final Method GET_LOADED_CHUNKS_METHOD = ObfuscationReflectionHelper.findMethod(ChunkMap.class, "getChunks");
-    private static final SetMultimap<UUID, ChunkPos> PENDING_AURA_CHUNKS = HashMultimap.create();
+    private static final SetMultimap<UUID, ChunkPos> PENDING_AURA_CHUNKS = Multimaps.synchronizedSetMultimap(HashMultimap.create());
 
     @SubscribeEvent
     public void onChunkUnload(ChunkEvent.Unload event) {
