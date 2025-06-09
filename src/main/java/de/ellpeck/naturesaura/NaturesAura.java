@@ -31,13 +31,14 @@ public final class NaturesAura {
 
     public NaturesAura(ModContainer container) {
         NaturesAura.instance = this;
-        NaturesAura.proxy = FMLEnvironment.dist.isClient() ? new ClientProxy(container) : new ServerProxy();
-
-        container.getEventBus().addListener(this::setup);
 
         var builder = new ModConfigSpec.Builder();
         ModConfig.instance = new ModConfig(builder);
         container.registerConfig(net.neoforged.fml.config.ModConfig.Type.COMMON, builder.build());
+
+        NaturesAura.proxy = FMLEnvironment.dist.isClient() ? new ClientProxy(container) : new ServerProxy();
+
+        container.getEventBus().addListener(this::setup);
     }
 
     public void setup(FMLCommonSetupEvent event) {
