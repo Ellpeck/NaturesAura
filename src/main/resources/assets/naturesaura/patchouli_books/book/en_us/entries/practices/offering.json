@@ -3,6 +3,7 @@
     "icon": "naturesaura:offering_table",
     "category": "naturesaura:practices",
     "advancement": "naturesaura:infused_materials",
+    "turnin": "naturesaura:sky_ingot",
     "pages": [
         {
             "type": "text",
