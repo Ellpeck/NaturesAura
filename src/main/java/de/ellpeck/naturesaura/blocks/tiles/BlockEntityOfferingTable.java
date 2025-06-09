@@ -101,7 +101,7 @@ public class BlockEntityOfferingTable extends BlockEntityImpl implements ITickab
                 }
             } else if (this.level.getGameTime() % 3 == 0) {
                 if (!this.itemsToSpawn.isEmpty())
-                    this.level.addFreshEntity(new ItemEntity(this.level, this.worldPosition.getX() + 0.5F, 256, this.worldPosition.getZ() + 0.5F, this.itemsToSpawn.remove()));
+                    this.level.addFreshEntity(new ItemEntity(this.level, this.worldPosition.getX() + 0.5F, this.level.getMaxBuildHeight(), this.worldPosition.getZ() + 0.5F, this.itemsToSpawn.remove()));
             }
         }
     }
