@@ -1,7 +1,6 @@
 package de.ellpeck.naturesaura.events;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
+import com.google.common.collect.*;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
@@ -19,6 +18,7 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.level.ChunkWatchEvent;
@@ -35,7 +35,7 @@ import java.util.UUID;
 public class CommonEvents {
 
     private static final Method GET_LOADED_CHUNKS_METHOD = ObfuscationReflectionHelper.findMethod(ChunkMap.class, "getChunks");
-    private static final ListMultimap<UUID, ChunkPos> PENDING_AURA_CHUNKS = ArrayListMultimap.create();
+    private static final SetMultimap<UUID, ChunkPos> PENDING_AURA_CHUNKS = HashMultimap.create();
 
     @SubscribeEvent
     public void onChunkUnload(ChunkEvent.Unload event) {
@@ -47,6 +47,7 @@ public class CommonEvents {
                 data.auraChunksWithSpots.remove(chunk.getPos().toLong());
             }
         }
+        CommonEvents.PENDING_AURA_CHUNKS.values().remove(iChunk.getPos());
     }
 
     @SubscribeEvent
@@ -106,6 +107,11 @@ public class CommonEvents {
             else if (aura >= 1500000)
                 Helper.addAdvancement(event.getEntity(), ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "positive_imbalance"), "triggered_in_code");
         }
+    }
+
+    @SubscribeEvent
+    public void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
+        CommonEvents.PENDING_AURA_CHUNKS.removeAll(event.getEntity().getUUID());
     }
 
     @SubscribeEvent
