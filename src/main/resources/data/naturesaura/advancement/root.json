@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:eye"
+            "id": "naturesaura:eye"
         },
         "title": {
             "translate": "advancement.naturesaura.root"
@@ -20,10 +20,13 @@
                 "items": [
                     {
                         "items": ["patchouli:guide_book"],
-                        "nbt": "{\"patchouli:book\":\"naturesaura:book\"}"
+                        "components": {
+                            "patchouli:book": "naturesaura:book"
+                        }
                     }
                 ]
             }
         }
-    }
+    },
+    "requirements": [["book"]]
 }

@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:placer"
+            "id": "naturesaura:placer"
         },
         "title": {
             "translate": "advancement.naturesaura.placer"
@@ -22,5 +22,6 @@
                 ]
             }
         }
-    }
+    },
+    "requirements": [["placer"]]
 }

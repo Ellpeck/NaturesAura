@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:infused_iron"
+            "id": "naturesaura:infused_iron"
         },
         "title": {
             "translate": "advancement.naturesaura.infused_materials"
@@ -22,5 +22,6 @@
                 ]
             }
         }
-    }
+    },
+    "requirements": [["materials"]]
 }

@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:depth_pickaxe"
+            "id": "naturesaura:depth_pickaxe"
         },
         "title": {
             "translate": "advancement.naturesaura.depth_tools"
@@ -46,5 +46,6 @@
                 ]
             }
         }
-    }
+    },
+    "requirements": [["materials"]]
 }

@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:furnace_heater"
+            "id": "naturesaura:furnace_heater"
         },
         "title": {
             "translate": "advancement.naturesaura.furnace_heater"
@@ -22,5 +22,6 @@
                 ]
             }
         }
-    }
+    },
+    "requirements": [["heater"]]
 }

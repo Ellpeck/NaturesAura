@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:infused_iron_pickaxe"
+            "id": "naturesaura:infused_iron_pickaxe"
         },
         "title": {
             "translate": "advancement.naturesaura.infused_tools"
@@ -12,7 +12,7 @@
     },
     "parent": "naturesaura:infused_materials",
     "criteria": {
-        "materials": {
+        "tools": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
@@ -25,5 +25,6 @@
                 ]
             }
         }
-    }
+    },
+    "requirements": [["tools"]]
 }

@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "minecraft:wheat_seeds"
+            "id": "minecraft:wheat_seeds"
         },
         "title": {
             "translate": "advancement.naturesaura.positive_imbalance"
@@ -15,5 +15,6 @@
         "triggered_in_code": {
             "trigger": "minecraft:impossible"
         }
-    }
+    },
+    "requirements": [["triggered_in_code"]]
 }

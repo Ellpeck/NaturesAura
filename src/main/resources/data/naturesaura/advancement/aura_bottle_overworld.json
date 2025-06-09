@@ -1,8 +1,12 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:aura_bottle",
-            "nbt": "{\"stored_type\":\"naturesaura:overworld\"}"
+            "id": "naturesaura:aura_bottle",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:overworld"
+                }
+            }
         },
         "title": {
             "translate": "advancement.naturesaura.aura_bottle_overworld"
@@ -19,10 +23,15 @@
                 "items": [
                     {
                         "items": ["naturesaura:aura_bottle"],
-                        "nbt": "{\"stored_type\":\"naturesaura:overworld\"}"
+                        "components": {
+                            "naturesaura:aura_bottle_data": {
+                                "aura_type": "naturesaura:overworld"
+                            }
+                        }
                     }
                 ]
             }
         }
-    }
+    },
+    "requirements": [["bottle"]]
 }

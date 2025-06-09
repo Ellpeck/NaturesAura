@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:vacuum_bottle"
+            "id": "naturesaura:vacuum_bottle"
         },
         "title": {
             "translate": "advancement.naturesaura.vacuum_bottle"
@@ -22,5 +22,6 @@
                 ]
             }
         }
-    }
+    },
+    "requirements": [["bottle"]]
 }

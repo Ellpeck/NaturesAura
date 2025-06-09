@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:nature_altar"
+            "id": "naturesaura:nature_altar"
         },
         "title": {
             "translate": "advancement.naturesaura.altar"
@@ -12,7 +12,7 @@
     },
     "parent": "naturesaura:aura_bottle_overworld",
     "criteria": {
-        "book": {
+        "altar": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
@@ -22,5 +22,6 @@
                 ]
             }
         }
-    }
+    },
+    "requirements": [["altar"]]
 }

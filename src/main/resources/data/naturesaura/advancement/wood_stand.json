@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:wood_stand"
+            "id": "naturesaura:wood_stand"
         },
         "title": {
             "translate": "advancement.naturesaura.wood_stand"
@@ -22,5 +22,6 @@
                 ]
             }
         }
-    }
+    },
+    "requirements": [["stand"]]
 }

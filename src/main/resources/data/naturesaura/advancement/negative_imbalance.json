@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:decayed_leaves"
+            "id": "naturesaura:decayed_leaves"
         },
         "title": {
             "translate": "advancement.naturesaura.negative_imbalance"
@@ -15,5 +15,6 @@
         "triggered_in_code": {
             "trigger": "minecraft:impossible"
         }
-    }
+    },
+    "requirements": [["triggered_in_code"]]
 }

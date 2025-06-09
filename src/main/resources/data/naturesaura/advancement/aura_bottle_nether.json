@@ -1,8 +1,12 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:aura_bottle",
-            "nbt": "{\"stored_type\":\"naturesaura:nether\"}"
+            "id": "naturesaura:aura_bottle",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:nether"
+                }
+            }
         },
         "title": {
             "translate": "advancement.naturesaura.aura_bottle_nether"
@@ -19,10 +23,15 @@
                 "items": [
                     {
                         "items": ["naturesaura:aura_bottle"],
-                        "nbt": "{\"stored_type\":\"naturesaura:nether\"}"
+                        "components": {
+                            "naturesaura:aura_bottle_data": {
+                                "aura_type": "naturesaura:nether"
+                            }
+                        }
                     }
                 ]
             }
         }
-    }
+    },
+    "requirements": [["bottle"]]
 }

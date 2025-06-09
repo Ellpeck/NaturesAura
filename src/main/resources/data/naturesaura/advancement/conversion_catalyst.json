@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:conversion_catalyst"
+            "id": "naturesaura:conversion_catalyst"
         },
         "title": {
             "translate": "advancement.naturesaura.conversion_catalyst"
@@ -22,5 +22,6 @@
                 ]
             }
         }
-    }
+    },
+    "requirements": [["catalyst"]]
 }

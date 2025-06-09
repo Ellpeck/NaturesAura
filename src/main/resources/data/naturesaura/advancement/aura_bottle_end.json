@@ -1,8 +1,12 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:aura_bottle",
-            "nbt": "{\"stored_type\":\"naturesaura:end\"}"
+            "id": "naturesaura:aura_bottle",
+            "components": {
+                "naturesaura:aura_bottle_data": {
+                    "aura_type": "naturesaura:end"
+                }
+            }
         },
         "title": {
             "translate": "advancement.naturesaura.aura_bottle_end"
@@ -19,10 +23,15 @@
                 "items": [
                     {
                         "items": ["naturesaura:aura_bottle"],
-                        "nbt": "{\"stored_type\":\"naturesaura:end\"}"
+                        "components": {
+                            "naturesaura:aura_bottle_data": {
+                                "aura_type": "naturesaura:end"
+                            }
+                        }
                     }
                 ]
             }
         }
-    }
+    },
+    "requirements": [["bottle"]]
 }

@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "naturesaura:depth_ingot"
+            "id": "naturesaura:depth_ingot"
         },
         "title": {
             "translate": "advancement.naturesaura.depth_ingot"
@@ -22,5 +22,6 @@
                 ]
             }
         }
-    }
+    },
+    "requirements": [["ingot"]]
 }
