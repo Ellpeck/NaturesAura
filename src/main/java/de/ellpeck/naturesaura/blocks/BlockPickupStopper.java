@@ -1,9 +1,11 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.Helper;
+import de.ellpeck.naturesaura.api.misc.ILevelData;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityPickupStopper;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.misc.LevelData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
@@ -31,24 +33,22 @@ public class BlockPickupStopper extends BlockContainerImpl implements IVisualiza
         var player = event.getPlayer();
         if (player != null && !player.isShiftKeyDown()) {
             var item = event.getItemEntity();
-            var pos = item.blockPosition();
-            Helper.getBlockEntitiesInArea(item.level(), pos, 8, tile -> {
-                if (!(tile instanceof BlockEntityPickupStopper stopper))
-                    return false;
-                var radius = stopper.getRadius();
+            var data = (LevelData) ILevelData.getLevelData(item.level());
+            for (var tile : data.pickupStoppers) {
+                var radius = tile.getRadius();
                 if (radius <= 0F)
-                    return false;
-                var stopperPos = stopper.getBlockPos();
+                    continue;
+                var stopperPos = tile.getBlockPos();
                 if (!new AABB(stopperPos).inflate(radius).intersects(item.getBoundingBox()))
-                    return false;
+                    continue;
 
                 event.setCanPickup(TriState.FALSE);
 
                 if (item.level().getGameTime() % 3 == 0)
-                    PacketHandler.sendToAllAround(item.level(), pos, 32,
+                    PacketHandler.sendToAllAround(item.level(), item.blockPosition(), 32,
                         new PacketParticles((float) item.getX(), (float) item.getY(), (float) item.getZ(), PacketParticles.Type.PICKUP_STOPPER));
-                return true;
-            });
+                break;
+            }
         }
     }
 

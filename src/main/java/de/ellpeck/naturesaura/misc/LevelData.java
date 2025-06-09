@@ -4,6 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.misc.ILevelData;
+import de.ellpeck.naturesaura.blocks.tiles.BlockEntityPickupStopper;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntitySpawnLamp;
 import de.ellpeck.naturesaura.blocks.tiles.ItemStackHandlerNA;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
@@ -32,6 +33,7 @@ public class LevelData extends SavedData implements ILevelData {
     public final Long2ObjectOpenHashMap<AuraChunk> auraChunksWithSpots = new Long2ObjectOpenHashMap<>();
     public final List<BlockPos> recentlyConvertedMossStones = new ArrayList<>();
     public final Set<BlockEntitySpawnLamp> spawnLamps = new HashSet<>();
+    public final Set<BlockEntityPickupStopper> pickupStoppers = new HashSet<>();
     private final Map<String, ItemStackHandlerNA> enderStorages = new HashMap<>();
 
     public Level level;
