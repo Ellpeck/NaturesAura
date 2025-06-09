@@ -47,7 +47,10 @@ public class CommonEvents {
                 data.auraChunksWithSpots.remove(chunk.getPos().toLong());
             }
         }
-        CommonEvents.PENDING_AURA_CHUNKS.values().remove(iChunk.getPos());
+        // synchronize on multimap values, see Multimaps.synchronizedMultimap docs!
+        synchronized (CommonEvents.PENDING_AURA_CHUNKS) {
+            CommonEvents.PENDING_AURA_CHUNKS.values().remove(iChunk.getPos());
+        }
     }
 
     @SubscribeEvent
