@@ -43,7 +43,7 @@ public class PatchouliCompat implements ICompat {
                     rawMatchers[i] = PatchouliAPI.get().anyMatcher();
                 else
                     rawMatchers[i] = PatchouliAPI.get().predicateMatcher(matcher.defaultState(),
-                        state -> check.matches(null, null, null, null, state, (char) 0));
+                            state -> check.matches(null, null, null, null, state, (char) 0));
             }
         }
         PatchouliCompat.MULTIBLOCKS.put(name, PatchouliAPI.get().makeMultiblock(pattern, rawMatchers));
@@ -54,7 +54,8 @@ public class PatchouliCompat implements ICompat {
         var manager = Minecraft.getInstance().level.getRecipeManager();
         var res = ResourceLocation.parse(name);
         var pre = ResourceLocation.fromNamespaceAndPath(res.getNamespace(), type + "/" + res.getPath());
-        return (T) manager.byKey(pre).orElse(null).value();
+        var holder = manager.byKey(pre).orElse(null);
+        return holder != null ? (T) holder.value() : null;
     }
 
     public static IVariable ingredientVariable(Ingredient ingredient, HolderLookup.Provider registries) {
@@ -93,9 +94,9 @@ public class PatchouliCompat implements ICompat {
 
             if (event.getMouseX() >= x && event.getMouseY() >= y && event.getMouseX() < x + 43 && event.getMouseY() < y + 42)
                 event.getGraphics().renderTooltip(Minecraft.getInstance().font,
-                    Collections.singletonList(Component.literal("It's the author Ellpeck's birthday!").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GOLD))),
-                    Optional.empty(),
-                    event.getMouseX(), event.getMouseY());
+                        Collections.singletonList(Component.literal("It's the author Ellpeck's birthday!").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GOLD))),
+                        Optional.empty(),
+                        event.getMouseX(), event.getMouseY());
         } else if (now.getMonth() == Month.JUNE) {
             var x = gui.width / 2 + 272 / 2;
             var y = gui.height / 2 + 32;
@@ -105,8 +106,8 @@ public class PatchouliCompat implements ICompat {
             if (event.getMouseX() >= x && event.getMouseY() >= y && event.getMouseX() < x + 45 && event.getMouseY() < y + 26)
                 //noinspection UnnecessaryUnicodeEscape
                 event.getGraphics().renderTooltip(gui.getMinecraft().font,
-                    Collections.singletonList(Component.literal("\u00A76Happy \u00A74P\u00A76r\u00A7ei\u00A72d\u00A79e\u00A75!")), Optional.empty(),
-                    event.getMouseX(), event.getMouseY());
+                        Collections.singletonList(Component.literal("\u00A76Happy \u00A74P\u00A76r\u00A7ei\u00A72d\u00A79e\u00A75!")), Optional.empty(),
+                        event.getMouseX(), event.getMouseY());
         }
 
         var name = gui.getMinecraft().player.getName().getString();
@@ -128,8 +129,8 @@ public class PatchouliCompat implements ICompat {
 
             if (event.getMouseX() >= x && event.getMouseY() >= y && event.getMouseX() < x + 16 && event.getMouseY() < y + 18)
                 event.getGraphics().renderTooltip(gui.getMinecraft().font,
-                    Collections.singletonList(Component.literal("Thanks for your support, " + name + "!").setStyle(Style.EMPTY.applyFormat(ChatFormatting.YELLOW))), Optional.empty(),
-                    event.getMouseX(), event.getMouseY());
+                        Collections.singletonList(Component.literal("Thanks for your support, " + name + "!").setStyle(Style.EMPTY.applyFormat(ChatFormatting.YELLOW))), Optional.empty(),
+                        event.getMouseX(), event.getMouseY());
 
         }
     }
