@@ -257,30 +257,32 @@ public class ClientEvents {
         if (event.getName() == VanillaGuiLayers.HOTBAR && !mc.options.hideGui && mc.player != null) {
             if (!ClientEvents.heldCache.isEmpty()) {
                 var container = ClientEvents.heldCache.getCapability(NaturesAuraAPI.AURA_CONTAINER_ITEM_CAPABILITY, null);
-                var width = Mth.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
+                if (container != null) {
+                    var width = Mth.ceil(container.getStoredAura() / (float) container.getMaxAura() * 80);
 
-                int conf = ModConfig.instance.cacheBarLocation.get();
-                var x = res.getGuiScaledWidth() / 2 + (conf == 0 ? -173 - (mc.player.getOffhandItem().isEmpty() ? 0 : 29) : 93);
-                var y = res.getGuiScaledHeight() - 8;
+                    int conf = ModConfig.instance.cacheBarLocation.get();
+                    var x = res.getGuiScaledWidth() / 2 + (conf == 0 ? -173 - (mc.player.getOffhandItem().isEmpty() ? 0 : 29) : 93);
+                    var y = res.getGuiScaledHeight() - 8;
 
-                stack.pushPose();
+                    stack.pushPose();
 
-                var color = container.getAuraColor();
-                graphics.setColor((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 1);
-                if (width < 80)
-                    graphics.blit(ClientEvents.OVERLAYS, x + width, y, width, 0, 80 - width, 6, 256, 256);
-                if (width > 0)
-                    graphics.blit(ClientEvents.OVERLAYS, x, y, 0, 6, width, 6, 256, 256);
+                    var color = container.getAuraColor();
+                    graphics.setColor((color >> 16 & 255) / 255F, (color >> 8 & 255) / 255F, (color & 255) / 255F, 1);
+                    if (width < 80)
+                        graphics.blit(ClientEvents.OVERLAYS, x + width, y, width, 0, 80 - width, 6, 256, 256);
+                    if (width > 0)
+                        graphics.blit(ClientEvents.OVERLAYS, x, y, 0, 6, width, 6, 256, 256);
 
-                var scale = 0.75F;
-                stack.pushPose();
-                stack.scale(scale, scale, scale);
-                var s = ClientEvents.heldCache.getHoverName().getString();
-                graphics.drawString(mc.font, s, conf == 1 ? x / scale : (x + 80) / scale - mc.font.width(s), (y - 7) / scale, color, true);
-                stack.popPose();
+                    var scale = 0.75F;
+                    stack.pushPose();
+                    stack.scale(scale, scale, scale);
+                    var s = ClientEvents.heldCache.getHoverName().getString();
+                    graphics.drawString(mc.font, s, conf == 1 ? x / scale : (x + 80) / scale - mc.font.width(s), (y - 7) / scale, color, true);
+                    stack.popPose();
 
-                graphics.setColor(1F, 1F, 1F, 1);
-                stack.pushPose();
+                    graphics.setColor(1F, 1F, 1F, 1);
+                    stack.pushPose();
+                }
             }
 
             if (!ClientEvents.heldEye.isEmpty() || !ClientEvents.heldOcular.isEmpty()) {
