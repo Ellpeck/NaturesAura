@@ -11,7 +11,7 @@
             "type": "spotlight",
             "item": "naturesaura:aura_bloom",
             "link_recipe": true,
-            "text": "The $(item)Aura Bloom$() grows in any kind of area where there is $(thing)grass$() to be found, usually in small patches. Finding areas like these can be espeically useful when first starting out with $(aura), since it is much less destructive for the environment to collect $(aura) using the $(l:practices/aura_bottle)Bottle and Cork$() here."
+            "text": "The $(item)Aura Bloom$() grows in any kind of area where there is $(thing)grass$() to be found, usually in small patches. Finding areas like these can be especially useful when first starting out with $(aura), since it is much less destructive for the environment to collect $(aura) using the $(l:practices/aura_bottle)Bottle and Cork$() here."
         },
         {
             "type": "spotlight",
