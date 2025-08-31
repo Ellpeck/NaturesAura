@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:goat_horn"
+        }
+    ],
+    "entity": "minecraft:goat",
+    "aura": 60000,
+    "time": 80
+}

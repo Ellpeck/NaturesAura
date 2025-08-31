@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:glow_ink_sac"
+        }
+    ],
+    "entity": "minecraft:glow_squid",
+    "aura": 50000,
+    "time": 40
+}

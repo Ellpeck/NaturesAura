@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:armadillo_scute"
+        }
+    ],
+    "entity": "minecraft:armadillo",
+    "aura": 150000,
+    "time": 100
+}

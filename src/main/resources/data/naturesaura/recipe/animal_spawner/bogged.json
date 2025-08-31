@@ -1,0 +1,17 @@
+{
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:bone"
+        },
+        {
+            "item": "minecraft:moss_block"
+        }
+    ],
+    "entity": "minecraft:bogged",
+    "aura": 100000,
+    "time": 120
+}

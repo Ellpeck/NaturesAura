@@ -1,0 +1,17 @@
+{
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:breeze_rod"
+        },
+        {
+            "item": "minecraft:wind_charge"
+        }
+    ],
+    "entity": "minecraft:breeze",
+    "aura": 250000,
+    "time": 200
+}

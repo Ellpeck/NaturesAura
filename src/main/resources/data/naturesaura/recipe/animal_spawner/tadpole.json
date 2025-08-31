@@ -1,0 +1,17 @@
+{
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:slime_ball"
+        },
+        {
+            "item": "minecraft:egg"
+        }
+    ],
+    "entity": "minecraft:tadpole",
+    "aura": 25000,
+    "time": 50
+}

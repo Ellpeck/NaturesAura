@@ -1,0 +1,20 @@
+{
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:sand"
+        },
+        {
+            "item": "minecraft:cactus"
+        },
+        {
+            "item": "minecraft:leather"
+        }
+    ],
+    "entity": "minecraft:camel",
+    "aura": 60000,
+    "time": 100
+}

@@ -1,0 +1,17 @@
+{
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:torchflower_seeds"
+        },
+        {
+            "item": "minecraft:egg"
+        }
+    ],
+    "entity": "minecraft:sniffer",
+    "aura": 150000,
+    "time": 100
+}

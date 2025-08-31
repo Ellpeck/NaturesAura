@@ -1,0 +1,14 @@
+{
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "tag": "minecraft:fishes"
+        }
+    ],
+    "entity": "minecraft:axolotl",
+    "aura": 150000,
+    "time": 80
+}

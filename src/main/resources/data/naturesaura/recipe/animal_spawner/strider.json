@@ -1,0 +1,17 @@
+{
+    "type": "naturesaura:animal_spawner",
+    "ingredients": [
+        {
+            "item": "naturesaura:birth_spirit"
+        },
+        {
+            "item": "minecraft:warped_fungus"
+        },
+        {
+            "item": "minecraft:string"
+        }
+    ],
+    "entity": "minecraft:strider",
+    "aura": 120000,
+    "time": 150
+}
