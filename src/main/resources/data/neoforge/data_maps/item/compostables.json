@@ -1,0 +1,37 @@
+{
+    "values": {
+        "naturesaura:ancient_leaves": {
+            "chance": 0.5
+        },
+        "naturesaura:ancient_sapling": {
+            "chance": 0.3
+        },
+        "naturesaura:gold_fiber": {
+            "chance": 0.3
+        },
+        "naturesaura:gold_leaf": {
+            "chance": 0.3
+        },
+        "naturesaura:gold_powder": {
+            "chance": 0.3
+        },
+        "naturesaura:aura_bloom": {
+            "chance": 0.65
+        },
+        "naturesaura:aura_cactus": {
+            "chance": 0.65
+        },
+        "naturesaura:warped_aura_mushroom": {
+            "chance": 0.65
+        },
+        "naturesaura:crimson_aura_mushroom": {
+            "chance": 0.65
+        },
+        "naturesaura:aura_mushroom": {
+            "chance": 0.65
+        },
+        "naturesaura:nether_wart_mushroom": {
+            "chance": 0.85
+        }
+    }
+}
