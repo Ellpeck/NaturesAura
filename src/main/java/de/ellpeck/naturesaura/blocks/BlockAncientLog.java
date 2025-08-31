@@ -1,6 +1,7 @@
 package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.reg.IAxeBreakable;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.IModItem;
 import de.ellpeck.naturesaura.reg.ModRegistry;
@@ -8,7 +9,7 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 
-public class BlockAncientLog extends RotatedPillarBlock implements IModItem, ICustomBlockState {
+public class BlockAncientLog extends RotatedPillarBlock implements IModItem, ICustomBlockState, IAxeBreakable {
 
     private final String baseName;
 

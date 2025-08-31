@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAnimalContainer;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -16,7 +17,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-public class BlockAnimalContainer extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
+public class BlockAnimalContainer extends BlockContainerImpl implements IVisualizable, ICustomBlockState, IPickaxeBreakable {
 
     private static final VoxelShape SHAPE = Block.box(5, 0, 5, 11, 13, 11);
 

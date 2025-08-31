@@ -16,14 +16,14 @@ public class BlockStateGenerator extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        for (var item : ModRegistry.ALL_ITEMS) {
-            if (!(item instanceof Block block))
-                continue;
+        ModData.getAllModItems().forEach(i -> {
+            if (!(i instanceof Block block))
+                return;
             if (block instanceof ICustomBlockState custom) {
                 custom.generateCustomBlockState(this);
             } else {
                 this.simpleBlock(block);
             }
-        }
+        });
     }
 }

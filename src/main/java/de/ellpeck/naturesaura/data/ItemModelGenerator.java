@@ -18,16 +18,16 @@ public class ItemModelGenerator extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        for (var modItem : ModRegistry.ALL_ITEMS) {
-            var name = modItem.getBaseName();
-            if (modItem instanceof ICustomItemModel) {
-                ((ICustomItemModel) modItem).generateCustomItemModel(this);
-            } else if (modItem instanceof Item) {
+        ModData.getAllModItems().forEach(i -> {
+            var name = i.getBaseName();
+            if (i instanceof ICustomItemModel) {
+                ((ICustomItemModel) i).generateCustomItemModel(this);
+            } else if (i instanceof Item) {
                 this.withExistingParent(name, "item/generated").texture("layer0", "item/" + name);
-            } else if (modItem instanceof Block && !(modItem instanceof INoItemBlock)) {
+            } else if (i instanceof Block && !(i instanceof INoItemBlock)) {
                 this.withExistingParent(name, this.modLoc("block/" + name));
             }
-        }
+        });
     }
 
     @Override

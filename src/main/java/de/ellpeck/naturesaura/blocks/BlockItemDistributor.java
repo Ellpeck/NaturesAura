@@ -3,6 +3,7 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityItemDistributor;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -11,7 +12,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class BlockItemDistributor extends BlockContainerImpl implements ICustomBlockState {
+public class BlockItemDistributor extends BlockContainerImpl implements ICustomBlockState, IPickaxeBreakable {
 
     public BlockItemDistributor() {
         super("item_distributor", BlockEntityItemDistributor.class, Properties.ofFullCopy(Blocks.STONE_BRICKS));

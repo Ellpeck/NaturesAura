@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.data.ItemModelGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ICustomItemModel;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -29,7 +30,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 
 import javax.annotation.Nullable;
 
-public class BlockGratedChute extends BlockContainerImpl implements ICustomBlockState, ICustomItemModel {
+public class BlockGratedChute extends BlockContainerImpl implements ICustomBlockState, ICustomItemModel, IPickaxeBreakable {
 
     public static final DirectionProperty FACING = HopperBlock.FACING;
     private static final VoxelShape INSIDE = Block.box(2.0, 11.0, 2.0, 14.0, 16.0, 14.0);

@@ -3,9 +3,10 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityChorusGenerator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import net.minecraft.world.level.block.Blocks;
 
-public class BlockChorusGenerator extends BlockContainerImpl implements ICustomBlockState {
+public class BlockChorusGenerator extends BlockContainerImpl implements ICustomBlockState, IPickaxeBreakable {
 
     public BlockChorusGenerator() {
         super("chorus_generator", BlockEntityChorusGenerator.class, Properties.ofFullCopy(Blocks.END_STONE));

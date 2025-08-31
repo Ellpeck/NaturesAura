@@ -3,6 +3,8 @@ package de.ellpeck.naturesaura.data;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
 import de.ellpeck.naturesaura.items.ModItems;
+import de.ellpeck.naturesaura.reg.IAxeBreakable;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -44,23 +46,14 @@ public class BlockTagProvider extends BlockTagsProvider {
         this.tag(BlockTagProvider.ALTAR_FANCY_BRICK).add(Blocks.RED_NETHER_BRICKS, Blocks.CHISELED_STONE_BRICKS);
         this.tag(Tags.Blocks.STORAGE_BLOCKS).add(ModBlocks.DEPTH_INGOT_BLOCK, ModBlocks.SKY_INGOT_BLOCK, ModBlocks.INFUSED_IRON_BLOCK);
 
-        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.ANIMAL_CONTAINER, ModBlocks.ANIMAL_GENERATOR,
-            ModBlocks.ANIMAL_SPAWNER, ModBlocks.AURA_DETECTOR, ModBlocks.AURA_TIMER, ModBlocks.BLAST_FURNACE_BOOSTER,
-            ModBlocks.CHORUS_GENERATOR, ModBlocks.CHUNK_LOADER, ModBlocks.CONVERSION_CATALYST, ModBlocks.CRUSHING_CATALYST,
-            ModBlocks.DEPTH_INGOT_BLOCK, ModBlocks.ENDER_CRATE, ModBlocks.FIELD_CREATOR, ModBlocks.FIREWORK_GENERATOR,
-            ModBlocks.FURNACE_HEATER, ModBlocks.GENERATOR_LIMIT_REMOVER, ModBlocks.GOLD_BRICK, ModBlocks.GOLD_NETHER_BRICK,
-            ModBlocks.GRATED_CHUTE, ModBlocks.HOPPER_UPGRADE, ModBlocks.INFUSED_BRICK, ModBlocks.INFUSED_BRICK_SLAB,
-            ModBlocks.INFUSED_BRICK_STAIRS, ModBlocks.INFUSED_IRON_BLOCK, ModBlocks.INFUSED_SLAB, ModBlocks.INFUSED_STAIRS,
-            ModBlocks.INFUSED_STONE, ModBlocks.ITEM_DISTRIBUTOR, ModBlocks.LOWER_LIMITER, ModBlocks.MOSS_GENERATOR,
-            ModBlocks.NATURE_ALTAR, ModBlocks.NETHER_GRASS, ModBlocks.PICKUP_STOPPER, ModBlocks.PLACER, ModBlocks.POTION_GENERATOR,
-            ModBlocks.POWDER_PLACER, ModBlocks.PROJECTILE_GENERATOR, ModBlocks.RF_CONVERTER, ModBlocks.SKY_INGOT_BLOCK,
-            ModBlocks.SNOW_CREATOR, ModBlocks.SPAWN_LAMP, ModBlocks.SPRING, ModBlocks.TAINTED_GOLD_BLOCK,
-            ModBlocks.TIME_CHANGER, ModBlocks.WEATHER_CHANGER);
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModData.getAllModItems().filter(i -> i instanceof IPickaxeBreakable).map(i -> (Block) i).toArray(Block[]::new));
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.CONVERSION_CATALYST, ModBlocks.CRUSHING_CATALYST,
+            ModBlocks.DEPTH_INGOT_BLOCK, ModBlocks.GOLD_BRICK, ModBlocks.GOLD_NETHER_BRICK, ModBlocks.INFUSED_STONE, ModBlocks.INFUSED_BRICK,
+            ModBlocks.INFUSED_BRICK_SLAB, ModBlocks.INFUSED_BRICK_STAIRS, ModBlocks.INFUSED_IRON_BLOCK, ModBlocks.INFUSED_SLAB,
+            ModBlocks.INFUSED_STAIRS, ModBlocks.SKY_INGOT_BLOCK, ModBlocks.TAINTED_GOLD_BLOCK);
 
-        this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.ANCIENT_BARK, ModBlocks.ANCIENT_LOG,
-            ModBlocks.ANCIENT_PLANKS, ModBlocks.ANCIENT_SLAB, ModBlocks.ANCIENT_STAIRS,
-            ModBlocks.AUTO_CRAFTER, ModBlocks.FLOWER_GENERATOR, ModBlocks.NETHER_WART_MUSHROOM,
-            ModBlocks.OAK_GENERATOR, ModBlocks.OFFERING_TABLE, ModBlocks.WOOD_STAND);
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModData.getAllModItems().filter(i -> i instanceof IAxeBreakable).map(i -> (Block) i).toArray(Block[]::new));
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.ANCIENT_PLANKS, ModBlocks.ANCIENT_SLAB, ModBlocks.ANCIENT_STAIRS, ModBlocks.NETHER_WART_MUSHROOM);
     }
 
 }

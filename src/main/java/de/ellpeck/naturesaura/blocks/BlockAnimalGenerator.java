@@ -8,6 +8,7 @@ import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.animal.Animal;
@@ -24,7 +25,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
-public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
+public class BlockAnimalGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState, IPickaxeBreakable {
 
     public BlockAnimalGenerator() {
         super("animal_generator", BlockEntityAnimalGenerator.class, Properties.of().strength(3F).sound(SoundType.STONE));

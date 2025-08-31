@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityOakGenerator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.reg.IAxeBreakable;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -22,7 +23,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.BlockGrowFeatureEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 
-public class BlockOakGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
+public class BlockOakGenerator extends BlockContainerImpl implements IVisualizable, ICustomBlockState, IAxeBreakable {
 
     public BlockOakGenerator() {
         super("oak_generator", BlockEntityOakGenerator.class, Properties.of().strength(2F).sound(SoundType.WOOD));

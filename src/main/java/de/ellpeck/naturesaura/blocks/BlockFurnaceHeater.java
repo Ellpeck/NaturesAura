@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityFurnaceHeater;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -22,7 +23,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlockState {
+public class BlockFurnaceHeater extends BlockContainerImpl implements ICustomBlockState, IPickaxeBreakable {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 

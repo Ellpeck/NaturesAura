@@ -9,6 +9,7 @@ import de.ellpeck.naturesaura.misc.LevelData;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
@@ -20,7 +21,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 
-public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
+public class BlockPickupStopper extends BlockContainerImpl implements IVisualizable, ICustomBlockState, IPickaxeBreakable {
 
     public BlockPickupStopper() {
         super("pickup_stopper", BlockEntityPickupStopper.class, Properties.of().strength(2F).sound(SoundType.STONE));

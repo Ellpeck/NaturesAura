@@ -32,9 +32,9 @@ public class BlockLootProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-        for (var item : ModRegistry.ALL_ITEMS) {
+        ModData.getAllModItems().forEach(item -> {
             if (!(item instanceof Block block))
-                continue;
+                return;
             if (block instanceof Slab) {
                 this.add(block, this::createSlabItemTable);
             } else if (block instanceof BlockFlowerPot) {
@@ -42,7 +42,7 @@ public class BlockLootProvider extends BlockLootSubProvider {
             } else {
                 this.dropSelf(block);
             }
-        }
+        });
 
         this.add(ModBlocks.ANCIENT_LEAVES, this::createSilkTouchOnlyTable);
         this.add(ModBlocks.DECAYED_LEAVES, this::createSilkTouchOnlyTable);
@@ -53,7 +53,7 @@ public class BlockLootProvider extends BlockLootSubProvider {
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return ModRegistry.ALL_ITEMS.stream().filter(i -> i instanceof Block).map(i -> (Block) i).toList();
+        return ModData.getAllModItems().filter(i -> i instanceof Block).map(i -> (Block) i).toList();
     }
 
 }

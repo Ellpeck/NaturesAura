@@ -2,14 +2,14 @@
   "values": [
     "naturesaura:ancient_bark",
     "naturesaura:ancient_log",
+    "naturesaura:auto_crafter",
+    "naturesaura:flower_generator",
+    "naturesaura:oak_generator",
+    "naturesaura:offering_table",
+    "naturesaura:wood_stand",
     "naturesaura:ancient_planks",
     "naturesaura:ancient_slab",
     "naturesaura:ancient_stairs",
-    "naturesaura:auto_crafter",
-    "naturesaura:flower_generator",
-    "naturesaura:nether_wart_mushroom",
-    "naturesaura:oak_generator",
-    "naturesaura:offering_table",
-    "naturesaura:wood_stand"
+    "naturesaura:nether_wart_mushroom"
   ]
 }

@@ -3,9 +3,10 @@ package de.ellpeck.naturesaura.blocks;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityTimeChanger;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import net.minecraft.world.level.block.SoundType;
 
-public class BlockTimeChanger extends BlockContainerImpl implements ICustomBlockState {
+public class BlockTimeChanger extends BlockContainerImpl implements ICustomBlockState, IPickaxeBreakable {
 
     public BlockTimeChanger() {
         super("time_changer", BlockEntityTimeChanger.class, Properties.of().strength(2.5F).sound(SoundType.STONE));

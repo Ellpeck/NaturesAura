@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.blocks;
 
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityAutoCrafter;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.reg.IAxeBreakable;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -11,7 +12,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
-public class BlockAutoCrafter extends BlockContainerImpl implements ICustomBlockState {
+public class BlockAutoCrafter extends BlockContainerImpl implements ICustomBlockState, IAxeBreakable {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 

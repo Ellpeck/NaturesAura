@@ -10,6 +10,7 @@ import de.ellpeck.naturesaura.blocks.tiles.render.RenderEnderCrate;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -37,7 +38,7 @@ import net.neoforged.neoforge.event.AnvilUpdateEvent;
 
 import java.util.List;
 
-public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider<BlockEntityEnderCrate>, ICustomBlockState {
+public class BlockEnderCrate extends BlockContainerImpl implements ITESRProvider<BlockEntityEnderCrate>, ICustomBlockState, IPickaxeBreakable {
 
     public BlockEnderCrate() {
         super("ender_crate", BlockEntityEnderCrate.class, Properties.of().strength(5F).lightLevel(s -> 7).sound(SoundType.STONE));

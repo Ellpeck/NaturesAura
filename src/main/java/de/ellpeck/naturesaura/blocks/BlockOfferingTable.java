@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntityOfferingTable;
 import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderOfferingTable;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
+import de.ellpeck.naturesaura.reg.IAxeBreakable;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -22,7 +23,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvider<BlockEntityOfferingTable>, ICustomBlockState {
+public class BlockOfferingTable extends BlockContainerImpl implements ITESRProvider<BlockEntityOfferingTable>, ICustomBlockState, IAxeBreakable {
 
     private static final VoxelShape SHAPE = Shapes.create(2 / 16F, 0F, 2 / 16F, 14 / 16F, 1F, 14 / 16F);
 

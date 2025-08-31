@@ -4,6 +4,7 @@ import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntitySnowCreator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -11,7 +12,7 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-public class BlockSnowCreator extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
+public class BlockSnowCreator extends BlockContainerImpl implements IVisualizable, ICustomBlockState, IPickaxeBreakable {
 
     public BlockSnowCreator() {
         super("snow_creator", BlockEntitySnowCreator.class, Properties.ofFullCopy(Blocks.STONE_BRICKS));

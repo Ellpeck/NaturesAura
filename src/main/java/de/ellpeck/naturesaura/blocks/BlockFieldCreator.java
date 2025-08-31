@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.api.NaturesAuraAPI;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityFieldCreator;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
@@ -19,7 +20,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-public class BlockFieldCreator extends BlockContainerImpl implements ICustomBlockState {
+public class BlockFieldCreator extends BlockContainerImpl implements ICustomBlockState, IPickaxeBreakable {
 
     public BlockFieldCreator() {
         super("field_creator", BlockEntityFieldCreator.class, Properties.of().strength(2F).noOcclusion().sound(SoundType.STONE));

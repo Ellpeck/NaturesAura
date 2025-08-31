@@ -5,11 +5,12 @@ import de.ellpeck.naturesaura.blocks.tiles.ModBlockEntities;
 import de.ellpeck.naturesaura.blocks.tiles.render.RenderGeneratorLimitRemover;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import de.ellpeck.naturesaura.reg.ITESRProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.level.block.SoundType;
 
-public class BlockGeneratorLimitRemover extends BlockContainerImpl implements ITESRProvider<BlockEntityGeneratorLimitRemover>, ICustomBlockState {
+public class BlockGeneratorLimitRemover extends BlockContainerImpl implements ITESRProvider<BlockEntityGeneratorLimitRemover>, ICustomBlockState, IPickaxeBreakable {
 
     public BlockGeneratorLimitRemover() {
         super("generator_limit_remover", BlockEntityGeneratorLimitRemover.class, Properties.of().strength(2F).sound(SoundType.STONE));

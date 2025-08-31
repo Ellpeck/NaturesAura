@@ -7,6 +7,7 @@ import de.ellpeck.naturesaura.api.render.IVisualizable;
 import de.ellpeck.naturesaura.blocks.tiles.BlockEntityChunkLoader;
 import de.ellpeck.naturesaura.data.BlockStateGenerator;
 import de.ellpeck.naturesaura.reg.ICustomBlockState;
+import de.ellpeck.naturesaura.reg.IPickaxeBreakable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -21,7 +22,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-public class BlockChunkLoader extends BlockContainerImpl implements IVisualizable, ICustomBlockState {
+public class BlockChunkLoader extends BlockContainerImpl implements IVisualizable, ICustomBlockState, IPickaxeBreakable {
 
     private static final VoxelShape SHAPE = Block.box(4, 4, 4, 12, 12, 12);
 
@@ -42,12 +43,12 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
             var range = ((BlockEntityChunkLoader) tile).range();
             if (range > 0) {
                 return new AABB(
-                        pos.getX() - range >> 4 << 4,
-                        level.getMinBuildHeight(),
-                        pos.getZ() - range >> 4 << 4,
-                        (pos.getX() + range >> 4 << 4) + 16,
-                        level.getMaxBuildHeight(),
-                        (pos.getZ() + range >> 4 << 4) + 16);
+                    pos.getX() - range >> 4 << 4,
+                    level.getMinBuildHeight(),
+                    pos.getZ() - range >> 4 << 4,
+                    (pos.getX() + range >> 4 << 4) + 16,
+                    level.getMaxBuildHeight(),
+                    (pos.getZ() + range >> 4 << 4) + 16);
             }
         }
         return null;
@@ -62,8 +63,8 @@ public class BlockChunkLoader extends BlockContainerImpl implements IVisualizabl
         if (tile instanceof BlockEntityChunkLoader loader && loader.canUseRightNow(loader.getAuraUsed())) {
             for (var i = Mth.ceil(loader.range() / 8F); i > 0; i--) {
                 NaturesAuraAPI.instance().spawnMagicParticle(
-                        pos.getX() + levelIn.random.nextFloat(), pos.getY() + levelIn.random.nextFloat(), pos.getZ() + levelIn.random.nextFloat(),
-                        0, 0, 0, 0xa12dff, 1F + levelIn.random.nextFloat(), 100, 0, false, true);
+                    pos.getX() + levelIn.random.nextFloat(), pos.getY() + levelIn.random.nextFloat(), pos.getZ() + levelIn.random.nextFloat(),
+                    0, 0, 0, 0xa12dff, 1F + levelIn.random.nextFloat(), 100, 0, false, true);
             }
         }
     }

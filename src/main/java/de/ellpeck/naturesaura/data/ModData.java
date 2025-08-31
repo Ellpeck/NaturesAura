@@ -3,6 +3,8 @@ package de.ellpeck.naturesaura.data;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.compat.Compat;
 import de.ellpeck.naturesaura.gen.ModFeatures;
+import de.ellpeck.naturesaura.reg.IModItem;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.core.Cloner;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistrySetBuilder;
@@ -10,6 +12,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.registries.VanillaRegistries;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -18,9 +21,11 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DataPackRegistriesHooks;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public final class ModData {
@@ -57,4 +62,7 @@ public final class ModData {
         return registryBuilder.buildPatch(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY), VanillaRegistries.createLookup(), factory);
     }
 
+    public static Stream<IModItem> getAllModItems() {
+        return ModRegistry.ALL_ITEMS.stream().sorted(Comparator.comparing(IModItem::getBaseName));
+    }
 }
