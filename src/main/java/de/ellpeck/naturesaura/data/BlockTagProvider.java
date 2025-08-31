@@ -2,6 +2,7 @@ package de.ellpeck.naturesaura.data;
 
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import de.ellpeck.naturesaura.items.ModItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -9,6 +10,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +42,7 @@ public class BlockTagProvider extends BlockTagsProvider {
         this.tag(BlockTagProvider.ALTAR_STONE).addTag(BlockTags.STONE_BRICKS).add(Blocks.NETHER_BRICKS);
         this.tag(BlockTagProvider.ALTAR_GOLD_BRICK).add(ModBlocks.GOLD_BRICK, ModBlocks.GOLD_NETHER_BRICK);
         this.tag(BlockTagProvider.ALTAR_FANCY_BRICK).add(Blocks.RED_NETHER_BRICKS, Blocks.CHISELED_STONE_BRICKS);
+        this.tag(Tags.Blocks.STORAGE_BLOCKS).add(ModBlocks.DEPTH_INGOT_BLOCK, ModBlocks.SKY_INGOT_BLOCK, ModBlocks.INFUSED_IRON_BLOCK);
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.ANIMAL_CONTAINER, ModBlocks.ANIMAL_GENERATOR,
             ModBlocks.ANIMAL_SPAWNER, ModBlocks.AURA_DETECTOR, ModBlocks.AURA_TIMER, ModBlocks.BLAST_FURNACE_BOOSTER,

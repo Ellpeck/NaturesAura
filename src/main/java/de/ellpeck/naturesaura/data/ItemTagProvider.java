@@ -38,6 +38,8 @@ public class ItemTagProvider extends ItemTagsProvider {
 
         this.tag(Tags.Items.RODS_WOODEN).add(ModItems.ANCIENT_STICK);
 
+        this.tag(Tags.Items.INGOTS).add(ModItems.DEPTH_INGOT, ModItems.SKY_INGOT, ModItems.INFUSED_IRON);
+
         // sort these so that they don't change the json every time we run data (because it's a set)
         ModRegistry.ALL_ITEMS.stream().sorted(Comparator.comparing(IModItem::getBaseName)).filter(i -> i instanceof Item).map(i -> (Item) i).forEach(i -> {
             if (i instanceof ItemPickaxe) {
