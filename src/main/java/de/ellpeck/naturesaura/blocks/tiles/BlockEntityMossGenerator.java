@@ -53,6 +53,8 @@ public class BlockEntityMossGenerator extends BlockEntityImpl implements ITickab
                 this.generateAura(toAdd);
                 PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
                         new PacketParticles(offset.getX(), offset.getY(), offset.getZ(), PacketParticles.Type.MOSS_GENERATOR));
+            }else{
+                this.spawnCannotGenerateParticles();
             }
 
             this.level.levelEvent(2001, offset, Block.getId(state));

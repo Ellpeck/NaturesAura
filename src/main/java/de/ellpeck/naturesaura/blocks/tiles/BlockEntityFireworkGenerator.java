@@ -96,6 +96,8 @@ public class BlockEntityFireworkGenerator extends BlockEntityImpl implements ITi
                         if (this.canGenerateRightNow(toAdd)) {
                             this.toRelease = toAdd;
                             this.releaseTimer = 15 * flightTime + 40;
+                        } else {
+                            this.spawnCannotGenerateParticles();
                         }
 
                         List<Integer> data = new ArrayList<>();

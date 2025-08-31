@@ -4,6 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.blocks.ModBlocks;
+import de.ellpeck.naturesaura.packet.PacketHandler;
+import de.ellpeck.naturesaura.packet.PacketParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -140,6 +142,12 @@ public class BlockEntityImpl extends BlockEntity {
         }
         var aura = IAuraChunk.getAuraInArea(this.level, this.worldPosition, 35);
         return aura + toAdd <= IAuraChunk.DEFAULT_AURA * 2;
+    }
+
+    public void spawnCannotGenerateParticles() {
+        if (this.level.isClientSide)
+            return;
+        PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.CANNOT_GENERATE));
     }
 
     public boolean wantsLimitRemover() {

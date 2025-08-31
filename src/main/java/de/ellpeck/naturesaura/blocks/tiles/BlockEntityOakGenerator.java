@@ -25,12 +25,15 @@ public class BlockEntityOakGenerator extends BlockEntityImpl implements ITickabl
                 if (this.level.getBlockState(pos).is(BlockTags.LOGS)) {
                     var toAdd = 100000;
                     var canGen = this.canGenerateRightNow(toAdd);
-                    if (canGen)
+                    if (canGen) {
                         this.generateAura(toAdd);
+                    } else {
+                        this.spawnCannotGenerateParticles();
+                    }
 
                     PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(
-                            this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.OAK_GENERATOR,
-                            pos.getX(), pos.getY(), pos.getZ(), canGen ? 1 : 0));
+                        this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.OAK_GENERATOR,
+                        pos.getX(), pos.getY(), pos.getZ(), canGen ? 1 : 0));
                 }
             }
     }

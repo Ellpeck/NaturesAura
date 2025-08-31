@@ -545,6 +545,17 @@ public record PacketParticles(float posX, float posY, float posZ, int particleTy
                     level.random.nextFloat() * 0.001F + 0.002F,
                     level.random.nextGaussian() * 0.002F,
                     message.data.getFirst(), level.random.nextFloat() * 2 + 1, level.random.nextInt(50) + 50, 0, false, true);
+        }),
+        CANNOT_GENERATE((message, level) -> {
+            for (var i = level.random.nextInt(100) + 50; i >= 0; i--) {
+                var side = level.random.nextBoolean();
+                var x = side ? level.random.nextFloat() : level.random.nextBoolean() ? 1.05F : -0.05F;
+                var z = !side ? level.random.nextFloat() : level.random.nextBoolean() ? 1.05F : -0.05F;
+                NaturesAuraAPI.instance().spawnMagicParticle(
+                    message.posX + x, message.posY + 0.1F + level.random.nextFloat() * 0.98F, message.posZ + z,
+                    level.random.nextGaussian() * 0.001F, level.random.nextGaussian() * 0.001F, level.random.nextGaussian() * 0.001F,
+                    0xe00b0f, level.random.nextFloat() + 0.25F, 50, 0F, true, true);
+            }
         });
 
         public final BiConsumer<PacketParticles, Level> action;

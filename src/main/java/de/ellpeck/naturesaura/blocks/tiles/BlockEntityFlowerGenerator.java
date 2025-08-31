@@ -58,6 +58,7 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
                 if (IAuraType.forLevel(this.level).isSimilar(NaturesAuraAPI.TYPE_OVERWORLD) && this.canGenerateRightNow(toAdd)) {
                     this.generateAura(toAdd);
                 } else {
+                    this.spawnCannotGenerateParticles();
                     toAdd = 0;
                 }
             }
@@ -77,13 +78,13 @@ public class BlockEntityFlowerGenerator extends BlockEntityImpl implements ITick
             if (toAdd > 0) {
                 for (var i = this.level.random.nextInt(5) + 5; i >= 0; i--)
                     PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticleStream(
-                            pos.getX() + 0.25F + this.level.random.nextFloat() * 0.5F,
-                            pos.getY() + 0.25F + this.level.random.nextFloat() * 0.5F,
-                            pos.getZ() + 0.25F + this.level.random.nextFloat() * 0.5F,
-                            this.worldPosition.getX() + 0.25F + this.level.random.nextFloat() * 0.5F,
-                            this.worldPosition.getY() + 0.25F + this.level.random.nextFloat() * 0.5F,
-                            this.worldPosition.getZ() + 0.25F + this.level.random.nextFloat() * 0.5F,
-                            this.level.random.nextFloat() * 0.02F + 0.1F, color, 1F
+                        pos.getX() + 0.25F + this.level.random.nextFloat() * 0.5F,
+                        pos.getY() + 0.25F + this.level.random.nextFloat() * 0.5F,
+                        pos.getZ() + 0.25F + this.level.random.nextFloat() * 0.5F,
+                        this.worldPosition.getX() + 0.25F + this.level.random.nextFloat() * 0.5F,
+                        this.worldPosition.getY() + 0.25F + this.level.random.nextFloat() * 0.5F,
+                        this.worldPosition.getZ() + 0.25F + this.level.random.nextFloat() * 0.5F,
+                        this.level.random.nextFloat() * 0.02F + 0.1F, color, 1F
                     ));
                 PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.FLOWER_GEN_AURA_CREATION));
             }

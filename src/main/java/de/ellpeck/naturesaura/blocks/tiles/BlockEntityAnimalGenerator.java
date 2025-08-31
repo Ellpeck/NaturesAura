@@ -26,7 +26,9 @@ public class BlockEntityAnimalGenerator extends BlockEntityImpl implements ITick
             if (this.canGenerateRightNow(remain)) {
                 this.generateAura(remain);
                 PacketHandler.sendToAllAround(this.level, this.worldPosition, 32,
-                        new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.ANIMAL_GEN_CREATE));
+                    new PacketParticles(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.ANIMAL_GEN_CREATE));
+            } else {
+                this.spawnCannotGenerateParticles();
             }
 
             this.timeRemaining -= 10;

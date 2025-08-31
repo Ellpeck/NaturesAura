@@ -87,8 +87,10 @@ public class BlockProjectileGenerator extends BlockContainerImpl implements ITES
         var amount = NaturesAuraAPI.PROJECTILE_GENERATIONS.get(entity.getType());
         if (amount == null || amount <= 0)
             return;
-        if (!generator.canGenerateRightNow(amount))
+        if (!generator.canGenerateRightNow(amount)) {
+            generator.spawnCannotGenerateParticles();
             return;
+        }
         generator.generateAura(amount);
 
         PacketHandler.sendToAllAround(entity.level(), pos, 32,

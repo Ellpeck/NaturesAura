@@ -11,7 +11,7 @@
         },
         {
             "type": "text",
-            "text": "Once an amount of $(aura) close to that is reached in the area, these creational devices will behave in different ways, some shutting off completely, others continuing their behavior without creating any $(aura) in the process. Of course, they can be stopped manually using an $(l:devices/aura_detector)Aura Detector$() or similar. $(p)Later on, this behavior can be changed using the $(l:creating/generator_limit_remover)Creational Catalyst$()."
+            "text": "Once an amount of $(aura) close to that is reached in the area, these creational devices will behave in different ways, some shutting off completely, others continuing their behavior without creating any $(aura) in the process. When this occurs, look out for $(thing)red sparks$() emitting from them. Of course, they can be stopped manually using an $(l:devices/aura_detector)Aura Detector$() or similar. $(p)Later on, this behavior can be changed using the $(l:creating/generator_limit_remover)Creational Catalyst$()."
         }
     ]
 }

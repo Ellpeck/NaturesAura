@@ -49,8 +49,11 @@ public class BlockEntityPotionGenerator extends BlockEntityImpl implements ITick
 
                             var toAdd = (effect.getAmplifier() * 7 + 1) * (effect.getDuration() / 25) * 100;
                             var canGen = this.canGenerateRightNow(toAdd);
-                            if (canGen)
+                            if (canGen) {
                                 this.generateAura(toAdd);
+                            } else {
+                                this.spawnCannotGenerateParticles();
+                            }
 
                             PacketHandler.sendToAllAround(this.level, this.worldPosition, 32, new PacketParticles(
                                 this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), PacketParticles.Type.POTION_GEN,
