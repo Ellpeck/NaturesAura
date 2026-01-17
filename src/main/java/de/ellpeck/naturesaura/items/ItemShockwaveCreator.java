@@ -58,7 +58,7 @@ public class ItemShockwaveCreator extends ItemImpl implements ITrinketItem {
             if (living instanceof Player && !NaturesAuraAPI.instance().extractAuraFromPlayer((Player) living, 1000, false))
                 return;
 
-            var infusedSet = ItemArmor.isFullSetEquipped(living, ModArmorMaterial.INFUSED.material.value());
+            var infusedSet = ItemArmor.isFullSetEquipped(living, ModArmorMaterial.INFUSED);
             var range = 5;
             var mobs = levelIn.getEntitiesOfClass(LivingEntity.class, new AABB(
                 living.getX() - range, living.getY() - 0.5, living.getZ() - range,

@@ -23,6 +23,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,20 +32,23 @@ public class ItemArmor extends ArmorItem implements IModItem {
 
     private static final AttributeModifier SKY_MOVEMENT_MODIFIER = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "sky_movement_speed"), 0.15F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     private static final AttributeModifier SKY_STEP_MODIFIER = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, "sky_step_modifier"), 0.5F, AttributeModifier.Operation.ADD_VALUE);
-    private static final Map<ArmorMaterial, Item[]> SETS = new ConcurrentHashMap<>();
+    private static final Map<ModArmorMaterial, Item[]> SETS = new ConcurrentHashMap<>();
     private final String baseName;
+    private final ModArmorMaterial material;
 
     public ItemArmor(String baseName, ModArmorMaterial materialIn, ArmorItem.Type equipmentSlotIn) {
         super(materialIn.material, equipmentSlotIn, new Properties().durability(materialIn.getDurability(equipmentSlotIn)));
         this.baseName = baseName;
+        this.material = materialIn;
         ModRegistry.ALL_ITEMS.add(this);
     }
 
-    public static boolean isFullSetEquipped(LivingEntity entity, ArmorMaterial material) {
-        var set = ItemArmor.SETS.computeIfAbsent(material, m -> BuiltInRegistries.ITEM.stream()
-            .filter(i -> i instanceof ItemArmor && ((ItemArmor) i).getMaterial().value() == material)
-            .sorted(Comparator.comparingInt(i -> ((ItemArmor) i).getEquipmentSlot().ordinal()))
-            .toArray(Item[]::new));
+    public static boolean isFullSetEquipped(LivingEntity entity, ModArmorMaterial material) {
+        var set = ItemArmor.SETS.computeIfAbsent(material, m -> ModRegistry.ALL_ITEMS.stream()
+            .filter(i -> i instanceof ItemArmor a && a.material == material)
+            .map(i -> (ItemArmor) i)
+            .sorted(Comparator.comparingInt(i -> i.getEquipmentSlot().ordinal()))
+            .toArray(ItemArmor[]::new));
         for (var i = 0; i < 4; i++) {
             var slot = EquipmentSlot.values()[i + 2];
             var stack = entity.getItemBySlot(slot);
@@ -66,11 +70,11 @@ public class ItemArmor extends ArmorItem implements IModItem {
         public static void onAttack(LivingIncomingDamageEvent event) {
             var entity = event.getEntity();
             if (!entity.level().isClientSide) {
-                if (ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.INFUSED.material.value())) {
+                if (ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.INFUSED)) {
                     var source = event.getSource().getEntity();
                     if (source instanceof LivingEntity)
                         ((LivingEntity) source).addEffect(new MobEffectInstance(MobEffects.WITHER, 40));
-                } else if (ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.DEPTH.material.value())) {
+                } else if (ItemArmor.isFullSetEquipped(entity, ModArmorMaterial.DEPTH)) {
                     for (var other : entity.level().getEntitiesOfClass(LivingEntity.class, new AABB(entity.position(), entity.position()).inflate(2))) {
                         if (other != entity && (!(entity instanceof Player player) || !player.isAlliedTo(other)))
                             other.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 255));
@@ -86,7 +90,7 @@ public class ItemArmor extends ArmorItem implements IModItem {
             var step = player.getAttribute(Attributes.STEP_HEIGHT);
             var key = NaturesAura.MOD_ID + ":sky_equipped";
             var nbt = player.getPersistentData();
-            var equipped = ItemArmor.isFullSetEquipped(player, ModArmorMaterial.SKY.material.value());
+            var equipped = ItemArmor.isFullSetEquipped(player, ModArmorMaterial.SKY);
             if (equipped && !nbt.getBoolean(key)) {
                 // we just equipped it
                 nbt.putBoolean(key, true);
