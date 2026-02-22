@@ -1,0 +1,22 @@
+{
+    "name": "Небесная броня",
+    "icon": "naturesaura:sky_chest",
+    "category": "naturesaura:items",
+    "advancement": "naturesaura:sky_ingot",
+    "pages": [
+        {
+            "type": "text",
+            "text": "Ботаники могут почувствовать себя богами, надев $(thing)небесные доспехи$(). Они не только могут быть отремонтированы, как и их $(l:items/infused_iron_armor)аналоги$(), но и дают $(thing)бонус комплекта$(): При ношении всех частей доспехов (или замене нагрудника на $(item)элитры$()), $(thing)скорость движения$() носителя увеличивается. Кроме того, улучшается его способность $(thing)взбираться$() на блоки, что избавляет от необходимости часто прыгать."
+        },
+        {
+            "type": "crafting",
+            "recipe": "naturesaura:sky_helmet",
+            "recipe2": "naturesaura:sky_chest"
+        },
+        {
+            "type": "crafting",
+            "recipe": "naturesaura:sky_pants",
+            "recipe2": "naturesaura:sky_shoes"
+        }
+    ]
+}
