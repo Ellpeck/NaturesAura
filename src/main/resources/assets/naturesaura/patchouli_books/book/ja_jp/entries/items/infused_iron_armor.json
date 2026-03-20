@@ -1,12 +1,12 @@
 {
-    "name": "魔法植物学者の防具",
+    "name": "ボタニストの防具",
     "icon": "naturesaura:infused_iron_chest",
     "category": "naturesaura:items",
     "advancement": "naturesaura:infused_materials",
     "pages": [
         {
             "type": "text",
-            "text": "$(l:items/infused_iron_tools)道具$()に加えて、植物学者は防具——特に$(item)魔法植物学者の防具$()を身に纏うことで身を守ることができる。鉄の防具と同等の防御性能を備えているだけでなく、同種の道具と同じく、$(l:items/aura_cache)霊気貯蔵器$()を所持してスニークすることで、減少した耐久値を再充填できるのが特徴だ。さらに、この防具一式を同時に装備することで、強力な$(thing)セットボーナス$()が発動する。"
+            "text": "$(l:items/infused_iron_tools)道具$()に加えて、植物学者は防具——特に$(item)ボタニストの防具$()を身に纏うことで身を守ることができる。鉄の防具と同等の防御性能を備えているだけでなく、同種の道具と同じく、$(l:items/aura_cache)霊気貯蔵器$()を所持してスニークすることで、減少した耐久値を再充填できるのが特徴だ。さらに、この防具一式を同時に装備することで、強力な$(thing)セットボーナス$()が発動する。"
         },
         {
             "type": "text",
