@@ -1,0 +1,17 @@
+{
+    "name": "Око шалкера",
+    "icon": "naturesaura:end_city_finder",
+    "category": "naturesaura:items",
+    "advancement": "naturesaura:aura_bottle_end",
+    "pages": [
+        {
+            "type": "text",
+            "text": "Зная о способностях $(item)Ока Эндера$() и $(l:items/fortress_finder)Ока всполоха$(), магические ботаники могут создать третий из этих глаз, позволяющих находить структуры, завершив таким образом последовательность измерений. $(item)Око Шалкера$(), подобно своим аналогам в верхнем мире и в Нижнем мире, после бросания найдет ближайший $(thing)Город Эндера$()."
+        },
+        {
+            "type": "crafting",
+            "text": "Создание $(item)глаза шалкера$()",
+            "recipe": "naturesaura:end_city_finder"
+        }
+    ]
+}

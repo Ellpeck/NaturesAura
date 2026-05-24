@@ -1,0 +1,17 @@
+{
+    "name": "Око всполоха",
+    "icon": "naturesaura:fortress_finder",
+    "category": "naturesaura:items",
+    "advancement": "naturesaura:aura_bottle_nether",
+    "pages": [
+        {
+            "type": "text",
+            "text": "Чтобы найти $(thing)крепость$(), можно использовать способности $(item)Ока эндера$(), который, после бросания, будет медленно двигаться к ближайшей из крепостей, указывая путь к ней. Подобное поведение можно наблюдать и у $(item)ока всполоха$(), но вместо поиска крепостей он будет находить ближайшую $(thing)Крепость Нижнего мира$()."
+        },
+        {
+            "type": "crafting",
+            "text": "Создание $(item)Ока всполоха$()",
+            "recipe": "naturesaura:fortress_finder"
+        }
+    ]
+}
