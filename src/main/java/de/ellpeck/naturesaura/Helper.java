@@ -38,6 +38,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -320,13 +321,13 @@ public final class Helper {
         return ItemStack.EMPTY;
     }
 
-    public static BlockPos getClosestAirAboveGround(Level level, BlockPos pos, int radius) {
+    public static BlockPos getClosestBonemealableBlock(Level level, BlockPos pos, int radius) {
         for (var i = 0; i < radius; i++) {
             var up = pos.above(i);
-            if (level.isEmptyBlock(up) && !level.isEmptyBlock(up.below()))
+            if (level.getBlockState(up).getBlock() instanceof BonemealableBlock)
                 return up;
             var dn = pos.below(i);
-            if (level.isEmptyBlock(dn) && !level.isEmptyBlock(dn.below()))
+            if (level.getBlockState(dn).getBlock() instanceof BonemealableBlock)
                 return dn;
         }
         return pos;
