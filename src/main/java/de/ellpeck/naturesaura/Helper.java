@@ -322,12 +322,12 @@ public final class Helper {
     public static BlockPos getClosestBonemealableBlock(Level level, BlockPos pos, int radius) {
         for (var i = 0; i < radius; i++) {
             var up = pos.above(i);
-            Block block = level.getBlockState(up).getBlock();
-            if (block instanceof BonemealableBlock)
+//      check if this is the top of a bonemealable block.
+            if ((level.getBlockState(up).getBlock() instanceof BonemealableBlock) && !(level.getBlockState(up.above()) instanceof BonemealableBlock))
                 return up;
             var dn = pos.below(i);
-            block = level.getBlockState(dn).getBlock();
-            if (block instanceof BonemealableBlock)
+//      check if this is the top of a bonemealable block.
+            if ((level.getBlockState(dn).getBlock() instanceof BonemealableBlock)  && !(level.getBlockState(dn.above()) instanceof BonemealableBlock))
                 return dn;
         }
         return pos;
