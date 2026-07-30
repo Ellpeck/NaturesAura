@@ -110,7 +110,7 @@ public class ClientEvents {
                         var x = Mth.floor(mc.player.getX()) + mc.level.random.nextInt(64) - 32;
                         var y = Mth.floor(mc.player.getY()) + mc.level.random.nextInt(32) - 16;
                         var z = Mth.floor(mc.player.getZ()) + mc.level.random.nextInt(64) - 32;
-                        var pos = Helper.getClosestBonemealableBlock(mc.level, new BlockPos(x, y, z), 16);
+                        var pos = Helper.getClosestNatureBlock(mc.level, new BlockPos(x, y, z), 16);
                         var state = mc.level.getBlockState(pos);
                         var block = state.getBlock();
                         if (block instanceof BonemealableBlock || block instanceof LeavesBlock || block instanceof MyceliumBlock) {
