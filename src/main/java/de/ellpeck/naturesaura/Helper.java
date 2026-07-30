@@ -319,6 +319,20 @@ public final class Helper {
         return ItemStack.EMPTY;
     }
 
+    public static BlockPos getClosestBonemealableBlock(Level level, BlockPos pos, int radius) {
+        for (var i = 0; i < radius; i++) {
+            var up = pos.above(i);
+            Block block = level.getBlockState(up).getBlock();
+            if (block instanceof BonemealableBlock)
+                return up;
+            var dn = pos.below(i);
+            block = level.getBlockState(dn).getBlock();
+            if (block instanceof BonemealableBlock)
+                return dn;
+        }
+        return pos;
+    }
+
     public static BlockPos getClosestNatureBlock(Level level, BlockPos pos, int radius) {
         for (var i = 0; i < radius; i++) {
             var up = pos.above(i);
