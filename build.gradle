@@ -28,9 +28,6 @@ repositories {
     maven {
         url = "https://maven.theillusivec4.top/"
     }
-    maven {
-        url = uri("https://maven.octo-studios.com/releases")
-    }
 }
 
 base {
