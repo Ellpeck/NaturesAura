@@ -10,6 +10,7 @@ import de.ellpeck.naturesaura.proxy.ClientProxy;
 import de.ellpeck.naturesaura.proxy.IProxy;
 import de.ellpeck.naturesaura.proxy.ServerProxy;
 import de.ellpeck.naturesaura.recipes.ModRecipes;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -69,9 +70,9 @@ public final class NaturesAura {
         NaturesAura.proxy.postInit(event);
 
         NaturesAura.LOGGER.info("-- Nature's Aura Fake Player Information --");
-        NaturesAura.LOGGER.info("Name: [Minecraft]");
-        NaturesAura.LOGGER.info("UUID: 41C82C87-7AfB-4024-BA57-13D2C99CAE77");
-        NaturesAura.LOGGER.info(Strings.padStart("", 43, '-'));
+        NaturesAura.LOGGER.info("Name: {}", ModRegistry.FAKE_PLAYER.getName());
+        NaturesAura.LOGGER.info("UUID: {}", ModRegistry.FAKE_PLAYER.getId());
+        NaturesAura.LOGGER.info("-------------------------------------------");
     }
 
 }

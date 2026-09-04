@@ -1,5 +1,6 @@
 package de.ellpeck.naturesaura.reg;
 
+import com.mojang.authlib.GameProfile;
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.NaturesAura;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
@@ -62,12 +63,14 @@ import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @EventBusSubscriber
 public final class ModRegistry {
 
     // we use a list so that the creative tab maintains addition order
     public static final List<IModItem> ALL_ITEMS = new ArrayList<>();
+    public static final GameProfile FAKE_PLAYER = new GameProfile(UUID.fromString("4ce3b06b-e254-4992-8a5a-d1e56d24601f"), "[NaturesAura]");
 
     @SubscribeEvent
     public static void register(RegisterEvent event) {

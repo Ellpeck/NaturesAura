@@ -8,6 +8,7 @@ import de.ellpeck.naturesaura.api.aura.chunk.IDrainSpotEffect;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.api.misc.WeightedOre;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -128,7 +129,7 @@ public class OreSpawnEffect implements IDrainSpotEffect {
                         if (toPlace == Blocks.AIR)
                             continue;
 
-                        var player = FakePlayerFactory.getMinecraft((ServerLevel) level);
+                        var player = FakePlayerFactory.get((ServerLevel) level, ModRegistry.FAKE_PLAYER);
                         player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                         var ray = new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false);
                         var context = new BlockPlaceContext(new UseOnContext(player, InteractionHand.MAIN_HAND, ray));

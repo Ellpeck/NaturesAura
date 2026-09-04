@@ -6,6 +6,7 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.api.aura.type.IAuraType;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticleStream;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -108,7 +109,7 @@ public class BlockEntityFieldCreator extends BlockEntityImpl implements ITickabl
 
                 var state = this.level.getBlockState(pos);
                 if (!state.isAir() && state.getDestroySpeed(this.level, pos) >= 0F) {
-                    var fake = FakePlayerFactory.getMinecraft((ServerLevel) this.level);
+                    var fake = FakePlayerFactory.get((ServerLevel) this.level, ModRegistry.FAKE_PLAYER);
                     if (!NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(this.level, pos, state, fake)).isCanceled()) {
                         var drops = state.getDrops(new LootParams.Builder((ServerLevel) this.level)
                                 .withParameter(LootContextParams.THIS_ENTITY, fake)

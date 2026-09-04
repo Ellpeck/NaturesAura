@@ -5,6 +5,7 @@ import de.ellpeck.naturesaura.api.aura.chunk.IAuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
 import de.ellpeck.naturesaura.packet.PacketHandler;
 import de.ellpeck.naturesaura.packet.PacketParticles;
+import de.ellpeck.naturesaura.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -112,7 +113,7 @@ public class BlockEntityPlacer extends BlockEntityImpl implements ITickableBlock
     private ItemStack tryPlace(ItemStack stack, BlockPos pos) {
         if (!(this.level instanceof ServerLevel))
             return stack;
-        var fake = FakePlayerFactory.getMinecraft((ServerLevel) this.level);
+        var fake = FakePlayerFactory.get((ServerLevel) this.level, ModRegistry.FAKE_PLAYER);
         fake.getInventory().items.set(fake.getInventory().selected, stack);
         var ray = new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false);
         CommonHooks.onPlaceItemIntoWorld(new UseOnContext(fake, InteractionHand.MAIN_HAND, ray));
