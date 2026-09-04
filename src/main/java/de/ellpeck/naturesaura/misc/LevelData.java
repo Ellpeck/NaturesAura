@@ -9,6 +9,8 @@ import de.ellpeck.naturesaura.blocks.tiles.BlockEntitySpawnLamp;
 import de.ellpeck.naturesaura.blocks.tiles.ItemStackHandlerNA;
 import de.ellpeck.naturesaura.chunk.AuraChunk;
 import de.ellpeck.naturesaura.items.ModItems;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -30,7 +32,7 @@ public class LevelData extends SavedData implements ILevelData {
     public static LevelData client;
 
     public final ListMultimap<ResourceLocation, Tuple<Vec3, Integer>> effectPowders = ArrayListMultimap.create();
-    public final Long2ObjectOpenHashMap<AuraChunk> auraChunksWithSpots = new Long2ObjectOpenHashMap<>();
+    public final Long2ObjectMap<AuraChunk> auraChunksWithSpots = Long2ObjectMaps.synchronize(new Long2ObjectOpenHashMap<>());
     public final List<BlockPos> recentlyConvertedMossStones = new ArrayList<>();
     public final Set<BlockEntitySpawnLamp> spawnLamps = new HashSet<>();
     public final Set<BlockEntityPickupStopper> pickupStoppers = new HashSet<>();
