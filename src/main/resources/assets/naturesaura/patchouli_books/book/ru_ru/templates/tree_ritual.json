@@ -1,0 +1,88 @@
+{
+    "processor": "de.ellpeck.naturesaura.compat.patchouli.ProcessorTreeRitual",
+    "components": [
+        {
+            "type": "patchouli:item",
+            "item": "#input1",
+            "x": 34,
+            "y": 14
+        },
+        {
+            "type": "patchouli:item",
+            "item": "#input2",
+            "x": 34,
+            "y": 78
+        },
+        {
+            "type": "patchouli:item",
+            "item": "#input3",
+            "x": 2,
+            "y": 46
+        },
+        {
+            "type": "patchouli:item",
+            "item": "#input4",
+            "x": 66,
+            "y": 46
+        },
+        {
+            "type": "patchouli:item",
+            "item": "#input5",
+            "x": 9,
+            "y": 21
+        },
+        {
+            "type": "patchouli:item",
+            "item": "#input6",
+            "x": 59,
+            "y": 71
+        },
+        {
+            "type": "patchouli:item",
+            "item": "#input7",
+            "x": 59,
+            "y": 21
+        },
+        {
+            "type": "patchouli:item",
+            "item": "#input8",
+            "x": 9,
+            "y": 71
+        },
+        {
+            "type": "patchouli:item",
+            "item": "#output",
+            "x": 98,
+            "y": 46,
+            "link_recipe": true
+        },
+        {
+            "type": "patchouli:item",
+            "item": "#sapling",
+            "x": 34,
+            "y": 46
+        },
+        {
+            "type": "patchouli:image",
+            "image": "naturesaura:textures/gui/patchouli/elements.png",
+            "x": -4,
+            "y": 10,
+            "u": 0,
+            "v": 44,
+            "width": 122,
+            "height": 88
+        },
+        {
+            "type": "patchouli:header",
+            "text": "#name",
+            "x": -1,
+            "y": 0
+        },
+        {
+            "type": "patchouli:text",
+            "text": "#text",
+            "x": 0,
+            "y": 100
+        }
+    ]
+}

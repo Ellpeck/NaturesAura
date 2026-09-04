@@ -1,0 +1,46 @@
+{
+    "processor": "de.ellpeck.naturesaura.compat.patchouli.ProcessorOffering",
+    "components": [
+        {
+            "type": "patchouli:image",
+            "image": "naturesaura:textures/gui/patchouli/elements.png",
+            "x": 16,
+            "y": 13,
+            "u": 92,
+            "v": 0,
+            "width": 84,
+            "height": 38
+        },
+        {
+            "type": "patchouli:item",
+            "item": "#input",
+            "x": 20,
+            "y": 31
+        },
+        {
+            "type": "patchouli:item",
+            "item": "#output",
+            "x": 80,
+            "y": 31,
+            "link_recipe": true
+        },
+        {
+            "type": "patchouli:item",
+            "item": "#start",
+            "x": 48,
+            "y": 17
+        },
+        {
+            "type": "patchouli:header",
+            "text": "#name",
+            "x": -1,
+            "y": 0
+        },
+        {
+            "type": "patchouli:text",
+            "text": "#text",
+            "x": 0,
+            "y": 63
+        }
+    ]
+}
