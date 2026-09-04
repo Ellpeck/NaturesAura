@@ -43,12 +43,14 @@ public record PacketClient(int packetType, CompoundTag data) implements CustomPa
                     var goalDim = ResourceLocation.parse(message.data.getString("dim"));
                     var goalPos = BlockPos.of(message.data.getLong("pos"));
                     ItemRangeVisualizer.visualize(mc.player, ItemRangeVisualizer.VISUALIZED_RAILS, goalDim, goalPos);
+                    break;
                 case 1:
                     var entity = mc.level.getEntity(message.data.getInt("id"));
                     mc.particleEngine.createTrackingEmitter(entity, ParticleTypes.TOTEM_OF_UNDYING, 30);
                     mc.level.playLocalSound(entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TOTEM_USE, entity.getSoundSource(), 1.0F, 1.0F, false);
                     if (entity == mc.player)
                         mc.gameRenderer.displayItemActivation(new ItemStack(ModItems.DEATH_RING));
+                    break;
             }
         }
     }

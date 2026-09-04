@@ -99,20 +99,19 @@ public class BlockDimensionRail extends BaseRailBlock implements IModItem, ICust
     }
 
     private BlockPos getGoalCoords(Level level, BlockPos pos) {
-        var server = level.getServer();
         if (this == ModBlocks.DIMENSION_RAIL_NETHER) {
             // travel to the nether from the overworld
-            return new BlockPos(pos.getX() / 8, pos.getY() / 2, pos.getZ() / 8);
+            return new BlockPos(pos.getX() / 8, pos.getY(), pos.getZ() / 8);
         } else if (this == ModBlocks.DIMENSION_RAIL_END) {
             // travel to the end from the overworld
             return ServerLevel.END_SPAWN_POINT.above(8);
         } else {
-            if (level.dimension() == Level.OVERWORLD) {
+            if (level.dimension() == Level.NETHER) {
                 // travel to the overworld from the nether
-                return new BlockPos(pos.getX() * 8, pos.getY() * 2, pos.getZ() * 8);
+                return new BlockPos(pos.getX() * 8, pos.getY(), pos.getZ() * 8);
             } else {
                 // travel to the overworld from the end
-                var overworld = server.getLevel(this.goalDim);
+                var overworld = level.getServer().getLevel(this.goalDim);
                 var spawn = overworld.getSharedSpawnPos();
                 var ret = new BlockPos(spawn.getX(), 0, spawn.getZ());
                 return ret.above(overworld.getHeight(Heightmap.Types.WORLD_SURFACE, spawn.getX(), spawn.getZ()));

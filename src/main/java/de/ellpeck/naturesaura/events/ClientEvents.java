@@ -134,7 +134,7 @@ public class ClientEvents {
                     }
                 }
 
-                if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER) && mc.level.getGameTime() % 5 == 0) {
+                if (Helper.isHoldingItem(mc.player, ModItems.RANGE_VISUALIZER) && mc.level.getGameTime() % 3 == 0) {
                     var inst = NaturesAuraAPI.instance();
                     inst.setParticleSpawnRange(512);
                     inst.setParticleDepth(false);
@@ -143,7 +143,7 @@ public class ClientEvents {
                             pos.getX() + mc.level.random.nextFloat(),
                             pos.getY() + mc.level.random.nextFloat(),
                             pos.getZ() + mc.level.random.nextFloat(),
-                            0F, 0F, 0F, 0xe0faff, mc.level.random.nextFloat() * 5 + 1, 100, 0F, false, true);
+                            0F, 0F, 0F, 0xe0faff, mc.level.random.nextFloat() * 10 + 2, 100, 0F, false, true);
                     }
                     inst.setParticleDepth(true);
                     inst.setParticleSpawnRange(32);
