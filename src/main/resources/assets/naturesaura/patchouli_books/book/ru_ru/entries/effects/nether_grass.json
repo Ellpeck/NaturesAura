@@ -1,0 +1,17 @@
+{
+    "name": "Адское разрастание",
+    "icon": "naturesaura:nether_grass",
+    "category": "naturesaura:effects",
+    "advancement": "naturesaura:positive_imbalance",
+    "pages": [
+        {
+            "type": "text",
+            "text": "Как обсуждалось в главе о $(l:effects/plant_boost)Увеличение плодородности$(), избыток $(#419600)ауры$() может быть поглощен растениями и т. п. Подобный эффект можно наблюдать в $(thing)нижнем мире$(): если уровень $(#419600)ауры$() достаточно высок, $(item)трава$() сможет пробиться наверх сквозь $(item)незерак$() в этой области."
+        },
+        {
+            "type": "naturesaura:tree_ritual",
+            "recipe": "naturesaura:nether_grass_powder",
+            "text": "Этот эффект можно подавить с помощью $(l:effects/effect_powder)Опустошающего порошка$()."
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "name": "Эндер окуляр",
+    "icon": "naturesaura:ender_access",
+    "category": "naturesaura:items",
+    "advancement": "naturesaura:aura_bottle_end",
+    "pages": [
+        {
+            "type": "text",
+            "text": "$(item)Эндер окуляр$() — это, проще говоря, портативная версия $(l:using/ender_crate)Эндер ящика$(). После присвоения ему $(thing)Имкени$() точно таким же образом, взаимодействие с ним, держа его в руке, откроет хранилище прямо на месте. Для этого требуется $(l:items/aura_cache)тайник ауры$(), из которого будет израсходована часть $(#419600)ауры$()."
+        },
+        {
+            "type": "crafting",
+            "text": "Создание $(item)Эндер окуляра$()",
+            "recipe": "naturesaura:ender_access"
+        }
+    ]
+}
