@@ -2,6 +2,8 @@ package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.Helper;
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.data.ItemModelGenerator;
+import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -15,10 +17,10 @@ import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 
-public class ItemLootFinder extends ItemImpl {
+public class ItemLootFinder extends ItemImpl implements ICustomItemModel {
 
     public ItemLootFinder() {
-        super("loot_finder");
+        super("loot_finder", new Properties().stacksTo(1));
     }
 
     @Override
@@ -57,6 +59,11 @@ public class ItemLootFinder extends ItemImpl {
         }
         playerIn.getCooldowns().addCooldown(this, 20 * 60);
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
+    }
+
+    @Override
+    public void generateCustomItemModel(ItemModelGenerator generator) {
+        generator.withExistingParent(this.getBaseName(), "item/handheld").texture("layer0", "item/" + this.getBaseName());
     }
 
 }

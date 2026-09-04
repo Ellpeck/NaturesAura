@@ -1,6 +1,8 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.data.ItemModelGenerator;
+import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -10,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 
-public class ItemCaveFinder extends ItemImpl {
+public class ItemCaveFinder extends ItemImpl implements ICustomItemModel {
 
     public ItemCaveFinder() {
         super("cave_finder", new Properties().stacksTo(1));
@@ -60,4 +62,8 @@ public class ItemCaveFinder extends ItemImpl {
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
 
+    @Override
+    public void generateCustomItemModel(ItemModelGenerator generator) {
+        generator.withExistingParent(this.getBaseName(), "item/handheld").texture("layer0", "item/" + this.getBaseName());
+    }
 }

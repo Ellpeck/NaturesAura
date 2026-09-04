@@ -1,6 +1,8 @@
 package de.ellpeck.naturesaura.items;
 
 import de.ellpeck.naturesaura.api.NaturesAuraAPI;
+import de.ellpeck.naturesaura.data.ItemModelGenerator;
+import de.ellpeck.naturesaura.reg.ICustomItemModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.InteractionHand;
@@ -11,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 
-public class ItemNetheriteFinder extends ItemImpl {
+public class ItemNetheriteFinder extends ItemImpl implements ICustomItemModel {
 
     public ItemNetheriteFinder() {
         super("netherite_finder", new Properties().stacksTo(1));
@@ -53,4 +55,8 @@ public class ItemNetheriteFinder extends ItemImpl {
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
 
+    @Override
+    public void generateCustomItemModel(ItemModelGenerator generator) {
+        generator.withExistingParent(this.getBaseName(), "item/handheld").texture("layer0", "item/" + this.getBaseName());
+    }
 }
