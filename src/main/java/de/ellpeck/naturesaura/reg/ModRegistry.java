@@ -63,7 +63,7 @@ import vazkii.patchouli.api.PatchouliAPI;
 import java.util.ArrayList;
 import java.util.List;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public final class ModRegistry {
 
     // we use a list so that the creative tab maintains addition order
@@ -405,7 +405,7 @@ public final class ModRegistry {
             helper.register(ResourceLocation.fromNamespaceAndPath(NaturesAura.MOD_ID, ((IModItem) item).getBaseName()), item);
     }
 
-    @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(value = Dist.CLIENT)
     public static final class Client {
 
         @SubscribeEvent
