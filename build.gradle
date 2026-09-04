@@ -188,5 +188,7 @@ publishMods {
         minecraftVersions.add(minecraft_version)
         requires("patchouli")
         optional("curios-continuation")
+        clientRequired = true
+        serverRequired = true
     }
 }
