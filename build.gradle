@@ -4,7 +4,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.neoforged.gradle.userdev' version '7.1.38'
-    id 'me.modmuss50.mod-publish-plugin' version "0.7.4"
+    id 'me.modmuss50.mod-publish-plugin' version "0.8.4"
 }
 
 tasks.named('wrapper', Wrapper).configure {
